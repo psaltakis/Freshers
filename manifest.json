@@ -1,0 +1,16 @@
+{
+  "name": "Freshers' Fortnight 2026 · Jesus College MCR",
+  "short_name": "Fortnight",
+  "description": "The Freshers' Fortnight 2026 programme for the MCR of Jesus College, Cambridge.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#8E0F14",
+  "theme_color": "#8E0F14",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
