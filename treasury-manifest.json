@@ -1,0 +1,17 @@
+{
+  "name": "Jesus College MCR Treasury",
+  "short_name": "MCR Treasury",
+  "description": "Claims, reimbursements and the budget for Jesus College MCR.",
+  "id": "/treasury/",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#8E0F14",
+  "theme_color": "#89090F",
+  "icons": [
+    { "src": "treasury-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "treasury-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "treasury-icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
