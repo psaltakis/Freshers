@@ -15,9 +15,9 @@ html:has(#boot)::before,html.booted::before{content:none}
 @keyframes preboot{to{transform:rotate(360deg)}}
 </style>
 <title>Jesus College MCR Treasury 2026/27</title>
-<link rel="icon" href="favicon.ico" sizes="any">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="manifest" href="manifest.json">
+<link rel="icon" href="treasury-favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="treasury-apple-touch-icon.png">
+<link rel="manifest" href="treasury-manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="MCR Treasury">
@@ -400,6 +400,26 @@ a.btn{display:inline-block;line-height:1.15}
 @keyframes sp{to{transform:rotate(360deg)}}
 @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
+/* ---------- the email allowance ---------- */
+.quota{margin-top:4px}
+.qhead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.qhead b{font-family:var(--mono);font-size:30px;font-weight:600;font-variant-numeric:tabular-nums;
+  letter-spacing:-.02em;line-height:1}
+.qhead span{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-soft)}
+.qbar{height:16px;border-radius:999px;background:var(--cream-2);overflow:hidden;display:flex;
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.12)}
+.qbar i{display:block;height:100%;transition:width .5s cubic-bezier(.2,.8,.3,1)}
+.qbar i.used{background:var(--ink)}
+.qbar i.res{background:repeating-linear-gradient(-45deg,var(--gold) 0 5px,#EFCF8F 5px 10px)}
+.qkey{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:11px;font-family:var(--mono);font-size:10px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+.qkey span{display:inline-flex;align-items:center;gap:7px}
+.qkey .sw{box-shadow:0 0 0 1px var(--cream-3)}
+.qclaims{margin-top:14px;font-size:15px;color:var(--ink-2);line-height:1.5}
+.qclaims b{font-weight:600}
+.qclaims.low{color:var(--red-deep)}
+
 /* ---------- asking a question without a browser dialog ----------
    confirm() and prompt() are fine once. Used a dozen times in a session, every
    browser starts offering to suppress them, which is where the "this page is
@@ -751,7 +771,7 @@ ul.notes li:last-child{margin-bottom:0}
       <svg viewBox="0 0 120 120" aria-hidden="true">
         <circle class="t" cx="60" cy="60" r="55"/><circle class="p" cx="60" cy="60" r="55"/>
       </svg>
-      <img src="logo.png" alt="Jesus College MCR Treasury" width="257" height="420">
+      <img src="treasury-logo.png" alt="Jesus College MCR Treasury" width="257" height="420">
     </div>
     <b class="wm">MCR Treasury <i>2026/27</i></b>
     <div class="bar"><i id="bootBar"></i></div>
@@ -763,7 +783,7 @@ ul.notes li:last-child{margin-bottom:0}
 
 <div id="welcome" hidden>
   <div>
-    <img src="logo.png" alt="" width="257" height="420">
+    <img src="treasury-logo.png" alt="" width="257" height="420">
     <h2 id="welTitle">Welcome to the MCR treasury</h2>
     <p id="welSub">Jesus College MCR</p>
     <div class="note"><span class="spin"></span><span id="welNote">Opening your treasury</span></div>
@@ -788,7 +808,7 @@ ul.notes li:last-child{margin-bottom:0}
   <div class="gate" id="gate" hidden>
     <div class="gatecard">
       <div class="gatetop">
-        <img src="logo.png" alt="" width="257" height="420">
+        <img src="treasury-logo.png" alt="" width="257" height="420">
         <div><span class="eyebrow">Jesus College MCR</span><h2>Treasury and reimbursements</h2></div>
       </div>
       <div class="gatebody">
@@ -915,12 +935,11 @@ ul.notes li:last-child{margin-bottom:0}
 
       <div class="shead"><h2 id="formTitle">New claim</h2><span class="note" id="formNote">Receipt required</span></div>
       <div class="panel" id="mailOut" hidden style="background:#FFF8E9;border:1px solid var(--gold)">
-        <p class="lede" style="margin:0;color:var(--ink-2)"><b>Claims are paused until tomorrow.</b>
-          The treasury sends every claim to the committee by email, and it has used its allowance
-          for the day. The allowance resets at 8am Cambridge time. Nothing already submitted is
-          affected, and you can write the claim out now and send it in the morning.</p>
+        <p class="lede" style="margin:0;color:var(--ink-2)"><b id="mailOutTitle">Claims are paused.</b>
+          <span id="mailOutWhy"></span> Nothing already submitted is affected, and you can write the
+          claim out now and send it once they reopen.</p>
       </div>
-      <div class="panel">
+      <div class="panel" id="claimForm">
         <div class="seg" id="kindSeg" style="margin-bottom:16px">
           <button data-kind="reimbursement" aria-pressed="true">I have already paid</button>
           <button data-kind="allocation" aria-pressed="false">Ask for money first</button>
@@ -1100,13 +1119,78 @@ ul.notes li:last-child{margin-bottom:0}
         <div id="roleList" style="margin-bottom:18px"></div>
         <dl class="kv" style="margin-bottom:18px">
           <dt>Reports folder</dt><dd id="sDriveShow">-</dd>
-          <dt>Email left today</dt><dd id="sMailShow">-</dd>
         </dl>
-        <p class="hintline" id="sMailNote" style="margin:0"></p>
         <div class="grid two" data-president>
           <label class="f"><span class="l">President name, as it appears on reports</span><input type="text" id="sPresName"></label>
           <label class="f"><span class="l">Vice President name</span><input type="text" id="sViceName"></label>
           <label class="f"><span class="l">Treasurer name, as it appears on reports</span><input type="text" id="sTreasName"></label>
+        </div>
+      </div>
+
+      <div data-president>
+        <div class="shead"><h2>Who holds each role</h2><span class="note">Changes take effect at once</span></div>
+        <div class="panel">
+          <p class="lede">Two different things, and it is worth keeping them apart. The
+            <b>inbox</b> is where the treasury's mail goes, and stays the same year to year. The
+            <b>people</b> are the personal University accounts allowed to sign in as that role, and
+            change every time the committee does. Several addresses per role, separated by commas.</p>
+          <div class="grid two">
+            <label class="f"><span class="l">President inbox</span>
+              <input type="email" id="cPresInbox" inputmode="email" autocapitalize="none" spellcheck="false"></label>
+            <label class="f"><span class="l">President, personal accounts</span>
+              <input type="text" id="cPres" autocapitalize="none" spellcheck="false"></label>
+            <label class="f"><span class="l">Treasurer inbox</span>
+              <input type="email" id="cTreasInbox" inputmode="email" autocapitalize="none" spellcheck="false"></label>
+            <label class="f"><span class="l">Treasurer, personal accounts</span>
+              <input type="text" id="cTreas" autocapitalize="none" spellcheck="false"></label>
+            <label class="f"><span class="l">Vice President inbox</span>
+              <input type="email" id="cViceInbox" inputmode="email" autocapitalize="none" spellcheck="false"></label>
+            <label class="f"><span class="l">Vice President, personal accounts</span>
+              <input type="text" id="cVice" autocapitalize="none" spellcheck="false"></label>
+          </div>
+          <p class="hintline" id="cFounders"></p>
+          <div class="actions">
+            <button class="btn" id="bSaveCommittee">Save the committee</button>
+            <span class="msg" id="commMsg"></span>
+          </div>
+        </div>
+      </div>
+
+      <div data-admin>
+        <div class="shead"><h2>Email allowance</h2><span class="note">Resets at 8am</span></div>
+        <div class="panel">
+          <p class="lede">Every claim is carried by email, and Google caps how many people the
+            account may write to in a day. It counts recipients, not messages. When there is not
+            enough left for one more claim the form closes itself, so nothing is ever accepted
+            that the committee would not be told about.</p>
+          <div class="quota">
+            <div class="qhead"><b id="qLeft">&mdash;</b><span id="qOf"></span></div>
+            <div class="qbar"><i class="used" id="qUsed"></i><i class="res" id="qRes"></i></div>
+            <div class="qkey">
+              <span><i class="sw" style="background:var(--ink)"></i> Used today</span>
+              <span><i class="sw" style="background:var(--gold)"></i> Held for claims in progress</span>
+              <span><i class="sw" style="background:var(--cream-2)"></i> Free</span>
+            </div>
+            <div class="qclaims" id="qClaims"></div>
+          </div>
+        </div>
+      </div>
+
+      <div data-president>
+        <div class="shead"><h2>Pause claims</h2><span class="note">For when the MCR cannot pay</span></div>
+        <div class="panel">
+          <p class="lede">Closes the claim form for everybody and says why. Use it when the account
+            is empty, between disbursements, or over the vacation. Claims already in the system are
+            untouched, and approving and paying carry on as normal.</p>
+          <label class="f"><span class="l">Reason, shown to everybody</span>
+            <input type="text" id="fzReason" maxlength="240"
+              placeholder="e.g. Paused until the Lent disbursement arrives in mid January"></label>
+          <div class="actions">
+            <button class="btn danger" id="bFreeze">Pause claims</button>
+            <button class="btn" id="bUnfreeze" hidden>Reopen claims</button>
+            <span class="msg" id="fzMsg"></span>
+          </div>
+          <p class="hintline" id="fzState"></p>
         </div>
       </div>
 
@@ -1232,7 +1316,7 @@ ul.notes li:last-child{margin-bottom:0}
 
 <div id="install" hidden>
   <div class="in">
-    <img src="apple-touch-icon.png" alt="" width="46" height="46">
+    <img src="treasury-apple-touch-icon.png" alt="" width="46" height="46">
     <div class="t"><b>Keep the treasury on your home screen</b>
       <span id="installHow"></span></div>
     <button class="btn small" id="installGo" hidden>Add</button>
@@ -1251,7 +1335,7 @@ ul.notes li:last-child{margin-bottom:0}
    ============================================================ */
 
 /* PASTE YOUR TREASURY WEB APP URL HERE. Deploy, Manage deployments, ends in /exec. */
-const API_URL = "https://script.google.com/macros/s/AKfycbwZDfsqasLGSb42SCY3yJ7hXPBaBPDMHY-2B4JLHMgrrzukjx67TdpzxmvpcSAs-YSj/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwg7nIoY0G_-VlhUIPKfcV1ELn-_O2JHEVEGnDr0rQ5cyfenSeE5LKvl1CInMxdR2hk/exec";
 
 /* The crest, once. It used to appear three times in this file, which made the
    page a third of a megabyte before a single figure had loaded. */
@@ -2082,7 +2166,7 @@ const isPresident=()=>!!(S&&S.can&&S.can.admin);
 /* Email is the one resource here with a hard daily ceiling. When it runs out the
    app cannot tell the committee a claim has arrived, so it stops taking them
    rather than swallowing them silently. */
-const MAIL_OUT="The treasury has used its email allowance for today, so no more claims can be taken until it resets at 8am. Nothing already submitted is affected.";
+const MAIL_OUT="Claims are paused at the moment. Nothing already submitted is affected.";
 const mailOk=()=>!(S&&S.mail&&S.mail.ok===false);
 /* Budget lines by id, built once per state rather than scanned per lookup. */
 let LINEMAP_=null;
@@ -2443,11 +2527,27 @@ function paintKind(){
     ? "For something not paid for yet. The committee sets the money aside against the budget line, then asks you for the receipt once you have spent it. Only then does it reach the Treasurer."
     : "Attach the receipt now. Once the President or Treasurer approves, a payment report is produced with the receipt inside it, filed to Drive and emailed to the Treasurer automatically.";
 }
+/* One switch for the whole claim form, whether it was the allowance or the
+   President that closed it. The form itself is dimmed rather than hidden, so
+   somebody can still read what they were about to write. */
 function paintMail(){
+  const q=(S&&S.mail)||{};
   const out=!mailOk();
-  const b=$("mailOut"); if(b)b.hidden=!out;
-  const sub=$("bSubmit"); if(sub){sub.disabled=out;sub.title=out?MAIL_OUT:""}
-  const rec=$("bSendReceipt"); if(rec){rec.disabled=out;rec.title=out?MAIL_OUT:""}
+  const why=q.why||MAIL_OUT;
+  const b=$("mailOut");
+  if(b){
+    b.hidden=!out;
+    if(out){
+      $("mailOutTitle").textContent=q.frozen?"Claims are paused by the committee.":"Claims are paused until tomorrow.";
+      $("mailOutWhy").textContent=why;
+    }
+  }
+  const form=$("claimForm");
+  if(form){form.style.opacity=out?".5":"";form.style.pointerEvents=out?"none":""}
+  const sub=$("bSubmit"); if(sub){sub.disabled=out;sub.title=out?why:""}
+  const rec=$("bSendReceipt"); if(rec){rec.disabled=out;rec.title=out?why:""}
+  const need=$("needWrap");
+  if(need&&out&&!need.hidden)$("nCap").textContent=why;
 }
 function resetForm(){
   editingId=null;formReceipt=null;$("iReceipt").value="";
@@ -3139,6 +3239,108 @@ function renderRoles(){
         esc(who.length?who.join(", "):"nobody set")+' \u00b7 mail to '+esc(r.inbox)+
       '</em></span></span>'}).join("")+'</div>';
 }
+/* The day's email, as a bar rather than a number nobody would read.
+   Black is what has gone, gold is what is being held back so that claims already
+   in the system can still be approved and paid, and the rest is free. */
+function renderQuota(){
+  if(!$("qLeft"))return;
+  const q=S.mail||{};
+  if(q.left===undefined||q.left<0){
+    $("qLeft").textContent="Unknown";
+    $("qOf").textContent="the allowance could not be read";
+    $("qUsed").style.width="0%";$("qRes").style.width="0%";
+    $("qClaims").className="qclaims";
+    $("qClaims").textContent="Nothing is being blocked, because a reading that cannot be taken is not evidence of a problem.";
+    return;
+  }
+  const cap=q.cap||100, left=q.left, used=Math.max(0,cap-left);
+  const held=Math.min(left,q.perClaim||6);
+  const pc=x=>Math.max(0,Math.min(100,x/cap*100));
+  $("qLeft").textContent=left.toLocaleString("en-GB");
+  $("qOf").textContent="of "+cap.toLocaleString("en-GB")+" recipients left today";
+  $("qUsed").style.width=pc(used)+"%";
+  $("qRes").style.width=pc(held)+"%";
+  const n=q.claims;
+  const low=n<=2;
+  $("qClaims").className="qclaims"+(low?" low":"");
+  $("qClaims").innerHTML=q.frozen
+    ? "<b>Claims are paused by hand,</b> so the allowance is not what is stopping them."
+    : n<=0
+      ? "<b>No more claims can be taken today.</b> The form is closed until the allowance resets at 8am Cambridge time."
+      : "Room for about <b>"+n+" more claim"+(n===1?"":"s")+"</b> today, at roughly "+
+        (q.perClaim||6)+" recipients each: telling the committee it arrived, sending the "+
+        "Treasurer the payment report, and telling the claimant it was approved and then paid."+
+        (low?" The form closes when there is not enough left for one more.":"");
+}
+function renderCommittee(){
+  if(!$("cPres")||!isPresident())return;
+  const c=S.committee||{};
+  const set=(id,v)=>{const el=$(id);if(el&&document.activeElement!==el)el.value=v||""};
+  set("cPresInbox",c.presInbox);set("cTreasInbox",c.treasInbox);set("cViceInbox",c.viceInbox);
+  set("cPres",(c.president||[]).join(", "));
+  set("cTreas",(c.treasurer||[]).join(", "));
+  set("cVice",(c.vice||[]).join(", "));
+  if($("cFounders"))$("cFounders").innerHTML=
+    "There must always be at least one President. "+
+    ((c.founders||[]).length
+      ? esc((c.founders||[]).join(", "))+" keeps President access whatever this page says, so a "+
+        "mistake here can always be undone. That address is set in Code.gs and cannot be removed from the app."
+      : "");
+}
+function renderFreeze(){
+  if(!$("bFreeze"))return;
+  const q=S.mail||{};
+  $("bFreeze").hidden=!!q.frozen;
+  $("bUnfreeze").hidden=!q.frozen;
+  if(document.activeElement!==$("fzReason"))$("fzReason").value=q.reason||"";
+  $("fzState").innerHTML=q.frozen
+    ? "<b>Claims are paused.</b>"+(q.frozenBy?" Paused by "+esc(q.frozenBy)+".":"")+
+      (q.frozenAt?" Since "+esc(stamp(q.frozenAt))+".":"")
+    : "Claims are open. Members can submit as normal.";
+}
+$("bSaveCommittee").addEventListener("click",async()=>{
+  const m=$("commMsg");m.className="msg";
+  const btn=$("bSaveCommittee");
+  const mine=String(S.me.email||"").toLowerCase();
+  const pres=$("cPres").value.toLowerCase();
+  if(pres.indexOf(mine)<0&&!(S.committee&&(S.committee.founders||[]).indexOf(mine)>=0)){
+    if(!await ask({title:"Take yourself off the President list?",
+      body:"Your own address is not in the President box. Save this and you lose access to "+
+        "Settings the moment you reload. If that is the handover you mean, go ahead.",
+      yes:"Save anyway",no:"Let me fix it",danger:true}))return;
+  }
+  btn.disabled=true;
+  try{
+    const r=await api("saveCommittee",{committee:{
+      president:$("cPres").value,treasurer:$("cTreas").value,vice:$("cVice").value,
+      presInbox:$("cPresInbox").value.trim(),treasInbox:$("cTreasInbox").value.trim(),
+      viceInbox:$("cViceInbox").value.trim()}});
+    S.committee=r.committee;S.settings.roles=r.roles;
+    renderCommittee();renderRoles();
+    m.className="msg good";m.textContent="Saved. It applies from the next request.";
+    setTimeout(()=>m.textContent="",3200);
+  }catch(e){m.textContent=e.message}
+  btn.disabled=false;
+});
+$("bFreeze").addEventListener("click",async()=>{
+  const reason=$("fzReason").value.trim();
+  if(!await ask({title:"Pause claims?",
+    body:"Nobody will be able to submit a new claim until you reopen it."+
+      (reason?" They will be told: <b>"+esc(reason)+"</b>":
+       " No reason has been given, so they will just be told it is paused."),
+    yes:"Pause claims",danger:true}))return;
+  const m=$("fzMsg");m.className="msg";$("bFreeze").disabled=true;
+  try{ await api("setFreeze",{on:true,reason}); await refresh(); toast("Claims are paused"); }
+  catch(e){m.textContent=e.message}
+  $("bFreeze").disabled=false;
+});
+$("bUnfreeze").addEventListener("click",async()=>{
+  const m=$("fzMsg");m.className="msg";$("bUnfreeze").disabled=true;
+  try{ await api("setFreeze",{on:false,reason:""}); await refresh(); toast("Claims are open again"); }
+  catch(e){m.textContent=e.message}
+  $("bUnfreeze").disabled=false;
+});
+
 function renderViewers(){
   const box=$("viewerList");
   if(!box)return;
@@ -3186,17 +3388,7 @@ function fillSettings(){
     ?"Plus "+gbp0.format(t.received)+" received since, giving "+gbp0.format(t.funds)+" in total."
     :"Record each disbursement under Planned costs and it is added to this.";
   if($("sDriveShow"))$("sDriveShow").textContent=s.drive||"";
-  const q=S.mail||{};
-  if($("sMailShow")){
-    $("sMailShow").textContent=q.left===undefined?"unknown"
-      :q.left<0?"could not be read"
-      :q.left+" recipient"+(q.left===1?"":"s");
-  }
-  if($("sMailNote"))$("sMailNote").textContent=q.left<0
-    ?"The allowance could not be read, so nothing is being blocked."
-    :q.ok===false
-      ?"Claims are paused until the allowance resets at 8am Cambridge time."
-      :"Google counts recipients, not messages, and resets at 8am Cambridge time. A claim costs about five between arriving, being approved and being paid.";
+  renderQuota();renderCommittee();renderFreeze();
   if($("linkWarn"))$("linkWarn").textContent=s.publicLinks
     ?"Reports and receipts open from a Drive link, so anyone holding the link can view them. The link is the secret."
     :"Reports and receipts open only for people the Drive folder is shared with.";
