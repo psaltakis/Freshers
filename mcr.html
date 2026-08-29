@@ -7,6 +7,7 @@ html::before{content:"";position:fixed;left:50%;top:50%;width:120px;height:120px
   border-radius:50%;border:2px solid rgba(251,243,236,.16);border-top-color:rgba(251,243,236,.85);
   animation:bootspin 1s linear infinite;z-index:1}
 @keyframes bootspin{to{transform:rotate(360deg)}}
+html.up::before{content:none}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -265,6 +266,15 @@ nav::-webkit-scrollbar{display:none}
 .gcard .msg{color:var(--gold-2);font-size:13.5px;min-height:20px;margin:10px 0 0}
 .gfoot{display:flex;justify-content:space-between;font-size:11.5px;color:var(--cream-3);
   margin-top:22px;padding-top:14px;border-top:1px solid var(--line)}
+.gcard .fix{margin-top:14px;padding:13px 15px;border-radius:14px;background:rgba(226,169,60,.12);
+  border:1px solid rgba(226,169,60,.4)}
+.gcard .fix b{display:block;font-size:14.5px;font-weight:600;margin-bottom:4px}
+.gcard .fix p{margin:0 0 10px;font-size:13px;color:var(--cream-2);line-height:1.5}
+.gcard .fix p:last-child{margin-bottom:0}
+.gcard .fix code{display:inline-block;margin-top:2px}
+#diag{margin-top:12px;font-family:var(--mono);font-size:11px;color:var(--cream-3);
+  background:rgba(0,0,0,.3);border-radius:12px;padding:11px 13px;line-height:1.7;word-break:break-all}
+#diag b{color:var(--cream);font-weight:500}
 .gsiskel{display:block;width:100%;height:44px;border-radius:999px;background:rgba(255,255,255,.12);
   animation:pulse 1.4s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:.5}50%{opacity:.9}}
@@ -631,7 +641,10 @@ code{font-family:var(--mono);font-size:12.5px;background:rgba(0,0,0,.3);padding:
     <div id="gsiBtn"><span class="gsiskel" aria-hidden="true"></span></div>
     <p class="lede" style="margin:10px 0 0;font-size:12.5px">Use your <b>@cam.ac.uk</b> account. There is no password and nothing is emailed to you.</p>
     <p class="msg" id="gateMsg"></p>
-    <div class="gfoot"><span id="gFootYear"></span><span>Jesus College, Cambridge</span></div>
+    <div id="gateFix"></div>
+    <div class="gfoot"><span id="gFootYear"></span>
+      <button id="bDiag" style="background:none;border:0;color:var(--cream-3);font-size:11.5px;padding:0;text-decoration:underline">What is wrong?</button></div>
+    <div id="diag" hidden></div>
   </div>
 </div>
 
@@ -647,7 +660,11 @@ code{font-family:var(--mono);font-size:12.5px;background:rgba(0,0,0,.3);padding:
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/a/macros/jcollegemcr.co.uk/s/AKfycbxDTluwm6rs1L6TGOHldsUcH7J4_ECNOsKDbj9msE6eM6nCqLVG9jHefPwnGaXsNgHfBg/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbw_zg28ZuAcPV3piW-WxSs8rglgbnxYFLuCCXYDkkDwaT_gRQr_rF2xYS62HmnfoC06Yg/exec";
+
+/* JavaScript is alive, so the ring painted before the page was parsed can go.
+   It is a pseudo element on <html>, so nothing else can remove it. */
+document.documentElement.className = "up";
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c =>
@@ -806,46 +823,191 @@ function unspin(b){
   if (b.dataset.was) b.innerHTML = b.dataset.was;
 }
 
-/* ---------- sign in ---------- */
-let gsiUp = false;
+/* ---------- sign in ----------
+   Four things can go wrong before anybody sees a button, and the old version
+   of this said nothing about any of them: it just spun. Each one now names
+   itself and says what to do about it.
+
+   1. the page cannot reach the server at all
+   2. the server answers but nobody has set the OAuth client ID
+   3. the page is inside a frame, where Google will not draw its button
+   4. Google's own script did not load
+*/
+const inFrame = (() => { try { return window.top !== window.self; } catch(e){ return true; } })();
+let gsiUp = false, probing = false, APP_URL = "", CLIENT_ID = "";
+const withTimeout = (p, ms, what) => Promise.race([p,
+  new Promise((_, rej) => setTimeout(() => rej(new Error(what || "The server did not answer in time.")), ms))]);
+
+function gateBusy(on){
+  $("gsiBtn").innerHTML = on ? '<span class="gsiskel" aria-hidden="true"></span>' : "";
+}
+function gateFix(title, body, actions){
+  gateBusy(false);
+  $("gateMsg").textContent = "";
+  $("gateFix").innerHTML = '<div class="fix"><b>' + esc(title) + "</b><p>" + body + "</p>" +
+    (actions ? '<div class="acts" style="margin-top:0">' + actions + "</div>" : "") + "</div>";
+}
+function gateClear(){ $("gateFix").innerHTML = ""; }
+
+/* Everything the committee would need to tell somebody in order to fix it,
+   including the origin Google has to be told about, which is the single
+   thing people get wrong. */
+/* A page opened straight off the disk reports its origin as the string "null",
+   which is worse than useless in a message somebody is going to act on. */
+const originOf = () => (location.origin && location.origin !== "null")
+  ? location.origin : "a local file, which Google will never accept";
+function renderDiag(){
+  const rows = [
+    ["Serving from", originOf()],
+    ["Inside a frame", inFrame ? "yes, which Google will not allow" : "no"],
+    ["Talking to the server by", bridge() ? "the Apps Script bridge" : (API_URL ? "fetch to API_URL" : "nothing, API_URL is empty")],
+    ["The deployed app", APP_URL || "not known yet"],
+    ["OAuth client ID", CLIENT_ID ? CLIENT_ID.slice(0, 22) + "\u2026" : "not set"],
+    ["Google's script", (window.google && google.accounts && google.accounts.id) ? "loaded" : "did not load"]
+  ];
+  $("diag").innerHTML = rows.map(r => "<b>" + esc(r[0]) + ":</b> " + esc(r[1])).join("<br>") +
+    '<br><br>Google must be told about <b>' + esc(originOf()) +
+    "</b> under Authorised JavaScript origins, and about nothing else.";
+}
+
+async function probe(){
+  if (probing) return;
+  probing = true;
+  gateClear();
+  gateBusy(true);
+  try{
+    /* 1. can this page reach a server at all */
+    if (!bridge() && !API_URL){
+      return gateFix("This page cannot reach the server",
+        "It is not being served by Apps Script, and <code>API_URL</code> at the top of the script block is empty. " +
+        "Paste your deployed Web App URL in there, or open the app from its <code>/exec</code> address.",
+        '<button class="btn ghost sm" data-retry>Try again</button>');
+    }
+    /* 2. does it answer */
+    let d;
+    try{ d = await withTimeout(api("ping"), 15000); }
+    catch(e){
+      return gateFix("The server did not answer",
+        esc(e.message) + "<br><br>If you have just deployed, make sure you chose <b>New version</b> rather than saving, " +
+        "and that access is set to <b>Anyone</b>.",
+        '<button class="btn cream sm" data-retry>Try again</button>');
+    }
+    APP_URL = d.url || "";
+    CLIENT_ID = (d.signIn && d.signIn.clientId) || "";
+    $("gFootYear").textContent = d.year || "";
+    /* 3. has anybody set the client ID */
+    if (!d.signIn || !d.signIn.ready){
+      return gateFix("Sign in is not set up yet",
+        "The server is running, but <code>GOOGLE_CLIENT_ID</code> at the top of <code>Code.gs</code> is still empty, " +
+        "so there is nothing for Google to draw a button for. Make an OAuth client ID, paste it in, and deploy a new version. " +
+        "It is free and takes about five minutes.",
+        '<button class="btn ghost sm" data-diag>Show me the details</button>');
+    }
+    /* 4. is the page framed, which is what an Apps Script /exec URL does */
+    if (inFrame){
+      return gateFix("This page has to be served from an address of its own",
+        "Apps Script wraps whatever it serves in a frame, and that frame's address changes on every load, " +
+        "so Google has nothing stable to trust and will not draw a sign in button here. Opening the " +
+        "<code>/exec</code> link in a new tab does not help, because it frames the page again.<br><br>" +
+        "Put <code>index.html</code> somewhere with a fixed address, GitHub Pages or " +
+        "<code>mcr.jesus.cam.ac.uk</code>. Set <code>API_URL</code> at the top of the script block to the " +
+        "<code>/exec</code> address. Then add the fixed address to the OAuth client under Authorised " +
+        "JavaScript origins. The sign in happens on the fixed address and the data still comes from here.",
+        '<button class="btn ghost sm" data-diag>Show me the addresses</button>' +
+        '<button class="btn ghost sm" data-tryanyway>Try here anyway</button>');
+    }
+    /* The other half of the same mistake: the page is on its own address, but not
+       the one the committee registered, so Google will refuse it silently. */
+    if (d.origin && location.origin && location.origin !== "null" && d.origin !== location.origin){
+      gateFix("This is not the address Google was told about",
+        "The page is being served from <code>" + esc(originOf()) + "</code> but <code>HOSTED_ORIGIN</code> " +
+        "in Code.gs says <code>" + esc(d.origin) + "</code>. One of the two is wrong, and Google will refuse " +
+        "whichever it has not been given.",
+        '<button class="btn ghost sm" data-diag>Show me the addresses</button>');
+    }
+    startGsi(d.signIn);
+  } finally { probing = false; }
+}
+
 function startGsi(cfg){
   if (gsiUp || !cfg || !cfg.clientId) return;
-  const go = () => {
-    if (!window.google || !google.accounts || !google.accounts.id) return setTimeout(go, 180);
-    gsiUp = true;
-    google.accounts.id.initialize({
-      client_id: cfg.clientId, hd: cfg.hd || undefined, callback: onCredential,
-      ux_mode: "popup", auto_select: false, itp_support: true
-    });
-    const el = $("gsiBtn");
-    el.innerHTML = "";
-    google.accounts.id.renderButton(el, { theme:"filled_black", size:"large", shape:"pill",
-      text:"continue_with", width: Math.min(360, el.offsetWidth || 320), logo_alignment:"left" });
-  };
-  go();
+  gateClear();
+  gateBusy(true);
+  let tries = 0;
+  (function go(){
+    if (window.google && google.accounts && google.accounts.id){
+      try{
+        gsiUp = true;
+        google.accounts.id.initialize({
+          client_id: cfg.clientId,
+          /* hd narrows the account chooser, but jesus.cam.ac.uk is a subdomain
+             and Google treats it as a different hd, so the real check is done
+             on the server where it belongs. */
+          callback: onCredential, ux_mode: "popup", auto_select: false, itp_support: true
+        });
+        const el = $("gsiBtn");
+        el.innerHTML = "";
+        google.accounts.id.renderButton(el, { theme:"outline", size:"large", shape:"pill",
+          text:"continue_with", width: Math.min(360, Math.max(240, el.offsetWidth || 320)),
+          logo_alignment:"left" });
+        /* If Google refuses the origin it renders nothing at all and throws
+           nothing either, so the only way to know is to look a second later. */
+        setTimeout(() => {
+          /* Counting children rather than measuring height: a hidden tab, a
+             zoomed page or a frame all report zero height for a button that is
+             perfectly fine, and a false alarm here is worse than none. */
+          if (!el.children.length) gsiFallback(cfg, "Google drew nothing.");
+        }, 1400);
+      }catch(err){ gsiUp = false; gsiFallback(cfg, err && err.message); }
+      return;
+    }
+    if (++tries > 45) return gsiFallback(cfg, "Google's sign in script did not load.");
+    setTimeout(go, 200);
+  })();
 }
+
+/* When the button will not draw, the account chooser usually still will, so
+   offer a plain one rather than a dead end. */
+function gsiFallback(cfg, why){
+  gateBusy(false);
+  const canPrompt = !!(window.google && google.accounts && google.accounts.id);
+  gateFix("The Google button would not draw",
+    (why ? esc(why) + " " : "") +
+    "That nearly always means the address this page is served from has not been added to the OAuth client, " +
+    "or an extension is blocking <code>accounts.google.com</code>.",
+    (canPrompt ? '<button class="btn cream sm" data-prompt>Continue with Google</button>' : "") +
+    '<button class="btn ghost sm" data-retry>Try again</button>' +
+    '<button class="btn ghost sm" data-diag>Show me the details</button>');
+}
+
 async function onCredential(res){
+  gateClear();
   $("gateMsg").textContent = "Checking with Google";
   try{
-    const d = await api("googleToken", { credential: res.credential });
+    const d = await withTimeout(api("googleToken", { credential: res.credential }), 20000);
     setToken(d.token);
     $("gateMsg").textContent = "";
     await boot(true);
   }catch(e){
-    $("gateMsg").textContent = e && e.message ? e.message : String(e);
+    $("gateMsg").textContent = "";
+    gateFix("That sign in did not go through", esc(e && e.message ? e.message : String(e)),
+      '<button class="btn cream sm" data-retry>Try again</button>');
   }
 }
+
 function signedOut(msg){
   clearToken();
   S = null;
   stopPolling();
+  bootTalk(false);
   $("boot").hidden = true;
   $("app").hidden = true;
   $("nav").hidden = true;
   $("hdr").hidden = true;
   $("gate").hidden = false;
-  if (msg) $("gateMsg").textContent = msg;
-  api("ping").then(d => startGsi(d.signIn)).catch(() => {});
+  gsiUp = false;
+  $("gateMsg").textContent = msg || "";
+  probe();
 }
 
 /* ---------- boot ---------- */
@@ -867,7 +1029,7 @@ async function boot(fresh){
   bootTalk(true);
   if (!getToken()){ bootTalk(false); return signedOut(); }
   try{
-    S = await api("state");
+    S = await withTimeout(api("state"), 25000, "The server took too long to answer.");
   }catch(e){
     bootTalk(false);
     return signedOut(e && e.message ? e.message : "");
@@ -2296,6 +2458,27 @@ document.addEventListener("click", async e => {
     }
   }catch(err){ unspin(t); fail(err); }
 });
+/* The gate's own buttons. It sits outside the app, so it gets its own
+   listener rather than borrowing the one that needs S to exist. */
+$("gate").addEventListener("click", e => {
+  const t = e.target.closest("[data-retry],[data-diag],[data-prompt],[data-tryanyway]");
+  if (!t) return;
+  if (t.hasAttribute("data-retry")){ gsiUp = false; return probe(); }
+  if (t.hasAttribute("data-diag")){ renderDiag(); $("diag").hidden = !$("diag").hidden; return; }
+  if (t.hasAttribute("data-tryanyway")){ gateClear(); return api("ping").then(d => startGsi(d.signIn)).catch(fail); }
+  if (t.hasAttribute("data-prompt")){
+    try{ google.accounts.id.prompt(n => {
+      if (n && (n.isNotDisplayed && n.isNotDisplayed() || n.isSkippedMoment && n.isSkippedMoment()))
+        gateFix("Google would not show the chooser",
+          "Its own reason was <code>" + esc((n.getNotDisplayedReason && n.getNotDisplayedReason()) ||
+          (n.getSkippedReason && n.getSkippedReason()) || "unknown") + "</code>.",
+          '<button class="btn ghost sm" data-diag>Show me the details</button>');
+    }); }catch(err){ fail(err); }
+    return;
+  }
+});
+$("bDiag").addEventListener("click", () => { renderDiag(); $("diag").hidden = !$("diag").hidden; });
+
 document.querySelectorAll("#nav .tabbtn").forEach(b => b.addEventListener("click", () => go(b.dataset.view)));
 document.addEventListener("keydown", e => { if (e.key === "Escape" && sheetOpen) closeSheet(); });
 $("bMe").addEventListener("click", () => go("me"));
