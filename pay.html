@@ -1,0 +1,260 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#42145F">
+<meta name="robots" content="noindex, nofollow">
+<title>Pay a claim &middot; Jesus College MCR Treasury</title>
+<link rel="icon" href="treasury-favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="treasury-apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@600;700&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+<!--
+  The page the Pay button in the Treasurer's email opens.
+
+  It exists because a custom scheme such as natwest:// cannot be put in an email:
+  most clients strip it, and on iOS an unregistered scheme is answered with an
+  error rather than a fallback. A plain https link always opens, and from here we
+  can try the app properly and offer online banking when it is not there.
+
+  The claim details arrive in the URL fragment, not the query string, so they are
+  never sent to a server and never written into a web log. Nothing here talks to
+  the treasury: it is a static page that reads what it was handed.
+-->
+<style>
+:root{
+  --nw:#42145F; --nw-2:#5B1E80; --red:#E5231B;
+  --ink:#1B1220; --soft:#6B5E75; --line:#E4DEE8; --paper:#FBF9FC;
+  --display:'Bitter',Georgia,serif;
+  --body:'Source Sans 3','Helvetica Neue',Arial,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--paper)}
+body{font-family:var(--body);color:var(--ink);font-size:17px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  padding:0 max(16px,env(safe-area-inset-left)) calc(40px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-right))}
+.wrap{max-width:520px;margin:0 auto;padding-top:calc(22px + env(safe-area-inset-top))}
+
+header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+header img{height:34px;width:auto}
+header .t{min-width:0}
+header b{display:block;font-family:var(--display);font-weight:700;font-size:17px;line-height:1.2}
+header span{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--soft)}
+
+.amount{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px 22px 6px;
+  box-shadow:0 1px 2px rgba(0,0,0,.05),0 18px 40px -30px rgba(27,18,32,.5)}
+.amount .big{font-family:var(--mono);font-weight:600;font-size:42px;letter-spacing:-.03em;
+  line-height:1;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.amount .to{color:var(--soft);font-size:15.5px;margin-top:8px;overflow-wrap:anywhere}
+.amount .to b{color:var(--ink);font-weight:600}
+
+.rows{margin-top:18px;border-top:1px solid var(--line)}
+.row{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--soft);width:92px;flex:none}
+.row .v{font-family:var(--mono);font-size:19px;font-weight:600;letter-spacing:.01em;
+  font-variant-numeric:tabular-nums;flex:1;min-width:0;overflow-wrap:anywhere}
+.copy{border:1px solid var(--line);background:#fff;color:var(--nw);border-radius:999px;
+  font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  padding:9px 13px;cursor:pointer;flex:none;min-height:38px;
+  transition:background .15s,color .15s,border-color .15s;-webkit-tap-highlight-color:transparent}
+.copy:hover{background:var(--paper)}
+.copy.done{background:var(--nw);border-color:var(--nw);color:#fff}
+
+.go{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;
+  margin-top:22px;padding:20px 18px;border-radius:16px;border:2px solid var(--nw);
+  background:#fff;color:var(--nw);font-family:var(--body);font-size:18px;font-weight:600;
+  cursor:pointer;text-decoration:none;min-height:64px;
+  transition:background .15s;-webkit-tap-highlight-color:transparent}
+.go:hover{background:#F6F1FA}
+.go img{height:26px;width:auto;flex:none}
+.web{display:block;text-align:center;margin-top:14px;color:var(--nw);font-size:15.5px}
+.web.store{font-size:14px;color:var(--soft);margin-top:10px}
+.note{margin-top:22px;font-size:14px;color:var(--soft);line-height:1.55}
+.note b{color:var(--ink)}
+.empty{background:#fff;border:1px solid var(--line);border-radius:18px;padding:26px;text-align:center}
+.empty b{display:block;font-family:var(--display);font-size:19px;margin-bottom:6px}
+.empty span{color:var(--soft);font-size:15px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));
+  transform:translateX(-50%) translateY(14px);background:var(--ink);color:#fff;
+  font-family:var(--mono);font-size:12.5px;padding:12px 18px;border-radius:999px;
+  opacity:0;pointer-events:none;transition:.22s;max-width:88vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:400px){
+  .amount .big{font-size:36px}
+  .row{flex-wrap:wrap;gap:6px 12px}
+  .row .k{width:100%}
+  .row .v{flex:1 1 auto}
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <img src="treasury-apple-touch-icon.png" alt="">
+    <div class="t"><b>Pay a claim</b><span>Jesus College MCR Treasury</span></div>
+  </header>
+  <div id="out"></div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* Getting to the app.
+
+   There is no reliable published scheme for the NatWest app, and on iOS asking
+   for a scheme the phone does not know produces an error page rather than a
+   quiet failure. So the order below is deliberate, cheapest risk first:
+
+   1. The https address. Banks register these as universal links, and when they
+      have, iOS hands the address straight to the app and never opens Safari.
+      This can never fail badly: worst case you get the web login.
+   2. The scheme, but only if the https attempt visibly did nothing, and only
+      once. If it is wrong you see one error and the page is still there.
+   3. The App Store product page. On an iPhone that already has the app this
+      opens the store with an Open button rather than a Get button, so it is one
+      tap to the app and it can never fail. On one that does not, it is exactly
+      where they need to be anyway.
+
+   If you find the real scheme, put it in APP_SCHEME and it becomes step one. */
+const APP_SCHEME = "natwest://";
+const WEB_URL    = "https://www.onlinebanking.natwest.com/";
+const STORE_URL  = "https://apps.apple.com/gb/app/natwest-mobile-banking/id334855322";
+const ANDROID_URL= "https://play.google.com/store/apps/details?id=com.rbs.mobile.android.natwest";
+const IOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+const ANDROID = /Android/.test(navigator.userAgent);
+const NW_LOGO    = "data:image/png;base64,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";
+
+const esc = s => String(s == null ? "" : s)
+  .replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+/* The fragment, which the browser never sends anywhere. */
+function fields(){
+  const raw = location.hash.replace(/^#/, "");
+  const o = {};
+  raw.split("&").forEach(p => {
+    const i = p.indexOf("=");
+    if (i < 0) return;
+    try { o[p.slice(0, i)] = decodeURIComponent(p.slice(i + 1).replace(/\+/g, " ")); }
+    catch (e) {}
+  });
+  return o;
+}
+const gbp = new Intl.NumberFormat("en-GB", { style:"currency", currency:"GBP", minimumFractionDigits:2 });
+
+let toastT;
+function toast(m){
+  const t = document.getElementById("toast");
+  t.textContent = m; t.classList.add("show");
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 2200);
+}
+/* The clipboard API needs a secure context and a real gesture. Both hold here,
+   but the old selection trick is kept for anything that refuses. */
+async function copy(text, btn){
+  let ok = false;
+  try { await navigator.clipboard.writeText(text); ok = true; }
+  catch (e) {
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = text; ta.setAttribute("readonly","");
+      ta.style.cssText = "position:fixed;top:0;left:0;opacity:0";
+      document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, 99999);
+      ok = document.execCommand("copy"); ta.remove();
+    } catch (e2) {}
+  }
+  if (ok){
+    btn.textContent = "Copied";
+    btn.classList.add("done");
+    setTimeout(() => { btn.textContent = "Copy"; btn.classList.remove("done"); }, 1600);
+  } else toast("Select the number and copy it by hand.");
+}
+
+function row(k, v, plain){
+  if (!v) return "";
+  return '<div class="row"><span class="k">' + esc(k) + '</span>' +
+    '<span class="v">' + esc(v) + '</span>' +
+    '<button class="copy" data-copy="' + esc(plain || v) + '">Copy</button></div>';
+}
+
+const f = fields();
+const amount = Number(f.a);
+const out = document.getElementById("out");
+
+if (!f.c && !f.s && !isFinite(amount)){
+  out.innerHTML = '<div class="empty"><b>Nothing to pay here</b>' +
+    '<span>Open this from the Pay button in a payment request, and the claim\u2019s ' +
+    'details will be waiting on it.</span></div>' +
+    '<a class="web" href="' + WEB_URL + '">Open NatWest online banking</a>';
+} else {
+  out.innerHTML =
+    '<div class="amount">' +
+      '<div class="big">' + esc(isFinite(amount) ? gbp.format(amount) : "\u2014") + '</div>' +
+      (f.n ? '<div class="to">to <b>' + esc(f.n) + '</b>' +
+        (f.w ? ' for ' + esc(f.w) : '') + '</div>' : '') +
+      '<div class="rows">' +
+        row("Sort code", f.s) +
+        row("Account no.", f.c) +
+        row("Reference", f.r) +
+        (isFinite(amount) ? row("Amount", gbp.format(amount), amount.toFixed(2)) : "") +
+      '</div>' +
+    '</div>' +
+    '<button class="go" id="go">' +
+      '<img src="' + NW_LOGO + '" alt="NatWest">' +
+      '<span>Open the app to pay</span>' +
+    '</button>' +
+    '<a class="web" href="' + WEB_URL + '">Or open online banking in a browser</a>' +
+    '<a class="web store" id="store" href="' + (ANDROID ? ANDROID_URL : STORE_URL) + '">' +
+      'Open it from the App Store instead</a>' +
+    '<p class="note">Tap <b>Copy</b> beside each figure, then paste it into the payment ' +
+    'screen. When the money has gone, reply <b>paid</b> to the email and the claim closes ' +
+    'itself.</p>';
+
+  /* Did the phone leave? Anything that answers a link takes the page into the
+     background, so a page that is still visible a moment later was not answered. */
+  function watch(ms){
+    return new Promise(resolve => {
+      let left = false;
+      const seen = () => { if (document.hidden) left = true; };
+      document.addEventListener("visibilitychange", seen);
+      window.addEventListener("pagehide", seen);
+      setTimeout(() => {
+        document.removeEventListener("visibilitychange", seen);
+        window.removeEventListener("pagehide", seen);
+        resolve(left || document.hidden);
+      }, ms);
+    });
+  }
+  const go = document.getElementById("go");
+  go.addEventListener("click", async () => {
+    if (!IOS && !ANDROID){ window.location.href = WEB_URL; return; }
+    go.querySelector("span").textContent = "Opening\u2026";
+
+    /* Step one. Harmless whatever happens. */
+    const a = document.createElement("a");
+    a.href = WEB_URL; a.rel = "noopener";
+    document.body.appendChild(a); a.click(); a.remove();
+    if (await watch(1200)) return;
+
+    /* Step two. The page is still here, so the https address was not claimed by
+       the app. Try the scheme once. */
+    go.querySelector("span").textContent = "Trying the app\u2026";
+    try { window.location.href = APP_SCHEME; } catch (e) {}
+    if (await watch(1400)) return;
+
+    /* Step three. Neither took it, so hand over to the App Store, which shows
+       Open when the app is installed and Get when it is not. Either way the
+       page has done as much as a web page can. */
+    go.querySelector("span").textContent = "Opening the App Store\u2026";
+    toast("Taking you to the App Store. Press Open.");
+    window.location.href = ANDROID ? ANDROID_URL : STORE_URL;
+    setTimeout(() => { go.querySelector("span").textContent = "Open the app to pay"; }, 2500);
+  });
+}
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-copy]");
+  if (b) copy(b.dataset.copy, b);
+});
+</script>
