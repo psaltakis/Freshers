@@ -115,6 +115,12 @@ section > .shead:first-child{margin-top:24px}
 .cash .v{font-family:var(--mono);font-size:27px;font-weight:600;font-variant-numeric:tabular-nums;
   letter-spacing:-.02em;display:block;line-height:1.15;overflow-wrap:anywhere}
 .cash .v.neg{color:#FF9AA0}
+/* The bank balance sits on gold, where the pink used for the figures on the dark
+   panel disappears completely. An account in the red is the one number on this
+   screen that has to be impossible to miss. */
+#cashBank.neg{color:#5E0509;font-weight:700}
+.cash .c.big.over{background:#F0C98A;box-shadow:inset 0 0 0 2px #5E0509}
+.cash .c.big.over .k,.cash .c.big.over .s{color:#5E0509;opacity:.9}
 .cash .s{font-family:var(--mono);font-size:10.5px;opacity:.65;display:block;margin-top:6px;line-height:1.4}
 
 .rail{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
@@ -235,6 +241,17 @@ a.btn{display:inline-block;line-height:1.15}
 .drop .txt b{display:block;font-family:var(--display);font-size:16px}
 .drop .txt span{font-size:13.5px;color:var(--ink-soft)}
 .drop img{width:64px;height:64px;object-fit:cover;border-radius:8px;border:1px solid var(--cream-3);flex:none}
+.shots{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.shot{position:relative;width:78px;display:block}
+.shot img,.shot .pdfmark{width:78px;height:78px;object-fit:cover;border-radius:10px;
+  border:1px solid var(--cream-3);display:grid;place-items:center;background:var(--cream-2);
+  font-family:var(--mono);font-size:11px;font-weight:600;color:var(--ink-soft)}
+.shot em{display:block;font-style:normal;font-size:10px;color:var(--ink-soft);margin-top:4px;
+  line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.shot .x{position:absolute;top:-6px;right:-6px;width:24px;height:24px;border-radius:50%;border:0;
+  background:var(--ink);color:#fff;font-size:15px;line-height:1;cursor:pointer;
+  box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.shot .x:hover{background:var(--red)}
 .drop .pdfmark{width:64px;height:64px;border-radius:8px;background:var(--cream-2);display:grid;place-items:center;
   font-family:var(--mono);font-size:11px;font-weight:600;color:var(--ink-soft);flex:none}
 
@@ -257,6 +274,7 @@ a.btn{display:inline-block;line-height:1.15}
   font-weight:600;padding:5px 11px;border-radius:999px;border:1px solid;white-space:normal;
   vertical-align:middle;margin-right:4px;max-width:100%;word-break:keep-all}
 .chip.submitted{background:#FFF6E2;border-color:var(--gold);color:#7C4F05}
+.chip.college{background:#EDE7DA;border-color:#8A6D2F;color:#6B531F}
 .chip.allocated{background:#E9F2EC;border-color:var(--ok);color:var(--ok)}
 .chip.approved{background:#EEE7F6;border-color:#5C3E8F;color:#5C3E8F}
 .chip.paid{background:var(--ink);border-color:var(--ink);color:#fff}
@@ -421,6 +439,50 @@ a.btn{display:inline-block;line-height:1.15}
 .qclaims{margin-top:14px;font-size:15px;color:var(--ink-2);line-height:1.5}
 .qclaims b{font-weight:600}
 .qclaims.low{color:var(--red-deep)}
+
+/* ---------- first run ----------
+   Three short screens, once. A name, an account to be paid into, and the privacy
+   notice. Nothing here is a surprise later: the alternative is a member finding
+   out at the moment they most want their money back that the app has never had
+   their sort code. */
+#setup{position:fixed;inset:0;z-index:118;overflow-y:auto;
+  background:radial-gradient(1000px 560px at 50% -8%,rgba(255,255,255,.12),transparent 62%),
+    linear-gradient(178deg,#B4141B,#7E0A10);
+  padding:calc(26px + env(safe-area-inset-top)) 0 calc(34px + env(safe-area-inset-bottom))}
+#setup .in{max-width:520px;margin:0 auto;padding:0 max(18px,env(safe-area-inset-left))}
+#setup .brandline{display:flex;align-items:center;gap:13px;margin-bottom:22px;color:#FBF3EC}
+#setup .brandline img{height:56px;width:auto}
+#setup .brandline small{display:block;font-family:var(--display);font-style:italic;font-size:11px;
+  letter-spacing:.15em;text-transform:uppercase;opacity:.85}
+#setup .brandline b{display:block;font-family:var(--display);font-size:19px;line-height:1.15;margin-top:3px}
+#setup .dots{display:flex;gap:7px;margin-bottom:20px}
+#setup .dots i{flex:1;height:4px;border-radius:999px;background:rgba(255,255,255,.22)}
+#setup .dots i.on{background:var(--gold)}
+#setup .dots i.did{background:rgba(255,255,255,.6)}
+#setup h2{font-family:var(--display);font-weight:700;font-size:clamp(25px,6vw,32px);
+  color:#fff;margin:0 0 8px;letter-spacing:-.02em;line-height:1.15}
+#setup h2 i{font-weight:400;color:var(--gold)}
+#setup .lede{color:rgba(255,255,255,.82);font-size:16px;margin:0 0 20px;max-width:44ch}
+#setup .panel{margin-bottom:0}
+#setup .legal{background:var(--cream);color:var(--ink-2);border-radius:12px;padding:16px 18px;
+  max-height:min(300px,42vh);overflow-y:auto;-webkit-overflow-scrolling:touch;
+  font-size:14.5px;line-height:1.55;border:1px solid var(--cream-3)}
+#setup .legal p{margin:0 0 12px}
+#setup .legal p:last-child{margin-bottom:0}
+#setup .legal b{color:var(--ink)}
+#setup .agree{display:flex;gap:12px;align-items:flex-start;margin-top:16px;
+  background:var(--cream);border-radius:12px;padding:14px 16px;color:var(--ink-2);
+  font-size:15px;line-height:1.45;cursor:pointer}
+#setup .agree input{width:22px;height:22px;flex:none;margin:1px 0 0;accent-color:var(--red)}
+#setup .nav{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+#setup .nav .btn{flex:1 1 0;min-width:0;justify-content:center}
+#setup .nav .btn.ghost{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.3)}
+#setup .nav .btn.ghost:hover{background:rgba(255,255,255,.2)}
+#setup .skip{flex:1 1 100%;order:3;text-align:center;background:none;border:0;cursor:pointer;
+  color:rgba(255,255,255,.7);font-family:var(--body);font-size:14.5px;text-decoration:underline;padding:6px}
+#setup .msg{color:#FFD9A8;display:block;margin-top:12px}
+#setup .step{animation:riseIn .32s cubic-bezier(.2,.8,.3,1) both}
+@keyframes riseIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
 /* ---------- asking a question without a browser dialog ----------
    confirm() and prompt() are fine once. Used a dozen times in a session, every
@@ -897,12 +959,12 @@ ul.notes li:last-child{margin-bottom:0}
           <div style="margin-top:16px">
             <span class="l" style="font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:8px">Receipt</span>
             <div class="drop" id="nDrop">
-              <div class="pdfmark" id="nPrev">JPG<br>PDF</div>
-              <div class="txt"><b id="nTitle">No receipt attached</b><span id="nSub">A clear photo or a PDF, up to 3 MB.</span></div>
-              <input type="file" id="nFile" accept="image/*,application/pdf" style="display:none">
-              <button class="btn ghost small" id="nPick">Choose file</button>
-              <button class="btn ghost small" id="nDropRc" hidden>Remove</button>
+              <div class="txt"><b id="nTitle">No receipts attached</b><span id="nSub">Photos or PDFs, up to 3 MB each.</span></div>
+              <input type="file" id="nFile" accept="image/*,application/pdf" multiple style="display:none">
+              <button class="btn ghost small" id="nPick">Add files</button>
+              <button class="btn ghost small" id="nDropRc" hidden>Remove all</button>
             </div>
+            <div class="shots" id="nShots"></div>
           </div>
           <div class="actions"><button class="btn gold" id="bSendReceipt">Send receipt to the Treasurer</button>
             <span class="msg" id="nMsg"></span></div>
@@ -934,8 +996,7 @@ ul.notes li:last-child{margin-bottom:0}
       <div class="shead"><h2 id="formTitle">New claim</h2><span class="note" id="formNote">Receipt required</span></div>
       <div class="panel" id="mailOut" hidden style="background:#FFF8E9;border:1px solid var(--gold)">
         <p class="lede" style="margin:0;color:var(--ink-2)"><b id="mailOutTitle">Claims are paused.</b>
-          <span id="mailOutWhy"></span> Nothing already submitted is affected, and you can write the
-          claim out now and send it once they reopen.</p>
+          <span id="mailOutWhy"></span> Nothing already submitted is affected.</p>
       </div>
       <div class="panel" id="claimForm">
         <div class="seg" id="kindSeg" style="margin-bottom:16px">
@@ -943,6 +1004,8 @@ ul.notes li:last-child{margin-bottom:0}
           <button data-kind="allocation" aria-pressed="false">Ask for money first</button>
         </div>
         <p class="lede" id="kindLede">Attach the receipt now. Once the President or Treasurer approves, a payment report is produced with the receipt inside it, filed to Drive and sent to the Treasurer automatically.</p>
+        <p class="lede" id="bigWarn" hidden style="background:#FFF8E9;border:1px solid var(--gold);
+          border-radius:11px;padding:13px 15px;color:var(--ink-2);margin-bottom:16px"></p>
         <div class="grid">
           <label class="f"><span class="l" id="dateLbl">Date of spend</span><input type="date" id="iDate"></label>
           <label class="f"><span class="l" id="amtLbl">Amount (&pound;)</span><input type="number" id="iAmt" step="0.01" min="0" inputmode="decimal" enterkeyhint="done" placeholder="0.00"></label>
@@ -953,12 +1016,12 @@ ul.notes li:last-child{margin-bottom:0}
         <div style="margin-top:16px" id="rcWrap">
           <span class="l" style="font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:8px">Receipt</span>
           <div class="drop" id="dropZone">
-            <div class="pdfmark" id="rcPreviewBox">JPG<br>PDF</div>
-            <div class="txt"><b id="rcTitle">No receipt attached</b><span id="rcSub">A clear photo or a PDF, up to 3 MB.</span></div>
-            <input type="file" id="iReceipt" accept="image/*,application/pdf" style="display:none">
-            <button class="btn ghost small" id="bPick">Choose file</button>
-            <button class="btn ghost small" id="bDropRc" hidden>Remove</button>
+            <div class="txt"><b id="rcTitle">No receipts attached</b><span id="rcSub">Photos or PDFs, up to 3 MB each.</span></div>
+            <input type="file" id="iReceipt" accept="image/*,application/pdf" multiple style="display:none">
+            <button class="btn ghost small" id="bPick">Add files</button>
+            <button class="btn ghost small" id="bDropRc" hidden>Remove all</button>
           </div>
+          <div class="shots" id="rcShots"></div>
         </div>
         <div class="actions">
           <button class="btn" id="bSubmit">Submit claim</button>
@@ -1049,6 +1112,7 @@ ul.notes li:last-child{margin-bottom:0}
         <select id="qStatus">
           <option value="open">Needs a decision</option>
           <option value="submitted">Awaiting a decision</option>
+          <option value="college">With the college</option>
           <option value="allocated">Set aside, receipt needed</option>
           <option value="all">Including rejected and cancelled</option>
         </select>
@@ -1264,6 +1328,17 @@ ul.notes li:last-child{margin-bottom:0}
   </div>
 </div>
 
+<div id="setup" hidden>
+  <div class="in">
+    <div class="brandline">
+      <img src="treasury-logo.png" alt="" width="257" height="420">
+      <span><small>Jesus College MCR</small><b>Treasury 2026/27</b></span>
+    </div>
+    <div class="dots" id="suDots"></div>
+    <div id="suStep"></div>
+  </div>
+</div>
+
 <div id="stalled" hidden>
   <div class="sendcard">
     <div class="plane"><span class="ring"></span>
@@ -1330,7 +1405,7 @@ ul.notes li:last-child{margin-bottom:0}
    ============================================================ */
 
 /* PASTE YOUR TREASURY WEB APP URL HERE. Deploy, Manage deployments, ends in /exec. */
-const API_URL = "https://script.google.com/macros/s/AKfycbxZUfSz-FdpMLC6nfHW071Dv0W4r59yNpvTqmviIhAveBjU0snNP_supcifWf0F8mz8/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycby625VCdAttC7OqbMGQx4-1fhPQNrh0Ys6FR1EIDjAT--SyeBKEaMFJNavkBNd1Kko3/exec";
 
 /* The crest, once. It used to appear three times in this file, which made the
    page a third of a megabyte before a single figure had loaded. */
@@ -1705,7 +1780,8 @@ const PALETTE={
   "Contingency":{c:"#5C6674",d:"#343B45",l:"#C8CED5"}
 };
 const CAT=c=>PALETTE[c]||{c:"#8A5F5C",d:"#4A2523",l:"#DCC9C6"};
-const STATUS={submitted:"Awaiting decision",allocated:"Approved, receipt needed",
+const STATUS={submitted:"Awaiting decision",college:"With the college",
+  allocated:"Approved, receipt needed",
   approved:"With the Treasurer",paid:"Paid",rejected:"Rejected",cancelled:"Cancelled"};
 const KIND={reimbursement:"Already paid",allocation:"Money set aside"};
 
@@ -1764,7 +1840,7 @@ function moneyWhy(v){
 const debounce=(fn,ms)=>{let t;return function(){clearTimeout(t);const a=arguments;t=setTimeout(()=>fn.apply(null,a),ms||180)}};
 
 let token=null, S=null, view="overview", editingId=null, claimKind="reimbursement";
-let formReceipt=null, needReceipt=null, expanded={}, busy=false;
+let formReceipt=[], needReceipt=[], expanded={}, busy=false;
 /* Keeping people signed in is harder than it looks, so every route is tried in turn. */
 const TK="mcr-treasury-token";
 let memToken=null;
@@ -2159,6 +2235,134 @@ $("bRefresh").addEventListener("click",()=>refresh(true));
 </script>
 
 <script>
+/* ---------------- first run ----------------
+   Three screens, shown once, the first time somebody signs in. It ends with the
+   privacy notice, because holding a person's bank details without having told
+   them what happens to them is not something to do quietly. */
+let suIdx=0, suDraft={};
+function setupNeeded(){ return !!(S && S.me && !S.me.ready); }
+function openSetup(){
+  suIdx=0;
+  suDraft={ name:(S.me.name||""), position:(S.me.position||""),
+            acct:(S.me.bank&&S.me.bank.name)||S.me.name||"",
+            sort:(S.me.bank&&S.me.bank.sort)||"", no:(S.me.bank&&S.me.bank.acct)||"",
+            bank:(S.me.bank&&S.me.bank.bank)||"", consent:false };
+  $("setup").hidden=false;
+  paintSetup();
+}
+function paintSetup(){
+  $("suDots").innerHTML=[0,1,2].map(i=>
+    '<i class="'+(i===suIdx?"on":i<suIdx?"did":"")+'"></i>').join("");
+  const el=$("suStep");
+  if(suIdx===0){
+    el.innerHTML='<div class="step"><h2>Who <i>are you</i>?</h2>'+
+      '<p class="lede">This is the name that appears on a claim and on the payment report filed '+
+      'with the year end accounts, so use the one your bank knows.</p>'+
+      '<div class="panel"><div class="grid">'+
+        '<label class="f full"><span class="l">Your name</span>'+
+          '<input type="text" id="suName" autocomplete="name" value="'+esc(suDraft.name)+'"></label>'+
+        '<label class="f full"><span class="l">Your position in the MCR</span>'+
+          '<input type="text" id="suPos" list="posList" placeholder="MCR member is fine" value="'+
+            esc(suDraft.position)+'"></label>'+
+      '</div></div>'+
+      '<div class="nav"><button class="btn" id="suNext">Continue</button></div>'+
+      '<span class="msg" id="suMsg"></span></div>';
+  }else if(suIdx===1){
+    el.innerHTML='<div class="step"><h2>Where should the money <i>go</i>?</h2>'+
+      '<p class="lede">Attached to each claim so the Treasurer can pay you without chasing. '+
+      'Only the President and Treasurer see it. You can leave this until you claim.</p>'+
+      '<div class="panel"><div class="grid">'+
+        '<label class="f full"><span class="l">Account name</span>'+
+          '<input type="text" id="suAcct" value="'+esc(suDraft.acct)+'"></label>'+
+        '<label class="f"><span class="l">Sort code</span>'+
+          '<input type="text" id="suSort" class="mono" placeholder="00-00-00" maxlength="8" '+
+            'inputmode="numeric" autocomplete="off" value="'+esc(suDraft.sort)+'"></label>'+
+        '<label class="f"><span class="l">Account number</span>'+
+          '<input type="text" id="suNo" class="mono" placeholder="12345678" maxlength="8" '+
+            'inputmode="numeric" autocomplete="off" value="'+esc(suDraft.no)+'"></label>'+
+        '<label class="f full"><span class="l">Bank or building society</span>'+
+          '<input type="text" id="suBank" value="'+esc(suDraft.bank)+'"></label>'+
+      '</div></div>'+
+      '<div class="nav"><button class="btn" id="suNext">Continue</button>'+
+      '<button class="btn ghost" id="suBack">Back</button>'+
+      '<button class="skip" id="suSkip">I will add these later</button></div>'+
+      '<span class="msg" id="suMsg"></span></div>';
+  }else{
+    el.innerHTML='<div class="step"><h2>What we <i>keep</i></h2>'+
+      '<p class="lede">Short, and worth reading once.</p>'+
+      '<div class="legal">'+
+        '<p><b>What is held.</b> Your name, your University email address, your position in the '+
+        'MCR, your bank account details, and every claim you make: what it was for, how much, the '+
+        'budget line, and the receipts you attach.</p>'+
+        '<p><b>Why.</b> To pay you back, and to keep the accounts the MCR has to keep. Your bank '+
+        'details are used for nothing else. Nothing here is sold, shared outside the committee, or '+
+        'used to advertise anything.</p>'+
+        '<p><b>Who sees it.</b> Bank details and receipts reach the President and the Treasurer, '+
+        'because they are the two who pay. The Vice President sees the books but not account '+
+        'numbers. No other member sees any of it.</p>'+
+        '<p><b>Where it lives.</b> A Google Sheet and a Drive folder owned by the MCR inside the '+
+        'college Google account, shared with the committee by name and readable by nobody else.</p>'+
+        '<p><b>How long.</b> Claims are kept with the year end accounts, which the college requires '+
+        'to be retained for six years. Your bank details are deleted when you ask, or when you '+
+        'leave, whichever is first.</p>'+
+        '<p><b>Your rights.</b> Under UK GDPR you may ask to see what is held about you, correct '+
+        'it, or have it deleted, by writing to the committee. Most of it you can change yourself '+
+        'under My claims. The lawful basis is your consent, and you may withdraw it at any time, '+
+        'though that means the app can no longer pay you.</p>'+
+      '</div>'+
+      '<label class="agree"><input type="checkbox" id="suConsent"'+(suDraft.consent?" checked":"")+'>'+
+        '<span>I have read this and I agree to the MCR committee holding and using my information '+
+        'in the way described.</span></label>'+
+      '<div class="nav"><button class="btn" id="suNext">Agree and finish</button>'+
+      '<button class="btn ghost" id="suBack">Back</button></div>'+
+      '<span class="msg" id="suMsg"></span></div>';
+  }
+}
+function suHold(){
+  if(suIdx===0){ suDraft.name=$("suName").value.trim(); suDraft.position=$("suPos").value.trim(); }
+  if(suIdx===1){ suDraft.acct=$("suAcct").value.trim(); suDraft.sort=$("suSort").value.trim();
+                 suDraft.no=$("suNo").value.trim(); suDraft.bank=$("suBank").value.trim(); }
+  if(suIdx===2){ suDraft.consent=$("suConsent").checked; }
+}
+$("setup").addEventListener("click",async e=>{
+  const b=e.target.closest("button");
+  if(!b)return;
+  suHold();
+  const m=$("suMsg");
+  if(b.id==="suBack"){ suIdx--; paintSetup(); return; }
+  if(b.id==="suSkip"){ suDraft.sort="";suDraft.no="";suDraft.bank="";suIdx=2; paintSetup(); return; }
+  if(b.id!=="suNext")return;
+  if(suIdx===0){
+    if(!suDraft.name){ m.textContent="Add your name."; return; }
+    suIdx=1; paintSetup(); return;
+  }
+  if(suIdx===1){
+    const any=suDraft.sort||suDraft.no||suDraft.bank;
+    if(any){
+      if(suDraft.sort.replace(/[^0-9]/g,"").length!==6){ m.textContent="A sort code is six digits."; return; }
+      if(suDraft.no.replace(/[^0-9]/g,"").length!==8){ m.textContent="An account number is eight digits."; return; }
+      if(!suDraft.bank){ m.textContent="Add the name of your bank."; return; }
+    }
+    suIdx=2; paintSetup(); return;
+  }
+  if(!suDraft.consent){ m.textContent="The app cannot hold your details without this."; return; }
+  b.disabled=true; b.innerHTML='<span class="spin"></span>Saving';
+  try{
+    const payload={ name:suDraft.name, position:suDraft.position||"MCR member",
+                    consent:true, setupDone:true };
+    if(suDraft.sort||suDraft.no||suDraft.bank)
+      payload.bank={ name:suDraft.acct||suDraft.name, sort:suDraft.sort,
+                     acct:suDraft.no, bank:suDraft.bank };
+    S.me=await api("saveProfile",payload);
+    $("setup").hidden=true;
+    $("whoName").textContent=S.me.name||roleLabel(S.me.role);
+    fillProfile(); render();
+    toast(S.me.canClaim?"All set":"Saved. Add your bank details before you claim.");
+    offerInstall();
+  }catch(err){ m.textContent=err.message; }
+  b.disabled=false; b.textContent="Agree and finish";
+});
+
 /* ---------------- state ---------------- */
 const isAdmin=()=>S&&["president","treasurer","vice"].indexOf(S.me.role)>=0;
 const canApprove=()=>!!(S&&S.can&&S.can.approve);
@@ -2255,7 +2459,7 @@ async function boot(fromWelcome){
     :(S.canSeeBudget?["overview","mine"]:["mine"]);
   if(allowed.indexOf(view)<0)view=allowed[0];
   fillLineSelects();fillProfile();fillSettings();resetForm();setView(view,true);
-  offerInstall();
+  if(setupNeeded())openSetup(); else offerInstall();
 }
 function welcomeNote(){
   if(isAdmin()){
@@ -2272,6 +2476,8 @@ function welcomeNote(){
   }
   const owed=S.claims.filter(c=>c.status==="approved").reduce((s,c)=>s+c.amount,0);
   const need=S.claims.filter(c=>c.status==="allocated").length;
+  const atColl=myClaims().filter(c=>c.status==="college").length;
+  if(atColl)return atColl===1?"One of your claims is with the college":atColl+" of your claims are with the college";
   if(need)return need===1?"One claim is waiting on your receipt":need+" claims are waiting on your receipts";
   if(owed>0)return gbp.format(owed)+" is on its way to you";
   return "Everything is up to date";
@@ -2333,6 +2539,7 @@ function renderCash(){
   const t=S.totals;
   $("cashBank").textContent=gbp.format(t.bank);
   $("cashBank").className="v"+(t.bank<0?" neg":"");
+  $("cashBank").closest(".c").classList.toggle("over",t.bank<0);
   $("cashBankSub").textContent=gbp0.format(t.funds)+" in, "+gbp0.format(t.spent)+" out";
   $("fundsManual").hidden=true;
   $("fundsDerived").hidden=false;
@@ -2488,38 +2695,67 @@ function prepare(file){
     r.onerror=()=>rej(new Error("That file could not be read."));r.readAsDataURL(file);
   });
 }
+/* A claim can carry several files: a receipt, the itemised till roll, a photo of
+   the thing that was bought. They are held as a list, shown as a strip, and any
+   one of them can be taken back off without starting again. */
+const MAX_FILES=()=>(S&&S.maxReceipts)||8;
 function wireDrop(opts){
   const input=$(opts.input);
   $(opts.pick).addEventListener("click",()=>input.click());
   $(opts.zone).addEventListener("dragover",e=>e.preventDefault());
   $(opts.zone).addEventListener("drop",e=>{e.preventDefault();
-    if(e.dataTransfer.files&&e.dataTransfer.files[0])take(e.dataTransfer.files[0])});
-  input.addEventListener("change",()=>{if(input.files&&input.files[0])take(input.files[0])});
-  $(opts.drop).addEventListener("click",()=>{opts.set(null);input.value="";paint()});
-  async function take(f){
-    $(opts.title).textContent="Preparing "+f.name;$(opts.sub).textContent="One moment";
-    try{const data=await prepare(f);
-      opts.set({data,name:f.name,kind:data.indexOf("application/pdf")>0?"pdf":"image"});paint()}
-    catch(err){opts.set(null);paint();$(opts.title).textContent="That file did not work";
-      $(opts.sub).textContent=err.message}
+    if(e.dataTransfer.files)take(e.dataTransfer.files)});
+  input.addEventListener("change",()=>{if(input.files)take(input.files);input.value=""});
+  $(opts.drop).addEventListener("click",()=>{opts.set([]);paint()});
+  $(opts.shots).addEventListener("click",e=>{
+    const b=e.target.closest("button[data-drop-i]");
+    if(!b)return;
+    const list=opts.get().slice();
+    list.splice(Number(b.dataset.dropI),1);
+    opts.set(list);paint();
+  });
+  async function take(files){
+    const list=opts.get().slice();
+    const room=MAX_FILES()-list.length;
+    const picked=Array.prototype.slice.call(files,0,Math.max(0,room));
+    if(files.length>picked.length)
+      toast("Up to "+MAX_FILES()+" files on one claim, so "+
+        (picked.length?"only the first "+picked.length+" were added":"none were added")+".");
+    if(!picked.length)return;
+    $(opts.title).textContent="Preparing "+picked.length+" file"+(picked.length===1?"":"s");
+    $(opts.sub).textContent="One moment";
+    for(const f of picked){
+      try{
+        const data=await prepare(f);
+        list.push({data,name:f.name,kind:data.indexOf("application/pdf")>0?"pdf":"image"});
+      }catch(err){ toast(f.name+": "+err.message); }
+    }
+    opts.set(list);paint();
   }
   function paint(){
-    const cur=opts.get(),box=document.getElementById(opts.prev);
-    $(opts.drop).hidden=!cur;
-    delete EL_[opts.prev];
-    if(!cur){box.outerHTML='<div class="pdfmark" id="'+opts.prev+'">JPG<br>PDF</div>';
-      $(opts.title).textContent="No receipt attached";
-      $(opts.sub).textContent="A clear photo or a PDF, up to 3 MB.";return}
-    box.outerHTML=cur.kind==="image"?'<img id="'+opts.prev+'" src="'+cur.data+'" alt="Receipt preview">'
-      :'<div class="pdfmark" id="'+opts.prev+'">PDF</div>';
-    $(opts.title).textContent="Receipt attached";$(opts.sub).textContent=cur.name+" is ready to send";
+    const list=opts.get()||[];
+    $(opts.drop).hidden=list.length<2;
+    $(opts.pick).textContent=list.length?"Add another":"Add files";
+    $(opts.pick).disabled=list.length>=MAX_FILES();
+    $(opts.title).textContent=list.length
+      ? list.length+" file"+(list.length===1?"":"s")+" attached"
+      : "No receipts attached";
+    $(opts.sub).textContent=list.length
+      ? (list.length>=MAX_FILES()?"That is the most a claim can carry.":"Add another if the receipt runs over a page.")
+      : "Photos or PDFs, up to 3 MB each.";
+    $(opts.shots).innerHTML=list.map((f,i)=>
+      '<span class="shot">'+
+        (f.kind==="image"?'<img src="'+f.data+'" alt="">':'<span class="pdfmark">PDF</span>')+
+        '<button class="x" data-drop-i="'+i+'" aria-label="Remove '+esc(f.name)+'">&times;</button>'+
+        '<em>'+esc(f.name)+'</em>'+
+      '</span>').join("");
   }
   return paint;
 }
 const paintReceipt=wireDrop({input:"iReceipt",pick:"bPick",zone:"dropZone",drop:"bDropRc",
-  prev:"rcPreviewBox",title:"rcTitle",sub:"rcSub",get:()=>formReceipt,set:v=>formReceipt=v});
+  shots:"rcShots",title:"rcTitle",sub:"rcSub",get:()=>formReceipt,set:v=>formReceipt=v});
 const paintNeed=wireDrop({input:"nFile",pick:"nPick",zone:"nDrop",drop:"nDropRc",
-  prev:"nPrev",title:"nTitle",sub:"nSub",get:()=>needReceipt,set:v=>needReceipt=v});
+  shots:"nShots",title:"nTitle",sub:"nSub",get:()=>needReceipt,set:v=>needReceipt=v});
 
 /* ---------------- claim form ---------------- */
 $("kindSeg").addEventListener("click",e=>{
@@ -2535,6 +2771,7 @@ function paintKind(){
   $("dateLbl").textContent=alloc?"When you expect to spend it":"Date of spend";
   $("amtLbl").textContent=alloc?"Amount you need (\u00a3)":"Amount (\u00a3)";
   $("bSubmit").textContent=editingId?"Save and resubmit":(alloc?"Request the money":"Submit claim");
+  paintBig();
   $("kindLede").textContent=alloc
     ? "For something not paid for yet. The committee sets the money aside against the budget line, then asks you for the receipt once you have spent it. Only then does it reach the Treasurer."
     : "Attach the receipt now. Once the President or Treasurer approves, a payment report is produced with the receipt inside it, filed to Drive and emailed to the Treasurer automatically.";
@@ -2562,12 +2799,32 @@ function paintMail(){
   if(need&&out&&!need.hidden)$("nCap").textContent=why;
 }
 function resetForm(){
-  editingId=null;formReceipt=null;$("iReceipt").value="";
+  editingId=null;formReceipt=[];$("iReceipt").value="";
   $("formTitle").textContent="New claim";$("bCancelEdit").hidden=true;
   $("iDate").value=today();["iAmt","iWhat","iNote"].forEach(i=>$(i).value="");
-  $("formMsg").textContent="";paintKind();paintReceipt();paintMail();
+  $("formMsg").textContent="";paintKind();paintReceipt();paintMail();paintBig();
 }
 $("bCancelEdit").addEventListener("click",()=>{resetForm();render()});
+const collegeLimit=()=>(S&&S.collegeLimit)||299;
+const overLimit=v=>{const n=money(v);return n!==null&&n>collegeLimit()};
+/* A running note under the amount, so nobody meets the college route for the
+   first time in a confirmation box. */
+function paintBig(){
+  const w=$("bigWarn");
+  if(!w)return;
+  const big=overLimit($("iAmt").value);
+  w.hidden=!big;
+  if(!big)return;
+  const alloc=claimKind==="allocation";
+  w.innerHTML="<b>Over "+esc(gbp0.format(collegeLimit()))+", so the college has to approve it.</b> "+
+    (alloc
+      ? "The President agrees it first, then the Treasurer puts it to the Bursar. No money is set "+
+        "aside until the Bursar says yes."
+      : "The Treasurer agrees it first, then puts it to the Bursar. Nothing is approved and nothing "+
+        "is paid until the Bursar says yes.")+
+    " It usually takes a few days.";
+}
+$("iAmt").addEventListener("input",paintBig);
 $("bSubmit").addEventListener("click",async()=>{
   const m=$("formMsg");m.className="msg";
   if(!profileReady()){m.textContent="Fill in your details above first.";return}
@@ -2575,16 +2832,32 @@ $("bSubmit").addEventListener("click",async()=>{
   if(amt===null){m.textContent=moneyWhy($("iAmt").value);$("iAmt").focus();return}
   if(!what){m.textContent="Say what the money is for.";$("iWhat").focus();return}
   if(!mailOk()){m.textContent=MAIL_OUT;return}
-  if(claimKind==="reimbursement"&&!formReceipt&&!editingId){
+  if(claimKind==="reimbursement"&&!formReceipt.length&&!editingId){
     m.textContent="Attach the receipt, or switch to asking for the money first.";return}
   m.textContent="";
+  /* Over the limit this is a different process with a different timescale, and
+     somebody who does not know that will read silence as a refusal. Say it in
+     full, once, before anything is sent. */
+  if(amt>collegeLimit()){
+    const alloc=claimKind==="allocation";
+    if(!await ask({title:"This needs the college's approval",
+      body:"<b>"+esc(gbp.format(amt))+" is over the "+esc(gbp0.format(collegeLimit()))+
+        " limit,</b> so the MCR cannot approve it on its own. Here is what happens:"+
+        "<br><br>1. "+(alloc?"The <b>President</b> agrees to the spend.":"The <b>Treasurer</b> agrees to the claim.")+
+        "<br>2. The <b>Treasurer</b> puts it to the college <b>Bursar</b>."+
+        "<br>3. Only once the Bursar has agreed is it "+(alloc?"set aside":"approved and paid")+"."+
+        "<br><br>Until step 3 it is <b>not approved</b>, and "+
+        (alloc?"no money is set aside":"nothing will be paid")+
+        ". It usually takes a few days. You will be told at each step.",
+      yes:"Send it anyway",no:"Go back"}))return;
+  }
   const btn=$("bSubmit"),label=btn.textContent;btn.disabled=true;
   sending(true,claimKind==="allocation"?"Sending your request":"Sending your claim",
     formReceipt?"Filing the receipt and telling the committee":"Telling the committee");
   try{
     await api("submitClaim",{id:editingId,kind:claimKind,amount:amt,what,
       lineId:$("iLine").value,date:$("iDate").value||today(),note:$("iNote").value.trim(),
-      receipt:formReceipt?{data:formReceipt.data,name:formReceipt.name}:null});
+      receipts:formReceipt.map(f=>({data:f.data,name:f.name}))});
     resetForm();await refresh();
     sendingDone(claimKind==="allocation"?"Request sent":"Claim sent",
       "The committee has it. You can follow it below.");
@@ -2617,7 +2890,7 @@ $("bSendReceipt").addEventListener("click",async()=>{
   const m=$("nMsg");m.className="msg";
   const c=myClaims().filter(x=>x.id===$("nSel").value)[0];
   if(!c){m.textContent="Pick a claim.";return}
-  if(!needReceipt){m.textContent="Attach the receipt first.";return}
+  if(!needReceipt.length){m.textContent="Attach the receipt first.";return}
   const amt=money($("nAmt").value);
   if(amt===null){m.textContent=moneyWhy($("nAmt").value);$("nAmt").focus();return}
   if(!mailOk()){m.textContent=MAIL_OUT;return}
@@ -2625,8 +2898,8 @@ $("bSendReceipt").addEventListener("click",async()=>{
   sending(true,"Sending your receipt","Building the payment report and emailing the Treasurer");
   try{
     const r=await api("sendReceipt",{id:c.id,amount:amt,date:$("nDate").value||today(),
-      receipt:{data:needReceipt.data,name:needReceipt.name}});
-    needReceipt=null;$("nFile").value="";paintNeed();
+      receipts:needReceipt.map(f=>({data:f.data,name:f.name}))});
+    needReceipt=[];paintNeed();
     await refresh();
     if(r.over){sending(false);m.className="msg";
       m.textContent="That is more than was set aside, so it has gone back to the committee."}
@@ -2686,9 +2959,18 @@ function renderMine(){
 function trackHtml(c){
   if(c.status==="rejected")return '<div class="track"><div class="st dead now">Rejected</div></div>';
   if(c.status==="cancelled")return '<div class="track"><div class="st dead now">Cancelled by the claimant</div></div>';
-  const steps=c.kind==="allocation"?["Requested","Money set aside","Receipt in","Paid"]
-    :["Claimed with receipt","Approved","Report filed","Paid"];
-  const idx={submitted:0,allocated:1,approved:2,paid:3}[c.status];
+  const alloc=c.kind==="allocation";
+  /* A large claim has two more gates in it, and hiding them would make the wait
+     look like nothing happening. */
+  const steps=c.needsCollege
+    ? (alloc?["Requested","President agreed","College agreed","Money set aside","Receipt in","Paid"]
+            :["Claimed","Treasurer agreed","College agreed","With the Treasurer","Paid"])
+    : (alloc?["Requested","Money set aside","Receipt in","Paid"]
+            :["Claimed with receipt","Approved","Report filed","Paid"]);
+  const idx=c.needsCollege
+    ? (alloc?{submitted:0,college:1,allocated:3,approved:4,paid:5}
+            :{submitted:0,college:1,approved:3,paid:4})[c.status]
+    : {submitted:0,allocated:1,approved:2,paid:3}[c.status];
   return '<div class="track">'+steps.map((s,i)=>
     '<div class="st'+(i<=idx?" on":"")+(i===idx?" now":"")+'">'+s+'</div>').join("")+'</div>';
 }
@@ -2711,6 +2993,18 @@ function claimCard(c,mode){
           ' with the report and the receipt attached, and moves this to Payments.'
          :'Nothing is asked of the Treasurer yet. The claimant is asked for the receipt, and only then does it become a payment.')+
         (c.overBy?' <b>'+gbp.format(c.overBy)+' more than was originally set aside.</b>':'')+'</p>';
+    }else if(c.status==="college"){
+      acts=openBtn(c,"receipt","ghost")+
+        '<button class="btn small" data-college-yes="'+c.id+'">Record the college\u2019s answer</button>'+
+        '<button class="btn danger small" data-reject="'+c.id+'">Withdraw it</button>';
+      extra='<div class="box warn"><h4>Not approved. With the college.</h4>'+
+        '<p>This is over '+gbp0.format(collegeLimit())+', so the Bursar has to agree to it before '+
+        'the MCR may '+(c.kind==="allocation"?"set the money aside":"pay it")+'. '+
+        esc(actor(c.committeeBy)||"The committee")+' agreed to it'+
+        (c.committeeAt?" on "+esc(stamp(c.committeeAt)):"")+
+        ', and the Treasurer has been sent what to put to the Bursar.</p>'+
+        '<p>When the Bursar answers, record it here. Nothing else in the app can move this on, '+
+        'and it cannot be paid until you do.</p></div>';
     }else if(c.status==="allocated"){
       acts='<button class="btn ghost small" data-chase="'+c.id+'">Chase the receipt</button>'+
         '<button class="btn danger small" data-reject="'+c.id+'">Cancel this allocation</button>';
@@ -2732,6 +3026,14 @@ function claimCard(c,mode){
     if(c.status==="submitted")
       acts='<button class="btn ghost small" data-edit="'+c.id+'">Edit</button>'+
         '<button class="btn danger small" data-cancel="'+c.id+'">Cancel this claim</button>';
+    if(c.status==="college"){
+      acts='<button class="btn danger small" data-cancel="'+c.id+'">Cancel this claim</button>';
+      extra='<div class="box warn"><h4>Not approved yet</h4><p>This is over '+
+        gbp0.format(collegeLimit())+', so the college has to approve it as well as the MCR. '+
+        esc(actor(c.committeeBy)||"The committee")+' has agreed to it and the Treasurer has put it '+
+        'to the Bursar. Nothing is needed from you, and it usually takes a few days.</p>'+
+        '<p><b>No money has been set aside and nothing will be paid until the Bursar agrees.</b></p></div>';
+    }
     if(c.status==="allocated"){
       acts='<button class="btn gold small" data-need="'+c.id+'">Send the receipt</button>'+
         '<button class="btn danger small" data-cancel="'+c.id+'">Cancel this claim</button>';
@@ -2755,6 +3057,9 @@ function claimCard(c,mode){
         (c.status==="cancelled"?"Reopen and resubmit":"Revise and resubmit")+'</button>';
   }
   const trail=[(c.kind==="allocation"?"Requested ":"Claimed ")+stamp(c.submittedAt),
+    c.committeeAt?"Agreed by "+esc(actor(c.committeeBy))+", "+stamp(c.committeeAt):"",
+    c.collegeAt?"College agreed, recorded by "+esc(actor(c.collegeBy))+", "+stamp(c.collegeAt)+
+      (c.collegeRef?" ("+esc(c.collegeRef)+")":""):"",
     c.approvedAt?(c.kind==="allocation"&&c.status==="allocated"?"Set aside by ":"Approved by ")+esc(actor(c.approvedBy))+", "+stamp(c.approvedAt):"",
     c.receiptAt?"Receipt in "+stamp(c.receiptAt):"",
     c.pdfAt?"Report filed "+stamp(c.pdfAt):"",
@@ -2783,12 +3088,19 @@ function lineOptionsHtml(sel){
 }
 /* One button per file, opening Drive directly. No round trip through the app. */
 function openBtn(c,which,style){
-  const url=which==="pdf"?c.driveUrl:c.receiptUrl;
-  const label=which==="pdf"?"Open payment report":"Open receipt";
-  if(which==="receipt"&&!c.receipt)return "";
   if(which==="pdf"&&!c.pdf)return "";
-  if(url)return '<a class="btn '+style+' small" href="'+esc(url)+'" target="_blank" rel="noopener" style="text-decoration:none">'+label+'</a>';
-  return '<button class="btn '+style+' small" data-'+which+'="'+c.id+'">'+label+'</button>';
+  if(which==="receipt"&&!c.receipt)return "";
+  if(which==="pdf")
+    return '<button class="btn '+style+' small" data-pdf="'+c.id+'">Open payment report</button>';
+  /* One button per attachment, since a claim can carry up to eight. Everything
+     goes through the app rather than a Drive link, so it is only ever handed to
+     somebody the server has already checked. */
+  const n=c.receiptCount||1;
+  let out="";
+  for(let i=0;i<n;i++)
+    out+='<button class="btn '+style+' small" data-receipt="'+c.id+'" data-n="'+i+'">'+
+      (n>1?"Receipt "+(i+1):"Open receipt")+'</button>';
+  return out;
 }
 function payBox(c){
   const b=c.bank||{};
@@ -2817,16 +3129,17 @@ function renderApprovals(){
   if(!canApprove())return;
   const q=$("qSearch").value.trim().toLowerCase(),f=$("qStatus").value;
   const all=S.claims.filter(c=>{
-    if(f==="open")return c.status==="submitted"||c.status==="allocated";
+    if(f==="open")return c.status==="submitted"||c.status==="college"||c.status==="allocated";
     if(f==="all")return true;
     return c.status===f});
   const list=all.filter(c=>matches(c,q))
     .sort((a,b)=>(a.status==="submitted"?0:1)-(b.status==="submitted"?0:1)||b.submittedAt-a.submittedAt);
   const waiting=S.claims.filter(c=>c.status==="submitted");
-  $("approvalNote").textContent=waiting.length
+  const atCollege=S.claims.filter(c=>c.status==="college").length;
+  $("approvalNote").textContent=(waiting.length
     ?waiting.length+(waiting.length===1?" claim needs":" claims need")+" a decision, "+
       gbp.format(waiting.reduce((s,c)=>s+c.amount,0))
-    :"Nothing waiting on you";
+    :"Nothing waiting on you")+(atCollege?" \u00b7 "+atCollege+" with the college":"");
   $("approvalList").innerHTML=list.length?list.map(c=>claimCard(c,"admin")).join("")
     :'<div class="empty"><b>Nothing here</b><span>'+(q?"No claim matches that search.":"Every claim has been dealt with.")+'</span></div>';
 }
@@ -2877,13 +3190,27 @@ async function act(fn,msg,btn,label){
 document.addEventListener("click",async e=>{
   const t=e.target.closest("button[data-approve],button[data-part],button[data-reject],button[data-pay],"+
     "button[data-renotify],button[data-chase],button[data-remind],button[data-cancel],button[data-edit],"+
-    "button[data-need],button[data-receipt],button[data-pdf]");
+    "button[data-need],button[data-receipt],button[data-pdf],button[data-college-yes]");
   if(!t)return;
   const d=t.dataset;
   if(d.approve!==undefined){
     const c=S.claims.filter(x=>x.id===d.approve)[0];
     if(!c)return;
     const own=String(c.email||"").toLowerCase()===String(S.me.email||"").toLowerCase();
+    if(c.needsCollege){
+      const alloc=c.kind==="allocation";
+      if(!await ask({title:"Send this to the college?",
+        body:"<b>"+esc(gbp.format(c.amount))+" is over the "+esc(gbp0.format(collegeLimit()))+
+          " limit,</b> so agreeing to it here does <b>not</b> approve it and does <b>not</b> "+
+          (alloc?"set any money aside":"authorise any payment")+".<br><br>"+
+          "It records that the MCR is content, and sends the Treasurer what to put to the "+
+          "<b>Bursar</b>. Only when you come back and record the Bursar\u2019s answer does it "+
+          (alloc?"become money set aside":"become payable")+".",
+        yes:"Agree and send to the college"}))return;
+      await act(()=>api("decide",{id:d.approve,decision:"approve"}),
+        "Sent to the college. Record their answer when it comes.",t,"Sending");
+      return;
+    }
     if(!await ask({
       title:c.receipt?"Approve "+gbp.format(c.amount)+"?":"Set aside "+gbp.format(c.amount)+"?",
       body:(own?"<b>This is your own claim.</b> It will be recorded as a self approval and the Vice President will be sent a copy for the record.<br><br>":"")+
@@ -2894,6 +3221,31 @@ document.addEventListener("click",async e=>{
     await act(()=>api("decide",{id:d.approve,decision:"approve"}),
       c.receipt?"Approved, and the Treasurer has been emailed":"Money set aside, the claimant has been asked for the receipt",
       t,"Filing");
+    return;
+  }
+  if(d.collegeYes!==undefined){
+    const c=S.claims.filter(x=>x.id===d.collegeYes)[0];if(!c)return;
+    const alloc=c.kind==="allocation";
+    const ref=await ask({title:"What did the Bursar say?",
+      body:"Recording <b>yes</b> "+(alloc?"sets aside ":"approves and releases ")+
+        "<b>"+esc(gbp.format(c.amount))+"</b>"+(alloc?"":" for payment")+
+        ", and tells "+esc(c.who)+".<br><br>If the college said no, press <b>They said no</b> "+
+        "and the claim is turned down with your reason.",
+      field:"Their reference or a note, if you have one",placeholder:"Optional",
+      yes:"They approved it",no:"They said no"});
+    if(ref===false){
+      const why=await ask({title:"The college turned it down?",
+        body:"The claim is rejected and "+esc(c.who)+" is emailed your reason.",
+        field:"What the college said",placeholder:"Optional but kinder",
+        yes:"Reject the claim",no:"Cancel",danger:true});
+      if(why===false)return;
+      await act(()=>api("collegeAnswer",{id:c.id,ok:false,reason:String(why||"")}),
+        "Recorded, and the claimant has been told",t,"Saving");
+      return;
+    }
+    await act(()=>api("collegeAnswer",{id:c.id,ok:true,ref:String(ref||"")}),
+      alloc?"The college agreed, and the money is set aside":"The college agreed, and it is ready to pay",
+      t,"Saving");
     return;
   }
   if(d.part!==undefined){
@@ -2962,7 +3314,7 @@ document.addEventListener("click",async e=>{
     $("bCancelEdit").hidden=false;
     $("iDate").value=c.date||today();$("iAmt").value=c.amount;$("iWhat").value=c.what;
     $("iNote").value=c.note||"";$("iLine").value=c.lineId;
-    formReceipt=null;paintReceipt();paintKind();
+    formReceipt=[];paintReceipt();paintKind();paintBig();
     $("iWhat").scrollIntoView({behavior:"smooth",block:"center"});
     return;
   }
@@ -2972,7 +3324,7 @@ document.addEventListener("click",async e=>{
       $("needWrap").scrollIntoView({behavior:"smooth",block:"start"})}},60);
     return;
   }
-  if(d.receipt!==undefined){openFile(d.receipt,"receipt");return}
+  if(d.receipt!==undefined){openFile(d.receipt,"receipt",Number(d.n)||0);return}
   if(d.pdf!==undefined){openFile(d.pdf,"pdf");return}
 });
 /* Rerouting is a select, not a button. */
@@ -2993,10 +3345,10 @@ document.addEventListener("change",async e=>{
    Popups are blocked by default on a phone, a data: URL of a few megabytes is
    refused outright by Safari, and writing into another window is what makes
    browsers start asking whether the page should be allowed to do things. */
-async function openFile(id,which){
+async function openFile(id,which,n){
   toast("Opening\u2026");
   try{
-    const f=await api("file",{id,which});
+    const f=await api("file",{id,which,n:n||0});
     const m=String(f.data).match(/^data:([^;]+);base64,(.*)$/);
     if(!m)throw new Error("That file came back in a form the browser cannot open.");
     const bin=atob(m[2]);
