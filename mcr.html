@@ -15,442 +15,437 @@ html.up::before{content:none}
 
 <style>
 :root{
-  /* Off the crest: the crimson field, the black cockerels, the silver ground.
-     Deepened, because the old palette was flat and flat reads as sterile. */
-  --crimson:#B4141B; --crimson-2:#8E0F14; --crimson-3:#5E070C; --crimson-4:#3A0206;
-  --crimson-lite:#D94048;
-  --cream:#FDF6EF; --cream-2:#F0DFD0; --cream-3:#D6BCA9; --cream-4:#A98B78;
-  --ink:#2A0508; --ink-2:#4A1418;
-  --gold:#E8B356; --gold-2:#FBE3B0; --gold-3:#8A6212; --gold-ink:#3A2600;
-  --moss:#4E8C63; --sky:#4E93CC; --plum:#A97CD1; --clay:#E08862; --rose:#D4739A;
-  --line:rgba(253,246,239,.13); --line-2:rgba(253,246,239,.26); --line-3:rgba(253,246,239,.42);
-  /* the glass system: one fill, one highlight, one shadow, used everywhere */
-  --glass:linear-gradient(158deg,rgba(253,246,239,.13),rgba(253,246,239,.045) 46%,rgba(0,0,0,.06));
-  --glass-2:linear-gradient(158deg,rgba(253,246,239,.20),rgba(253,246,239,.07) 46%,rgba(0,0,0,.05));
-  --lift:0 1px 0 rgba(253,246,239,.20) inset, 0 1px 2px rgba(30,2,5,.24), 0 10px 24px -12px rgba(30,2,5,.62);
-  --lift-2:0 1px 0 rgba(253,246,239,.28) inset, 0 2px 6px rgba(30,2,5,.30), 0 26px 50px -22px rgba(30,2,5,.78);
+  /* Off the crest. Crimson field, black cockerel, gold roundel, cream ground. */
+  --crimson:#B4141B; --crimson-2:#8E0F14; --crimson-3:#6B080D; --crimson-4:#460509;
+  --crimson-lite:#D0313A;
+  --cream:#FBF3EC; --cream-2:#F2E4D8; --cream-3:#DCC3AE; --cream-4:#B0917E;
+  --ink:#2A1012; --ink-2:#4A1A1E;
+  --gold:#E2A93C; --gold-2:#F7DDA6; --gold-3:#B07E1E; --gold-ink:#4A2E00;
+  /* The colours that stop it being one red page. Each one carries a meaning
+     and is used nowhere else: the calendar, the tags, and the team headings. */
+  --moss:#4E8C63; --sky:#4A8FC9; --plum:#A472CE; --clay:#DE7F55; --rose:#CE6D93;
+  --teal:#3FA394; --slate:#7E90A6;
+  --line:rgba(251,243,236,.14); --line-2:rgba(251,243,236,.28);
+  --panel:#7A0D14; --panel-2:#8E0F14; --panel-3:#650910;
   --display:'Fraunces',Georgia,'Times New Roman',serif;
   --ui:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;
   --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
-  --r:20px; --r2:14px;
+  --r:16px; --r2:12px;
   --sat:env(safe-area-inset-top,0px); --sab:env(safe-area-inset-bottom,0px);
-  --navh:82px; --ease:cubic-bezier(.22,1,.36,1);
+  --navh:76px; --ease:cubic-bezier(.22,1,.36,1);
+  --shadow:0 1px 2px rgba(38,9,11,.28), 0 8px 20px -12px rgba(38,9,11,.6);
+  --shadow-2:0 2px 4px rgba(38,9,11,.3), 0 18px 38px -18px rgba(38,9,11,.75);
+  --pad:18px;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;min-height:100%}
-body{
-  background:var(--crimson-3);
-  color:var(--cream);font-family:var(--ui);font-size:16px;line-height:1.55;
-  -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;overflow-x:hidden;
-}
-/* The ground the whole app sits on: a deep crimson wash, a warm light coming
-   from over your right shoulder, and a fine grain so it is not a flat fill. */
-body::before{content:"";position:fixed;inset:0;z-index:-2;
+body{background:var(--crimson-2);color:var(--cream);font-family:var(--ui);font-size:16px;
+  line-height:1.55;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-1;
   background:
-    radial-gradient(1200px 700px at 84% -12%, rgba(232,179,86,.20), transparent 58%),
-    radial-gradient(900px 600px at 8% 104%, rgba(212,64,72,.24), transparent 62%),
-    linear-gradient(174deg,#A9151C 0%,#7E0E15 44%,#4E060B 100%);}
-body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.30;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.42'/%3E%3C/svg%3E")}
+    radial-gradient(900px 520px at 88% -8%, rgba(226,169,60,.14), transparent 56%),
+    linear-gradient(176deg,#B4141B 0%,#941016 52%,#6B080D 100%)}
 body.locked{overflow:hidden}
 [hidden]{display:none!important}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer;background:none;border:0}
 a{color:var(--gold-2);text-underline-offset:3px}
-:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:10px}
-::selection{background:rgba(232,179,86,.32)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:8px}
+::selection{background:rgba(226,169,60,.3)}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
-
-/* Everything arrives rather than appearing. The delay is set per element in JS
-   so a screen unfolds top down, which is what makes it feel built rather than
-   dumped on the page. */
-@keyframes rise{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @keyframes glow{0%,100%{opacity:.55}50%{opacity:1}}
 @keyframes spin{to{transform:rotate(360deg)}}
-.rise{animation:rise .62s var(--ease) both}
 
-/* ---------- the crest ---------- */
-.crest{width:44px;height:44px;flex:0 0 44px;border-radius:50%;
-  background:radial-gradient(circle at 32% 26%, #FFFDFA, var(--cream-2));
-  display:grid;place-items:center;
-  box-shadow:0 1px 0 rgba(255,255,255,.6) inset, 0 3px 10px rgba(30,2,5,.42), 0 0 0 1px rgba(90,10,14,.22)}
-.crest svg{width:27px;height:27px;display:block}
-.crest.big{width:82px;height:82px;flex-basis:82px}
-.crest.big svg{width:50px;height:50px}
+/* ---------- the crest, as the MCR actually draws it ---------- */
+.crest{display:block;width:40px;height:40px;flex:0 0 40px;object-fit:contain}
+.crest.big{width:78px;height:78px;flex-basis:78px}
 
 /* ---------- header ---------- */
-header{position:sticky;top:0;z-index:40;padding-top:var(--sat)}
-header::before{content:"";position:absolute;inset:0;backdrop-filter:blur(18px) saturate(1.3);
-  -webkit-backdrop-filter:blur(18px) saturate(1.3);
-  background:linear-gradient(180deg,rgba(58,2,6,.82),rgba(58,2,6,.44) 66%,transparent);
-  -webkit-mask-image:linear-gradient(180deg,#000 62%,transparent);
-  mask-image:linear-gradient(180deg,#000 62%,transparent)}
-.hbar{position:relative;display:flex;align-items:center;gap:13px;max-width:940px;margin:0 auto;padding:12px 20px 18px}
-.wm b{display:block;font-family:var(--display);font-size:17px;font-weight:600;line-height:1.05;
-  letter-spacing:-.02em;font-variation-settings:"SOFT" 30}
-.wm i{display:block;font-style:normal;font-size:11px;color:var(--cream-3);letter-spacing:.09em;
+header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
+  background:linear-gradient(180deg,var(--crimson-3) 0%,rgba(107,8,13,.92) 62%,rgba(107,8,13,0));
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.hbar{display:flex;align-items:center;gap:11px;max-width:1180px;margin:0 auto;padding:8px 20px 14px}
+.wm b{display:block;font-family:var(--display);font-size:16px;font-weight:600;line-height:1.05;letter-spacing:-.02em}
+.wm i{display:block;font-style:normal;font-size:10px;color:var(--cream-4);letter-spacing:.14em;
   text-transform:uppercase;margin-top:2px}
 .sp{flex:1}
-.iconbtn{width:40px;height:40px;border-radius:50%;background:var(--glass);border:1px solid var(--line-2);
-  display:grid;place-items:center;color:var(--cream);box-shadow:var(--lift);
-  transition:transform .2s var(--ease),background .2s}
-.iconbtn:hover{background:var(--glass-2);transform:translateY(-1px)}
-.iconbtn:active{transform:scale(.94)}
-.iconbtn svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-.iconbtn.avatar{font-family:var(--display);font-size:14px;font-weight:600;
-  background:linear-gradient(150deg,var(--cream),var(--cream-2));color:var(--crimson-3);border-color:transparent}
+.iconbtn{width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.22);border:1px solid var(--line-2);
+  display:grid;place-items:center;color:var(--cream);transition:background .18s,transform .18s var(--ease)}
+.iconbtn:hover{background:rgba(0,0,0,.36)}
+.iconbtn:active{transform:scale(.93)}
+.iconbtn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.iconbtn.avatar{font-family:var(--display);font-size:13px;font-weight:600;background:var(--cream);
+  color:var(--crimson-3);border-color:transparent;overflow:hidden}
+.iconbtn.avatar img{width:100%;height:100%;object-fit:cover}
 
-/* ---------- layout ---------- */
-.wrap{max-width:940px;margin:0 auto;padding:2px 20px calc(var(--navh) + 40px + var(--sab))}
-.vh{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin:18px 0 18px}
-.vh h2{font-family:var(--display);font-size:34px;font-weight:600;margin:0;letter-spacing:-.035em;
-  line-height:.98;font-variation-settings:"SOFT" 40,"WONK" 1}
+/* ---------- layout ----------
+   One column on a phone, two on a tablet, three where there is room. The
+   sections say for themselves how wide they want to be. */
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px calc(var(--navh) + 30px + var(--sab))}
+@media(min-width:1100px){:root{--pad:20px}}
+.vh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:14px 0 14px}
+.vh h2{font-family:var(--display);font-size:clamp(24px,4.4vw,30px);font-weight:600;margin:0;
+  letter-spacing:-.03em;line-height:1}
 .vh h2 i{font-style:italic;color:var(--gold-2)}
-.vh .note{font-size:12.5px;color:var(--cream-3);padding-bottom:6px}
-.vh .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
-.grp{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;
-  color:var(--gold-2);margin:28px 0 11px;display:flex;align-items:center;gap:11px;opacity:.92}
-.grp::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line-2),transparent)}
-.grp:first-child{margin-top:6px}
+.vh .note{font-size:12px;color:var(--cream-4)}
+.vh .right{margin-left:auto;display:flex;gap:7px;flex-wrap:wrap}
+.grp{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-2);
+  margin:22px 0 9px;display:flex;align-items:center;gap:10px}
+.grp::after{content:"";flex:1;height:1px;background:var(--line)}
+.grp:first-child{margin-top:4px}
+.grp b{font-weight:500;color:var(--cream-4);letter-spacing:.1em}
+/* the two and three column shelves */
+.cols{display:grid;gap:12px}
+@media(min-width:760px){.cols.two{grid-template-columns:1fr 1fr}}
+@media(min-width:1000px){.cols.three{grid-template-columns:repeat(3,1fr)}
+  .cols.wide{grid-template-columns:1.4fr 1fr}}
 
 /* ---------- buttons ---------- */
-.btn{border:1px solid var(--line-2);background:var(--glass);color:var(--cream);border-radius:999px;
-  padding:10px 19px;font-size:14.5px;font-weight:600;display:inline-flex;align-items:center;gap:8px;
-  box-shadow:var(--lift);transition:transform .18s var(--ease),background .2s,box-shadow .2s;
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-.btn:hover{background:var(--glass-2);transform:translateY(-1.5px);box-shadow:var(--lift-2)}
-.btn:active{transform:translateY(0) scale(.975)}
-.btn.sm{padding:7px 14px;font-size:13px}
-.btn.cream{background:linear-gradient(150deg,#FFFDFA,var(--cream-2));color:var(--crimson-3);border-color:transparent}
-.btn.crimson{background:linear-gradient(150deg,var(--crimson),var(--crimson-3));border-color:rgba(0,0,0,.28);color:var(--cream)}
-.btn.ghost{background:transparent;box-shadow:none}
-.btn.ghost:hover{background:var(--glass)}
+.btn{border:1px solid var(--line-2);background:rgba(0,0,0,.2);color:var(--cream);border-radius:999px;
+  padding:8px 16px;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:7px;
+  transition:transform .16s var(--ease),background .18s}
+.btn:hover{background:rgba(0,0,0,.34)}
+.btn:active{transform:scale(.97)}
+.btn.sm{padding:6px 13px;font-size:12.5px}
+.btn.cream{background:var(--cream);color:var(--crimson-3);border-color:transparent}
+.btn.cream:hover{background:#fff}
+.btn.crimson{background:var(--crimson-3);border-color:rgba(0,0,0,.3)}
+.btn.gold{background:var(--gold);color:var(--gold-ink);border-color:transparent}
+.btn.ghost{background:transparent}
+.btn.ghost:hover{background:rgba(0,0,0,.2)}
 .btn[disabled]{opacity:.42;pointer-events:none}
-.spin{width:13px;height:13px;border-radius:50%;border:2px solid rgba(255,255,255,.3);
+.spin{width:12px;height:12px;border-radius:50%;border:2px solid rgba(255,255,255,.3);
   border-top-color:currentColor;animation:spin .8s linear infinite;display:inline-block}
 
-/* ---------- cards ---------- */
-.card{background:var(--glass);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;
-  margin-bottom:13px;box-shadow:var(--lift);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  transition:transform .28s var(--ease),box-shadow .28s,border-color .28s}
-.card:hover{border-color:var(--line-2)}
-.card h3{margin:0 0 7px;font-family:var(--display);font-size:19px;font-weight:600;letter-spacing:-.02em}
-.card p{margin:0 0 10px;color:var(--cream-2);font-size:14.5px;white-space:pre-wrap;line-height:1.62}
+/* ---------- cards: solid panels, not glass ---------- */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:var(--pad);
+  margin-bottom:11px;box-shadow:var(--shadow)}
+.card h3{margin:0 0 6px;font-family:var(--display);font-size:18px;font-weight:600;letter-spacing:-.02em}
+.card p{margin:0 0 9px;color:var(--cream-2);font-size:14.5px;white-space:pre-wrap;line-height:1.6}
 .card p:last-child{margin-bottom:0}
-.card .who{font-size:12.5px;color:var(--gold-2);letter-spacing:.01em}
-.lede{color:var(--cream-3);font-size:13.5px;line-height:1.6}
-.rowline{display:flex;align-items:center;gap:13px;padding:13px 0;border-bottom:1px solid var(--line)}
+.card .who{font-size:12px;color:var(--gold-2)}
+.lede{color:var(--cream-3);font-size:13.5px;line-height:1.58}
+.rowline{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
 .rowline:last-child{border-bottom:0;padding-bottom:0}
 .rowline:first-child{padding-top:0}
 .rowline .t{flex:1;min-width:0}
-.rowline .t b{display:block;font-size:15px;font-weight:600}
-.rowline .t span{display:block;font-size:12.5px;color:var(--cream-3);margin-top:1px}
+.rowline .t b{display:block;font-size:14.5px;font-weight:600}
+.rowline .t span{display:block;font-size:12.5px;color:var(--cream-4);margin-top:1px}
 
-/* ---------- Cockcrow ----------
-   The one object the app is remembered by. A horizon that moves with the real
-   hour: a sunrise at seven, a low gold band at noon, deep crimson at midnight.
-   It is a gradient and two divs, and it costs nothing to run. */
-.crow{position:relative;border-radius:26px;padding:26px 24px 22px;margin-bottom:20px;overflow:hidden;
-  border:1px solid var(--line-2);box-shadow:var(--lift-2);isolation:isolate}
-.crow .sky{position:absolute;inset:0;z-index:-2;transition:background 1.2s linear}
-.crow .sun{position:absolute;left:74%;width:230px;height:230px;margin-left:-115px;border-radius:50%;
-  z-index:-1;filter:blur(2px);transition:bottom 1.2s var(--ease),background 1.2s linear,opacity 1.2s}
-.crow .horizon{position:absolute;left:0;right:0;bottom:0;height:44%;z-index:-1;
-  background:linear-gradient(180deg,rgba(30,2,5,0),rgba(30,2,5,.62))}
-.crow .when{font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;
-  color:var(--gold-2);text-shadow:0 1px 6px rgba(30,2,5,.7)}
-.crow h3{font-family:var(--display);font-size:clamp(28px,7vw,38px);margin:8px 0 8px;font-weight:600;
-  line-height:1.0;letter-spacing:-.04em;font-variation-settings:"SOFT" 40,"WONK" 1;
-  text-shadow:0 2px 14px rgba(30,2,5,.5)}
-.crow .line{margin:0;color:var(--cream);font-size:16px;max-width:42ch;text-shadow:0 1px 8px rgba(30,2,5,.6)}
-.state{display:flex;flex-wrap:wrap;gap:7px;margin-top:17px}
-.state span{font-size:12px;background:rgba(30,2,5,.34);border:1px solid var(--line-2);border-radius:999px;
-  padding:5px 12px;color:var(--cream);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.state span.warn{background:rgba(232,179,86,.26);border-color:rgba(232,179,86,.6);color:var(--gold-2)}
+/* ---------- the pigeonhole ----------
+   The MCR room holds everyone's pigeonhole, so the front page is one: a wall
+   of wooden slots, and a slip in the ones that have something in them. */
+.hole{background:linear-gradient(168deg,var(--panel-2),var(--panel-3));border:1px solid var(--line-2);
+  border-radius:var(--r);padding:20px var(--pad) 18px;margin-bottom:14px;position:relative;overflow:hidden}
+.hole::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background:repeating-linear-gradient(92deg,rgba(0,0,0,.10) 0 2px,transparent 2px 7px)}
+.hole .when{position:relative;font-family:var(--mono);font-size:9.5px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--gold-2)}
+.hole h3{position:relative;font-family:var(--display);font-size:clamp(25px,6vw,33px);margin:6px 0 6px;
+  font-weight:600;line-height:1;letter-spacing:-.035em}
+.hole .line{position:relative;margin:0;color:var(--cream-2);font-size:15px;max-width:46ch}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:9px;margin-top:16px;position:relative}
+.slot{background:rgba(0,0,0,.26);border:1px solid var(--line);border-radius:var(--r2);padding:12px 13px;
+  text-align:left;color:inherit;min-height:76px;display:flex;flex-direction:column;justify-content:space-between;
+  transition:transform .18s var(--ease),background .18s,border-color .18s}
+.slot:hover{background:rgba(0,0,0,.38);transform:translateY(-2px);border-color:var(--line-2)}
+.slot .k{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--cream-4)}
+.slot b{display:block;font-size:14px;font-weight:600;line-height:1.3;margin-top:5px}
+.slot.has{border-color:rgba(226,169,60,.5);background:rgba(226,169,60,.14)}
+.slot.has .k{color:var(--gold-2)}
+.slot .n{position:absolute;top:9px;right:11px;font-family:var(--display);font-size:19px;color:var(--gold-2);font-weight:600}
+.slot{position:relative}
+.slot.empty{opacity:.62}
+.state{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;position:relative}
+.state span{font-size:11.5px;background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:999px;
+  padding:4px 11px;color:var(--cream-2)}
+.state span.warn{background:rgba(226,169,60,.22);border-color:rgba(226,169,60,.55);color:var(--gold-2)}
 .state span.dot::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--moss);
-  display:inline-block;margin-right:7px;vertical-align:1px;box-shadow:0 0 8px var(--moss)}
+  display:inline-block;margin-right:6px;vertical-align:1px}
 
 /* ---------- three days ---------- */
-.three{display:grid;gap:13px;margin-bottom:6px}
-.d3{background:var(--glass);border:1px solid var(--line);border-radius:var(--r);padding:15px 17px;
-  box-shadow:var(--lift);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-.d3 .lab{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--gold-2);margin-bottom:11px;display:flex;align-items:center;gap:10px}
-.d3 .lab::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line-2),transparent)}
-.d3 .none{color:var(--cream-4);font-size:13.5px;font-style:italic;font-family:var(--display)}
+.three{display:grid;gap:11px;margin-bottom:4px}
+@media(min-width:820px){.three{grid-template-columns:repeat(3,1fr)}}
+.d3{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;
+  box-shadow:var(--shadow)}
+.d3 .lab{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold-2);margin-bottom:10px;display:flex;align-items:center;gap:9px}
+.d3 .lab::after{content:"";flex:1;height:1px;background:var(--line)}
+.d3 .none{color:var(--cream-4);font-size:13px;font-family:var(--display);font-style:italic}
 
 /* ---------- an event row ---------- */
-.ev{display:flex;align-items:stretch;background:var(--glass);border:1px solid var(--line);
-  border-radius:var(--r2);margin-bottom:9px;overflow:hidden;position:relative;box-shadow:var(--lift);
-  transition:transform .22s var(--ease),box-shadow .22s,border-color .22s}
+.ev{display:flex;align-items:stretch;background:rgba(0,0,0,.2);border:1px solid var(--line);
+  border-radius:var(--r2);margin-bottom:7px;overflow:hidden;position:relative;
+  transition:transform .18s var(--ease),background .18s,border-color .18s}
 .ev:last-child{margin-bottom:0}
-.ev:hover{transform:translateY(-2px);box-shadow:var(--lift-2);border-color:var(--line-2)}
-.ev:active{transform:translateY(0) scale(.995)}
-.ev .cat{position:absolute;left:0;top:0;bottom:0;width:4px;box-shadow:0 0 14px currentColor}
-.ev .tab{flex:0 0 70px;display:grid;place-items:center;font-family:var(--mono);font-size:12.5px;
-  background:rgba(30,2,5,.28);color:var(--cream-2);border-right:1px solid var(--line);line-height:1.25;
-  text-align:center;letter-spacing:.02em}
-.ev .body{flex:1;min-width:0;text-align:left;padding:13px 15px;color:inherit}
-.ev .body b{display:block;font-size:15.5px;font-weight:600;letter-spacing:-.015em;line-height:1.25}
-.ev .body small{display:block;font-size:12.5px;color:var(--cream-3);margin-top:3px;
+.ev:hover{background:rgba(0,0,0,.32);border-color:var(--line-2)}
+.ev:active{transform:scale(.995)}
+.ev .cat{position:absolute;left:0;top:0;bottom:0;width:4px}
+.ev .tab{flex:0 0 64px;display:grid;place-items:center;font-family:var(--mono);font-size:12px;
+  background:rgba(0,0,0,.26);color:var(--cream-2);border-right:1px solid var(--line);line-height:1.2;text-align:center}
+.ev .body{flex:1;min-width:0;text-align:left;padding:11px 13px;color:inherit}
+.ev .body b{display:block;font-size:15px;font-weight:600;letter-spacing:-.012em;line-height:1.25}
+.ev .body small{display:block;font-size:12px;color:var(--cream-4);margin-top:2px;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ev .tick{flex:0 0 54px;border-left:1px solid var(--line);display:grid;place-items:center;color:var(--cream-4);
-  transition:color .2s,background .2s}
-.ev .tick:hover{background:rgba(253,246,239,.07);color:var(--cream)}
-.ev .tick svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
-.ev.going{border-color:rgba(232,179,86,.5);background:linear-gradient(158deg,rgba(232,179,86,.20),rgba(232,179,86,.06))}
+.ev .tick{flex:0 0 48px;border-left:1px solid var(--line);display:grid;place-items:center;color:var(--cream-4);
+  transition:color .18s,background .18s}
+.ev .tick:hover{background:rgba(255,255,255,.07);color:var(--cream)}
+.ev .tick svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.ev.going{border-color:rgba(226,169,60,.55);background:rgba(226,169,60,.15)}
 .ev.going .tick{color:var(--gold-2)}
 .ev.waitlist{border-style:dashed}
 .ev.cancelled .body b{text-decoration:line-through;opacity:.6}
-.ev.past{opacity:.45}
-.ev.live{border-color:rgba(217,64,72,.65)}
-.ev.live .tab{background:rgba(217,64,72,.28);color:#FFE7E8}
-.chip{font-size:11px;padding:3px 9px;border-radius:999px;border:1px solid var(--line-2);color:var(--cream-2);
-  margin-left:7px;white-space:nowrap;background:rgba(30,2,5,.22)}
-.chip.full{background:rgba(217,64,72,.26);border-color:rgba(217,64,72,.55)}
-.chip.low{background:rgba(232,179,86,.22);border-color:rgba(232,179,86,.55);color:var(--gold-2)}
+.ev.past{opacity:.46}
+.ev.live .tab{background:rgba(208,49,58,.34);color:#FFE3E4}
+.chip{font-size:10.5px;padding:2px 8px;border-radius:999px;border:1px solid var(--line-2);color:var(--cream-2);
+  margin-left:6px;white-space:nowrap}
+.chip.full{background:rgba(208,49,58,.26);border-color:rgba(208,49,58,.55)}
+.chip.low{background:rgba(226,169,60,.22);border-color:rgba(226,169,60,.5);color:var(--gold-2)}
 
-/* ---------- the calendar ----------
-   Big numbers, big lights. The old grid was 40px cells with 5px dots, which is
-   why it read as a spreadsheet. */
-.calbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-.seg{display:flex;background:rgba(30,2,5,.34);border:1px solid var(--line);border-radius:999px;padding:4px;
-  box-shadow:var(--lift);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-.seg button{color:var(--cream-3);font-size:13.5px;font-weight:600;padding:7px 17px;border-radius:999px;
-  transition:color .24s,background .24s}
-.seg button[aria-pressed="true"]{background:linear-gradient(150deg,#FFFDFA,var(--cream-2));
-  color:var(--crimson-3);box-shadow:0 2px 8px rgba(30,2,5,.32)}
-.mv{display:flex;align-items:center;gap:6px;margin-left:auto}
-.mv b{font-family:var(--display);font-size:20px;min-width:158px;text-align:center;font-weight:600;letter-spacing:-.02em}
-.mv button{background:var(--glass);border:1px solid var(--line-2);color:var(--cream);width:38px;height:38px;
-  border-radius:50%;font-size:18px;line-height:1;box-shadow:var(--lift);transition:transform .18s var(--ease)}
-.mv button:hover{transform:scale(1.08)}
-.month{background:var(--glass);border:1px solid var(--line);border-radius:var(--r);padding:16px 14px 14px;
-  margin-bottom:18px;box-shadow:var(--lift);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-.dows{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:8px}
-.dows span{text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--cream-4);padding:4px 0}
-.mgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
-.cell{aspect-ratio:1/1;min-height:58px;border:1px solid transparent;border-radius:16px;color:var(--cream);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:3px;
-  transition:background .2s,transform .2s var(--ease),border-color .2s}
-.cell:hover{background:rgba(253,246,239,.09);transform:scale(1.05)}
+/* ---------- the calendar ---------- */
+.calbar{display:flex;align-items:center;gap:9px;margin-bottom:12px;flex-wrap:wrap}
+.seg{display:flex;background:rgba(0,0,0,.28);border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg button{color:var(--cream-3);font-size:13px;font-weight:600;padding:6px 16px;border-radius:999px;
+  transition:color .2s,background .2s}
+.seg button[aria-pressed="true"]{background:var(--cream);color:var(--crimson-3)}
+.mv{display:flex;align-items:center;gap:5px;margin-left:auto}
+.mv b{font-family:var(--display);font-size:18px;min-width:150px;text-align:center;font-weight:600;letter-spacing:-.02em}
+.mv button{background:rgba(0,0,0,.26);border:1px solid var(--line-2);color:var(--cream);width:34px;height:34px;
+  border-radius:50%;font-size:17px;line-height:1}
+.mv button:hover{background:rgba(0,0,0,.4)}
+.month{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:14px 12px 12px;
+  margin-bottom:14px;box-shadow:var(--shadow)}
+.dows{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px}
+.dows span{text-align:center;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--cream-4);padding:3px 0}
+.mgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cell{aspect-ratio:1/1;min-height:52px;border:1px solid transparent;border-radius:13px;color:var(--cream);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:2px;
+  transition:background .18s,transform .18s var(--ease)}
+@media(min-width:900px){.cell{min-height:76px}}
+.cell:hover{background:rgba(255,255,255,.09)}
 .cell.out{opacity:.16;pointer-events:none}
-.cell.today{border-color:var(--gold);box-shadow:0 0 0 1px rgba(232,179,86,.3), 0 0 20px -6px var(--gold)}
-.cell.sel{background:linear-gradient(150deg,#FFFDFA,var(--cream-2));color:var(--crimson-3);
-  box-shadow:var(--lift-2);transform:scale(1.06)}
-.cell b{font-family:var(--display);font-size:20px;font-weight:600;line-height:1;letter-spacing:-.03em}
+.cell.today{border-color:var(--gold);background:rgba(226,169,60,.12)}
+.cell.sel{background:var(--cream);color:var(--crimson-3)}
+.cell b{font-family:var(--display);font-size:19px;font-weight:600;line-height:1;letter-spacing:-.03em}
+@media(min-width:900px){.cell b{font-size:23px}}
 .cell.today b{color:var(--gold-2)}
 .cell.sel b{color:var(--crimson-3)}
-/* the lights */
 .dots{display:flex;gap:4px;height:9px;align-items:center}
-.dots i{width:9px;height:9px;border-radius:50%;display:block;box-shadow:0 0 10px currentColor}
+.dots i{width:9px;height:9px;border-radius:50%;display:block}
+@media(min-width:900px){.dots i{width:10px;height:10px}}
 .dots i.ring{outline:2px solid var(--cream);outline-offset:1.5px}
-.cell.sel .dots i{box-shadow:none}
 .cell.sel .dots i.ring{outline-color:var(--crimson-3)}
-
-/* week view: seven columns of the real thing */
-.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;margin-bottom:18px}
-@media(max-width:760px){.week{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:460px){.week{grid-template-columns:1fr}}
-.wcol{background:var(--glass);border:1px solid var(--line);border-radius:var(--r2);padding:11px 10px;
-  min-height:130px;box-shadow:var(--lift);transition:border-color .2s,transform .2s var(--ease)}
-.wcol:hover{transform:translateY(-2px);border-color:var(--line-2)}
-.wcol.today{border-color:rgba(232,179,86,.55);background:linear-gradient(158deg,rgba(232,179,86,.15),rgba(232,179,86,.03))}
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px;margin-bottom:14px}
+@media(max-width:900px){.week{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:560px){.week{grid-template-columns:1fr}}
+.wcol{background:var(--panel);border:1px solid var(--line);border-radius:var(--r2);padding:10px 9px;
+  min-height:120px;box-shadow:var(--shadow)}
+.wcol.today{border-color:rgba(226,169,60,.55);background:rgba(226,169,60,.12)}
 .wcol.past{opacity:.5}
-.wcol .wh{display:flex;align-items:baseline;gap:7px;margin-bottom:9px;padding-bottom:8px;border-bottom:1px solid var(--line)}
-.wcol .wh b{font-family:var(--display);font-size:22px;font-weight:600;line-height:1;letter-spacing:-.03em}
-.wcol .wh span{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--cream-4)}
-.wev{display:block;width:100%;text-align:left;border-radius:11px;padding:8px 10px;margin-bottom:6px;
-  background:rgba(30,2,5,.26);border-left:3px solid;transition:transform .18s var(--ease),background .2s}
-.wev:hover{transform:translateX(2px);background:rgba(30,2,5,.4)}
-.wev b{display:block;font-size:13px;font-weight:600;line-height:1.28}
-.wev span{display:block;font-family:var(--mono);font-size:10.5px;color:var(--cream-3);margin-top:2px}
-.wev.mine{background:rgba(232,179,86,.20)}
-.wcol .none{font-size:12px;color:var(--cream-4);font-family:var(--display);font-style:italic}
-
-.chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px}
-.chips button{background:var(--glass);border:1px solid var(--line);color:var(--cream-2);font-size:13px;
-  padding:7px 14px;border-radius:999px;display:flex;align-items:center;gap:8px;
-  transition:transform .18s var(--ease),background .2s}
-.chips button:hover{transform:translateY(-1.5px)}
-.chips button[aria-pressed="true"]{background:linear-gradient(150deg,#FFFDFA,var(--cream-2));
-  color:var(--crimson-3);border-color:transparent;font-weight:700}
-.chips button i{width:9px;height:9px;border-radius:50%;display:block;box-shadow:0 0 8px currentColor}
+.wcol .wh{display:flex;align-items:baseline;gap:6px;margin-bottom:8px;padding-bottom:7px;border-bottom:1px solid var(--line)}
+.wcol .wh b{font-family:var(--display);font-size:20px;font-weight:600;line-height:1;letter-spacing:-.03em}
+.wcol .wh span{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--cream-4)}
+.wev{display:block;width:100%;text-align:left;border-radius:9px;padding:7px 9px;margin-bottom:5px;
+  background:rgba(0,0,0,.28);border-left:3px solid;transition:transform .16s var(--ease),background .18s}
+.wev:hover{transform:translateX(2px);background:rgba(0,0,0,.42)}
+.wev b{display:block;font-size:12.5px;font-weight:600;line-height:1.28}
+.wev span{display:block;font-family:var(--mono);font-size:10px;color:var(--cream-4);margin-top:2px}
+.wev.mine{background:rgba(226,169,60,.2)}
+.wcol .none{font-size:11.5px;color:var(--cream-4);font-family:var(--display);font-style:italic}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.chips button{background:rgba(0,0,0,.24);border:1px solid var(--line);color:var(--cream-2);font-size:12.5px;
+  padding:6px 13px;border-radius:999px;display:flex;align-items:center;gap:7px;transition:background .18s}
+.chips button:hover{background:rgba(0,0,0,.4)}
+.chips button[aria-pressed="true"]{background:var(--cream);color:var(--crimson-3);border-color:transparent;font-weight:700}
+.chips button i{width:9px;height:9px;border-radius:50%;display:block}
 .c-social{background:var(--gold);color:var(--gold)} .c-sport{background:var(--moss);color:var(--moss)}
 .c-welfare{background:var(--sky);color:var(--sky)} .c-academic{background:var(--plum);color:var(--plum)}
 .c-food{background:var(--clay);color:var(--clay)} .c-formal{background:#D8B24A;color:#D8B24A}
-.c-trip{background:#63B8A6;color:#63B8A6} .c-meeting{background:var(--cream-3);color:var(--cream-3)}
-.c-college{background:#8FA3B8;color:#8FA3B8} .c-member{background:var(--rose);color:var(--rose)}
-.c-practical{background:#A3A398;color:#A3A398} .c-other{background:var(--cream-3);color:var(--cream-3)}
-.daycard{background:var(--glass);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;
-  margin-bottom:13px;box-shadow:var(--lift);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-.daycard.today{border-color:rgba(232,179,86,.5);background:linear-gradient(158deg,rgba(232,179,86,.13),rgba(253,246,239,.04))}
+.c-trip{background:var(--teal);color:var(--teal)} .c-meeting{background:var(--cream-3);color:var(--cream-3)}
+.c-college{background:var(--slate);color:var(--slate)} .c-member{background:var(--rose);color:var(--rose)}
+.c-practical{background:#9E9E92;color:#9E9E92} .c-other{background:var(--cream-3);color:var(--cream-3)}
+.daycard{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;
+  margin-bottom:11px;box-shadow:var(--shadow)}
+.daycard.today{border-color:rgba(226,169,60,.5);background:rgba(226,169,60,.10)}
 .daycard.past{opacity:.5}
-.dh{display:flex;align-items:baseline;gap:11px;margin-bottom:13px}
-.dh b{font-family:var(--display);font-size:30px;font-weight:600;line-height:1;letter-spacing:-.04em}
-.dh span{font-size:13.5px;color:var(--cream-3)}
-.dh .flag{margin-left:auto;font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--gold-2)}
-.rest{color:var(--cream-4);font-size:14px;font-family:var(--display);font-style:italic}
+.dh{display:flex;align-items:baseline;gap:10px;margin-bottom:11px}
+.dh b{font-family:var(--display);font-size:26px;font-weight:600;line-height:1;letter-spacing:-.04em}
+.dh span{font-size:13px;color:var(--cream-4)}
+.dh .flag{margin-left:auto;font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-2)}
+.rest{color:var(--cream-4);font-size:13.5px;font-family:var(--display);font-style:italic}
 
 /* ---------- notices ---------- */
-.notice{border-left:4px solid var(--gold);border-radius:0 var(--r) var(--r) 0;
-  background:linear-gradient(100deg,rgba(232,179,86,.20),rgba(232,179,86,.05));padding:15px 19px;
-  margin-bottom:11px;box-shadow:var(--lift)}
-.notice.urgent{border-color:var(--crimson-lite);
-  background:linear-gradient(100deg,rgba(217,64,72,.26),rgba(217,64,72,.07))}
-.notice b{display:block;font-family:var(--display);font-size:16.5px;font-weight:600;margin-bottom:3px;letter-spacing:-.015em}
-.notice small{color:var(--cream-3);font-size:11.5px}
-.notice p{margin:8px 0 0;font-size:14px;color:var(--cream-2);white-space:pre-wrap}
+.notice{border-left:4px solid var(--gold);border-radius:0 var(--r) var(--r) 0;background:rgba(226,169,60,.14);
+  padding:13px 17px;margin-bottom:9px}
+.notice.urgent{border-color:var(--crimson-lite);background:rgba(208,49,58,.2)}
+.notice b{display:block;font-family:var(--display);font-size:16px;font-weight:600;margin-bottom:2px;letter-spacing:-.015em}
+.notice small{color:var(--cream-4);font-size:11px}
+.notice p{margin:7px 0 0;font-size:13.5px;color:var(--cream-2);white-space:pre-wrap}
 
 /* ---------- tiles and links ---------- */
-.tilegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:10px;margin-bottom:18px}
-.tilegrid button,.tilegrid a{background:var(--glass);border:1px solid var(--line);color:var(--cream);
-  border-radius:var(--r2);padding:16px 15px;font-size:14.5px;font-weight:600;text-align:left;line-height:1.3;
-  box-shadow:var(--lift);text-decoration:none;display:block;
-  transition:transform .22s var(--ease),background .22s,box-shadow .22s}
-.tilegrid button:hover,.tilegrid a:hover{background:var(--glass-2);transform:translateY(-3px);box-shadow:var(--lift-2)}
-.linkcard{display:flex;gap:14px;align-items:flex-start;background:var(--glass);border:1px solid var(--line);
-  border-radius:var(--r);padding:16px 18px;margin-bottom:10px;text-decoration:none;color:inherit;
-  box-shadow:var(--lift);transition:transform .22s var(--ease),background .22s,box-shadow .22s}
-.linkcard:hover{transform:translateY(-3px);background:var(--glass-2);box-shadow:var(--lift-2)}
+.tilegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:9px;margin-bottom:14px}
+.tilegrid button,.tilegrid a{background:var(--panel);border:1px solid var(--line);color:var(--cream);
+  border-radius:var(--r2);padding:14px 13px;font-size:14px;font-weight:600;text-align:left;line-height:1.3;
+  text-decoration:none;display:block;transition:transform .18s var(--ease),background .18s}
+.tilegrid button:hover,.tilegrid a:hover{background:var(--crimson-2);transform:translateY(-2px)}
+.tilegrid small{display:block;font-weight:400;font-size:11.5px;color:var(--cream-4);margin-top:4px;line-height:1.4}
+.linkcard{display:flex;gap:12px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--r);padding:14px 16px;margin-bottom:8px;text-decoration:none;color:inherit;
+  transition:transform .18s var(--ease),background .18s}
+.linkcard:hover{transform:translateY(-2px);background:var(--crimson-2)}
 .linkcard .t{flex:1;min-width:0}
-.linkcard b{display:block;font-family:var(--display);font-size:16.5px;font-weight:600;letter-spacing:-.015em}
-.linkcard p{margin:5px 0 0;font-size:13.5px;color:var(--cream-3);line-height:1.55}
-.linkcard .who{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--gold-2);margin-top:8px;display:block}
-.linkcard .arw{flex:0 0 34px;height:34px;border-radius:50%;background:rgba(30,2,5,.3);border:1px solid var(--line-2);
-  display:grid;place-items:center;font-size:15px;transition:transform .22s var(--ease)}
-.linkcard:hover .arw{transform:translate(3px,-3px)}
+.linkcard b{display:block;font-family:var(--display);font-size:16px;font-weight:600;letter-spacing:-.015em}
+.linkcard p{margin:4px 0 0;font-size:13px;color:var(--cream-3);line-height:1.5}
+.linkcard .who{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold-2);margin-top:7px;display:block}
+.linkcard .arw{flex:0 0 30px;height:30px;border-radius:50%;background:rgba(0,0,0,.26);border:1px solid var(--line-2);
+  display:grid;place-items:center;font-size:14px;transition:transform .18s var(--ease)}
+.linkcard:hover .arw{transform:translate(2px,-2px)}
+@media(min-width:820px){.linkgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.linkgrid .linkcard{margin-bottom:0}}
 
 /* ---------- threads ---------- */
-.thread{border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin-bottom:11px;
-  background:var(--glass);box-shadow:var(--lift)}
-.thread .top{display:flex;gap:9px;align-items:baseline;flex-wrap:wrap}
-.thread .top b{font-family:var(--display);font-size:16.5px;font-weight:600;letter-spacing:-.015em}
-.ref{font-family:var(--mono);font-size:11px;color:var(--cream-4);letter-spacing:.04em}
-.st{font-size:11px;padding:3px 10px;border-radius:999px;border:1px solid var(--line-2);color:var(--cream-2);
-  white-space:nowrap;background:rgba(30,2,5,.2)}
-.st.open{background:rgba(232,179,86,.2);border-color:rgba(232,179,86,.5);color:var(--gold-2)}
-.st.answered{background:rgba(78,140,99,.28);border-color:rgba(78,140,99,.55)}
-.st.college{background:rgba(78,147,204,.24);border-color:rgba(78,147,204,.55)}
+.thread{border:1px solid var(--line);border-radius:var(--r);padding:15px 17px;margin-bottom:9px;
+  background:var(--panel);box-shadow:var(--shadow)}
+.thread .top{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.thread .top b{font-family:var(--display);font-size:16px;font-weight:600;letter-spacing:-.015em}
+.ref{font-family:var(--mono);font-size:10.5px;color:var(--cream-4);letter-spacing:.04em}
+.st{font-size:10.5px;padding:2px 9px;border-radius:999px;border:1px solid var(--line-2);color:var(--cream-2);white-space:nowrap}
+.st.open{background:rgba(226,169,60,.2);border-color:rgba(226,169,60,.5);color:var(--gold-2)}
+.st.answered{background:rgba(78,140,99,.3);border-color:rgba(78,140,99,.55)}
+.st.college{background:rgba(74,143,201,.26);border-color:rgba(74,143,201,.55)}
 .st.closed{opacity:.5}
-.msg{margin-top:11px;padding:12px 14px;border-radius:var(--r2);background:rgba(253,246,239,.07);
-  font-size:14px;white-space:pre-wrap;line-height:1.6}
-.msg.mine{background:rgba(232,179,86,.14)}
-.msg .m{display:block;font-size:11.5px;color:var(--cream-4);margin-bottom:5px}
+.msg{margin-top:10px;padding:11px 13px;border-radius:var(--r2);background:rgba(0,0,0,.24);font-size:13.5px;
+  white-space:pre-wrap;line-height:1.58}
+.msg.mine{background:rgba(226,169,60,.14)}
+.msg .m{display:block;font-size:11px;color:var(--cream-4);margin-bottom:4px}
 
 /* ---------- people ---------- */
-.whogrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(164px,1fr));gap:12px}
-.whoc{background:var(--glass);border:1px solid var(--line);border-radius:var(--r);padding:18px 14px;
-  text-align:center;box-shadow:var(--lift);transition:transform .28s var(--ease),box-shadow .28s,border-color .28s}
-.whoc:hover{transform:translateY(-4px);box-shadow:var(--lift-2);border-color:var(--line-2)}
-.whoc .ph{width:74px;height:74px;border-radius:50%;margin:0 auto 11px;display:block;object-fit:cover;
-  background:radial-gradient(circle at 34% 28%,var(--crimson),var(--crimson-4));color:var(--cream);
-  font-family:var(--display);font-size:26px;line-height:74px;text-align:center;font-weight:600;
-  letter-spacing:-.02em;box-shadow:0 1px 0 rgba(253,246,239,.28) inset, 0 6px 18px -6px rgba(30,2,5,.8),
-  0 0 0 1px rgba(253,246,239,.16)}
-.whoc.vacant .ph{background:rgba(253,246,239,.07);color:var(--cream-4);font-size:19px}
-.whoc b{display:block;font-size:15px;font-weight:600;letter-spacing:-.01em}
-.whoc span{display:block;font-size:12px;color:var(--gold-2);margin-bottom:10px;line-height:1.35;margin-top:2px}
-.whoc .runs{font-size:11.5px;color:var(--cream-4);margin-bottom:10px;line-height:1.4;font-style:italic;font-family:var(--display)}
-.whoc button{width:100%;background:rgba(253,246,239,.09);border:1px solid var(--line-2);color:var(--cream);
-  border-radius:999px;padding:7px;font-size:12.5px;font-weight:600;transition:background .2s}
-.whoc button:hover{background:rgba(253,246,239,.17)}
+.whogrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(138px,1fr));gap:10px}
+@media(min-width:900px){.whogrid{grid-template-columns:repeat(auto-fill,minmax(158px,1fr))}}
+.whoc{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:14px 11px;
+  text-align:center;transition:transform .2s var(--ease),background .2s;box-shadow:var(--shadow)}
+.whoc:hover{transform:translateY(-3px);background:var(--crimson-2)}
+.whoc .ph{width:66px;height:66px;border-radius:50%;margin:0 auto 9px;display:block;object-fit:cover;
+  background:var(--crimson-4);color:var(--cream-4);font-family:var(--display);font-size:22px;line-height:66px;
+  text-align:center;font-weight:600;border:2px solid var(--gold-3)}
+@media(min-width:900px){.whoc .ph{width:82px;height:82px;line-height:82px}}
+.whoc.vacant .ph{border-color:var(--line-2);font-size:17px}
+.whoc b{display:block;font-size:14px;font-weight:600;letter-spacing:-.01em;line-height:1.25}
+.whoc span{display:block;font-size:11.5px;color:var(--gold-2);margin:3px 0 9px;line-height:1.3}
+.whoc button{width:100%;background:rgba(0,0,0,.26);border:1px solid var(--line-2);color:var(--cream);
+  border-radius:999px;padding:6px;font-size:12px;font-weight:600}
+.whoc button:hover{background:rgba(0,0,0,.42)}
+/* each welfare team gets its own colour so the page is not one red wall */
+.team-leadership .whoc .ph{border-color:var(--gold)}
+.team-welfare .whoc .ph{border-color:var(--sky)}
+.team-socials .whoc .ph{border-color:var(--clay)}
+.team-academic .whoc .ph{border-color:var(--moss)}
+.team-other .whoc .ph{border-color:var(--cream-4)}
 
-/* ---------- the floating bar ----------
-   Detached from the edge, glass, with the active pill sliding underneath. */
-nav{position:fixed;left:50%;bottom:calc(14px + var(--sab));transform:translateX(-50%);z-index:45;
-  display:flex;gap:2px;overflow-x:auto;max-width:calc(100vw - 24px);padding:7px;
-  background:rgba(48,3,7,.62);border:1px solid var(--line-2);border-radius:999px;
-  backdrop-filter:blur(24px) saturate(1.5);-webkit-backdrop-filter:blur(24px) saturate(1.5);
-  box-shadow:0 1px 0 rgba(253,246,239,.18) inset, 0 10px 34px -8px rgba(20,1,3,.86);
-  scrollbar-width:none;scroll-behavior:smooth}
+/* ---------- ideas and polls ---------- */
+.idea{display:flex;gap:13px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
+  padding:14px 16px;margin-bottom:9px;box-shadow:var(--shadow)}
+.idea .back{flex:0 0 62px;text-align:center;border-right:1px solid var(--line);padding-right:12px}
+.idea .back button{width:100%;border-radius:var(--r2);padding:8px 0;background:rgba(0,0,0,.26);
+  border:1px solid var(--line-2);transition:background .18s}
+.idea .back button:hover{background:rgba(226,169,60,.22)}
+.idea .back button[aria-pressed="true"]{background:var(--gold);color:var(--gold-ink);border-color:transparent}
+.idea .back .n{display:block;font-family:var(--display);font-size:21px;font-weight:600;line-height:1}
+.idea .back .l{display:block;font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;margin-top:3px}
+.idea .t{flex:1;min-width:0}
+.idea .t b{display:block;font-family:var(--display);font-size:16.5px;font-weight:600;letter-spacing:-.015em}
+.idea .t p{margin:5px 0 0;font-size:13.5px;color:var(--cream-2);white-space:pre-wrap}
+.idea .kind{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-2)}
+.idea.doing{border-color:rgba(78,140,99,.55)} .idea.done{opacity:.62} .idea.no{opacity:.6}
+.bar{height:9px;border-radius:999px;background:rgba(0,0,0,.3);overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--gold);border-radius:999px;transition:width .5s var(--ease)}
+.opt{display:flex;align-items:center;gap:11px;padding:8px 0;border-bottom:1px solid var(--line)}
+.opt:last-child{border-bottom:0}
+.opt .t{flex:1;min-width:0}
+.opt .t b{font-size:14px;font-weight:600}
+.opt button{flex:0 0 auto}
+.opt.picked .t b{color:var(--gold-2)}
+
+/* ---------- the floating bar ---------- */
+nav{position:fixed;left:50%;bottom:calc(12px + var(--sab));transform:translateX(-50%);z-index:45;display:flex;
+  gap:2px;overflow-x:auto;max-width:calc(100vw - 20px);padding:6px;background:rgba(70,5,9,.92);
+  border:1px solid var(--line-2);border-radius:999px;
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  box-shadow:0 8px 28px -6px rgba(30,2,5,.8);scrollbar-width:none;scroll-behavior:smooth}
 nav::-webkit-scrollbar{display:none}
-.tabbtn{flex:0 0 auto;color:var(--cream-4);font-size:9.5px;font-weight:700;letter-spacing:.02em;
-  display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 13px;border-radius:999px;
-  position:relative;min-width:60px;transition:color .26s var(--ease),background .26s var(--ease)}
-.tabbtn svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;
-  stroke-linejoin:round;transition:transform .32s var(--ease)}
+.tabbtn{flex:0 0 auto;color:var(--cream-4);font-size:9.5px;font-weight:700;display:flex;flex-direction:column;
+  align-items:center;gap:3px;padding:7px 13px;border-radius:999px;position:relative;min-width:58px;
+  transition:color .22s,background .22s}
+.tabbtn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .tabbtn:hover{color:var(--cream-2)}
-.tabbtn:hover svg{transform:translateY(-1.5px)}
-.tabbtn[aria-current="true"]{color:var(--crimson-3);background:linear-gradient(150deg,#FFFDFA,var(--cream-2));
-  box-shadow:0 2px 10px rgba(20,1,3,.5)}
-.tabbtn[aria-current="true"] svg{transform:translateY(-1px)}
-.tabbtn.committee[aria-current="true"]{background:linear-gradient(150deg,var(--gold-2),var(--gold));color:var(--gold-ink)}
-.tabbtn .badge{position:absolute;top:3px;right:7px;background:var(--crimson-lite);color:#fff;font-size:9.5px;
-  font-weight:800;border-radius:999px;min-width:17px;padding:1px 4px;line-height:1.5;
-  box-shadow:0 2px 6px rgba(20,1,3,.6)}
+.tabbtn[aria-current="true"]{color:var(--crimson-3);background:var(--cream)}
+.tabbtn.committee[aria-current="true"]{background:var(--gold);color:var(--gold-ink)}
+.tabbtn .badge{position:absolute;top:2px;right:6px;background:var(--crimson-lite);color:#fff;font-size:9px;
+  font-weight:800;border-radius:999px;min-width:16px;padding:1px 4px;line-height:1.5}
 .tabbtn[aria-current="true"] .badge{background:var(--crimson-3)}
-.sep{flex:0 0 1px;background:var(--line-2);margin:9px 6px;align-self:stretch}
+.sep{flex:0 0 1px;background:var(--line-2);margin:8px 5px;align-self:stretch}
 
 /* ---------- gate ---------- */
-#gate{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:24px}
-.gcard{max-width:452px;width:100%;background:var(--glass-2);border:1px solid var(--line-2);border-radius:28px;
-  padding:34px 30px;box-shadow:var(--lift-2);text-align:left;
-  backdrop-filter:blur(26px) saturate(1.4);-webkit-backdrop-filter:blur(26px) saturate(1.4);
-  animation:rise .8s var(--ease) both}
-.gcard .head{display:flex;align-items:center;gap:15px;margin-bottom:20px}
-.gcard .head b{display:block;font-family:var(--display);font-size:26px;font-weight:600;line-height:1;
-  letter-spacing:-.035em;font-variation-settings:"SOFT" 40,"WONK" 1}
+#gate{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:22px}
+.gcard{max-width:430px;width:100%;background:var(--panel);border:1px solid var(--line-2);border-radius:22px;
+  padding:30px 26px;box-shadow:var(--shadow-2);animation:rise .5s var(--ease) both}
+.gcard .head{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.gcard .head b{display:block;font-family:var(--display);font-size:24px;font-weight:600;line-height:1;letter-spacing:-.03em}
 .gcard .head b i{font-style:italic;color:var(--gold-2)}
-.gcard .head small{display:block;font-family:var(--mono);font-size:9.5px;color:var(--cream-4);
-  letter-spacing:.24em;margin-bottom:5px}
-.gcard .msg{color:var(--gold-2);font-size:13.5px;min-height:20px;margin:12px 0 0}
-.gcard .fix{margin-top:16px;padding:15px 17px;border-radius:var(--r);
-  background:linear-gradient(150deg,rgba(232,179,86,.20),rgba(232,179,86,.06));
-  border:1px solid rgba(232,179,86,.45)}
-.gcard .fix b{display:block;font-family:var(--display);font-size:16px;font-weight:600;margin-bottom:6px}
-.gcard .fix p{margin:0 0 11px;font-size:13px;color:var(--cream-2);line-height:1.55}
+.gcard .head small{display:block;font-family:var(--mono);font-size:9px;color:var(--cream-4);letter-spacing:.22em;margin-bottom:5px}
+.gcard .msg{color:var(--gold-2);font-size:13px;min-height:18px;margin:11px 0 0}
+.gcard .fix{margin-top:15px;padding:14px 16px;border-radius:var(--r);background:rgba(226,169,60,.16);
+  border:1px solid rgba(226,169,60,.45)}
+.gcard .fix b{display:block;font-family:var(--display);font-size:15.5px;font-weight:600;margin-bottom:5px}
+.gcard .fix p{margin:0 0 10px;font-size:12.5px;color:var(--cream-2);line-height:1.55}
 .gcard .fix p:last-child{margin-bottom:0}
-.gfoot{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:var(--cream-4);
-  margin-top:24px;padding-top:16px;border-top:1px solid var(--line)}
-#diag{margin-top:13px;font-family:var(--mono);font-size:11px;color:var(--cream-3);background:rgba(20,1,3,.42);
-  border-radius:var(--r2);padding:13px 15px;line-height:1.8;word-break:break-all}
+.gfoot{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--cream-4);
+  margin-top:20px;padding-top:14px;border-top:1px solid var(--line)}
+#diag{margin-top:12px;font-family:var(--mono);font-size:10.5px;color:var(--cream-3);background:rgba(0,0,0,.3);
+  border-radius:var(--r2);padding:12px 14px;line-height:1.75;word-break:break-all}
 #diag b{color:var(--cream);font-weight:500}
-.gsiskel{display:block;width:100%;height:46px;border-radius:999px;background:rgba(253,246,239,.11);
-  animation:glow 1.6s ease-in-out infinite}
+.gsiskel{display:block;width:100%;height:44px;border-radius:999px;background:rgba(251,243,236,.1);
+  animation:glow 1.5s ease-in-out infinite}
 
 /* ---------- sheet, toast, forms ---------- */
-.sheet{position:fixed;inset:0;z-index:80;background:rgba(20,1,3,.72);display:flex;align-items:flex-end;
-  justify-content:center;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-  animation:fade .3s ease both}
+.sheet{position:fixed;inset:0;z-index:80;background:rgba(30,3,6,.7);display:flex;align-items:flex-end;
+  justify-content:center;animation:fade .24s ease both}
 @keyframes fade{from{opacity:0}to{opacity:1}}
-@keyframes slideup{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
-.sheet .inner{background:linear-gradient(180deg,#7C0D14,#4E060B);border:1px solid var(--line-2);
-  border-radius:28px 28px 0 0;width:100%;max-width:660px;max-height:92vh;overflow:auto;
-  padding:24px 24px calc(28px + var(--sab));box-shadow:0 -24px 70px rgba(20,1,3,.7);
-  animation:slideup .42s var(--ease) both}
-@media(min-width:660px){.sheet{align-items:center;padding:26px}.sheet .inner{border-radius:28px}}
-.sheet h3{font-family:var(--display);font-size:24px;margin:0 0 16px;font-weight:600;letter-spacing:-.03em}
-.f{display:block;margin-bottom:14px}
-.f span{display:block;font-size:12px;color:var(--cream-4);margin-bottom:6px;letter-spacing:.02em}
-.f input,.f select,.f textarea{width:100%;background:rgba(20,1,3,.4);border:1px solid var(--line-2);
-  color:var(--cream);border-radius:var(--r2);padding:12px 14px;font-size:15px;transition:border-color .2s,background .2s}
-.f input:focus,.f select:focus,.f textarea:focus{border-color:var(--gold);background:rgba(20,1,3,.55);outline:none}
-.f textarea{min-height:130px;resize:vertical;line-height:1.6}
-.f2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.check{display:flex;align-items:flex-start;gap:10px;font-size:14px;margin-bottom:14px;color:var(--cream-2);line-height:1.5}
-.check input{margin-top:3px;width:18px;height:18px;accent-color:var(--gold);flex:0 0 18px}
-.acts{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:17px}
-#toast{position:fixed;left:50%;bottom:calc(var(--navh) + 26px + var(--sab));transform:translate(-50%,26px);
-  background:linear-gradient(150deg,#FFFDFA,var(--cream-2));color:var(--crimson-3);padding:12px 22px;
-  border-radius:999px;font-size:14px;font-weight:600;z-index:90;opacity:0;pointer-events:none;
-  transition:.34s var(--ease);max-width:88vw;text-align:center;box-shadow:0 12px 34px -8px rgba(20,1,3,.8)}
+@keyframes slideup{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}
+.sheet .inner{background:var(--panel);border:1px solid var(--line-2);border-radius:22px 22px 0 0;width:100%;
+  max-width:620px;max-height:92vh;overflow:auto;padding:22px 22px calc(26px + var(--sab));
+  box-shadow:0 -18px 50px rgba(30,2,5,.6);animation:slideup .34s var(--ease) both}
+@media(min-width:620px){.sheet{align-items:center;padding:24px}.sheet .inner{border-radius:22px}}
+.sheet h3{font-family:var(--display);font-size:22px;margin:0 0 14px;font-weight:600;letter-spacing:-.025em}
+.f{display:block;margin-bottom:12px}
+.f span{display:block;font-size:11.5px;color:var(--cream-4);margin-bottom:5px}
+.f input,.f select,.f textarea{width:100%;background:rgba(0,0,0,.32);border:1px solid var(--line-2);
+  color:var(--cream);border-radius:var(--r2);padding:11px 13px;font-size:15px;transition:border-color .18s}
+.f input:focus,.f select:focus,.f textarea:focus{border-color:var(--gold);outline:none}
+.f textarea{min-height:120px;resize:vertical;line-height:1.58}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+@media(max-width:460px){.f2{grid-template-columns:1fr}}
+.check{display:flex;align-items:flex-start;gap:9px;font-size:13.5px;margin-bottom:12px;color:var(--cream-2);line-height:1.5}
+.check input{margin-top:3px;width:17px;height:17px;accent-color:var(--gold);flex:0 0 17px}
+.acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:15px}
+#toast{position:fixed;left:50%;bottom:calc(var(--navh) + 22px + var(--sab));transform:translate(-50%,22px);
+  background:var(--cream);color:var(--crimson-3);padding:11px 20px;border-radius:999px;font-size:13.5px;
+  font-weight:600;z-index:90;opacity:0;pointer-events:none;transition:.3s var(--ease);max-width:88vw;
+  text-align:center;box-shadow:var(--shadow-2)}
 #toast.show{opacity:1;transform:translate(-50%,0)}
-.skel{height:78px;border-radius:var(--r);background:rgba(253,246,239,.08);margin-bottom:12px;
-  animation:glow 1.6s ease-in-out infinite}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(102px,1fr));gap:10px;margin-bottom:16px}
-.stat{background:var(--glass);border:1px solid var(--line);border-radius:var(--r2);padding:14px 15px;
-  box-shadow:var(--lift)}
-.stat b{display:block;font-family:var(--display);font-size:27px;font-weight:600;line-height:1;letter-spacing:-.03em}
-.stat span{font-size:11.5px;color:var(--cream-4)}
-table.att{width:100%;border-collapse:collapse;font-size:13.5px}
-table.att th{text-align:left;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.16em;
-  color:var(--cream-4);padding:7px 9px;font-weight:500}
-table.att td{padding:9px;border-top:1px solid var(--line)}
-code{font-family:var(--mono);font-size:12.5px;background:rgba(20,1,3,.44);padding:3px 8px;border-radius:7px;
+.skel{height:72px;border-radius:var(--r);background:rgba(251,243,236,.08);margin-bottom:11px;
+  animation:glow 1.5s ease-in-out infinite}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:9px;margin-bottom:14px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--r2);padding:12px 14px}
+.stat b{display:block;font-family:var(--display);font-size:25px;font-weight:600;line-height:1;letter-spacing:-.03em}
+.stat span{font-size:11px;color:var(--cream-4)}
+table.att{width:100%;border-collapse:collapse;font-size:13px}
+table.att th{text-align:left;font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.14em;
+  color:var(--cream-4);padding:6px 8px;font-weight:500}
+table.att td{padding:8px;border-top:1px solid var(--line)}
+code{font-family:var(--mono);font-size:12px;background:rgba(0,0,0,.36);padding:2px 7px;border-radius:6px;
   word-break:break-all;color:var(--gold-2)}
 
 /* ---------- the seasons ----------
@@ -491,33 +486,6 @@ body[data-season="fortnight"]{
 .season{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
   color:var(--gold-2);opacity:.9}
 
-/* ---------- the plan ---------- */
-.planwrap{position:relative;background:rgba(0,0,0,.22);border:1px solid var(--line);
-  border-radius:var(--r);overflow:hidden;touch-action:none}
-.planwrap svg{display:block;width:100%;height:auto;cursor:grab}
-.planwrap svg:active{cursor:grabbing}
-.plan-lbl{font-family:var(--ui);font-size:5px;fill:rgba(251,243,236,.72);letter-spacing:.4px;
-  text-anchor:middle;pointer-events:none;font-weight:600}
-.plan-court{font-family:var(--display);font-size:7px;fill:rgba(251,243,236,.9);
-  text-anchor:middle;pointer-events:none;font-style:italic}
-.plan-st{font-family:var(--mono);font-size:4.4px;fill:rgba(251,243,236,.5);text-anchor:middle;pointer-events:none}
-.pin{cursor:pointer}
-.pin circle{transition:r .18s}
-.pin:hover circle.hit{r:9}
-.plantools{position:absolute;right:10px;bottom:10px;display:flex;flex-direction:column;gap:6px}
-.plantools button{width:36px;height:36px;border-radius:12px;background:rgba(20,4,5,.72);
-  border:1px solid var(--line-2);color:var(--cream);font-size:17px;line-height:1;
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.plankey{display:flex;gap:12px;flex-wrap:wrap;font-size:11.5px;color:var(--cream-3);margin-top:10px}
-.plankey span{display:flex;align-items:center;gap:5px}
-.plankey i{width:9px;height:9px;border-radius:50%;display:block}
-.callout{position:absolute;left:12px;right:12px;bottom:12px;background:rgba(20,4,5,.90);
-  border:1px solid var(--line-2);border-radius:15px;padding:13px 15px;
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);max-width:380px}
-.callout b{display:block;font-family:var(--display);font-size:16px;font-weight:600}
-.callout span{display:block;font-size:12.5px;color:var(--cream-3);margin-top:2px}
-.callout .ev{margin-top:9px}
-
 /* ---------- the board ---------- */
 .mkgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:11px}
 .mk{background:rgba(0,0,0,.18);border:1px solid var(--line);border-radius:15px;overflow:hidden}
@@ -549,14 +517,14 @@ code{font-family:var(--mono);font-size:12.5px;background:rgba(0,0,0,.3);padding:
 
 <div id="boot" style="position:fixed;inset:0;display:grid;place-items:center;z-index:70">
   <div style="text-align:center">
-    <div class="crest big" style="margin:0 auto 16px" id="crestBoot"></div>
+    <img class="crest big" id="crestBoot" style="margin:0 auto 16px" alt="Jesus College MCR">
     <div style="font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(251,243,236,.72)" id="bootLine">Waking the porters</div>
   </div>
 </div>
 
 <header hidden id="hdr">
   <div class="hbar">
-    <span class="crest" id="crestTop"></span>
+    <img class="crest" id="crestTop" alt="">
     <div class="wm"><b>Jesus College MCR</b><i id="wmYear"></i></div>
     <span class="sp"></span>
     <button class="iconbtn" id="bRefresh" title="Pull the latest" aria-label="Refresh"><svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.3"/><path d="M20 5v6h-6"/></svg></button>
@@ -568,11 +536,10 @@ code{font-family:var(--mono);font-size:12.5px;background:rgba(0,0,0,.3);padding:
 
   <!-- ===================== TODAY ===================== -->
   <section id="v-today">
-    <div class="vh"><h2><i>Cockcrow</i></h2><span class="note" id="seasonNote"></span></div>
+    <div class="vh"><h2>Your <i>pigeonhole</i></h2><span class="note" id="seasonNote"></span></div>
     <div id="crow"></div>
-    <div id="bumpsCard"></div>
     <div id="todayUrgent"></div>
-    <div id="todayNeeds"></div>
+    <div id="bumpsCard"></div>
     <div class="grp">The next three days</div>
     <div class="three" id="three"></div>
     <div id="todayQuick"></div>
@@ -592,27 +559,6 @@ code{font-family:var(--mono);font-size:12.5px;background:rgba(0,0,0,.3);padding:
     <div id="board"></div>
   </section>
 
-  <!-- ===================== THE PLAN ===================== -->
-  <section id="v-map" hidden>
-    <div class="vh"><h2>The <i>college</i></h2><span class="note">Tap a court, or a lantern</span>
-      <div class="right"><button class="btn ghost sm" id="bFit">Whole college</button></div></div>
-    <div class="planwrap" id="planwrap">
-      <div id="planSvg"></div>
-      <div class="plantools">
-        <button id="bZin" aria-label="Closer">+</button>
-        <button id="bZout" aria-label="Further out">&minus;</button>
-      </div>
-      <div class="callout" id="callout" hidden></div>
-    </div>
-    <div class="plankey">
-      <span><i style="background:#E2A93C"></i>something on today</span>
-      <span><i style="background:#D0313A"></i>happening now</span>
-      <span><i style="background:#8E5A44"></i>a building</span>
-      <span><i style="background:#4E7A4E"></i>grass</span>
-    </div>
-    <div id="mapNotices" style="margin-top:14px"></div>
-  </section>
-
   <!-- ===================== LODGE ===================== -->
   <section id="v-lodge" hidden>
     <div class="vh"><h2>The <i>lodge</i></h2><span class="note">Notices, and how the college works</span>
@@ -625,25 +571,24 @@ code{font-family:var(--mono);font-size:12.5px;background:rgba(0,0,0,.3);padding:
     <div id="lodgeCards"></div>
   </section>
 
-  <!-- ===================== ASK ===================== -->
+  <!-- ============ ASK, AND WHO YOU ARE ASKING ============ -->
   <section id="v-ask" hidden>
-    <div class="vh"><h2><i>Ask</i></h2><span class="note">One question, one person, one thread</span></div>
+    <div class="vh"><h2>Ask the <i>MCR</i></h2><span class="note">One question, one officer, one thread</span></div>
     <div id="askIntro"></div>
     <div id="askThreads"></div>
-  </section>
-
-  <!-- ===================== PEOPLE ===================== -->
-  <section id="v-who" hidden>
-    <div class="vh"><h2>Who to <i>ask</i></h2><span class="note">Your committee, and the college</span></div>
     <div id="whoTeams"></div>
-    <div id="whoIndex"></div>
     <div id="whoDir"></div>
+    <div id="notOurs"></div>
   </section>
 
   <!-- ===================== BUSINESS ===================== -->
   <section id="v-biz" hidden>
     <div class="vh"><h2>MCR <i>business</i></h2><span class="note">Meetings, motions and the vote</span>
-      <div class="right"><button class="btn cream sm" id="bNewMotion">Put down a motion</button></div></div>
+      <div class="right"><button class="btn gold sm" id="bNewIdea">Suggest something</button>
+        <button class="btn ghost sm" id="bNewMotion">Motion</button>
+        <button class="btn ghost sm" id="bNewPoll" data-committee hidden>Poll</button></div></div>
+    <div id="bizIdeas"></div>
+    <div id="bizPolls"></div>
     <div id="bizMeetings"></div>
     <div id="bizMotions"></div>
   </section>
@@ -765,10 +710,8 @@ code{font-family:var(--mono);font-size:12.5px;background:rgba(0,0,0,.3);padding:
 <nav id="nav" aria-label="Sections" hidden>
   <button class="tabbtn" data-view="today" aria-current="true"><svg viewBox="0 0 24 24"><path d="M4 15a8 8 0 0 1 16 0"/><path d="M12 3v3M4.2 6.6l2.1 2.1M19.8 6.6l-2.1 2.1M2 15h20"/></svg>Today<span class="badge" id="bToday_" hidden>0</span></button>
   <button class="tabbtn" data-view="cal"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Calendar<span class="badge" id="bdgCal" hidden>0</span></button>
-  <button class="tabbtn" data-view="map"><svg viewBox="0 0 24 24"><path d="M3 6.6l6-2 6 2 6-2v13l-6 2-6-2-6 2z"/><path d="M9 4.6v13M15 6.6v13"/></svg>Map</button>
   <button class="tabbtn" data-view="lodge"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>Lodge<span class="badge" id="bdgLodge" hidden>0</span></button>
   <button class="tabbtn" data-view="ask"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/><path d="M12 12.4v-.5c0-1 .7-1.5 1.3-1.9.6-.4 1-.9 1-1.6a2.3 2.3 0 0 0-4.6 0"/><path d="M12 14.4h.01"/></svg>Ask<span class="badge" id="bdgAsk" hidden>0</span></button>
-  <button class="tabbtn" data-view="who"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.4"/><circle cx="17" cy="9" r="2.7"/><path d="M2.6 20c0-3.6 2.9-6 6.4-6s6.4 2.4 6.4 6M15.4 19c.4-2.4 2.2-4 4.4-4"/></svg>People</button>
   <button class="tabbtn" data-view="biz"><svg viewBox="0 0 24 24"><path d="M4 20h16M12 4v3M6 20V9l6-4 6 4v11"/><path d="M9 13h6"/></svg>Business<span class="badge" id="bdgBiz" hidden>0</span></button>
   <span class="sep" data-committee hidden></span>
   <button class="tabbtn committee" data-view="desk" data-committee hidden><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="7" rx="1.6"/><rect x="3" y="13" width="18" height="7" rx="1.6"/><path d="M7 7.5h.01M7 16.5h.01"/></svg>Desk</button>
@@ -779,7 +722,7 @@ code{font-family:var(--mono);font-size:12.5px;background:rgba(0,0,0,.3);padding:
 
 <div id="gate" hidden>
   <div class="gcard">
-    <div class="head"><span class="crest" id="crestGate"></span>
+    <div class="head"><img class="crest" id="crestGate" alt="">
       <span><small>JESUS COLLEGE</small><b>The <i>MCR</i></b></span></div>
     <p class="lede" id="gLede">The postgraduate community at Jesus. The term calendar, the Lodge, and somebody to ask. Sign in with your University of Cambridge Google account.</p>
     <div id="gsiBtn"><span class="gsiskel" aria-hidden="true"></span></div>
@@ -804,13 +747,16 @@ code{font-family:var(--mono);font-size:12.5px;background:rgba(0,0,0,.3);padding:
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbxFyUJoA05bykkQdA6RoPF7Zf9gQbWBsaTBY_DTBdUYTN3cr9z4BPyVynzb7qk2juptYw/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwKBGdQcBVdaue_aC9G5Phek__R1F1ZioSyrO3YswBGobtLtRGO00u7MiIdr9y23g0rVQ/exec";
 
 /* JavaScript is alive, so the ring painted before the page was parsed can go.
    It is a pseudo element on <html>, so nothing else can remove it. */
 document.documentElement.className = "up";
 
 const $ = id => document.getElementById(id);
+/* Write into a container only if it is there. A section that has moved should
+   change what you see, not stop the page dead. */
+function put(id, html){ const el = $(id); if (el) el.innerHTML = html; return !!el; }
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c =>
   ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const pad = n => ("0" + n).slice(-2);
@@ -822,23 +768,7 @@ const TICK = '<svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg
 
 /* The crest, drawn rather than fetched. A cockerel on a shield, which is what
    the college has had since 1496 and what the run club is named after. */
-const CREST = '<svg viewBox="0 0 32 32" aria-hidden="true">' +
-  '<path d="M16 2.6 27 6v10.5c0 6.6-4.6 11.2-11 13.4C9.6 27.7 5 23.1 5 16.5V6z" fill="#B4141B"/>' +
-  '<path d="M20.4 10.2c0-1.9-1.6-3.3-3.6-3.3-1.4 0-2.6.7-3.2 1.8-.4-.5-1-.8-1.7-.8-1.2 0-2.1.9-2.1 2 0 .5.2 1 .5 1.4-.9.8-1.4 1.9-1.4 3.1 0 2.6 2.4 4.7 5.4 4.7.6 0 1.2-.1 1.7-.2l2.6 4.4 1.6-1-2.3-3.9c1.4-.9 2.3-2.3 2.3-3.9 0-.6-.1-1.1-.3-1.6.4-.7.5-1.5.5-2.7z" fill="#2A1012"/>' +
-  '<circle cx="18.2" cy="10.4" r=".9" fill="#FBF3EC"/>' +
-  '<path d="M21.6 11.4l2.6-.9-2.4 2z" fill="#E2A93C"/></svg>';
-
-/* The college itself, traced court by court. x runs east, y runs north, in
-   metres from the Gate Tower. The plan draws from this and nothing else, so
-   there is no tile server, no key and nothing to go down.
-   b: buildings, g: grounds, l: roads and paths, v: venues, m: landmarks,
-   s: staircase letters, t: trees. */
-const PLAN = {"b":[["fc_n","First Court, north range","brick",[-38.9,60.1,-38.9,55.6,-37.0,55.6,-37.0,50.2,-2.8,50.2,-2.8,55.6,-17.4,55.6,-17.4,57.7,-34.7,57.7,-34.7,62.3,-37.0,62.3,-37.0,60.1]],["fc_e","First Court, east range","brick",[-11.6,55.7,-13.8,14.4,-10.2,14.2,-10.1,15.9,-6.8,15.7,-6.8,17.2,-3.1,17.0,-3.6,7.5,-1.1,7.3,0.6,40.7,2.8,40.6,3.5,54.9]],["fc_s","First Court, south range","brick",[-6.6,-4.7,-5.5,4.2,-39.1,8.3,-39.5,5.7,-48.5,6.8,-48.1,9.4,-49.9,9.6,-50.2,7.0,-57.1,7.9,-57.4,5.8,-59.1,6.0,-59.6,1.8]],["gatehouse","Gate Tower and Porters' Lodge","brick",[-11.2,5.0,-11.2,-2.5,-2.2,-2.5,-2.2,-7.4,5.0,-7.4,5.0,-0.3,-2.2,-0.3,-2.2,5.0]],["hall","The Hall and Upper Hall","stone",[15.5,55.4,15.2,42.2,31.9,41.8,32.3,55.0]],["cl_e","Cloister Court, east range","stone",[31.6,44.6,31.6,36.5,18.9,36.5,18.9,22.0,29.4,22.0,29.4,18.3,33.8,18.3,33.8,44.6]],["cl_s","Master's Lodge","brick",[0.6,22.3,22.9,22.3,22.9,11.8,0.6,11.8]],["chapel","The Chapel","stone",[40.0,6.5,29.1,6.5,29.1,3.1,31.3,3.1,31.3,-1.1,-1.4,-1.1,-1.4,-9.0,40.0,-9.0,40.0,-3.4,34.5,-3.4,34.5,3.1,40.0,3.1]],["chapel_tower","The Chapel tower","stone",[31.4,8.7,28.8,8.7,28.8,3.1,31.4,3.1,31.4,-1.5,18.6,-1.5,18.6,-9.0,31.4,-9.0]],["chapel_t","The Chapel, transept","stone",[19.2,-4.2,19.2,-15.5,22.8,-15.5,22.8,-13.6,31.0,-13.6,31.0,-4.2]],["pc_w","Pump Court, west range","brick",[-2.5,59.5,-2.5,49.9,12.7,49.9,12.7,56.1,10.5,56.1,10.5,59.5]],["pc_long","The long range: L, K, J, G and F staircases","brick",[35.5,78.1,36.7,71.8,31.9,70.9,36.5,45.7,31.5,44.8,33.0,36.5,28.4,35.6,34.2,4.5,41.9,5.9,39.0,21.7,43.9,22.6,38.6,51.2,43.8,52.2,38.8,78.7]],["picken","Picken Room","brick",[49.6,88.8,49.6,74.7,61.4,74.7,61.4,87.4,59.2,87.4,59.2,88.8]],["sc_n","Second Court, north range: P, O, N and M staircases","brick",[-36.7,106.5,-37.2,103.1,23.9,94.0,25.6,105.3,17.5,106.5,17.3,104.8,13.9,105.3,13.4,101.6,9.4,102.2,10.5,109.3,-25.1,114.7,-26.6,105.0]],["jcr","Coleridge Room and JCR","brick",[21.4,105.0,20.3,96.3,24.4,95.8,24.7,97.4,44.4,95.0,45.2,102.0]],["nc_a","North Court","buff",[-72.7,140.9,-34.9,137.6,-35.3,133.3,-23.8,132.3,-22.7,145.2,-44.1,147.0,-43.8,150.5,-71.7,152.9]],["nc_b","North Court","buff",[-72.6,144.0,-74.5,143.1,-73.2,140.4,-79.0,137.6,-77.4,134.4,-80.3,133.0,-75.7,123.4,-79.8,121.4,-75.8,113.0,-68.8,116.3,-70.7,120.3,-66.0,122.5,-67.6,125.8,-64.6,127.2]],["maint","Maintenance and Gardens","brick",[-103.7,198.8,-103.7,181.0,-81.8,181.0,-81.8,198.8,-93.3,198.8,-93.3,194.4,-101.4,194.4,-101.4,198.8]],["pavilion","Cricket Pavilion","timber",[55.8,222.0,68.8,222.0,68.8,213.3,55.8,213.3]],["cc_e","Chapel Court, east range","red",[99.3,81.3,99.3,63.9,102.3,63.9,102.3,18.6,99.3,18.6,99.3,9.0,115.0,9.0,115.0,78.3,107.2,78.3,107.2,81.3]],["boaty","Boaty Archway tower","red",[113.8,62.3,115.7,47.3,123.3,48.2,121.5,63.3]],["cc_s","Chapel Court, south range","red",[70.2,9.4,98.6,4.4,97.8,-0.1,112.4,-2.7,113.2,1.9,115.8,1.4,118.0,13.6,112.2,14.6,111.8,12.9,72.0,19.9]],["carpenter","Carpenter Building","red",[103.2,6.5,103.2,3.7,105.1,3.7,105.1,0.6,99.9,0.6,99.9,-1.5,101.4,-1.5,101.4,-6.2,105.1,-6.2,105.1,-37.0,99.9,-37.0,99.9,-40.8,112.4,-40.8,112.4,0.6,115.9,0.6,115.9,6.5]],["lib_n","Library Court, north range","red",[58.6,-46.8,111.1,-50.0,111.4,-45.6,113.7,-45.7,114.5,-31.6,104.5,-31.0,104.2,-36.6,69.3,-34.5,69.4,-31.7,59.6,-31.1]],["lib_w","Library Court, west range","red",[53.1,-46.2,53.1,-75.6,58.6,-75.6,58.6,-49.0,56.4,-49.0,56.4,-46.2]],["qlib","Quincentenary Library","modern",[58.9,-51.3,42.0,-51.3,42.0,-84.9,47.1,-84.9,47.1,-81.5,58.9,-81.5]],["lib_s","Library Court, south range","buff",[59.2,-84.6,61.1,-84.2,61.7,-87.9,59.7,-88.2,61.3,-97.8,79.7,-94.9,80.0,-97.4,98.2,-94.5,99.0,-99.3,114.0,-97.0,111.8,-83.5,60.3,-91.6]],["easthouse","East House","red",[118.4,-19.0,116.0,-32.8,120.1,-33.6,121.7,-24.2,128.9,-25.4,127.3,-34.8,123.9,-34.2,123.3,-37.5,140.3,-40.5,141.2,-35.4,138.7,-34.9,140.8,-22.9,129.7,-21.0,130.9,-14.3,126.1,-13.5,125.5,-16.8,128.0,-17.2,127.4,-20.6]],["health","Health and wellbeing, IT, Multi-faith Space","modern",[40.2,-44.3,40.2,-46.2,38.1,-46.1,37.8,-60.0,39.8,-60.1,39.7,-63.6,33.8,-63.4,33.6,-69.4,48.1,-69.8,48.5,-54.4,52.4,-54.5,52.6,-46.5,44.3,-46.3,44.3,-44.4]],["wc_n","West Court, north range","brick",[-159.2,13.1,-153.1,12.1,-152.7,14.8,-146.8,13.8,-146.5,15.4,-143.3,14.8,-144.4,8.6,-138.5,7.5,-138.1,9.4,-126.0,7.3,-125.5,10.0,-120.7,9.2,-119.9,13.4,-111.4,11.9,-110.1,19.6,-156.6,27.9]],["roost","Roost Cafe Bar, MCR and Brewery Room","brick",[-158.7,18.0,-158.4,12.4,-149.6,12.9,-149.7,15.1,-146.0,15.3,-145.7,8.3,-132.1,9.0,-132.6,19.4]],["webb","Webb Library","brick",[-136.4,9.0,-133.3,8.8,-133.2,10.5,-121.3,9.7,-121.1,13.4,-115.1,13.0,-114.6,20.2,-134.1,21.5,-134.3,19.2,-135.7,19.3]],["wc_w","West Court, west range","brick",[-167.1,5.0,-167.1,1.6,-169.4,1.6,-169.4,-15.5,-171.6,-15.5,-171.6,-29.8,-160.0,-29.8,-160.0,-25.4,-157.8,-25.4,-157.8,-3.2,-154.7,-3.2,-154.7,-10.7,-152.2,-10.7,-152.2,1.6,-157.8,1.6,-157.8,5.0]],["wc_s","West Court, south range","brick",[-161.8,-33.8,-161.8,-40.6,-111.9,-40.6,-111.9,-31.9,-114.7,-31.9,-114.7,-33.8,-118.1,-33.8,-120.0,-31.9,-132.6,-31.9,-132.6,-28.5,-155.9,-28.5,-155.9,-30.4,-160.0,-30.4,-160.0,-33.8]],["wc_e","West Court, east range","brick",[-117.2,4.4,-117.8,-4.6,-107.6,-5.2,-108.6,-20.9,-114.1,-20.6,-115.2,-38.6,-106.6,-39.1,-106.3,-33.2,-92.9,-34.0,-92.6,-28.5,-97.7,-28.2,-96.5,-7.8,-98.6,-7.7,-98.2,-1.1,-112.9,-0.2,-112.6,4.1]],["wesley","Wesley House","brick",[-113.5,-20.8,-113.5,-31.5,-116.1,-31.5,-116.1,-42.2,-105.2,-42.2,-105.2,-33.8,-103.2,-33.8,-103.2,-31.5,-93.6,-31.5,-93.6,-26.3,-97.3,-26.3,-97.3,-20.8]],["elena","Elena Hall and Sibilla Room","modern",[-168.9,-9.8,-168.5,-15.7,-175.8,-16.2,-176.6,-2.6,-181.7,-2.9,-181.5,-5.7,-187.2,-6.1,-187.0,-8.0,-193.8,-8.4,-193.6,-11.3,-200.0,-11.7,-200.3,-6.9,-210.7,-7.5,-210.4,-12.4,-206.6,-12.1,-206.4,-14.5,-211.4,-14.8,-211.5,-12.4,-218.2,-12.8,-216.8,-36.0,-182.0,-33.9,-181.8,-36.4,-172.4,-35.8,-172.7,-30.4,-167.6,-30.1]],["marshall","Marshall Court 1 to 4","modern",[-217.5,-44.3,-213.9,-44.7,-214.7,-52.1,-216.8,-51.9,-186.7,-55.3,-185.1,-41.4,-189.8,-40.8,-190.2,-44.1,-195.0,-43.5,-194.8,-41.8,-192.4,-42.1,-191.9,-38.0,-196.6,-37.5,-195.9,-31.7,-215.8,-29.4]],["ltrinity","Little Trinity","brick",[-213.6,-47.1,-213.6,-50.9,-215.3,-50.9,-215.3,-66.3,-206.8,-66.3,-206.8,-62.5,-198.4,-62.5,-198.4,-59.8,-192.7,-59.8,-192.7,-47.1]],["allsaints","All Saints' Church","stone",[-62.2,-67.3,-59.2,-67.0,-58.8,-70.2,-55.5,-69.8,-55.2,-72.3,-44.0,-71.0,-43.5,-74.9,-37.7,-74.2,-38.8,-65.6,-53.6,-67.4,-54.7,-58.9,-60.1,-59.5,-60.4,-56.9,-63.4,-57.3]],["westcott","Westcott House","town",[-53.8,-66.3,-54.8,-58.8,-60.0,-59.6,-60.2,-57.5,-75.0,-59.6,-74.0,-66.9,-62.2,-65.2,-61.9,-67.4]],["boathouse","Jesus College Boathouse","timber",[523.6,218.5,551.6,218.5,551.6,234.5,523.6,234.5]]],"g":[["meadow","Jesus Green",[-520.2,398.0,6.8,398.0,-55.2,236.8,-117.2,196.5,-160.6,143.8,-200.9,88.0,-231.9,38.4,-241.2,-42.2,-520.2,-42.2]],["site","",[-231.9,38.4,-200.9,88.0,-160.6,143.8,-117.2,196.5,-55.2,236.8,6.8,398.0,264.1,398.0,264.1,-82.5,161.8,-98.0,68.8,-85.6,-24.2,-67.0,-117.2,-48.4,-197.8,-36.0]],["city","",[-520.2,-42.2,-241.2,-42.2,-197.8,-36.0,-117.2,-48.4,-24.2,-67.0,68.8,-85.6,161.8,-98.0,264.1,-82.5,409.8,-113.5,409.8,-222.0,-520.2,-222.0]],["meadow","Midsummer Common",[277.6,106.5,697.6,106.5,697.6,200.5,277.6,186.5]],["meadow","",[277.6,238.5,697.6,238.5,697.6,306.5,277.6,306.5]],["lawn","First Court",[-58.3,52.7,-8.7,52.7,-8.7,14.3,-58.3,14.3]],["lawn","Second Court",[-42.8,97.3,22.3,86.8,13.0,73.8,-45.9,81.8]],["lawn","North Court",[-73.8,143.8,-25.4,133.9,-30.4,120.3,-65.1,125.2]],["lawn","Chapel Court",[49.3,68.2,91.1,68.2,91.1,21.1,49.3,21.1]],["lawn","",[53.3,1.2,99.8,1.2,99.8,-32.9,53.3,-32.9]],["lawn","Library Court",[65.7,-45.3,113.5,-45.3,113.5,-84.9,65.7,-84.9]],["lawn","West Court",[-153.8,-0.6,-116.2,-0.6,-116.2,-22.9,-153.8,-22.9]],["paved","Cloister Court",[2.5,42.2,22.3,42.2,22.3,21.7,2.5,21.7]],["lawn","",[6.2,38.4,18.6,38.4,18.6,25.4,6.2,25.4]],["paved","Pump Court",[1.9,73.8,31.6,73.8,31.6,52.1,1.9,52.1]],["garden","Fellows' Garden",[-98.6,1.2,-21.1,-1.9,-21.1,-45.3,-104.8,-39.1]],["garden","Master's Garden",[3.7,-17.4,53.3,-20.5,53.3,-63.9,-5.6,-57.7]],["orchard","The Orchard",[-154.4,100.4,-55.2,81.8,-73.8,16.7,-166.8,32.2]],["pitch","The cricket ground",[25.4,199.6,199.0,181.0,192.8,100.4,19.2,119.0]],["pitch","",[130.8,1.2,223.8,1.2,223.8,-73.2,130.8,-73.2]],["court","Tennis courts",[-68.8,198.4,-36.6,192.8,-41.5,174.8,-73.8,181.0]],["paved","",[-21.1,140.7,25.4,132.7,22.3,115.3,-24.2,123.4]],["paved","",[115.3,47.7,137.0,47.7,137.0,26.0,115.3,26.0]],["paved","",[118.4,-76.3,149.4,-76.3,149.4,-101.1,118.4,-101.1]],["path","The Chimney",[-6.2,-5.0,0.6,-5.0,0.6,-48.4,-6.2,-48.4]]],"l":[["road","Jesus Lane",9,[-200.9,-36.0,-117.2,-47.1,-24.2,-64.5,68.8,-82.5,161.8,-96.1,264.1,-110.4]],["road","Victoria Avenue",11,[254.8,398.0,258.5,150.0,261.6,-5.0,264.1,-110.4]],["road","Morgan Avenue",5.5,[123.4,55.2,192.8,50.8,257.3,45.9]],["road","Park Street",7,[-241.2,57.0,-228.8,-36.0,-204.0,-39.1]],["road","Lower Park Street",7,[-256.7,128.3,-173.0,150.0,-117.2,171.7]],["drive","",4.5,[257.3,45.9,161.8,57.0,68.8,100.4,22.3,119.0,-5.6,122.1]],["water","Jesus Ditch",3,[-200.9,88.0,-142.0,128.3,-67.6,171.7,6.8,202.7,68.8,215.1]],["river","The River Cam",20,[237.6,196.5,387.6,204.5,537.6,210.5,697.6,214.5]],["path","",2.5,[-3.1,-48.4,-3.1,-5.0]],["path","",2.5,[-33.5,14.3,-33.5,52.7]],["path","",2,[-58.3,33.5,-8.7,33.5]],["path","",2.5,[-11.8,60.1,-21.1,86.2,-24.2,119.0]],["path","",2.5,[-45.9,75.6,-76.9,60.1,-111.0,38.4,-129.6,26.0]],["path","",2.2,[41.5,47.7,101.7,47.7]],["path","",2.2,[68.8,75.6,68.8,11.8]],["path","",2.2,[68.8,1.9,68.8,-34.7]],["path","",2,[68.8,75.6,65.7,112.8,68.8,143.8]],["path","",2.5,[257.3,45.9,417.6,146.5,517.6,200.5]]],"v":{"first-court":{"n":"First Court","at":[-10.9,38.8],"h":"The horse is on the lawn. Do not ride it."},"mcr":{"n":"MCR","at":[-140.1,15.6],"h":"West Court, north range, next to the Roost."},"second-court":{"n":"Second Court","at":[-11.8,88.0],"h":"Through the passage from First Court."},"orchard":{"n":"The Orchard","at":[-111.0,57.0],"h":"The path from Second Court leads straight in."},"brewery":{"n":"Brewery Room","at":[-114.6,25.0],"h":"West Court, north range. Follow the noise."},"boathouse":{"n":"Boathouse","at":[537.6,217.5],"h":"Across Midsummer Common, about eight minutes."},"cricket-pitch":{"n":"Cricket Pitch","at":[70.4,207.9],"h":"North of Chapel Court, through the screen gate."},"elena-hall":{"n":"Elena Hall","at":[-171.5,10.2],"h":"The far west of West Court."},"library-court":{"n":"Library Court","at":[87.4,-63.9],"h":"Below Chapel Court, by the Quincentenary Library."},"delivery-archway":{"n":"Delivery Archway","at":[36.6,86.2],"h":"The north end of the long range, by the car park."},"webb-library":{"n":"Webb Library","at":[-116.2,10.9],"h":"West Court, at the north east corner."},"lodge":{"n":"Porters' Lodge","at":[-3.1,1.9],"h":"The gatehouse at the top of the Chimney."},"frankopan-hall":{"n":"Frankopan Hall","at":[-125.2,-24.8],"h":"West Court, on the south side."},"radegund-hall":{"n":"Radegund Hall","at":[-143.9,2.4],"h":"West Court."},"prioress-room":{"n":"Prioress's Room","at":[14.0,24.1],"h":"Cloister Court, off the Hall."},"upper-hall":{"n":"Upper Hall","at":[13.3,31.3],"h":"Cloister Court, above the Hall."},"bawden-room":{"n":"Bawden Room","at":[-144.8,-15.5],"h":"West Court, below Radegund Hall."},"masters-garden":{"n":"Master's Garden","at":[16.9,-22.0],"h":"Through the gate south of Cloister Court."}},"m":[["The Chimney",-3.1,-26.7],["Jesus Lane gate",-3.1,-49.6],["Cloister Court",12.4,32.2],["Pump Court",16.7,63.2],["Chapel Court",70.1,44.6],["North Court",-51.5,133.9],["Boaty Archway",117.2,55.2],["Angel Archway",107.3,1.2],["N Archway",-24.2,112.8],["F Archway",36.6,11.8],["L Archway",36.6,75.6],["Victoria Avenue gate",257.3,45.9],["West Court gate",-132.7,-40.3],["The Chapel",19.2,-1.9],["Midsummer Common",387.6,136.5]],"s":[["T",-91.5,131.4],["S",-89.2,145.5],["R",-83.7,154.6],["Q",-69.3,151.5],["P",-38.4,120.3],["O",-27.8,117.8],["N",-7.7,113.2],["M",0.2,111.0],["C",-41.6,59.4],["D",-22.4,57.9],["L",20.6,85.1],["K",22.0,69.1],["J",23.9,49.9],["G",19.7,41.8],["F",28.6,21.2],["B",-40.1,13.9],["A",-29.4,12.5],["E",9.5,3.2],["1",96.1,82.5],["2",103.9,76.8],["3",104.9,65.0],["4",107.2,42.7],["5",107.7,36.7],["6",108.9,25.1],["7",100.1,17.5],["8",104.3,-13.0],["9",105.2,-22.4],["14",61.5,-23.0],["13",67.8,-30.6],["12",78.6,-30.4],["11",91.4,-30.2],["10",101.1,-30.1],["I",64.8,-82.0],["II",75.1,-81.8],["III",85.7,-81.7],["IV",96.3,-81.5],["V",107.2,-81.4],["2",-149.3,4.3],["1",-125.7,3.2],["3",-163.8,-15.0],["4",-159.4,-24.9],["5",-128.9,-26.8]],"t":[[-40.6,223.6,7.6],[149.4,226.1,10.3],[-58.7,223.2,9.4],[-77.7,222.3,6.4],[-128.8,221.1,9.1],[29.2,225.0,5.6],[40.8,225.2,4.5],[85.3,224.6,6.4],[96.2,225.6,4.4],[118.4,224.6,6.1],[130.6,226.1,5.8],[-89.5,222.7,4.4],[106.5,225.3,4.6],[-144.1,214.0,7.7],[209.0,215.2,5.2],[-150.4,202.1,6.1],[208.6,202.2,7.4],[-262.7,191.7,7.1],[-156.2,190.1,5.9],[-186.9,181.3,7.7],[210.4,186.7,7.1],[-162.6,178.9,6.5],[-249.4,168.7,5.2],[-169.4,169.2,4.3],[211.4,168.3,9.5],[-199.7,161.8,8.8],[-174.2,158.5,6.1],[-239.6,154.1,5.1],[-180.5,146.7,5.5],[213.3,149.6,6.1],[214.0,127.4,4.8],[-199.5,107.2,2.5],[152.3,62.5,5.8],[182.2,63.0,6.1],[212.7,63.3,5.8],[136.6,61.9,5.9],[166.6,62.7,5.8],[197.3,63.2,5.6],[139.1,41.5,5.9],[154.3,40.7,6.3],[199.3,41.6,5.8],[214.5,42.0,5.5],[169.0,41.0,6.1],[184.5,41.4,5.9],[221.7,25.4,7.2],[-234.4,22.5,4.0],[222.5,8.4,5.0],[143.2,3.2,5.1],[130.8,-3.1,3.7],[223.3,-4.2,4.9],[-264.6,-30.6,6.4],[-58.1,-49.8,4.3],[-235.2,-53.4,1.9],[-49.1,-53.8,4.0],[-36.5,-55.5,5.9],[-225.7,-63.2,4.2],[225.3,-66.8,4.8],[221.8,-85.4,7.0],[215.8,-96.8,4.6],[207.1,-103.4,4.8],[179.6,-104.5,4.9],[188.8,-105.9,4.4],[197.2,-106.2,3.8],[239.9,-111.1,7.3]],"bounds":[-299.8,-212.0,617.6,316.0],"home":[-239.8,-122.0,162.3,246.0],"geo":{"lat":[0.0,8.99830831803621e-06,52.208945570348774],"lon":[1.465953329838781e-05,0.0,0.12347253073644451]}};
-
-const TONE = { brick:"#8E5A44", stone:"#B8AC96", red:"#9A4536", buff:"#A99A82",
-  modern:"#8E8E8A", timber:"#7C6448", town:"#6E6259" };
-const GROUND = { lawn:"#4E7A4E", garden:"#436E45", orchard:"#4A7348", meadow:"#4F7550",
-  pitch:"#4C7A4C", court:"#6E6A55", paved:"#6C6157", site:"#5E5248", city:"#4E4740" };
+const CREST = "data:image/png;base64,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";
 
 /* ---------- time, all of it Cambridge wall clock ---------- */
 const fmtLondon = new Intl.DateTimeFormat("en-GB", {timeZone:TZ, year:"numeric", month:"2-digit",
@@ -1002,15 +932,15 @@ const withTimeout = (p, ms, what) => Promise.race([p,
   new Promise((_, rej) => setTimeout(() => rej(new Error(what || "The server did not answer in time.")), ms))]);
 
 function gateBusy(on){
-  $("gsiBtn").innerHTML = on ? '<span class="gsiskel" aria-hidden="true"></span>' : "";
+  put("gsiBtn", on ? '<span class="gsiskel" aria-hidden="true"></span>' : "");
 }
 function gateFix(title, body, actions){
   gateBusy(false);
   $("gateMsg").textContent = "";
-  $("gateFix").innerHTML = '<div class="fix"><b>' + esc(title) + "</b><p>" + body + "</p>" +
-    (actions ? '<div class="acts" style="margin-top:0">' + actions + "</div>" : "") + "</div>";
+  put("gateFix", '<div class="fix"><b>' + esc(title) + "</b><p>" + body + "</p>" +
+    (actions ? '<div class="acts" style="margin-top:0">' + actions + "</div>" : "") + "</div>");
 }
-function gateClear(){ $("gateFix").innerHTML = ""; }
+function gateClear(){ put("gateFix", ""); }
 
 /* Everything the committee would need to tell somebody in order to fix it,
    including the origin Google has to be told about, which is the single
@@ -1029,9 +959,9 @@ function renderDiag(){
     ["Google's script", (window.google && google.accounts && google.accounts.id) ? "loaded" : "did not load"],
     ["Google's complaint", gsiComplaint || "none so far"]
   ];
-  $("diag").innerHTML = rows.map(r => "<b>" + esc(r[0]) + ":</b> " + esc(r[1])).join("<br>") +
+  put("diag", rows.map(r => "<b>" + esc(r[0]) + ":</b> " + esc(r[1])).join("<br>") +
     '<br><br>Google must be told about <b>' + esc(originOf()) +
-    "</b> under Authorised JavaScript origins, and about nothing else.";
+    "</b> under Authorised JavaScript origins, and about nothing else.");
 }
 
 async function probe(){
@@ -1205,9 +1135,10 @@ function bootTalk(on){
   }, 2200);
 }
 async function boot(fresh){
-  $("crestBoot").innerHTML = CREST;
-  $("crestTop").innerHTML = CREST;
-  $("crestGate").innerHTML = CREST;
+  [["crestBoot","big"],["crestTop",""],["crestGate",""]].forEach(function(c){
+    const el = $(c[0]);
+    if (el) el.outerHTML = '<img class="crest ' + c[1] + '" id="' + c[0] + '" src="' + CREST + '" alt="Jesus College MCR">';
+  });
   bootTalk(true);
   if (!getToken()){ bootTalk(false); return signedOut(); }
   try{
@@ -1379,86 +1310,75 @@ function skyAt(h){
 function renderCrow(){
   const now = new Date();
   const hm = londonStr(now).slice(11);
-  const h = +hm.slice(0, 2) + (+hm.slice(3, 5)) / 60;
+  const h = +hm.slice(0, 2);
   const t = todayLondon();
   const when = h < 5 ? "Late" : h < 12 ? "This morning" : h < 18 ? "This afternoon" : "This evening";
   const hello = h < 5 ? "Still up" : h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening";
   const name = first(S.me.name) || "there";
   const on = eventsOn(t).filter(e => e.status !== "cancelled");
   const nextUp = on.filter(e => endOf(e) > now)[0];
-  const line = !on.length
-      ? "Nothing in the diary today. A good evening for the library, or the Orchard."
-    : nextUp
-      ? "Next up: " + nextUp.title + " at " + clock(nextUp.start) + ", " + nextUp.venueName + "."
-      : on.length + (on.length === 1 ? " thing was on today, and it has finished."
-                                     : " things were on today, and they have all finished.");
-  const sk = skyAt(h);
+  const line = !on.length ? "Nothing in the diary today."
+    : nextUp ? "Next up: " + nextUp.title + " at " + clock(nextUp.start) + ", " + nextUp.venueName + "."
+    : "Everything on today has finished.";
+
+  /* The slots. A pigeonhole with nothing in it is still a pigeonhole, so every
+     slot is always there and the ones with something in them light up. That is
+     what makes it readable at a glance rather than a list that changes shape. */
+  const mineSoon = (S.events || []).filter(e =>
+    ["going","waitlist"].indexOf(myStatus(e.id)) >= 0 && e.date >= t && e.status !== "cancelled");
+  const replies = (S.tickets || []).filter(x => x.status === "answered");
+  const votes = (S.motions || []).filter(m => m.status === "voting" && !(S.myVotes || {})[m.id]).length +
+                (S.polls || []).filter(p => p.open && !p.mine).length;
+  const rooms = (S.rooms || []).filter(r => r.status !== "new" && r.at > Date.now() - 6 * 864e5);
+  const overdue = (S.lend || []).filter(l => l.out.some(o => o.email === S.me.email && o.due < t));
+  const fresh = (S.updates || []).filter(u => u.at > (S.me.seenAt || 0)).length;
+  const mineIdeas = (S.ideas || []).filter(i => i.own && i.status !== "open" &&
+    i.at > Date.now() - 30 * 864e5).length;
+  const slot = (k, label, n, empty, goTo) =>
+    '<button class="slot ' + (n ? "has" : "empty") + '" data-goto="' + goTo + '">' +
+    '<span class="k">' + esc(label) + "</span>" +
+    (n ? '<span class="n">' + n + "</span>" : "") +
+    "<b>" + esc(n ? k : empty) + "</b></button>";
+  const slots = [
+    slot(replies.length ? replies[0].subject : "", "Replies", replies.length, "Nothing waiting", "ask"),
+    slot(mineSoon.length ? mineSoon[0].title : "", "You are down for", mineSoon.length, "Nothing booked", "cal"),
+    slot(votes ? "Your vote is wanted" : "", "To decide", votes, "Nothing to decide", "biz"),
+    slot(fresh ? "Read what changed" : "", "Notices", fresh, "Nothing new", "lodge"),
+    slot(rooms.length ? rooms[0].title : "", "Your requests", rooms.length, "None open", "ask"),
+    slot(overdue.length ? overdue[0].name + " is overdue" : "", "Borrowed", overdue.length, "Nothing out", "lodge"),
+    mineIdeas ? slot("The committee answered", "Your ideas", mineIdeas, "", "biz") : ""
+  ].join("");
+
   const bits = [];
-  const gateShut = h >= 0 && h < 5.5;
+  const gateShut = h >= 0 && h < 5;
   bits.push(gateShut
-    ? '<span class="warn">Chimney gate shut until 5.30. Jesus Lane, Victoria Avenue or Lower Park Street with your card</span>'
+    ? '<span class="warn">Chimney gate shut until 5.30. Jesus Lane, Victoria Avenue or Lower Park Street</span>'
     : '<span class="dot">Chimney gate open</span>');
-  bits.push('<span class="dot">Lodge staffed, 01223 339339</span>');
+  bits.push('<span class="dot">Lodge, 01223 339339</span>');
   const works = (S.notices || []).filter(n => ["access","works","urgent"].indexOf(n.kind) >= 0)[0];
   if (works) bits.push('<span class="warn">' + esc(works.title) + "</span>");
-  const live = (S.bumps || []).filter(m => m.live)[0];
-  if (live) bits.push('<span class="warn">' + esc(live.meet) + " is on</span>");
   const mtg = (S.meetings || []).filter(m => m.date === t)[0];
   if (mtg) bits.push('<span class="warn">' + esc(mtg.title) + " at " + esc(clock(mtg.start)) + "</span>");
-  const out = (S.lend || []).filter(l => l.out.some(o => o.email === S.me.email));
-  if (out.length) bits.push("<span>You have the " + esc(out[0].name.toLowerCase()) + "</span>");
-  $("crow").innerHTML = '<div class="crow">' +
-    '<div class="sky" style="background:linear-gradient(178deg,' + sk.top + ' 0%,' + sk.band +
-      ' 52%,' + sk.low + ' 100%)"></div>' +
-    '<div class="sun" style="bottom:' + Math.round(sk.height * 100 - 22) + '%;opacity:' +
-      (0.28 + sk.height * 0.75).toFixed(2) + ';background:radial-gradient(circle,' + sk.sun +
-      ' 0%,rgba(0,0,0,0) 68%)"></div>' +
-    '<div class="horizon"></div>' +
+
+  put("crow", '<div class="hole">' +
     '<div class="when">' + esc(when) + " &middot; " + esc(longDate(t)) + "</div>" +
     "<h3>" + esc(hello) + ", " + esc(name) + "</h3>" +
     '<p class="line">' + esc(line) + "</p>" +
-    '<div class="state">' + bits.join("") + "</div></div>";
+    '<div class="slots">' + slots + "</div>" +
+    '<div class="state">' + bits.join("") + "</div></div>");
 }
 function eventsOn(d){
   return (S.events || []).filter(e => e.date === d && (!catFilter || catOf(e) === catFilter));
 }
 function renderTodayUrgent(){
   const live = (S.notices || []).filter(n => n.pin || n.kind === "urgent").slice(0, 2);
-  $("todayUrgent").innerHTML = live.map(noticeHtml).join("");
+  put("todayUrgent", live.map(noticeHtml).join(""));
 }
 /* The pigeonhole. Anything the app owes you, in one place, because the MCR
    room is where the pigeonholes are and this is the same idea. */
-function renderTodayNeeds(){
-  const bits = [];
-  const replies = (S.tickets || []).filter(t => t.status === "answered");
-  if (replies.length) bits.push('<div class="rowline"><div class="t"><b>' + replies.length +
-    (replies.length === 1 ? " reply is waiting" : " replies are waiting") +
-    '</b><span>' + esc(replies.map(r => r.subject).slice(0, 2).join(", ")) + '</span></div>' +
-    '<button class="btn cream sm" data-goto="ask">Read</button></div>');
-  const roomsDone = (S.rooms || []).filter(r => r.status !== "new");
-  if (roomsDone.length && roomsDone[0].at > Date.now() - 5 * 864e5)
-    bits.push('<div class="rowline"><div class="t"><b>' + esc(roomsDone[0].title) + '</b><span>' +
-      (roomsDone[0].status === "yes" ? "On the calendar" : "Not this time") +
-      '</span></div><button class="btn ghost sm" data-goto="ask">See</button></div>');
-  const promoted = Object.keys(S.mine || {}).filter(id => {
-    const m = S.mine[id];
-    const e = evById(id);
-    return m.status === "going" && e && e.full && m.at > Date.now() - 3 * 864e5;
-  });
-  const voting = (S.motions || []).filter(m => m.status === "voting" && !(S.myVotes || {})[m.id]);
-  if (voting.length) bits.push('<div class="rowline"><div class="t"><b>A vote is open</b><span>' +
-    esc(voting[0].title) + '</span></div><button class="btn cream sm" data-goto="biz">Vote</button></div>');
-  const due = (S.lend || []).filter(l => l.out.some(o => o.email === S.me.email && o.due < todayLondon()));
-  if (due.length) bits.push('<div class="rowline"><div class="t"><b>' + esc(due[0].name) +
-    ' is overdue</b><span>Due back ' + esc(shortDate(due[0].out[0].due)) +
-    '</span></div><button class="btn ghost sm" data-goto="lodge">Return it</button></div>');
-  $("todayNeeds").innerHTML = bits.length
-    ? '<div class="grp">Your pigeonhole</div><div class="card">' + bits.join("") + "</div>"
-    : '<div class="grp">Your pigeonhole</div><div class="card"><p class="lede">Empty, which is the good kind of empty. Anything the app owes you lands here: a reply, a place off the waiting list, a vote closing.</p></div>';
-}
 function renderThree(){
   const t = todayLondon();
-  $("three").innerHTML = [0, 1, 2].map(i => {
+  put("three", [0, 1, 2].map(i => {
     const d = addDays(t, i);
     const list = eventsOn(d);
     const lab = i === 0 ? "Today" : i === 1 ? "Tomorrow" : DOWL[dow(d)];
@@ -1466,27 +1386,26 @@ function renderThree(){
       esc(MON[dobj(d).getUTCMonth()]) + "</div>" +
       (list.length ? list.map(evRow).join("")
         : '<div class="none">Nothing on.</div>') + "</div>";
-  }).join("");
+  }).join(""));
 }
 function renderTodayQuick(){
   const link = k => (S.links || []).filter(l => l.key === k)[0];
   const permit = link("permit"), fix = link("maintenance");
-  $("todayQuick").innerHTML = '<div class="grp">Quick things</div><div class="tilegrid">' +
+  put("todayQuick", '<div class="grp">Quick things</div><div class="tilegrid">' +
     '<button data-goto="ask">Ask somebody</button>' +
     '<button data-room>Put something on in the MCR</button>' +
     (fix ? '<a href="' + esc(fix.url) + '" target="_blank" rel="noopener">Report something broken</a>' : "") +
     (permit ? '<a href="' + esc(permit.url) + '" target="_blank" rel="noopener">Apply for an event permit</a>' : "") +
-    '<button data-goto="map">Where is it</button>' +
-    '<button data-goto="who">Who to ask</button></div>';
+    '<button data-goto="who">Who to ask</button></div>');
 }
 function renderTodayNews(){
   const list = (S.updates || []).slice(0, 5);
-  if (!list.length){ $("todayNews").innerHTML = ""; return; }
-  $("todayNews").innerHTML = '<div class="grp">What has changed</div><div class="card">' +
+  if (!list.length){ put("todayNews", ""); return; }
+  put("todayNews", '<div class="grp">What has changed</div><div class="card">' +
     list.map(u => '<div class="rowline"><div class="t"><b>' + esc(u.text) + "</b><span>" +
       esc(u.by) + " &middot; " + esc(ago(u.at)) + "</span></div>" +
       (isAdmin() ? '<button class="btn ghost sm" data-delupdate="' + esc(u.id) + '">Remove</button>' : "") +
-      "</div>").join("") + "</div>";
+      "</div>").join("") + "</div>");
 }
 
 /* ============================================================
@@ -1511,17 +1430,17 @@ function renderCal(){
     ? dnum(ws) + " " + MON[dobj(ws).getUTCMonth()].slice(0, 3) + " to " +
       dnum(addDays(ws, 6)) + " " + MON[dobj(addDays(ws, 6)).getUTCMonth()].slice(0, 3)
     : monthLabel(ms);
-  $("calBar").innerHTML = '<div class="seg">' +
+  put("calBar", '<div class="seg">' +
     [["month","Month"],["week","Week"],["day","Day"]].map(k =>
       '<button data-mode="' + k[0] + '" aria-pressed="' + (mode === k[0]) + '">' + k[1] + "</button>").join("") +
     "</div>" +
     (mode === "day" ? "" : '<div class="mv"><button data-m="-1" aria-label="Back">&#8249;</button><b>' +
-      esc(label) + '</b><button data-m="1" aria-label="Forward">&#8250;</button></div>');
-  $("calMonth").innerHTML = mode === "month" ? monthGrid(ms) : mode === "week" ? weekGrid(ws) : "";
-  $("calChips").innerHTML = (S.tags || []).map(t =>
+      esc(label) + '</b><button data-m="1" aria-label="Forward">&#8250;</button></div>'));
+  put("calMonth", mode === "month" ? monthGrid(ms) : mode === "week" ? weekGrid(ws) : "");
+  put("calChips", (S.tags || []).map(t =>
       '<button data-cat="' + esc(t.key) + '" aria-pressed="' + (catFilter === t.key) + '"><i class="c-' +
       esc(t.key) + '"></i>' + esc(t.name) + "</button>").join("") +
-    (catFilter ? '<button data-cat="">Show everything</button>' : "");
+    (catFilter ? '<button data-cat="">Show everything</button>' : ""));
 }
 function monthGrid(ms){
   const t = todayLondon(), lead = dow(ms), n = daysIn(ms);
@@ -1569,7 +1488,7 @@ function renderBoard(){
   const byDate = {};
   shown.forEach(e => (byDate[e.date] = byDate[e.date] || []).push(e));
   $("calNote").textContent = shown.length + " in the term · " + goingCount() + " yours";
-  $("board").innerHTML = days.map(d => {
+  put("board", days.map(d => {
     const list = byDate[d] || [];
     if (!list.length && mode !== "day" && d !== t) return "";
     return '<div class="daycard' + (d === t ? " today" : d < t ? " past" : "") + '" id="d-' + d + '">' +
@@ -1577,7 +1496,7 @@ function renderBoard(){
       (d === t ? '<span class="flag">Today</span>' : "") + "</div>" +
       (list.length ? list.map(evRow).join("")
         : '<div class="rest">Nothing on.</div>') + "</div>";
-  }).join("") || '<div class="card"><p>Nothing in this month yet.</p></div>';
+  }).join("") || '<div class="card"><p>Nothing in this month yet.</p></div>');
 }
 
 /* ---------- an event, opened ---------- */
@@ -1591,8 +1510,6 @@ function openEvent(id){
   lines.push('<p class="lede">' + esc(longDate(ev.date)) + ", " + esc(clock(ev.start)) +
     (ev.end ? " to " + esc(clock(ev.end)) : "") + " &middot; " + esc(ev.venueName) +
     (ev.venueHint ? '<br><span style="color:var(--cream-3)">' + esc(ev.venueHint) + "</span>" : "") + "</p>");
-  if (PLAN.v[ev.venue]) lines.push('<div class="acts" style="margin-top:0"><button class="btn ghost sm" data-showon="' +
-    esc(ev.venue) + '">Show me where</button></div>');
   if (ev.status === "cancelled") lines.push('<div class="notice urgent"><b>Cancelled</b>' +
     (ev.note ? "<p>" + esc(ev.note) + "</p>" : "") + "</div>");
   else if (ev.status === "changed" && ev.note) lines.push('<div class="notice"><b>This has changed</b><p>' + esc(ev.note) + "</p></div>");
@@ -1666,10 +1583,10 @@ function renderLinks(){
     '<div class="grp">Jesus, in its own words</div>' + rest.map(card).join("");
 }
 function renderLodge(){
-  $("lodgeNotices").innerHTML = (S.notices || []).length
+  put("lodgeNotices", (S.notices || []).length
     ? '<div class="grp">On the board</div>' + S.notices.map(noticeHtml).join("")
-    : '<div class="card"><p>Nothing on the board, which is usually good news.</p></div>';
-  $("lodgeLend").innerHTML = (S.lend || []).length
+    : '<div class="card"><p>Nothing on the board, which is usually good news.</p></div>');
+  put("lodgeLend", (S.lend || []).length
     ? '<div class="grp">Borrowing</div><div class="card">' + S.lend.map(l => {
         const mineOut = l.out.some(o => o.email === S.me.email);
         return '<div class="rowline"><div class="t"><b>' + esc(l.name) + "</b><span>" +
@@ -1678,37 +1595,35 @@ function renderLodge(){
           (mineOut ? '<button class="btn ghost sm" data-lendback="' + esc(l.id) + '">Give it back</button>'
             : l.free ? '<button class="btn cream sm" data-lendtake="' + esc(l.id) + '">Take it</button>'
             : '<span class="st">Out</span>') + "</div>";
-      }).join("") + "</div>" : "";
-  $("lodgeClubs").innerHTML = (S.clubs || []).length
+      }).join("") + "</div>" : "");
+  put("lodgeClubs", (S.clubs || []).length
     ? '<div class="grp">Sport and clubs</div>' + S.clubs.map(c =>
         '<div class="card"><h3>' + esc(c.name) + "</h3>" + (c.note ? "<p>" + esc(c.note) + "</p>" : "") +
         '<div class="who">' + [c.meets, c.where, c.lead].filter(Boolean).map(esc).join(" &middot; ") + "</div>" +
         '<div class="acts"><button class="btn ghost sm" data-ask="mcr" data-subject="' +
-        esc("Joining " + c.name) + '">Ask about joining</button></div></div>').join("") : "";
+        esc("Joining " + c.name) + '">Ask about joining</button></div></div>').join("") : "");
   const res = S.resources || [];
   const groups = [];
   res.forEach(r => { if (groups.indexOf(r.group) < 0) groups.push(r.group); });
-  $("lodgeCards").innerHTML = groups.map(g =>
+  put("lodgeCards", groups.map(g =>
     '<div class="grp">' + esc(g) + "</div>" +
     res.filter(r => r.group === g).map(r =>
       '<div class="card"><h3>' + esc(r.title) + "</h3><p>" + esc(r.body) + "</p>" +
       (r.contact ? '<div class="who">' + esc(r.contact) + "</div>" : "") +
-      (r.venue && PLAN.v[r.venue] ? '<div class="acts"><button class="btn ghost sm" data-showon="' +
-        esc(r.venue) + '">Show me where</button></div>' : "") +
       (isCommittee() ? '<div class="acts"><button class="btn ghost sm" data-editres="' + esc(r.id) +
-        '">Edit this card</button></div>' : "") + "</div>").join("")).join("");
+        '">Edit this card</button></div>' : "") + "</div>").join("")).join(""));
 }
 
 /* ============================================================
    ASK
    ============================================================ */
 function renderAsk(){
-  $("askIntro").innerHTML = '<div class="card">' +
+  put("askIntro", '<div class="card">' +
     "<p>Pick what it is about and it goes to one person, not to everybody. The reply appears here.</p>" +
     '<p class="lede">If it cannot wait, ring the Porters on 01223 339339. They are there every hour of the year and they will find whoever is on duty.</p></div>' +
     '<div class="tilegrid">' + (S.ask || []).map(a =>
       '<button data-ask="' + esc(a.key) + '">' + esc(a.name) + "</button>").join("") +
-    '<button data-room>Put something on in the MCR</button></div>';
+    '<button data-room>Put something on in the MCR</button></div>');
   const rooms = S.rooms || [], th = S.tickets || [];
   $("askThreads").innerHTML =
     (rooms.length ? '<div class="grp">Your room requests</div>' + rooms.map(r =>
@@ -1824,38 +1739,127 @@ function openRoom(){
     }));
 }
 
-/* ============================================================
-   PEOPLE
-   ============================================================ */
-const ASK_INDEX = [
-  ["I am locked out", "Porters' Lodge, 01223 339339, any hour"],
-  ["Something is broken in my room", "Report it on JNet, or tell the housekeepers"],
-  ["I need an extension or an intermission", "Graduate Tutors, surgery Wednesdays 6 to 7, F6"],
-  ["I cannot pay my bill", "Financial Tutor, financial-tutor@jesus.cam.ac.uk"],
-  ["I am unwell", "College Nurse, Staircase 1, Library Court"],
-  ["I need to talk to somebody tonight", "Ring the Lodge and ask for the Welfare Tutor on duty"],
-  ["A form needs signing", "Graduate Administrator, graduate-tutor@jesus.cam.ac.uk"],
-  ["My visa", "International Student Office, through Ask if you want help framing it"],
-  ["A parcel has gone missing", "Porters' Lodge"],
-  ["I want to start a club", "Sports and Societies Officer, through Ask"],
-  ["I want the MCR to change something", "Put down a motion under Business"]
-];
+
+
+/* Who you would be asking. Photographs, because a name you have seen is a
+   person you will actually stop in a corridor, and that is the whole job.
+   Each team gets its own ring colour so the page is not one red wall. */
 function renderWho(){
   const all = S.committee || [];
-  $("whoTeams").innerHTML = (S.teams || []).map(t => {
-    const list = all.filter(p => (p.team || "other") === t.key);
-    if (!list.length) return "";
-    return '<div class="grp">' + esc(t.name) + '</div><div class="whogrid">' + list.map(p =>
-      '<div class="whoc' + (p.name ? "" : " vacant") + '">' +
-      (p.photo ? '<img class="ph" src="' + p.photo + '" alt="">' : '<span class="ph">' + esc(initials(p.name)) + "</span>") +
-      "<b>" + esc(p.name) + "</b><span>" + esc(p.role) + "</span>" +
-      (p.runs && p.runs.length ? '<div class="runs">' + esc(p.runs.slice(0, 2).join(", ")) + "</div>" : "") +
-      '<button data-ask="mcr" data-subject="' + esc("For " + p.name) + '">Ask them</button></div>').join("") +
-      "</div>";
-  }).join("");
-  $("whoIndex").innerHTML = '<div class="grp">If this is the problem</div><div class="card">' +
-    ASK_INDEX.map(r => '<div class="rowline"><div class="t"><b>' + esc(r[0]) + "</b><span>" +
-      esc(r[1]) + "</span></div></div>").join("") + "</div>";
+  put("whoTeams", '<div class="grp">Who you are asking</div>' +
+    (S.teams || []).map(t => {
+      const list = all.filter(p => (p.team || "other") === t.key);
+      if (!list.length) return "";
+      return '<div class="grp"><b>' + esc(t.name) + '</b></div><div class="whogrid team-' + esc(t.key) + '">' +
+        list.map(p => '<div class="whoc' + (p.name ? "" : " vacant") + '">' +
+          (p.photo ? '<img class="ph" src="' + p.photo + '" alt="">'
+                   : '<span class="ph">' + esc(p.name ? initials(p.name) : "\u2014") + "</span>") +
+          "<b>" + esc(p.name || "Vacant") + "</b><span>" + esc(p.role) + "</span>" +
+          (p.name ? '<button data-ask="mcr" data-subject="' + esc("For " + p.name) + '">Ask them</button>'
+                  : '<button data-ask="mcr" data-subject="Standing for a vacant post">Stand for it</button>') +
+          "</div>").join("") + "</div>";
+    }).join(""));
+  /* What the MCR cannot do, said before somebody wastes a week finding out. */
+  const link = k => (S.links || []).filter(l => l.key === k)[0];
+  put("notOurs", '<div class="grp">Faster than asking us</div><div class="card">' +
+    (S.notOurs || []).map(n => {
+      const l = n.link ? link(n.link) : null;
+      return '<div class="rowline"><div class="t"><b>' + esc(n.problem) + "</b><span>" + esc(n.who) +
+        "</span></div>" +
+        (l ? '<a class="btn ghost sm" href="' + esc(l.url) + '" target="_blank" rel="noopener">Open</a>' : "") +
+        "</div>";
+    }).join("") + "</div>");
+}
+
+/* ============================================================
+   IDEAS AND POLLS
+   The suggestion box the MCR has never had. Anybody proposes,
+   everybody backs, and past a threshold the committee has to
+   answer in public. A suggestion box nobody replies to is a bin.
+   ============================================================ */
+function renderIdeas(){
+  const list = S.ideas || [], need = S.backingToAnswer || 10;
+  const lab = { open:"", doing:"The committee is on it", done:"Done", no:"Not this time" };
+  put("bizIdeas", '<div class="grp">What the MCR should buy, run or change</div>' +
+    '<div class="card"><p class="lede">Put something up and other members back it. Once ' + need +
+    " have, the committee has to answer it here, in public, with a reason.</p>" +
+    '<div class="acts"><button class="btn gold sm" data-newidea>Suggest something</button></div></div>' +
+    (list.length ? list.map(i =>
+      '<div class="idea ' + esc(i.status) + '">' +
+      '<div class="back"><button data-back="' + esc(i.id) + '" aria-pressed="' + i.backed +
+        '" aria-label="Back this"><span class="n">' + i.backing + '</span>' +
+        '<span class="l">' + (i.backed ? "backed" : "back it") + "</span></button></div>" +
+      '<div class="t"><span class="kind">' +
+        esc(((S.ideaKinds || []).filter(k => k.key === i.kind)[0] || {}).name || i.kind) +
+        " &middot; " + esc(i.name) + "</span>" +
+      "<b>" + esc(i.title) + "</b>" + (i.body ? "<p>" + esc(i.body) + "</p>" : "") +
+      (i.status === "open"
+        ? '<div class="bar"><i style="width:' + Math.min(100, Math.round(i.backing / need * 100)) + '%"></i></div>' +
+          '<span class="ref">' + (i.needs ? i.needs + " more and the committee has to answer" : "The committee owes an answer") + "</span>"
+        : '<div class="msg"><span class="m">' + esc(lab[i.status]) + "</span>" + esc(i.reply) + "</div>") +
+      '<div class="acts">' +
+        (i.own && i.status === "open" ? '<button class="btn ghost sm" data-dropidea="' + esc(i.id) + '">Take it down</button>' : "") +
+        (isCommittee() ? ["doing","done","no"].map(k =>
+          '<button class="btn ghost sm" data-setidea="' + esc(i.id) + '" data-s="' + k + '"' +
+          (i.status === k ? " disabled" : "") + ">" +
+          (k === "doing" ? "We are on it" : k === "done" ? "Done" : "Say no") + "</button>").join("") : "") +
+      "</div></div></div>").join("")
+      : '<div class="card"><p>Nothing suggested yet. Somebody has to be first, and it may as well be about the coffee machine.</p></div>'));
+}
+function renderPolls(){
+  const list = S.polls || [];
+  if (!list.length){ put("bizPolls", ""); return; }
+  put("bizPolls", '<div class="grp">Polls</div>' + list.map(p => {
+    const pct = o => p.total ? Math.round((p.counts[o] || 0) / p.total * 100) : 0;
+    return '<div class="card"><h3>' + esc(p.question) + "</h3>" +
+      '<p class="lede">' + esc(p.by) + " &middot; " + (p.open
+        ? (p.closes ? "closes " + esc(shortDate(p.closes)) : "open") : "closed") +
+      " &middot; " + p.total + (p.total === 1 ? " vote" : " votes") + "</p>" +
+      p.options.map(o =>
+        '<div class="opt' + (p.mine === o ? " picked" : "") + '"><div class="t"><b>' + esc(o) + "</b>" +
+        '<div class="bar"><i style="width:' + pct(o) + '%"></i></div></div>' +
+        (p.open ? '<button class="btn ' + (p.mine === o ? "gold" : "ghost") + ' sm" data-pollvote="' +
+          esc(p.id) + '" data-o="' + esc(o) + '">' + (p.mine === o ? "Yours" : "Pick") + "</button>"
+          : '<span class="ref">' + pct(o) + "%</span>") + "</div>").join("") +
+      (isCommittee() && p.open ? '<div class="acts"><button class="btn ghost sm" data-pollclose="' +
+        esc(p.id) + '">Close it</button></div>' : "") + "</div>";
+  }).join(""));
+}
+function openIdea(){
+  sheet("Suggest something",
+    '<div class="card"><p class="lede">Anything the MCR should buy, run or change. Other members back it, and once enough have, the committee has to answer here with a reason.</p></div>' +
+    '<label class="f"><span>What sort</span><select id="idKind">' + (S.ideaKinds || []).map(k =>
+      '<option value="' + esc(k.key) + '">' + esc(k.name) + "</option>").join("") + "</select></label>" +
+    '<p class="lede" id="idNote"></p>' +
+    '<label class="f"><span>In one line</span><input id="idTitle" maxlength="120" placeholder="A second coffee machine, because the queue at nine is absurd"></label>' +
+    '<label class="f"><span>Why, and roughly what it would take</span><textarea id="idBody" maxlength="2000"></textarea></label>' +
+    '<div class="acts"><button class="btn crimson" id="idGo">Put it up</button></div>',
+    el => {
+      const note = () => { const k = (S.ideaKinds || []).filter(x => x.key === $("idKind").value)[0];
+        $("idNote").textContent = k ? k.note : ""; };
+      el.querySelector("#idKind").addEventListener("change", note); note();
+      el.querySelector("#idGo").addEventListener("click", async e => {
+        const b = e.currentTarget; spin(b, "Putting it up");
+        try{
+          const d = await api("ideaNew", { kind: $("idKind").value, title: $("idTitle").value, body: $("idBody").value });
+          S.ideas = d.ideas; closeSheet(); renderIdeas(); go("biz"); toast("Up. It needs backing next.");
+        }catch(err){ unspin(b); fail(err); }
+      });
+    });
+}
+function openPoll(){
+  sheet("Run a poll",
+    '<label class="f"><span>The question</span><input id="poQ" maxlength="160" placeholder="Which night should Grad Hall move to?"></label>' +
+    '<label class="f"><span>The answers, one per line</span><textarea id="poO" placeholder="Tuesday\nThursday\nLeave it alone"></textarea></label>' +
+    '<label class="f"><span>Closes</span><input type="date" id="poC" value="' + esc(addDays(todayLondon(), 7)) + '"></label>' +
+    '<div class="acts"><button class="btn crimson" id="poGo">Open it</button></div>',
+    el => el.querySelector("#poGo").addEventListener("click", async e => {
+      const b = e.currentTarget; spin(b, "Opening");
+      try{
+        const d = await api("pollNew", { question: $("poQ").value, options: $("poO").value, closes: $("poC").value });
+        S.polls = d.polls; closeSheet(); renderPolls(); toast("Open.");
+      }catch(err){ unspin(b); fail(err); }
+    }));
 }
 
 /* ============================================================
@@ -1864,7 +1868,7 @@ function renderWho(){
 function renderBiz(){
   const t = todayLondon();
   const next = (S.meetings || []).filter(m => m.date >= t)[0];
-  $("bizMeetings").innerHTML = next
+  put("bizMeetings", next
     ? '<div class="grp">The next meeting</div><div class="card"><h3>' + esc(next.title) + "</h3>" +
       '<p class="lede">' + esc(longDate(next.date)) + ", " + esc(clock(next.start)) + " &middot; " +
       esc(next.venueName) + "</p>" +
@@ -1874,11 +1878,11 @@ function renderBiz(){
         (isCommittee() ? '<button class="btn cream sm" data-code="' + esc(next.id) + '">Show the code</button>'
           : '<button class="btn cream sm" data-checkin="' + esc(next.id) + '">I am in the room</button>') +
         "</div>" : "") + "</div>"
-    : '<div class="card"><p>No meeting in the diary yet.</p></div>';
+    : '<div class="card"><p>No meeting in the diary yet.</p></div>');
   const ms = S.motions || [], mv = S.myVotes || {};
   const lab = { proposed:"Needs a seconder", seconded:"Seconded", voting:"Voting open",
     passed:"Passed", failed:"Failed", withdrawn:"Withdrawn" };
-  $("bizMotions").innerHTML = '<div class="grp">Motions</div>' + (ms.length ? ms.map(m => {
+  put("bizMotions", '<div class="grp">Motions</div>' + (ms.length ? ms.map(m => {
     const v = m.votes || { for:0, against:0, abstain:0 };
     const mine = mv[m.id];
     return '<div class="thread"><div class="top"><b>' + esc(m.title) + '</b><span class="st ' +
@@ -1898,7 +1902,7 @@ function renderBiz(){
         '<button class="btn ghost sm" data-mset="' + esc(m.id) + '" data-s="' + s + '"' +
         (m.status === s ? " disabled" : "") + ">" + s[0].toUpperCase() + s.slice(1) + "</button>").join("") : "") +
       "</div></div>";
-  }).join("") : '<div class="card"><p>Nothing on the table. Anything you want changed starts here.</p></div>');
+  }).join("") : '<div class="card"><p>Nothing on the table. Anything you want changed starts here.</p></div>'));
 }
 function openMotion(){
   sheet("Put down a motion",
@@ -1945,8 +1949,8 @@ function renderMe(){
   $("pDiet").value = me.dietary || "";
   $("pRemind").value = String(me.remind === undefined ? 60 : me.remind);
   $("pShowRes").checked = !!me.showResearch;
-  $("feedBox").innerHTML = me.feedUrl
-    ? "<code>" + esc(me.feedUrl) + "</code>" : '<span class="lede">Deploy the app to get a link.</span>';
+  put("feedBox", me.feedUrl
+    ? "<code>" + esc(me.feedUrl) + "</code>" : '<span class="lede">Deploy the app to get a link.</span>');
   $("bWholeFeed").href = S.programmeUrl || "#";
 }
 
@@ -1959,21 +1963,21 @@ function renderDesk(){
   const up = (S.events || []).filter(e => e.date >= t);
   const mineRun = up.filter(e => (e.leads || []).some(l => l.email === S.me.email));
   $("deskNote").textContent = up.length + " to come · " + mineRun.length + " yours";
-  $("deskStats").innerHTML = [
+  put("deskStats", [
     [up.length, "still to come"],
     [(S.people || []).length, "members"],
     [(S.allRooms || []).filter(r => r.status === "new").length, "room requests"],
     [(S.deskTickets || []).filter(x => x.status === "open").length, "threads open"]
-  ].map(s => '<div class="stat"><b>' + s[0] + "</b><span>" + esc(s[1]) + "</span></div>").join("");
-  $("deskSeries").innerHTML = (S.series || []).length
+  ].map(s => '<div class="stat"><b>' + s[0] + "</b><span>" + esc(s[1]) + "</span></div>").join(""));
+  put("deskSeries", (S.series || []).length
     ? '<div class="grp">Weekly things</div><div class="card">' + S.series.map(s =>
         '<div class="rowline"><div class="t"><b>' + esc(s.title) + "</b><span>" +
         esc(s.byday.join(", ")) + " &middot; " + esc(clock(s.start)) + " &middot; " +
         esc((S.venues.filter(v => v.key === s.venue)[0] || {}).name || s.venue) +
         (s.status === "off" ? " &middot; paused" : "") + "</span></div>" +
-        '<button class="btn ghost sm" data-editser="' + esc(s.id) + '">Edit</button></div>').join("") + "</div>" : "";
-  $("deskList").innerHTML = '<div class="grp">The next three weeks</div>' +
-    up.filter(e => e.date <= addDays(t, 21)).map(e => evRow(e)).join("");
+        '<button class="btn ghost sm" data-editser="' + esc(s.id) + '">Edit</button></div>').join("") + "</div>" : "");
+  put("deskList", '<div class="grp">The next three weeks</div>' +
+    up.filter(e => e.date <= addDays(t, 21)).map(e => evRow(e)).join(""));
 }
 function renderQueue(){
   if (!isCommittee()) return;
@@ -1981,7 +1985,7 @@ function renderQueue(){
   const th = S.deskTickets || [];
   $("queueNote").textContent = rooms.length + " room requests · " +
     th.filter(x => x.status !== "closed").length + " threads open";
-  $("queueRooms").innerHTML = rooms.length
+  put("queueRooms", rooms.length
     ? '<div class="grp">Room requests</div>' + rooms.map(r =>
         '<div class="thread"><div class="top"><b>' + esc(r.title) + '</b><span class="ref">' +
         esc(r.email) + "</span></div>" +
@@ -1990,10 +1994,10 @@ function renderQueue(){
         (r.note ? '<div class="msg">' + esc(r.note) + "</div>" : "") +
         '<div class="acts"><button class="btn crimson sm" data-roomyes="' + esc(r.id) +
         '">Put it on the calendar</button><button class="btn ghost sm" data-roomno="' + esc(r.id) +
-        '">Not this time</button></div></div>').join("") : "";
-  $("queueTickets").innerHTML = '<div class="grp">Threads</div>' +
+        '">Not this time</button></div></div>').join("") : "");
+  put("queueTickets", '<div class="grp">Threads</div>' +
     (th.length ? th.map(x => threadHtml(x, true)).join("")
-      : '<div class="card"><p>Nothing waiting. Rare, and worth enjoying.</p></div>');
+      : '<div class="card"><p>Nothing waiting. Rare, and worth enjoying.</p></div>'));
 }
 function renderMembers(){
   if (!isCommittee()) return;
@@ -2001,32 +2005,32 @@ function renderMembers(){
   const all = (S.people || []).filter(p => !q ||
     (p.name + " " + p.email + " " + p.programme + " " + p.research).toLowerCase().indexOf(q) >= 0);
   $("memNote").textContent = (S.people || []).length + " signed in at least once";
-  $("memStats").innerHTML = [
+  put("memStats", [
     [(S.people || []).length, "members"],
     [(S.people || []).filter(p => p.dietary).length, "with dietary needs"],
     [(S.people || []).filter(p => p.research).length, "have said what they do"]
-  ].map(s => '<div class="stat"><b>' + s[0] + "</b><span>" + esc(s[1]) + "</span></div>").join("");
-  $("memTbl").innerHTML = "<tr><th>Name</th><th>Course</th><th>Working on</th><th>Diet</th></tr>" +
+  ].map(s => '<div class="stat"><b>' + s[0] + "</b><span>" + esc(s[1]) + "</span></div>").join(""));
+  put("memTbl", "<tr><th>Name</th><th>Course</th><th>Working on</th><th>Diet</th></tr>" +
     all.map(p => "<tr><td>" + esc(p.name || p.email.split("@")[0]) + "</td><td>" + esc(p.programme) +
-      "</td><td>" + esc(p.research) + "</td><td>" + esc(p.dietary) + "</td></tr>").join("");
+      "</td><td>" + esc(p.research) + "</td><td>" + esc(p.dietary) + "</td></tr>").join(""));
 }
 function renderAdmin(){
   if (!isAdmin()) return;
-  $("ownerList").innerHTML = (S.owners || []).map(o =>
+  put("ownerList", (S.owners || []).map(o =>
     '<div class="rowline"><div class="t"><b>' + esc(o) + "</b><span>" +
-    ((S.hardOwners || []).indexOf(o) >= 0 ? "Permanent" : "Administrator") + "</span></div></div>").join("");
-  $("rosterList").innerHTML = (S.roster || []).map(r =>
+    ((S.hardOwners || []).indexOf(o) >= 0 ? "Permanent" : "Administrator") + "</span></div></div>").join(""));
+  put("rosterList", (S.roster || []).map(r =>
     '<div class="rowline"><div class="t"><b>' + esc(r.name) + "</b><span>" + esc(r.role) +
     " &middot; " + esc(r.email) + (r.admin ? " &middot; can edit" : "") + "</span></div>" +
     '<button class="btn ghost sm" data-rosteredit="' + esc(r.email) + '">Edit</button>' +
-    '<button class="btn ghost sm" data-rosterdel="' + esc(r.email) + '">Remove</button></div>').join("");
-  $("rTeam").innerHTML = (S.teams || []).map(t =>
-    '<option value="' + esc(t.key) + '">' + esc(t.name) + "</option>").join("");
+    '<button class="btn ghost sm" data-rosterdel="' + esc(r.email) + '">Remove</button></div>').join(""));
+  put("rTeam", (S.teams || []).map(t =>
+    '<option value="' + esc(t.key) + '">' + esc(t.name) + "</option>").join(""));
   $("allowlist").value = (S.allowlist || []).join("\n");
   if (!typingIn("v-admin")) $("voiceText").value = (S.voice || []).join("\n");
-  $("adminLinks").innerHTML = (S.sheetUrl ? 'The spreadsheet: <a href="' + esc(S.sheetUrl) +
+  put("adminLinks", (S.sheetUrl ? 'The spreadsheet: <a href="' + esc(S.sheetUrl) +
     '" target="_blank" rel="noopener">open it</a>. ' : "") +
-    (S.appUrl ? "The app lives at <code>" + esc(S.appUrl) + "</code>." : "");
+    (S.appUrl ? "The app lives at <code>" + esc(S.appUrl) + "</code>." : ""));
   $("bExport").href = (S.appUrl || "") + "?export=1&t=" + encodeURIComponent(getToken() || "");
 }
 
@@ -2231,122 +2235,11 @@ function applySeason(){
 }
 
 /* ============================================================
-   THE PLAN
-   Drawn from the traced geometry, not from a tile server, so it
-   works with no signal and there is nothing to go down. x runs
-   east and y runs north, which means y flips on the way into SVG.
-   ============================================================ */
-let planView = null, planSel = null, panning = null;
-const PAD = 14;
-function planPath(flat){
-  let d = "";
-  for (let i = 0; i < flat.length; i += 2) d += (i ? "L" : "M") + flat[i] + " " + (-flat[i + 1]);
-  return d + "Z";
-}
-function planLine(flat){
-  let d = "";
-  for (let i = 0; i < flat.length; i += 2) d += (i ? "L" : "M") + flat[i] + " " + (-flat[i + 1]);
-  return d;
-}
-function planHome(){
-  const h = PLAN.home;
-  return { x: h[0] - PAD, y: -h[3] - PAD, w: (h[2] - h[0]) + PAD * 2, h: (h[3] - h[1]) + PAD * 2 };
-}
-/* Which venues have something on, and whether it is on right now. Colour on
-   this plan means the same as colour everywhere else in the app. */
-function venueHeat(){
-  const t = todayLondon(), now = new Date(), heat = {};
-  (S.events || []).forEach(e => {
-    if (e.date !== t || e.status === "cancelled") return;
-    const live = now >= startOf(e) && now < endOf(e);
-    heat[e.venue] = live ? "live" : (heat[e.venue] || "on");
-  });
-  (S.notices || []).forEach(n => { if (n.venue && !heat[n.venue]) heat[n.venue] = "notice"; });
-  return heat;
-}
-function renderPlan(){
-  if (!S) return;
-  if (!planView) planView = planHome();
-  const v = planView, heat = venueHeat();
-  const out = [];
-  out.push('<svg viewBox="' + [v.x, v.y, v.w, v.h].map(n => Math.round(n * 10) / 10).join(" ") +
-    '" role="img" aria-label="A plan of Jesus College"><defs>' +
-    '<filter id="soft" x="-20%" y="-20%" width="140%" height="140%">' +
-    '<feDropShadow dx="0" dy="1.2" stdDeviation="1.1" flood-color="#000" flood-opacity=".35"/></filter></defs>');
-  /* grounds first, then paths, then buildings, so the college stacks the way
-     it does on the ground */
-  (PLAN.g || []).forEach(g => {
-    const fill = GROUND[g[0]] || "#5E5248";
-    out.push('<path d="' + planPath(g[2]) + '" fill="' + fill + '" opacity="' +
-      (g[0] === "city" ? ".30" : g[0] === "site" ? ".45" : ".78") + '"/>');
-  });
-  (PLAN.l || []).forEach(l => {
-    const road = l[0] === "road", water = l[0] === "water" || l[0] === "river";
-    out.push('<path d="' + planLine(l[3]) + '" fill="none" stroke="' +
-      (water ? "#3E86C4" : road ? "#575049" : "#7A6E62") + '" stroke-width="' + l[2] +
-      '" stroke-linecap="round" stroke-linejoin="round" opacity="' + (water ? ".7" : ".65") + '"/>');
-  });
-  (PLAN.t || []).forEach(t => out.push('<circle cx="' + t[0] + '" cy="' + (-t[1]) +
-    '" r="' + (t[2] / 2) + '" fill="#3F6B45" opacity=".55"/>'));
-  (PLAN.b || []).forEach(b => {
-    const isTown = b[2] === "town";
-    out.push('<path d="' + planPath(b[3]) + '" fill="' + (TONE[b[2]] || "#8E5A44") +
-      '" stroke="rgba(0,0,0,.32)" stroke-width=".5"' +
-      (isTown ? ' opacity=".5"' : ' filter="url(#soft)"') + "/>");
-  });
-  (PLAN.s || []).forEach(t => out.push('<text class="plan-st" x="' + t[1] + '" y="' + (-t[2] + 1.6) + '">' + esc(t[0]) + "</text>"));
-  (PLAN.g || []).forEach(g => {
-    if (!g[1]) return;
-    const c = centroid(g[2]);
-    out.push('<text class="plan-court" x="' + c[0] + '" y="' + (-c[1]) + '">' + esc(g[1]) + "</text>");
-  });
-  (PLAN.m || []).forEach(m => out.push('<text class="plan-lbl" x="' + m[1] + '" y="' + (-m[2]) + '">' + esc(m[0]) + "</text>"));
-  Object.keys(PLAN.v).forEach(k => {
-    const p = PLAN.v[k], st = heat[k];
-    const col = st === "live" ? "#D0313A" : st === "on" ? "#E2A93C" : st === "notice" ? "#3E86C4" : "rgba(251,243,236,.55)";
-    const r = st ? 4.2 : 2.6;
-    out.push('<g class="pin" data-pin="' + esc(k) + '">' +
-      '<circle class="hit" cx="' + p.at[0] + '" cy="' + (-p.at[1]) + '" r="7" fill="transparent"/>' +
-      (st === "live" ? '<circle cx="' + p.at[0] + '" cy="' + (-p.at[1]) + '" r="7" fill="' + col + '" opacity=".22"/>' : "") +
-      '<circle cx="' + p.at[0] + '" cy="' + (-p.at[1]) + '" r="' + r + '" fill="' + col +
-      '" stroke="rgba(20,4,5,.65)" stroke-width=".8"/></g>');
-  });
-  out.push("</svg>");
-  $("planSvg").innerHTML = out.join("");
-  if (planSel) showPin(planSel);
-}
-function centroid(flat){
-  let x = 0, y = 0, n = 0;
-  for (let i = 0; i < flat.length; i += 2){ x += flat[i]; y += flat[i + 1]; n++; }
-  return [x / n, y / n];
-}
-function showPin(key){
-  planSel = key;
-  const p = PLAN.v[key];
-  if (!p) return;
-  const t = todayLondon();
-  const on = (S.events || []).filter(e => e.venue === key && e.date >= t && e.status !== "cancelled").slice(0, 3);
-  const notes = (S.notices || []).filter(n => n.venue === key);
-  $("callout").hidden = false;
-  $("callout").innerHTML = "<b>" + esc(p.n) + "</b>" + (p.h ? "<span>" + esc(p.h) + "</span>" : "") +
-    notes.map(n => '<span style="color:var(--gold-2);margin-top:6px">' + esc(n.title) + "</span>").join("") +
-    (on.length ? on.map(evRow).join("") : '<span style="margin-top:8px">Nothing on here just now.</span>') +
-    '<div class="acts" style="margin-top:10px"><button class="btn ghost sm" data-closepin>Close</button></div>';
-}
-function planZoom(f, cx, cy){
-  const v = planView;
-  const x = cx === undefined ? v.x + v.w / 2 : cx, y = cy === undefined ? v.y + v.h / 2 : cy;
-  const w = Math.max(60, Math.min(1200, v.w * f)), h = w * (v.h / v.w);
-  planView = { x: x - (x - v.x) * (w / v.w), y: y - (y - v.y) * (h / v.h), w: w, h: h };
-  renderPlan();
-}
-
-/* ============================================================
    SECOND LIFE, and lost property
    ============================================================ */
 function renderMarket(){
   const m = S.market || [];
-  $("lodgeMarket").innerHTML = '<div class="grp">Second life</div>' +
+  put("lodgeMarket", '<div class="grp">Second life</div>' +
     '<div class="card"><p class="lede">Duvets, pans, lamps and kettles left behind by people who have finished, and whatever turned up in the Orchard. Furnishing a room from nothing is expensive, and this is how most of the MCR avoids it.</p>' +
     '<div class="acts"><button class="btn cream sm" data-marketnew>Put something up</button></div></div>' +
     (m.length ? '<div class="mkgrid">' + m.map(x => {
@@ -2365,7 +2258,7 @@ function renderMarket(){
           : '<button class="btn cream sm" data-markettake="' + esc(x.id) + '">' +
             (x.kind === "lost" ? "I have it" : x.kind === "want" ? "I have one" : "I will take it") + "</button>") +
         "</div></div></div>";
-    }).join("") + "</div>" : '<div class="card"><p>Nothing on the board. Put the first thing up.</p></div>');
+    }).join("") + "</div>" : '<div class="card"><p>Nothing on the board. Put the first thing up.</p></div>'));
 }
 function openMarket(){
   const vs = S.venues || [];
@@ -2399,7 +2292,7 @@ function openMarket(){
           c.width = Math.round(img.width * sc); c.height = Math.round(img.height * sc);
           c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
           photo = c.toDataURL("image/jpeg", 0.72);
-          $("mkPrev").innerHTML = '<img src="' + photo + '" style="width:100%;border-radius:12px;margin-bottom:12px">';
+          put("mkPrev", '<img src="' + photo + '" style="width:100%;border-radius:12px;margin-bottom:12px">');
           URL.revokeObjectURL(img.src);
         };
         img.src = URL.createObjectURL(f);
@@ -2463,21 +2356,21 @@ function bumpsSummary(m){
 }
 function renderBumps(){
   const live = (S.bumps || []).filter(m => m.live)[0];
-  if (!live){ $("bumpsCard").innerHTML = ""; return; }
-  $("bumpsCard").innerHTML = '<div class="grp">On the river</div><div class="bumps">' +
+  if (!live){ put("bumpsCard", ""); return; }
+  put("bumpsCard", '<div class="grp">On the river</div><div class="bumps">' +
     '<div style="display:flex;align-items:baseline;gap:9px;flex-wrap:wrap">' +
     '<b style="font-family:var(--display);font-size:19px;font-weight:600">' + esc(live.meet) + "</b>" +
     '<span class="lede">' + esc(bumpsSummary(live)) + "</span></div>" +
-    bumpsChart(live) + "</div>";
+    bumpsChart(live) + "</div>");
 }
 function renderBumpsAdmin(){
   const all = S.bumps || [];
-  $("bumpsAdmin").innerHTML = all.length ? all.map(m =>
+  put("bumpsAdmin", all.length ? all.map(m =>
     '<div class="grp" style="margin-top:8px">' + esc(m.meet) + (m.live ? " &middot; live" : "") + "</div>" +
     m.crews.map(c => '<div class="rowline"><div class="t"><b>' + esc(c.crew) + "</b><span>" +
       c.pos.map(p => p || "\u2013").join(" \u2192 ") + "</span></div>" +
       '<button class="btn ghost sm" data-bumpedit="' + esc(m.meet) + "|" + esc(c.crew) + '">Edit</button></div>').join("")
-  ).join("") : '<p class="lede">Nothing entered yet.</p>';
+  ).join("") : '<p class="lede">Nothing entered yet.</p>');
 }
 function openBumps(meet, crew){
   const m = (S.bumps || []).filter(x => x.meet === meet)[0];
@@ -2518,7 +2411,7 @@ function renderDir(){
   const hit = !q ? all : all.filter(p =>
     (p.name + " " + p.programme + " " + p.research).toLowerCase().indexOf(q) >= 0);
   const mark = t => !q ? esc(t) : esc(t).replace(new RegExp("(" + q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "ig"), "<mark>$1</mark>");
-  $("whoDir").innerHTML = '<div class="grp">What everybody is working on</div>' +
+  put("whoDir", '<div class="grp">What everybody is working on</div>' +
     '<div class="card"><p class="lede">' + all.length + " members have said, in one line, what they do. " +
     (S.me.showResearch ? "Yours is in here." : "Yours is not: turn it on in settings.") + "</p>" +
     '<input type="text" id="dirQ" value="' + esc(dirQ) + '" placeholder="Search: memristor, Minoan, mRNA, Kant" ' +
@@ -2526,7 +2419,7 @@ function renderDir(){
     (hit.length ? hit.slice(0, 60).map(p => '<div class="dir"><b>' + mark(p.name) + "</b>" +
       (p.programme ? '<span class="prog">' + esc(p.programme) + "</span>" : "") +
       "<p>" + mark(p.research) + "</p></div>").join("")
-      : '<div class="card"><p>Nobody yet. Somebody has to be first.</p></div>');
+      : '<div class="card"><p>Nobody yet. Somebody has to be first.</p></div>'));
   const box = $("dirQ");
   if (box) box.addEventListener("input", e => { dirQ = e.target.value; renderDir(); $("dirQ").focus(); });
 }
@@ -2547,7 +2440,7 @@ function voiceCard(){
 /* ============================================================
    Render, navigate, wire
    ============================================================ */
-const VIEWS = ["today","cal","map","lodge","ask","who","biz","me","desk","queue","members","admin"];
+const VIEWS = ["today","cal","lodge","ask","biz","me","desk","queue","members","admin"];
 /* Stagger the first children of whatever has just been shown. Sixty
    milliseconds apart is enough to read as unfolding and not as waiting. */
 function stagger(id){
@@ -2573,7 +2466,6 @@ function go(v, scroll){
   VIEWS.forEach(id => { const el = $("v-" + id); if (el) el.hidden = id !== v; });
   if (v === "lodge") seen();
   if (v === "members") renderMembers();
-  if (v === "map") renderPlan();
   stagger(v);
   const tab = document.querySelector('#nav .tabbtn[data-view="' + v + '"]');
   if (tab && tab.scrollIntoView) { try{ tab.scrollIntoView({ inline:"center", block:"nearest", behavior:"smooth" }); }catch(e){} }
@@ -2592,7 +2484,8 @@ function renderBadges(){
   set("bdgCal", goingCount());
   set("bdgLodge", (S.updates || []).filter(u => u.at > (S.me.seenAt || 0)).length);
   set("bdgAsk", (S.tickets || []).filter(t => t.status === "answered").length);
-  set("bdgBiz", (S.motions || []).filter(m => m.status === "voting" && !(S.myVotes || {})[m.id]).length);
+  set("bdgBiz", (S.motions || []).filter(m => m.status === "voting" && !(S.myVotes || {})[m.id]).length +
+    (S.polls || []).filter(p => p.open && !p.mine).length);
   if (isCommittee())
     set("bdgQueue", (S.allRooms || []).filter(r => r.status === "new").length +
       (S.deskTickets || []).filter(t => t.status === "open").length);
@@ -2614,12 +2507,11 @@ function render(){
   document.querySelectorAll("[data-owner]").forEach(el => el.hidden = !S.me.owner);
   if (!month) month = monthStart(todayLondon());
   applySeason();
-  renderCrow(); renderBumps(); renderTodayUrgent(); renderTodayNeeds(); renderThree();
+  renderCrow(); renderBumps(); renderTodayUrgent(); renderThree();
   renderTodayQuick(); renderTodayNews();
   renderCal(); renderBoard();
-  renderLodge(); renderLinks(); renderMarket(); renderAsk(); renderWho(); renderDir(); renderBiz();
-  if (view === "map") renderPlan();
-  $("mapNotices").innerHTML = (S.notices || []).filter(n => n.venue).map(noticeHtml).join("");
+  renderLodge(); renderLinks(); renderMarket(); renderAsk(); renderWho(); renderDir();
+  renderIdeas(); renderPolls(); renderBiz();
   if (!typingIn("v-me")) renderMe();
   if (isCommittee()){ renderDesk(); renderQueue(); if (!typingIn("v-admin")){ renderAdmin(); renderBumpsAdmin(); } }
   renderBadges();
@@ -2631,13 +2523,12 @@ document.addEventListener("click", async e => {
     "[data-goto],[data-ask],[data-room],[data-reply],[data-tset],[data-lendtake],[data-lendback]," +
     "[data-noticeoff],[data-editres],[data-roomyes],[data-roomno],[data-rsvp],[data-edit],[data-cancel]," +
     "[data-skip],[data-editser],[data-second],[data-vote],[data-mset],[data-code],[data-checkin]," +
-    "[data-delupdate],[data-rosteredit],[data-rosterdel],[data-pin],[data-closepin]," +
-    "[data-marketnew],[data-markettake],[data-marketdrop],[data-bumpedit],[data-showon]");
+    "[data-delupdate],[data-rosteredit],[data-rosterdel],[data-newidea],[data-back]," +
+    "[data-setidea],[data-dropidea],[data-pollvote],[data-pollclose]," +
+    "[data-marketnew],[data-markettake],[data-marketdrop],[data-bumpedit]");
   if (!t) return;
   const d = t.dataset;
   try{
-    if (d.pin) return showPin(d.pin);
-    if (t.hasAttribute("data-closepin")){ planSel = null; $("callout").hidden = true; return; }
     if (t.hasAttribute("data-marketnew")) return openMarket();
     if (d.markettake){
       const r = await api("marketTake", { id: d.markettake });
@@ -2646,15 +2537,26 @@ document.addEventListener("click", async e => {
     }
     if (d.marketdrop){ S.market = (await api("marketDrop", { id: d.marketdrop })).market; renderMarket(); return; }
     if (d.bumpedit){ const q = d.bumpedit.split("|"); return openBumps(q[0], q[1]); }
-    if (d.showon){ go("map"); setTimeout(() => showPin(d.showon), 60); return; }
+    if (t.hasAttribute("data-newidea")) return openIdea();
+    if (d.back){ S.ideas = (await api("ideaBack", { id: d.back })).ideas; renderIdeas(); renderCrow(); return; }
+    if (d.dropidea){ S.ideas = (await api("ideaDrop", { id: d.dropidea })).ideas; renderIdeas(); return; }
+    if (d.setidea){
+      const why = d.s === "doing" ? prompt("A line on what you are doing. People see this.")
+                                  : prompt("Why. People see this, and a reason is the point.");
+      if (why === null) return;
+      S.ideas = (await api("ideaSet", { id: d.setidea, status: d.s, reply: why })).ideas;
+      renderIdeas(); await refresh(false); return;
+    }
+    if (d.pollvote){ S.polls = (await api("pollVote", { id: d.pollvote, choice: d.o })).polls;
+      renderPolls(); renderCrow(); renderBadges(); return; }
+    if (d.pollclose){ S.polls = (await api("pollClose", { id: d.pollclose })).polls; renderPolls(); return; }
     if (d.open) return openEvent(d.open);
     if (d.tick){
       const st = myStatus(d.tick);
       const r = await api("rsvp", { eventId: d.tick, status: st === "going" || st === "waitlist" ? "no" : "going" });
       S.mine = r.mine;
       S.events.forEach(x => { if (r.counts[x.id]) x.counts = r.counts[x.id]; });
-      renderBoard(); renderThree(); renderBadges(); renderTodayNeeds();
-      if (r.placed === "waitlist") toast("Full, so you are on the waiting list.");
+      renderBoard(); renderThree(); renderBadges();       if (r.placed === "waitlist") toast("Full, so you are on the waiting list.");
       return;
     }
     if (d.rsvp){
@@ -2802,10 +2704,9 @@ $("bNewEvent2").addEventListener("click", () => openEventEditor(""));
 $("bNewSeries").addEventListener("click", () => openSeriesEditor(""));
 $("bNewNotice").addEventListener("click", openNoticeEditor);
 $("bNewMotion").addEventListener("click", openMotion);
+$("bNewIdea").addEventListener("click", openIdea);
+$("bNewPoll").addEventListener("click", openPoll);
 $("memQ").addEventListener("input", renderMembers);
-$("bFit").addEventListener("click", () => { planView = planHome(); planSel = null; $("callout").hidden = true; renderPlan(); });
-$("bZin").addEventListener("click", () => planZoom(0.7));
-$("bZout").addEventListener("click", () => planZoom(1.45));
 $("bBumpsAdd").addEventListener("click", () => openBumps("", ""));
 $("bVoice").addEventListener("click", async e => {
   const b = e.currentTarget;
@@ -2813,37 +2714,6 @@ $("bVoice").addEventListener("click", async e => {
   try{ const d = await api("saveVoice", { voice: $("voiceText").value }); S.voice = d.voice; unspin(b); toast("Saved."); }
   catch(err){ unspin(b); fail(err); }
 });
-/* Drag and pinch on the plan. Two fingers scale about their midpoint, which is
-   what a phone expects, and one finger pans. */
-(function(){
-  const w = $("planwrap");
-  let last = null, pinch = null;
-  const pt = e => { const r = w.getBoundingClientRect();
-    return { x: planView.x + ((e.clientX - r.left) / r.width) * planView.w,
-             y: planView.y + ((e.clientY - r.top) / r.height) * planView.h }; };
-  w.addEventListener("pointerdown", e => {
-    if (e.target.closest(".plantools,.callout,.pin")) return;
-    last = { cx: e.clientX, cy: e.clientY, vx: planView.x, vy: planView.y };
-    w.setPointerCapture(e.pointerId);
-  });
-  w.addEventListener("pointermove", e => {
-    if (!last || !planView) return;
-    const r = w.getBoundingClientRect();
-    planView.x = last.vx - (e.clientX - last.cx) * (planView.w / r.width);
-    planView.y = last.vy - (e.clientY - last.cy) * (planView.h / r.height);
-    const svg = w.querySelector("svg");
-    if (svg) svg.setAttribute("viewBox", [planView.x, planView.y, planView.w, planView.h]
-      .map(n => Math.round(n * 10) / 10).join(" "));
-  });
-  w.addEventListener("pointerup", () => { last = null; });
-  w.addEventListener("pointercancel", () => { last = null; });
-  w.addEventListener("wheel", e => {
-    if (!planView) return;
-    e.preventDefault();
-    const p = pt(e);
-    planZoom(e.deltaY > 0 ? 1.12 : 0.89, p.x, p.y);
-  }, { passive: false });
-})();
 $("bSignOut").addEventListener("click", async () => {
   try{ await api("signOut"); }catch(e){}
   signedOut("Signed out.");
