@@ -15,9 +15,15 @@ html:has(#boot)::before,html.booted::before{content:none}
 @keyframes preboot{to{transform:rotate(360deg)}}
 </style>
 <title>Jesus College MCR Treasury 2026/27</title>
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MCR Treasury">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<meta name="description" content="Claims, reimbursements and the budget for Jesus College MCR.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://accounts.google.com">
@@ -52,7 +58,9 @@ button{font-family:var(--body)}
 /* ---------- shell ---------- */
 .topbar{position:sticky;top:0;z-index:40;background:rgba(126,8,14,.9);backdrop-filter:blur(14px);
   border-bottom:1px solid var(--line)}
-.topbar .in{max-width:1200px;margin:0 auto;padding:11px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;min-width:0}
+.topbar{padding-top:env(safe-area-inset-top)}
+.topbar .in{max-width:1200px;margin:0 auto;
+  padding:11px max(24px,env(safe-area-inset-right)) 11px max(24px,env(safe-area-inset-left));display:flex;align-items:center;gap:16px;flex-wrap:wrap;min-width:0}
 .topbar .crest{height:44px;width:auto;flex:none;margin-right:14px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.35))}
 .brand{min-width:0;flex:0 1 auto}
 .brand .eyebrow{font-family:var(--display);font-style:italic;font-weight:600;font-size:11px;
@@ -71,7 +79,8 @@ button{font-family:var(--body)}
   font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;padding:7px 12px}
 .iconbtn:hover{background:rgba(255,255,255,.14)}
 .iconbtn:focus-visible,.nav button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-.wrap{max-width:1200px;margin:0 auto;padding:0 24px 96px}
+.wrap{max-width:1200px;margin:0 auto;
+  padding:0 max(24px,env(safe-area-inset-left)) calc(96px + env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-right))}
 
 .nav{display:flex;gap:7px;flex-wrap:wrap;padding:20px 0 4px}
 .nav button{background:rgba(0,0,0,.18);border:1px solid var(--line);border-radius:999px;color:rgba(255,255,255,.82);
@@ -176,6 +185,22 @@ input[type=text],input[type=email],input[type=date],input[type=number],input[typ
   width:100%;font-family:var(--body);font-size:16.5px;color:var(--ink);background:#fff;
   border:1px solid var(--cream-3);border-radius:9px;padding:10px 12px;transition:border-color .12s,box-shadow .12s}
 input[type=number],input[type=date],input.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+/* iOS gives date and number inputs an intrinsic width and a centred value, which
+   pushed them past the edge of their card and looked nothing like the others. */
+input[type=date],input[type=number]{-webkit-appearance:none;appearance:none;
+  min-width:0;max-width:100%;text-align:left;min-height:46px}
+input[type=date]::-webkit-date-and-time-value{text-align:left;margin:0}
+input[type=date]::-webkit-calendar-picker-indicator{margin-left:auto}
+select{-webkit-appearance:none;appearance:none;min-height:46px;
+  background-image:linear-gradient(45deg,transparent 50%,var(--ink-soft) 50%),
+    linear-gradient(135deg,var(--ink-soft) 50%,transparent 50%);
+  background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;
+  background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:34px}
+textarea{min-height:74px}
+/* Nothing you have to hit should be smaller than a fingertip. */
+.btn{min-height:44px}
+.btn.small{min-height:38px}
+.iconbtn{min-height:34px}
 textarea{resize:vertical;min-height:64px}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(180,20,27,.15)}
 input:disabled{background:var(--cream-2);color:var(--ink-soft);cursor:not-allowed}
@@ -330,11 +355,12 @@ a.btn{display:inline-block;line-height:1.15}
 </style>
 <style>
 /* ---------- gate ---------- */
-.gate{min-height:calc(100vh - 130px);display:grid;place-items:center;padding:30px 0}
+.gate{min-height:calc(100vh - 130px);min-height:calc(100dvh - 130px);
+  display:grid;place-items:center;padding:30px 0}
 .gatecard{background:var(--cream);color:var(--ink);border-radius:20px;box-shadow:0 30px 70px -34px rgba(0,0,0,.78);
   max-width:530px;width:100%;overflow:hidden}
 .gatetop{background:var(--red-deep);padding:24px 30px;display:flex;align-items:center;gap:18px;min-width:0}
-.gatetop img{height:76px;width:auto;margin-right:15px;flex:none}
+.gatetop img{height:78px;width:auto;margin-right:16px;flex:none}
 .gatetop .t,.gatetop div{min-width:0}
 .gatetop .eyebrow{font-family:var(--display);font-style:italic;font-size:12px;letter-spacing:.15em;
   text-transform:uppercase;color:rgba(255,255,255,.85);display:block}
@@ -350,12 +376,19 @@ a.btn{display:inline-block;line-height:1.15}
 .known .s{font-size:12px;color:var(--ink-soft);display:block;line-height:1.5}
 .linky{background:none;border:0;padding:0;color:var(--red);font:inherit;text-decoration:underline;cursor:pointer}
 .linky:hover{color:var(--red-deep)}
-.seg{display:inline-flex;background:var(--cream-2);border-radius:999px;padding:4px;gap:4px;flex-wrap:wrap}
-.seg button{border:0;background:transparent;border-radius:999px;padding:10px 17px;cursor:pointer;
-  font-family:var(--display);font-weight:600;font-size:14.5px;color:var(--ink-soft)}
-.seg button[aria-pressed="true"]{background:#fff;color:var(--red-deep);box-shadow:0 1px 2px rgba(0,0,0,.1)}
+/* Two equal halves that never wrap. It used to be an inline-flex row with
+   flex-wrap on, so on a phone the second option dropped underneath the first and
+   the pill behind them stayed the wrong shape. A grid cannot do that. */
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--cream-2);
+  border-radius:999px;padding:4px;width:100%;max-width:460px}
+.seg button{border:0;background:transparent;border-radius:999px;padding:12px 10px;cursor:pointer;
+  font-family:var(--display);font-weight:600;font-size:14.5px;color:var(--ink-soft);
+  min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  transition:background .16s,color .16s,box-shadow .16s;-webkit-tap-highlight-color:transparent}
+.seg button[aria-pressed="true"]{background:#fff;color:var(--red-deep);box-shadow:0 1px 3px rgba(0,0,0,.14)}
 .seg button:focus-visible{outline:2px solid var(--red);outline-offset:1px}
-.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(16px);background:var(--ink);color:#fff;
+@media (max-width:420px){.seg button{font-size:13px;padding:12px 6px;letter-spacing:-.01em}}
+.toast{position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(16px);background:var(--ink);color:#fff;
   font-family:var(--mono);font-size:12.5px;letter-spacing:.04em;padding:13px 20px;border-radius:999px;opacity:0;
   pointer-events:none;transition:.25s;z-index:90;max-width:90vw;text-align:center;box-shadow:0 14px 34px -14px rgba(0,0,0,.8)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -366,6 +399,47 @@ a.btn{display:inline-block;line-height:1.15}
 .btn.ghost .spin,.btn.gold .spin{border-color:rgba(0,0,0,.25);border-top-color:currentColor}
 @keyframes sp{to{transform:rotate(360deg)}}
 @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ---------- asking a question without a browser dialog ----------
+   confirm() and prompt() are fine once. Used a dozen times in a session, every
+   browser starts offering to suppress them, which is where the "this page is
+   preventing further dialogs" message comes from, and on a phone they are ugly
+   and cannot be styled. This is the same thing, in the app's own hand. */
+#ask{position:fixed;inset:0;z-index:130;display:grid;place-items:center;padding:20px;
+  background:rgba(38,9,11,.66);backdrop-filter:blur(6px);animation:fadeIn .18s ease both}
+.askcard{background:var(--cream);color:var(--ink);border-radius:18px;padding:24px 24px 20px;
+  width:min(440px,100%);box-shadow:0 30px 70px -30px rgba(0,0,0,.8);
+  animation:askIn .24s cubic-bezier(.2,.8,.3,1) both;
+  max-height:calc(100dvh - 40px);overflow:auto;-webkit-overflow-scrolling:touch}
+.askcard h3{font-family:var(--display);font-size:20px;margin:0 0 8px;color:var(--red-deep);line-height:1.25}
+.askcard p{margin:0 0 4px;font-size:15.5px;color:var(--ink-2);line-height:1.55}
+.askcard .f{margin-top:16px}
+.askcard .actions{margin-top:20px;justify-content:flex-end}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes askIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+@media (max-width:520px){
+  #ask{place-items:end center;padding:0}
+  .askcard{border-radius:20px 20px 0 0;width:100%;padding-bottom:calc(20px + env(safe-area-inset-bottom));
+    animation:sheetIn .26s cubic-bezier(.2,.8,.3,1) both}
+  .askcard .actions{flex-direction:column-reverse}
+  .askcard .actions .btn{width:100%}
+  @keyframes sheetIn{from{transform:translateY(100%)}to{transform:none}}
+}
+
+/* ---------- add to home screen ---------- */
+#install{position:fixed;left:0;right:0;bottom:0;z-index:95;
+  padding:12px max(14px,env(safe-area-inset-left)) calc(12px + env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-right));
+  animation:upIn .35s cubic-bezier(.2,.8,.3,1) both}
+#install .in{max-width:640px;margin:0 auto;background:var(--cream);color:var(--ink);border-radius:16px;
+  box-shadow:0 18px 44px -18px rgba(0,0,0,.75);padding:12px 14px;display:flex;align-items:center;gap:12px}
+#install img{border-radius:10px;flex:none}
+#install .t{min-width:0;flex:1}
+#install .t b{display:block;font-family:var(--display);font-size:15.5px;line-height:1.25}
+#install .t span{display:block;font-size:13px;color:var(--ink-soft);line-height:1.4;margin-top:2px}
+#install .iconbtn{border-color:var(--cream-3);color:var(--ink-soft);flex:none}
+#install .iconbtn:hover{background:var(--cream-2)}
+@keyframes upIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@media (max-width:520px){#install .t b{font-size:14.5px}#install .t span{font-size:12px}}
 
 /* ---------- the boot screen ---------- */
 #boot{position:fixed;inset:0;z-index:80;display:grid;place-items:center;
@@ -380,13 +454,13 @@ a.btn{display:inline-block;line-height:1.15}
   animation:preboot 1.5s linear infinite}
 #boot:has(.mark)::before{content:none}
 #boot .in{width:min(320px,calc(100vw - 44px));text-align:center}
-#boot .mark{position:relative;width:132px;height:132px;margin:0 auto;display:grid;place-items:center}
+#boot .mark{position:relative;width:132px;height:132px;margin:0 auto;display:grid;place-items:center;overflow:visible}
 #boot .mark svg{position:absolute;inset:0;width:132px;height:132px;transform:rotate(-90deg)}
 #boot .mark circle{fill:none;stroke-width:2.5}
 #boot .mark .t{stroke:rgba(255,255,255,.16)}
 #boot .mark .p{stroke:var(--gold);stroke-dasharray:346;stroke-dashoffset:250;
   transform-origin:50% 50%;animation:ring2 1.5s linear infinite}
-#boot .mark img{position:relative;height:76px;width:auto;display:block;
+#boot .mark img{position:relative;height:92px;width:auto;display:block;
   filter:drop-shadow(0 4px 12px rgba(0,0,0,.35));animation:bootBreath 2.8s ease-in-out .4s infinite}
 #boot .wm{display:block;margin:15px 0 0;font-family:var(--display);font-weight:700;font-size:19px;
   letter-spacing:-.02em;line-height:1.15;color:#FBF3EC}
@@ -426,7 +500,7 @@ section[id^="v-"]:not([hidden]){animation:viewIn .22s cubic-bezier(.2,.8,.3,1) b
 #welcome.out{animation:welOut .3s ease both}
 @keyframes welIn{from{opacity:0}to{opacity:1}}
 @keyframes welOut{from{opacity:1}to{opacity:0;transform:scale(1.015)}}
-#welcome img{height:142px;width:auto;filter:drop-shadow(0 6px 18px rgba(0,0,0,.4));
+#welcome img{height:min(168px,26vh);width:auto;filter:drop-shadow(0 6px 18px rgba(0,0,0,.4));
   animation:welRise .45s cubic-bezier(.2,.8,.3,1) both}
 #welcome h2{font-family:var(--display);font-weight:700;font-size:clamp(30px,6vw,52px);margin:24px 0 0;
   letter-spacing:-.02em;overflow-wrap:anywhere;max-width:min(900px,92vw);margin-left:auto;margin-right:auto;
@@ -632,8 +706,33 @@ ul.notes li:last-child{margin-bottom:0}
   .actions .btn{flex:1 1 auto}
   .gatebody{padding:22px 20px 24px}
   .gatetop{padding:20px 20px}
-  .gatetop img{height:60px;margin-right:12px}
+  .gatetop img{height:58px;margin-right:12px}
   .gatetop h2{font-size:21px}
+}
+@media (max-width:620px){
+  /* Long budget line names in a dropdown, a claim reference and a person's
+     details all used to run past the edge of the card on a 360px screen. */
+  .toolbar{gap:8px}
+  .toolbar input[type=text]{max-width:none;flex:1 1 100%}
+  .toolbar select{width:100%}
+  .toolbar .sp{display:none}
+  .toolbar .btn{flex:1 1 auto}
+  .rowacts{gap:8px}
+  .rowacts .btn{flex:1 1 auto;text-align:center}
+  .req .hd{padding:16px 16px 0}
+  .req .bd{padding:12px 16px 16px}
+  .kv{grid-template-columns:1fr;gap:2px 0}
+  .kv dt{margin-top:8px}
+  .up{grid-template-columns:1fr}
+  .addrow{gap:8px}
+  .addrow label{min-width:100%}
+  .addrow .btn{width:100%}
+  .bubble .who b,.bubble .who em{max-width:calc(100vw - 150px)}
+  .nav{gap:6px;padding:16px 0 4px}
+  .nav button{padding:9px 15px;font-size:13.5px}
+  .shead{margin:26px 0 12px;gap:8px}
+  .shead h2{font-size:21px}
+  .footnote{font-size:10px;gap:10px}
 }
 @media (max-width:380px){
   .chip-user .nm{font-size:12px}
@@ -652,7 +751,7 @@ ul.notes li:last-child{margin-bottom:0}
       <svg viewBox="0 0 120 120" aria-hidden="true">
         <circle class="t" cx="60" cy="60" r="55"/><circle class="p" cx="60" cy="60" r="55"/>
       </svg>
-      <img class="crest" alt="Jesus College MCR">
+      <img src="logo.png" alt="Jesus College MCR Treasury" width="257" height="420">
     </div>
     <b class="wm">MCR Treasury <i>2026/27</i></b>
     <div class="bar"><i id="bootBar"></i></div>
@@ -664,7 +763,7 @@ ul.notes li:last-child{margin-bottom:0}
 
 <div id="welcome" hidden>
   <div>
-    <img class="crest" alt="">
+    <img src="logo.png" alt="" width="257" height="420">
     <h2 id="welTitle">Welcome to the MCR treasury</h2>
     <p id="welSub">Jesus College MCR</p>
     <div class="note"><span class="spin"></span><span id="welNote">Opening your treasury</span></div>
@@ -689,7 +788,7 @@ ul.notes li:last-child{margin-bottom:0}
   <div class="gate" id="gate" hidden>
     <div class="gatecard">
       <div class="gatetop">
-        <img class="crest" alt="">
+        <img src="logo.png" alt="" width="257" height="420">
         <div><span class="eyebrow">Jesus College MCR</span><h2>Treasury and reimbursements</h2></div>
       </div>
       <div class="gatebody">
@@ -774,7 +873,7 @@ ul.notes li:last-child{margin-bottom:0}
           <p class="lede">The committee has set money aside for these. Send the receipt and the claim goes straight to the Treasurer to pay.</p>
           <div class="grid">
             <label class="f full"><span class="l">Which one</span><select id="nSel"></select></label>
-            <label class="f"><span class="l">Final amount you actually paid (&pound;)</span><input type="number" id="nAmt" step="0.01" min="0"></label>
+            <label class="f"><span class="l">Final amount you actually paid (&pound;)</span><input type="number" id="nAmt" step="0.01" min="0" inputmode="decimal" enterkeyhint="done"></label>
             <label class="f"><span class="l">Date of spend</span><input type="date" id="nDate"></label>
           </div>
           <div style="margin-top:16px">
@@ -807,14 +906,20 @@ ul.notes li:last-child{margin-bottom:0}
               <option value="Green Officer"><option value="Academic Officer"><option value="Families and Partners Officer">
             </datalist>
           </label>
-          <label class="f"><span class="l">Sort code</span><input type="text" id="bkSort" class="mono" placeholder="00-00-00" maxlength="8" inputmode="numeric"></label>
-          <label class="f"><span class="l">Account number</span><input type="text" id="bkAcct" class="mono" placeholder="12345678" maxlength="8" inputmode="numeric"></label>
+          <label class="f"><span class="l">Sort code</span><input type="text" id="bkSort" class="mono" placeholder="00-00-00" maxlength="8" inputmode="numeric" autocomplete="off"></label>
+          <label class="f"><span class="l">Account number</span><input type="text" id="bkAcct" class="mono" placeholder="12345678" maxlength="8" inputmode="numeric" autocomplete="off"></label>
           <label class="f"><span class="l">Bank or building society</span><input type="text" id="bkBank" placeholder="Optional"></label>
         </div>
         <div class="actions"><button class="btn ghost" id="bSaveBank">Save your details</button><span class="msg" id="bankMsg"></span></div>
       </div>
 
       <div class="shead"><h2 id="formTitle">New claim</h2><span class="note" id="formNote">Receipt required</span></div>
+      <div class="panel" id="mailOut" hidden style="background:#FFF8E9;border:1px solid var(--gold)">
+        <p class="lede" style="margin:0;color:var(--ink-2)"><b>Claims are paused until tomorrow.</b>
+          The treasury sends every claim to the committee by email, and it has used its allowance
+          for the day. The allowance resets at 8am Cambridge time. Nothing already submitted is
+          affected, and you can write the claim out now and send it in the morning.</p>
+      </div>
       <div class="panel">
         <div class="seg" id="kindSeg" style="margin-bottom:16px">
           <button data-kind="reimbursement" aria-pressed="true">I have already paid</button>
@@ -823,7 +928,7 @@ ul.notes li:last-child{margin-bottom:0}
         <p class="lede" id="kindLede">Attach the receipt now. Once the President or Treasurer approves, a payment report is produced with the receipt inside it, filed to Drive and sent to the Treasurer automatically.</p>
         <div class="grid">
           <label class="f"><span class="l" id="dateLbl">Date of spend</span><input type="date" id="iDate"></label>
-          <label class="f"><span class="l" id="amtLbl">Amount (&pound;)</span><input type="number" id="iAmt" step="0.01" min="0" placeholder="0.00"></label>
+          <label class="f"><span class="l" id="amtLbl">Amount (&pound;)</span><input type="number" id="iAmt" step="0.01" min="0" inputmode="decimal" enterkeyhint="done" placeholder="0.00"></label>
           <label class="f full"><span class="l">Budget line</span><select id="iLine"></select></label>
           <label class="f full"><span class="l">What it was for</span><input type="text" id="iWhat" placeholder="e.g. Charcoal and burgers for the Saturday BBQ"></label>
           <label class="f full"><span class="l">Anything the committee should know</span><textarea id="iNote" placeholder="Optional. Who agreed it, or anything unusual about the spend"></textarea></label>
@@ -877,7 +982,7 @@ ul.notes li:last-child{margin-bottom:0}
           <div class="grid">
             <label class="f full"><span class="l">What is it</span><input type="text" id="iWhatIn" placeholder="e.g. Michaelmas disbursement"></label>
             <label class="f"><span class="l">From</span><input type="text" id="iSource" value="Jesus College"></label>
-            <label class="f"><span class="l">Amount (&pound;)</span><input type="number" id="iAmtIn" step="0.01" min="0" placeholder="0.00"></label>
+            <label class="f"><span class="l">Amount (&pound;)</span><input type="number" id="iAmtIn" step="0.01" min="0" inputmode="decimal" enterkeyhint="done" placeholder="0.00"></label>
             <label class="f"><span class="l">Date due</span><input type="date" id="iDateIn"></label>
             <label class="f"><span class="l">Status</span><select id="iStatusIn">
               <option value="expected">Expected</option><option value="received">Already received</option></select></label>
@@ -896,7 +1001,7 @@ ul.notes li:last-child{margin-bottom:0}
             <label class="f full"><span class="l">What is it</span><input type="text" id="cWhat" placeholder="e.g. Garden Party marquee hire"></label>
             <label class="f full"><span class="l">Budget line</span><select id="cLine"></select></label>
             <label class="f"><span class="l">Paid to</span><input type="text" id="cPayee" placeholder="Supplier or college department"></label>
-            <label class="f"><span class="l">Total amount (&pound;)</span><input type="number" id="cAmt" step="0.01" min="0" placeholder="0.00"></label>
+            <label class="f"><span class="l">Total amount (&pound;)</span><input type="number" id="cAmt" step="0.01" min="0" inputmode="decimal" enterkeyhint="done" placeholder="0.00"></label>
             <label class="f"><span class="l">First payment date</span><input type="date" id="cDate"></label>
             <label class="f"><span class="l">Number of instalments</span><input type="number" id="cCount" min="1" max="36" step="1" value="1"></label>
             <label class="f"><span class="l">Repeats</span><select id="cFreq">
@@ -995,7 +1100,9 @@ ul.notes li:last-child{margin-bottom:0}
         <div id="roleList" style="margin-bottom:18px"></div>
         <dl class="kv" style="margin-bottom:18px">
           <dt>Reports folder</dt><dd id="sDriveShow">-</dd>
+          <dt>Email left today</dt><dd id="sMailShow">-</dd>
         </dl>
+        <p class="hintline" id="sMailNote" style="margin:0"></p>
         <div class="grid two" data-president>
           <label class="f"><span class="l">President name, as it appears on reports</span><input type="text" id="sPresName"></label>
           <label class="f"><span class="l">Vice President name</span><input type="text" id="sViceName"></label>
@@ -1009,10 +1116,10 @@ ul.notes li:last-child{margin-bottom:0}
           <p class="lede">The opening balance is what the account held before any disbursement arrived. Every payment you record under Planned costs is <b>added on top of it</b>, never in place of it, and everything paid out comes off. Cash in hand is counted separately.</p>
           <div class="grid two">
             <label class="f"><span class="l">Opening balance (&pound;)</span>
-              <input type="number" id="sFunds" step="0.01" min="0">
+              <input type="number" id="sFunds" step="0.01" min="0" inputmode="decimal" enterkeyhint="done">
               <span class="hintline" id="sFundsNote"></span></label>
             <label class="f"><span class="l">Cash in hand, the float and the tin (&pound;)</span>
-              <input type="number" id="sCash" step="0.01" min="0">
+              <input type="number" id="sCash" step="0.01" min="0" inputmode="decimal" enterkeyhint="done">
               <span class="hintline">Counted separately from the bank, and shown beside it on the Budget screen.</span></label>
           </div>
           <div class="actions">
@@ -1046,7 +1153,7 @@ ul.notes li:last-child{margin-bottom:0}
           <div class="bubbles" id="viewerList"></div>
           <div class="addrow">
             <label class="f"><span class="l">Add someone</span>
-              <input type="email" id="viewerEmail" placeholder="abc123@cam.ac.uk"></label>
+              <input type="email" id="viewerEmail" placeholder="abc123@cam.ac.uk" inputmode="email" autocomplete="off" autocapitalize="none" spellcheck="false"></label>
             <button class="btn" id="bAddViewer">Give access</button>
             <span class="msg" id="viewerMsg"></span>
           </div>
@@ -1073,7 +1180,7 @@ ul.notes li:last-child{margin-bottom:0}
     <div class="footnote">
       <span id="syncNote">Ready</span>
       <span class="sp"></span>
-      <span>Receipts and reports are stored in the MCR Google Drive. Members only ever see their own.</span>
+      <span>Receipts and reports are stored in the MCR Google Drive. Only members ever see them.</span>
     </div>
   </div>
 </div>
@@ -1110,6 +1217,29 @@ ul.notes li:last-child{margin-bottom:0}
     <span id="sendSub">Hold on a moment</span>
   </div>
 </div>
+<div id="ask" hidden role="dialog" aria-modal="true" aria-labelledby="askTitle">
+  <div class="askcard">
+    <h3 id="askTitle">Are you sure?</h3>
+    <p id="askBody"></p>
+    <label class="f" id="askFieldWrap" hidden><span class="l" id="askLabel">Reason</span>
+      <input type="text" id="askField" autocomplete="off"></label>
+    <div class="actions">
+      <button class="btn ghost" id="askNo">Cancel</button>
+      <button class="btn" id="askYes">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<div id="install" hidden>
+  <div class="in">
+    <img src="apple-touch-icon.png" alt="" width="46" height="46">
+    <div class="t"><b>Keep the treasury on your home screen</b>
+      <span id="installHow"></span></div>
+    <button class="btn small" id="installGo" hidden>Add</button>
+    <button class="iconbtn" id="installNo" aria-label="Dismiss">Not now</button>
+  </div>
+</div>
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -1121,12 +1251,14 @@ ul.notes li:last-child{margin-bottom:0}
    ============================================================ */
 
 /* PASTE YOUR TREASURY WEB APP URL HERE. Deploy, Manage deployments, ends in /exec. */
-const API_URL = "https://script.google.com/macros/s/AKfycbxRTDNG4AgSg8ZaqdlwZ4TQ3EJZQCHGG5zVrt09pZ5oWqRoDGmlBKoYjWSgVk2COsJV/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwZDfsqasLGSb42SCY3yJ7hXPBaBPDMHY-2B4JLHMgrrzukjx67TdpzxmvpcSAs-YSj/exec";
 
 /* The crest, once. It used to appear three times in this file, which made the
    page a third of a megabyte before a single figure had loaded. */
 const CREST_B64 = "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";
 const CREST = "data:image/png;base64," + CREST_B64;
+/* Only the header still carries the college arms inline, so the bar is complete
+   on the first frame without waiting for a file. Everything else uses logo.png. */
 document.querySelectorAll("img.crest").forEach(function(i){ i.src = CREST; });
 
 const LAST_YEAR={"source":"MCR Reimbursement Form 2025-26, 191 claims, Oct 2025 to Aug 2026","total":23760.03,"byCat":{"Welcome Events":1861.88,"Welfare":2345.76,"Academic":1408.68,"Entertainment":7328.49,"Sports and Societies":3181.62,"General":7633.6},"monthly":{"Welcome Events":{"Sep":0,"Oct":0,"Nov":16.78,"Dec":670.72,"Jan":335.7,"Feb":0,"Mar":0,"Apr":123.8,"May":71.0,"Jun":0,"Jul":0,"Aug":643.88},"Welfare":{"Sep":0,"Oct":59.55,"Nov":177.8,"Dec":153.06,"Jan":216.85,"Feb":362.23,"Mar":888.63,"Apr":152.27,"May":155.06,"Jun":180.31,"Jul":0,"Aug":0},"Academic":{"Sep":0,"Oct":0,"Nov":172.16,"Dec":30.03,"Jan":221.07,"Feb":233.99,"Mar":211.54,"Apr":93.23,"May":159.5,"Jun":183.66,"Jul":103.5,"Aug":0},"Entertainment":{"Sep":0,"Oct":64.99,"Nov":93.45,"Dec":78.99,"Jan":0,"Feb":981.42,"Mar":221.84,"Apr":5088.0,"May":195.0,"Jun":540.2,"Jul":64.6,"Aug":0},"Sports and Societies":{"Sep":0,"Oct":233.34,"Nov":570.0,"Dec":243.3,"Jan":568.95,"Feb":204.64,"Mar":263.06,"Apr":314.89,"May":226.4,"Jun":481.61,"Jul":36.0,"Aug":39.43},"General":{"Sep":0,"Oct":992.81,"Nov":304.76,"Dec":272.23,"Jan":40.0,"Feb":375.69,"Mar":665.97,"Apr":211.94,"May":991.48,"Jun":3154.61,"Jul":560.29,"Aug":63.82}},"outliers":[{"date":"2026-04-07","cat":"Entertainment","amount":5088.0,"what":"Easter Egg Hunt"},{"date":"2026-06-16","cat":"General","amount":1182.37,"what":"alcohol for garden party. "}]};
@@ -1520,6 +1652,29 @@ const roleLabel=r=>({member:"MCR member",president:"President",treasurer:"Treasu
 /* older records were stamped "President (President)" before names were required */
 const actor=s=>{const m=String(s||"").match(/^(.*) \((.*)\)$/);
   return m&&m[1].trim()===m[2].trim()?m[1].trim():String(s||"")};
+/* An amount, and nothing that merely looks like one.
+   Number() turns "1e309" into Infinity, "0x20" into 32 and " 12 " into 12, none
+   of which anybody typed on purpose. So the text is checked first and only then
+   converted, and the same rule runs again on the server. */
+const MAX_CLAIM=25000;
+function money(v){
+  const t=String(v==null?"":v).trim().replace(/[\u00A3,\s]/g,"");
+  if(!/^\d{1,9}(\.\d{1,2})?$/.test(t))return null;
+  const n=Math.round(Number(t)*100)/100;
+  return (isFinite(n)&&n>0&&n<=MAX_CLAIM)?n:null;
+}
+/* Says which of the three it failed, so the message can be specific. */
+function moneyWhy(v){
+  const t=String(v==null?"":v).trim().replace(/[\u00A3,\s]/g,"");
+  if(!t)return "Add an amount.";
+  if(/[eE]/.test(t))return "Write the amount out in full, not in scientific notation.";
+  if(!/^\d{1,9}(\.\d{1,2})?$/.test(t))return "Amounts are pounds and pence, such as 42.50.";
+  const n=Number(t);
+  if(!(n>0))return "The amount has to be more than zero.";
+  if(n>MAX_CLAIM)return "The most a single claim can be is "+gbp0.format(MAX_CLAIM)+
+    ". If it really is that large, speak to the Treasurer.";
+  return "Check the amount.";
+}
 const debounce=(fn,ms)=>{let t;return function(){clearTimeout(t);const a=arguments;t=setTimeout(()=>fn.apply(null,a),ms||180)}};
 
 let token=null, S=null, view="overview", editingId=null, claimKind="reimbursement";
@@ -1639,6 +1794,77 @@ function toast(m){const e=$("toast");e.textContent=m;e.classList.add("show");
   clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove("show"),3800)}
 const note=m=>{const n=$("syncNote"); if(n)n.textContent=m};
 function fail(e){toast(e&&e.message?e.message:String(e))}
+
+/* ---------------- asking a question ----------------
+   A promise that resolves to false, true, or the typed string. Escape and the
+   backdrop both cancel, the keyboard works, and the browser never sees a native
+   dialog it might decide to suppress. */
+let askResolve=null;
+function ask(opts){
+  return new Promise(resolve=>{
+    const box=$("ask"),f=$("askFieldWrap"),inp=$("askField");
+    $("askTitle").textContent=opts.title||"Are you sure?";
+    $("askBody").innerHTML=opts.body||"";
+    $("askYes").textContent=opts.yes||"Confirm";
+    $("askNo").textContent=opts.no||"Cancel";
+    $("askYes").className="btn"+(opts.danger?" danger":"");
+    if(opts.field){
+      f.hidden=false;$("askLabel").textContent=opts.field;
+      inp.value=opts.value||"";inp.placeholder=opts.placeholder||"";
+    }else f.hidden=true;
+    askResolve=v=>{askResolve=null;box.hidden=true;resolve(v)};
+    box.hidden=false;
+    setTimeout(()=>{ (opts.field?inp:$("askYes")).focus() },60);
+  });
+}
+$("askYes").addEventListener("click",()=>{
+  if(!askResolve)return;
+  askResolve($("askFieldWrap").hidden?true:$("askField").value.trim());
+});
+$("askNo").addEventListener("click",()=>{ if(askResolve)askResolve(false) });
+$("ask").addEventListener("click",e=>{ if(e.target===$("ask")&&askResolve)askResolve(false) });
+$("askField").addEventListener("keydown",e=>{ if(e.key==="Enter")$("askYes").click() });
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"&&askResolve)askResolve(false);
+});
+
+/* ---------------- keeping it on the home screen ----------------
+   Installed, it runs without Safari's chrome, remembers the sign in, and behaves
+   like the Freshers app. Asked once, and only after somebody has actually signed
+   in, because offering it to a stranger on the gate screen is just noise. */
+const INSTALL_KEY="mcr-treasury-installed-asked";
+let deferredInstall=null;
+window.addEventListener("beforeinstallprompt",e=>{ e.preventDefault(); deferredInstall=e; });
+function standalone(){
+  return window.matchMedia("(display-mode: standalone)").matches||window.navigator.standalone===true;
+}
+let installShown=false;
+function offerInstall(){
+  if(installShown||standalone())return;
+  installShown=true;
+  try{ if(localStorage.getItem(INSTALL_KEY))return }catch(e){}
+  const ua=navigator.userAgent;
+  const ios=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1);
+  if(!deferredInstall&&!ios)return;         // nothing useful to say on desktop Chrome without the event
+  $("installHow").textContent=deferredInstall
+    ? "One tap and it opens like an app, without the browser bars."
+    : "Tap Share, then Add to Home Screen. It then opens like an app.";
+  $("installGo").hidden=!deferredInstall;
+  setTimeout(()=>{ $("install").hidden=false },2500);
+}
+function dismissInstall(){
+  $("install").hidden=true;
+  try{ localStorage.setItem(INSTALL_KEY,"1") }catch(e){}
+}
+$("installNo").addEventListener("click",dismissInstall);
+$("installGo").addEventListener("click",async()=>{
+  if(!deferredInstall)return dismissInstall();
+  $("install").hidden=true;
+  deferredInstall.prompt();
+  try{ await deferredInstall.userChoice }catch(e){}
+  deferredInstall=null;
+  try{ localStorage.setItem(INSTALL_KEY,"1") }catch(e){}
+});
 
 /* ---------------- the boot screen ----------------
    It used to be a still picture with a bar sliding under it, which says nothing
@@ -1853,6 +2079,11 @@ const canApprove=()=>!!(S&&S.can&&S.can.approve);
 const canEditCosts=()=>!!(S&&S.can&&S.can.editCosts);
 const canEditBank=()=>!!(S&&S.can&&S.can.editBank);
 const isPresident=()=>!!(S&&S.can&&S.can.admin);
+/* Email is the one resource here with a hard daily ceiling. When it runs out the
+   app cannot tell the committee a claim has arrived, so it stops taking them
+   rather than swallowing them silently. */
+const MAIL_OUT="The treasury has used its email allowance for today, so no more claims can be taken until it resets at 8am. Nothing already submitted is affected.";
+const mailOk=()=>!(S&&S.mail&&S.mail.ok===false);
 /* Budget lines by id, built once per state rather than scanned per lookup. */
 let LINEMAP_=null;
 function lineIndex(){
@@ -1937,6 +2168,7 @@ async function boot(fromWelcome){
     :(S.canSeeBudget?["overview","mine"]:["mine"]);
   if(allowed.indexOf(view)<0)view=allowed[0];
   fillLineSelects();fillProfile();fillSettings();resetForm();setView(view,true);
+  offerInstall();
 }
 function welcomeNote(){
   if(isAdmin()){
@@ -1993,7 +2225,7 @@ function setView(v,quiet){
 }
 function render(){
   if(!S)return;
-  renderBadge();                 // always, because it sits in the nav
+  renderBadge();paintMail();     // always, because both sit outside the views
   const fn=RENDERERS[view];
   if(fn)fn();
 }
@@ -2211,19 +2443,26 @@ function paintKind(){
     ? "For something not paid for yet. The committee sets the money aside against the budget line, then asks you for the receipt once you have spent it. Only then does it reach the Treasurer."
     : "Attach the receipt now. Once the President or Treasurer approves, a payment report is produced with the receipt inside it, filed to Drive and emailed to the Treasurer automatically.";
 }
+function paintMail(){
+  const out=!mailOk();
+  const b=$("mailOut"); if(b)b.hidden=!out;
+  const sub=$("bSubmit"); if(sub){sub.disabled=out;sub.title=out?MAIL_OUT:""}
+  const rec=$("bSendReceipt"); if(rec){rec.disabled=out;rec.title=out?MAIL_OUT:""}
+}
 function resetForm(){
   editingId=null;formReceipt=null;$("iReceipt").value="";
   $("formTitle").textContent="New claim";$("bCancelEdit").hidden=true;
   $("iDate").value=today();["iAmt","iWhat","iNote"].forEach(i=>$(i).value="");
-  $("formMsg").textContent="";paintKind();paintReceipt();
+  $("formMsg").textContent="";paintKind();paintReceipt();paintMail();
 }
 $("bCancelEdit").addEventListener("click",()=>{resetForm();render()});
 $("bSubmit").addEventListener("click",async()=>{
   const m=$("formMsg");m.className="msg";
   if(!profileReady()){m.textContent="Fill in your details above first.";return}
-  const amt=Number($("iAmt").value),what=$("iWhat").value.trim();
-  if(!(amt>0)){m.textContent="Add an amount greater than zero.";return}
-  if(!what){m.textContent="Say what the money is for.";return}
+  const amt=money($("iAmt").value),what=$("iWhat").value.trim();
+  if(amt===null){m.textContent=moneyWhy($("iAmt").value);$("iAmt").focus();return}
+  if(!what){m.textContent="Say what the money is for.";$("iWhat").focus();return}
+  if(!mailOk()){m.textContent=MAIL_OUT;return}
   if(claimKind==="reimbursement"&&!formReceipt&&!editingId){
     m.textContent="Attach the receipt, or switch to asking for the money first.";return}
   m.textContent="";
@@ -2267,8 +2506,9 @@ $("bSendReceipt").addEventListener("click",async()=>{
   const c=myClaims().filter(x=>x.id===$("nSel").value)[0];
   if(!c){m.textContent="Pick a claim.";return}
   if(!needReceipt){m.textContent="Attach the receipt first.";return}
-  const amt=Number($("nAmt").value);
-  if(!(amt>0)){m.textContent="Add the amount you actually paid.";return}
+  const amt=money($("nAmt").value);
+  if(amt===null){m.textContent=moneyWhy($("nAmt").value);$("nAmt").focus();return}
+  if(!mailOk()){m.textContent=MAIL_OUT;return}
   const btn=$("bSendReceipt");btn.disabled=true;
   sending(true,"Sending your receipt","Building the payment report and emailing the Treasurer");
   try{
@@ -2531,9 +2771,14 @@ document.addEventListener("click",async e=>{
   if(d.approve!==undefined){
     const c=S.claims.filter(x=>x.id===d.approve)[0];
     if(!c)return;
-    if(!confirm(c.receipt
-      ?"Approve "+gbp.format(c.amount)+" for "+c.who+"?\n\nA payment report will be filed to Drive and emailed to the Treasurer with the receipt attached."
-      :"Set aside "+gbp.format(c.amount)+" for "+c.who+"?\n\nThe money is held against the budget line. Nothing reaches the Treasurer until the receipt arrives."))return;
+    const own=String(c.email||"").toLowerCase()===String(S.me.email||"").toLowerCase();
+    if(!await ask({
+      title:c.receipt?"Approve "+gbp.format(c.amount)+"?":"Set aside "+gbp.format(c.amount)+"?",
+      body:(own?"<b>This is your own claim.</b> It will be recorded as a self approval and the Vice President will be sent a copy for the record.<br><br>":"")+
+        (c.receipt
+        ?"A payment report will be filed to Drive and emailed to the Treasurer with the receipt attached."
+        :"The money is held against the budget line. Nothing reaches the Treasurer until "+esc(c.who)+" sends the receipt."),
+      yes:c.receipt?"Approve":"Set aside"}))return;
     await act(()=>api("decide",{id:d.approve,decision:"approve"}),
       c.receipt?"Approved, and the Treasurer has been emailed":"Money set aside, the claimant has been asked for the receipt",
       t,"Filing");
@@ -2541,11 +2786,12 @@ document.addEventListener("click",async e=>{
   }
   if(d.part!==undefined){
     const c=S.claims.filter(x=>x.id===d.part)[0];if(!c)return;
-    const raw=prompt("How much should be set aside for "+c.who+"?\n\nThey asked for "+
-      gbp.format(c.amount)+". Enter a smaller amount.",String(c.amount));
-    if(raw===null)return;
-    const amt=Number(String(raw).replace(/[^0-9.]/g,""));
-    if(!(amt>0)){toast("That is not an amount.");return}
+    const raw=await ask({title:"Approve a smaller amount",
+      body:esc(c.who)+" asked for <b>"+gbp.format(c.amount)+"</b>. Enter what should be set aside instead.",
+      field:"Amount (\u00a3)",value:String(c.amount),yes:"Set aside"});
+    if(raw===false)return;
+    const amt=money(raw);
+    if(amt===null){toast("Enter a plain amount, such as 42.50.");return}
     if(amt>c.amount){toast("You cannot set aside more than was asked for.");return}
     await act(()=>api("decide",{id:d.part,decision:"approve",amount:amt}),
       gbp.format(amt)+" set aside, the claimant has been told",t,"Saving");
@@ -2553,15 +2799,20 @@ document.addEventListener("click",async e=>{
   }
   if(d.reject!==undefined){
     const c=S.claims.filter(x=>x.id===d.reject)[0];if(!c)return;
-    const reason=prompt("Why is this being turned down?\n\nThe claimant is emailed this reason.","");
-    if(reason===null)return;
+    const reason=await ask({title:"Reject this claim",
+      body:"The claimant is emailed whatever you write here, so a line of explanation goes a long way.",
+      field:"Reason",placeholder:"Optional, but kinder",yes:"Reject",no:"Keep it",danger:true});
+    if(reason===false)return;
     await act(()=>api("decide",{id:d.reject,decision:"reject",reason}),
       "Rejected, and the claimant has been told",t,"Saving");
     return;
   }
   if(d.pay!==undefined){
     const c=S.claims.filter(x=>x.id===d.pay)[0];if(!c)return;
-    if(!confirm("Mark "+gbp.format(c.amount)+" to "+c.who+" as paid?\n\nOnly do this once the transfer has actually gone."))return;
+    if(!await ask({title:"Mark as paid?",
+      body:"<b>"+gbp.format(c.amount)+"</b> to "+esc(c.who)+
+        ". Only do this once the transfer has actually left the account. "+esc(c.who)+" is emailed straight away.",
+      yes:"Yes, it has been paid"}))return;
     await act(()=>api("markPaid",{id:d.pay}),"Marked paid, and the claimant has been told",t,"Saving");
     return;
   }
@@ -2579,11 +2830,15 @@ document.addEventListener("click",async e=>{
   }
   if(d.cancel!==undefined){
     const c=S.claims.filter(x=>x.id===d.cancel)[0];if(!c)return;
-    if(!confirm("Cancel this claim for "+gbp.format(c.amount)+"?\n\n"+
-      (c.status==="approved"?"It has already gone to the Treasurer, so they will be told not to pay it."
-        :"The committee will be told.")+"\n\nYou can reopen and resubmit it later."))return;
-    const reason=prompt("Anything the committee should know? Optional.","")||"";
-    await act(()=>api("cancelClaim",{id:d.cancel,reason}),"Cancelled",t,"Cancelling");
+    const reason=await ask({title:"Cancel this claim?",
+      body:(c.status==="approved"
+        ?"It has already gone to the Treasurer, so they will be told not to pay it. "
+        :"The money goes back to the budget line. ")+
+        "You can reopen and resubmit it later.",
+      field:"Anything the committee should know?",placeholder:"Optional",
+      yes:"Cancel the claim",no:"Keep it",danger:true});
+    if(reason===false)return;
+    await act(()=>api("cancelClaim",{id:d.cancel,reason:String(reason||"")}),"Cancelled",t,"Cancelling");
     return;
   }
   if(d.edit!==undefined){
@@ -2615,23 +2870,34 @@ document.addEventListener("change",async e=>{
   const id=s.dataset.route,c=S.claims.filter(x=>x.id===id)[0];
   if(!c||c.lineId===s.value)return;
   const to=lineById(s.value);
-  if(!confirm("Move this claim to "+(to?to.cat+" \u2014 "+to.name:"that line")+"?")){render();return}
+  if(!await ask({title:"Move this claim?",
+    body:"It will be counted against <b>"+esc(to?to.cat+" \u2014 "+to.name:"that line")+"</b> instead.",
+    yes:"Move it"})){render();return}
   s.disabled=true;
   await act(()=>api("reroute",{id,lineId:s.value}),"Moved to another budget line");
   if(s.isConnected)s.disabled=false;
 });
+/* A blob and a link, rather than writing a document into a popup window.
+   Popups are blocked by default on a phone, a data: URL of a few megabytes is
+   refused outright by Safari, and writing into another window is what makes
+   browsers start asking whether the page should be allowed to do things. */
 async function openFile(id,which){
   toast("Opening\u2026");
   try{
     const f=await api("file",{id,which});
-    const w=window.open("","_blank");
-    if(!w){toast("Your browser blocked the pop up.");return}
-    w.document.write('<title>'+esc(f.name)+'</title>'+
-      '<body style="margin:0;background:#26090B;display:grid;place-items:center;min-height:100vh">'+
-      (f.mime==="application/pdf"
-        ?'<embed src="'+f.data+'" type="application/pdf" style="width:100vw;height:100vh">'
-        :'<img src="'+f.data+'" style="max-width:100%;max-height:100vh">')+'</body>');
-    w.document.close();
+    const m=String(f.data).match(/^data:([^;]+);base64,(.*)$/);
+    if(!m)throw new Error("That file came back in a form the browser cannot open.");
+    const bin=atob(m[2]);
+    const buf=new Uint8Array(bin.length);
+    for(let i=0;i<bin.length;i++)buf[i]=bin.charCodeAt(i);
+    const url=URL.createObjectURL(new Blob([buf],{type:m[1]}));
+    const a=document.createElement("a");
+    a.href=url;a.target="_blank";a.rel="noopener";
+    /* iOS will not open a blob in a new tab, so it downloads instead, which puts
+       the file in Files where it opens properly. */
+    if(/iPhone|iPad|iPod/.test(navigator.userAgent))a.download=f.name||"receipt";
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),60000);
   }catch(e){fail(e)}
 }
 
@@ -2699,9 +2965,9 @@ $("cFilter").addEventListener("change",()=>renderCosts());
 /* ---------------- income ---------------- */
 $("bAddIncome").addEventListener("click",async()=>{
   const m=$("incMsg");m.className="msg";
-  const amt=Number($("iAmtIn").value),what=$("iWhatIn").value.trim();
+  const amt=money($("iAmtIn").value),what=$("iWhatIn").value.trim();
   if(!what){m.textContent="Give the payment a name.";return}
-  if(!(amt>0)){m.textContent="Add an amount greater than zero.";return}
+  if(amt===null){m.textContent=moneyWhy($("iAmtIn").value);return}
   const btn=$("bAddIncome");btn.disabled=true;
   try{
     await api("addIncome",{what,source:$("iSource").value.trim()||"Jesus College",amount:amt,
@@ -2741,14 +3007,15 @@ document.addEventListener("click",async e=>{
   if(d.incGot!==undefined)return act(()=>api("incomeStatus",{id:d.incGot,status:"received"}),"Marked as received",t,"Saving");
   if(d.incBack!==undefined)return act(()=>api("incomeStatus",{id:d.incBack,status:"expected"}),"Moved back to expected",t,"Saving");
   if(d.incDel!==undefined){
-    if(!confirm("Delete this payment record?"))return;
+    if(!await ask({title:"Delete this payment?",body:"It is removed from the books entirely.",
+      yes:"Delete",danger:true}))return;
     return act(()=>api("deleteIncome",{id:d.incDel}),"Deleted",t,"Deleting");
   }
 });
 
 /* ---------------- planned costs ---------------- */
 function costPreview(){
-  const total=Number($("cAmt").value)||0,n=Math.max(1,Number($("cCount").value)||1);
+  const total=money($("cAmt").value)||0,n=Math.max(1,Number($("cCount").value)||1);
   $("costPreview").textContent=n>1&&total>0
     ?n+" payments of about "+gbp.format(total/n)+", "+$("cFreq").selectedOptions[0].text.toLowerCase()+
       " from "+fmtDate($("cDate").value||today())
@@ -2757,9 +3024,9 @@ function costPreview(){
 ["cAmt","cCount","cFreq","cDate"].forEach(i=>$(i).addEventListener("input",costPreview));
 $("bAddCost").addEventListener("click",async()=>{
   const m=$("costMsg");m.className="msg";
-  const amt=Number($("cAmt").value),what=$("cWhat").value.trim();
+  const amt=money($("cAmt").value),what=$("cWhat").value.trim();
   if(!what){m.textContent="Give the cost a name.";return}
-  if(!(amt>0)){m.textContent="Add an amount greater than zero.";return}
+  if(amt===null){m.textContent=moneyWhy($("cAmt").value);return}
   const btn=$("bAddCost");btn.disabled=true;
   try{
     const r=await api("addCost",{what,lineId:$("cLine").value,payee:$("cPayee").value.trim(),
@@ -2809,11 +3076,14 @@ document.addEventListener("click",async e=>{
   if(d.costPaid!==undefined)return act(()=>api("costStatus",{id:d.costPaid,status:"paid"}),"Marked as paid",t,"Saving");
   if(d.costBack!==undefined)return act(()=>api("costStatus",{id:d.costBack,status:"planned"}),"Moved back to scheduled",t,"Saving");
   if(d.costDel!==undefined){
-    if(!confirm("Delete this cost?"))return;
+    if(!await ask({title:"Delete this cost?",body:"It is removed from the books entirely.",
+      yes:"Delete",danger:true}))return;
     return act(()=>api("deleteCost",{id:d.costDel}),"Deleted",t,"Deleting");
   }
   if(d.costSeries!==undefined){
-    if(!confirm("Delete every unpaid instalment in this series?"))return;
+    if(!await ask({title:"Delete the whole series?",
+      body:"Every instalment that has not been paid is removed. Paid ones are kept.",
+      yes:"Delete them",danger:true}))return;
     return act(()=>api("deleteCost",{series:d.costSeries}),"Series deleted",t,"Deleting");
   }
 });
@@ -2884,7 +3154,9 @@ function renderViewers(){
 document.addEventListener("click",async e=>{
   const b=e.target.closest("button[data-viewer]");
   if(!b)return;
-  if(!confirm("Remove access to the budget for "+b.dataset.viewer+"?"))return;
+  if(!await ask({title:"Remove budget access?",
+    body:esc(b.dataset.viewer)+" will go back to seeing only their own claims.",
+    yes:"Remove",danger:true}))return;
   try{ S.settings.viewers=(await api("removeViewer",{email:b.dataset.viewer})).viewers;
     renderViewers(); toast("Removed"); }
   catch(err){ fail(err) }
@@ -2914,6 +3186,17 @@ function fillSettings(){
     ?"Plus "+gbp0.format(t.received)+" received since, giving "+gbp0.format(t.funds)+" in total."
     :"Record each disbursement under Planned costs and it is added to this.";
   if($("sDriveShow"))$("sDriveShow").textContent=s.drive||"";
+  const q=S.mail||{};
+  if($("sMailShow")){
+    $("sMailShow").textContent=q.left===undefined?"unknown"
+      :q.left<0?"could not be read"
+      :q.left+" recipient"+(q.left===1?"":"s");
+  }
+  if($("sMailNote"))$("sMailNote").textContent=q.left<0
+    ?"The allowance could not be read, so nothing is being blocked."
+    :q.ok===false
+      ?"Claims are paused until the allowance resets at 8am Cambridge time."
+      :"Google counts recipients, not messages, and resets at 8am Cambridge time. A claim costs about five between arriving, being approved and being paid.";
   if($("linkWarn"))$("linkWarn").textContent=s.publicLinks
     ?"Reports and receipts open from a Drive link, so anyone holding the link can view them. The link is the secret."
     :"Reports and receipts open only for people the Drive folder is shared with.";
@@ -2956,7 +3239,13 @@ $("bSaveSettings").addEventListener("click",async()=>{
 });
 
 /* ---------------- exports ---------------- */
-const cell=v=>{const s=String(v==null?"":v);return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};
+/* Excel runs a formula in a CSV cell exactly as a spreadsheet does, so anything
+   beginning = + - or @ is marked as text on the way out too. */
+const cell=v=>{
+  let s=String(v==null?"":v).replace(/[\r\n]+/g," ");
+  if(/^[=+\-@]/.test(s))s="'"+s;
+  return /[",]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;
+};
 function download(name,rows){
   const csv="\ufeff"+rows.map(r=>r.map(cell).join(",")).join("\r\n");
   const a=document.createElement("a");
