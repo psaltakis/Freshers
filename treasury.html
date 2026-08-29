@@ -307,10 +307,12 @@ a.btn{display:inline-block;line-height:1.15}
 .people .th span:not(:first-child){text-align:right}
 .people .th,.people .tr{grid-template-columns:1fr 70px 96px 96px 104px 82px}
 .who{display:flex;align-items:center;gap:11px;min-width:0}
+.avatar.off{background:var(--ink-soft)}
 .avatar{width:32px;height:32px;border-radius:50%;background:var(--red-deep);color:#fff;flex:none;display:grid;
   place-items:center;font-family:var(--display);font-weight:700;font-size:12.5px;margin-right:11px}
 .who .m{min-width:0;max-width:100%}
-.who .m b{display:block;font-size:15.5px;font-weight:600;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.who .m b{display:block;font-size:15.5px;font-weight:600;line-height:1.35;overflow-wrap:anywhere}
+.who .m b .chip{font-size:9px;padding:2px 7px;margin-left:6px;vertical-align:2px}
 .who .m span{font-size:12.5px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
 .expand{background:#fff;padding:14px 18px 18px;border-bottom:1px solid var(--cream-2)}
 .pbar{display:grid;grid-template-columns:1fr 92px;gap:14px;align-items:center;margin-bottom:10px}
@@ -812,15 +814,11 @@ ul.notes li:last-child{margin-bottom:0}
         <div><span class="eyebrow">Jesus College MCR</span><h2>Treasury and reimbursements</h2></div>
       </div>
       <div class="gatebody">
-        <p class="lede">Sign in with your University of Cambridge Google account. If you are already
-          signed in to the Freshers' Fortnight app on this site, this happens by itself and you will
-          not be asked anything.</p>
+        <p class="lede">Sign in with your University of Cambridge Google account.</p>
         <div id="gBtn"></div>
         <p class="hintline" id="gateHint">Checking whether you are already signed in&hellip;</p>
         <div class="actions" style="justify-content:center"><span class="msg" id="gateMsg"></span></div>
-        <p class="hintline" style="margin-top:20px;font-size:13px">Your role is set by the committee against
-          your own address. Committee mail still goes to the shared President, Treasurer and Vice
-          President inboxes, so nothing changes about who is told what.</p>
+
       </div>
     </div>
   </div>
@@ -890,7 +888,7 @@ ul.notes li:last-child{margin-bottom:0}
       <div id="needWrap" hidden>
         <div class="shead"><h2>Receipt needed</h2><span class="note">Approved, waiting on you</span></div>
         <div class="panel">
-          <p class="lede">The committee has set money aside for these. Send the receipt and the claim goes straight to the Treasurer to pay.</p>
+          <p class="lede">Money is set aside for these. Send the receipt and it goes straight to the Treasurer to pay.</p>
           <div class="grid">
             <label class="f full"><span class="l">Which one</span><select id="nSel"></select></label>
             <label class="f"><span class="l">Final amount you actually paid (&pound;)</span><input type="number" id="nAmt" step="0.01" min="0" inputmode="decimal" enterkeyhint="done"></label>
@@ -914,7 +912,7 @@ ul.notes li:last-child{margin-bottom:0}
 
       <div class="shead"><h2>Your details</h2><span class="note">Needed before you can claim</span></div>
       <div class="panel">
-        <p class="lede">Your position and bank details are attached to each claim you submit so the Treasurer can pay you without chasing. Only the President and Treasurer ever see them.</p>
+        <p class="lede">Attached to each claim so the Treasurer can pay you without chasing. Only the President and Treasurer see them.</p>
         <div class="grid">
           <label class="f"><span class="l">Account name</span><input type="text" id="bkName" placeholder="e.g. G Psaltakis"></label>
           <label class="f"><span class="l">Your position in the MCR</span>
@@ -997,7 +995,7 @@ ul.notes li:last-child{margin-bottom:0}
       <div class="shead"><h2>Money coming in</h2><span class="note" id="incomeNote"></span></div>
       <div data-costs>
         <div class="panel">
-          <p class="lede">The college grant arrives in instalments. Record each one with the date it is due, and the bank figure on the Budget screen follows what has actually landed rather than a number typed in by hand.</p>
+          <p class="lede">The college grant arrives in instalments. Record each one and the bank figure follows what has actually landed, rather than a number typed in by hand.</p>
           <div class="grid">
             <label class="f full"><span class="l">What is it</span><input type="text" id="iWhatIn" placeholder="e.g. Michaelmas disbursement"></label>
             <label class="f"><span class="l">From</span><input type="text" id="iSource" value="Jesus College"></label>
@@ -1015,7 +1013,7 @@ ul.notes li:last-child{margin-bottom:0}
       <div data-costs>
         <div class="shead"><h2>Add a cost</h2><span class="note">Direct payments and instalments</span></div>
         <div class="panel">
-          <p class="lede">For money the MCR pays out itself, such as a college invoice, a coach deposit or a termly gym charge. Split it into instalments and each one lands on its own date and holds its share of the budget until it is paid.</p>
+          <p class="lede">For money the MCR pays out itself: a college invoice, a coach deposit, a termly gym charge. Split it into instalments and each holds its share of the budget until paid.</p>
           <div class="grid">
             <label class="f full"><span class="l">What is it</span><input type="text" id="cWhat" placeholder="e.g. Garden Party marquee hire"></label>
             <label class="f full"><span class="l">Budget line</span><select id="cLine"></select></label>
@@ -1130,10 +1128,9 @@ ul.notes li:last-child{margin-bottom:0}
       <div data-president>
         <div class="shead"><h2>Who holds each role</h2><span class="note">Changes take effect at once</span></div>
         <div class="panel">
-          <p class="lede">Two different things, and it is worth keeping them apart. The
-            <b>inbox</b> is where the treasury's mail goes, and stays the same year to year. The
-            <b>people</b> are the personal University accounts allowed to sign in as that role, and
-            change every time the committee does. Several addresses per role, separated by commas.</p>
+          <p class="lede">The <b>inbox</b> is where the treasury's mail goes and stays the same year
+            to year. The <b>people</b> are the personal accounts allowed to sign in as that role, and
+            change every handover. Several per role, comma separated.</p>
           <div class="grid two">
             <label class="f"><span class="l">President inbox</span>
               <input type="email" id="cPresInbox" inputmode="email" autocapitalize="none" spellcheck="false"></label>
@@ -1159,10 +1156,9 @@ ul.notes li:last-child{margin-bottom:0}
       <div data-admin>
         <div class="shead"><h2>Email allowance</h2><span class="note">Resets at 8am</span></div>
         <div class="panel">
-          <p class="lede">Every claim is carried by email, and Google caps how many people the
-            account may write to in a day. It counts recipients, not messages. When there is not
-            enough left for one more claim the form closes itself, so nothing is ever accepted
-            that the committee would not be told about.</p>
+          <p class="lede">Google caps how many people the account may write to in a day, counting
+            recipients rather than messages. When there is not enough left for one more claim the
+            form closes itself.</p>
           <div class="quota">
             <div class="qhead"><b id="qLeft">&mdash;</b><span id="qOf"></span></div>
             <div class="qbar"><i class="used" id="qUsed"></i><i class="res" id="qRes"></i></div>
@@ -1179,9 +1175,8 @@ ul.notes li:last-child{margin-bottom:0}
       <div data-president>
         <div class="shead"><h2>Pause claims</h2><span class="note">For when the MCR cannot pay</span></div>
         <div class="panel">
-          <p class="lede">Closes the claim form for everybody and says why. Use it when the account
-            is empty, between disbursements, or over the vacation. Claims already in the system are
-            untouched, and approving and paying carry on as normal.</p>
+          <p class="lede">Closes the claim form for everybody and says why. Claims already in the
+            system are untouched, and approving and paying carry on.</p>
           <label class="f"><span class="l">Reason, shown to everybody</span>
             <input type="text" id="fzReason" maxlength="240"
               placeholder="e.g. Paused until the Lent disbursement arrives in mid January"></label>
@@ -1216,7 +1211,7 @@ ul.notes li:last-child{margin-bottom:0}
       <div data-treasurer>
         <div class="shead"><h2>MCR bank account</h2><span class="note">Treasurer only</span></div>
         <div class="panel">
-          <p class="lede">The account the MCR pays out from. It appears on every payment report filed for the year end accounts, and only the Treasurer, or the President standing in for them, can change it.</p>
+          <p class="lede">The account the MCR pays out from. It appears on every payment report, and only the Treasurer or the President can change it.</p>
           <div class="grid two">
             <label class="f"><span class="l">Account name</span><input type="text" id="sAccName" placeholder="Jesus College MCR"></label>
             <label class="f"><span class="l">Bank</span><input type="text" id="sAccBank" placeholder="Barclays, Cambridge"></label>
@@ -1233,7 +1228,7 @@ ul.notes li:last-child{margin-bottom:0}
       <div data-president>
         <div class="shead"><h2>Who can see the budget</h2><span class="note">Everyone else gets claims only</span></div>
         <div class="panel">
-          <p class="lede">By default a member sees only their own claims. Add an address here and that person also gets the Budget screen with the category totals. The committee always has it.</p>
+          <p class="lede">A member sees only their own claims. Add an address here and they get the Budget screen too. The committee always has it.</p>
           <div class="bubbles" id="viewerList"></div>
           <div class="addrow">
             <label class="f"><span class="l">Add someone</span>
@@ -1335,7 +1330,7 @@ ul.notes li:last-child{margin-bottom:0}
    ============================================================ */
 
 /* PASTE YOUR TREASURY WEB APP URL HERE. Deploy, Manage deployments, ends in /exec. */
-const API_URL = "https://script.google.com/macros/s/AKfycbwg7nIoY0G_-VlhUIPKfcV1ELn-_O2JHEVEGnDr0rQ5cyfenSeE5LKvl1CInMxdR2hk/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwdg9OZnkt_8Iu60X7qU2VOYJUxR9-xieVmYKPejXuWB1m5lpQzqp6VPXDSLXJMtMo7/exec";
 
 /* The crest, once. It used to appear three times in this file, which made the
    page a third of a megabyte before a single figure had loaded. */
@@ -1722,7 +1717,14 @@ const $=id=>{ const c=EL_[id]; if(c&&c.isConnected)return c; const e=document.ge
 const gbp=new Intl.NumberFormat("en-GB",{style:"currency",currency:"GBP",minimumFractionDigits:2});
 const gbp0=new Intl.NumberFormat("en-GB",{style:"currency",currency:"GBP",maximumFractionDigits:0});
 const ESC_={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"};
-const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>ESC_[c]);
+const ESC_RE=/[&<>"']/g;
+/* Called a few thousand times per draw, so it skips the replace entirely for the
+   great majority of strings that contain none of these characters. */
+const esc=s=>{
+  const t=s==null?"":String(s);
+  ESC_RE.lastIndex=0;
+  return ESC_RE.test(t)?t.replace(ESC_RE,c=>ESC_[c]):t;
+};
 const today=()=>new Date().toISOString().slice(0,10);
 const fmtDate=d=>{if(!d)return"";const p=new Date(String(d).slice(0,10)+"T00:00:00");
   return isNaN(p)?String(d):p.toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})};
@@ -2182,6 +2184,7 @@ const profileReady=()=>S&&S.me.name&&S.me.position&&S.me.bank&&S.me.bank.sort&&S
 
 async function refresh(loud){
   const y=window.scrollY;
+  if(askResolve&&!loud)return;      // a question is on screen; do not redraw under it
   if(loud)note("Pulling the latest figures\u2026");
   try{
     S=await api("state");
@@ -2307,11 +2310,20 @@ function setView(v,quiet){
   if(y>0)window.scrollTo(0,y);
   else window.scrollTo({top:0,behavior:REDUCED?"auto":"smooth"});
 }
+/* Drawing is deferred to the next frame and collapsed, so a burst of changes,
+   a refresh landing while somebody is typing, or two renderers asked for at once
+   all cost a single pass rather than several. */
+let drawPending=false;
 function render(){
-  if(!S)return;
-  renderBadge();paintMail();     // always, because both sit outside the views
-  const fn=RENDERERS[view];
-  if(fn)fn();
+  if(!S||drawPending)return;
+  drawPending=true;
+  requestAnimationFrame(()=>{
+    drawPending=false;
+    if(!S)return;
+    renderBadge();paintMail();   // always, because both sit outside the views
+    const fn=RENDERERS[view];
+    if(fn)fn();
+  });
 }
 const fig=(k,v,cls,sub,neg)=>'<div class="fig '+(cls||"")+'"><span class="k">'+k+'</span><span class="v'+
   (neg?" neg":"")+'">'+v+'</span>'+(sub?'<span class="s">'+sub+'</span>':'')+'</div>';
@@ -2840,8 +2852,8 @@ function renderBadge(){
     p.hidden=!(canApprove()&&n);p.textContent=n}
 }
 /* Typing no longer redraws the list on every keystroke. */
-const reApprovals=debounce(renderApprovals,160);
-const rePayments=debounce(renderPayments,160);
+const reApprovals=debounce(renderApprovals,220);
+const rePayments=debounce(renderPayments,220);
 ["qSearch","qStatus"].forEach(i=>$(i).addEventListener("input",reApprovals));
 ["pqSearch","pqStatus"].forEach(i=>$(i).addEventListener("input",rePayments));
 
@@ -3005,10 +3017,24 @@ async function openFile(id,which){
 function renderPeople(){
   if(!isAdmin())return;
   const by={};
+  /* Start from the roster rather than the claims, so somebody who has signed in
+     and filled in their bank details but never claimed is still here to be found,
+     and so their details are the current ones rather than whatever was attached
+     to a claim months ago. */
+  (S.people||[]).forEach(p=>{
+    const k=String(p.email||"").toLowerCase();
+    if(!k)return;
+    by[k]={name:p.name||k,position:p.position,email:k,bank:p.bank||null,role:p.role,
+           paid:0,owed:0,held:0,pend:0,n:0,lines:{}};
+  });
   S.claims.forEach(c=>{
-    const k=c.email||c.who;
-    if(!by[k])by[k]={name:c.who,position:c.position,email:c.email,paid:0,owed:0,held:0,pend:0,n:0,lines:{}};
+    const k=String(c.email||c.who||"").toLowerCase();
+    if(!by[k])by[k]={name:c.who,position:c.position,email:c.email,bank:c.bank||null,
+                     paid:0,owed:0,held:0,pend:0,n:0,lines:{}};
     const p=by[k];p.n++;
+    if(!p.name)p.name=c.who;
+    if(!p.position)p.position=c.position;
+    if(!p.bank&&c.bank)p.bank=c.bank;
     if(c.status==="paid")p.paid+=c.amount;
     else if(c.status==="approved")p.owed+=c.amount;
     else if(c.status==="allocated")p.held+=c.amount;
@@ -3019,34 +3045,65 @@ function renderPeople(){
     }
   });
   const q=$("pSearch").value.trim().toLowerCase(),sort=$("pSort").value;
-  let list=Object.keys(by).map(k=>by[k])
-    .filter(p=>!q||(p.name+" "+(p.email||"")).toLowerCase().indexOf(q)>=0);
+  let list=Object.keys(by).map(k=>by[k]).filter(p=>p.email||p.name)
+    .filter(p=>!q||(p.name+" "+(p.email||"")+" "+(p.position||"")).toLowerCase().indexOf(q)>=0);
   list.sort(sort==="name"?(a,b)=>String(a.name).localeCompare(String(b.name))
     :sort==="open"?(a,b)=>(b.owed+b.held+b.pend)-(a.owed+a.held+a.pend)
     :(a,b)=>b.paid-a.paid);
-  $("peopleNote").textContent=list.length+(list.length===1?" person":" people")+" have claimed this year";
+  const blkN=Object.keys(S.blocked||{}).length;
+  $("peopleNote").textContent=list.length+(list.length===1?" person":" people")+
+    (blkN?", "+blkN+" blocked":"");
   const peak=Math.max.apply(null,list.map(p=>p.paid+p.owed).concat([1]));
   $("peopleTbl").innerHTML=
     '<div class="th"><span>Person</span><span>Claims</span><span>Paid</span><span>Owed</span>'+
       '<span>In progress</span><span></span></div>'+
     (list.length?list.map(p=>{
-      const open=!!expanded[p.email||p.name];
+      const key=p.email||p.name;
+      const open=!!expanded[key];
       const cats=Object.keys(p.lines).sort((a,b)=>p.lines[b]-p.lines[a]);
-      return '<div class="tr"><div class="who"><span class="avatar">'+esc(initials(p.name))+'</span>'+
-        '<span class="m"><b>'+esc(p.name)+'</b><span>'+esc(p.position||p.email||"")+'</span></span></div>'+
+      const blk=(S.blocked||{})[String(p.email||"").toLowerCase()];
+      const b=p.bank||{};
+      return '<div class="tr"><div class="who"><span class="avatar'+(blk?" off":"")+'">'+
+        esc(initials(p.name))+'</span>'+
+        '<span class="m"><b>'+esc(p.name)+
+          (blk?' <span class="chip rejected">Blocked</span>':'')+
+          (p.role&&p.role!=="member"?' <span class="chip approved">'+esc(roleLabel(p.role))+'</span>':'')+
+        '</b><span>'+esc([p.position,p.email].filter(Boolean).join(" \u00b7 "))+'</span></span></div>'+
         '<div class="n dim" data-l="Claims">'+p.n+'</div>'+
         '<div class="n" data-l="Paid">'+gbp.format(p.paid)+'</div>'+
         '<div class="n'+(p.owed?"":" dim")+'" data-l="Owed">'+gbp.format(p.owed)+'</div>'+
         '<div class="n dim" data-l="In progress">'+gbp.format(p.held+p.pend)+'</div>'+
-        '<div class="n"><button class="btn ghost small" data-person="'+esc(p.email||p.name)+'">'+
+        '<div class="n"><button class="btn ghost small" data-person="'+esc(key)+'">'+
           (open?"Hide":"Detail")+'</button></div></div>'+
-        (open?'<div class="expand">'+(cats.length?cats.map(c=>{
-          const v=p.lines[c],pc=Math.round(v/(p.paid+p.owed||1)*100);
-          return '<div class="pbar"><div class="lb"><div class="t"><i style="background:'+CAT(c).c+'"></i>'+
-            esc(c)+'</div><div class="track2"><i style="width:'+(v/peak*100)+
-            '%;background:'+CAT(c).c+'"></i></div></div>'+
-            '<div class="n">'+gbp.format(v)+'<br><span style="font-size:10px;color:var(--ink-soft)">'+pc+'%</span></div></div>'
-        }).join(""):'<p class="hintline" style="margin:0">Nothing paid or approved yet.</p>')+'</div>':'')
+        (open?'<div class="expand">'+
+          '<dl class="kv" style="margin-bottom:14px">'+
+            '<dt>Email</dt><dd>'+(p.email?'<a href="mailto:'+esc(p.email)+'" style="color:var(--red-deep)">'+
+              esc(p.email)+'</a>':'not known')+'</dd>'+
+            (p.position?'<dt>Position</dt><dd>'+esc(p.position)+'</dd>':'')+
+            (canApprove()
+              ? (b.acct
+                  ? '<dt>Account name</dt><dd><b>'+esc(b.name||p.name)+'</b></dd>'+
+                    '<dt>Sort code</dt><dd><b>'+esc(b.sort||"")+'</b></dd>'+
+                    '<dt>Account no.</dt><dd><b>'+esc(b.acct)+'</b></dd>'+
+                    (b.bank?'<dt>Bank</dt><dd>'+esc(b.bank)+'</dd>':'')+
+                    (b.ref?'<dt>Reference</dt><dd>'+esc(b.ref)+'</dd>':'')
+                  : '<dt>Bank details</dt><dd>not filled in yet</dd>')
+              : '<dt>Bank details</dt><dd>only the President and Treasurer see these</dd>')+
+          '</dl>'+
+          (blk?'<p class="hintline" style="margin:0 0 12px"><b>Blocked from claiming'+
+            (blk.by?" by "+esc(blk.by):"")+'.</b>'+(blk.reason?" "+esc(blk.reason):"")+'</p>':'')+
+          (p.email?'<div class="rowacts" style="margin-top:0">'+
+            (blk?'<button class="btn small" data-unblock="'+esc(p.email)+'">Let them claim again</button>'
+                :'<button class="btn danger small" data-block="'+esc(p.email)+'">Stop them claiming</button>')+
+          '</div>':'')+
+          (cats.length?'<div style="margin-top:16px">'+cats.map(c=>{
+            const v=p.lines[c],pc=Math.round(v/(p.paid+p.owed||1)*100);
+            return '<div class="pbar"><div class="lb"><div class="t"><i style="background:'+CAT(c).c+'"></i>'+
+              esc(c)+'</div><div class="track2"><i style="width:'+(v/peak*100)+
+              '%;background:'+CAT(c).c+'"></i></div></div>'+
+              '<div class="n">'+gbp.format(v)+'<br><span style="font-size:10px;color:var(--ink-soft)">'+pc+'%</span></div></div>'
+          }).join("")+'</div>':'')+
+        '</div>':'')
     }).join("")
     :'<div class="tr"><div class="who"><span class="m"><b>Nobody yet</b><span>Claims appear here as they come in.</span></span></div></div>');
 }
@@ -3056,7 +3113,28 @@ document.addEventListener("click",e=>{
   expanded[b.dataset.person]=!expanded[b.dataset.person];
   renderPeople();
 });
-const rePeople=debounce(renderPeople,160);
+/* Stopping one person claiming, rather than closing the form for everybody. Any
+   of the three committee roles can do it, because it is usually a conversation
+   rather than a sanction. Nothing already submitted is affected. */
+document.addEventListener("click",async e=>{
+  const t=e.target.closest("button[data-block],button[data-unblock]");
+  if(!t)return;
+  const on=t.dataset.block!==undefined;
+  const who=on?t.dataset.block:t.dataset.unblock;
+  if(on){
+    const reason=await ask({title:"Stop this person claiming?",
+      body:esc(who)+" keeps everything already submitted and can still follow it. They just "+
+        "cannot start a new claim until you undo this.",
+      field:"Reason, shown to them",placeholder:"Optional, but it saves a conversation",
+      yes:"Stop them claiming",no:"Cancel",danger:true});
+    if(reason===false)return;
+    await act(()=>api("setBlocked",{email:who,on:true,reason:String(reason||"")}),
+      "They can no longer submit claims",t,"Saving");
+  }else{
+    await act(()=>api("setBlocked",{email:who,on:false}),"They can claim again",t,"Saving");
+  }
+});
+const rePeople=debounce(renderPeople,220);
 ["pSearch","pSort"].forEach(i=>$(i).addEventListener("input",rePeople));
 $("cFilter").addEventListener("change",()=>renderCosts());
 </script>
