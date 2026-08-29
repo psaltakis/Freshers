@@ -1405,7 +1405,7 @@ ul.notes li:last-child{margin-bottom:0}
    ============================================================ */
 
 /* PASTE YOUR TREASURY WEB APP URL HERE. Deploy, Manage deployments, ends in /exec. */
-const API_URL = "https://script.google.com/macros/s/AKfycby625VCdAttC7OqbMGQx4-1fhPQNrh0Ys6FR1EIDjAT--SyeBKEaMFJNavkBNd1Kko3/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxpFC_gQO7P9R4G5MpBFgw0h1z7WzqY8S_ASiilA28_a7-gbhSk80ziqeVCuT_eAS77/exec";
 
 /* The crest, once. It used to appear three times in this file, which made the
    page a third of a megabyte before a single figure had loaded. */
@@ -2817,12 +2817,9 @@ function paintBig(){
   if(!big)return;
   const alloc=claimKind==="allocation";
   w.innerHTML="<b>Over "+esc(gbp0.format(collegeLimit()))+", so the college has to approve it.</b> "+
-    (alloc
-      ? "The President agrees it first, then the Treasurer puts it to the Bursar. No money is set "+
-        "aside until the Bursar says yes."
-      : "The Treasurer agrees it first, then puts it to the Bursar. Nothing is approved and nothing "+
-        "is paid until the Bursar says yes.")+
-    " It usually takes a few days.";
+    "The President agrees to it first, then the Treasurer puts it to the Bursar. "+
+    (alloc?"No money is set aside":"Nothing is approved and nothing is paid")+
+    " until the Bursar says yes. It usually takes a few days.";
 }
 $("iAmt").addEventListener("input",paintBig);
 $("bSubmit").addEventListener("click",async()=>{
@@ -2843,7 +2840,7 @@ $("bSubmit").addEventListener("click",async()=>{
     if(!await ask({title:"This needs the college's approval",
       body:"<b>"+esc(gbp.format(amt))+" is over the "+esc(gbp0.format(collegeLimit()))+
         " limit,</b> so the MCR cannot approve it on its own. Here is what happens:"+
-        "<br><br>1. "+(alloc?"The <b>President</b> agrees to the spend.":"The <b>Treasurer</b> agrees to the claim.")+
+        "<br><br>1. The <b>President</b> agrees to the spend."+
         "<br>2. The <b>Treasurer</b> puts it to the college <b>Bursar</b>."+
         "<br>3. Only once the Bursar has agreed is it "+(alloc?"set aside":"approved and paid")+"."+
         "<br><br>Until step 3 it is <b>not approved</b>, and "+
@@ -2964,7 +2961,7 @@ function trackHtml(c){
      look like nothing happening. */
   const steps=c.needsCollege
     ? (alloc?["Requested","President agreed","College agreed","Money set aside","Receipt in","Paid"]
-            :["Claimed","Treasurer agreed","College agreed","With the Treasurer","Paid"])
+            :["Claimed","President agreed","College agreed","With the Treasurer","Paid"])
     : (alloc?["Requested","Money set aside","Receipt in","Paid"]
             :["Claimed with receipt","Approved","Report filed","Paid"]);
   const idx=c.needsCollege
@@ -2982,7 +2979,15 @@ function claimCard(c,mode){
     const rem=line?line.budget-line.spent-line.alloc-line.pend:0;
     const route='<div class="reroute"><label><span>Budget line</span>'+
       '<select data-route="'+c.id+'">'+lineOptionsHtml(c.lineId)+'</select></label></div>';
-    if(c.status==="submitted"){
+    if(c.status==="submitted"&&c.needsCollege&&!isPresident()){
+      /* Over the limit the first word is the President's, so nobody else is
+         offered a button that would only be refused. */
+      acts=openBtn(c,"receipt","ghost")+
+        '<button class="btn danger small" data-reject="'+c.id+'">Reject</button>';
+      extra='<div class="box warn"><h4>Waiting on the President</h4><p>This is over '+
+        gbp0.format(collegeLimit())+', so the President agrees to it first and then it goes to '+
+        'the college through you. There is nothing to do here until they have.</p></div>';
+    }else if(c.status==="submitted"){
       acts=(c.receipt?openBtn(c,"receipt","ghost")+
         '<button class="btn small" data-approve="'+c.id+'">Approve and file report</button>'
         :'<button class="btn small" data-approve="'+c.id+'">Set aside '+gbp.format(c.amount)+'</button>'+
@@ -3000,7 +3005,7 @@ function claimCard(c,mode){
       extra='<div class="box warn"><h4>Not approved. With the college.</h4>'+
         '<p>This is over '+gbp0.format(collegeLimit())+', so the Bursar has to agree to it before '+
         'the MCR may '+(c.kind==="allocation"?"set the money aside":"pay it")+'. '+
-        esc(actor(c.committeeBy)||"The committee")+' agreed to it'+
+        esc(actor(c.committeeBy)||"The President")+' agreed to it'+
         (c.committeeAt?" on "+esc(stamp(c.committeeAt)):"")+
         ', and the Treasurer has been sent what to put to the Bursar.</p>'+
         '<p>When the Bursar answers, record it here. Nothing else in the app can move this on, '+
@@ -3030,7 +3035,7 @@ function claimCard(c,mode){
       acts='<button class="btn danger small" data-cancel="'+c.id+'">Cancel this claim</button>';
       extra='<div class="box warn"><h4>Not approved yet</h4><p>This is over '+
         gbp0.format(collegeLimit())+', so the college has to approve it as well as the MCR. '+
-        esc(actor(c.committeeBy)||"The committee")+' has agreed to it and the Treasurer has put it '+
+        esc(actor(c.committeeBy)||"The President")+' has agreed to it and the Treasurer has put it '+
         'to the Bursar. Nothing is needed from you, and it usually takes a few days.</p>'+
         '<p><b>No money has been set aside and nothing will be paid until the Bursar agrees.</b></p></div>';
     }
@@ -3203,8 +3208,8 @@ document.addEventListener("click",async e=>{
         body:"<b>"+esc(gbp.format(c.amount))+" is over the "+esc(gbp0.format(collegeLimit()))+
           " limit,</b> so agreeing to it here does <b>not</b> approve it and does <b>not</b> "+
           (alloc?"set any money aside":"authorise any payment")+".<br><br>"+
-          "It records that the MCR is content, and sends the Treasurer what to put to the "+
-          "<b>Bursar</b>. Only when you come back and record the Bursar\u2019s answer does it "+
+          "It records that the President is content, and sends the Treasurer what to put to "+
+          "the <b>Bursar</b>. Only when the Bursar\u2019s answer is recorded does it "+
           (alloc?"become money set aside":"become payable")+".",
         yes:"Agree and send to the college"}))return;
       await act(()=>api("decide",{id:d.approve,decision:"approve"}),
