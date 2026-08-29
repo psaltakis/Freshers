@@ -1,6 +1,19 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#A9111A">
+<style>
+/* The first rule in the file, so the very first frame the browser paints already
+   has something turning on it. #boot draws the same ring in the same place the
+   moment its tag is parsed, and the crest lands inside it; all three sit at the
+   centre, so the handovers are invisible and there is no bare red rectangle. */
+html,body{margin:0;padding:0;background:#8E0F14}
+html::before{content:"";position:fixed;left:50%;top:50%;width:132px;height:132px;
+  margin:-66px 0 0 -66px;border-radius:50%;box-sizing:border-box;pointer-events:none;z-index:79;
+  border:2.5px solid rgba(255,255,255,.16);border-top-color:#E2A93C;
+  animation:preboot 1.5s linear infinite}
+html:has(#boot)::before,html.booted::before{content:none}
+@keyframes preboot{to{transform:rotate(360deg)}}
+</style>
 <title>Jesus College MCR Treasury 2026/27</title>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -15,7 +28,7 @@
 :root{
   --red:#B4141B; --red-deep:#89090F; --red-mid:#C8262C;
   --cream:#FCF3F1; --cream-2:#F3E0DC; --cream-3:#E4C6C1;
-  --gold:#E2A93C; --ink:#26090B; --ink-2:#4A2523; --ink-soft:#8A5F5C;
+  --gold:#E2A93C; --gold-2:#F2C76B; --ink:#26090B; --ink-2:#4A2523; --ink-soft:#8A5F5C;
   --ok:#2C6B4F; --line:rgba(255,255,255,.22);
   --display:'Bitter',Georgia,serif;
   --body:'Source Sans 3','Helvetica Neue',Arial,sans-serif;
@@ -354,6 +367,58 @@ a.btn{display:inline-block;line-height:1.15}
 @keyframes sp{to{transform:rotate(360deg)}}
 @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
+/* ---------- the boot screen ---------- */
+#boot{position:fixed;inset:0;z-index:80;display:grid;place-items:center;
+  background:radial-gradient(1000px 560px at 50% -8%,rgba(255,255,255,.12),transparent 62%),
+    linear-gradient(178deg,#B4141B,#7E0A10)}
+/* The browser paints the opening tag before it has parsed the children inside it,
+   which left about a tenth of a second of bare gradient. This ring is drawn by the
+   tag itself, and steps aside the moment the real mark exists. */
+#boot::before{content:"";position:absolute;left:50%;top:50%;width:132px;height:132px;
+  margin:-66px 0 0 -66px;border-radius:50%;box-sizing:border-box;
+  border:2.5px solid rgba(255,255,255,.16);border-top-color:var(--gold);
+  animation:preboot 1.5s linear infinite}
+#boot:has(.mark)::before{content:none}
+#boot .in{width:min(320px,calc(100vw - 44px));text-align:center}
+#boot .mark{position:relative;width:132px;height:132px;margin:0 auto;display:grid;place-items:center}
+#boot .mark svg{position:absolute;inset:0;width:132px;height:132px;transform:rotate(-90deg)}
+#boot .mark circle{fill:none;stroke-width:2.5}
+#boot .mark .t{stroke:rgba(255,255,255,.16)}
+#boot .mark .p{stroke:var(--gold);stroke-dasharray:346;stroke-dashoffset:250;
+  transform-origin:50% 50%;animation:ring2 1.5s linear infinite}
+#boot .mark img{position:relative;height:76px;width:auto;display:block;
+  filter:drop-shadow(0 4px 12px rgba(0,0,0,.35));animation:bootBreath 2.8s ease-in-out .4s infinite}
+#boot .wm{display:block;margin:15px 0 0;font-family:var(--display);font-weight:700;font-size:19px;
+  letter-spacing:-.02em;line-height:1.15;color:#FBF3EC}
+#boot .wm i{font-weight:300;font-style:italic;color:var(--gold-2)}
+#boot .bar{display:block;width:100%;max-width:236px;height:6px;margin:18px auto 0;padding:0;border:0;
+  border-radius:999px;background:rgba(255,255,255,.16);overflow:hidden;
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.25)}
+/* Indeterminate until the script has something true to say, so the very first
+   frame is already moving. bootProgress() adds .go and it becomes a real bar. */
+#boot .bar i{display:block;height:100%;width:34%;border-radius:999px;
+  background:linear-gradient(90deg,var(--gold),var(--gold-2));
+  box-shadow:0 0 12px -2px rgba(226,169,60,.8);animation:slide 1.15s ease-in-out infinite}
+#boot .bar.go i{position:relative;overflow:hidden;width:0%;animation:none;
+  transition:width .45s cubic-bezier(.2,.8,.3,1)}
+#boot .bar.go i::after{content:"";position:absolute;inset:0;border-radius:999px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
+  transform:translateX(-100%);animation:shim 1.4s infinite}
+#boot p{margin:14px 0 0;min-height:16px;font-family:var(--mono);font-size:10.5px;
+  letter-spacing:.16em;text-transform:uppercase;color:rgba(251,243,236,.72);transition:opacity .25s}
+#boot p.swap{opacity:0}
+#boot .pct{display:block;min-height:14px;margin-top:5px;font-family:var(--mono);font-size:11px;
+  letter-spacing:.1em;color:var(--gold);font-variant-numeric:tabular-nums}
+#boot.out{animation:softOut .42s cubic-bezier(.4,0,.2,1) both}
+@keyframes slide{0%{transform:translateX(-110%)}100%{transform:translateX(320%)}}
+@keyframes ring2{to{transform:rotate(360deg)}}
+@keyframes bootBreath{0%,100%{transform:none}50%{transform:scale(1.045)}}
+@keyframes shim{100%{transform:translateX(100%)}}
+@keyframes softOut{to{opacity:0}}
+/* switching tabs settles rather than snapping */
+section[id^="v-"]:not([hidden]){animation:viewIn .22s cubic-bezier(.2,.8,.3,1) both}
+@keyframes viewIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
 #welcome{position:fixed;inset:0;z-index:120;display:grid;place-items:center;text-align:center;padding:30px;
   background:radial-gradient(1200px 640px at 50% -10%,rgba(255,255,255,.12),transparent 66%),
     linear-gradient(178deg,#B4141B 0%,#9C0F16 62%,#870C12 100%);
@@ -579,6 +644,24 @@ ul.notes li:last-child{margin-bottom:0}
 }
 </style>
 
+<!-- The first thing anybody sees. Everything above this point is stylesheet, so
+     the moment this tag is parsed the browser has a complete screen to draw. -->
+<div id="boot">
+  <div class="in">
+    <div class="mark">
+      <svg viewBox="0 0 120 120" aria-hidden="true">
+        <circle class="t" cx="60" cy="60" r="55"/><circle class="p" cx="60" cy="60" r="55"/>
+      </svg>
+      <img class="crest" alt="Jesus College MCR">
+    </div>
+    <b class="wm">MCR Treasury <i>2026/27</i></b>
+    <div class="bar"><i id="bootBar"></i></div>
+    <p id="bootNote">Opening the ledger</p><span class="pct" id="bootPct"></span>
+    <noscript><p style="margin-top:14px;text-transform:none;letter-spacing:0;font-size:13px">
+      This app needs JavaScript.</p></noscript>
+  </div>
+</div>
+
 <div id="welcome" hidden>
   <div>
     <img class="crest" alt="">
@@ -627,7 +710,7 @@ ul.notes li:last-child{margin-bottom:0}
   <div id="app" hidden>
     <nav class="nav" id="nav">
       <button data-view="overview" data-budget aria-current="true">Budget</button>
-      <button data-view="mine" data-member>My claims</button>
+      <button data-view="mine">My claims</button>
       <button data-view="people" data-admin>People</button>
       <button data-view="planned" data-admin>Planned costs</button>
       <button data-view="approvals" data-approver>Approvals <span class="badge" id="badge" hidden>0</span></button>
@@ -763,6 +846,9 @@ ul.notes li:last-child{margin-bottom:0}
       </div>
 
       <div class="shead"><h2>Your claims</h2></div>
+      <div class="panel" id="ownWarn" hidden style="padding:14px 18px;margin-bottom:14px">
+        <p class="lede" style="margin:0;font-size:15px" id="ownWarnText"></p>
+      </div>
       <div id="mineList"></div>
     </section>
 
@@ -1035,7 +1121,7 @@ ul.notes li:last-child{margin-bottom:0}
    ============================================================ */
 
 /* PASTE YOUR TREASURY WEB APP URL HERE. Deploy, Manage deployments, ends in /exec. */
-const API_URL = "https://script.google.com/macros/s/AKfycbwEp_-tvEMOt74OHqz-29J3qXpRuTtYUX53JjlAqC1WODCBaaehEaglJ_y01duF5r3G/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxRTDNG4AgSg8ZaqdlwZ4TQ3EJZQCHGG5zVrt09pZ5oWqRoDGmlBKoYjWSgVk2COsJV/exec";
 
 /* The crest, once. It used to appear three times in this file, which made the
    page a third of a megabyte before a single figure had loaded. */
@@ -1554,6 +1640,78 @@ function toast(m){const e=$("toast");e.textContent=m;e.classList.add("show");
 const note=m=>{const n=$("syncNote"); if(n)n.textContent=m};
 function fail(e){toast(e&&e.message?e.message:String(e))}
 
+/* ---------------- the boot screen ----------------
+   It used to be a still picture with a bar sliding under it, which says nothing
+   about whether anything is happening. The bar now moves with the work: each
+   step pushes it on, and it creeps between them so it is never frozen while
+   Apps Script is waking up. */
+const BOOT_LINES=["Opening the ledger","Checking the books","Counting what is left","Reconciling the bank"];
+const SLOW_LINE="Still waiting for the server";
+let BOOT=null,bootWatch=null;
+function bootProgress(){
+  const bar=$("bootBar"),pct=$("bootPct"),note=$("bootNote");
+  if(!bar)return {to(){},slow(){},done(){}};
+  if(bar.parentElement)bar.parentElement.classList.add("go");
+  let at=4,aim=24,i=0,held=false;
+  const paint=()=>{bar.style.width=at.toFixed(1)+"%";if(pct)pct.textContent=Math.round(at)+"%"};
+  const say=text=>{
+    if(!note)return;
+    note.classList.add("swap");
+    setTimeout(()=>{note.textContent=text;note.classList.remove("swap")},220);
+  };
+  paint();
+  const creep=setInterval(()=>{at+=Math.max(.25,(aim-at)*.1);if(at>aim)at=aim;paint()},90);
+  const talk=setInterval(()=>{if(!held){i=(i+1)%BOOT_LINES.length;say(BOOT_LINES[i])}},1400);
+  return {
+    to(p,text){aim=Math.max(aim,Math.min(99,p));if(text){held=true;say(text)}},
+    slow(){held=true;say(SLOW_LINE)},
+    done(){clearInterval(creep);clearInterval(talk);at=100;paint()}
+  };
+}
+/* Apps Script can be slow to wake, and a screen that has been loading for fifteen
+   seconds with no word looks broken. Say what is happening, and after half a
+   minute stop pretending and offer the retry card instead. */
+function watchBoot(on){
+  if(bootWatch){clearTimeout(bootWatch.a);clearTimeout(bootWatch.b);bootWatch=null}
+  if(!on)return;
+  bootWatch={
+    a:setTimeout(()=>{if(BOOT)BOOT.slow()},9000),
+    b:setTimeout(()=>{
+      const b=$("boot");
+      if(b&&!b.dataset.gone){
+        dropBoot();
+        stalled("The server has not answered in half a minute. That is usually Apps Script waking up rather than anything wrong. Try again.");
+      }
+    },30000)
+  };
+}
+function dropBoot(){
+  const b=$("boot");
+  if(!b||b.dataset.gone)return;
+  b.dataset.gone="1";
+  watchBoot(false);
+  if(BOOT){BOOT.done();BOOT=null}
+  b.classList.add("out");
+  setTimeout(()=>{b.hidden=true;document.documentElement.classList.add("booted")},420);
+}
+/* Put it back when something long starts again, rather than leaving somebody on a
+   bare page while the app reconnects. */
+function raiseBoot(note){
+  const b=$("boot");
+  if(!b)return;
+  if(BOOT)BOOT.done();
+  delete b.dataset.gone;
+  b.classList.remove("out");
+  b.hidden=false;
+  document.documentElement.classList.remove("booted");
+  const bar=$("bootBar");
+  if(bar){bar.style.width="0%";if(bar.parentElement)bar.parentElement.classList.remove("go")}
+  if($("bootPct"))$("bootPct").textContent="";
+  if(note&&$("bootNote"))$("bootNote").textContent=note;
+  BOOT=bootProgress();
+  watchBoot(true);
+}
+
 /* ---------------- sign in ----------------
    Google only, and shared with the Freshers' Fortnight app.
 
@@ -1625,6 +1783,7 @@ async function onGoogle(res){
   }
 }
 function showWelcome(who){
+  dropBoot();
   $("welTitle").textContent=greeting(who);
   $("welSub").textContent=welcomeSub(who);
   $("welNote").textContent="Opening the treasury";
@@ -1663,6 +1822,7 @@ function stalled(why){
 $("bRetry").addEventListener("click",async()=>{
   const b=$("bRetry");b.disabled=true;b.innerHTML='<span class="spin"></span>Trying again';
   $("stalled").hidden=true;
+  raiseBoot("Trying the server again");
   await boot();
   b.disabled=false;b.textContent="Try again";
 });
@@ -1706,30 +1866,41 @@ const lineById=id=>lineIndex()[id]||null;
 const profileReady=()=>S&&S.me.name&&S.me.position&&S.me.bank&&S.me.bank.sort&&S.me.bank.acct;
 
 async function refresh(loud){
+  const y=window.scrollY;
+  if(loud)note("Pulling the latest figures\u2026");
   try{
     S=await api("state");
     LINEMAP_=null;TRENDS_=null;
     note("Updated "+new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"}));
     render();
+    /* Redrawing a list changes its height for a frame, which used to jump the
+       page. Put the scroll back where it was. */
+    if(Math.abs(window.scrollY-y)>2)window.scrollTo(0,y);
     if(loud)toast("Latest figures pulled in");
-  }catch(e){fail(e)}
+  }catch(e){note("Could not reach the server");fail(e)}
 }
 async function boot(fromWelcome){
   token=getToken();
+  if(!BOOT&&!fromWelcome&&!$("boot").dataset.gone){ BOOT=bootProgress(); watchBoot(true); }
   if(!token){
-    $("gate").hidden=false;
-    gateSay("Checking whether you are already signed in\u2026");
+    if(BOOT)BOOT.to(40,"Checking who you are");
     try{
       const p=await api("ping");
+      if(BOOT)BOOT.to(90,"Ready");
+      dropBoot();
+      $("gate").hidden=false;
+      gateSay("Checking whether you are already signed in\u2026");
       bootGoogle(p.signIn||null);
     }
-    catch(e){ gateSay("",e.message); }
+    catch(e){ dropBoot(); $("gate").hidden=false; gateSay("",e.message); }
     return;
   }
+  if(BOOT)BOOT.to(55,"Reading the books");
   try{ S=await api("state"); LINEMAP_=null; TRENDS_=null; }
   catch(e){
     // only a genuine rejection of the session ends it. A slow or missed request
     // must never sign somebody out, or a refresh on poor wifi loses their place.
+    dropBoot();
     if(/sign in|session has expired|no longer has access/i.test(e.message||"")){
       if(fromWelcome)$("welcome").hidden=true;
       signedOut();
@@ -1740,6 +1911,8 @@ async function boot(fromWelcome){
     stalled(e.message);
     return;
   }
+  if(BOOT)BOOT.to(95,"Laying out the year");
+  dropBoot();
   if(fromWelcome){
     $("welTitle").textContent=greeting(S.me);
     $("welSub").textContent=welcomeSub(S.me);
@@ -1753,14 +1926,13 @@ async function boot(fromWelcome){
   $("whoRole").textContent=S.me.name?roleLabel(S.me.role):S.me.email;
   $("chipUser").title=S.me.email;
   document.querySelectorAll("[data-admin]").forEach(el=>el.hidden=!isAdmin());
-  document.querySelectorAll("[data-member]").forEach(el=>el.hidden=isAdmin());
   document.querySelectorAll("[data-budget]").forEach(el=>el.hidden=!S.canSeeBudget);
   document.querySelectorAll("[data-approver]").forEach(el=>el.hidden=!canApprove());
   document.querySelectorAll("[data-costs]").forEach(el=>el.hidden=!canEditCosts());
   document.querySelectorAll("[data-treasurer]").forEach(el=>el.hidden=!canEditBank());
   document.querySelectorAll("[data-president]").forEach(el=>el.hidden=!isPresident());
   const allowed=isAdmin()
-    ?["overview","people","planned","trends","ledger","settings"]
+    ?["overview","mine","people","planned","trends","ledger","settings"]
       .concat(canApprove()?["approvals","payments"]:[])
     :(S.canSeeBudget?["overview","mine"]:["mine"]);
   if(allowed.indexOf(view)<0)view=allowed[0];
@@ -1768,6 +1940,10 @@ async function boot(fromWelcome){
 }
 function welcomeNote(){
   if(isAdmin()){
+    const owedMe=myClaims().filter(c=>c.status==="approved").reduce((s,c)=>s+c.amount,0);
+    const needMe=myClaims().filter(c=>c.status==="allocated").length;
+    if(needMe)return needMe===1?"One of your own claims needs its receipt"
+      :needMe+" of your own claims need receipts";
     const n=S.claims.filter(c=>c.status==="submitted").length;
     const p=S.claims.filter(c=>c.status==="approved").length;
     if(n&&p)return n+" waiting on a decision, "+p+" waiting to be paid";
@@ -1799,13 +1975,21 @@ const RENDERERS={
 };
 $("nav").addEventListener("click",e=>{
   const b=e.target.closest("button[data-view]");if(b)setView(b.dataset.view)});
+/* Coming back to a tab puts you where you left it, rather than at the top of a
+   list you have already scrolled through. A tab you have not opened yet still
+   starts at the top, and does so gently. */
+const SCROLL_={};
 function setView(v,quiet){
+  if(view&&view!==v)SCROLL_[view]=window.scrollY;
   view=v;
   document.querySelectorAll("#nav button").forEach(b=>b.setAttribute("aria-current",String(b.dataset.view===v)));
   ["overview","mine","people","planned","approvals","payments","trends","ledger","settings"].forEach(x=>{
     $("v-"+x).hidden=x!==v});
   render();
-  if(!quiet)window.scrollTo({top:0,behavior:"smooth"});
+  if(quiet)return;
+  const y=SCROLL_[v]||0;
+  if(y>0)window.scrollTo(0,y);
+  else window.scrollTo({top:0,behavior:REDUCED?"auto":"smooth"});
 }
 function render(){
   if(!S)return;
@@ -1935,7 +2119,6 @@ function fillLineSelects(){
   if($("cLine"))$("cLine").innerHTML=html;
 }
 function fillProfile(){
-  if(isAdmin())return;
   const b=S.me.bank||{};
   $("bkName").value=b.name||S.me.name||"";
   $("bkPos").value=S.me.position||"";
@@ -2060,7 +2243,7 @@ $("bSubmit").addEventListener("click",async()=>{
 
 /* ---------------- receipt needed panel ---------------- */
 function renderNeed(){
-  const list=S.claims.filter(c=>c.status==="allocated");
+  const list=myClaims().filter(c=>c.status==="allocated");
   $("needWrap").hidden=list.length===0;
   if(!list.length)return;
   const sel=$("nSel"),keep=sel.value;
@@ -2071,7 +2254,7 @@ function renderNeed(){
   syncNeed();
 }
 function syncNeed(){
-  const c=S.claims.filter(x=>x.id===$("nSel").value)[0];
+  const c=myClaims().filter(x=>x.id===$("nSel").value)[0];
   if(!c)return;
   if(document.activeElement!==$("nAmt"))$("nAmt").value=c.amount;
   if(document.activeElement!==$("nDate"))$("nDate").value=today();
@@ -2081,7 +2264,7 @@ function syncNeed(){
 $("nSel").addEventListener("change",syncNeed);
 $("bSendReceipt").addEventListener("click",async()=>{
   const m=$("nMsg");m.className="msg";
-  const c=S.claims.filter(x=>x.id===$("nSel").value)[0];
+  const c=myClaims().filter(x=>x.id===$("nSel").value)[0];
   if(!c){m.textContent="Pick a claim.";return}
   if(!needReceipt){m.textContent="Attach the receipt first.";return}
   const amt=Number($("nAmt").value);
@@ -2102,10 +2285,16 @@ $("bSendReceipt").addEventListener("click",async()=>{
 });
 
 /* ---------------- my claims ---------------- */
+/* The committee claim like anybody else, and their sign in is their own address,
+   so "mine" is always filtered by it. For a plain member S.claims already holds
+   nothing else, so the filter costs nothing and the rule is the same for all. */
+const myClaims=()=>{
+  const me=String((S&&S.me&&S.me.email)||"").toLowerCase();
+  return (S.claims||[]).filter(c=>String(c.email||"").toLowerCase()===me);
+};
 function renderMine(){
-  if(isAdmin())return;
   renderNeed();
-  const mine=S.claims.slice().sort((a,b)=>b.submittedAt-a.submittedAt);
+  const mine=myClaims().sort((a,b)=>b.submittedAt-a.submittedAt);
   let paid=0,owed=0,pend=0,held=0;
   mine.forEach(c=>{const a=c.amount;
     if(c.status==="paid")paid+=a;else if(c.status==="approved")owed+=a;
@@ -2119,6 +2308,26 @@ function renderMine(){
   const box=$("mineList");
   box.innerHTML=mine.length?mine.map(c=>claimCard(c,"mine")).join("")
     :'<div class="empty"><b>No claims yet</b><span>Submit one above and you can follow it all the way to payment.</span></div>';
+  /* Two different things worth saying, depending on whether there is anybody
+     else who could sign this off. */
+  const warn=$("ownWarn"),txt=$("ownWarnText");
+  if(warn&&txt){
+    if(!canApprove()){ warn.hidden=true; }
+    else if(S.can&&S.can.selfApprove){
+      warn.hidden=false;
+      txt.innerHTML="<b>You are currently the only approver.</b> That means the app will let you "+
+        "sign off your own claim, and it will record it as a self approval and email the Vice "+
+        "President so somebody else has seen it. Once a second approver is appointed this stops "+
+        "being possible, which is the better arrangement.";
+    }else{
+      warn.hidden=false;
+      const who=(S.approvers||[]).join(" or ");
+      txt.innerHTML="<b>You cannot approve your own claim.</b> "+
+        (who?esc(who)+" has to do it from their own sign in. ":"Another approver has to do it. ")+
+        "That is deliberate: no payment to a committee member should be signed off by that "+
+        "member alone.";
+    }
+  }
 }
 
 /* ---------------- claim cards ---------------- */
@@ -2299,11 +2508,19 @@ const rePayments=debounce(renderPayments,160);
 /* ---------------- actions ----------------
    One listener on the document, rather than rebinding several hundred buttons
    every time a list is drawn. */
-async function act(fn,msg){
+async function act(fn,msg,btn,label){
   if(busy)return;busy=true;
+  const old=btn?btn.innerHTML:null;
+  if(btn){btn.disabled=true;btn.innerHTML='<span class="spin"></span>'+(label||"Working")}
   try{await fn();if(msg)toast(msg);await refresh()}
   catch(e){fail(e)}
-  busy=false;
+  finally{
+    busy=false;
+    /* The list is usually redrawn underneath, in which case the button is gone
+       and there is nothing to put back. When the call failed it is still there,
+       and leaving it spinning for ever is the worst of both. */
+    if(btn&&btn.isConnected){btn.disabled=false;btn.innerHTML=old}
+  }
 }
 document.addEventListener("click",async e=>{
   const t=e.target.closest("button[data-approve],button[data-part],button[data-reject],button[data-pay],"+
@@ -2317,9 +2534,9 @@ document.addEventListener("click",async e=>{
     if(!confirm(c.receipt
       ?"Approve "+gbp.format(c.amount)+" for "+c.who+"?\n\nA payment report will be filed to Drive and emailed to the Treasurer with the receipt attached."
       :"Set aside "+gbp.format(c.amount)+" for "+c.who+"?\n\nThe money is held against the budget line. Nothing reaches the Treasurer until the receipt arrives."))return;
-    t.disabled=true;t.innerHTML='<span class="spin"></span>Working';
     await act(()=>api("decide",{id:d.approve,decision:"approve"}),
-      c.receipt?"Approved, and the Treasurer has been emailed":"Money set aside, the claimant has been asked for the receipt");
+      c.receipt?"Approved, and the Treasurer has been emailed":"Money set aside, the claimant has been asked for the receipt",
+      t,"Filing");
     return;
   }
   if(d.part!==undefined){
@@ -2331,36 +2548,33 @@ document.addEventListener("click",async e=>{
     if(!(amt>0)){toast("That is not an amount.");return}
     if(amt>c.amount){toast("You cannot set aside more than was asked for.");return}
     await act(()=>api("decide",{id:d.part,decision:"approve",amount:amt}),
-      gbp.format(amt)+" set aside, the claimant has been told");
+      gbp.format(amt)+" set aside, the claimant has been told",t,"Saving");
     return;
   }
   if(d.reject!==undefined){
     const c=S.claims.filter(x=>x.id===d.reject)[0];if(!c)return;
     const reason=prompt("Why is this being turned down?\n\nThe claimant is emailed this reason.","");
     if(reason===null)return;
-    await act(()=>api("decide",{id:d.reject,decision:"reject",reason}),"Rejected, and the claimant has been told");
+    await act(()=>api("decide",{id:d.reject,decision:"reject",reason}),
+      "Rejected, and the claimant has been told",t,"Saving");
     return;
   }
   if(d.pay!==undefined){
     const c=S.claims.filter(x=>x.id===d.pay)[0];if(!c)return;
     if(!confirm("Mark "+gbp.format(c.amount)+" to "+c.who+" as paid?\n\nOnly do this once the transfer has actually gone."))return;
-    t.disabled=true;t.innerHTML='<span class="spin"></span>Working';
-    await act(()=>api("markPaid",{id:d.pay}),"Marked paid, and the claimant has been told");
+    await act(()=>api("markPaid",{id:d.pay}),"Marked paid, and the claimant has been told",t,"Saving");
     return;
   }
   if(d.renotify!==undefined){
-    t.disabled=true;t.innerHTML='<span class="spin"></span>Sending';
-    await act(()=>api("renotify",{id:d.renotify}),"The Treasurer has been emailed again");
+    await act(()=>api("renotify",{id:d.renotify}),"The Treasurer has been emailed again",t,"Sending");
     return;
   }
   if(d.chase!==undefined){
-    t.disabled=true;
-    await act(()=>api("chase",{id:d.chase}),"Reminder sent to the claimant");
+    await act(()=>api("chase",{id:d.chase}),"Reminder sent to the claimant",t,"Sending");
     return;
   }
   if(d.remind!==undefined){
-    t.disabled=true;t.innerHTML='<span class="spin"></span>Sending';
-    await act(()=>api("remind",{id:d.remind}),"The Treasurer has been reminded");
+    await act(()=>api("remind",{id:d.remind}),"The Treasurer has been reminded",t,"Sending");
     return;
   }
   if(d.cancel!==undefined){
@@ -2369,7 +2583,7 @@ document.addEventListener("click",async e=>{
       (c.status==="approved"?"It has already gone to the Treasurer, so they will be told not to pay it."
         :"The committee will be told.")+"\n\nYou can reopen and resubmit it later."))return;
     const reason=prompt("Anything the committee should know? Optional.","")||"";
-    await act(()=>api("cancelClaim",{id:d.cancel,reason}),"Cancelled");
+    await act(()=>api("cancelClaim",{id:d.cancel,reason}),"Cancelled",t,"Cancelling");
     return;
   }
   if(d.edit!==undefined){
@@ -2402,7 +2616,9 @@ document.addEventListener("change",async e=>{
   if(!c||c.lineId===s.value)return;
   const to=lineById(s.value);
   if(!confirm("Move this claim to "+(to?to.cat+" \u2014 "+to.name:"that line")+"?")){render();return}
+  s.disabled=true;
   await act(()=>api("reroute",{id,lineId:s.value}),"Moved to another budget line");
+  if(s.isConnected)s.disabled=false;
 });
 async function openFile(id,which){
   toast("Opening\u2026");
@@ -2522,11 +2738,11 @@ document.addEventListener("click",async e=>{
   const t=e.target.closest("button[data-inc-got],button[data-inc-back],button[data-inc-del]");
   if(!t)return;
   const d=t.dataset;
-  if(d.incGot!==undefined)return act(()=>api("incomeStatus",{id:d.incGot,status:"received"}),"Marked as received");
-  if(d.incBack!==undefined)return act(()=>api("incomeStatus",{id:d.incBack,status:"expected"}),"Moved back to expected");
+  if(d.incGot!==undefined)return act(()=>api("incomeStatus",{id:d.incGot,status:"received"}),"Marked as received",t,"Saving");
+  if(d.incBack!==undefined)return act(()=>api("incomeStatus",{id:d.incBack,status:"expected"}),"Moved back to expected",t,"Saving");
   if(d.incDel!==undefined){
     if(!confirm("Delete this payment record?"))return;
-    return act(()=>api("deleteIncome",{id:d.incDel}),"Deleted");
+    return act(()=>api("deleteIncome",{id:d.incDel}),"Deleted",t,"Deleting");
   }
 });
 
@@ -2590,15 +2806,15 @@ document.addEventListener("click",async e=>{
   const t=e.target.closest("button[data-cost-paid],button[data-cost-back],button[data-cost-del],button[data-cost-series]");
   if(!t)return;
   const d=t.dataset;
-  if(d.costPaid!==undefined)return act(()=>api("costStatus",{id:d.costPaid,status:"paid"}),"Marked as paid");
-  if(d.costBack!==undefined)return act(()=>api("costStatus",{id:d.costBack,status:"planned"}),"Moved back to scheduled");
+  if(d.costPaid!==undefined)return act(()=>api("costStatus",{id:d.costPaid,status:"paid"}),"Marked as paid",t,"Saving");
+  if(d.costBack!==undefined)return act(()=>api("costStatus",{id:d.costBack,status:"planned"}),"Moved back to scheduled",t,"Saving");
   if(d.costDel!==undefined){
     if(!confirm("Delete this cost?"))return;
-    return act(()=>api("deleteCost",{id:d.costDel}),"Deleted");
+    return act(()=>api("deleteCost",{id:d.costDel}),"Deleted",t,"Deleting");
   }
   if(d.costSeries!==undefined){
     if(!confirm("Delete every unpaid instalment in this series?"))return;
-    return act(()=>api("deleteCost",{series:d.costSeries}),"Series deleted");
+    return act(()=>api("deleteCost",{series:d.costSeries}),"Series deleted",t,"Deleting");
   }
 });
 
