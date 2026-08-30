@@ -685,6 +685,17 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .srow.paid .ss{color:var(--sport)}
 .srow.waiting{opacity:.6}
 /* the JCSU list */
+.gauge{background:var(--t1);border-radius:var(--r);padding:var(--pad);margin-bottom:var(--g2)}
+.gauge.low{background:rgba(232,83,92,.16)}
+.gt{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.gt b{font-family:var(--display);font-size:1.7rem;font-weight:600;letter-spacing:-.04em;line-height:1;
+  color:var(--gold-2)}
+.gauge.low .gt b{color:var(--crimson-lite)}
+.gt span{font-size:.86rem;font-weight:700;color:var(--cream-2)}
+.gt i{margin-left:auto;font-style:normal;font-size:.7rem;color:var(--cream-4);font-weight:600}
+.gbar{height:8px;border-radius:8px;background:rgba(0,0,0,.34);overflow:hidden}
+.gbar span{display:block;height:100%;border-radius:8px;background:var(--sport);transition:width .5s var(--ease)}
+.gauge.low .gbar span{background:var(--crimson-lite)}
 .jall{display:flex;align-items:center;gap:10px;width:100%;margin-top:var(--g);background:var(--t3);
   border-radius:var(--r2);padding:12px 14px;color:var(--cream);font-size:.86rem;font-weight:700;
   transition:background .16s}
@@ -1277,7 +1288,7 @@ code{font-family:var(--mono);font-size:0.658rem;background:rgba(0,0,0,.3);paddin
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbyNsHWmDjxfFK-fYKxGoFkKAgW2I1Q3YE-sTsSPtvqUnHW_On--u0smmby-pnZ-obEKYQ/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyAuj8vFz-_D_g_1m9R0OpdDAozxs1BsbS3IbSE2QC8lxsqQoWRTZ-i7oQaFADr-d4jRg/exec";
 
 /* JavaScript is alive, so the ring painted before the page was parsed can go.
    It is a pseudo element on <html>, so nothing else can remove it. */
@@ -3132,6 +3143,21 @@ function deskWeekly(){
 }
 /* Everything about running a swap in one place: what is owed, who owes it,
    who has paid, and whether the app can actually reach any of them. */
+/* The day's allowance, and what is left of it. Google gives a college account
+   1500 a day and a personal one 100, and the app is silent when it runs out,
+   so this is the only place anybody would find out. */
+function mailGauge(m){
+  if (!m || m.quota === undefined || m.quota < 0) return "";
+  const cap = m.cap || 100, left = Math.max(0, m.quota), used = Math.max(0, cap - left);
+  const pct = Math.round(left / cap * 100);
+  const low = pct <= 15;
+  return '<div class="gauge' + (low ? " low" : "") + '">' +
+    '<div class="gt"><b>' + left + "</b><span>of " + cap + " emails left today</span>" +
+    "<i>" + used + " used &middot; resets at midnight Pacific</i></div>" +
+    '<div class="gbar"><span style="width:' + pct + '%"></span></div>' +
+    (low ? '<p class="lede">Close to the limit. A swap going up to forty people is forty messages, ' +
+      "so anything sent after this may quietly not arrive.</p>" : "") + "</div>";
+}
 function renderSwapDesk(){
   if (!isCommittee()) return;
   const all = S.swaps || [], live = all.filter(w => !w.past);
@@ -3152,15 +3178,20 @@ function renderSwapDesk(){
         "so the email asking for money tells people to write to " + esc(t.name || "the Treasurer") +
         " instead of giving them the details. Put the sort code and account number into " +
         "<code>TREASURER</code> at the top of Code.gs.</span></div>" : "") +
-    (mail.quota === 0 || mail.scopeError
+    /* If it cannot send, say so first, say why, and give the way out. */
+    (mail.authNeeded || mail.scopeError || mail.quota === 0
       ? '<div class="warnbox"><b>The app cannot send email</b><span>' +
-        (mail.scopeError ? esc(mail.scopeError)
-          : "Today's sending quota reads zero, which usually means the deployment was never given " +
-            "permission to send.") +
-        " Nothing has been going out: not payment requests, not replies to questions, not room " +
-        "permissions. Run <code>setup()</code> once from the editor, accept the permission it asks " +
-        "for, then deploy a new version.</span>" +
-        '<button class="btn gold sm" data-mailtest>Send me a test email</button></div>' : "") +
+        (mail.authNeeded
+          ? "This deployment has never been given permission to send. Nothing has gone out: not payment " +
+            "requests, not replies to questions, not room permissions."
+          : mail.scopeError ? esc(mail.scopeError)
+          : "Today's allowance is used up. It resets at midnight Pacific time.") +
+        "</span>" +
+        (mail.authNeeded && mail.authUrl
+          ? '<a class="btn gold sm" href="' + esc(mail.authUrl) + '" target="_blank" rel="noopener">' +
+            "Grant permission now</a>" : "") +
+        '<button class="btn ghost sm" data-mailtest>Send me a test email</button>' +
+        '<button class="btn ghost sm" data-mailhelp>What if that does not work</button></div>' : "") +
     '<div class="stats">' + [
       [held.length, "waiting to pay"],
       ["\u00a3" + Math.round(owed), "owed to " + esc(t.name || "the Treasurer")],
@@ -3168,8 +3199,10 @@ function renderSwapDesk(){
       [wait.length, "on waiting lists"],
       [late.length, "overdue"],
       [(mail.sent || 0) + "/" + ((mail.sent || 0) + (mail.failed || 0)), "emails sent"]
-    ].map(x => '<div class="stat' + (String(x[0]) === "0" ? "" : "") + '"><b>' + x[0] + "</b><span>" +
-      x[1] + "</span></div>").join("") + "</div>" +
+    ].map(x => '<div class="stat"><b>' + x[0] + "</b><span>" + x[1] + "</span></div>").join("") + "</div>" +
+    /* How many are left today, drawn, because running out is silent otherwise
+       and a swap going up to forty people is forty of them. */
+    mailGauge(mail) +
 
     (held.length
       ? '<div class="grp"><b>Owes money</b><span class="weeknav"><a class="btn gold sm" href="mailto:' +
@@ -3663,6 +3696,53 @@ function swapCard(w, hold){
 }
 const ordinal = n => n === 1 ? "st" : n === 2 ? "nd" : n === 3 ? "rd" : "th";
 
+/* Written out because the failure is invisible and the fix is four steps in
+   a place most people have never opened. */
+function openMailHelp(){
+  const m = S.mail || {};
+  sheet("Making email work",
+    '<div class="card"><p>Apps Script only asks for a permission when a run in front of it actually ' +
+    "needs one. Sending was added to this app long after it was first authorised, so the question was " +
+    "never asked and every message has been refused since.</p></div>" +
+    (m.stale
+      ? '<div class="warnbox"><b>Google is holding an old permission</b><span>The run was not stopped ' +
+        "to ask you, which means it is still using an authorisation granted before the sending code " +
+        "existed. It will go on using it until that authorisation is taken away. Nothing done inside " +
+        "the editor changes this.</span>" +
+        '<a class="btn gold sm" href="https://myaccount.google.com/permissions" target="_blank" ' +
+        'rel="noopener">Open your Google permissions</a></div>'
+      : "") +
+    '<div class="grp"><b>Five steps, about a minute</b></div>' +
+    '<div class="card">' +
+    ['Go to <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener">' +
+       "myaccount.google.com/permissions</a>, signed in as whoever owns the script.",
+     "Find this project. It will be called The Chimney, or Jesus MCR, or Untitled project. Open it " +
+       "and choose <b>Remove access</b>. This is the step that matters and the one everybody skips.",
+     "Back in the editor, pick <code>authorise</code> from the function list and press Run. This time " +
+       "a permission screen appears and mentions sending email as you. Accept it.",
+     "Deploy, Manage deployments, edit the deployment, <b>New version</b>, Deploy.",
+     "Run <code>authorise</code> once more. The email line should read a number."
+    ].map((x, i) => '<div class="rowline"><div class="t"><b>' + (i + 1) + "</b><span>" + x +
+      "</span></div></div>").join("") + "</div>" +
+    '<div class="card"><p class="lede">If step three still does not ask: Project Settings, tick ' +
+    "<b>Show appsscript.json manifest file in editor</b>, and check <code>oauthScopes</code> contains " +
+    "<code>script.send_mail</code>. Where a manifest lists scopes, that list is the whole truth, and " +
+    "anything missing from it is never requested however much the code needs it.</p></div>" +
+    (m.authUrl ? '<div class="grp"><b>Or grant it straight from here</b></div>' +
+      '<div class="card"><p class="lede">Apps Script will hand out a link for exactly this. It opens ' +
+      "the same permission screen.</p>" +
+      '<div class="acts"><a class="btn gold" href="' + esc(m.authUrl) + '" target="_blank" ' +
+      'rel="noopener">Open the permission screen</a></div></div>' : "") +
+    '<div class="grp"><b>What it says now</b></div><div class="card">' +
+    '<div class="rowline"><div class="t"><b>Permission</b><span>' +
+      esc(m.authStatus || "unknown") + (m.authNeeded ? ", so nothing can be sent" : "") + "</span></div></div>" +
+    '<div class="rowline"><div class="t"><b>Allowance</b><span>' +
+      (m.quota === undefined || m.quota < 0 ? "cannot be read, which itself means no permission"
+        : m.quota + " of " + (m.cap || 100) + " left today") + "</span></div></div>" +
+    (m.scopeError ? '<div class="rowline"><div class="t"><b>Last error</b><span>' +
+      esc(m.scopeError) + "</span></div></div>" : "") + "</div>" +
+    '<div class="acts"><button class="btn gold" data-mailtest>Send me a test email</button></div>');
+}
 function openSwapTake(id){
   const w = (S.swaps || []).filter(x => x.id === id)[0];
   if (!w) return;
@@ -4092,7 +4172,7 @@ document.addEventListener("click", async e => {
     "[data-skip],[data-editser],[data-second],[data-vote],[data-mset],[data-code],[data-checkin]," +
     "[data-delupdate],[data-rosteredit],[data-rosterdel],[data-newidea],[data-back]," +
     "[data-setidea],[data-dropidea],[data-pollvote],[data-pollclose]," +
-    "[data-marketnew],[data-markettake],[data-marketdrop],[data-bumpedit],[data-gk],[data-gift],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-polldrop],[data-motiondrop],[data-desktab],[data-tick2],[data-gp],[data-desk],[data-asktab],[data-thread],[data-mythreads],[data-swaptake],[data-swapdrop],[data-swappaid],[data-swapedit],[data-swapsave],[data-swapcancel],[data-swapdel],[data-swappast],[data-mailtest],[data-jcsu],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
+    "[data-marketnew],[data-markettake],[data-marketdrop],[data-bumpedit],[data-gk],[data-gift],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-polldrop],[data-motiondrop],[data-desktab],[data-tick2],[data-gp],[data-desk],[data-asktab],[data-thread],[data-mythreads],[data-swaptake],[data-swapdrop],[data-swappaid],[data-swapedit],[data-swapsave],[data-swapcancel],[data-swapdel],[data-swappast],[data-mailtest],[data-mailhelp],[data-jcsu],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
   if (!t) return;
   const d = t.dataset;
   try{
@@ -4151,6 +4231,7 @@ document.addEventListener("click", async e => {
     if (t.hasAttribute("data-swapedit")){ swapEdit = d.swapedit || "new"; renderSwaps(); return; }
     if (t.hasAttribute("data-swapcancel")){ swapEdit = ""; renderSwaps(); return; }
     if (d.jcsu !== undefined){ jcsuOpen = d.jcsu === "1"; renderLodge(); return; }
+    if (t.hasAttribute("data-mailhelp")) return openMailHelp();
     if (t.hasAttribute("data-mailtest")){
       spin(t, "Sending");
       try{
