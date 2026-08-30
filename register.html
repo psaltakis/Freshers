@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#48050A">
+<title>The Porter&rsquo;s Book &middot; Jesus College MCR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Manrope:wght@500..800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   The Porter's Book. One page: the register of the Jesus MCR.
+   The same cloth as The Chimney, cut smaller.
+   ============================================================ */
+:root{
+  --crimson:#B4141B; --crimson-2:#8E0F14; --crimson-3:#6B080D; --crimson-4:#48050A;
+  --crimson-lite:#E8535C;
+  --cream:#FDF7F1; --cream-2:#EFE1D2; --cream-3:#D4BAA4; --cream-4:#A78C77;
+  --ink:#2A0F0C; --gold:#EBB753; --gold-2:#FCE7B6; --gold-ink:#3A2700;
+  --t1:rgba(255,255,255,.075); --t2:rgba(255,255,255,.12); --t3:rgba(0,0,0,.24);
+  --edge:rgba(255,255,255,.14);
+  --display:"Fraunces",serif; --body:"Manrope",system-ui,sans-serif; --mono:"JetBrains Mono",monospace;
+  --r:16px; --ease:cubic-bezier(.22,.9,.3,1); --sab:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;margin:0}
+html{font-size:104%}
+@media(min-width:1000px){html{font-size:112%}}
+body{min-height:100dvh;color:var(--cream);font-family:var(--body);font-weight:500;line-height:1.55;
+  background:radial-gradient(120% 90% at 12% -10%,#8E0F14,transparent 60%),
+    radial-gradient(130% 100% at 100% 0%,#5E070C,transparent 55%),
+    linear-gradient(178deg,#6B080D,#48050A 64%,#35040A);
+  background-attachment:fixed;-webkit-font-smoothing:antialiased}
+.wrap{max-width:620px;margin:0 auto;padding:26px 20px calc(48px + var(--sab))}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.card,.gcard{animation:rise .5s var(--ease) both}
+header{display:flex;align-items:center;gap:13px;margin-bottom:22px}
+.arch{width:44px;height:44px;flex:0 0 44px;color:var(--gold)}
+.arch svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+header b{display:block;font-family:var(--display);font-size:1.32rem;font-weight:600;letter-spacing:-.04em;line-height:1.05}
+header b i{font-style:italic;color:var(--gold-2)}
+header small{display:block;font-family:var(--mono);font-size:.6rem;color:var(--cream-4);
+  letter-spacing:.22em;text-transform:uppercase;font-weight:700;margin-bottom:4px}
+header .right{margin-left:auto}
+.card{background:var(--t1);border-radius:var(--r);padding:19px 19px 16px;margin-bottom:14px}
+.card h3{font-family:var(--display);font-size:1.13rem;font-weight:600;letter-spacing:-.035em;margin:0 0 8px}
+.card h3 i{font-style:italic;color:var(--gold-2)}
+p{font-size:.86rem;color:var(--cream-2)}
+p+p{margin-top:8px}
+.lede{font-size:.755rem;color:var(--cream-3);line-height:1.6}
+.mono{font-family:var(--mono);font-size:.78rem;letter-spacing:.01em}
+a{color:var(--gold-2)}
+.btn{appearance:none;border:0;cursor:pointer;font-family:var(--body);font-weight:800;font-size:.83rem;
+  letter-spacing:-.01em;border-radius:999px;padding:12px 20px;color:var(--cream);background:var(--t2);
+  display:inline-flex;align-items:center;gap:8px;transition:transform .14s var(--ease),background .14s}
+.btn:hover{background:rgba(255,255,255,.18)}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.45;cursor:default;transform:none}
+.btn.gold{background:var(--gold);color:var(--gold-ink)}
+.btn.gold:hover{background:#F5C86E}
+.btn.ghost{background:transparent;box-shadow:inset 0 0 0 1px var(--edge)}
+.btn.sm{padding:8px 15px;font-size:.74rem}
+.acts{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.f{display:block;margin-bottom:13px}
+.f span{display:block;font-family:var(--mono);font-size:.63rem;color:var(--cream-4);margin-bottom:6px;
+  letter-spacing:.14em;text-transform:uppercase;font-weight:700}
+.f input,.f select,.f textarea{width:100%;background:rgba(0,0,0,.32);border:1px solid transparent;
+  border-radius:12px;color:var(--cream);font:inherit;font-size:.88rem;padding:11px 13px;outline:0}
+.f input:focus,.f select:focus,.f textarea:focus{border-color:var(--gold);background:rgba(0,0,0,.42)}
+.f textarea{min-height:96px;resize:vertical}
+.f select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--cream-3) 50%),
+  linear-gradient(135deg,var(--cream-3) 50%,transparent 50%);
+  background-position:calc(100% - 20px) 50%,calc(100% - 15px) 50%;background-size:5px 5px;background-repeat:no-repeat}
+.code input{font-family:var(--mono);font-size:1.5rem;letter-spacing:.42em;text-align:center;padding:14px 8px 14px 18px}
+.msg{font-size:.755rem;color:var(--gold-2);min-height:1.2em;margin-top:9px;font-weight:700}
+.steps{display:flex;gap:8px;margin:2px 0 16px}
+.steps i{flex:1;height:4px;border-radius:4px;background:var(--t2);font-style:normal}
+.steps i.on{background:var(--gold)}
+.steps i.done{background:var(--gold);opacity:.45}
+.stamp{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.66rem;
+  letter-spacing:.14em;text-transform:uppercase;font-weight:700;padding:6px 13px;border-radius:999px;background:var(--t2)}
+.stamp.in{background:rgba(79,200,148,.22);color:#B7F0D6}
+.stamp.wait{background:rgba(235,183,83,.2);color:var(--gold-2)}
+.stamp.no{background:rgba(226,74,74,.24);color:#FFC9C9}
+.row{display:flex;align-items:center;gap:11px;padding:9px 0;box-shadow:0 1px 0 rgba(255,255,255,.06);flex-wrap:wrap}
+.row:last-child{box-shadow:none}
+.row .t{flex:1;min-width:170px}
+.row .t b{display:block;font-size:.86rem;letter-spacing:-.015em}
+.row .t span{display:block;font-size:.7rem;color:var(--cream-4);font-weight:600;margin-top:1px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;font-size:.8rem;margin:10px 0 2px}
+.kv b{font-family:var(--mono);font-size:.63rem;color:var(--cream-4);letter-spacing:.14em;
+  text-transform:uppercase;font-weight:700;padding-top:3px}
+.filepick{display:flex;align-items:center;gap:11px;background:rgba(0,0,0,.32);border-radius:12px;
+  padding:11px 13px;cursor:pointer;border:1px dashed rgba(255,255,255,.22)}
+.filepick:hover{border-color:var(--gold)}
+.filepick input{display:none}
+.filepick .fn{font-size:.8rem;color:var(--cream-2);font-weight:700;min-width:0;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.filepick .hint{font-size:.68rem;color:var(--cream-4);font-weight:600}
+pre{background:rgba(0,0,0,.36);border-radius:12px;padding:13px 14px;font-family:var(--mono);
+  font-size:.66rem;line-height:1.7;overflow-x:auto;color:var(--cream-2);margin-top:10px}
+#gate{display:grid;place-items:center;min-height:70dvh;padding:10px 0}
+.gcard{max-width:400px;width:100%;background:var(--t1);border-radius:18px;padding:26px 24px}
+.gsiskel{display:block;height:44px;border-radius:999px;background:var(--t2)}
+#toast{position:fixed;left:50%;bottom:calc(22px + var(--sab));transform:translateX(-50%) translateY(80px);
+  background:var(--cream);color:var(--ink);font-weight:800;font-size:.8rem;padding:12px 20px;border-radius:999px;
+  transition:transform .3s var(--ease);z-index:90;max-width:88vw;text-align:center}
+#toast.show{transform:translateX(-50%)}
+.spin{width:14px;height:14px;border-radius:50%;border:2.5px solid rgba(0,0,0,.25);border-top-color:currentColor;
+  display:inline-block;animation:sp .7s linear infinite;vertical-align:-2px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.grp{display:flex;align-items:baseline;gap:9px;margin:20px 2px 9px}
+.grp b{font-family:var(--display);font-size:.98rem;font-weight:600;letter-spacing:-.03em}
+.grp span{font-family:var(--mono);font-size:.63rem;color:var(--cream-4);font-weight:700}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="arch"><svg viewBox="0 0 44 44"><path d="M8 40V20a14 14 0 0 1 28 0v20"/><path d="M8 40h28"/><path d="M15 40V24a7 7 0 0 1 14 0v16"/><path d="M22 6v4M22 3.4h.01"/></svg></span>
+    <span><small>Jesus College MCR</small><b>The Porter&rsquo;s <i>Book</i></b></span>
+    <span class="right"><button class="btn ghost sm" id="bOut" hidden>Sign out</button></span>
+  </header>
+
+  <div id="gate" hidden>
+    <div class="gcard">
+      <p class="lede" style="margin-bottom:16px">The register of the Jesus College MCR. If your name is
+        written in it, this and every other MCR site opens for you. Sign in with your University of
+        Cambridge Google account and the book is checked on the spot.</p>
+      <div id="gsiBtn"><span class="gsiskel" aria-hidden="true"></span></div>
+      <p class="lede" style="margin:11px 0 0;font-size:.68rem">Use your <b>@cam.ac.uk</b> account.
+        Nothing to make and nothing to remember.</p>
+      <p class="msg" id="gateMsg"></p>
+    </div>
+  </div>
+
+  <div id="app" hidden></div>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+/* Put the deployed Apps Script Web App URL here when this page is hosted
+   anywhere other than inside Apps Script itself. Leave it empty when the
+   script serves the page and the google.script.run bridge is used instead. */
+const API_URL = "https://script.google.com/macros/s/AKfycbz0WzUCcLZ4aeSMH7lqbIVjWslClgkzUI4SubEPa2njIP2ykTMdhIkR4PPQnvNq8B6EOg/exec";
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+  .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const TOKEN_KEY = "pb_token";
+const getToken = () => { try{ return localStorage.getItem(TOKEN_KEY) || ""; }catch(e){ return ""; } };
+const setToken = t => { try{ t ? localStorage.setItem(TOKEN_KEY, t) : localStorage.removeItem(TOKEN_KEY); }catch(e){} };
+const bridge = () => (window.google && google.script && google.script.run) ? google.script.run : null;
+
+function api(action, payload){
+  const body = Object.assign({ action, token: getToken() || "" }, payload || {});
+  return bridge() ? viaBridge(body) : viaFetch(body);
+}
+function viaBridge(body){
+  return new Promise((res, rej) => {
+    bridge().withSuccessHandler(t => { try{ res(unpack(t)); }catch(e){ rej(e); } })
+            .withFailureHandler(e => rej(e))
+            .apiCall(JSON.stringify(body));
+  });
+}
+async function viaFetch(body){
+  if (!API_URL) throw new Error("This page has no API_URL set, so it cannot reach the register.");
+  const r = await fetch(API_URL, { method:"POST", body: JSON.stringify(body),
+    headers:{ "Content-Type":"text/plain;charset=utf-8" }, redirect:"follow" });
+  return unpack(await r.text());
+}
+function unpack(txt){
+  let j; try{ j = JSON.parse(txt); }catch(e){ throw new Error("The register sent something unreadable."); }
+  if (!j.ok) throw new Error(j.error || "Something went wrong.");
+  return j.data;
+}
+let toastT;
+function toast(m){ const e = $("toast"); e.textContent = m; e.classList.add("show");
+  clearTimeout(toastT); toastT = setTimeout(() => e.classList.remove("show"), 4200); }
+function fail(e){ toast(e && e.message ? e.message : String(e)); }
+function spin(b, label){ if (!b) return; b.disabled = true; b.dataset.was = b.innerHTML;
+  b.innerHTML = '<span class="spin"></span>' + esc(label || "One moment"); }
+function unspin(b){ if (!b) return; b.disabled = false; if (b.dataset.was) b.innerHTML = b.dataset.was; }
+
+/* ---------- state ---------- */
+let S = null;                    /* whatever state() last said */
+let proof = null;                /* { name, mime, data } picked but not yet sent */
+let resendAt = 0;                /* when the resend link wakes up again */
+
+async function load(){
+  try{
+    S = await api("state");
+    $("gate").hidden = true; $("app").hidden = false; $("bOut").hidden = false;
+    render();
+  }catch(e){
+    setToken("");
+    $("app").hidden = true; $("bOut").hidden = true;
+    openGate();
+  }
+}
+
+/* ---------- the gate ---------- */
+async function openGate(){
+  $("gate").hidden = false;
+  let cfg;
+  try{ cfg = (await api("ping")).signIn; }
+  catch(e){ $("gateMsg").textContent = "The register cannot be reached: " + (e.message || e); return; }
+  if (!cfg || !cfg.ready){ $("gateMsg").textContent = "Sign in is not configured yet."; return; }
+  const start = () => {
+    if (!(window.google && google.accounts && google.accounts.id)) return setTimeout(start, 300);
+    google.accounts.id.initialize({ client_id: cfg.clientId, callback: onCredential,
+      ux_mode: "popup", auto_select: false, itp_support: true });
+    const el = $("gsiBtn"); el.innerHTML = "";
+    google.accounts.id.renderButton(el, { theme:"outline", size:"large", shape:"pill",
+      text:"continue_with", width: Math.min(360, Math.max(240, el.offsetWidth || 320)) });
+  };
+  start();
+}
+async function onCredential(resp){
+  try{
+    const r = await api("googleToken", { cred: resp.credential });
+    setToken(r.token);
+    await load();
+  }catch(e){ $("gateMsg").textContent = e.message || String(e); }
+}
+$("bOut").onclick = async () => {
+  try{ await api("signOut"); }catch(e){}
+  setToken(""); S = null; location.reload();
+};
+
+/* ---------- the page, in whatever state the person is in ---------- */
+function render(){
+  const a = [];
+  if (S.member) a.push(memberCard());
+  else a.push(applyFlow());
+  if (S.admin) a.push(adminBlock());
+  $("app").innerHTML = a.join("");
+  wire();
+}
+
+function memberCard(){
+  const m = S.member;
+  return '<div class="card"><span class="stamp in">In the book</span>' +
+    '<h3 style="margin-top:12px">' + esc(m.name || S.email) + '</h3>' +
+    '<p>Your name is written in the register of the Jesus College MCR' +
+    (m.since ? ', entered ' + esc(m.since) : '') + '. Anything the MCR runs online reads this same ' +
+    'book, so this one yes opens all of it.</p>' +
+    '<div class="acts"><a class="btn gold sm" href="https://jcollegemcr.co.uk" target="_blank" rel="noopener">Open The Chimney</a></div></div>';
+}
+
+/* Three steps, drawn as three bars: the code, the papers, the President. */
+function stepper(n){
+  return '<div class="steps">' + [1,2,3].map(i =>
+    '<i class="' + (i < n ? "done" : i === n ? "on" : "") + '"></i>').join("") + '</div>';
+}
+
+function applyFlow(){
+  const ap = S.application;
+  /* Already applied: show where it stands rather than the form again. */
+  if (ap && ap.status === "new")
+    return '<div class="card">' + stepper(3) +
+      '<span class="stamp wait">With the President</span>' +
+      '<h3 style="margin-top:12px">Your application is in</h3>' +
+      '<p>Sent ' + esc(ap.at) + '. The President reads these in person, so give it a day or two. ' +
+      'The yes or the no lands in your inbox either way, and this page will change on its own.</p>' +
+      '<div class="kv"><b>Programme</b><span>' + esc(ap.programme) + '</span>' +
+      '<b>Year</b><span>' + esc(ap.year) + '</span>' +
+      (ap.note ? '<b>Note</b><span>' + esc(ap.note) + '</span>' : '') + '</div>' +
+      '<div class="acts"><button class="btn ghost sm" id="bAgain">Replace it with a fresh one</button></div></div>';
+  if (ap && ap.status === "rejected" && !S.verified)
+    return '<div class="card"><span class="stamp no">Not this time</span>' +
+      '<h3 style="margin-top:12px">The President said no</h3>' +
+      (ap.reply ? '<p>' + esc(ap.reply) + '</p>' : '') +
+      '<p class="lede">If something was missing you can go round again: same door, fresh code.</p>' +
+      startCard(true) + '</div>';
+  /* The three-step door. */
+  if (S.verified) return formCard();
+  if (S.codeSentTo) return codeCard();
+  return '<div class="card">' + stepper(1) +
+    '<h3>Not in the book <i>yet</i></h3>' +
+    '<p>You signed in as <span class="mono">' + esc(S.email) + '</span> and that name is not in the ' +
+    'register. If you are a Jesus postgraduate, joining takes three short steps: a code to your ' +
+    'college address to prove the CRSid is yours, a line or two about what you study, and a yes ' +
+    'from the President.</p>' + startCard(false) + '</div>';
+}
+function startCard(bare){
+  const jesus = S.jesusAddress || "";
+  const inner = jesus
+    ? '<p class="lede" style="margin-top:10px">The code goes to <b>' + esc(jesus) + '</b>, the Jesus ' +
+      'counterpart of the address you signed in with. Same inbox in Outlook for most people; look ' +
+      'in junk if it hides.</p>' +
+      '<div class="acts"><button class="btn gold" id="bCode">Email me a code</button></div>'
+    : '<p class="lede" style="margin-top:10px">Your address is not a personal CRSid, so the code ' +
+      'cannot be sent automatically. Write to the President instead and you will be added by hand.</p>';
+  return bare ? inner : inner;
+}
+function codeCard(){
+  const wait = Math.max(0, Math.ceil((resendAt - Date.now()) / 1000));
+  return '<div class="card">' + stepper(1) +
+    '<h3>The code is on its <i>way</i></h3>' +
+    '<p>Sent to <b>' + esc(S.codeSentTo) + '</b>. Six digits, good for fifteen minutes.</p>' +
+    '<label class="f code" style="margin-top:14px"><span>The code</span>' +
+    '<input id="codeIn" inputmode="numeric" autocomplete="one-time-code" maxlength="7" placeholder="000000"></label>' +
+    '<div class="acts"><button class="btn gold" id="bVerify">That is the one</button>' +
+    '<button class="btn ghost sm" id="bResend"' + (wait ? " disabled" : "") + '>' +
+    (wait ? "Send another in " + wait + "s" : "Send another") + '</button></div>' +
+    '<p class="msg" id="codeMsg"></p></div>';
+}
+function formCard(){
+  return '<div class="card">' + stepper(2) +
+    '<h3>Now the <i>papers</i></h3>' +
+    '<p class="lede">A minute of form. The proof can be anything that shows you are a Jesus ' +
+    'postgraduate: a CamSIS screenshot, your college confirmation letter, a student card. ' +
+    'It is seen by the President and nobody else.</p>' +
+    '<label class="f" style="margin-top:14px"><span>Your name</span>' +
+    '<input id="apName" value="' + esc(S.name || "") + '" autocomplete="name"></label>' +
+    '<label class="f"><span>What you study</span>' +
+    '<input id="apProg" placeholder="PhD in Electrical Engineering"></label>' +
+    '<label class="f"><span>Year</span><select id="apYear">' +
+    ["MPhil or MRes","PhD, first year","PhD, second year","PhD, third year",
+     "PhD, fourth year or beyond","MBA or MFin","Part-time, visiting or other"]
+      .map(y => '<option>' + y + '</option>').join("") + '</select></label>' +
+    '<label class="f"><span>Anything worth adding</span>' +
+    '<textarea id="apNote" placeholder="Optional. A line is plenty."></textarea></label>' +
+    '<label class="filepick" id="pickWrap"><input type="file" id="apFile" accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg">' +
+    '<span class="fn" id="pickName">Attach the proof</span>' +
+    '<span class="hint">PDF, PNG or JPG &middot; up to 5 MB</span></label>' +
+    '<div class="acts"><button class="btn gold" id="bApply">Send it to the President</button></div>' +
+    '<p class="msg" id="apMsg"></p></div>';
+}
+
+/* ---------- the admin desk ---------- */
+function adminBlock(){
+  const A = S.adminData || {};
+  const pend = (A.applications || []).filter(x => x.status === "new");
+  const done = (A.applications || []).filter(x => x.status !== "new");
+  return '<div class="grp"><b>The desk</b><span>' + (A.memberCount || 0) + ' in the book</span></div>' +
+    (pend.length ? pend.map(appCard).join("")
+      : '<div class="card"><p>Nothing waiting. Rare, and worth enjoying.</p></div>') +
+    (done.length ? '<div class="grp"><b>Answered lately</b></div><div class="card">' +
+      done.slice(0, 8).map(x => '<div class="row"><div class="t"><b>' + esc(x.name || x.key) +
+      '</b><span>' + esc(x.programme) + ' &middot; ' + esc(x.decidedAt || "") + '</span></div>' +
+      '<span class="stamp ' + (x.status === "approved" ? "in" : "no") + '">' + esc(x.status) +
+      '</span></div>').join("") + '</div>' : '') +
+    '<div class="grp"><b>The book itself</b></div>' +
+    '<div class="card"><label class="f"><span>Find somebody</span>' +
+    '<input id="findQ" placeholder="Name, CRSid or address"></label>' +
+    '<div id="findOut"></div>' +
+    '<div class="acts"><a class="btn gold sm" href="' + esc(A.sheetUrl || "#") +
+    '" target="_blank" rel="noopener">Open the spreadsheet</a>' +
+    '<span class="lede">The sheet is the register. Edit it by hand whenever you like; every site ' +
+    'reads it live.</span></div></div>' +
+    '<div class="card"><h3>Add somebody by hand</h3>' +
+    '<label class="f"><span>Address</span><input id="addEmail" placeholder="abc123@cam.ac.uk"></label>' +
+    '<label class="f"><span>Name</span><input id="addName"></label>' +
+    '<div class="acts"><button class="btn gold sm" id="bAdd">Write them in</button></div></div>' +
+    '<div class="card"><h3>For other apps</h3>' +
+    '<p class="lede">Any Apps Script the MCR runs can ask this register one question: is this ' +
+    'address in the book? Two lines, and the key below is the handshake.</p>' +
+    '<pre>' + esc('const r = JSON.parse(UrlFetchApp.fetch(\n  "' + (A.webUrl || "YOUR_WEB_APP_URL") +
+    '"\n  + "?verify=" + encodeURIComponent(email)\n  + "&key=' + (A.apiKey || "API_KEY") +
+    '").getContentText());\nif (r.member) { /* they are Jesus MCR */ }') + '</pre>' +
+    '<div class="acts"><button class="btn ghost sm" id="bKey">Copy the key</button>' +
+    '<span class="lede mono" style="font-size:.62rem">' + esc(A.apiKey || "") + '</span></div></div>';
+}
+function appCard(x){
+  return '<div class="card"><span class="stamp wait">Waiting</span>' +
+    '<h3 style="margin-top:12px">' + esc(x.name || x.key) + '</h3>' +
+    '<div class="kv"><b>Address</b><span class="mono">' + esc(x.email) + '</span>' +
+    '<b>Programme</b><span>' + esc(x.programme) + '</span>' +
+    '<b>Year</b><span>' + esc(x.year) + '</span>' +
+    (x.note ? '<b>Note</b><span>' + esc(x.note) + '</span>' : '') +
+    '<b>Sent</b><span>' + esc(x.at) + '</span></div>' +
+    '<div class="acts">' +
+    (x.proofUrl ? '<a class="btn ghost sm" href="' + esc(x.proofUrl) +
+      '" target="_blank" rel="noopener">Open the proof</a>' : '') +
+    '<button class="btn gold sm" data-yes="' + esc(x.id) + '">Write them in</button>' +
+    '<button class="btn ghost sm" data-no="' + esc(x.id) + '">Say no</button></div>' +
+    '<label class="f" id="why-' + esc(x.id) + '" hidden style="margin-top:12px"><span>Why not, in a line they will read</span>' +
+    '<input id="whyIn-' + esc(x.id) + '" placeholder="The proof does not show a Jesus course."></label></div>';
+}
+
+/* ---------- wiring ---------- */
+function wire(){
+  const on = (id, fn) => { const el = $(id); if (el) el.onclick = fn; };
+  on("bCode", async () => {
+    const b = $("bCode"); spin(b, "Sending");
+    try{
+      const r = await api("requestCode");
+      S.codeSentTo = r.sentTo; resendAt = Date.now() + 60000;
+      render(); tickResend();
+    }catch(e){ unspin(b); fail(e); }
+  });
+  on("bResend", async () => {
+    const b = $("bResend"); spin(b, "Sending");
+    try{ const r = await api("requestCode"); S.codeSentTo = r.sentTo;
+      resendAt = Date.now() + 60000; render(); tickResend(); }
+    catch(e){ unspin(b); fail(e); }
+  });
+  on("bVerify", async () => {
+    const b = $("bVerify"); spin(b, "Checking");
+    try{
+      await api("verifyCode", { code: ($("codeIn").value || "").replace(/\D/g, "") });
+      S.verified = true; render();
+    }catch(e){ unspin(b); $("codeMsg").textContent = e.message || String(e); }
+  });
+  on("bAgain", async () => { S.application = null; S.verified = false; render(); });
+  const file = $("apFile");
+  if (file) file.onchange = () => {
+    proof = null; $("pickName").textContent = "Attach the proof";
+    const f = file.files && file.files[0];
+    if (!f) return;
+    if (f.size > 5 * 1024 * 1024){ $("apMsg").textContent = "That file is over 5 MB. A screenshot is plenty."; file.value = ""; return; }
+    if (!/pdf|png|jpe?g/i.test(f.type + f.name)){ $("apMsg").textContent = "PDF, PNG or JPG only."; file.value = ""; return; }
+    const rd = new FileReader();
+    rd.onload = () => {
+      proof = { name: f.name, mime: f.type || "application/octet-stream",
+        data: String(rd.result).split(",")[1] || "" };
+      $("pickName").textContent = f.name; $("apMsg").textContent = "";
+    };
+    rd.readAsDataURL(f);
+  };
+  on("bApply", async () => {
+    const b = $("bApply");
+    if (!$("apProg").value.trim()) return $("apMsg").textContent = "Say what you study.";
+    if (!proof) return $("apMsg").textContent = "Attach the proof first.";
+    spin(b, "Sending");
+    try{
+      const r = await api("apply", { name: $("apName").value, programme: $("apProg").value,
+        year: $("apYear").value, note: $("apNote").value, proof: proof });
+      S.application = r.application; S.verified = false; proof = null; render();
+      toast("Sent. The President has it.");
+    }catch(e){ unspin(b); $("apMsg").textContent = e.message || String(e); }
+  });
+  /* admin */
+  document.querySelectorAll("[data-yes]").forEach(el => el.onclick = async () => {
+    spin(el, "Writing in");
+    try{ S.adminData = (await api("decide", { id: el.dataset.yes, want: "yes" })).adminData;
+      render(); toast("In the book, and told so."); }
+    catch(e){ unspin(el); fail(e); }
+  });
+  document.querySelectorAll("[data-no]").forEach(el => el.onclick = async () => {
+    const box = $("why-" + el.dataset.no);
+    if (box.hidden){ box.hidden = false; $("whyIn-" + el.dataset.no).focus(); return; }
+    const why = $("whyIn-" + el.dataset.no).value.trim();
+    if (!why) return toast("Give them a line to go on.");
+    spin(el, "Sending");
+    try{ S.adminData = (await api("decide", { id: el.dataset.no, want: "no", reply: why })).adminData;
+      render(); toast("Answered."); }
+    catch(e){ unspin(el); fail(e); }
+  });
+  const fq = $("findQ");
+  if (fq){ let t; fq.oninput = () => { clearTimeout(t); t = setTimeout(find, 350); }; }
+  on("bAdd", async () => {
+    const b = $("bAdd");
+    if (!$("addEmail").value.trim()) return toast("An address first.");
+    spin(b, "Writing in");
+    try{ S.adminData = (await api("memberAdd", { email: $("addEmail").value,
+        name: $("addName").value })).adminData;
+      render(); toast("In the book."); }
+    catch(e){ unspin(b); fail(e); }
+  });
+  on("bKey", async () => {
+    try{ await navigator.clipboard.writeText((S.adminData || {}).apiKey || ""); toast("Copied."); }
+    catch(e){ toast("Copy it from the line beside the button."); }
+  });
+}
+async function find(){
+  const q = ($("findQ").value || "").trim();
+  if (!q){ $("findOut").innerHTML = ""; return; }
+  try{
+    const r = await api("membersFind", { q: q });
+    $("findOut").innerHTML = (r.list || []).map(m =>
+      '<div class="row"><div class="t"><b>' + esc(m.name || m.key) + '</b><span class="mono">' +
+      esc(m.email) + ' &middot; ' + esc(m.source) + '</span></div>' +
+      '<button class="btn ghost sm" data-drop="' + esc(m.key) + '">Strike out</button></div>').join("") ||
+      '<p class="lede">Nobody by that name.</p>';
+    document.querySelectorAll("[data-drop]").forEach(el => el.onclick = async () => {
+      if (!confirm("Strike them from the book? They lose access everywhere that reads it.")) return;
+      spin(el, "Striking");
+      try{
+        S.adminData = (await api("memberDrop", { key: el.dataset.drop })).adminData;
+        const kept = q;
+        render();
+        const fq2 = $("findQ");
+        if (fq2){ fq2.value = kept; find(); }
+        toast("Struck out.");
+      }
+      catch(e){ unspin(el); fail(e); }
+    });
+  }catch(e){ fail(e); }
+}
+let resendT;
+function tickResend(){
+  clearTimeout(resendT);
+  if (Date.now() < resendAt && S && S.codeSentTo && !S.verified){
+    const b = $("bResend");
+    if (b){ const w = Math.ceil((resendAt - Date.now()) / 1000);
+      b.textContent = "Send another in " + w + "s"; b.disabled = true; }
+    resendT = setTimeout(tickResend, 1000);
+  }else{
+    const b = $("bResend");
+    if (b){ b.textContent = "Send another"; b.disabled = false; }
+  }
+}
+
+/* ---------- off we go ---------- */
+if (getToken()) load(); else openGate();
+</script>
+</body>
+</html>
