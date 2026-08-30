@@ -6,7 +6,7 @@
      which is why it looked like a shrunken desktop site however large the type
      was set. Everything below assumes the real width of the device. -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#8E0F14">
+<meta name="theme-color" content="#8E0F14" id="metaTheme">
 <meta name="color-scheme" content="dark">
 <!-- Painted before anything else is parsed, so the first frame is already the
      college crimson rather than a white flash. -->
@@ -94,7 +94,6 @@ html[data-place="ask"]{--wash:rgba(235,183,83,.18)}
 html[data-place="biz"]{--wash:rgba(185,143,236,.18)}
 html[data-place="gifts"]{--wash:rgba(79,211,201,.18)}
 html[data-place="swaps"],html[data-place="swapdesk"]{--wash:rgba(236,138,180,.20)}
-html[data-place="today"]{--wash:rgba(235,183,83,.20)}
 body.locked{overflow:hidden}
 [hidden]{display:none!important}
 button,input,select,textarea{font:inherit;color:inherit}
@@ -179,8 +178,20 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .rowline .t b{display:block;font-size:.94rem;font-weight:700;letter-spacing:-.012em}
 .rowline .t span{display:block;font-size:.8rem;color:var(--cream-4);margin-top:1px;font-weight:500}
 
-/* ---------- the pigeonhole: tiles with gaps ---------- */
-.wall{margin:0 0 var(--g)}
+/* ---------- the pigeonhole, under the Cockcrow sky ----------
+   Six wall clock moments, blended by the minute, drawn behind the greeting.
+   Two gradients and a sun: the one thing on the page that is never the same
+   twice, which is the point of opening it in the morning. */
+.wall{position:relative;margin:0 0 var(--g);border-radius:var(--r);padding:var(--pad);overflow:hidden;
+  background:linear-gradient(180deg,#7E1620,#5A0C12)}
+.wall>*{position:relative}
+.wall .sky{position:absolute;inset:0;display:block;transition:background 1.1s ease}
+.wall .sky::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(24,2,6,.3),rgba(24,2,6,.14) 26%,rgba(30,3,7,.38) 46%,
+    rgba(46,4,8,.55) 66%,rgba(38,3,7,.72))}
+.wall .sky i{position:absolute;width:26px;height:26px;border-radius:50%;transform:translate(-50%,-50%);
+  transition:left 1.1s ease,top 1.1s ease,opacity 1.1s ease,background 1.1s ease}
+@media(max-width:520px){.wall .sky i{width:20px;height:20px}}
 .wall .when{font-family:var(--mono);font-size:0.66rem;letter-spacing:.18em;text-transform:uppercase;
   color:var(--cream-4);font-weight:700;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
 .wall .when em{font-style:normal;color:var(--gold-ink);background:var(--gold);border-radius:999px;
@@ -243,6 +254,8 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .ev.cancelled .body b{text-decoration:line-through;color:var(--cream-4)}
 .ev.past{opacity:.42}
 .ev.live .tab{color:var(--crimson-lite)}
+.ev.booking{background:rgba(0,0,0,.28)}
+.ev.booking .body b{color:var(--cream-3);font-weight:600}
 .chip{font-size:0.66rem;padding:2px 8px;border-radius:999px;background:var(--t2);color:var(--cream-3);
   margin-left:6px;white-space:nowrap;font-weight:700}
 .chip.full{background:rgba(232,83,92,.3);color:#FFD9DB}
@@ -257,22 +270,6 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
   transition:.18s;white-space:nowrap;flex:0 0 auto;scroll-snap-align:start;line-height:1.2}
 .seg button[aria-pressed="true"]{background:var(--gold);color:var(--gold-ink)}
 @media(max-width:520px){.seg{padding:2px}.seg button{padding:7px 12px;font-size:.74rem}}
-.seg button[aria-pressed="true"]{background:var(--gold);color:var(--gold-ink)}
-.mv{display:flex;align-items:center;gap:4px;margin-left:auto}
-.mv b{font-family:var(--display);font-size:0.895rem;min-width:150px;text-align:center;font-weight:600;letter-spacing:-.03em}
-.mv button{background:var(--t1);color:var(--cream-2);width:32px;height:32px;border-radius:50%;font-size:0.842rem;
-  line-height:1;transition:.18s}
-.mv button:hover{background:var(--t3);color:var(--cream)}
-@media(min-width:920px){.cell{min-height:78px;border-radius:var(--r2)}}
-.cell.out{background:none;pointer-events:none}
-.cell.today{background:rgba(235,183,83,.2)}
-.cell.today b{color:var(--gold-2)}
-.cell.sel{background:var(--gold)}
-.cell.sel b{color:var(--gold-ink)}
-@media(min-width:920px){.cell b{font-size:1.316rem}}
-@media(min-width:920px){.dots{gap:5px;height:10px}.dots i{width:10px;height:10px}}
-.dots i.ring{box-shadow:0 0 0 2px var(--cream)}
-.cell.sel .dots i.ring{box-shadow:0 0 0 2px var(--gold-ink)}
 /* Seven columns at every width. What changes is how much fits in one: on a
    phone a day is its date and a row of coloured dots, on a desk it is the
    events written out. The list underneath always has the detail, so nothing
@@ -628,15 +625,6 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .clock i{display:block;height:100%;border-radius:4px;background:var(--gold);transition:width .5s var(--ease)}
 .swyou.urgent .clock i{background:var(--crimson-lite)}
 /* who is on it, for the committee */
-.swroster{display:flex;flex-wrap:wrap;gap:5px;margin-top:var(--g2);padding-top:var(--g);
-  box-shadow:0 -1px 0 rgba(255,255,255,.08)}
-.sr{display:flex;align-items:center;gap:6px;background:var(--t3);border-radius:999px;padding:5px 11px;
-  font-size:.66rem;color:var(--cream-4);font-weight:700;transition:background .16s}
-.sr:hover{background:rgba(0,0,0,.5)}
-.sr b{color:var(--cream);font-weight:700;font-size:.72rem}
-.sr.paid{background:rgba(79,200,148,.22);color:#B7F0D6}
-.sr.paid b{color:#DFF7EC}
-.sr.waiting{opacity:.55}
 .swedit{margin-top:var(--g2);font-family:var(--mono);font-size:0.64rem;letter-spacing:.16em;
   text-transform:uppercase;color:var(--cream-4);font-weight:700}
 .swedit:hover{color:var(--gold-2);text-decoration:underline}
@@ -671,7 +659,7 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .swroster{margin-top:var(--g2);padding-top:var(--g);box-shadow:0 -1px 0 rgba(255,255,255,.08);display:block}
 .swroster .grp{margin:0 0 var(--g)}
 .swroster .grp span{margin-left:auto;font-family:var(--ui);text-transform:none;letter-spacing:0}
-.srow{display:flex;align-items:center;gap:var(--g);padding:8px 0;
+.srow{display:flex;align-items:center;gap:var(--g);padding:8px 0;flex-wrap:wrap;
   box-shadow:0 1px 0 rgba(255,255,255,.06)}
 .srow:last-child{box-shadow:none}
 .srow .sn{flex:0 0 1.4rem;font-family:var(--display);font-size:.9rem;color:var(--cream-4);font-weight:600}
@@ -685,17 +673,6 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .srow.paid .ss{color:var(--sport)}
 .srow.waiting{opacity:.6}
 /* the JCSU list */
-.gauge{background:var(--t1);border-radius:var(--r);padding:var(--pad);margin-bottom:var(--g2)}
-.gauge.low{background:rgba(232,83,92,.16)}
-.gt{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:10px}
-.gt b{font-family:var(--display);font-size:1.7rem;font-weight:600;letter-spacing:-.04em;line-height:1;
-  color:var(--gold-2)}
-.gauge.low .gt b{color:var(--crimson-lite)}
-.gt span{font-size:.86rem;font-weight:700;color:var(--cream-2)}
-.gt i{margin-left:auto;font-style:normal;font-size:.7rem;color:var(--cream-4);font-weight:600}
-.gbar{height:8px;border-radius:8px;background:rgba(0,0,0,.34);overflow:hidden}
-.gbar span{display:block;height:100%;border-radius:8px;background:var(--sport);transition:width .5s var(--ease)}
-.gauge.low .gbar span{background:var(--crimson-lite)}
 .jall{display:flex;align-items:center;gap:10px;width:100%;margin-top:var(--g);background:var(--t3);
   border-radius:var(--r2);padding:12px 14px;color:var(--cream);font-size:.86rem;font-weight:700;
   transition:background .16s}
@@ -765,12 +742,6 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .ohlist span{display:flex;gap:9px;padding:3px 0}
 .ohlist b{color:var(--gold-2);flex:0 0 52px}
 .ohlist em{font-style:normal;color:var(--cream-4);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.hours{margin-top:12px}
-.hrow .t{flex:1;min-width:0}
-.hrow .t b{display:block;font-size:0.789rem;font-weight:700}
-.hrow .t span{display:block;font-size:0.684rem;color:var(--cream-4);font-weight:500}
-.hrow.mine{background:rgba(235,183,83,.14);border-radius:var(--r3);padding:11px 13px;box-shadow:none;margin:2px 0}
-.hrow.mine .t span{color:var(--gold-2)}
 .iconbtn.busy svg{animation:spin .9s linear infinite}
 /* The boot screen the Fortnight app had: the crest sitting inside two rings
    that turn at different speeds, the line under it saying what is happening,
@@ -797,6 +768,11 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
   width:100%;margin:0}
 .loadtrack i{display:block;height:100%;width:8%;border-radius:3px;background:var(--gold);transition:width .6s var(--ease)}
 .bootslow{margin:0;font-size:0.684rem;color:var(--cream-3);line-height:1.55;font-weight:500}
+/* the empty gate. When a board has nothing on it, the Chimney itself is
+   drawn: an arch, a smaller arch, the ground. Nothing has come through yet. */
+.roost{display:grid;place-items:center;padding:8px 0 4px;color:var(--cream-4)}
+.roost svg{width:54px;height:54px;fill:none;stroke:currentColor;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round;opacity:.85}
 /* the skeleton a section wears while it waits */
 .sk{background:var(--t1);border-radius:var(--r2);animation:glow 1.4s ease-in-out infinite}
 .skwall{height:120px;border-radius:var(--r);margin-bottom:8px}
@@ -889,6 +865,7 @@ nav{position:fixed;left:50%;bottom:calc(10px + var(--sab));transform:translateX(
   box-shadow:0 6px 22px -4px rgba(20,1,3,.8);scrollbar-width:none;scroll-behavior:smooth}
 nav::-webkit-scrollbar{display:none}
 nav .railtop{display:none}
+.railfoot{display:none}
 .tabbtn{flex:0 0 auto;color:var(--cream-4);font-size:0.66rem;font-weight:700;display:flex;flex-direction:column;
   align-items:center;gap:3px;padding:7px 11px;border-radius:999px;position:relative;min-width:54px;transition:.2s}
 .tabbtn svg{width:1.15rem;height:1.15rem;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
@@ -919,6 +896,16 @@ nav .railtop{display:none}
   .tabbtn svg{width:18px;height:18px}
   .tabbtn .badge{position:static;margin-left:auto}
   .sep{height:1px;width:auto;margin:10px 10px;background:var(--edge)}
+  /* the same sky as the pigeonhole, in a coin, with the clock beside it */
+  .railfoot{display:flex;align-items:center;gap:10px;margin-top:auto;padding:16px 10px 2px}
+  .railfoot .orb{width:30px;height:30px;border-radius:50%;flex:0 0 30px;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.16),0 2px 10px rgba(20,1,3,.5);transition:background 1.1s ease}
+  .railfoot b{display:block;font-family:var(--mono);font-size:.83rem;font-weight:700;letter-spacing:.04em}
+  .railfoot i{display:block;font-style:normal;font-size:.615rem;color:var(--gold-2);letter-spacing:.14em;
+    text-transform:uppercase;font-weight:700;margin-top:2px}
+  .tabbtn[aria-current="true"]{position:relative}
+  .tabbtn[aria-current="true"]::before{content:"";position:absolute;left:-12px;top:9px;bottom:9px;width:3px;
+    border-radius:3px;background:var(--gold)}
   /* the rail is fixed, so the page fills whatever is left of the window
      instead of sitting in a 940px column with a field of red beside it */
   .wrap{margin-left:var(--rail);max-width:none;width:auto;
@@ -942,6 +929,37 @@ nav .railtop{display:none}
 /* and the reading column stays readable however wide the window is */
 @media(min-width:1000px){
   .card p,.notice p,.idea .t p,.swn,.wall .line{max-width:78ch}}
+
+/* ---------- wide screens compose, narrow screens stack ----------
+   On a phone these wrappers dissolve into nothing and the order is exactly
+   what it always was. From a desk, Today and Business become two columns,
+   notices and the committee page flow like a broadsheet, and the swap cards
+   sit side by side. The window fills because the content does. */
+.twocol,.colA,.colB{display:contents}
+@media(min-width:1240px){
+  .twocol{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:0 var(--g2);align-items:start}
+  .colA,.colB{display:block;min-width:0}
+  .noticecols{columns:2 460px;column-gap:var(--g2)}
+  .noticecols>*{break-inside:avoid}
+  .noticecols .grp{column-span:all}
+  #v-admin{columns:2 480px;column-gap:var(--g2)}
+  #v-admin>*{break-inside:avoid}
+  #v-admin>.vh{column-span:all}
+}
+@media(min-width:1180px){
+  #swapList{display:grid;grid-template-columns:repeat(auto-fill,minmax(430px,1fr));gap:var(--g);align-items:start}
+  #swapList>.swap{margin-bottom:0}
+}
+@media(min-width:1780px){.wrap{padding-left:calc((100vw - var(--rail) - 1560px)/2);
+  padding-right:calc((100vw - var(--rail) - 1560px)/2)}}
+
+/* ---------- the swap desk roster ---------- */
+.swdc .swdh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.swdc .swdh .t{flex:1;min-width:200px}
+.swdc .swdh .t b{font-family:var(--display);font-size:1.05rem;font-weight:600;letter-spacing:-.03em;display:block}
+.swdc .swdh .t span{display:block;font-size:.72rem;color:var(--cream-3);font-weight:600;margin-top:2px}
+.swx{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+.st.late{background:rgba(226,74,74,.3);color:#FFC9C9}
 
 /* ---------- gate ---------- */
 #gate{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:22px;
@@ -991,6 +1009,11 @@ nav .railtop{display:none}
   .sheet .inner{border-radius:16px;max-height:calc(100vh - 44px);max-height:calc(100dvh - 44px)}}
 @media(min-width:1000px){.sheet{padding-left:calc(var(--rail) + 22px)}}
 .sheet h3{font-family:var(--display);font-size:1.211rem;margin:0 0 14px;font-weight:600;letter-spacing:-.04em}
+.sheet .sback{display:inline-flex;align-items:center;gap:8px;background:var(--t2);border:1px solid var(--edge);
+  color:var(--cream);font-weight:800;font-size:.86rem;letter-spacing:-.01em;padding:10px 18px 10px 13px;
+  border-radius:999px;margin:0 0 15px;cursor:pointer}
+.sheet .sback svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.sheet .sback:hover{background:var(--t3)}
 .sheet .card p{font-size:0.763rem}
 .sheet .lede{font-size:0.711rem}
 .sheet .card{padding:0 0 4px;background:none}
@@ -1009,7 +1032,8 @@ nav .railtop{display:none}
 .acts{display:flex;gap:var(--g);flex-wrap:wrap;align-items:center;margin-top:var(--g2)}
 #toast{position:fixed;left:50%;bottom:calc(var(--navh) + 22px + var(--sab));transform:translate(-50%,16px);
   background:var(--gold);color:var(--gold-ink);padding:11px 19px;border-radius:999px;font-size:0.684rem;
-  font-weight:800;z-index:90;opacity:0;pointer-events:none;transition:.28s var(--ease);max-width:88vw;text-align:center}
+  font-weight:800;z-index:90;opacity:0;pointer-events:none;transition:.28s var(--ease);max-width:88vw;text-align:center;
+  box-shadow:0 8px 24px -6px rgba(20,1,3,.55)}
 #toast.show{opacity:1;transform:translate(-50%,0)}
 @media(min-width:1000px){#toast{left:calc(50% + var(--rail)/2);bottom:26px}}
 .skel{height:64px;border-radius:var(--r);background:var(--t1);margin-bottom:var(--g);animation:glow 1.5s ease-in-out infinite}
@@ -1035,13 +1059,6 @@ body[data-season="vacation"]{--gold:#E3A863;--gold-2:#F9E3C6}
 body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
 .season{font-family:var(--mono);font-size:0.66rem;letter-spacing:.16em;text-transform:uppercase;
   color:var(--gold-2);opacity:.9}
-.mk{background:var(--t1);border:1px solid var(--edge);border-radius:var(--r);overflow:hidden}
-.mk img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:rgba(255,255,255,.05)}
-.mk .in{padding:11px 12px}
-.mk b{display:block;font-size:0.737rem;font-weight:600;line-height:1.25}
-.mk span{display:block;font-size:0.66rem;color:var(--cream-3);margin-top:3px}
-.mk.gone{opacity:.5}
-.mk .kind{font-family:var(--mono);font-size:0.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-2)}
 
 /* ---------- bumps ---------- */
 .bumps{background:var(--t1);border:1px solid var(--edge);border-radius:var(--r);padding:var(--pad)}
@@ -1050,11 +1067,6 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
 .bumps text{font-family:var(--mono);font-size:0.635rem;fill:rgba(251,243,236,.66)}
 .bumps text.crew{font-family:var(--ui);font-size:0.635rem;font-weight:700;fill:var(--cream)}
 .up{color:#8FD19E} .down{color:#E88E8E}
-.dir .prog{font-family:var(--mono);font-size:0.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);margin-left:8px}
-mark{background:rgba(226,169,60,.32);color:inherit;border-radius:3px;padding:0 2px}
-
-code{font-family:var(--mono);font-size:0.658rem;background:rgba(0,0,0,.3);padding:2px 7px;border-radius:6px;
-  word-break:break-all}
 </style>
 
 <div id="boot">
@@ -1084,10 +1096,10 @@ code{font-family:var(--mono);font-size:0.658rem;background:rgba(0,0,0,.3);paddin
     <div id="crow"></div>
     <div id="todayUrgent"></div>
     <div id="bumpsCard"></div>
-    <div id="todayWeek"></div>
-    <div id="todayOn"></div>
-    <div id="todayQuick"></div>
-    <div id="todayNews"></div>
+    <div class="twocol">
+      <div class="colA"><div id="todayWeek"></div><div id="todayOn"></div></div>
+      <div class="colB"><div id="todayQuick"></div><div id="todayNews"></div></div>
+    </div>
   </section>
 
   <!-- ===================== SWAPS ===================== -->
@@ -1127,11 +1139,10 @@ code{font-family:var(--mono);font-size:0.658rem;background:rgba(0,0,0,.3);paddin
       <div class="right"><button class="btn gold sm" id="bNewIdea">Suggest something</button>
         <button class="btn ghost sm" id="bNewMotion">Motion</button>
         <button class="btn ghost sm" id="bNewPoll" data-committee hidden>Poll</button></div></div>
-    <div id="bizMoney"></div>
-    <div id="bizIdeas"></div>
-    <div id="bizPolls"></div>
-    <div id="bizMeetings"></div>
-    <div id="bizMotions"></div>
+    <div class="twocol">
+      <div class="colA"><div id="bizMoney"></div><div id="bizIdeas"></div><div id="bizPolls"></div></div>
+      <div class="colB"><div id="bizMeetings"></div><div id="bizMotions"></div></div>
+    </div>
   </section>
 
   <!-- ===================== SETTINGS ===================== -->
@@ -1146,7 +1157,7 @@ code{font-family:var(--mono);font-size:0.658rem;background:rgba(0,0,0,.3);paddin
     </div>
     <div class="card">
       <h3>Your calendar</h3>
-      <p class="lede">Subscribe once and everything you put your name down for appears in your own calendar, with the alerts built in. It stays up to date on its own. This app sends no email at all, so this is how your phone reminds you.</p>
+      <p class="lede">Subscribe once and everything you put your name down for appears in your own calendar, with the alerts built in. It stays up to date on its own, and it is how your phone reminds you. The app emails only when something genuinely needs your inbox: a reply to something you asked, permission for a room, or a swap place waiting to be paid for.</p>
       <div class="acts" id="feedBox"></div>
       <label class="f"><span>Alert before each event</span>
         <select id="pRemind"><option value="15">15 minutes before</option><option value="30">30 minutes before</option><option value="60">An hour before</option><option value="120">Two hours before</option><option value="1440">The day before</option><option value="0">No alert</option></select></label>
@@ -1247,7 +1258,7 @@ code{font-family:var(--mono);font-size:0.658rem;background:rgba(0,0,0,.3);paddin
 
 <nav id="nav" aria-label="Sections" hidden>
   <div class="railtop"><img class="crest" id="crestRail" alt="Jesus College MCR"><span><b>Jesus MCR</b><i id="railYear"></i></span></div>
-  <button class="tabbtn" data-view="today" aria-current="true"><svg viewBox="0 0 24 24"><path d="M4 15a8 8 0 0 1 16 0"/><path d="M12 3v3M4.2 6.6l2.1 2.1M19.8 6.6l-2.1 2.1M2 15h20"/></svg>Today<span class="badge" id="bToday_" hidden>0</span></button>
+  <button class="tabbtn" data-view="today" aria-current="true"><svg viewBox="0 0 24 24"><path d="M4 15a8 8 0 0 1 16 0"/><path d="M12 3v3M4.2 6.6l2.1 2.1M19.8 6.6l-2.1 2.1M2 15h20"/></svg>Today</button>
   <button class="tabbtn" data-view="lodge"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>Lodge<span class="badge" id="bdgLodge" hidden>0</span></button>
   <button class="tabbtn" data-view="swaps"><svg viewBox="0 0 24 24"><path d="M4 8h13l-3-3M20 16H7l3 3"/></svg>Swaps<span class="badge" id="bdgSwaps" hidden>0</span></button>
   <button class="tabbtn" data-view="gifts"><svg viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="12" rx="1.6"/><path d="M2 6.5h20V9H2zM12 6.5V21"/><path d="M12 6.5S10.6 3 8.6 3a2 2 0 1 0 0 4M12 6.5S13.4 3 15.4 3a2 2 0 1 1 0 4"/></svg>Second life<span class="badge" id="bdgGifts" hidden>0</span></button>
@@ -1259,6 +1270,7 @@ code{font-family:var(--mono);font-size:0.658rem;background:rgba(0,0,0,.3);paddin
   <button class="tabbtn committee" data-view="swapdesk" data-committee hidden><svg viewBox="0 0 24 24"><path d="M4 8h13l-3-3M20 16H7l3 3"/><circle cx="18.5" cy="6.5" r="2.2"/></svg>Swap desk<span class="badge" id="bdgSwapDesk" hidden>0</span></button>
   <button class="tabbtn committee" data-view="members" data-committee hidden><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>Members</button>
   <button class="tabbtn committee" data-view="admin" data-admin hidden><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3 8.5-7 10-4-1.5-7-5-7-10V6z"/><path d="M9.5 12l1.8 1.8 3.4-3.6"/></svg>Committee</button>
+  <div class="railfoot" aria-hidden="true"><span class="orb" id="railOrb"></span><span class="rc"><b id="railClock"></b><i id="railTerm"></i></span></div>
 </nav>
 
 <div id="gate" hidden>
@@ -1267,7 +1279,7 @@ code{font-family:var(--mono);font-size:0.658rem;background:rgba(0,0,0,.3);paddin
       <span><small>JESUS COLLEGE</small><b>The <i>MCR</i></b></span></div>
     <p class="lede" id="gLede">The postgraduate community at Jesus. The term calendar, the Lodge, and somebody to ask. Sign in with your University of Cambridge Google account.</p>
     <div id="gsiBtn"><span class="gsiskel" aria-hidden="true"></span></div>
-    <p class="lede" style="margin:10px 0 0;font-size:12.5px">Use your <b>@cam.ac.uk</b> account. There is no password and nothing is emailed to you.</p>
+    <p class="lede" style="margin:10px 0 0;font-size:12.5px">Use your <b>@cam.ac.uk</b> account. There is no password to make and nothing to verify.</p>
     <p class="msg" id="gateMsg"></p>
     <div id="gateFix"></div>
     <div class="gfoot"><span id="gFootYear"></span>
@@ -1288,7 +1300,7 @@ code{font-family:var(--mono);font-size:0.658rem;background:rgba(0,0,0,.3);paddin
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbyAuj8vFz-_D_g_1m9R0OpdDAozxs1BsbS3IbSE2QC8lxsqQoWRTZ-i7oQaFADr-d4jRg/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbywp68TrjnCvJjKaNAwWf-Y2BErq2Jzf8z_lpuT6RSZgfCdVARSoglIoMZkdIO6VfU/exec";
 
 /* JavaScript is alive, so the ring painted before the page was parsed can go.
    It is a pseudo element on <html>, so nothing else can remove it. */
@@ -1311,6 +1323,12 @@ const DOWL = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Satur
 const MON = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 const TZ = "Europe/London";
 const TICK = '<svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg>';
+/* The Chimney itself, for a board with nothing on it: an arch, a smaller
+   arch, the ground. Nothing has come through the gate yet. */
+const GATE = '<div class="roost" aria-hidden="true"><svg viewBox="0 0 64 64">' +
+  '<path d="M13 54V27c0-10.5 8.5-19 19-19s19 8.5 19 19v27"/>' +
+  '<path d="M22 54V31c0-5.5 4.5-10 10-10s10 4.5 10 10v23"/>' +
+  '<path d="M9 54h46"/><path d="M32 4v4"/></svg></div>';
 
 /* The crest, drawn rather than fetched. A cockerel on a shield, which is what
    the college has had since 1496 and what the run club is named after. */
@@ -1697,8 +1715,21 @@ function signedOut(msg){
 }
 
 /* ---------- boot ---------- */
-const BOOT_LINES = ["Unlocking the gate", "Waking the porters", "Laying out the term",
-  "Counting the chairs", "Checking your pigeonhole"];
+/* The boot lines follow the term. Nobody is counting chairs in May Week. */
+const BOOT_BASE = ["Unlocking the gate", "Waking the porters", "Checking your pigeonhole"];
+const BOOT_SEASON = {
+  fortnight: ["Blowing up the balloons", "Learning everyone's names"],
+  michaelmas: ["Laying out the term", "Counting the chairs"],
+  vacation: ["Banking the fires", "Forwarding the post"],
+  lent: ["Scraping frost off the gate", "Watching the river"],
+  easter: ["Opening the Orchard", "Airing the gowns"],
+  mayweek: ["Fetching the punts", "Stringing the lights"]
+};
+function bootLines(){
+  let key = "michaelmas";
+  try{ key = seasonOf(todayLondon()).key; }catch(e){}
+  return BOOT_BASE.concat(BOOT_SEASON[key] || BOOT_SEASON.michaelmas);
+}
 let bootIdx = 0, bootTimer = null;
 let bootPct = 8, slowTimer = null;
 function bootTalk(on){
@@ -1706,10 +1737,11 @@ function bootTalk(on){
   if (!on){ bootPct = 8; return; }
   const bar = $("bootBar");
   if (bar) bar.style.width = "8%";
+  const L = bootLines();
   bootTimer = setInterval(() => {
-    bootIdx = (bootIdx + 1) % BOOT_LINES.length;
+    bootIdx = (bootIdx + 1) % L.length;
     const el = $("bootLine");
-    if (el) el.textContent = BOOT_LINES[bootIdx];
+    if (el) el.textContent = L[bootIdx];
     /* the bar creeps towards ninety and never reaches it, because a bar that
        sits at a hundred while nothing happens is a lie */
     bootPct = Math.min(90, bootPct + (90 - bootPct) * 0.28);
@@ -1742,6 +1774,7 @@ function cacheState(){
   try{
     const slim = Object.assign({}, S);
     delete slim.people; delete slim.signups; delete slim.market;
+    delete slim.signupsAll; delete slim.deskTickets; delete slim.allRooms; delete slim.pending;
     localStorage.setItem(CK, JSON.stringify({ at: Date.now(), s: slim }));
   }catch(e){}
 }
@@ -1839,9 +1872,14 @@ function sheet(title, inner, onOpen, sticky){
   const el = document.createElement("div");
   el.className = "sheet";
   el.id = "sheet";
-  el.innerHTML = '<div class="inner"><div class="scroll"><h3>' + esc(title) + "</h3>" + body + "</div>" +
+  el.innerHTML = '<div class="inner"><div class="scroll">' +
+    /* One obvious way back, at the top where a thumb starts, labelled in
+       words. The pale close in the corner of the eye was being missed. */
+    '<button class="sback" data-close aria-label="Go back">' +
+      '<svg viewBox="0 0 24 24"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg>Back</button>' +
+    '<h3>' + esc(title) + "</h3>" + body + "</div>" +
     '<div class="foot">' + (foot || "") +
-    (sticky ? "" : (foot ? "" : '<div class="acts"><button class="btn ghost sm" data-close>Close</button></div>')) +
+    (sticky ? "" : (foot ? "" : '<div class="acts"><button class="btn ghost" data-close>Close this</button></div>')) +
     "</div></div>";
   document.body.appendChild(el);
   document.body.classList.add("locked");
@@ -1866,8 +1904,6 @@ const isCommittee = () => !!(S && S.me.role === "committee");
 const isAdmin = () => !!(S && S.me.admin);
 const evById = id => (S.events || []).filter(e => e.id === id)[0] || null;
 const myStatus = id => (S.mine && S.mine[id] && S.mine[id].status) || "";
-const goingCount = () => (S.events || []).filter(e =>
-  ["going","waitlist"].indexOf(myStatus(e.id)) >= 0 && e.date >= todayLondon()).length;
 const catOf = ev => {
   const order = (S.tags || []).map(t => t.key);
   for (const k of order) if ((ev.tags || []).indexOf(k) >= 0) return k;
@@ -1882,6 +1918,16 @@ function evState(ev){
 
 /* ---------- an event row ---------- */
 function evRow(ev){
+  /* A private booking shows the room as taken and nothing more. Whose it is
+     stays their business, and there is no tick because there is nothing to
+     put a name down for. */
+  if (ev.private || ev.rsvpMode === "none"){
+    return '<div class="ev booking"><span class="cat c-practical"></span>' +
+      '<span class="tab">' + esc(clock(ev.start)) + '</span>' +
+      '<span class="body" style="padding:11px 10px 11px 0"><b>Room taken</b>' +
+      '<small>' + esc(ev.venueName) + " &middot; a member has it until " +
+      esc(clock(ev.end || ev.start)) + "</small></span></div>";
+  }
   const st = myStatus(ev.id), state = evState(ev), c = ev.counts || { going: 0 };
   const cls = ["ev", st, state === "cancelled" ? "cancelled" : "",
     state === "past" ? "past" : "", state === "live" ? "live" : ""].filter(Boolean).join(" ");
@@ -1891,7 +1937,7 @@ function evRow(ev){
   if (ev.rsvpMode === "required" && ev.signupBy){
     chips.push(ev.signupBy < todayLondon()
       ? '<span class="chip">names closed</span>'
-      : '<span class="chip">book by ' + esc(shortDate(ev.signupBy).slice(0, 6)) + "</span>");
+      : '<span class="chip">book by ' + esc(shortDate(ev.signupBy).slice(4)) + "</span>");
   }
   if (ev.repeats) chips.push('<span class="chip">weekly</span>');
   const meta = state === "cancelled" ? "Cancelled"
@@ -1998,7 +2044,7 @@ function renderCrow(){
          : '<span class="hollow">' + esc(empty) + "</span>") +
       '<span class="plate">' + esc(plate) + "</span></button>";
   const slots = [
-    box("Replies", replies.length, replies.length ? replies[0].subject : "", "empty", "ask"),
+    box("Replies", replies.length, replies.length ? replies[0].subject : "", "none waiting", "ask"),
     box("You are down for", mineSoon.length, mineSoon.length ? mineSoon[0].title : "", "nothing booked", "today"),
     box("To decide", votes, votes ? "Your vote is wanted" : "", "nothing to decide", "biz"),
     box("Notices", fresh, fresh ? "Read what has changed" : "", "nothing new", "lodge"),
@@ -2014,7 +2060,7 @@ function renderCrow(){
   ].join("");
 
   const bits = [];
-  const gateShut = h >= 0 && h < 5;
+  const gateShut = h < 5 || (h === 5 && +hm.slice(3) < 30);
   bits.push(gateShut
     ? '<span class="warn">Chimney gate shut until 5.30. Jesus Lane, Victoria Avenue or Lower Park Street</span>'
     : '<span class="dot">Chimney gate open</span>');
@@ -2025,7 +2071,29 @@ function renderCrow(){
   if (mtg) bits.push('<span class="warn">' + esc(mtg.title) + " at " + esc(clock(mtg.start)) + "</span>");
 
   const sea = seasonOf(t), wk = termWeek(t);
+  /* The sky, at last. skyAt() blends six wall clock moments by the minute;
+     the sun climbs and sets on the same clock, and the browser chrome is
+     tinted to match so the page starts above its own top edge. */
+  const hf = h + (+hm.slice(3)) / 60;
+  const sky = skyAt(hf);
+  const meta = $("metaTheme");
+  if (meta) meta.setAttribute("content", sky.band);
+  const sunX = 8 + 84 * Math.max(0, Math.min(1, (hf - 5.5) / 15.5));
+  const sunY = 76 - sky.height * 60;
+  const sun = sky.height > 0.03
+    ? '<i style="left:' + sunX.toFixed(1) + '%;top:' + sunY.toFixed(1) + '%;background:' + sky.sun +
+      ';box-shadow:0 0 22px 8px ' + sky.sun.replace("rgb(", "rgba(").replace(")", ",.45)") +
+      ';opacity:' + Math.min(1, sky.height * 3 + 0.25).toFixed(2) + '"></i>'
+    : "";
+  const orb = $("railOrb");
+  if (orb){
+    orb.style.background = "linear-gradient(135deg," + sky.top + "," + sky.band + " 62%," + sky.low + ")";
+    put("railClock", hm);
+    put("railTerm", sea.name + (wk ? " \u00b7 " + wk : ""));
+  }
   put("crow", '<div class="wall">' +
+    '<span class="sky" aria-hidden="true" style="background:linear-gradient(180deg,' +
+      sky.top + ' 0%,' + sky.band + ' 56%,' + sky.low + ' 100%)">' + sun + "</span>" +
     '<div class="when">' + esc(longDate(t)) + " &middot; " + esc(when.toLowerCase()) +
       '<em>' + esc(sea.name) + (wk ? ", " + esc(wk) : "") + "</em></div>" +
     termRule(t) +
@@ -2036,7 +2104,7 @@ function renderCrow(){
     '<div class="state">' + bits.join("") + "</div></div>");
 }
 function eventsOn(d){
-  return (S.events || []).filter(e => e.date === d &&
+  return (S.events || []).filter(e => e.date === d && !e.private &&
     (!mineOnly || ["going","waitlist"].indexOf(myStatus(e.id)) >= 0));
 }
 function renderTodayUrgent(){
@@ -2076,7 +2144,7 @@ function renderTodayOn(){
      arrows move both together and the page always agrees with itself */
   const ws = homeWeek || weekStart(t), we = addDays(ws, 6);
   const soon = (S.events || [])
-    .filter(e => e.status !== "cancelled" && e.date >= ws && e.date <= we)
+    .filter(e => e.status !== "cancelled" && !e.private && e.date >= ws && e.date <= we)
     .filter(e => e.date > t || e.date < t || endOf(e) > now)
     .filter(e => !mineOnly || ["going","waitlist"].indexOf(myStatus(e.id)) >= 0);
   const mine = soon.filter(e => ["going","waitlist"].indexOf(myStatus(e.id)) >= 0);
@@ -2248,6 +2316,11 @@ function openTerms(id){
 function openEvent(id){
   const ev = evById(id);
   if (!ev) return;
+  if (ev.private || ev.rsvpMode === "none")
+    return sheet("The room is taken",
+      '<p class="lede">' + esc(ev.venueName) + " is held by a member from " + esc(clock(ev.start)) +
+      " to " + esc(clock(ev.end || ev.start)) + " on " + esc(longDate(ev.date)) +
+      ". Whose it is stays their business; it is on the calendar so nobody plans over it.</p>");
   const st = myStatus(id), m = (S.mine || {})[id] || {};
   const c = ev.counts || { going: 0, waitlist: 0 };
   const closed = ev.signupBy && todayLondon() > ev.signupBy;
@@ -2273,7 +2346,7 @@ function openEvent(id){
     ev.leads.map(l => '<div class="whoc">' +
       (faceOf(l) ? '<img class="ph" src="' + faceOf(l) + '" alt="">' : '<span class="ph">' + esc(initials(l.name)) + "</span>") +
       "<b>" + esc(l.name) + "</b><span>" + esc(l.role) + "</span></div>").join("") + "</div>");
-  const pos = m.position ? " You are " + m.position + (m.position === 1 ? "st" : m.position === 2 ? "nd" : m.position === 3 ? "rd" : "th") + " on the waiting list." : "";
+  const pos = m.position ? " You are " + m.position + ordinal(m.position) + " on the waiting list." : "";
   if (ev.terms) lines.push('<div class="grp"><b>Terms</b></div><div class="card"><p>' + esc(ev.terms) + "</p></div>");
   lines.push('<div class="acts">' +
     (ev.status === "cancelled" ? "" :
@@ -2349,13 +2422,12 @@ function renderLodge(){
 function lodgeNow(){
   const n = S.notices || [];
   const waiting = n.filter(x => x.status === "pending");
-  return (isCommittee() && waiting.length
+  return '<div class="noticecols">' + (isCommittee() && waiting.length
     ? '<div class="grp"><b>Waiting for a yes</b></div>' + waiting.map(noticeHtml).join("") +
       '<div class="grp"><b>On the board</b></div>' : "") +
     (n.length ? n.filter(x => x.status !== "pending" || !isCommittee()).map(noticeHtml).join("")
     : '<div class="card"><p>Nothing on the board, which is usually good news.</p>' +
-      '<p class="lede">Gates, building work, lost property and anything the Porters want the MCR to know lands here.</p></div>') +
-    "";
+      '<p class="lede">Gates, building work, lost property and anything the Porters want the MCR to know lands here.</p></div>') + '</div>';
 }
 function lodgeForms(){
   const L = S.links || [];
@@ -2667,7 +2739,7 @@ function openAsk(key, subject){
           body: $("akBody").value, anon: !!($("akAnon") && $("akAnon").checked) });
         S.tickets = d.tickets;
         closeSheet();
-        askTab = "rooms"; renderAsk();
+        askTab = "threads"; renderAsk();
         go("ask");
         toast("Sent. Your reference is " + d.ref + ".");
       }catch(err){ unspin(b); fail(err); }
@@ -2718,6 +2790,7 @@ function openRoom(){
           date: $("rmDate").value, start: $("rmStart").value, end: $("rmEnd").value,
           people: $("rmPeople").value, note: $("rmNote").value });
         S.rooms = d.rooms;
+        if (d.tickets) S.tickets = d.tickets;
         closeSheet();
         askTab = "rooms"; renderAsk();
         go("ask");
@@ -3005,8 +3078,9 @@ function renderMe(){
 function pendingHtml(){
   const p = S.pending || [];
   const word = { notice:"A notice", idea:"A suggestion", room:"The room", swap:"A place held" };
-  if (!p.length) return '<div class="card"><h3>Nothing waiting</h3>' +
-    '<p class="lede">Notices, suggestions, room requests and unpaid swap places all land here.</p></div>';
+  if (!p.length) return '<div class="card">' + GATE +
+    '<h3 style="text-align:center">Nothing waiting</h3>' +
+    '<p class="lede" style="text-align:center">Notices, suggestions, room requests and unpaid swap places all land here. The gate is clear.</p></div>';
   return '<div class="grp"><b>' + p.length + " waiting on the committee</b></div>" +
     p.map(x => '<div class="pend ' + esc(x.kind) + '">' +
       '<div class="pk">' + esc(word[x.kind] || x.kind) + "</div>" +
@@ -3143,21 +3217,6 @@ function deskWeekly(){
 }
 /* Everything about running a swap in one place: what is owed, who owes it,
    who has paid, and whether the app can actually reach any of them. */
-/* The day's allowance, and what is left of it. Google gives a college account
-   1500 a day and a personal one 100, and the app is silent when it runs out,
-   so this is the only place anybody would find out. */
-function mailGauge(m){
-  if (!m || m.quota === undefined || m.quota < 0) return "";
-  const cap = m.cap || 100, left = Math.max(0, m.quota), used = Math.max(0, cap - left);
-  const pct = Math.round(left / cap * 100);
-  const low = pct <= 15;
-  return '<div class="gauge' + (low ? " low" : "") + '">' +
-    '<div class="gt"><b>' + left + "</b><span>of " + cap + " emails left today</span>" +
-    "<i>" + used + " used &middot; resets at midnight Pacific</i></div>" +
-    '<div class="gbar"><span style="width:' + pct + '%"></span></div>' +
-    (low ? '<p class="lede">Close to the limit. A swap going up to forty people is forty messages, ' +
-      "so anything sent after this may quietly not arrive.</p>" : "") + "</div>";
-}
 function renderSwapDesk(){
   if (!isCommittee()) return;
   const all = S.swaps || [], live = all.filter(w => !w.past);
@@ -3174,24 +3233,19 @@ function renderSwapDesk(){
   put("swdBody",
     /* the two things that stop everything working, first */
     (!t.ready
-      ? '<div class="warnbox"><b>Nobody can pay yet</b><span>The account to pay into is not filled in, ' +
-        "so the email asking for money tells people to write to " + esc(t.name || "the Treasurer") +
-        " instead of giving them the details. Put the sort code and account number into " +
-        "<code>TREASURER</code> at the top of Code.gs.</span></div>" : "") +
-    /* If it cannot send, say so first, say why, and give the way out. */
-    (mail.authNeeded || mail.scopeError || mail.quota === 0
+      ? '<div class="warnbox"><b>Nobody can pay yet</b><span>The account to pay into has not been ' +
+        "filled in, so the email asking for money tells people to write to " +
+        esc(t.name || "the Treasurer") + " instead of giving them the details.</span>" +
+        '<button class="btn gold sm" data-bank>Fill in the account details</button></div>' : "") +
+    (mail.quota === 0 || mail.scopeError
       ? '<div class="warnbox"><b>The app cannot send email</b><span>' +
-        (mail.authNeeded
-          ? "This deployment has never been given permission to send. Nothing has gone out: not payment " +
-            "requests, not replies to questions, not room permissions."
-          : mail.scopeError ? esc(mail.scopeError)
-          : "Today's allowance is used up. It resets at midnight Pacific time.") +
-        "</span>" +
-        (mail.authNeeded && mail.authUrl
-          ? '<a class="btn gold sm" href="' + esc(mail.authUrl) + '" target="_blank" rel="noopener">' +
-            "Grant permission now</a>" : "") +
-        '<button class="btn ghost sm" data-mailtest>Send me a test email</button>' +
-        '<button class="btn ghost sm" data-mailhelp>What if that does not work</button></div>' : "") +
+        (mail.scopeError ? esc(mail.scopeError)
+          : "Today's sending quota reads zero, which usually means the deployment was never given " +
+            "permission to send.") +
+        " Nothing has been going out: not payment requests, not replies to questions, not room " +
+        "permissions. Open the Apps Script editor, run <code>setup</code> once, accept the " +
+        "permission it asks for, then Deploy, New version.</span>" +
+        '<button class="btn gold sm" data-mailtest>Send me a test email</button></div>' : "") +
     '<div class="stats">' + [
       [held.length, "waiting to pay"],
       ["\u00a3" + Math.round(owed), "owed to " + esc(t.name || "the Treasurer")],
@@ -3200,14 +3254,14 @@ function renderSwapDesk(){
       [late.length, "overdue"],
       [(mail.sent || 0) + "/" + ((mail.sent || 0) + (mail.failed || 0)), "emails sent"]
     ].map(x => '<div class="stat"><b>' + x[0] + "</b><span>" + x[1] + "</span></div>").join("") + "</div>" +
-    /* How many are left today, drawn, because running out is silent otherwise
-       and a swap going up to forty people is forty of them. */
-    mailGauge(mail) +
 
+    /* the chase list: everybody who owes, most urgent first, one tap each */
     (held.length
-      ? '<div class="grp"><b>Owes money</b><span class="weeknav"><a class="btn gold sm" href="mailto:' +
-        esc(held.map(r => r.x.email).join(",")) + "?subject=" +
-        encodeURIComponent("Your swap place: payment") + '">Write to all ' + held.length + "</a></span></div>" +
+      ? '<div class="grp"><b>Owes money</b><span class="weeknav">' +
+        '<a class="btn gold sm" href="mailto:' + esc(held.map(r => r.x.email).join(",")) + "?subject=" +
+        encodeURIComponent("Your swap place: payment") + '">Write to all ' + held.length + "</a>" +
+        '<button class="btn ghost sm" data-copyaddrs="' +
+        encodeURIComponent(held.map(r => r.x.email).join(", ")) + '">Copy the addresses</button></span></div>' +
         held.sort((a, b) => (a.x.dueBy || 0) - (b.x.dueBy || 0)).map(r => {
           const d = Math.ceil((r.x.dueBy - Date.now()) / 864e5);
           return '<div class="srow' + (d <= 0 ? " over" : d <= 1 ? " soon" : "") + '">' +
@@ -3217,20 +3271,15 @@ function renderSwapDesk(){
             '<span class="ss ' + (d <= 0 ? "bad" : "") + '">' +
               (d <= 0 ? "overdue" : d + (d === 1 ? " day" : " days")) + "</span>" +
             '<button class="btn gold sm" data-swappaid="' + esc(r.x.id) + '" data-p="1">Paid</button>' +
+            '<button class="btn ghost sm" data-swapnudge="' + esc(r.x.id) + '">Nudge</button>' +
             "</div>";
         }).join("")
       : '<div class="card"><p>Nobody owes anything.</p></div>') +
 
-    (paid.length ? '<div class="grp"><b>Paid</b></div><div class="card">' + paid.map(r =>
-      '<div class="rowline"><div class="t"><b>' + esc(r.x.name) + "</b><span>" + esc(r.w.college) +
-      " &middot; " + esc(r.w.price || "free") + "</span></div>" +
-      '<button class="btn ghost sm" data-swappaid="' + esc(r.x.id) + '" data-p="0">Undo</button></div>').join("") +
-      "</div>" : "") +
-
-    (wait.length ? '<div class="grp"><b>Waiting</b></div><div class="card">' + wait.map(r =>
-      '<div class="rowline"><div class="t"><b>' + esc(r.x.name) + "</b><span>" + esc(r.w.college) +
-      "</span></div><a class=\"btn ghost sm\" href=\"mailto:" + esc(r.x.email) + '">Write</a></div>').join("") +
-      "</div>" : "") +
+    /* then every swap in full: who signed up, who paid, who waits, in order */
+    '<div class="grp"><b>Each swap, and everybody on it</b></div>' +
+    (live.length ? live.map(swapDeskCard).join("")
+      : '<div class="card"><p>No swaps coming up. Add one from the Swaps page.</p></div>') +
 
     '<div class="grp"><b>Where the money goes</b></div><div class="card">' +
       '<div class="rowline"><div class="t"><b>' + esc(t.name || "The Treasurer") + "</b><span>" +
@@ -3241,7 +3290,8 @@ function renderSwapDesk(){
           "</span></div></div>"
         : '<p class="lede">No account details yet, so the payment email cannot give them.</p>') +
       '<p class="lede">Places are held for ' + (S.swapHold || 3) + " days. After that they pass to the " +
-      "next person on their own.</p></div>" +
+      "next person on their own, who is asked for the money by email the moment it happens.</p>" +
+      '<div class="acts"><button class="btn ghost sm" data-bank>Edit these details</button></div></div>' +
 
     '<div class="grp"><b>What the app has sent</b></div><div class="card">' +
       (mail.recent && mail.recent.length
@@ -3253,6 +3303,89 @@ function renderSwapDesk(){
       '<div class="acts"><button class="btn ghost sm" data-mailtest>Send me a test email</button>' +
       '<span class="lede">Quota left today: ' + (mail.quota === undefined || mail.quota < 0 ? "unknown" : mail.quota) +
       "</span></div></div>");
+}
+/* One swap as its committee card: the header says how full it is, then every
+   person in the order they arrived, each with exactly the buttons their state
+   allows. Paid people can only be unpaid; held people can be marked paid,
+   nudged, or released; waiting people can be promoted when there is room. */
+function swapDeskCard(w){
+  const list = w.list || [];
+  const waitList = list.filter(x => x.status === "waiting");
+  const room = (w.left || 0) > 0;
+  const chip = x =>
+    x.status === "paid"
+      ? '<span class="st answered">paid' + (x.paidAt ? " &middot; " + esc(ago(x.paidAt)) : "") + "</span>"
+    : x.status === "held"
+      ? (x.dueBy && x.dueBy < Date.now()
+          ? '<span class="st late">overdue</span>'
+          : '<span class="st open">due in ' +
+            Math.max(1, Math.ceil(((x.dueBy || Date.now()) - Date.now()) / 864e5)) + "d</span>")
+      : '<span class="st">' + (waitList.indexOf(x) + 1) + ' of ' + waitList.length + " waiting</span>";
+  const act = x =>
+    x.status === "held"
+      ? '<button class="btn gold sm" data-swappaid="' + esc(x.id) + '" data-p="1">Paid</button>' +
+        '<button class="btn ghost sm" data-swapnudge="' + esc(x.id) + '">Nudge</button>' +
+        '<button class="btn ghost sm" data-swapkick="' + esc(x.id) + '">Release</button>'
+    : x.status === "paid"
+      ? '<button class="btn ghost sm" data-swappaid="' + esc(x.id) + '" data-p="0">Undo</button>'
+      : (room
+          ? '<button class="btn gold sm" data-swappromote="' + esc(x.id) + '">Promote</button>'
+          : '<button class="btn ghost sm" disabled title="No place free yet">Promote</button>') +
+        '<button class="btn ghost sm" data-swapkick="' + esc(x.id) + '">Release</button>';
+  return '<div class="card swdc">' +
+    '<div class="swdh"><div class="t"><b>' + esc(w.college) + "</b><span>" +
+      esc(longDate(w.date)) + (w.start ? " &middot; sits at " + esc(clock(w.start)) : "") +
+      (w.price ? " &middot; " + esc(w.price) : "") + "</span></div>" +
+      '<span class="ss">' + w.taken + "/" + (w.spots || 0) + " places" +
+      (waitList.length ? " &middot; " + waitList.length + " waiting" : "") + "</span>" +
+      '<button class="btn ghost sm" data-swapdeskedit="' + esc(w.id) + '">Edit</button></div>' +
+    (list.length ? list.map(x =>
+        '<div class="rowline"><div class="t"><b>' + esc(x.name) + "</b>" +
+        '<span><a href="mailto:' + esc(x.email) + '">' + esc(x.email) + "</a></span></div>" +
+        chip(x) + '<span class="swx">' + act(x) + "</span></div>").join("")
+      : '<p class="lede">Nobody has put their name down yet.</p>') +
+    (list.length
+      ? '<div class="acts"><a class="btn ghost sm" href="mailto:' +
+        esc(list.map(x => x.email).join(",")) + '">Write to everybody on this one</a>' +
+        '<button class="btn ghost sm" data-copyaddrs="' +
+        encodeURIComponent(list.map(x => x.email).join(", ")) + '">Copy the addresses</button></div>'
+      : "") +
+    "</div>";
+}
+/* The account the payment email gives out, edited here and kept in the
+   spreadsheet. A new treasurer types over it and never opens the code. */
+function openBank(){
+  const t = S.treasurer || {};
+  sheet("Where the money goes",
+    '<p class="lede">These lines go word for word into the email that asks somebody to pay, so write ' +
+    "them exactly as the bank shows them. They are kept in the spreadsheet, not the code.</p>" +
+    '<label class="f"><span>Treasurer</span><input id="bk-name" value="' + esc(t.name || "") + '"></label>' +
+    '<label class="f"><span>Treasurer address</span><input id="bk-email" type="email" value="' +
+      esc(t.email || "") + '"></label>' +
+    '<label class="f"><span>Name on the account</span><input id="bk-bankName" value="' +
+      esc(t.bankName || "") + '" placeholder="G Rossi"></label>' +
+    '<div class="f2"><label class="f"><span>Sort code</span><input id="bk-sortCode" value="' +
+      esc(t.sortCode || "") + '" placeholder="20-17-19"></label>' +
+    '<label class="f"><span>Account number</span><input id="bk-account" value="' +
+      esc(t.account || "") + '" placeholder="12345678"></label></div>' +
+    '<label class="f"><span>Reference to use</span><input id="bk-reference" value="' +
+      esc(t.reference || "") + '"></label>' +
+    '<div class="acts"><button class="btn gold" id="bkGo">Save the details</button>' +
+    '<button class="btn ghost" data-close>Cancel</button></div>',
+    () => {
+      $("bkGo").onclick = async () => {
+        spin($("bkGo"), "Saving");
+        try{
+          const r = await api("bankSet", { bank: {
+            name: $("bk-name").value, email: $("bk-email").value, bankName: $("bk-bankName").value,
+            sortCode: $("bk-sortCode").value, account: $("bk-account").value,
+            reference: $("bk-reference").value } });
+          S.treasurer = r.treasurer;
+          closeSheet(); renderSwapDesk();
+          toast("Saved. The payment email now gives these details.");
+        }catch(err){ unspin($("bkGo")); fail(err); }
+      };
+    });
 }
 function renderQueue(){
   if (!isCommittee()) return;
@@ -3385,11 +3518,18 @@ function openEventEditor(id){
     '<label class="f"><span>Bring</span><input id="eBring" maxlength="220" value="' + v("bring") + '"></label>' +
     '<label class="f"><span>Theme or dress</span><input id="eDress" maxlength="120" value="' + v("dress") + '"></label>' +
     '<label class="check"><input type="checkbox" id="eCost"' + (ev && ev.cost ? " checked" : "") + "> Bring money</label>" +
+    '<label class="f" id="ePriceRow"' + (ev && ev.cost ? "" : " hidden") +
+      '><span>Roughly how much</span><input id="ePrice" maxlength="40" value="' + v("price") +
+      '" placeholder="\u00a35 on the door"></label>' +
     '<label class="f"><span>Who is running it, addresses comma separated</span><input id="eLeads" value="' +
       esc(ev ? (ev.leads || []).map(l => l.email).filter(Boolean).join(",") : S.me.email) + '"></label>' +
     '<div class="acts"><button class="btn crimson" id="eGo">Save</button>' +
       (ev && isAdmin() ? '<button class="btn ghost" id="eDel">Delete it</button>' : "") + "</div>",
     el => {
+      const costBox = el.querySelector("#eCost");
+      if (costBox) costBox.addEventListener("change", () => {
+        const r = $("ePriceRow"); if (r) r.hidden = !costBox.checked;
+      });
       el.querySelector("#eGo").addEventListener("click", async e => {
         const b = e.currentTarget;
         spin(b, "Saving");
@@ -3398,7 +3538,8 @@ function openEventEditor(id){
             start: $("eStart").value, end: $("eEnd").value, venue: $("eVenue").value, desc: $("eDesc").value,
             tags: $("eTags").value, capacity: $("eCap").value, signupBy: $("eBy").value,
             rsvpMode: $("eMode").value, bring: $("eBring").value, dress: $("eDress").value,
-            cost: $("eCost").checked, leads: $("eLeads").value, terms: $("eTerms").value } });
+            cost: $("eCost").checked, price: $("ePrice") ? $("ePrice").value : "",
+            leads: $("eLeads").value, terms: $("eTerms").value } });
           closeSheet();
           await refresh(false);
           toast("Saved. Everyone sees it within the minute.");
@@ -3585,7 +3726,8 @@ function renderSwaps(){
       status: "open", mine: null, list: [] }, hold) : "") +
     (list.length
       ? list.map(w => swapCard(w, hold)).join("")
-      : '<div class="card"><h3>' + (swapPast ? "Nothing behind us yet" : "Nothing arranged yet") + "</h3>" +
+      : '<div class="card">' + GATE +
+        '<h3 style="text-align:center">' + (swapPast ? "Nothing behind us yet" : "Nothing arranged yet") + "</h3>" +
         "<p>A swap is dinner at another college with their MCR, and theirs at ours a few weeks later. " +
         "You sit with people you would never otherwise meet, in a hall you would never otherwise see.</p>" +
         '<p class="lede">Places are few and they go quickly, so this is where they are handed out: first ' +
@@ -3694,55 +3836,8 @@ function swapCard(w, hold){
     (isCommittee() ? '<button class="swedit" data-swapedit="' + esc(w.id) + '">Edit this swap</button>' : "") +
     "</div>";
 }
-const ordinal = n => n === 1 ? "st" : n === 2 ? "nd" : n === 3 ? "rd" : "th";
+const ordinal = n => { const v = n % 100; return v >= 11 && v <= 13 ? "th" : ["th","st","nd","rd"][n % 10] || "th"; };
 
-/* Written out because the failure is invisible and the fix is four steps in
-   a place most people have never opened. */
-function openMailHelp(){
-  const m = S.mail || {};
-  sheet("Making email work",
-    '<div class="card"><p>Apps Script only asks for a permission when a run in front of it actually ' +
-    "needs one. Sending was added to this app long after it was first authorised, so the question was " +
-    "never asked and every message has been refused since.</p></div>" +
-    (m.stale
-      ? '<div class="warnbox"><b>Google is holding an old permission</b><span>The run was not stopped ' +
-        "to ask you, which means it is still using an authorisation granted before the sending code " +
-        "existed. It will go on using it until that authorisation is taken away. Nothing done inside " +
-        "the editor changes this.</span>" +
-        '<a class="btn gold sm" href="https://myaccount.google.com/permissions" target="_blank" ' +
-        'rel="noopener">Open your Google permissions</a></div>'
-      : "") +
-    '<div class="grp"><b>Five steps, about a minute</b></div>' +
-    '<div class="card">' +
-    ['Go to <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener">' +
-       "myaccount.google.com/permissions</a>, signed in as whoever owns the script.",
-     "Find this project. It will be called The Chimney, or Jesus MCR, or Untitled project. Open it " +
-       "and choose <b>Remove access</b>. This is the step that matters and the one everybody skips.",
-     "Back in the editor, pick <code>authorise</code> from the function list and press Run. This time " +
-       "a permission screen appears and mentions sending email as you. Accept it.",
-     "Deploy, Manage deployments, edit the deployment, <b>New version</b>, Deploy.",
-     "Run <code>authorise</code> once more. The email line should read a number."
-    ].map((x, i) => '<div class="rowline"><div class="t"><b>' + (i + 1) + "</b><span>" + x +
-      "</span></div></div>").join("") + "</div>" +
-    '<div class="card"><p class="lede">If step three still does not ask: Project Settings, tick ' +
-    "<b>Show appsscript.json manifest file in editor</b>, and check <code>oauthScopes</code> contains " +
-    "<code>script.send_mail</code>. Where a manifest lists scopes, that list is the whole truth, and " +
-    "anything missing from it is never requested however much the code needs it.</p></div>" +
-    (m.authUrl ? '<div class="grp"><b>Or grant it straight from here</b></div>' +
-      '<div class="card"><p class="lede">Apps Script will hand out a link for exactly this. It opens ' +
-      "the same permission screen.</p>" +
-      '<div class="acts"><a class="btn gold" href="' + esc(m.authUrl) + '" target="_blank" ' +
-      'rel="noopener">Open the permission screen</a></div></div>' : "") +
-    '<div class="grp"><b>What it says now</b></div><div class="card">' +
-    '<div class="rowline"><div class="t"><b>Permission</b><span>' +
-      esc(m.authStatus || "unknown") + (m.authNeeded ? ", so nothing can be sent" : "") + "</span></div></div>" +
-    '<div class="rowline"><div class="t"><b>Allowance</b><span>' +
-      (m.quota === undefined || m.quota < 0 ? "cannot be read, which itself means no permission"
-        : m.quota + " of " + (m.cap || 100) + " left today") + "</span></div></div>" +
-    (m.scopeError ? '<div class="rowline"><div class="t"><b>Last error</b><span>' +
-      esc(m.scopeError) + "</span></div></div>" : "") + "</div>" +
-    '<div class="acts"><button class="btn gold" data-mailtest>Send me a test email</button></div>');
-}
 function openSwapTake(id){
   const w = (S.swaps || []).filter(x => x.id === id)[0];
   if (!w) return;
@@ -3802,7 +3897,8 @@ function renderMarket(){
           '<button data-gp="' + (giftPage + 1) + '"' +
             (giftPage >= pages - 1 ? " disabled" : "") + ">Next</button></div>"
         : "")
-    : '<div class="card"><p>Nothing here yet. Somebody has to be first, and June is when it fills up.</p></div>');
+    : '<div class="card">' + GATE +
+      '<p style="text-align:center">Nothing through the gate yet. Somebody has to be first, and June is when it fills up.</p></div>');
 }
 function vcard(m){
   const k = (S.marketKinds || []).filter(x => x.key === m.kind)[0] || { name: m.kind };
@@ -4117,7 +4213,6 @@ async function seen(){
 function renderBadges(){
   if (!S) return;
   const set = (id, n) => { const el = $(id); if (el){ el.hidden = !n; el.textContent = n; } };
-  set("bdgCal", goingCount());
   set("bdgLodge", (S.updates || []).filter(u => u.at > (S.me.seenAt || 0)).length);
   set("bdgAsk", (S.tickets || []).filter(t => t.status === "answered").length);
   set("bdgSwapDesk", (S.swaps || []).reduce((n, w) => n +
@@ -4172,7 +4267,7 @@ document.addEventListener("click", async e => {
     "[data-skip],[data-editser],[data-second],[data-vote],[data-mset],[data-code],[data-checkin]," +
     "[data-delupdate],[data-rosteredit],[data-rosterdel],[data-newidea],[data-back]," +
     "[data-setidea],[data-dropidea],[data-pollvote],[data-pollclose]," +
-    "[data-marketnew],[data-markettake],[data-marketdrop],[data-bumpedit],[data-gk],[data-gift],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-polldrop],[data-motiondrop],[data-desktab],[data-tick2],[data-gp],[data-desk],[data-asktab],[data-thread],[data-mythreads],[data-swaptake],[data-swapdrop],[data-swappaid],[data-swapedit],[data-swapsave],[data-swapcancel],[data-swapdel],[data-swappast],[data-mailtest],[data-mailhelp],[data-jcsu],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
+    "[data-marketnew],[data-markettake],[data-marketdrop],[data-bumpedit],[data-gk],[data-gift],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-polldrop],[data-motiondrop],[data-desktab],[data-tick2],[data-gp],[data-desk],[data-asktab],[data-thread],[data-mythreads],[data-swaptake],[data-swapdrop],[data-swappaid],[data-swapedit],[data-swapsave],[data-swapcancel],[data-swapdel],[data-swappast],[data-mailtest],[data-bank],[data-swapnudge],[data-swapkick],[data-swappromote],[data-copyaddrs],[data-swapdeskedit],[data-jcsu],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
   if (!t) return;
   const d = t.dataset;
   try{
@@ -4183,7 +4278,8 @@ document.addEventListener("click", async e => {
     if (d.lodge){ lodgeTab = d.lodge; renderLodge(); window.scrollTo(0, 0); return; }
     if (t.hasAttribute("data-newnotice")) return openNoticeEditor();
     if (d.hw !== undefined){
-      homeWeek = d.hw === "0" ? weekStart(todayLondon()) : addDays(homeWeek, (+d.hw) * 7);
+      homeWeek = d.hw === "0" ? weekStart(todayLondon())
+        : addDays(homeWeek || weekStart(todayLondon()), (+d.hw) * 7);
       renderTodayWeek(); renderTodayOn(); return;
     }
     if (t.hasAttribute("data-mineonly")){
@@ -4231,7 +4327,6 @@ document.addEventListener("click", async e => {
     if (t.hasAttribute("data-swapedit")){ swapEdit = d.swapedit || "new"; renderSwaps(); return; }
     if (t.hasAttribute("data-swapcancel")){ swapEdit = ""; renderSwaps(); return; }
     if (d.jcsu !== undefined){ jcsuOpen = d.jcsu === "1"; renderLodge(); return; }
-    if (t.hasAttribute("data-mailhelp")) return openMailHelp();
     if (t.hasAttribute("data-mailtest")){
       spin(t, "Sending");
       try{
@@ -4266,7 +4361,40 @@ document.addEventListener("click", async e => {
       S.swaps = (await api("swapDrop", { id: d.swapdrop })).swaps; renderSwaps(); return toast("Given up.");
     }
     if (d.swappaid){ await api("swapPaid", { spot: d.swappaid, paid: d.p === "1" });
-      await refresh(false); return toast(d.p === "1" ? "Marked paid." : "Marked unpaid."); }
+      await refresh(false); return toast(d.p === "1"
+        ? "Marked paid, and they have been told their place is confirmed." : "Marked unpaid."); }
+    if (t.hasAttribute("data-bank")) return openBank();
+    if (d.swapnudge){
+      spin(t, "Sending");
+      try{
+        const r = await api("swapNudge", { spot: d.swapnudge });
+        S.swaps = r.swaps; S.mail = r.mail; renderSwapDesk();
+        toast("Asked again, by email.");
+      }catch(err){ unspin(t); fail(err); }
+      return;
+    }
+    if (d.swapkick){
+      if (!confirm("Let this place go? It offers itself to the waiting list straight away.")) return;
+      const r = await api("swapKick", { spot: d.swapkick });
+      S.swaps = r.swaps; S.mail = r.mail; renderSwapDesk();
+      return toast("Released.");
+    }
+    if (d.swappromote){
+      spin(t, "Promoting");
+      try{
+        const r = await api("swapPromote", { spot: d.swappromote });
+        S.swaps = r.swaps; S.mail = r.mail; renderSwapDesk();
+        toast("Promoted, and asked for the money.");
+      }catch(err){ unspin(t); fail(err); }
+      return;
+    }
+    if (t.hasAttribute("data-copyaddrs")){
+      const s = decodeURIComponent(t.getAttribute("data-copyaddrs") || "");
+      try{ await navigator.clipboard.writeText(s); toast("Copied."); }
+      catch(e){ prompt("Copy these:", s); }
+      return;
+    }
+    if (d.swapdeskedit){ swapEdit = d.swapdeskedit; go("swaps"); renderSwaps(); return; }
     if (t.hasAttribute("data-editclub")) return openClubEditor(d.editclub);
     if (d.noticeok){ S.notices = (await api("noticeDecide", { id: d.noticeok, ok: true })).notices;
       await refresh(false); return toast("Up on the board."); }
@@ -4396,7 +4524,7 @@ document.addEventListener("click", async e => {
 /* The gate's own buttons. It sits outside the app, so it gets its own
    listener rather than borrowing the one that needs S to exist. */
 on("gate", "click", e => {
-  const t = e.target.closest("[data-retry],[data-diag],[data-prompt],[data-tryanyway]");
+  const t = e.target.closest("[data-retry],[data-diag],[data-prompt],[data-tryanyway],[data-copyorigin]");
   if (!t) return;
   if (t.hasAttribute("data-retry")){ gsiUp = false; gsiComplaint = ""; return probe(); }
   if (t.hasAttribute("data-copyorigin")){
@@ -4436,8 +4564,8 @@ document.querySelectorAll("#nav .tabbtn").forEach(b => b.addEventListener("click
 document.addEventListener("keydown", e => {
   if (e.key === "Escape" && sheetOpen) return closeSheet();
   if (sheetOpen || !S || view !== "today") return;
-  if (e.key === "ArrowLeft"){ homeWeek = addDays(homeWeek, -7); renderTodayWeek(); renderTodayOn(); }
-  if (e.key === "ArrowRight"){ homeWeek = addDays(homeWeek, 7); renderTodayWeek(); renderTodayOn(); }
+  if (e.key === "ArrowLeft"){ homeWeek = addDays(homeWeek || weekStart(todayLondon()), -7); renderTodayWeek(); renderTodayOn(); }
+  if (e.key === "ArrowRight"){ homeWeek = addDays(homeWeek || weekStart(todayLondon()), 7); renderTodayWeek(); renderTodayOn(); }
 });
 /* Swipe the week on a phone. Only a clean horizontal drag counts, so it never
    steals a scroll. */
@@ -4454,14 +4582,13 @@ document.addEventListener("keydown", e => {
     const dx = t.clientX - x0, dy = t.clientY - y0;
     x0 = null;
     if (Math.abs(dx) > 56 && Math.abs(dx) > Math.abs(dy) * 1.8){
-      homeWeek = addDays(homeWeek, dx < 0 ? 7 : -7);
+      homeWeek = addDays(homeWeek || weekStart(todayLondon()), dx < 0 ? 7 : -7);
       renderTodayWeek(); renderTodayOn();
     }
   }, { passive: true });
 })();
 on("bMe", "click", () => go("me"));
 on("bRefresh", "click", () => refresh(true));
-// calendar tab removed
 on("bNewEvent2", "click", () => openEventEditor(""));
 on("bNewSeries", "click", () => openSeriesEditor(""));
 on("bNewMotion", "click", openMotion);
