@@ -148,13 +148,14 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .wall{margin:0 0 var(--g)}
 .wall .when{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
   color:var(--gold-2);font-weight:600}
-.wall h3{font-family:var(--display);font-size:clamp(32px,7.6vw,52px);margin:9px 0 7px;font-weight:600;
+.wall h3{font-family:var(--display);font-size:clamp(28px,6.4vw,44px);margin:7px 0 6px;font-weight:600;
   line-height:.98;letter-spacing:-.048em;font-variation-settings:"SOFT" 0,"WONK" 1,"opsz" 144}
 .wall h3 em{font-style:italic;color:var(--gold-2)}
 .wall .line{margin:0;color:var(--cream-2);font-size:17.5px;max-width:44ch;letter-spacing:-.01em;font-weight:500}
-.slots{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--g);margin-top:18px}
-@media(min-width:660px){.slots{grid-template-columns:repeat(4,1fr)}}
-.slot{position:relative;text-align:left;padding:12px 13px;min-height:84px;background:var(--t1);
+.slots{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:16px}
+@media(min-width:560px){.slots{grid-template-columns:repeat(4,1fr)}}
+@media(min-width:1000px){.slots{grid-template-columns:repeat(8,1fr)}}
+.slot{position:relative;text-align:left;padding:10px 12px;min-height:70px;background:var(--t1);
   border-radius:var(--r2);display:flex;flex-direction:column;justify-content:space-between;
   transition:background .18s,transform .18s var(--ease)}
 .slot.has{background:var(--t2)}
@@ -163,9 +164,10 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
   color:var(--cream-4);display:flex;align-items:center;gap:6px;font-weight:600}
 .slot.has .plate{color:var(--gold)}
 .slot.has .plate::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--gold);flex:0 0 5px}
-.slot .slip b{display:block;font-size:15px;font-weight:700;line-height:1.26;letter-spacing:-.02em;color:var(--cream)}
-.slot .hollow{display:block;font-size:14.5px;color:var(--cream-4);font-weight:500}
-.slot .n{position:absolute;top:12px;right:14px;font-family:var(--display);font-size:15px;font-weight:600;color:var(--gold-2)}
+.slot .slip b{display:block;font-size:13.5px;font-weight:700;line-height:1.24;letter-spacing:-.022em;
+  color:var(--cream);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.slot .hollow{display:block;font-size:13px;color:var(--cream-4);font-weight:500}
+.slot .n{position:absolute;top:9px;right:11px;font-family:var(--display);font-size:14px;font-weight:600;color:var(--gold-2)}
 .state{display:flex;flex-wrap:wrap;gap:var(--g);margin-top:var(--g)}
 .state span{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--cream-3);background:var(--t1);
   border-radius:999px;padding:6px 13px;font-weight:600}
@@ -223,13 +225,31 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 @media(min-width:920px){.dots{gap:5px;height:10px}.dots i{width:10px;height:10px}}
 .dots i.ring{box-shadow:0 0 0 2px var(--cream)}
 .cell.sel .dots i.ring{box-shadow:0 0 0 2px var(--gold-ink)}
-.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-bottom:18px}
-@media(max-width:1080px){.week{grid-template-columns:repeat(4,minmax(0,1fr))}}
-@media(max-width:700px){.week{grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--g)}}
-@media(max-width:420px){.week{grid-template-columns:1fr}
-  .wcol{min-height:0;display:flex;align-items:flex-start;gap:12px}
-  .wcol .wh{flex:0 0 54px;margin:0;padding:0;display:block}
-  .wcol .wev,.wcol .none{flex:1}}
+/* Seven columns, always, at every width. A week that reflows into two
+   columns stops being a week. Below the point where a title fits, the
+   columns keep the dates and the dots and the detail moves to the list
+   underneath, which is there anyway. */
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin-bottom:16px}
+.wcol{background:var(--t1);border-radius:var(--r3);padding:9px 7px 10px;min-height:88px}
+.wcol .wh{display:block;margin-bottom:7px}
+.wcol .wh b{font-size:17px;display:block}
+.wcol .wh span{display:block;font-size:8.5px;margin-top:1px}
+.wev{padding:5px 6px;margin-bottom:4px;border-left-width:2px}
+.wev b{font-size:11px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.wev span{font-size:9px}
+@media(max-width:760px){
+  .wcol{min-height:66px;padding:8px 5px 9px}
+  .wcol .wh b{font-size:15px}
+  .wev{padding:0;background:none;border-left:0;margin-bottom:3px}
+  .wev b{display:none}
+  .wev span{display:none}
+  .wev::before{content:"";display:block;width:7px;height:7px;border-radius:50%;background:currentColor;
+    margin:0 auto}
+  .wcol .none{display:none}}
+@media(min-width:900px){.wcol{min-height:118px;padding:12px 10px}
+  .wcol .wh b{font-size:21px}.wcol .wh span{font-size:9px}
+  .wev{padding:6px 8px;background:var(--t3);border-left-width:3px}
+  .wev b{font-size:12px}.wev span{font-size:10px;display:block}}
 .wcol{background:var(--t1);border-radius:var(--r2);padding:12px 11px;min-height:112px}
 .wcol.today{background:rgba(235,183,83,.16)}
 .wcol.past{opacity:.45}
@@ -281,6 +301,10 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
   font-size:15px;font-weight:700;text-align:left;line-height:1.3;text-decoration:none;display:block;
   letter-spacing:-.02em;transition:background .16s,transform .16s var(--ease)}
 .tilegrid button:hover,.tilegrid a:hover{background:var(--t2);transform:translateY(-2px)}
+.tilegrid .fresh{grid-column:1/-1;background:linear-gradient(100deg,var(--gold),#F3C86E);color:var(--gold-ink)}
+.tilegrid .fresh b{font-family:var(--display);font-size:19px;font-weight:600;letter-spacing:-.03em;display:block}
+.tilegrid .fresh small{color:rgba(58,39,0,.78);font-weight:600}
+.tilegrid .fresh:hover{background:linear-gradient(100deg,#F3C86E,var(--gold-2))}
 .tilegrid small{display:block;font-weight:500;font-size:12px;color:var(--cream-4);margin-top:4px;line-height:1.42}
 .linkcard{display:flex;gap:13px;align-items:center;background:var(--t1);border-radius:var(--r2);padding:14px 16px;
   margin-bottom:6px;text-decoration:none;color:var(--cream);transition:background .16s,transform .16s var(--ease)}
@@ -381,6 +405,47 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
   font-size:13px;color:var(--cream-3);font-weight:600;margin-bottom:12px}
 .upl.done{color:var(--gold-2)}
 .uplshot{width:100%;border-radius:var(--r2);margin-bottom:8px;display:block}
+.bocal{display:grid;gap:3px;margin-bottom:12px}
+.boday{display:flex;align-items:center;gap:10px;background:var(--t1);border-radius:var(--r3);padding:7px 11px}
+.boday.today{background:rgba(235,183,83,.16)}
+.bod{flex:0 0 52px;font-size:11px;color:var(--cream-4);font-weight:700;display:flex;align-items:baseline;gap:5px}
+.bod b{font-family:var(--display);font-size:16px;color:var(--cream);font-weight:600}
+.boday.today .bod b{color:var(--gold-2)}
+.bobar{flex:1;position:relative;height:11px;border-radius:11px;background:rgba(0,0,0,.32);overflow:hidden}
+.bobar i{position:absolute;top:0;bottom:0;border-radius:11px;min-width:4px}
+.bobar i.event{background:var(--gold)} .bobar i.booking{background:var(--welfare)}
+.bow{flex:0 0 96px;font-size:11px;color:var(--cream-4);font-weight:600;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap;text-align:right}
+.boday.busy .bow{color:var(--cream-2)}
+@media(max-width:560px){.bow{display:none}}
+.bokey{display:flex;flex-wrap:wrap;gap:14px;font-size:11.5px;color:var(--cream-4);font-weight:600;margin-bottom:14px}
+.bokey span{display:flex;align-items:center;gap:6px}
+.bokey i{width:12px;height:6px;border-radius:6px;display:block}
+.bokey i.event{background:var(--gold)} .bokey i.booking{background:var(--welfare)}
+.notice.waiting{opacity:.85;background:rgba(99,173,238,.14);border-left-color:var(--welfare)}
+.notice .st{margin-bottom:7px;display:inline-block}
+.upzone{border-radius:var(--r);overflow:hidden;background:var(--t3);margin-bottom:14px;cursor:pointer;
+  box-shadow:inset 0 0 0 2px transparent;transition:box-shadow .18s}
+.upzone:hover,.upzone.over{box-shadow:inset 0 0 0 2px var(--gold)}
+.upzone #mkPrev{position:relative;min-height:180px;display:grid;place-items:center;text-align:center;padding:22px}
+.upzone img{width:100%;display:block;border-radius:var(--r);max-height:320px;object-fit:cover}
+.upempty{color:var(--cream-4)}
+.upempty b{display:block;font-size:15.5px;font-weight:700;color:var(--cream-2);margin:9px 0 3px}
+.upempty small{display:block;font-size:12.5px;max-width:30ch;margin:0 auto;line-height:1.5}
+.upbusy{display:flex;align-items:center;gap:10px;color:var(--cream-3);font-weight:600;font-size:13.5px}
+.upswap{position:absolute;right:10px;bottom:10px;background:rgba(0,0,0,.66);color:var(--cream);
+  border-radius:999px;padding:5px 12px;font-size:11.5px;font-weight:700}
+.kindrow{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.kindrow button{background:var(--t3);color:var(--cream-3);border-radius:999px;padding:8px 14px;
+  font-size:13px;font-weight:700;transition:.16s}
+.kindrow button:hover{color:var(--cream)}
+.kindrow button[aria-pressed="true"]{background:currentColor;color:var(--gold-ink)}
+.kindrow button[aria-pressed="true"].k-gift{color:#06301C;background:var(--sport)}
+.kindrow button[aria-pressed="true"].k-sell{color:var(--gold-ink);background:var(--gold)}
+.kindrow button[aria-pressed="true"].k-want{color:#0B2A45;background:var(--welfare)}
+.kindrow button[aria-pressed="true"].k-lost{color:#fff;background:var(--crimson-lite)}
+.kindrow button[aria-pressed="true"].k-found{color:#04322E;background:var(--trip)}
+.f span i{font-style:normal;color:var(--cream-4);opacity:.7;letter-spacing:0;text-transform:none}
 .ohr{padding:15px 17px}
 .ohgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
 @media(max-width:520px){.ohgrid{grid-template-columns:1fr}}
@@ -391,8 +456,13 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .oh.mine{background:rgba(235,183,83,.2)}
 .oh.mine span{color:var(--gold-2)}
 .oh.full{opacity:.55}
-.ohlist{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px;font-size:12.5px;color:var(--cream-3);font-weight:600}
-.ohlist b{color:var(--gold-2)}
+.ohlist{margin-top:12px;font-size:12.5px;color:var(--cream-3);font-weight:600;background:var(--t3);
+  border-radius:var(--r3);padding:9px 11px}
+.ohlist i{display:block;font-style:normal;font-family:var(--mono);font-size:9px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--cream-4);margin-bottom:5px}
+.ohlist span{display:flex;gap:9px;padding:3px 0}
+.ohlist b{color:var(--gold-2);flex:0 0 52px}
+.ohlist em{font-style:normal;color:var(--cream-4);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .hours{margin-top:12px}
 .hrow .t{flex:1;min-width:0}
 .hrow .t b{display:block;font-size:15px;font-weight:700}
@@ -521,6 +591,10 @@ nav .railtop{display:none}
     align-items:stretch;border-radius:0;background:rgba(66,4,9,.42);box-shadow:none;
     padding:18px 12px calc(18px + var(--sab));overflow-y:auto}
   nav .railtop{display:flex;align-items:center;gap:10px;padding:2px 9px 18px}
+  nav .railtop .crest{width:34px;height:34px;flex-basis:34px}
+  /* the rail carries the crest, so the bar above the page does not repeat it */
+  header .crest,header .wm i{display:none}
+  .hbar{padding-top:12px}
   nav .railtop b{font-family:var(--display);font-size:15px;font-weight:600;letter-spacing:-.03em;line-height:1.1}
   nav .railtop i{display:block;font-style:normal;font-size:8.5px;color:var(--gold-2);letter-spacing:.16em;
     text-transform:uppercase;margin-top:3px;font-weight:700}
@@ -555,9 +629,11 @@ nav .railtop{display:none}
 .gfoot{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--cream-4);
   margin-top:22px;font-weight:600}
 .gfoot button{color:var(--cream-4);text-decoration:underline;font-weight:600}
-#diag{margin-top:12px;font-family:var(--mono);font-size:10px;color:var(--cream-3);background:var(--t3);
-  border-radius:var(--r2);padding:13px 15px;line-height:1.75;word-break:break-all;font-weight:500}
-#diag b{color:var(--cream);font-weight:700}
+#diag{margin-top:12px;font-family:var(--mono);font-size:10.5px;background:var(--t3);border-radius:var(--r2);
+  padding:9px 11px;display:grid;gap:3px}
+#diag span{display:flex;gap:9px;color:var(--sport);word-break:break-all;font-weight:600}
+#diag span.no{color:var(--crimson-lite)}
+#diag b{color:var(--cream-4);font-weight:700;flex:0 0 44px}
 .gsiskel{display:block;width:100%;height:44px;border-radius:999px;background:var(--t3);animation:glow 1.5s ease-in-out infinite}
 
 /* ---------- sheet, toast, forms ---------- */
@@ -699,9 +775,9 @@ code{font-family:var(--mono);font-size:12.5px;background:rgba(0,0,0,.3);padding:
   <!-- ============ ASK, AND WHO YOU ARE ASKING ============ -->
   <section id="v-ask" hidden>
     <div class="vh"><h2>Ask the <i>MCR</i></h2><span class="note">One question, one officer, one thread</span></div>
-    <div id="askHours"></div>
     <div id="askIntro"></div>
     <div id="askThreads"></div>
+    <div id="askHours"></div>
     <div id="whoTeams"></div>
     <div id="notOurs"></div>
   </section>
@@ -709,9 +785,11 @@ code{font-family:var(--mono);font-size:12.5px;background:rgba(0,0,0,.3);padding:
   <!-- ===================== BUSINESS ===================== -->
   <section id="v-biz" hidden>
     <div class="vh"><h2>MCR <i>business</i></h2><span class="note">Meetings, motions and the vote</span>
-      <div class="right"><button class="btn gold sm" id="bNewIdea">Suggest something</button>
+      <div class="right"><a class="btn ghost sm" href="https://jcollegemcr.co.uk/treasury" target="_blank" rel="noopener">Claim money back</a>
+        <button class="btn gold sm" id="bNewIdea">Suggest something</button>
         <button class="btn ghost sm" id="bNewMotion">Motion</button>
         <button class="btn ghost sm" id="bNewPoll" data-committee hidden>Poll</button></div></div>
+    <div id="bizMoney"></div>
     <div id="bizIdeas"></div>
     <div id="bizPolls"></div>
     <div id="bizMeetings"></div>
@@ -874,7 +952,7 @@ code{font-family:var(--mono);font-size:12.5px;background:rgba(0,0,0,.3);padding:
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbwLvuLs57OPtj7IDAvgrY3vAeAGSSvt9jmzx6vBJU-37721kiwgCJ0r4hYZplIvKuUSEw/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxr7MJ6HYFsyaaPfo9zL845mIPNdCpKTMlrfazApPfDxCen0dGhhfiFoInavn-MMkK3/exec";
 
 /* JavaScript is alive, so the ring painted before the page was parsed can go.
    It is a pseudo element on <html>, so nothing else can remove it. */
@@ -1094,19 +1172,20 @@ function gateClear(){ put("gateFix", ""); }
    which is worse than useless in a message somebody is going to act on. */
 const originOf = () => (location.origin && location.origin !== "null")
   ? location.origin : "a local file, which Google will never accept";
+/* Four lines, not eight. Anything longer stops being read at the moment
+   somebody most needs to read it. */
 function renderDiag(){
+  const ok = x => x ? "" : ' class="no"';
   const rows = [
-    ["Serving from", originOf()],
-    ["Inside a frame", inFrame ? "yes, which Google will not allow" : "no"],
-    ["Talking to the server by", bridge() ? "the Apps Script bridge" : (API_URL ? "fetch to API_URL" : "nothing, API_URL is empty")],
-    ["The deployed app", APP_URL || "not known yet"],
-    ["OAuth client ID", CLIENT_ID ? CLIENT_ID.slice(0, 22) + "\u2026" : "not set"],
-    ["Google's script", (window.google && google.accounts && google.accounts.id) ? "loaded" : "did not load"],
-    ["Google's complaint", gsiComplaint || "none so far"]
+    ["from", originOf(), true],
+    ["server", bridge() ? "Apps Script" : (API_URL ? "reachable" : "no API_URL"), bridge() || !!API_URL],
+    ["client", CLIENT_ID ? CLIENT_ID.split("-")[0] : "not set", !!CLIENT_ID],
+    ["google", gsiComplaint ? gsiComplaint.slice(0, 58)
+      : (window.google && google.accounts && google.accounts.id) ? "loaded" : "blocked",
+      !gsiComplaint && !!(window.google && google.accounts && google.accounts.id)]
   ];
-  put("diag", rows.map(r => "<b>" + esc(r[0]) + ":</b> " + esc(r[1])).join("<br>") +
-    '<br><br>Google must be told about <b>' + esc(originOf()) +
-    "</b> under Authorised JavaScript origins, and about nothing else.");
+  if (inFrame) rows.push(["frame", "Google refuses a framed page", false]);
+  put("diag", rows.map(r => "<span" + ok(r[2]) + "><b>" + esc(r[0]) + "</b>" + esc(r[1]) + "</span>").join(""));
 }
 
 async function probe(){
@@ -1240,14 +1319,25 @@ function gsiFallback(cfg, why){
 }
 
 async function onCredential(res){
+  /* The moment Google hands the token back, the loading screen comes up. The
+     round trip after this can take a few seconds on a cold server, and leaving
+     somebody looking at a dead button for that long is the worst part of any
+     sign in. */
   gateClear();
-  $("gateMsg").textContent = "Checking with Google";
+  $("gate").hidden = true;
+  $("boot").hidden = false;
+  bootIdx = 0;
+  $("bootLine").textContent = "Checking with Google";
+  bootTalk(true);
   try{
     const d = await withTimeout(api("googleToken", { credential: res.credential }), 20000);
     setToken(d.token);
     $("gateMsg").textContent = "";
     await boot(true);
   }catch(e){
+    bootTalk(false);
+    $("boot").hidden = true;
+    $("gate").hidden = false;
     $("gateMsg").textContent = "";
     gateFix("That sign in did not go through", esc(e && e.message ? e.message : String(e)),
       '<button class="btn cream sm" data-retry>Try again</button>');
@@ -1271,7 +1361,7 @@ function signedOut(msg){
 }
 
 /* ---------- boot ---------- */
-const BOOT_LINES = ["Waking the porters", "Unlocking the gate", "Laying out the term",
+const BOOT_LINES = ["Unlocking the gate", "Waking the porters", "Laying out the term",
   "Counting the chairs", "Checking your pigeonhole"];
 let bootIdx = 0, bootTimer = null;
 let bootPct = 8, slowTimer = null;
@@ -1534,7 +1624,6 @@ function renderCrow(){
   const votes = (S.motions || []).filter(m => m.status === "voting" && !(S.myVotes || {})[m.id]).length +
                 (S.polls || []).filter(p => p.open && !p.mine).length;
   const rooms = (S.rooms || []).filter(r => r.status !== "new" && r.at > Date.now() - 6 * 864e5);
-  const overdue = (S.lend || []).filter(l => l.out.some(o => o.email === S.me.email && o.due < t));
   const fresh = (S.updates || []).filter(u => u.at > (S.me.seenAt || 0)).length;
   const answered = (S.ideas || []).filter(i => i.own && i.status !== "open").length;
   const box = (plate, n, full, empty, goTo) =>
@@ -1549,7 +1638,9 @@ function renderCrow(){
     box("To decide", votes, votes ? "Your vote is wanted" : "", "nothing to decide", "biz"),
     box("Notices", fresh, fresh ? "Read what has changed" : "", "nothing new", "lodge"),
     box("Your requests", rooms.length, rooms.length ? rooms[0].title : "", "none open", "ask"),
-    box("Borrowed", overdue.length, overdue.length ? overdue[0].name + " is overdue" : "", "nothing out", "lodge"),
+    box("The room", (S.blackouts || []).filter(b => b.date === t).length,
+      (S.blackouts || []).filter(b => b.date === t)[0]
+        ? (S.blackouts || []).filter(b => b.date === t)[0].title : "", "free today", "lodge"),
     box("Your ideas", answered, answered ? "The committee answered" : "", "none up yet", "biz"),
     box("Tuesday hour", (S.hours || []).filter(h => h.mine).length,
       (S.hours || []).filter(h => h.mine)[0]
@@ -1612,12 +1703,16 @@ function renderTodayWeek(){
    the tick right there. This is the half of the page people came for. */
 function renderTodayOn(){
   const t = todayLondon(), now = new Date();
+  /* the list under the week is that week, not a rolling fortnight, so the
+     arrows move both together and the page always agrees with itself */
+  const ws = homeWeek || weekStart(t), we = addDays(ws, 6);
   const soon = (S.events || [])
-    .filter(e => e.status !== "cancelled" && (e.date > t || (e.date === t && endOf(e) > now)))
+    .filter(e => e.status !== "cancelled" && e.date >= ws && e.date <= we)
+    .filter(e => e.date > t || e.date < t || endOf(e) > now)
     .filter(e => !mineOnly || ["going","waitlist"].indexOf(myStatus(e.id)) >= 0);
   const mine = soon.filter(e => ["going","waitlist"].indexOf(myStatus(e.id)) >= 0);
   const byDay = {};
-  soon.slice(0, 14).forEach(e => (byDay[e.date] = byDay[e.date] || []).push(e));
+  soon.forEach(e => (byDay[e.date] = byDay[e.date] || []).push(e));
   const days = Object.keys(byDay).sort();
   put("todayOn",
     '<div class="grp"><b>What is on</b>' +
@@ -1631,13 +1726,16 @@ function renderTodayOn(){
         (d === t ? "Today" : d === addDays(t, 1) ? "Tomorrow" : DOWL[dow(d)]) + " &middot; " +
         esc(MON[dobj(d).getUTCMonth()]) + "</span></div>" +
         byDay[d].map(evRow).join("") + "</div>").join("")
-      : '<div class="card"><p>' + (mineOnly ? "You are not down for anything yet."
-          : "Nothing in the diary. The committee is probably arranging something.") + "</p></div>"));
+      : '<div class="card"><p>' + (mineOnly ? "Nothing of yours this week."
+          : "Nothing on this week.") + "</p></div>"));
 }
 function renderTodayQuick(){
   const link = k => (S.links || []).filter(l => l.key === k)[0];
   const permit = link("permit"), fix = link("maintenance");
   put("todayQuick", '<div class="grp">Quick things</div><div class="tilegrid">' +
+    '<a href="https://jcollegemcr.co.uk" target="_blank" rel="noopener" class="fresh">' +
+      "<b>Are you a fresher?</b><small>Freshers\u2019 Fortnight lives over here, with the whole of your first " +
+      "two weeks in it.</small></a>" +
     '<button data-goto="ask">Ask somebody</button>' +
     '<button data-room>Put something on in the MCR</button>' +
     (fix ? '<a href="' + esc(fix.url) + '" target="_blank" rel="noopener">Report something broken</a>' : "") +
@@ -1670,7 +1768,8 @@ function weekGrid(ws){
       (list.length ? list.map(e => {
         const mine = ["going","waitlist"].indexOf(myStatus(e.id)) >= 0;
         return '<button class="wev' + (mine ? " mine" : "") + '" data-open="' + esc(e.id) +
-          '" style="border-left-color:var(--' + ({social:"gold",sport:"moss",welfare:"sky",academic:"plum",
+          '" title="' + esc(e.title) + '" style="color:var(--' + (catOf(e) || "meeting") +
+          ');border-left-color:var(--' + ({social:"gold",sport:"moss",welfare:"sky",academic:"plum",
             food:"clay",member:"rose"}[catOf(e)] || "cream-3") + ')"><b>' + esc(e.title) +
           "</b><span>" + esc(clock(e.start)) + "</span></button>";
       }).join("") : '<div class="none">Nothing</div>') + "</div>";
@@ -1810,12 +1909,19 @@ function openEvent(id){
    LODGE
    ============================================================ */
 function noticeHtml(n){
-  return '<div class="notice' + (n.kind === "urgent" ? " urgent" : "") + '"><b>' + esc(n.title) + "</b>" +
+  const waiting = n.status === "pending";
+  return '<div class="notice' + (n.kind === "urgent" ? " urgent" : "") + (waiting ? " waiting" : "") +
+    '">' + (waiting ? '<span class="st open">Waiting for the committee</span>' : "") +
+    "<b>" + esc(n.title) + "</b>" +
     "<small>" + esc(n.source || n.by || "MCR committee") + " &middot; " + esc(ago(n.at)) +
     (n.until ? " &middot; until " + esc(shortDate(n.until)) : "") + "</small>" +
     (n.body ? "<p>" + esc(n.body) + "</p>" : "") +
-    (isCommittee() ? '<div class="acts"><button class="btn ghost sm" data-noticeoff="' + esc(n.id) +
-      '">Take it down</button></div>' : "") + "</div>";
+    (isCommittee()
+      ? '<div class="acts">' +
+        (waiting ? '<button class="btn gold sm" data-noticeok="' + esc(n.id) + '">Put it up</button>' : "") +
+        '<button class="btn ghost sm" data-noticeoff="' + esc(n.id) + '">' +
+        (waiting ? "No" : "Take it down") + "</button></div>"
+      : "") + "</div>";
 }
 /* The forms and pages people need and normally cannot find. Buttons, not a
    paragraph, because nobody reads a paragraph standing in a corridor. */
@@ -1826,7 +1932,7 @@ function noticeHtml(n){
 let lodgeTab = "now";
 const LODGE_TABS = [
   ["now","On the board"], ["forms","Forms and links"], ["guides","How college works"],
-  ["sport","Sport"], ["borrow","Borrowing"]
+  ["sport","Sport"], ["room","The MCR room"]
 ];
 function renderLodge(){
   if (!S) return;
@@ -1835,20 +1941,25 @@ function renderLodge(){
     forms: (S.links || []).length,
     guides: (S.resources || []).length,
     sport: (S.clubs || []).length,
-    borrow: (S.lend || []).filter(l => l.free > 0).length
+    room: (S.blackouts || []).length
   };
   put("lodgeSeg", LODGE_TABS.map(t =>
     '<button data-lodge="' + t[0] + '" aria-pressed="' + (lodgeTab === t[0]) + '">' + esc(t[1]) +
     (counts[t[0]] ? " &middot; " + counts[t[0]] : "") + "</button>").join(""));
   put("lodgeBody", { now: lodgeNow, forms: lodgeForms, guides: lodgeGuides,
-    sport: lodgeSport, borrow: lodgeBorrow }[lodgeTab]());
+    sport: lodgeSport, room: lodgeRoom }[lodgeTab]());
 }
 function lodgeNow(){
   const n = S.notices || [];
-  return (n.length ? n.map(noticeHtml).join("")
+  const waiting = n.filter(x => x.status === "pending");
+  return (isCommittee() && waiting.length
+    ? '<div class="grp"><b>Waiting for a yes</b></div>' + waiting.map(noticeHtml).join("") +
+      '<div class="grp"><b>On the board</b></div>' : "") +
+    (n.length ? n.filter(x => x.status !== "pending" || !isCommittee()).map(noticeHtml).join("")
     : '<div class="card"><p>Nothing on the board, which is usually good news.</p>' +
       '<p class="lede">Gates, building work, lost property and anything the Porters want the MCR to know lands here.</p></div>') +
-    (isCommittee() ? '<div class="acts"><button class="btn gold sm" data-newnotice>Post a notice</button></div>' : "");
+    '<div class="acts"><button class="btn gold sm" data-newnotice>' +
+      (isCommittee() ? "Post a notice" : "Suggest a notice") + "</button></div>";
 }
 function lodgeForms(){
   const L = S.links || [];
@@ -1887,19 +1998,40 @@ function lodgeSport(){
       '<div class="card"><h3>' + esc(x.name) + "</h3><p>" + esc(x.note) + "</p>" +
       (x.lead ? '<div class="who">' + esc(x.lead) + "</div>" : "") + "</div>").join("") : "");
 }
-function lodgeBorrow(){
-  const l = S.lend || [];
-  return '<div class="card"><p>Things the MCR owns and lends. Take it, bring it back by the date, and if it ' +
-    "breaks tell us rather than quietly putting it back.</p></div>" +
-    '<div class="card">' + l.map(x => {
-      const mineOut = x.out.some(o => o.email === S.me.email);
-      return '<div class="rowline"><div class="t"><b>' + esc(x.name) + "</b><span>" +
-        esc(x.where) + " &middot; " + (x.free ? x.free + " free" : "out until " + esc(shortDate(x.out[0].due))) +
-        (x.note ? " &middot; " + esc(x.note) : "") + "</span></div>" +
-        (mineOut ? '<button class="btn ghost sm" data-lendback="' + esc(x.id) + '">Give it back</button>'
-          : x.free ? '<button class="btn gold sm" data-lendtake="' + esc(x.id) + '">Take it</button>'
-          : '<span class="st">Out</span>') + "</div>";
-    }).join("") + "</div>";
+/* When the room is free, drawn rather than described. Three weeks across,
+   anything already on shaded in, so somebody can pick a slot before they ask
+   instead of asking and waiting to be told no. */
+function lodgeRoom(){
+  const t = todayLondon(), bl = S.blackouts || [];
+  const days = [];
+  for (let i = 0; i < 21; i++) days.push(addDays(t, i));
+  const byDay = {};
+  bl.forEach(b => (byDay[b.date] = byDay[b.date] || []).push(b));
+  const hour = hm => Math.max(8, Math.min(24, +String(hm).slice(0, 2) + (+String(hm).slice(3, 5)) / 60));
+  return '<div class="card"><p>The MCR is a common room. It is never booked so that members are shut out, ' +
+    "but something already on is something you should know about before you plan around it.</p>" +
+    '<p class="lede">Pick a time nobody else has taken, send it, and a member of the committee will put ' +
+    "it on the calendar. Bigger than a few friends and it needs a permit from the Dean as well.</p>" +
+    '<div class="acts"><button class="btn gold sm" data-room>Ask for the room</button>' +
+    '<a class="btn ghost sm" href="' +
+      esc(((S.links || []).filter(l => l.key === "permit")[0] || {}).url || "#") +
+      '" target="_blank" rel="noopener">The permit form</a></div></div>' +
+    '<div class="grp"><b>The next three weeks</b></div>' +
+    '<div class="bocal">' + days.map(d => {
+      const on = byDay[d] || [];
+      return '<div class="boday' + (on.length ? " busy" : "") + (d === t ? " today" : "") + '">' +
+        '<span class="bod"><b>' + dnum(d) + "</b>" + DOW[dow(d)] + "</span>" +
+        '<span class="bobar">' + on.map(b => {
+          const a = hour(b.start), z = Math.max(a + 0.5, hour(b.end));
+          return '<i class="' + esc(b.kind) + '" title="' + esc(b.title) + " " + esc(clock(b.start)) +
+            '" style="left:' + ((a - 8) / 16 * 100).toFixed(1) + '%;width:' +
+            ((z - a) / 16 * 100).toFixed(1) + '%"></i>';
+        }).join("") + "</span>" +
+        '<span class="bow">' + (on.length ? esc(on[0].title) + (on.length > 1 ? " +" + (on.length - 1) : "")
+          : "free") + "</span></div>";
+    }).join("") + "</div>" +
+    '<div class="bokey"><span><i class="event"></i>on the calendar</span>' +
+    '<span><i class="booking"></i>a member has it</span><span>8am on the left, midnight on the right</span></div>';
 }
 /* ============================================================
    ASK
@@ -1938,9 +2070,12 @@ function renderHours(){
             : full ? "" : '<button class="btn gold sm" data-hour="' + esc(h.date) + '">Book</button>') +
           "</div>";
       }).join("") + "</div>" +
-      (isCommittee() && show[0] && show[0].list.length
-        ? '<div class="ohlist">' + show[0].list.map(x =>
-            "<span><b>" + esc(clock(x.slot)) + "</b> " + esc(x.who) + "</span>").join("") + "</div>"
+      (isCommittee()
+        ? show.filter(h => h.list.length).map(h =>
+            '<div class="ohlist"><i>' + esc(shortDate(h.date)) + "</i>" +
+            h.list.map(x => "<span><b>" + esc(clock(x.slot)) + "</b>" + esc(x.who) +
+              (x.note ? ' <em title="' + esc(x.note) + '">' + esc(x.note.slice(0, 40)) +
+                (x.note.length > 40 ? "\u2026" : "") + "</em>" : "") + "</span>").join("") + "</div>").join("")
         : "") +
     "</div>");
 }
@@ -2136,6 +2271,12 @@ function renderWho(){
    everybody backs, and past a threshold the committee has to
    answer in public. A suggestion box nobody replies to is a bin.
    ============================================================ */
+function renderTreasury(){
+  put("bizMoney", '<a class="linkcard" href="https://jcollegemcr.co.uk/treasury" target="_blank" rel="noopener">' +
+    '<div class="t"><b>Claim money back</b><p>Anything you have paid for on behalf of the MCR: a receipt, ' +
+    "the amount, and where to send it. The Treasurer pays out fortnightly.</p>" +
+    '<span class="who">The Treasurer</span></div><span class="arw">&#8599;</span></a>');
+}
 function renderIdeas(){
   const list = S.ideas || [], need = S.backingToAnswer || 10;
   const lab = { open:"", doing:"The committee is on it", done:"Done", no:"Not this time" };
@@ -2536,7 +2677,7 @@ function openSeriesEditor(id){
     }));
 }
 function openNoticeEditor(){
-  sheet("Post a notice",
+  sheet(isCommittee() ? "Post a notice" : "Suggest a notice",
     voiceCard() +
     '<label class="f"><span>What kind</span><select id="ntKind">' +
       [["access","Gates and access"],["weather","Weather"],["works","Building work"],
@@ -2548,20 +2689,20 @@ function openNoticeEditor(){
     '<label class="f"><span>Whose notice is it</span><input id="ntSource" maxlength="70" placeholder="From the Porters\u2019 Lodge"></label>' +
     '<label class="f"><span>Take it down after</span><input type="date" id="ntUntil" value="' +
       esc(addDays(todayLondon(), 7)) + '"></label>' +
-    '<label class="check"><input type="checkbox" id="ntPin"> Keep it at the top, and on Today</label>' +
+    (isCommittee() ? '<label class="check"><input type="checkbox" id="ntPin"> Keep it at the top, and on Today</label>' : "") +
     '<div class="acts"><button class="btn gold" id="ntGo">Post it</button><button class="btn ghost" data-close>Cancel</button></div>',
     el => el.querySelector("#ntGo").addEventListener("click", async e => {
       const b = e.currentTarget;
       spin(b, "Posting");
       try{
         const d = await api("saveNotice", { notice: { kind: $("ntKind").value, title: $("ntTitle").value,
-          body: $("ntBody").value, source: $("ntSource").value, until: $("ntUntil").value, pin: $("ntPin").checked } });
+          body: $("ntBody").value, source: $("ntSource").value, until: $("ntUntil").value, pin: !!($("ntPin") && $("ntPin").checked) } });
         S.notices = d.notices;
         closeSheet();
         renderLodge();
         renderCrow();
         renderTodayUrgent();
-        toast("Posted.");
+        toast(d.pending ? "Sent to the committee. It goes up when one of them says yes." : "Up on the board.");
       }catch(err){ unspin(b); fail(err); }
     }));
 }
@@ -2712,92 +2853,115 @@ function openGift(id){
         '<button class="btn ghost" data-markettake="' + esc(m.id) + '">Mark it gone</button>') +
     "</div>");
 }
+/* Putting something up, the way a selling app does it: the photograph first
+   and big, because that is what decides whether anybody looks; then the one
+   line; then the price only if you are selling. Nothing else is required. */
 function openMarket(){
-  const vs = S.venues || [];
-  sheet("Put something on the board",
-    '<label class="f"><span>What sort</span><select id="mkKind">' + (S.marketKinds || []).map(k =>
-      '<option value="' + esc(k.key) + '">' + esc(k.name) + "</option>").join("") + "</select></label>" +
+  let photo = "", thumb = "";
+  const kinds = S.marketKinds || [];
+  sheet("Put something up",
+    '<div class="upzone" id="mkZone">' +
+      '<input type="file" id="mkPhoto" accept="image/*" hidden>' +
+      '<div id="mkPrev" class="upempty">' +
+        '<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.7" ' +
+          'stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/>' +
+          '<circle cx="8.5" cy="10" r="1.6"/><path d="M21 15l-5-4.5L5.5 19"/></svg>' +
+        "<b>Add a photograph</b><small>One good picture is most of it. It is shrunk here before it is sent.</small>" +
+      "</div></div>" +
+    '<div class="kindrow" id="mkKindRow">' + kinds.map((k, i) =>
+      '<button type="button" data-kind="' + esc(k.key) + '" class="k-' + esc(k.key) + '"' +
+      (i === 0 ? ' aria-pressed="true"' : "") + ">" + esc(k.name) + "</button>").join("") + "</div>" +
+    '<input type="hidden" id="mkKind" value="' + esc(kinds[0] ? kinds[0].key : "gift") + '">' +
+    '<label class="f"><span>What is it</span><input id="mkTitle" maxlength="90" ' +
+      'placeholder="Desk lamp, works, slightly bent"></label>' +
+    '<label class="f" id="mkPriceRow" hidden><span>Price</span><input id="mkPrice" maxlength="24" ' +
+      'placeholder="\u00a310, or nearest offer"></label>' +
+    '<label class="f"><span>Anything else <i>optional</i></span><textarea id="mkBody" maxlength="700" ' +
+      'style="min-height:70px" placeholder="Where it came from, what is wrong with it, when you are around."></textarea></label>' +
+    '<label class="f"><span>Where to collect it <i>optional</i></span><input id="mkVenue" maxlength="80" ' +
+      'placeholder="Second Court, staircase N, or just say when you write"></label>' +
     '<p class="lede" id="mkNote"></p>' +
-    '<label class="f"><span>What is it</span><input id="mkTitle" maxlength="90" placeholder="Desk lamp, works, slightly bent"></label>' +
-    '<label class="f" id="mkPriceRow" hidden><span>Asking price</span><input id="mkPrice" maxlength="24" placeholder="\u00a310, or nearest offer"></label>' +
-    '<label class="f"><span>Anything else</span><textarea id="mkBody" maxlength="700" style="min-height:80px"></textarea></label>' +
-    '<label class="f"><span>Where it is</span><select id="mkVenue"><option value="">Say in the message</option>' +
-      vs.map(v => '<option value="' + esc(v.key) + '">' + esc(v.name) + "</option>").join("") + "</select></label>" +
-    '<label class="f"><span>A photograph</span><input type="file" id="mkPhoto" accept="image/*"></label>' +
-    '<div id="mkPrev"></div>' +
-    '<div class="acts"><button class="btn gold" id="mkGo">Put it up</button><button class="btn ghost" data-close>Cancel</button></div>',
+    '<div class="acts"><button class="btn gold" id="mkGo">Put it up</button></div>',
     el => {
-      let photo = "", thumb = "";
-      const note = () => {
-        const k = (S.marketKinds || []).filter(x => x.key === $("mkKind").value)[0];
-        $("mkNote").textContent = k ? k.note : "";
+      const zone = el.querySelector("#mkZone"), file = el.querySelector("#mkPhoto");
+      zone.addEventListener("click", () => file.click());
+      const setKind = k => {
+        $("mkKind").value = k;
+        el.querySelectorAll("[data-kind]").forEach(b =>
+          b.setAttribute("aria-pressed", String(b.dataset.kind === k)));
+        const row = $("mkPriceRow");
+        if (row) row.hidden = k !== "sell";
+        const kk = kinds.filter(x => x.key === k)[0];
+        $("mkNote").textContent = kk ? kk.note : "";
       };
-      const showPrice = () => { const r = $("mkPriceRow"); if (r) r.hidden = $("mkKind").value !== "sell"; };
-      el.querySelector("#mkKind").addEventListener("change", () => { note(); showPrice(); });
-      note(); showPrice();
-      /* A phone camera makes something far too large for a spreadsheet cell,
-         so it is shrunk here before it ever leaves the page. */
-      /* A phone photograph is three to eight megabytes and a spreadsheet cell
-         holds fifty thousand characters, so it has to come down a long way.
-         This shrinks and re-encodes until it fits under the target, showing
-         what it is doing, and never sends anything the server would refuse. */
+      el.querySelectorAll("[data-kind]").forEach(b =>
+        b.addEventListener("click", () => setKind(b.dataset.kind)));
+      setKind($("mkKind").value);
+
+      /* A phone photograph is several megabytes and a spreadsheet cell holds
+         fifty thousand characters, so it comes down here, in the browser,
+         before anything is sent. */
       const TARGET = 90 * 1024;
-      el.querySelector("#mkPhoto").addEventListener("change", ev => {
-        const f = ev.target.files[0];
-        if (!f) return;
-        put("mkPrev", '<div class="upl"><span class="spin"></span>' +
-          "Reading " + Math.round(f.size / 1024) + " KB</div>");
+      const shrink = f => {
+        put("mkPrev", '<div class="upbusy"><span class="spin"></span>Reading ' +
+          Math.round(f.size / 1024) + " KB</div>");
         const img = new Image();
         img.onload = () => {
-          let w = img.width, h = img.height;
-          const long = Math.max(w, h);
-          const shrink = Math.min(1, 1400 / long);
-          w = Math.round(w * shrink); h = Math.round(h * shrink);
+          const long = Math.max(img.width, img.height);
+          const fit = Math.min(1, 1400 / long);
+          const w = Math.round(img.width * fit), h = Math.round(img.height * fit);
           const c = document.createElement("canvas");
           const step = (side, q) => {
             c.width = Math.round(w * side); c.height = Math.round(h * side);
-            const ctx = c.getContext("2d");
-            ctx.imageSmoothingQuality = "high";
-            ctx.drawImage(img, 0, 0, c.width, c.height);
+            const x = c.getContext("2d");
+            x.imageSmoothingQuality = "high";
+            x.drawImage(img, 0, 0, c.width, c.height);
             return c.toDataURL("image/jpeg", q);
           };
-          let side = 1, q = 0.74, out = step(side, q), tries = 0;
+          let side = 1, q = 0.74, out = step(side, q), n = 0;
           const grind = () => {
-            if (out.length <= TARGET || tries++ > 7){
+            if (out.length <= TARGET || n++ > 7){
               photo = out;
-              /* a small one for the grid so a board of twenty things is not
-                 two megabytes to look at */
               const tc = document.createElement("canvas");
-              const ts = 300 / Math.max(c.width, c.height);
+              const ts = 320 / Math.max(c.width, c.height);
               tc.width = Math.round(c.width * ts); tc.height = Math.round(c.height * ts);
               tc.getContext("2d").drawImage(c, 0, 0, tc.width, tc.height);
               thumb = tc.toDataURL("image/jpeg", 0.62);
               URL.revokeObjectURL(img.src);
-              put("mkPrev", '<img class="uplshot" src="' + photo + '">' +
-                '<div class="upl done">Ready &middot; ' + Math.round(photo.length / 1024) + " KB, " +
-                c.width + " by " + c.height + "</div>");
+              put("mkPrev", '<img src="' + photo + '" alt="">' +
+                '<span class="upswap">Change &middot; ' + Math.round(photo.length / 1024) + " KB</span>");
               return;
             }
             if (q > 0.42) q -= 0.09; else side *= 0.82;
-            put("mkPrev", '<div class="upl"><span class="spin"></span>Squeezing, ' +
-              Math.round(out.length / 1024) + " KB so far</div>");
+            put("mkPrev", '<div class="upbusy"><span class="spin"></span>Squeezing, ' +
+              Math.round(out.length / 1024) + " KB</div>");
             out = step(side, q);
             setTimeout(grind, 16);
           };
           setTimeout(grind, 16);
         };
-        img.onerror = () => put("mkPrev", '<div class="upl">That file is not an image the browser can read.</div>');
+        img.onerror = () => put("mkPrev", '<div class="upbusy">The browser cannot read that file.</div>');
         img.src = URL.createObjectURL(f);
+      };
+      file.addEventListener("change", ev => { if (ev.target.files[0]) shrink(ev.target.files[0]); });
+      zone.addEventListener("dragover", e => { e.preventDefault(); zone.classList.add("over"); });
+      zone.addEventListener("dragleave", () => zone.classList.remove("over"));
+      zone.addEventListener("drop", e => {
+        e.preventDefault(); zone.classList.remove("over");
+        if (e.dataTransfer.files[0]) shrink(e.dataTransfer.files[0]);
       });
+
       el.querySelector("#mkGo").addEventListener("click", async e => {
+        if (!$("mkTitle").value.trim()) return toast("It needs a name first.");
         const b = e.currentTarget;
         spin(b, "Putting it up");
         try{
           const d = await api("marketNew", { kind: $("mkKind").value, title: $("mkTitle").value,
-            body: $("mkBody").value, venue: $("mkVenue").value, photo: photo,
-            thumb: thumb, price: $("mkPrice") ? $("mkPrice").value : "" });
+            body: $("mkBody").value, venue: $("mkVenue").value, photo: photo, thumb: thumb,
+            price: $("mkPrice") ? $("mkPrice").value : "" });
           S.market = d.market;
-          closeSheet(); renderMarket(); go("gifts"); toast("Up on the board, with your address on it.");
+          closeSheet(); renderMarket(); go("gifts");
+          toast("Up on the board, with your address on it.");
         }catch(err){ unspin(b); fail(err); }
       });
     });
@@ -2984,7 +3148,7 @@ function render(){
   renderCrow(); renderBumps(); renderTodayUrgent(); renderTodayWeek(); renderTodayOn();
   renderTodayQuick(); renderTodayNews();
   renderLodge(); renderMarket(); renderHours(); renderAsk(); renderWho();
-  renderIdeas(); renderPolls(); renderBiz();
+  renderTreasury(); renderIdeas(); renderPolls(); renderBiz();
   if (!typingIn("v-me")) renderMe();
   if (isCommittee()){ renderDesk(); renderQueue(); if (!typingIn("v-admin")){ renderAdmin(); renderBumpsAdmin(); } }
   renderBadges();
@@ -3001,12 +3165,12 @@ document.addEventListener("click", async e => {
      state marker can never be mistaken for a button again. */
   if (!e.target.closest("#app, #nav, #sheet, header")) return;
   const t = e.target.closest("[data-open],[data-tick],[data-mode],[data-m],[data-day],[data-cat]," +
-    "[data-goto],[data-ask],[data-room],[data-reply],[data-tset],[data-lendtake],[data-lendback]," +
+    "[data-goto],[data-ask],[data-room],[data-reply],[data-tset]," +
     "[data-noticeoff],[data-editres],[data-roomyes],[data-roomno],[data-rsvp],[data-edit],[data-cancel]," +
     "[data-skip],[data-editser],[data-second],[data-vote],[data-mset],[data-code],[data-checkin]," +
     "[data-delupdate],[data-rosteredit],[data-rosterdel],[data-newidea],[data-back]," +
     "[data-setidea],[data-dropidea],[data-pollvote],[data-pollclose]," +
-    "[data-marketnew],[data-markettake],[data-marketdrop],[data-bumpedit],[data-gk],[data-gift],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
+    "[data-marketnew],[data-markettake],[data-marketdrop],[data-bumpedit],[data-gk],[data-gift],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
   if (!t) return;
   const d = t.dataset;
   try{
@@ -3017,7 +3181,7 @@ document.addEventListener("click", async e => {
     if (t.hasAttribute("data-newnotice")) return openNoticeEditor();
     if (d.hw !== undefined){
       homeWeek = d.hw === "0" ? weekStart(todayLondon()) : addDays(homeWeek, (+d.hw) * 7);
-      renderTodayWeek(); return;
+      renderTodayWeek(); renderTodayOn(); return;
     }
     if (t.hasAttribute("data-mineonly")){
       mineOnly = !mineOnly;
@@ -3041,6 +3205,8 @@ document.addEventListener("click", async e => {
     }
     if (d.hwk){ hourWeek = Math.max(0, hourWeek + (+d.hwk)); renderHours(); return; }
     if (t.hasAttribute("data-newevent")) return openEventEditor("");
+    if (d.noticeok){ S.notices = (await api("noticeDecide", { id: d.noticeok, ok: true })).notices;
+      renderLodge(); renderTodayUrgent(); return toast("Up on the board."); }
     if (d.editwho) return openWhoEditor(d.editwho);
     if (d.terms) return openTerms(d.terms);
     if (d.hour) return openHour(d.hour);
@@ -3094,8 +3260,6 @@ document.addEventListener("click", async e => {
       renderQueue(); renderBadges();
       return;
     }
-    if (d.lendtake){ S.lend = (await api("lendTake", { item: d.lendtake })).lend; renderLodge(); return toast("Yours. Please bring it back."); }
-    if (d.lendback){ S.lend = (await api("lendBack", { item: d.lendback })).lend; renderLodge(); return toast("Thank you."); }
     if (d.noticeoff){ S.notices = (await api("deleteNotice", { id: d.noticeoff })).notices; renderLodge(); renderCrow(); renderTodayUrgent(); return; }
     if (d.editres) return openResourceEditor(d.editres);
     if (d.roomyes || d.roomno){
@@ -3207,8 +3371,8 @@ document.querySelectorAll("#nav .tabbtn").forEach(b => b.addEventListener("click
 document.addEventListener("keydown", e => {
   if (e.key === "Escape" && sheetOpen) return closeSheet();
   if (sheetOpen || !S || view !== "today") return;
-  if (e.key === "ArrowLeft"){ homeWeek = addDays(homeWeek, -7); renderTodayWeek(); }
-  if (e.key === "ArrowRight"){ homeWeek = addDays(homeWeek, 7); renderTodayWeek(); }
+  if (e.key === "ArrowLeft"){ homeWeek = addDays(homeWeek, -7); renderTodayWeek(); renderTodayOn(); }
+  if (e.key === "ArrowRight"){ homeWeek = addDays(homeWeek, 7); renderTodayWeek(); renderTodayOn(); }
 });
 /* Swipe the week on a phone. Only a clean horizontal drag counts, so it never
    steals a scroll. */
@@ -3226,7 +3390,7 @@ document.addEventListener("keydown", e => {
     x0 = null;
     if (Math.abs(dx) > 56 && Math.abs(dx) > Math.abs(dy) * 1.8){
       homeWeek = addDays(homeWeek, dx < 0 ? 7 : -7);
-      renderTodayWeek();
+      renderTodayWeek(); renderTodayOn();
     }
   }, { passive: true });
 })();
