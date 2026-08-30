@@ -949,7 +949,7 @@ function viaBridge(body){
   });
 }
 async function viaFetch(body){
-  const url = API_URL || "";
+  const url = API_URL || "https://script.google.com/macros/s/AKfycbz79J_zeQHxee_5RtB98AeUArpVMD4S5KsM-YOW7r7jyQCd4BBe98hJv52U7wkRbh0XhQ/exec";
   if (!url) throw new Error("This page has no API_URL set, so it cannot reach the server.");
   const r = await fetch(url, { method:"POST", body: JSON.stringify(body),
     headers:{ "Content-Type":"text/plain;charset=utf-8" }, redirect:"follow" });
