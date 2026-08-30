@@ -247,8 +247,16 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
   margin-left:6px;white-space:nowrap;font-weight:700}
 .chip.full{background:rgba(232,83,92,.3);color:#FFD9DB}
 .chip.low{background:rgba(235,183,83,.28);color:var(--gold-2)}
-.seg{display:flex;background:var(--t3);border-radius:999px;padding:3px}
-.seg button{color:var(--cream-3);font-size:.8rem;font-weight:700;padding:6px 15px;border-radius:999px;transition:.18s}
+.seg{display:flex;background:var(--t3);border-radius:999px;padding:3px;gap:2px;
+  overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  scroll-snap-type:x proximity;max-width:100%}
+.seg::-webkit-scrollbar{display:none}
+/* it has to stay one line and one row: wrapping turned each option into a
+   three line blob and the active one into a great oval */
+.seg button{color:var(--cream-3);font-size:.78rem;font-weight:700;padding:7px 14px;border-radius:999px;
+  transition:.18s;white-space:nowrap;flex:0 0 auto;scroll-snap-align:start;line-height:1.2}
+.seg button[aria-pressed="true"]{background:var(--gold);color:var(--gold-ink)}
+@media(max-width:520px){.seg{padding:2px}.seg button{padding:7px 12px;font-size:.74rem}}
 .seg button[aria-pressed="true"]{background:var(--gold);color:var(--gold-ink)}
 .mv{display:flex;align-items:center;gap:4px;margin-left:auto}
 .mv b{font-family:var(--display);font-size:0.895rem;min-width:150px;text-align:center;font-weight:600;letter-spacing:-.03em}
@@ -654,6 +662,37 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
   .swside{flex:0 0 auto;text-align:left;width:100%}
   .swside span,.sfl,.swside .sf{text-align:left}
   .swprice{font-size:1.3rem}}
+.swlogo{width:2.4rem;height:2.4rem;border-radius:8px;object-fit:contain;background:rgba(255,255,255,.08);
+  float:left;margin:0 12px 6px 0;padding:4px}
+.swlogo.big{float:none;margin:0;width:3.4rem;height:3.4rem}
+.swlogo.empty{display:grid;place-items:center;font-family:var(--mono);font-size:0.64rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--cream-4);text-align:center;padding:4px}
+.swlogo-row{display:flex;align-items:center;gap:var(--g);margin-bottom:var(--g)}
+.swroster{margin-top:var(--g2);padding-top:var(--g);box-shadow:0 -1px 0 rgba(255,255,255,.08);display:block}
+.swroster .grp{margin:0 0 var(--g)}
+.swroster .grp span{margin-left:auto;font-family:var(--ui);text-transform:none;letter-spacing:0}
+.srow{display:flex;align-items:center;gap:var(--g);padding:8px 0;
+  box-shadow:0 1px 0 rgba(255,255,255,.06)}
+.srow:last-child{box-shadow:none}
+.srow .sn{flex:0 0 1.4rem;font-family:var(--display);font-size:.9rem;color:var(--cream-4);font-weight:600}
+.srow .st2{flex:1;min-width:0}
+.srow .st2 b{display:block;font-size:.86rem;font-weight:700}
+.srow .st2 a{display:block;font-family:var(--mono);font-size:.66rem;color:var(--cream-4);
+  text-decoration:none;word-break:break-all}
+.srow .st2 a:hover{color:var(--gold-2);text-decoration:underline}
+.srow .ss{flex:0 0 auto;font-size:.7rem;color:var(--cream-4);font-weight:700}
+.srow.paid{opacity:.7}
+.srow.paid .ss{color:var(--sport)}
+.srow.waiting{opacity:.6}
+/* the JCSU list */
+.jgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:var(--g);margin-bottom:var(--g2)}
+.jc{display:block;background:var(--t1);border-radius:var(--r2);padding:var(--pad-s);text-decoration:none;
+  color:var(--cream);transition:background .16s,transform .16s var(--ease)}
+.jc:hover{background:var(--t2);transform:translateY(-2px)}
+.jc b{display:block;font-size:.86rem;font-weight:700;letter-spacing:-.018em;line-height:1.24}
+.jc span{display:block;font-size:.72rem;color:var(--cream-4);font-weight:600;margin-top:3px}
+.jc i{display:block;font-style:normal;font-family:var(--mono);font-size:0.64rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--gold-2);font-weight:700;margin-top:7px}
 .pend{display:flex;gap:var(--g2);align-items:flex-start;background:var(--t1);border-radius:var(--r);
   padding:var(--pad);margin-bottom:var(--g);flex-wrap:wrap}
 .pend .pk{flex:0 0 auto;font-family:var(--mono);font-size:0.66rem;letter-spacing:.16em;text-transform:uppercase;
@@ -1032,7 +1071,7 @@ code{font-family:var(--mono);font-size:0.658rem;background:rgba(0,0,0,.3);paddin
   <!-- ===================== LODGE ===================== -->
   <section id="v-lodge" hidden>
     <div class="vh"><h2>The <i>lodge</i></h2><span class="note">Notices, and how the college works</span>
-      <div class="right"><button class="btn cream sm" id="bNewNotice" data-committee hidden>Post a notice</button></div></div>
+      <div class="right"><button class="btn gold sm" data-newnotice>Post a notice</button></div></div>
     <div class="seg" id="lodgeSeg" style="margin-bottom:14px;overflow-x:auto"></div>
     <div id="lodgeBody"></div>
   </section>
@@ -1204,7 +1243,7 @@ code{font-family:var(--mono);font-size:0.658rem;background:rgba(0,0,0,.3);paddin
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbxAs7hmSaS3OZ_bFs9OhSH5DR-t8xbtBm2q_5EWp2QgL6YSoqbYlPngwZoa58C7To-2cg/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxVXwEOkninl_9igr5aURNV9UFl_yxy-oleF720VlHyHzP8ZKqwBZL9dDux46r7ZBcArw/exec";
 
 /* JavaScript is alive, so the ring painted before the page was parsed can go.
    It is a pseudo element on <html>, so nothing else can remove it. */
@@ -2242,7 +2281,7 @@ function noticeHtml(n){
    why it read as a mess. It is now five shelves behind one control: what is
    true right now, the forms, the guides, sport, and what you can borrow.
    Nothing is longer than a screen. */
-let lodgeTab = "now";
+let lodgeTab = "now", jcsuQ = "";
 const LODGE_TABS = [
   ["now","On the board"], ["forms","Forms and links"], ["guides","How college works"],
   ["sport","Sport"], ["room","The MCR room"]
@@ -2271,8 +2310,7 @@ function lodgeNow(){
     (n.length ? n.filter(x => x.status !== "pending" || !isCommittee()).map(noticeHtml).join("")
     : '<div class="card"><p>Nothing on the board, which is usually good news.</p>' +
       '<p class="lede">Gates, building work, lost property and anything the Porters want the MCR to know lands here.</p></div>') +
-    '<div class="acts"><button class="btn gold sm" data-newnotice>' +
-      (isCommittee() ? "Post a notice" : "Suggest a notice") + "</button></div>";
+    "";
 }
 function lodgeForms(){
   const L = S.links || [];
@@ -2315,10 +2353,39 @@ function lodgeSport(){
         '<span class="ic"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" ' +
         'stroke-width="2" stroke-linecap="round"><path d="M2 12h2M20 12h2M6 8v8M18 8v8M9 6v12M15 6v12M9 12h6"/>' +
         "</svg></span>" +
-        '<span class="t"><b>Book your gym induction</b>' +
-        "<small>Both gyms are free to every member, and both are locked until you have done the induction " +
-        "that switches your University card on at the door. It takes twenty minutes, once.</small></span>" +
+        '<span class="t"><b>Do your gym induction</b>' +
+        "<small>Not a class and not a booking: a page of short videos and a form at the bottom. Fill it " +
+        "in and your University card starts opening the gym doors. Both gyms are free, and both are shut " +
+        "to you until you have.</small></span>" +
         '<span class="arw">&#8599;</span></a>' : "";
+    })() +
+    /* These are the JCSU's, not ours. Nearly all of them take postgraduates
+       and almost nobody finds that out, so the captain's address is one tap
+       away rather than three pages into another website. */
+    (function(){
+      const j = S.jcsu || [];
+      if (!j.length) return "";
+      const q = (jcsuQ || "").trim().toLowerCase();
+      const hit = j.filter(x => !q || (x.name + " " + x.who).toLowerCase().indexOf(q) >= 0);
+      const group = k => {
+        const list = hit.filter(x => x.kind === k);
+        if (!list.length) return "";
+        return '<div class="grp"><b>' + (k === "sport" ? "Sport" : "Societies") + "</b>" +
+          "<span>" + list.length + "</span></div>" +
+          '<div class="jgrid">' + list.map(x =>
+            '<a class="jc" href="mailto:' + esc(x.emails.join(",")) + "?subject=" +
+            encodeURIComponent("Jesus " + x.name) + '"><b>' + esc(x.name) + "</b>" +
+            "<span>" + esc(x.who) + "</span><i>write to them</i></a>").join("") + "</div>";
+      };
+      return '<div class="grp"><b>JCSU sports and societies</b></div>' +
+        '<div class="card"><p>These belong to the <b>JCSU</b>, the undergraduate union, not to the MCR. ' +
+        "Nearly all of them take postgraduates and hardly anybody finds that out. Tap one and it writes " +
+        "to whoever runs it.</p>" +
+        '<p class="lede">Correct as of April 2026. If the thing you want is missing, the JCSU will help ' +
+        "you start it.</p>" +
+        '<input class="bigin" id="jcsuQ" value="' + esc(jcsuQ || "") +
+        '" placeholder="Find a sport or a society" style="margin-top:var(--g)"></div>' +
+        group("sport") + group("society");
     })() +
     (function(){
       const want = ["courts","sport","societies","jcbc"];
@@ -2463,6 +2530,7 @@ function askNew(){
       '<button data-ask="' + esc(a.key) + '">' + esc(a.name) +
       (a.welfare ? "<small>Only the officer you send it to, and the President</small>" : "") +
       "</button>").join("") + "</div>" +
+    notOursHtml() +
     hoursHtml();
 }
 function askThreads(){
@@ -2494,7 +2562,7 @@ function askRooms(){
       : '<div class="card"><p>You have not asked for the room.</p></div>');
 }
 function askWho(){
-  return whoHtml() + notOursHtml();
+  return whoHtml();
 }
 function threadHtml(t, officer){
   const lab = { open:"Open", college:"Raised with College", answered:"Answered", closed:"Closed",
@@ -3375,8 +3443,14 @@ function swapCard(w, hold){
       fld("venue", w.venue, "Their hall, meet at our Lodge at 6.30") +
     "</div>" +
     '<div class="swside">' + fld("spots", w.spots, "12", "number") +
-      '<span class="sfl">places</span>' + fld("price", w.price, "\u00a325") +
+      '<span class="sfl">places</span>' + fld("waitCap", w.waitCap || "", "0 for no limit", "number") +
+      '<span class="sfl">waiting</span>' + fld("price", w.price, "25") +
       '<span class="sfl">each</span></div></div>' +
+    '<div class="swlogo-row"><div id="swLogoPrev">' +
+      (w.logo ? '<img class="swlogo big" src="' + w.logo + '" alt="">'
+              : '<span class="swlogo big empty">no crest</span>') + "</div>" +
+      '<label class="btn ghost sm">Add their crest<input type="file" id="swLogo" accept="image/*" hidden></label>' +
+      '<input type="hidden" data-f="logo" value="' + esc(w.logo || "") + '"></div>' +
     fld("payTo", w.payTo, "How to pay: the Treasurer, by bank transfer") +
     '<textarea class="sf" data-f="note" placeholder="Anything else worth saying">' + esc(w.note || "") +
       "</textarea>" +
@@ -3391,6 +3465,7 @@ function swapCard(w, hold){
   return '<div class="swap' + (m ? " mine" : "") + (w.status !== "open" ? " shut" : "") +
       (w.past ? " past" : "") + '">' +
     '<div class="swtop"><div class="swmain">' +
+      (w.logo ? '<img class="swlogo" src="' + w.logo + '" alt="">' : "") +
       '<b class="swcol">' + esc(w.college || "Somewhere") + "</b>" +
       '<span class="swwhen">' + esc(longDate(w.date)) + " &middot; " + esc(clock(w.start)) + "</span>" +
       (w.venue ? '<span class="swwhere">' + esc(w.venue) + "</span>" : "") +
@@ -3406,7 +3481,8 @@ function swapCard(w, hold){
       (w.spots > 40 ? '<span class="pipmore">+' + (w.spots - 40) + "</span>" : "") + "</div>" +
     '<div class="swline">' +
       "<span><b>" + w.left + "</b> " + (w.left === 1 ? "place left" : "places left") + "</span>" +
-      (w.waiting ? "<span><b>" + w.waiting + "</b> waiting</span>" : "") +
+      (w.waiting ? "<span><b>" + w.waiting + "</b> waiting" +
+        (w.waitLeft !== null ? " of " + (w.waiting + w.waitLeft) : "") + "</span>" : "") +
       (w.payTo ? "<span>pay " + esc(w.payTo) + "</span>" : "") + "</div>" +
     (w.note ? '<p class="swn">' + esc(w.note) + "</p>" : "") +
     (m
@@ -3428,13 +3504,22 @@ function swapCard(w, hold){
       : '<div class="acts"><button class="btn gold" data-swaptake="' + esc(w.id) + '">' +
         (full ? "Join the waiting list" : "Take a place") + "</button></div>") +
     (isCommittee() && w.list.length
-      ? '<div class="swroster">' + w.list.map(x =>
-          '<button class="sr ' + esc(x.status) + '" data-swappaid="' + esc(x.id) + '" data-p="' +
-          (x.status === "paid" ? "0" : "1") + '" title="' + esc(x.email) +
-          '"><b>' + esc(x.name) + "</b>" +
-          (x.status === "paid" ? "paid" : x.status === "held"
-            ? Math.max(0, Math.ceil((x.dueBy - Date.now()) / 864e5)) + "d" : "waiting") +
-          "</button>").join("") + "</div>"
+      /* names and addresses, because chasing four people for money needs
+         their addresses and not a list of first names */
+      ? '<div class="swroster"><div class="grp"><b>Who is on it</b><span class="weeknav">' +
+          '<a class="btn ghost sm" href="mailto:' +
+          esc(w.list.filter(x => x.status !== "paid").map(x => x.email).join(",")) + "?subject=" +
+          encodeURIComponent(w.college + " swap: payment") + '">Write to everyone unpaid</a></span></div>' +
+        w.list.map((x, i) =>
+          '<div class="srow ' + esc(x.status) + '">' +
+          '<span class="sn">' + (i + 1) + "</span>" +
+          '<span class="st2"><b>' + esc(x.name) + "</b>" +
+          '<a href="mailto:' + esc(x.email) + '">' + esc(x.email) + "</a></span>" +
+          '<span class="ss">' + (x.status === "paid" ? "paid" : x.status === "held"
+            ? Math.max(0, Math.ceil((x.dueBy - Date.now()) / 864e5)) + " days left" : "waiting") + "</span>" +
+          '<button class="btn ' + (x.status === "paid" ? "ghost" : "gold") + ' sm" data-swappaid="' +
+          esc(x.id) + '" data-p="' + (x.status === "paid" ? "0" : "1") + '">' +
+          (x.status === "paid" ? "Undo" : "Paid") + "</button></div>").join("") + "</div>"
       : "") +
     (isCommittee() ? '<button class="swedit" data-swapedit="' + esc(w.id) + '">Edit this swap</button>' : "") +
     "</div>";
@@ -3934,7 +4019,8 @@ document.addEventListener("click", async e => {
       try{
         const r = await api("swapSave", { swap: { id: d.swapsave || "", college: g("college"),
           date: g("date"), start: g("start"), spots: g("spots"), price: g("price"),
-          venue: g("venue"), payTo: g("payTo"), note: g("note"), status: g("status") } });
+          venue: g("venue"), payTo: g("payTo"), note: g("note"), status: g("status"),
+          waitCap: g("waitCap"), logo: g("logo") } });
         S.swaps = r.swaps; swapEdit = ""; renderSwaps(); toast("Saved.");
       }catch(err){ unspin(t); fail(err); }
       return;
@@ -4147,7 +4233,6 @@ on("bRefresh", "click", () => refresh(true));
 // calendar tab removed
 on("bNewEvent2", "click", () => openEventEditor(""));
 on("bNewSeries", "click", () => openSeriesEditor(""));
-on("bNewNotice", "click", openNoticeEditor);
 on("bNewMotion", "click", openMotion);
 on("bNewIdea", "click", openIdea);
 on("bNewGift", "click", openMarket);
@@ -4155,7 +4240,35 @@ on("bNewSwap", "click", () => { swapEdit = "new"; renderSwaps(); go("swaps"); wi
 on("bNewPoll", "click", openPoll);
 on("memQ", "input", renderMembers);
 /* the door search keeps its focus, which a full redraw would take away */
+/* a college crest, shrunk to something a spreadsheet cell will hold */
+document.addEventListener("change", e => {
+  const f = e.target.closest("#swLogo");
+  if (!f || !f.files[0]) return;
+  const card = f.closest(".swap");
+  const img = new Image();
+  img.onload = () => {
+    const c = document.createElement("canvas");
+    const side = Math.min(img.width, img.height);
+    c.width = c.height = 120;
+    c.getContext("2d").drawImage(img, (img.width - side) / 2, (img.height - side) / 2,
+      side, side, 0, 0, 120, 120);
+    const d = c.toDataURL("image/png");
+    const hid = card.querySelector('[data-f="logo"]');
+    if (hid) hid.value = d;
+    const prev = card.querySelector("#swLogoPrev");
+    if (prev) prev.innerHTML = '<img class="swlogo big" src="' + d + '" alt="">';
+    URL.revokeObjectURL(img.src);
+  };
+  img.src = URL.createObjectURL(f.files[0]);
+});
 document.addEventListener("input", e => {
+  if (e.target.closest("#jcsuQ") && S){
+    jcsuQ = e.target.value;
+    renderLodge();
+    const j = $("jcsuQ");
+    if (j){ j.focus(); j.setSelectionRange(j.value.length, j.value.length); }
+    return;
+  }
   if (!e.target.closest("#deskQ") || !S) return;
   deskQ = e.target.value;
   renderDesk();
