@@ -237,10 +237,14 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 @media(min-width:920px){.dots{gap:5px;height:10px}.dots i{width:10px;height:10px}}
 .dots i.ring{box-shadow:0 0 0 2px var(--cream)}
 .cell.sel .dots i.ring{box-shadow:0 0 0 2px var(--gold-ink)}
-.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:var(--g);margin-bottom:18px}
-@media(max-width:920px){.week{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:520px){.week{grid-template-columns:1fr}}
-.wcol{background:var(--t1);border-radius:var(--r2);padding:12px 11px;min-height:118px}
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-bottom:18px}
+@media(max-width:1080px){.week{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:700px){.week{grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--g)}}
+@media(max-width:420px){.week{grid-template-columns:1fr}
+  .wcol{min-height:0;display:flex;align-items:flex-start;gap:12px}
+  .wcol .wh{flex:0 0 54px;margin:0;padding:0;display:block}
+  .wcol .wev,.wcol .none{flex:1}}
+.wcol{background:var(--t1);border-radius:var(--r2);padding:12px 11px;min-height:112px}
 .wcol.today{background:rgba(235,183,83,.16)}
 .wcol.past{opacity:.45}
 .wcol .wh{display:flex;align-items:baseline;gap:6px;margin-bottom:10px}
@@ -352,6 +356,16 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .guide p{margin:0;padding:0 16px 15px;font-size:15px;color:var(--cream-2);white-space:pre-wrap;line-height:1.62;
   font-weight:500}
 .guide .acts{padding:0 16px 14px;margin-top:0}
+.grp .weeknav{margin-left:auto;display:flex;gap:6px;align-items:center}
+.weeknav button{background:var(--t1);color:var(--cream-2);border-radius:999px;padding:5px 12px;font-size:11.5px;
+  font-family:var(--ui);letter-spacing:0;text-transform:none;font-weight:700;transition:.16s}
+.weeknav button:hover{background:var(--t3);color:var(--cream)}
+.weeknav button[aria-pressed="true"]{background:var(--gold);color:var(--gold-ink)}
+.weeknav button.now{background:var(--t2)}
+.onday{background:var(--t1);border-radius:var(--r);padding:13px 15px;margin-bottom:8px}
+.ondh{display:flex;align-items:baseline;gap:10px;margin-bottom:9px}
+.ondh b{font-family:var(--display);font-size:23px;font-weight:600;line-height:1;letter-spacing:-.05em;color:var(--gold-2)}
+.ondh span{font-size:13px;color:var(--cream-4);font-weight:600}
 .hours{margin-top:12px}
 .hrow{display:flex;align-items:center;gap:12px;padding:11px 0;box-shadow:0 1px 0 rgba(255,255,255,.07)}
 .hrow:last-child{box-shadow:none;padding-bottom:0}
@@ -361,12 +375,25 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .hrow.mine{background:rgba(235,183,83,.14);border-radius:var(--r3);padding:11px 13px;box-shadow:none;margin:2px 0}
 .hrow.mine .t span{color:var(--gold-2)}
 .iconbtn.busy svg{animation:spin .9s linear infinite}
-.bootline{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--gold-2);font-weight:700;min-height:16px}
-.boottrack{height:3px;border-radius:3px;background:rgba(0,0,0,.34);overflow:hidden;margin-top:16px}
-.boottrack i{display:block;height:100%;width:8%;border-radius:3px;background:var(--gold);
-  transition:width .6s var(--ease)}
-.bootslow{margin-top:14px;font-size:12.5px;color:var(--cream-3);line-height:1.5;font-weight:500}
+/* The boot screen the Fortnight app had: the crest sitting inside two rings
+   that turn at different speeds, the line under it saying what is happening,
+   and a track that fills. The crest never moves, so the handover to the real
+   page is invisible. */
+#boot{position:fixed;inset:0;display:grid;place-items:center;z-index:70;background:var(--crimson-2)}
+#boot::before{content:"";position:absolute;inset:0;
+  background:radial-gradient(760px 460px at 78% -10%, rgba(235,183,83,.16), transparent 58%),
+    linear-gradient(172deg,#B4141B 0%,#8E0F14 48%,#5B070C 100%)}
+.bootin{position:relative;text-align:center;width:min(280px,74vw)}
+.ring4{position:absolute;left:50%;top:34px;width:132px;height:132px;margin:-66px 0 0 -66px;pointer-events:none}
+.ring4 i{position:absolute;inset:0;border-radius:50%;border:2px solid transparent;display:block}
+.ring4 i:first-child{border-top-color:rgba(252,245,238,.9);animation:spin 1.15s linear infinite}
+.ring4 i:last-child{inset:11px;border-bottom-color:rgba(235,183,83,.75);animation:spin 1.9s linear infinite reverse}
+#boot .crest.big{position:relative;margin:0 auto 22px;display:block}
+.bootline{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--gold-2);font-weight:700;min-height:17px}
+.loadtrack{display:block;height:3px;border-radius:3px;background:rgba(0,0,0,.3);overflow:hidden;margin-top:18px}
+.loadtrack i{display:block;height:100%;width:8%;border-radius:3px;background:var(--gold);transition:width .6s var(--ease)}
+.bootslow{margin-top:16px;font-size:13px;color:var(--cream-3);line-height:1.55;font-weight:500}
 /* the skeleton a section wears while it waits */
 .sk{background:var(--t1);border-radius:var(--r2);animation:glow 1.4s ease-in-out infinite}
 .skwall{height:120px;border-radius:var(--r);margin-bottom:8px}
@@ -514,10 +541,21 @@ nav .railtop{display:none}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 @keyframes slideup{from{transform:translateY(18px);opacity:0}to{transform:none;opacity:1}}
 .sheet .inner{background:linear-gradient(178deg,#921017,#63080E);border-radius:18px 18px 0 0;width:100%;
-  max-width:590px;max-height:92vh;overflow:auto;padding:22px 22px calc(26px + var(--sab));
+  max-width:580px;max-height:100%;display:flex;flex-direction:column;
   box-shadow:0 -14px 40px rgba(20,1,3,.7);animation:slideup .3s var(--ease) both}
-@media(min-width:600px){.sheet{align-items:center;padding:24px}.sheet .inner{border-radius:16px}}
-.sheet h3{font-family:var(--display);font-size:26px;margin:0 0 16px;font-weight:600;letter-spacing:-.042em}
+.sheet .scroll{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+  padding:22px 22px 6px;flex:1;min-height:0}
+/* the buttons sit on the floor of the sheet and never scroll away, which is
+   what made a long form look like it had no way to submit */
+.sheet .foot{flex:0 0 auto;padding:13px 22px calc(15px + var(--sab));
+  background:linear-gradient(180deg,rgba(99,8,14,0),#63080E 26%);
+  box-shadow:0 -1px 0 rgba(255,255,255,.09)}
+.sheet .foot .acts{margin-top:0}
+@media(min-width:600px){.sheet{align-items:center;padding:22px}.sheet .inner{border-radius:16px;max-height:calc(100vh - 44px)}}
+@media(min-width:1000px){.sheet{padding-left:calc(var(--rail) + 22px)}}
+.sheet h3{font-family:var(--display);font-size:23px;margin:0 0 14px;font-weight:600;letter-spacing:-.04em}
+.sheet .card p{font-size:14.5px}
+.sheet .lede{font-size:13.5px}
 .sheet .card{padding:0 0 4px;background:none}
 .f{display:block;margin-bottom:13px}
 .f span{display:block;font-family:var(--mono);font-size:10px;color:var(--cream-4);margin-bottom:6px;
@@ -590,12 +628,13 @@ code{font-family:var(--mono);font-size:12.5px;background:rgba(0,0,0,.3);padding:
   word-break:break-all}
 </style>
 
-<div id="boot" style="position:fixed;inset:0;display:grid;place-items:center;z-index:70">
-  <div style="text-align:center;width:min(260px,72vw)">
-    <img class="crest big" id="crestBoot" style="margin:0 auto 16px" alt="Jesus College MCR">
+<div id="boot">
+  <div class="bootin">
+    <span class="ring4"><i></i><i></i></span>
+    <img class="crest big" id="crestBoot" alt="Jesus College MCR">
     <div class="bootline" id="bootLine">Waking the porters</div>
-    <div class="boottrack"><i id="bootBar"></i></div>
-    <div class="bootslow" id="bootSlow" hidden>Still waiting for the server. It wakes up slowly the first time each day.</div>
+    <span class="loadtrack"><i id="bootBar"></i></span>
+    <div class="bootslow" id="bootSlow" hidden>Still waiting. The server sleeps between visits and takes a moment to wake the first time each day.</div>
   </div>
 </div>
 
@@ -617,8 +656,8 @@ code{font-family:var(--mono);font-size:12.5px;background:rgba(0,0,0,.3);padding:
     <div id="crow"></div>
     <div id="todayUrgent"></div>
     <div id="bumpsCard"></div>
-    <div class="grp">This <b>week</b></div>
     <div id="todayWeek"></div>
+    <div id="todayOn"></div>
     <div class="three" id="three" hidden></div>
     <div id="todayQuick"></div>
     <div id="todayNews"></div>
@@ -833,7 +872,7 @@ code{font-family:var(--mono);font-size:12.5px;background:rgba(0,0,0,.3);padding:
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbxrIFcVYXps-BVfyTzXaMFD_jelit7MFahaeZ0Pq7nuzYGIcpS281R-UlLHO2AH-XrGsg/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbz79J_zeQHxee_5RtB98AeUArpVMD4S5KsM-YOW7r7jyQCd4BBe98hJv52U7wkRbh0XhQ/exec";
 
 /* JavaScript is alive, so the ring painted before the page was parsed can go.
    It is a pseudo element on <html>, so nothing else can remove it. */
@@ -949,7 +988,7 @@ function viaBridge(body){
   });
 }
 async function viaFetch(body){
-  const url = API_URL || "https://script.google.com/macros/s/AKfycbz79J_zeQHxee_5RtB98AeUArpVMD4S5KsM-YOW7r7jyQCd4BBe98hJv52U7wkRbh0XhQ/exec";
+  const url = API_URL || "";
   if (!url) throw new Error("This page has no API_URL set, so it cannot reach the server.");
   const r = await fetch(url, { method:"POST", body: JSON.stringify(body),
     headers:{ "Content-Type":"text/plain;charset=utf-8" }, redirect:"follow" });
@@ -1279,7 +1318,7 @@ async function refresh(loud){
 function startPolling(){
   stopPolling();
   pollTimer = setInterval(pollTick, 45000);
-  tickTimer = setInterval(() => { if (S){ renderCrow(); renderThree(); renderTodayWeek(); renderBoard(); applySeason(); } }, 60000);
+  tickTimer = setInterval(() => { if (S){ renderCrow(); renderThree(); renderTodayWeek(); renderTodayOn(); renderBoard(); applySeason(); } }, 60000);
 }
 function stopPolling(){ clearInterval(pollTimer); clearInterval(tickTimer); pollTimer = tickTimer = null; }
 async function pollTick(){
@@ -1303,7 +1342,7 @@ function firstRun(){
     '<label class="f"><span>Your name</span><input id="fuName" value="' + esc(me.name || "") + '" placeholder="As you would like it read out"></label>' +
     '<label class="f"><span>Dietary needs</span><input id="fuDiet" value="' + esc(me.dietary || "") + '" placeholder="Vegetarian, halal, nut allergy, none"></label>' +
     '<label class="check"><input type="checkbox" id="fuConsent"> I am happy for the committee to hold my name, course and dietary needs while I am a member, and to delete them afterwards.</label>' +
-    '<div class="acts"><button class="btn crimson" id="fuGo">Start</button></div>',
+    '<div class="acts"><button class="btn gold" id="fuGo">Start</button><button class="btn ghost" data-close>Cancel</button></div>',
     el => el.querySelector("#fuGo").addEventListener("click", async e => {
       if (!$("fuName").value.trim()) return toast("Your name, and then you are done.");
       if (!$("fuConsent").checked) return toast("The app needs that box ticked before it can hold anything.");
@@ -1323,16 +1362,30 @@ function firstRun(){
 let sheetOpen = false;
 function sheet(title, inner, onOpen, sticky){
   closeSheet();
+  /* Anything the caller put in a trailing .acts block becomes the sheet's
+     floor, so the button you came for is always on screen however long the
+     form is. */
+  let body = inner, foot = "";
+  const cut = inner.lastIndexOf('<div class="acts"');
+  if (cut > -1 && inner.indexOf("</div>", cut) === inner.length - 6){
+    body = inner.slice(0, cut);
+    foot = inner.slice(cut);
+  }
   const el = document.createElement("div");
   el.className = "sheet";
   el.id = "sheet";
-  el.innerHTML = '<div class="inner"><h3>' + esc(title) + "</h3>" + inner +
-    (sticky ? "" : '<div class="acts"><button class="btn ghost sm" data-close>Close</button></div>') + "</div>";
+  el.innerHTML = '<div class="inner"><div class="scroll"><h3>' + esc(title) + "</h3>" + body + "</div>" +
+    '<div class="foot">' + (foot || "") +
+    (sticky ? "" : (foot ? "" : '<div class="acts"><button class="btn ghost sm" data-close>Close</button></div>')) +
+    "</div></div>";
   document.body.appendChild(el);
   document.body.classList.add("locked");
   sheetOpen = true;
-  if (!sticky) el.addEventListener("click", e => {
-    if (e.target === el || e.target.hasAttribute("data-close")) closeSheet();
+  /* Only the backdrop itself closes it. Catching stray taps on the padding
+     was closing half-finished forms. */
+  el.addEventListener("click", e => {
+    if (e.target.hasAttribute("data-close")) return closeSheet();
+    if (!sticky && e.target === el) closeSheet();
   });
   if (onOpen) onOpen(el);
 }
@@ -1487,7 +1540,9 @@ function renderCrow(){
     '<div class="state">' + bits.join("") + "</div></div>");
 }
 function eventsOn(d){
-  return (S.events || []).filter(e => e.date === d && (!catFilter || catOf(e) === catFilter));
+  return (S.events || []).filter(e => e.date === d &&
+    (!catFilter || catOf(e) === catFilter) &&
+    (!mineOnly || ["going","waitlist"].indexOf(myStatus(e.id)) >= 0));
 }
 function renderTodayUrgent(){
   const live = (S.notices || []).filter(n => n.pin || n.kind === "urgent").slice(0, 2);
@@ -1497,11 +1552,50 @@ function renderTodayUrgent(){
    room is where the pigeonholes are and this is the same idea. */
 /* The week, on the front page. Seven columns from Monday, today lifted, so
    the shape of the week is visible before anything is tapped. */
+let homeWeek = null, mineOnly = false;
+/* The week, on the front page, and you can walk through it without leaving.
+   Arrows, swipe, and a way back to this week when you have wandered off. */
 function renderTodayWeek(){
-  const t = todayLondon(), ws = weekStart(t);
-  put("todayWeek", weekGrid(ws) +
-    '<div class="acts" style="margin:-6px 0 0"><button class="btn ghost sm" data-goto="cal">The whole term</button>' +
-    '<span class="lede">Week beginning ' + esc(shortDate(ws)) + "</span></div>");
+  const t = todayLondon();
+  if (!homeWeek) homeWeek = weekStart(t);
+  const ws = homeWeek, we = addDays(ws, 6);
+  const here = ws === weekStart(t);
+  const label = here ? "This week"
+    : ws === weekStart(addDays(t, 7)) ? "Next week"
+    : dnum(ws) + " " + MON[dobj(ws).getUTCMonth()].slice(0, 3) + " to " +
+      dnum(we) + " " + MON[dobj(we).getUTCMonth()].slice(0, 3);
+  put("todayWeek",
+    '<div class="grp" style="margin-bottom:10px"><b>' + esc(label) + "</b>" +
+      '<span class="weeknav">' +
+        '<button data-hw="-1" aria-label="The week before">&#8249;</button>' +
+        (here ? "" : '<button data-hw="0" class="now">This week</button>') +
+        '<button data-hw="1" aria-label="The week after">&#8250;</button>' +
+      "</span></div>" +
+    '<div id="homeWeekBody">' + weekGrid(ws) + "</div>");
+}
+/* Everything you are down for, and everything still to come this week, with
+   the tick right there. This is the half of the page people came for. */
+function renderTodayOn(){
+  const t = todayLondon(), now = new Date();
+  const soon = (S.events || [])
+    .filter(e => e.status !== "cancelled" && (e.date > t || (e.date === t && endOf(e) > now)))
+    .filter(e => !mineOnly || ["going","waitlist"].indexOf(myStatus(e.id)) >= 0);
+  const mine = soon.filter(e => ["going","waitlist"].indexOf(myStatus(e.id)) >= 0);
+  const byDay = {};
+  soon.slice(0, 14).forEach(e => (byDay[e.date] = byDay[e.date] || []).push(e));
+  const days = Object.keys(byDay).sort();
+  put("todayOn",
+    '<div class="grp"><b>What is on</b>' +
+      '<span class="weeknav"><button data-mineonly aria-pressed="' + mineOnly + '">' +
+      (mineOnly ? "Everything" : "Only mine &middot; " + mine.length) + "</button>" +
+      '<button data-goto="cal">The term</button></span></div>' +
+    (days.length ? days.map(d =>
+        '<div class="onday"><div class="ondh"><b>' + dnum(d) + "</b><span>" +
+        (d === t ? "Today" : d === addDays(t, 1) ? "Tomorrow" : DOWL[dow(d)]) + " &middot; " +
+        esc(MON[dobj(d).getUTCMonth()]) + "</span></div>" +
+        byDay[d].map(evRow).join("") + "</div>").join("")
+      : '<div class="card"><p>' + (mineOnly ? "You are not down for anything yet."
+          : "Nothing in the diary. The committee is probably arranging something.") + "</p></div>"));
 }
 function renderThree(){
   const t = todayLondon();
@@ -1564,7 +1658,10 @@ function renderCal(){
     (mode === "day" ? "" : '<div class="mv"><button data-m="-1" aria-label="Back">&#8249;</button><b>' +
       esc(label) + '</b><button data-m="1" aria-label="Forward">&#8250;</button></div>'));
   put("calMonth", mode === "month" ? monthGrid(ms) : mode === "week" ? weekGrid(ws) : "");
-  put("calChips", (S.tags || []).map(t =>
+  put("calChips",
+    '<button data-mineonly aria-pressed="' + mineOnly + '">' +
+      (mineOnly ? "Showing only mine" : "Only what I am down for") + "</button>" +
+    (S.tags || []).map(t =>
       '<button data-cat="' + esc(t.key) + '" aria-pressed="' + (catFilter === t.key) + '"><i class="c-' +
       esc(t.key) + '"></i>' + esc(t.name) + "</button>").join("") +
     (catFilter ? '<button data-cat="">Show everything</button>' : ""));
@@ -1611,7 +1708,8 @@ function renderBoard(){
   if (!S) return;
   const t = todayLondon();
   const days = dayList();
-  const shown = (S.events || []).filter(e => !catFilter || catOf(e) === catFilter);
+  const shown = (S.events || []).filter(e => (!catFilter || catOf(e) === catFilter) &&
+    (!mineOnly || ["going","waitlist"].indexOf(myStatus(e.id)) >= 0));
   const byDate = {};
   shown.forEach(e => (byDate[e.date] = byDate[e.date] || []).push(e));
   $("calNote").textContent = shown.length + " in the term · " + goingCount() + " yours";
@@ -1821,7 +1919,7 @@ function openHour(date){
       "sit through an empty hour waiting. You will see your time as soon as you book.</p></div>" +
     '<label class="f"><span>What is it about, roughly</span><textarea id="hrNote" maxlength="500" ' +
       'placeholder="A line is plenty. It just means we can look something up before you arrive."></textarea></label>' +
-    '<div class="acts"><button class="btn gold" id="hrGo">Book it</button></div>',
+    '<div class="acts"><button class="btn gold" id="hrGo">Book it</button><button class="btn ghost" data-close>Cancel</button></div>',
     el => el.querySelector("#hrGo").addEventListener("click", async e => {
       const b = e.currentTarget; spin(b, "Booking");
       try{
@@ -1885,7 +1983,7 @@ function openAsk(key, subject){
       esc(subject || "") + '"></label>' +
     '<label class="f"><span>Tell them enough for a useful first reply</span><textarea id="akBody" maxlength="4000"></textarea></label>' +
     (cat.welfare ? '<label class="check"><input type="checkbox" id="akAnon"> Send this without my name. The officer will see the thread but not who you are.</label>' : "") +
-    '<div class="acts"><button class="btn crimson" id="akGo">Send it</button></div>',
+    '<div class="acts"><button class="btn gold" id="akGo">Send it</button><button class="btn ghost" data-close>Cancel</button></div>',
     el => el.querySelector("#akGo").addEventListener("click", async e => {
       const b = e.currentTarget;
       spin(b, "Sending");
@@ -1903,7 +2001,7 @@ function openAsk(key, subject){
 function openReply(id){
   sheet("Reply",
     '<label class="f"><span>Your reply</span><textarea id="rpBody" maxlength="4000"></textarea></label>' +
-    '<div class="acts"><button class="btn crimson" id="rpGo">Send</button></div>',
+    '<div class="acts"><button class="btn gold" id="rpGo">Send</button><button class="btn ghost" data-close>Cancel</button></div>',
     el => el.querySelector("#rpGo").addEventListener("click", async e => {
       const b = e.currentTarget;
       spin(b, "Sending");
@@ -1934,7 +2032,7 @@ function openRoom(){
     '<label class="f"><span>To</span><input type="time" id="rmEnd" value="20:00"></label></div>' +
     '<label class="f"><span>Roughly how many</span><input type="number" id="rmPeople" min="1" max="300" value="10"></label>' +
     '<label class="f"><span>Anything the committee should know</span><textarea id="rmNote" maxlength="700"></textarea></label>' +
-    '<div class="acts"><button class="btn crimson" id="rmGo">Send the request</button></div>',
+    '<div class="acts"><button class="btn gold" id="rmGo">Send the request</button><button class="btn ghost" data-close>Cancel</button></div>',
     el => el.querySelector("#rmGo").addEventListener("click", async e => {
       const b = e.currentTarget;
       spin(b, "Checking the calendar");
@@ -2068,7 +2166,7 @@ function openIdea(){
     '<p class="lede" id="idNote"></p>' +
     '<label class="f"><span>In one line</span><input id="idTitle" maxlength="120" placeholder="A second coffee machine, because the queue at nine is absurd"></label>' +
     '<label class="f"><span>Why, and roughly what it would take</span><textarea id="idBody" maxlength="2000"></textarea></label>' +
-    '<div class="acts"><button class="btn crimson" id="idGo">Put it up</button></div>',
+    '<div class="acts"><button class="btn gold" id="idGo">Put it up</button><button class="btn ghost" data-close>Cancel</button></div>',
     el => {
       const note = () => { const k = (S.ideaKinds || []).filter(x => x.key === $("idKind").value)[0];
         $("idNote").textContent = k ? k.note : ""; };
@@ -2087,7 +2185,7 @@ function openPoll(){
     '<label class="f"><span>The question</span><input id="poQ" maxlength="160" placeholder="Which night should Grad Hall move to?"></label>' +
     '<label class="f"><span>The answers, one per line</span><textarea id="poO" placeholder="Tuesday\nThursday\nLeave it alone"></textarea></label>' +
     '<label class="f"><span>Closes</span><input type="date" id="poC" value="' + esc(addDays(todayLondon(), 7)) + '"></label>' +
-    '<div class="acts"><button class="btn crimson" id="poGo">Open it</button></div>',
+    '<div class="acts"><button class="btn gold" id="poGo">Open it</button><button class="btn ghost" data-close>Cancel</button></div>',
     el => el.querySelector("#poGo").addEventListener("click", async e => {
       const b = e.currentTarget; spin(b, "Opening");
       try{
@@ -2147,7 +2245,7 @@ function openMotion(){
     '<p class="lede" id="moNote"></p>' +
     '<label class="f"><span>Title</span><input id="moTitle" maxlength="140" placeholder="That the MCR buys a second coffee machine"></label>' +
     '<label class="f"><span>The motion</span><textarea id="moBody" maxlength="4000" placeholder="What is being resolved, why, and what it costs if anything."></textarea></label>' +
-    '<div class="acts"><button class="btn crimson" id="moGo">Put it down</button></div>',
+    '<div class="acts"><button class="btn gold" id="moGo">Put it down</button><button class="btn ghost" data-close>Cancel</button></div>',
     el => {
       const note = () => {
         const k = (S.motionKinds || []).filter(x => x.key === $("moKind").value)[0];
@@ -2351,7 +2449,7 @@ function openSeriesEditor(id){
     '<label class="f"><span>What it is</span><textarea id="sDesc" maxlength="2000">' + esc(s ? s.desc : "") + "</textarea></label>" +
     '<label class="check"><input type="checkbox" id="sOff"' + (s && s.status === "off" ? " checked" : "") +
       "> Paused, do not show it at all</label>" +
-    '<div class="acts"><button class="btn crimson" id="sGo">Save</button></div>',
+    '<div class="acts"><button class="btn gold" id="sGo">Save</button><button class="btn ghost" data-close>Cancel</button></div>',
     el => el.querySelector("#sGo").addEventListener("click", async e => {
       const b = e.currentTarget;
       spin(b, "Saving");
@@ -2380,7 +2478,7 @@ function openNoticeEditor(){
     '<label class="f"><span>Take it down after</span><input type="date" id="ntUntil" value="' +
       esc(addDays(todayLondon(), 7)) + '"></label>' +
     '<label class="check"><input type="checkbox" id="ntPin"> Keep it at the top, and on Today</label>' +
-    '<div class="acts"><button class="btn crimson" id="ntGo">Post it</button></div>',
+    '<div class="acts"><button class="btn gold" id="ntGo">Post it</button><button class="btn ghost" data-close>Cancel</button></div>',
     el => el.querySelector("#ntGo").addEventListener("click", async e => {
       const b = e.currentTarget;
       spin(b, "Posting");
@@ -2549,7 +2647,7 @@ function openMarket(){
       vs.map(v => '<option value="' + esc(v.key) + '">' + esc(v.name) + "</option>").join("") + "</select></label>" +
     '<label class="f"><span>A photograph</span><input type="file" id="mkPhoto" accept="image/*"></label>' +
     '<div id="mkPrev"></div>' +
-    '<div class="acts"><button class="btn crimson" id="mkGo">Put it up</button></div>',
+    '<div class="acts"><button class="btn gold" id="mkGo">Put it up</button><button class="btn ghost" data-close>Cancel</button></div>',
     el => {
       let photo = "";
       const note = () => {
@@ -2666,7 +2764,7 @@ function openBumps(meet, crew){
       '<label class="f"><span>' + ["Start","After day 1","After day 2","After day 3","After day 4"][i] +
       '</span><input type="number" id="bu_' + k + '" min="0" max="120" value="' +
       (c ? (c.pos[i] || 0) : 0) + '"></label>').join("") + "</div>" +
-    '<div class="acts"><button class="btn crimson" id="buGo">Save</button></div>',
+    '<div class="acts"><button class="btn gold" id="buGo">Save</button><button class="btn ghost" data-close>Cancel</button></div>',
     el => el.querySelector("#buGo").addEventListener("click", async e => {
       const b = e.currentTarget;
       spin(b, "Saving");
@@ -2767,7 +2865,7 @@ function render(){
   document.querySelectorAll("[data-owner]").forEach(el => el.hidden = !S.me.owner);
   if (!month) month = monthStart(todayLondon());
   applySeason();
-  renderCrow(); renderBumps(); renderTodayUrgent(); renderTodayWeek(); renderThree();
+  renderCrow(); renderBumps(); renderTodayUrgent(); renderTodayWeek(); renderTodayOn(); renderThree();
   renderTodayQuick(); renderTodayNews();
   renderCal(); renderBoard();
   renderLodge(); renderMarket(); renderHours(); renderAsk(); renderWho();
@@ -2779,13 +2877,17 @@ function render(){
 
 /* ---------- one listener for the whole app ---------- */
 document.addEventListener("click", async e => {
+  /* Until the state has arrived there is nothing to act on, and every handler
+     below reads it. Swallowing the click is better than throwing behind a
+     loading screen, which is what it did before. */
+  if (!S) return;
   const t = e.target.closest("[data-open],[data-tick],[data-mode],[data-m],[data-day],[data-cat]," +
     "[data-goto],[data-ask],[data-room],[data-reply],[data-tset],[data-lendtake],[data-lendback]," +
     "[data-noticeoff],[data-editres],[data-roomyes],[data-roomno],[data-rsvp],[data-edit],[data-cancel]," +
     "[data-skip],[data-editser],[data-second],[data-vote],[data-mset],[data-code],[data-checkin]," +
     "[data-delupdate],[data-rosteredit],[data-rosterdel],[data-newidea],[data-back]," +
     "[data-setidea],[data-dropidea],[data-pollvote],[data-pollclose]," +
-    "[data-marketnew],[data-markettake],[data-marketdrop],[data-bumpedit],[data-gk],[data-gift],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel]");
+    "[data-marketnew],[data-markettake],[data-marketdrop],[data-bumpedit],[data-gk],[data-gift],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-hw],[data-mineonly]");
   if (!t) return;
   const d = t.dataset;
   try{
@@ -2794,6 +2896,14 @@ document.addEventListener("click", async e => {
     if (d.gift) return openGift(d.gift);
     if (d.lodge){ lodgeTab = d.lodge; renderLodge(); window.scrollTo(0, 0); return; }
     if (t.hasAttribute("data-newnotice")) return openNoticeEditor();
+    if (d.hw !== undefined){
+      homeWeek = d.hw === "0" ? weekStart(todayLondon()) : addDays(homeWeek, (+d.hw) * 7);
+      renderTodayWeek(); return;
+    }
+    if (t.hasAttribute("data-mineonly")){
+      mineOnly = !mineOnly;
+      renderTodayWeek(); renderTodayOn(); renderCal(); renderBoard(); return;
+    }
     if (d.hour) return openHour(d.hour);
     if (d.hourcancel){ S.hours = (await api("hourCancel", { date: d.hourcancel })).hours;
       renderHours(); renderCrow(); return toast("Cancelled."); }
@@ -2903,7 +3013,7 @@ document.addEventListener("click", async e => {
     if (d.checkin){
       return sheet("I am in the room",
         '<label class="f"><span>The six digits on the screen</span><input id="ciCode" inputmode="numeric" maxlength="6"></label>' +
-        '<div class="acts"><button class="btn crimson" id="ciGo">Confirm</button></div>',
+        '<div class="acts"><button class="btn gold" id="ciGo">Confirm</button><button class="btn ghost" data-close>Cancel</button></div>',
         el => el.querySelector("#ciGo").addEventListener("click", async ev2 => {
           const b = ev2.currentTarget;
           spin(b, "Checking");
@@ -2956,7 +3066,32 @@ $("gate").addEventListener("click", e => {
 $("bDiag").addEventListener("click", () => { renderDiag(); $("diag").hidden = !$("diag").hidden; });
 
 document.querySelectorAll("#nav .tabbtn").forEach(b => b.addEventListener("click", () => go(b.dataset.view)));
-document.addEventListener("keydown", e => { if (e.key === "Escape" && sheetOpen) closeSheet(); });
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && sheetOpen) return closeSheet();
+  if (sheetOpen || !S || view !== "today") return;
+  if (e.key === "ArrowLeft"){ homeWeek = addDays(homeWeek, -7); renderTodayWeek(); }
+  if (e.key === "ArrowRight"){ homeWeek = addDays(homeWeek, 7); renderTodayWeek(); }
+});
+/* Swipe the week on a phone. Only a clean horizontal drag counts, so it never
+   steals a scroll. */
+(function(){
+  let x0 = null, y0 = null;
+  document.addEventListener("touchstart", e => {
+    const w = e.target.closest("#todayWeek");
+    if (!w || e.touches.length !== 1) return;
+    x0 = e.touches[0].clientX; y0 = e.touches[0].clientY;
+  }, { passive: true });
+  document.addEventListener("touchend", e => {
+    if (x0 === null || !S) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - x0, dy = t.clientY - y0;
+    x0 = null;
+    if (Math.abs(dx) > 56 && Math.abs(dx) > Math.abs(dy) * 1.8){
+      homeWeek = addDays(homeWeek, dx < 0 ? 7 : -7);
+      renderTodayWeek();
+    }
+  }, { passive: true });
+})();
 $("bMe").addEventListener("click", () => go("me"));
 $("bRefresh").addEventListener("click", () => refresh(true));
 $("bToday").addEventListener("click", () => {
@@ -3061,7 +3196,7 @@ $("bNewMeeting").addEventListener("click", () => {
     '<label class="f"><span>Title</span><input id="mtTitle" value="General meeting"></label>' +
     '<div class="f2"><label class="f"><span>Date</span><input type="date" id="mtDate"></label>' +
     '<label class="f"><span>From</span><input type="time" id="mtStart" value="18:00"></label></div>' +
-    '<div class="acts"><button class="btn crimson" id="mtGo">Add it</button></div>',
+    '<div class="acts"><button class="btn gold" id="mtGo">Add it</button><button class="btn ghost" data-close>Cancel</button></div>',
     el => el.querySelector("#mtGo").addEventListener("click", async e => {
       const b = e.currentTarget;
       spin(b, "Saving");
