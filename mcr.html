@@ -93,7 +93,7 @@ html[data-place="lodge"]{--wash:rgba(79,200,148,.18)}
 html[data-place="ask"]{--wash:rgba(235,183,83,.18)}
 html[data-place="biz"]{--wash:rgba(185,143,236,.18)}
 html[data-place="gifts"]{--wash:rgba(79,211,201,.18)}
-html[data-place="swaps"]{--wash:rgba(236,138,180,.20)}
+html[data-place="swaps"],html[data-place="swapdesk"]{--wash:rgba(236,138,180,.20)}
 html[data-place="today"]{--wash:rgba(235,183,83,.20)}
 body.locked{overflow:hidden}
 [hidden]{display:none!important}
@@ -685,6 +685,15 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .srow.paid .ss{color:var(--sport)}
 .srow.waiting{opacity:.6}
 /* the JCSU list */
+.jall{display:flex;align-items:center;gap:10px;width:100%;margin-top:var(--g);background:var(--t3);
+  border-radius:var(--r2);padding:12px 14px;color:var(--cream);font-size:.86rem;font-weight:700;
+  transition:background .16s}
+.jall:hover{background:rgba(0,0,0,.5)}
+.jall .pm{display:grid;place-items:center;width:1.5rem;height:1.5rem;border-radius:50%;
+  background:var(--gold);color:var(--gold-ink);font-weight:800;font-size:1rem;line-height:1}
+.srow.over{background:rgba(232,83,92,.16);border-radius:var(--r3);padding-left:10px;padding-right:10px}
+.srow.soon{background:rgba(235,183,83,.14);border-radius:var(--r3);padding-left:10px;padding-right:10px}
+.srow .ss.bad{color:var(--crimson-lite)}
 .jgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:var(--g);margin-bottom:var(--g2)}
 .jc{display:block;background:var(--t1);border-radius:var(--r2);padding:var(--pad-s);text-decoration:none;
   color:var(--cream);transition:background .16s,transform .16s var(--ease)}
@@ -830,9 +839,13 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 /* ---------- ideas and polls ---------- */
 .idea{display:flex;gap:14px;padding:15px 17px;background:var(--t1);border-radius:var(--r);
   margin-bottom:var(--g);align-items:flex-start}
-.idea .back{flex:0 0 52px;text-align:center}
-.idea .back button{width:100%;background:var(--t3);border-radius:var(--r3);padding:9px 0;color:var(--cream);
-  transition:.18s}
+.idea .back{flex:0 0 5.6rem;text-align:center}
+@media(max-width:520px){.idea{flex-direction:column;gap:var(--g)}
+  .idea .back{flex:0 0 auto;width:100%}
+  .idea .back button{display:flex;align-items:center;justify-content:center;gap:10px;padding:12px 0}
+  .idea .back .n{margin-top:0}.idea .back .l{margin-top:0}}
+.idea .back button{width:100%;background:var(--t3);border-radius:var(--r2);padding:12px 6px;
+  color:var(--cream);transition:.18s}
 .idea .back button:hover{background:rgba(235,183,83,.24);color:var(--gold-2)}
 .idea .back button[aria-pressed="true"]{background:var(--gold);color:var(--gold-ink)}
 .idea .back .n{display:block;font-family:var(--display);font-size:1rem;font-weight:600;line-height:1;letter-spacing:-.03em}
@@ -885,7 +898,7 @@ nav .railtop{display:none}
   /* the rail already says who this is, so the bar above the page carries
      nothing but the two buttons */
   header .crest,header .wm{display:none}
-  .hbar{padding:10px var(--gut) 12px;justify-content:flex-end;max-width:940px;margin:0}
+  .hbar{padding:10px var(--gut) 12px;justify-content:flex-end;max-width:none;margin:0}
   header{background:linear-gradient(180deg,rgba(72,5,10,.86),rgba(72,5,10,0))}
   nav .railtop b{font-family:var(--display);font-size:0.789rem;font-weight:600;letter-spacing:-.03em;line-height:1.1}
   nav .railtop i{display:block;font-style:normal;font-size:0.635rem;color:var(--gold-2);letter-spacing:.16em;
@@ -895,7 +908,9 @@ nav .railtop{display:none}
   .tabbtn svg{width:18px;height:18px}
   .tabbtn .badge{position:static;margin-left:auto}
   .sep{height:1px;width:auto;margin:10px 10px;background:var(--edge)}
-  .wrap{margin-left:var(--rail);max-width:calc(var(--rail) + 940px);
+  /* the rail is fixed, so the page fills whatever is left of the window
+     instead of sitting in a 940px column with a field of red beside it */
+  .wrap{margin-left:var(--rail);max-width:none;width:auto;
     padding:0 var(--gut) calc(var(--g3) + 24px)}
   header{margin-left:var(--rail)}
   .hbar{padding:9px 38px 15px;max-width:940px;margin:0}
@@ -904,6 +919,18 @@ nav .railtop{display:none}
 @media(min-width:620px){:root{--gut:22px}}
 @media(min-width:1000px){:root{--gut:34px}}
 @media(min-width:1380px){:root{--gut:56px}}
+/* wide screens get more in a row, not a wider row of the same things */
+@media(min-width:1500px){
+  .vgrid{grid-template-columns:repeat(6,1fr)}
+  .whogrid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+  .jgrid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+  .cols.two{grid-template-columns:1fr 1fr}
+  .linkgrid{grid-template-columns:repeat(3,1fr)}
+  .tilegrid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}}
+@media(min-width:1900px){.vgrid{grid-template-columns:repeat(7,1fr)}}
+/* and the reading column stays readable however wide the window is */
+@media(min-width:1000px){
+  .card p,.notice p,.idea .t p,.swn,.wall .line{max-width:78ch}}
 
 /* ---------- gate ---------- */
 #gate{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:22px;
@@ -1135,6 +1162,12 @@ code{font-family:var(--mono);font-size:0.658rem;background:rgba(0,0,0,.3);paddin
     <div id="inboxList"></div>
   </section>
 
+  <!-- ===================== SWAP DESK (committee) ===================== -->
+  <section id="v-swapdesk" hidden>
+    <div class="vh"><h2>Swap <i>desk</i></h2><span class="note" id="swdNote"></span></div>
+    <div id="swdBody"></div>
+  </section>
+
   <!-- ===================== MEMBERS (committee) ===================== -->
   <section id="v-members" hidden>
     <div class="vh"><h2><i>Members</i></h2><span class="note" id="memNote"></span></div>
@@ -1212,6 +1245,7 @@ code{font-family:var(--mono);font-size:0.658rem;background:rgba(0,0,0,.3);paddin
   <span class="sep" data-committee hidden></span>
   <button class="tabbtn committee" data-view="desk" data-committee hidden><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="7" rx="1.6"/><rect x="3" y="13" width="18" height="7" rx="1.6"/><path d="M7 7.5h.01M7 16.5h.01"/></svg>Desk<span class="badge" id="bdgDesk" hidden>0</span></button>
   <button class="tabbtn committee" data-view="inbox" data-committee hidden><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Messages<span class="badge" id="bdgQueue" hidden>0</span></button>
+  <button class="tabbtn committee" data-view="swapdesk" data-committee hidden><svg viewBox="0 0 24 24"><path d="M4 8h13l-3-3M20 16H7l3 3"/><circle cx="18.5" cy="6.5" r="2.2"/></svg>Swap desk<span class="badge" id="bdgSwapDesk" hidden>0</span></button>
   <button class="tabbtn committee" data-view="members" data-committee hidden><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>Members</button>
   <button class="tabbtn committee" data-view="admin" data-admin hidden><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3 8.5-7 10-4-1.5-7-5-7-10V6z"/><path d="M9.5 12l1.8 1.8 3.4-3.6"/></svg>Committee</button>
 </nav>
@@ -1243,7 +1277,7 @@ code{font-family:var(--mono);font-size:0.658rem;background:rgba(0,0,0,.3);paddin
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbxVXwEOkninl_9igr5aURNV9UFl_yxy-oleF720VlHyHzP8ZKqwBZL9dDux46r7ZBcArw/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyNsHWmDjxfFK-fYKxGoFkKAgW2I1Q3YE-sTsSPtvqUnHW_On--u0smmby-pnZ-obEKYQ/exec";
 
 /* JavaScript is alive, so the ring painted before the page was parsed can go.
    It is a pseudo element on <html>, so nothing else can remove it. */
@@ -2281,7 +2315,7 @@ function noticeHtml(n){
    why it read as a mess. It is now five shelves behind one control: what is
    true right now, the forms, the guides, sport, and what you can borrow.
    Nothing is longer than a screen. */
-let lodgeTab = "now", jcsuQ = "";
+let lodgeTab = "now", jcsuQ = "", jcsuOpen = false;
 const LODGE_TABS = [
   ["now","On the board"], ["forms","Forms and links"], ["guides","How college works"],
   ["sport","Sport"], ["room","The MCR room"]
@@ -2339,26 +2373,27 @@ function lodgeGuides(){
 }
 function lodgeSport(){
   const c = S.clubs || [];
+  const g = (S.links || []).filter(l => l.key === "gym")[0];
+  const gymFirst = g
+    ? '<a class="fresh gymcard" href="' + esc(g.url) + '" target="_blank" rel="noopener">' +
+      '<span class="ic"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" ' +
+      'stroke-width="2" stroke-linecap="round"><path d="M2 12h2M20 12h2M6 8v8M18 8v8M9 6v12M15 6v12M9 12h6"/>' +
+      "</svg></span>" +
+      '<span class="t"><b>Do your gym induction</b>' +
+      "<small>Before anything else on this page. Not a class and not a booking: a page of short videos " +
+      "and a form at the bottom. Fill it in and your card starts opening the gym doors. Both gyms are " +
+      "free, and both are shut to you until you have.</small></span>" +
+      '<span class="arw">&#8599;</span></a>'
+    : "";
   const admin = isCommittee()
     ? '<div class="acts"><button class="btn ghost sm" data-editclub="">Add a club</button></div>' : "";
-  return '<div class="card"><p>Everything the MCR runs, plus the college clubs that take postgraduates. ' +
+  return gymFirst +
+    '<div class="card"><p>Everything the MCR runs, plus the college clubs that take postgraduates. ' +
     "If the thing you want does not exist, the Sports and Societies Officer can usually start it.</p></div>" +
     (c.length ? '<div class="tilegrid">' + c.map(x =>
       '<button data-ask="sport" data-subject="' + esc("Joining " + x.name) + '">' + esc(x.name) +
       "<small>" + esc([x.meets, x.where, x.note].filter(Boolean).join(" \u00b7 ") || "Ask to join") +
       "</small>" + "</button>").join("") + "</div>" : "") +
-    (function(){
-      const g = (S.links || []).filter(l => l.key === "gym")[0];
-      return g ? '<a class="fresh gymcard" href="' + esc(g.url) + '" target="_blank" rel="noopener">' +
-        '<span class="ic"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" ' +
-        'stroke-width="2" stroke-linecap="round"><path d="M2 12h2M20 12h2M6 8v8M18 8v8M9 6v12M15 6v12M9 12h6"/>' +
-        "</svg></span>" +
-        '<span class="t"><b>Do your gym induction</b>' +
-        "<small>Not a class and not a booking: a page of short videos and a form at the bottom. Fill it " +
-        "in and your University card starts opening the gym doors. Both gyms are free, and both are shut " +
-        "to you until you have.</small></span>" +
-        '<span class="arw">&#8599;</span></a>' : "";
-    })() +
     /* These are the JCSU's, not ours. Nearly all of them take postgraduates
        and almost nobody finds that out, so the captain's address is one tap
        away rather than three pages into another website. */
@@ -2367,9 +2402,12 @@ function lodgeSport(){
       if (!j.length) return "";
       const q = (jcsuQ || "").trim().toLowerCase();
       const hit = j.filter(x => !q || (x.name + " " + x.who).toLowerCase().indexOf(q) >= 0);
+      /* Sixty one of them is a wall, so it starts as a search box and opens
+         only if somebody asks. */
       const group = k => {
         const list = hit.filter(x => x.kind === k);
         if (!list.length) return "";
+        if (!q && !jcsuOpen) return "";
         return '<div class="grp"><b>' + (k === "sport" ? "Sport" : "Societies") + "</b>" +
           "<span>" + list.length + "</span></div>" +
           '<div class="jgrid">' + list.map(x =>
@@ -2384,7 +2422,11 @@ function lodgeSport(){
         '<p class="lede">Correct as of April 2026. If the thing you want is missing, the JCSU will help ' +
         "you start it.</p>" +
         '<input class="bigin" id="jcsuQ" value="' + esc(jcsuQ || "") +
-        '" placeholder="Find a sport or a society" style="margin-top:var(--g)"></div>' +
+        '" placeholder="Find a sport or a society" style="margin-top:var(--g)">' +
+        (q ? "" : '<button class="jall" data-jcsu="' + (jcsuOpen ? "0" : "1") + '">' +
+          '<span class="pm">' + (jcsuOpen ? "\u2212" : "+") + "</span>" +
+          (jcsuOpen ? "Close the list" : "Show all " + j.length + " of them") + "</button>") +
+        "</div>" +
         group("sport") + group("society");
     })() +
     (function(){
@@ -2762,8 +2804,12 @@ function renderIdeas(){
     (list.length ? list.map(i =>
       '<div class="idea ' + esc(i.status) + '">' +
       '<div class="back"><button data-back="' + esc(i.id) + '" aria-pressed="' + i.backed +
-        '" aria-label="Back this"><span class="n">' + i.backing + '</span>' +
-        '<span class="l">' + (i.backed ? "backed" : "back it") + "</span></button></div>" +
+        '" aria-label="' + (i.backed ? "You have backed this" : "Back this idea") + '">' +
+        '<span class="tick">' + (i.backed ? "\u2713" : "+") + "</span>" +
+        '<span class="n">' + i.backing + "</span>" +
+        '<span class="l">' + (i.backed ? "you and " + Math.max(0, i.backing - 1) + " others"
+          : i.backing === 1 ? "1 wants this" : i.backing + " want this") + "</span>" +
+        "</button></div>" +
       '<div class="t"><span class="kind">' +
         esc(((S.ideaKinds || []).filter(k => k.key === i.kind)[0] || {}).name || i.kind) +
         " &middot; " + esc(i.name) + "</span>" +
@@ -3083,6 +3129,97 @@ function deskWeekly(){
       (x.status === "off" ? " &middot; paused" : "") + "</span></div>" +
       '<button class="btn ghost sm" data-editser="' + esc(x.id) + '">Edit</button></div>').join("") +
       "</div>" : '<div class="card"><p>Nothing weekly yet.</p></div>');
+}
+/* Everything about running a swap in one place: what is owed, who owes it,
+   who has paid, and whether the app can actually reach any of them. */
+function renderSwapDesk(){
+  if (!isCommittee()) return;
+  const all = S.swaps || [], live = all.filter(w => !w.past);
+  const rows = [];
+  live.forEach(w => (w.list || []).forEach(x => rows.push({ w: w, x: x })));
+  const held = rows.filter(r => r.x.status === "held");
+  const paid = rows.filter(r => r.x.status === "paid");
+  const wait = rows.filter(r => r.x.status === "waiting");
+  const owed = held.reduce((n, r) => n + (parseFloat(String(r.w.price).replace(/[^0-9.]/g, "")) || 0), 0);
+  const late = held.filter(r => r.x.dueBy && r.x.dueBy < Date.now());
+  const t = S.treasurer || {}, mail = S.mail || {};
+  put("swdNote", live.length + (live.length === 1 ? " swap" : " swaps") + " &middot; " +
+    rows.length + " on them");
+  put("swdBody",
+    /* the two things that stop everything working, first */
+    (!t.ready
+      ? '<div class="warnbox"><b>Nobody can pay yet</b><span>The account to pay into is not filled in, ' +
+        "so the email asking for money tells people to write to " + esc(t.name || "the Treasurer") +
+        " instead of giving them the details. Put the sort code and account number into " +
+        "<code>TREASURER</code> at the top of Code.gs.</span></div>" : "") +
+    (mail.quota === 0 || mail.scopeError
+      ? '<div class="warnbox"><b>The app cannot send email</b><span>' +
+        (mail.scopeError ? esc(mail.scopeError)
+          : "Today's sending quota reads zero, which usually means the deployment was never given " +
+            "permission to send.") +
+        " Nothing has been going out: not payment requests, not replies to questions, not room " +
+        "permissions. Run <code>setup()</code> once from the editor, accept the permission it asks " +
+        "for, then deploy a new version.</span>" +
+        '<button class="btn gold sm" data-mailtest>Send me a test email</button></div>' : "") +
+    '<div class="stats">' + [
+      [held.length, "waiting to pay"],
+      ["\u00a3" + Math.round(owed), "owed to " + esc(t.name || "the Treasurer")],
+      [paid.length, "paid"],
+      [wait.length, "on waiting lists"],
+      [late.length, "overdue"],
+      [(mail.sent || 0) + "/" + ((mail.sent || 0) + (mail.failed || 0)), "emails sent"]
+    ].map(x => '<div class="stat' + (String(x[0]) === "0" ? "" : "") + '"><b>' + x[0] + "</b><span>" +
+      x[1] + "</span></div>").join("") + "</div>" +
+
+    (held.length
+      ? '<div class="grp"><b>Owes money</b><span class="weeknav"><a class="btn gold sm" href="mailto:' +
+        esc(held.map(r => r.x.email).join(",")) + "?subject=" +
+        encodeURIComponent("Your swap place: payment") + '">Write to all ' + held.length + "</a></span></div>" +
+        held.sort((a, b) => (a.x.dueBy || 0) - (b.x.dueBy || 0)).map(r => {
+          const d = Math.ceil((r.x.dueBy - Date.now()) / 864e5);
+          return '<div class="srow' + (d <= 0 ? " over" : d <= 1 ? " soon" : "") + '">' +
+            '<span class="st2"><b>' + esc(r.x.name) + "</b>" +
+            '<a href="mailto:' + esc(r.x.email) + '">' + esc(r.x.email) + "</a></span>" +
+            '<span class="ss">' + esc(r.w.college) + " &middot; " + esc(r.w.price || "free") + "</span>" +
+            '<span class="ss ' + (d <= 0 ? "bad" : "") + '">' +
+              (d <= 0 ? "overdue" : d + (d === 1 ? " day" : " days")) + "</span>" +
+            '<button class="btn gold sm" data-swappaid="' + esc(r.x.id) + '" data-p="1">Paid</button>' +
+            "</div>";
+        }).join("")
+      : '<div class="card"><p>Nobody owes anything.</p></div>') +
+
+    (paid.length ? '<div class="grp"><b>Paid</b></div><div class="card">' + paid.map(r =>
+      '<div class="rowline"><div class="t"><b>' + esc(r.x.name) + "</b><span>" + esc(r.w.college) +
+      " &middot; " + esc(r.w.price || "free") + "</span></div>" +
+      '<button class="btn ghost sm" data-swappaid="' + esc(r.x.id) + '" data-p="0">Undo</button></div>').join("") +
+      "</div>" : "") +
+
+    (wait.length ? '<div class="grp"><b>Waiting</b></div><div class="card">' + wait.map(r =>
+      '<div class="rowline"><div class="t"><b>' + esc(r.x.name) + "</b><span>" + esc(r.w.college) +
+      "</span></div><a class=\"btn ghost sm\" href=\"mailto:" + esc(r.x.email) + '">Write</a></div>').join("") +
+      "</div>" : "") +
+
+    '<div class="grp"><b>Where the money goes</b></div><div class="card">' +
+      '<div class="rowline"><div class="t"><b>' + esc(t.name || "The Treasurer") + "</b><span>" +
+      esc(t.email || "") + "</span></div></div>" +
+      (t.ready
+        ? '<div class="rowline"><div class="t"><b>' + esc(t.bankName || t.name) + "</b><span>" +
+          esc(t.sortCode) + " &middot; " + esc(t.account) + " &middot; reference: " + esc(t.reference) +
+          "</span></div></div>"
+        : '<p class="lede">No account details yet, so the payment email cannot give them.</p>') +
+      '<p class="lede">Places are held for ' + (S.swapHold || 3) + " days. After that they pass to the " +
+      "next person on their own.</p></div>" +
+
+    '<div class="grp"><b>What the app has sent</b></div><div class="card">' +
+      (mail.recent && mail.recent.length
+        ? mail.recent.map(m2 => '<div class="rowline"><div class="t"><b>' + esc(m2.subject) +
+          "</b><span>" + esc(m2.to) + " &middot; " + esc(ago(m2.at)) + "</span></div>" +
+          '<span class="st ' + (m2.ok ? "answered" : "open") + '">' +
+          (m2.ok ? "sent" : esc((m2.error || "failed").slice(0, 40))) + "</span></div>").join("")
+        : '<p class="lede">Nothing sent yet.</p>') +
+      '<div class="acts"><button class="btn ghost sm" data-mailtest>Send me a test email</button>' +
+      '<span class="lede">Quota left today: ' + (mail.quota === undefined || mail.quota < 0 ? "unknown" : mail.quota) +
+      "</span></div></div>");
 }
 function renderQueue(){
   if (!isCommittee()) return;
@@ -3855,7 +3992,7 @@ function voiceCard(){
 /* ============================================================
    Render, navigate, wire
    ============================================================ */
-const VIEWS = ["today","swaps","gifts","lodge","ask","biz","me","desk","inbox","members","admin"];
+const VIEWS = ["today","swaps","gifts","lodge","ask","biz","me","desk","inbox","swapdesk","members","admin"];
 /* Stagger the first children of whatever has just been shown. Sixty
    milliseconds apart is enough to read as unfolding and not as waiting. */
 function stagger(id){
@@ -3883,6 +4020,7 @@ function go(v, scroll){
   if (v === "lodge") seen();
   if (v === "members") renderMembers();
   if (v === "inbox") renderQueue();
+  if (v === "swapdesk") renderSwapDesk();
   stagger(v);
   const tab = document.querySelector('#nav .tabbtn[data-view="' + v + '"]');
   if (tab && tab.scrollIntoView) { try{ tab.scrollIntoView({ inline:"center", block:"nearest", behavior:"smooth" }); }catch(e){} }
@@ -3902,6 +4040,8 @@ function renderBadges(){
   set("bdgCal", goingCount());
   set("bdgLodge", (S.updates || []).filter(u => u.at > (S.me.seenAt || 0)).length);
   set("bdgAsk", (S.tickets || []).filter(t => t.status === "answered").length);
+  set("bdgSwapDesk", (S.swaps || []).reduce((n, w) => n +
+    (w.list || []).filter(x => x.status === "held").length, 0));
   set("bdgSwaps", (S.swaps || []).filter(w => w.mine && w.mine.status === "held").length);
   set("bdgGifts", (S.market || []).filter(m => m.status === "open" && m.at > (S.me.seenAt || 0)).length);
   set("bdgBiz", (S.motions || []).filter(m => m.status === "voting" && !(S.myVotes || {})[m.id]).length +
@@ -3932,7 +4072,7 @@ function render(){
   renderLodge(); renderSwaps(); renderMarket(); renderAsk();
   renderTreasury(); renderIdeas(); renderPolls(); renderBiz();
   if (!typingIn("v-me")) renderMe();
-  if (isCommittee()){ renderDesk(); renderQueue(); if (!typingIn("v-admin")){ renderAdmin(); renderBumpsAdmin(); } }
+  if (isCommittee()){ renderDesk(); renderSwapDesk(); renderQueue(); if (!typingIn("v-admin")){ renderAdmin(); renderBumpsAdmin(); } }
   renderBadges();
 }
 
@@ -3952,7 +4092,7 @@ document.addEventListener("click", async e => {
     "[data-skip],[data-editser],[data-second],[data-vote],[data-mset],[data-code],[data-checkin]," +
     "[data-delupdate],[data-rosteredit],[data-rosterdel],[data-newidea],[data-back]," +
     "[data-setidea],[data-dropidea],[data-pollvote],[data-pollclose]," +
-    "[data-marketnew],[data-markettake],[data-marketdrop],[data-bumpedit],[data-gk],[data-gift],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-polldrop],[data-motiondrop],[data-desktab],[data-tick2],[data-gp],[data-desk],[data-asktab],[data-thread],[data-mythreads],[data-swaptake],[data-swapdrop],[data-swappaid],[data-swapedit],[data-swapsave],[data-swapcancel],[data-swapdel],[data-swappast],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
+    "[data-marketnew],[data-markettake],[data-marketdrop],[data-bumpedit],[data-gk],[data-gift],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-polldrop],[data-motiondrop],[data-desktab],[data-tick2],[data-gp],[data-desk],[data-asktab],[data-thread],[data-mythreads],[data-swaptake],[data-swapdrop],[data-swappaid],[data-swapedit],[data-swapsave],[data-swapcancel],[data-swapdel],[data-swappast],[data-mailtest],[data-jcsu],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
   if (!t) return;
   const d = t.dataset;
   try{
@@ -4010,6 +4150,16 @@ document.addEventListener("click", async e => {
     if (d.swaptake) return openSwapTake(d.swaptake);
     if (t.hasAttribute("data-swapedit")){ swapEdit = d.swapedit || "new"; renderSwaps(); return; }
     if (t.hasAttribute("data-swapcancel")){ swapEdit = ""; renderSwaps(); return; }
+    if (d.jcsu !== undefined){ jcsuOpen = d.jcsu === "1"; renderLodge(); return; }
+    if (t.hasAttribute("data-mailtest")){
+      spin(t, "Sending");
+      try{
+        const r = await api("mailTest", {});
+        await refresh(false);
+        toast("Sent to " + r.sentTo + ". Look in your inbox.");
+      }catch(err){ unspin(t); fail(err); }
+      return;
+    }
     if (d.swappast !== undefined){ swapPast = d.swappast === "1"; renderSwaps(); window.scrollTo(0, 0); return; }
     if (t.hasAttribute("data-swapsave")){
       const card = t.closest(".swap");
