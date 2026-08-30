@@ -58,12 +58,12 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;transition:background 
     linear-gradient(172deg,#B4141B 0%,#8E0F14 48%,#5B070C 100%)}
 /* set on <html> so a season can never overwrite a section */
 :root{--wash:rgba(235,183,83,.18)}
-html[data-room="cal"]{--wash:rgba(99,173,238,.20)}
-html[data-room="lodge"]{--wash:rgba(79,200,148,.18)}
-html[data-room="ask"]{--wash:rgba(235,183,83,.18)}
-html[data-room="biz"]{--wash:rgba(185,143,236,.18)}
-html[data-room="gifts"]{--wash:rgba(79,211,201,.18)}
-html[data-room="today"]{--wash:rgba(235,183,83,.20)}
+html[data-place="today"]{--wash:rgba(235,183,83,.20)}
+html[data-place="lodge"]{--wash:rgba(79,200,148,.18)}
+html[data-place="ask"]{--wash:rgba(235,183,83,.18)}
+html[data-place="biz"]{--wash:rgba(185,143,236,.18)}
+html[data-place="gifts"]{--wash:rgba(79,211,201,.18)}
+html[data-place="today"]{--wash:rgba(235,183,83,.20)}
 body.locked{overflow:hidden}
 [hidden]{display:none!important}
 button,input,select,textarea{font:inherit;color:inherit}
@@ -106,7 +106,8 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .vh .right{margin-left:auto;display:flex;gap:7px;flex-wrap:wrap}
 /* a heading is a label, not a rule across the page */
 .grp{font-family:var(--mono);font-size:11px;letter-spacing:.17em;text-transform:uppercase;color:var(--gold-2);
-  margin:24px 0 10px;display:flex;align-items:center;gap:9px;font-weight:600}
+  margin:24px 0 10px;display:flex;align-items:center;gap:9px;font-weight:600;flex-wrap:wrap;row-gap:8px}
+.grp b{white-space:nowrap}
 .grp::before{content:"";width:16px;height:3px;border-radius:3px;background:currentColor;flex:0 0 16px}
 .grp:first-child{margin-top:2px}
 .grp b{font-weight:600;color:var(--cream)}
@@ -204,9 +205,6 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
   margin-left:6px;white-space:nowrap;font-weight:700}
 .chip.full{background:rgba(232,83,92,.3);color:#FFD9DB}
 .chip.low{background:rgba(235,183,83,.28);color:var(--gold-2)}
-
-/* ---------- calendar: cells with gaps, so no line ever doubles ---------- */
-.calbar{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
 .seg{display:flex;background:var(--t3);border-radius:999px;padding:3px}
 .seg button{color:var(--cream-3);font-size:13.5px;font-weight:700;padding:6px 15px;border-radius:999px;transition:.18s}
 .seg button[aria-pressed="true"]{background:var(--gold);color:var(--gold-ink)}
@@ -215,25 +213,13 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .mv button{background:var(--t1);color:var(--cream-2);width:32px;height:32px;border-radius:50%;font-size:16px;
   line-height:1;transition:.18s}
 .mv button:hover{background:var(--t3);color:var(--cream)}
-.month{margin-bottom:18px}
-.dows{display:grid;grid-template-columns:repeat(7,1fr);gap:var(--g);margin-bottom:6px}
-.dows span{text-align:center;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--cream-4);font-weight:600}
-.mgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:var(--g)}
-.cell{aspect-ratio:1/1;min-height:46px;background:var(--t1);border-radius:var(--r3);color:var(--cream);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
-  transition:background .16s,transform .16s var(--ease)}
 @media(min-width:920px){.cell{min-height:78px;border-radius:var(--r2)}}
-.cell:hover{background:var(--t2);transform:translateY(-2px)}
 .cell.out{background:none;pointer-events:none}
 .cell.today{background:rgba(235,183,83,.2)}
 .cell.today b{color:var(--gold-2)}
 .cell.sel{background:var(--gold)}
 .cell.sel b{color:var(--gold-ink)}
-.cell b{font-family:var(--display);font-size:18px;font-weight:600;line-height:1;letter-spacing:-.04em}
 @media(min-width:920px){.cell b{font-size:25px}}
-.dots{display:flex;gap:4px;height:8px;align-items:center}
-.dots i{width:8px;height:8px;border-radius:50%;display:block}
 @media(min-width:920px){.dots{gap:5px;height:10px}.dots i{width:10px;height:10px}}
 .dots i.ring{box-shadow:0 0 0 2px var(--cream)}
 .cell.sel .dots i.ring{box-shadow:0 0 0 2px var(--gold-ink)}
@@ -271,7 +257,6 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .c-trip{background:var(--trip);color:var(--trip)} .c-meeting{background:var(--meeting);color:var(--meeting)}
 .c-college{background:var(--college);color:var(--college)} .c-member{background:var(--member);color:var(--member)}
 .c-practical{background:var(--practical);color:var(--practical)} .c-other{background:var(--meeting);color:var(--meeting)}
-.daycard{background:var(--t1);border-radius:var(--r);padding:13px 15px;margin-bottom:var(--g)}
 .daycard.today{background:rgba(235,183,83,.14)}
 .daycard.past{opacity:.5}
 .dh{display:flex;align-items:baseline;gap:10px;margin-bottom:9px}
@@ -338,6 +323,8 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .whoc b{display:block;font-size:14px;font-weight:700;letter-spacing:-.022em;line-height:1.24}
 .whoc span{display:block;font-size:11.5px;color:var(--cream-4);margin:3px 0 8px;line-height:1.32;flex:1;font-weight:600}
 .whoc button{font-size:12px;font-weight:700;color:var(--gold-2);align-self:flex-start;margin-top:auto}
+.whoc .edithim{font-size:10.5px;color:var(--cream-4);margin-top:6px;font-weight:700}
+.whoc .edithim:hover{color:var(--gold-2);text-decoration:underline}
 .whoc .mail{display:block;font-size:11px;font-weight:600;color:var(--cream-4);margin-top:3px;text-decoration:none}
 .whoc .mail:hover{color:var(--gold-2);text-decoration:underline}
 .whoc button:hover{text-decoration:underline}
@@ -356,19 +343,57 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .guide p{margin:0;padding:0 16px 15px;font-size:15px;color:var(--cream-2);white-space:pre-wrap;line-height:1.62;
   font-weight:500}
 .guide .acts{padding:0 16px 14px;margin-top:0}
-.grp .weeknav{margin-left:auto;display:flex;gap:6px;align-items:center}
+.grp .weeknav{margin-left:auto;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+/* on a narrow screen the buttons drop to their own line rather than
+   crushing the heading into two words */
+@media(max-width:560px){.grp .weeknav{margin-left:0;width:100%}}
 .weeknav button{background:var(--t1);color:var(--cream-2);border-radius:999px;padding:5px 12px;font-size:11.5px;
   font-family:var(--ui);letter-spacing:0;text-transform:none;font-weight:700;transition:.16s}
 .weeknav button:hover{background:var(--t3);color:var(--cream)}
-.weeknav button[aria-pressed="true"]{background:var(--gold);color:var(--gold-ink)}
+.weeknav button[aria-pressed="true"],.weeknav button.gold{background:var(--gold);color:var(--gold-ink)}
 .weeknav button.now{background:var(--t2)}
 .onday{background:var(--t1);border-radius:var(--r);padding:13px 15px;margin-bottom:8px}
 .ondh{display:flex;align-items:baseline;gap:10px;margin-bottom:9px}
 .ondh b{font-family:var(--display);font-size:23px;font-weight:600;line-height:1;letter-spacing:-.05em;color:var(--gold-2)}
 .ondh span{font-size:13px;color:var(--cream-4);font-weight:600}
+.tk{background:var(--t1);border-radius:var(--r);margin-bottom:8px;overflow:hidden}
+.tk.open{background:var(--t2)}
+.tk.welfare{box-shadow:inset 3px 0 0 var(--welfare)}
+.tkhead{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:13px 15px;
+  transition:background .16s;flex-wrap:wrap;row-gap:6px}
+@media(max-width:460px){.tkhead .st{margin-left:46px}}
+.tkhead:hover{background:rgba(255,255,255,.06)}
+.tkwho{flex:0 0 34px;height:34px;border-radius:50%;background:var(--t3);display:grid;place-items:center;
+  font-family:var(--display);font-size:13px;font-weight:600;color:var(--cream-3)}
+.tkt{flex:1;min-width:0}
+.tkt b{display:block;font-size:15px;font-weight:700;letter-spacing:-.02em;line-height:1.26}
+.tkt span{display:block;font-size:12px;color:var(--cream-4);margin-top:2px;font-weight:500;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tkbody{padding:0 15px 14px}
+.tkbody .msg.note{background:rgba(99,173,238,.16);border-left:3px solid var(--welfare)}
+.tkform{margin-top:12px}
+.tkform textarea{width:100%;background:rgba(0,0,0,.34);border:1px solid transparent;color:var(--cream);
+  border-radius:var(--r3);padding:11px 13px;font-size:15px;font-weight:500;min-height:76px;resize:vertical}
+.tkform textarea:focus{border-color:var(--gold);outline:none}
+.tkass{background:rgba(0,0,0,.34);border:0;color:var(--cream);border-radius:999px;padding:7px 12px;
+  font-size:12.5px;font-weight:700}
+.upl{display:flex;align-items:center;gap:10px;background:var(--t3);border-radius:var(--r3);padding:11px 13px;
+  font-size:13px;color:var(--cream-3);font-weight:600;margin-bottom:12px}
+.upl.done{color:var(--gold-2)}
+.uplshot{width:100%;border-radius:var(--r2);margin-bottom:8px;display:block}
+.ohr{padding:15px 17px}
+.ohgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+@media(max-width:520px){.ohgrid{grid-template-columns:1fr}}
+.oh{background:var(--t3);border-radius:var(--r3);padding:12px 13px;display:flex;flex-direction:column;gap:3px}
+.oh b{font-size:14.5px;font-weight:700}
+.oh span{font-size:12.5px;color:var(--cream-4);font-weight:600}
+.oh .btn{align-self:flex-start;margin-top:7px}
+.oh.mine{background:rgba(235,183,83,.2)}
+.oh.mine span{color:var(--gold-2)}
+.oh.full{opacity:.55}
+.ohlist{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px;font-size:12.5px;color:var(--cream-3);font-weight:600}
+.ohlist b{color:var(--gold-2)}
 .hours{margin-top:12px}
-.hrow{display:flex;align-items:center;gap:12px;padding:11px 0;box-shadow:0 1px 0 rgba(255,255,255,.07)}
-.hrow:last-child{box-shadow:none;padding-bottom:0}
 .hrow .t{flex:1;min-width:0}
 .hrow .t b{display:block;font-size:15px;font-weight:700}
 .hrow .t span{display:block;font-size:13px;color:var(--cream-4);font-weight:500}
@@ -598,9 +623,6 @@ body[data-season="vacation"]{--gold:#E3A863;--gold-2:#F9E3C6}
 body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
 .season{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
   color:var(--gold-2);opacity:.9}
-
-/* ---------- the board ---------- */
-.mkgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:11px}
 .mk{background:rgba(0,0,0,.18);border:1px solid var(--line);border-radius:15px;overflow:hidden}
 .mk img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:rgba(255,255,255,.05)}
 .mk .in{padding:11px 12px}
@@ -616,12 +638,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
 .bumps text{font-family:var(--mono);font-size:6px;fill:rgba(251,243,236,.66)}
 .bumps text.crew{font-family:var(--ui);font-size:7px;font-weight:700;fill:var(--cream)}
 .up{color:#8FD19E} .down{color:#E88E8E}
-
-/* ---------- directory ---------- */
-.dir{background:rgba(0,0,0,.18);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px}
-.dir b{font-size:14.5px;font-weight:600}
 .dir .prog{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);margin-left:8px}
-.dir p{margin:5px 0 0;font-size:13.5px;color:var(--cream-2)}
 mark{background:rgba(226,169,60,.32);color:inherit;border-radius:3px;padding:0 2px}
 
 code{font-family:var(--mono);font-size:12.5px;background:rgba(0,0,0,.3);padding:2px 7px;border-radius:6px;
@@ -658,22 +675,8 @@ code{font-family:var(--mono);font-size:12.5px;background:rgba(0,0,0,.3);padding:
     <div id="bumpsCard"></div>
     <div id="todayWeek"></div>
     <div id="todayOn"></div>
-    <div class="three" id="three" hidden></div>
     <div id="todayQuick"></div>
     <div id="todayNews"></div>
-  </section>
-
-  <!-- ===================== CALENDAR ===================== -->
-  <section id="v-cal" hidden>
-    <div class="vh"><h2>The <i>term</i></h2><span class="note" id="calNote"></span>
-      <div class="right">
-        <button class="btn ghost sm" id="bToday">Today</button>
-        <button class="btn cream sm" id="bNewEvent" data-committee hidden>Add an event</button>
-      </div></div>
-    <div class="calbar" id="calBar"></div>
-    <div id="calMonth"></div>
-    <div class="chips" id="calChips"></div>
-    <div id="board"></div>
   </section>
 
   <!-- ===================== SECOND LIFE ===================== -->
@@ -758,10 +761,10 @@ code{font-family:var(--mono);font-size:12.5px;background:rgba(0,0,0,.3);padding:
   </section>
 
   <!-- ===================== QUEUE (committee) ===================== -->
-  <section id="v-queue" hidden>
-    <div class="vh"><h2>The <i>queue</i></h2><span class="note" id="queueNote"></span></div>
-    <div id="queueRooms"></div>
-    <div id="queueTickets"></div>
+  <section id="v-inbox" hidden>
+    <div class="vh"><h2><i>Messages</i></h2><span class="note" id="inboxNote"></span></div>
+    <div class="seg" id="inboxSeg" style="margin-bottom:12px;overflow-x:auto"></div>
+    <div id="inboxList"></div>
   </section>
 
   <!-- ===================== MEMBERS (committee) ===================== -->
@@ -833,14 +836,13 @@ code{font-family:var(--mono);font-size:12.5px;background:rgba(0,0,0,.3);padding:
 <nav id="nav" aria-label="Sections" hidden>
   <div class="railtop"><img class="crest" id="crestRail" alt=""><span><b>Jesus MCR</b><i id="railYear"></i></span></div>
   <button class="tabbtn" data-view="today" aria-current="true"><svg viewBox="0 0 24 24"><path d="M4 15a8 8 0 0 1 16 0"/><path d="M12 3v3M4.2 6.6l2.1 2.1M19.8 6.6l-2.1 2.1M2 15h20"/></svg>Today<span class="badge" id="bToday_" hidden>0</span></button>
-  <button class="tabbtn" data-view="cal"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Calendar<span class="badge" id="bdgCal" hidden>0</span></button>
   <button class="tabbtn" data-view="lodge"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>Lodge<span class="badge" id="bdgLodge" hidden>0</span></button>
   <button class="tabbtn" data-view="gifts"><svg viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="12" rx="1.6"/><path d="M2 6.5h20V9H2zM12 6.5V21"/><path d="M12 6.5S10.6 3 8.6 3a2 2 0 1 0 0 4M12 6.5S13.4 3 15.4 3a2 2 0 1 1 0 4"/></svg>Second life<span class="badge" id="bdgGifts" hidden>0</span></button>
   <button class="tabbtn" data-view="ask"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/><path d="M12 12.4v-.5c0-1 .7-1.5 1.3-1.9.6-.4 1-.9 1-1.6a2.3 2.3 0 0 0-4.6 0"/><path d="M12 14.4h.01"/></svg>Ask<span class="badge" id="bdgAsk" hidden>0</span></button>
   <button class="tabbtn" data-view="biz"><svg viewBox="0 0 24 24"><path d="M4 20h16M12 4v3M6 20V9l6-4 6 4v11"/><path d="M9 13h6"/></svg>MCR business<span class="badge" id="bdgBiz" hidden>0</span></button>
   <span class="sep" data-committee hidden></span>
   <button class="tabbtn committee" data-view="desk" data-committee hidden><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="7" rx="1.6"/><rect x="3" y="13" width="18" height="7" rx="1.6"/><path d="M7 7.5h.01M7 16.5h.01"/></svg>Desk</button>
-  <button class="tabbtn committee" data-view="queue" data-committee hidden><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Queue<span class="badge" id="bdgQueue" hidden>0</span></button>
+  <button class="tabbtn committee" data-view="inbox" data-committee hidden><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Messages<span class="badge" id="bdgQueue" hidden>0</span></button>
   <button class="tabbtn committee" data-view="members" data-committee hidden><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>Members</button>
   <button class="tabbtn committee" data-view="admin" data-admin hidden><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3 8.5-7 10-4-1.5-7-5-7-10V6z"/><path d="M9.5 12l1.8 1.8 3.4-3.6"/></svg>Committee</button>
 </nav>
@@ -872,7 +874,7 @@ code{font-family:var(--mono);font-size:12.5px;background:rgba(0,0,0,.3);padding:
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbz79J_zeQHxee_5RtB98AeUArpVMD4S5KsM-YOW7r7jyQCd4BBe98hJv52U7wkRbh0XhQ/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwLvuLs57OPtj7IDAvgrY3vAeAGSSvt9jmzx6vBJU-37721kiwgCJ0r4hYZplIvKuUSEw/exec";
 
 /* JavaScript is alive, so the ring painted before the page was parsed can go.
    It is a pseudo element on <html>, so nothing else can remove it. */
@@ -882,6 +884,11 @@ const $ = id => document.getElementById(id);
 /* Write into a container only if it is there. A section that has moved should
    change what you see, not stop the page dead. */
 function put(id, html){ const el = $(id); if (el) el.innerHTML = html; return !!el; }
+/* One missing element used to throw here and stop the rest of the file from
+   running, which is why the app sat on its loading screen for ever. Binding
+   through this means a button that has moved costs that button and nothing
+   else. */
+function on(id, ev, fn){ const el = $(id); if (el) el.addEventListener(ev, fn); return !!el; }
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c =>
   ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const pad = n => ("0" + n).slice(-2);
@@ -935,13 +942,6 @@ const dnum = date => dobj(date).getUTCDate();
 const longDate = date => DOWL[dow(date)] + " " + dnum(date) + " " + MON[dobj(date).getUTCMonth()];
 const shortDate = date => DOW[dow(date)] + " " + dnum(date) + " " + MON[dobj(date).getUTCMonth()].slice(0, 3);
 const addDays = (date, n) => new Date(dobj(date).getTime() + n * 864e5).toISOString().slice(0, 10);
-const monthStart = d => d.slice(0, 8) + "01";
-const monthShift = (ms, n) => {
-  const d = new Date(Date.UTC(+ms.slice(0, 4), +ms.slice(5, 7) - 1 + n, 1));
-  return d.toISOString().slice(0, 8) + "01";
-};
-const monthLabel = ms => MON[+ms.slice(5, 7) - 1] + " " + ms.slice(0, 4);
-const daysIn = ms => new Date(Date.UTC(+ms.slice(0, 4), +ms.slice(5, 7), 0)).getUTCDate();
 function ago(t){
   const s = Math.max(0, (Date.now() - t) / 1000);
   if (s < 60) return "just now";
@@ -955,7 +955,27 @@ const initials = n => String(n || "?").trim().split(/\s+/).slice(0, 2).map(w => 
 
 /* ---------- talking to the server ---------- */
 let token = null, S = null, view = "today", pollTimer = null, tickTimer = null, memToken = null;
-const TK = "jesus-mcr-token";
+const TK = "jesus-mcr-token", CK = "jesus-mcr-state", PK = "jesus-mcr-photos";
+/* The faces are kept in the browser and asked for again only when the server
+   says the set has changed. That is a hundred and thirty kilobytes off every
+   single load after the first. */
+let PHOTOS = {};
+function loadPhotos(){
+  try{ const raw = localStorage.getItem(PK); if (raw) PHOTOS = JSON.parse(raw).map || {}; }catch(e){ PHOTOS = {}; }
+}
+function photoRevHave(){
+  try{ const raw = localStorage.getItem(PK); return raw ? JSON.parse(raw).rev : ""; }catch(e){ return ""; }
+}
+async function syncPhotos(rev){
+  if (!rev || photoRevHave() === rev) return;
+  try{
+    const d = await api("photos");
+    PHOTOS = d.map || {};
+    try{ localStorage.setItem(PK, JSON.stringify({ rev: d.rev, map: PHOTOS })); }catch(e){}
+    render();
+  }catch(e){}
+}
+const faceOf = p => (p && (p.photo || PHOTOS[p.pk] || PHOTOS["role:" + p.role])) || "";
 function getToken(){
   if (memToken) return memToken;
   try{ const v = localStorage.getItem(TK); if (v) return (memToken = v); }catch(e){}
@@ -1194,7 +1214,9 @@ function gsiFallback(cfg, why){
   gsiUp = false;
   gateBusy(false);
   const canPrompt = !!(window.google && google.accounts && google.accounts.id);
-  const aboutOrigin = /origin|client/i.test(why || "") || !why;
+  /* An empty box is what Google leaves when it refuses an address, and that
+     is far and away the commonest reason, so it gets the useful message. */
+  const aboutOrigin = !why || /origin|client|drew nothing/i.test(why);
   if (aboutOrigin){
     return gateFix("Google has not been told about this address",
       "The sign in itself is fine. Google simply does not recognise <code>" + esc(originOf()) +
@@ -1234,6 +1256,7 @@ async function onCredential(res){
 
 function signedOut(msg){
   clearToken();
+  try{ localStorage.removeItem(CK); }catch(e){}
   S = null;
   stopPolling();
   bootTalk(false);
@@ -1283,16 +1306,50 @@ function skeletons(){
     "<div class=\"sk skslot\"></div><div class=\"sk skslot\"></div>" +
     "<div class=\"sk skslot\"></div><div class=\"sk skslot\"></div></div>");
   put("todayWeek", '<div class="skwk">' + "<div class=\"sk\"></div>".repeat(7) + "</div>");
-  put("board", '<div class="sk skrow"></div><div class="sk skrow"></div><div class="sk skrow"></div>');
+  put("todayOn", '<div class="sk skrow"></div><div class="sk skrow"></div><div class="sk skrow"></div>');
+}
+/* The last state is kept so a returning member sees their pigeonhole in the
+   first frame instead of a spinner, and the fresh copy replaces it a moment
+   later. Nothing sensitive is kept: the token lives separately and this is
+   only what was already on the screen. */
+function cacheState(){
+  try{
+    const slim = Object.assign({}, S);
+    delete slim.people; delete slim.signups; delete slim.market;
+    localStorage.setItem(CK, JSON.stringify({ at: Date.now(), s: slim }));
+  }catch(e){}
+}
+function cachedState(){
+  try{
+    const raw = localStorage.getItem(CK);
+    if (!raw) return null;
+    const c = JSON.parse(raw);
+    /* a day old is stale enough to be wrong about tonight */
+    if (!c || Date.now() - c.at > 864e5) return null;
+    return c.s;
+  }catch(e){ return null; }
 }
 async function boot(fresh){
   [["crestBoot","big"],["crestTop",""],["crestGate",""]].forEach(function(c){
     const el = $(c[0]);
     if (el) el.outerHTML = '<img class="crest ' + c[1] + '" id="' + c[0] + '" src="' + CREST + '" alt="Jesus College MCR">';
   });
+  loadPhotos();
+  if (!getToken()){ bootTalk(false); return signedOut(); }
+  /* show the page we already have while the fresh one is on its way */
+  const warm = fresh ? null : cachedState();
+  if (warm){
+    S = warm;
+    bootDone();
+    $("gate").hidden = true;
+    $("hdr").hidden = false;
+    render();
+    api("state").then(d => { S = d; render(); cacheState(); syncPhotos(d.photoRev); startPolling(); })
+      .catch(() => {});
+    return;
+  }
   bootTalk(true);
   skeletons();
-  if (!getToken()){ bootTalk(false); return signedOut(); }
   try{
     S = await withTimeout(api("state"), 25000, "The server took too long to answer.");
   }catch(e){
@@ -1300,10 +1357,11 @@ async function boot(fresh){
     return signedOut(e && e.message ? e.message : "");
   }
   bootDone();
+  cacheState();
+  syncPhotos(S.photoRev);
   $("gate").hidden = true;
   $("hdr").hidden = false;
   render();
-  if (fresh || !S.me.ready) firstRun();
   startPolling();
 }
 async function refresh(loud){
@@ -1311,6 +1369,8 @@ async function refresh(loud){
   try{
     S = await api("state");
     render();
+    cacheState();
+    syncPhotos(S.photoRev);
     if (loud) toast("Up to date.");
   }catch(e){ if (loud) fail(e); }
   finally{ const b = $("bRefresh"); if (b) b.classList.remove("busy"); }
@@ -1318,7 +1378,7 @@ async function refresh(loud){
 function startPolling(){
   stopPolling();
   pollTimer = setInterval(pollTick, 45000);
-  tickTimer = setInterval(() => { if (S){ renderCrow(); renderThree(); renderTodayWeek(); renderTodayOn(); renderBoard(); applySeason(); } }, 60000);
+  tickTimer = setInterval(() => { if (S){ renderCrow(); renderTodayWeek(); renderTodayOn(); applySeason(); } }, 60000);
 }
 function stopPolling(){ clearInterval(pollTimer); clearInterval(tickTimer); pollTimer = tickTimer = null; }
 async function pollTick(){
@@ -1329,34 +1389,10 @@ async function pollTick(){
     if (p.version !== S.version){
       S.version = p.version;
       S.events.forEach(e => { if (p.counts[e.id]) e.counts = p.counts[e.id]; });
-      renderBoard(); renderThree();
     }
   }catch(e){}
 }
 
-/* ---------- the first run ---------- */
-function firstRun(){
-  const me = S.me;
-  sheet("Welcome to the MCR", 
-    '<p class="lede">Two questions, once, and then the app leaves you alone. The committee needs your name for the list at the door and your dietary needs before they order food. Nothing here is shared outside the committee.</p>' +
-    '<label class="f"><span>Your name</span><input id="fuName" value="' + esc(me.name || "") + '" placeholder="As you would like it read out"></label>' +
-    '<label class="f"><span>Dietary needs</span><input id="fuDiet" value="' + esc(me.dietary || "") + '" placeholder="Vegetarian, halal, nut allergy, none"></label>' +
-    '<label class="check"><input type="checkbox" id="fuConsent"> I am happy for the committee to hold my name, course and dietary needs while I am a member, and to delete them afterwards.</label>' +
-    '<div class="acts"><button class="btn gold" id="fuGo">Start</button><button class="btn ghost" data-close>Cancel</button></div>',
-    el => el.querySelector("#fuGo").addEventListener("click", async e => {
-      if (!$("fuName").value.trim()) return toast("Your name, and then you are done.");
-      if (!$("fuConsent").checked) return toast("The app needs that box ticked before it can hold anything.");
-      const b = e.currentTarget;
-      spin(b, "One moment");
-      try{
-        const d = await api("saveProfile", { name: $("fuName").value, dietary: $("fuDiet").value,
-          consent: true, setupDone: true });
-        S.me = d.me;
-        closeSheet();
-        render();
-      }catch(err){ unspin(b); fail(err); }
-    }), true);
-}
 
 /* ---------- the sheet ---------- */
 let sheetOpen = false;
@@ -1509,7 +1545,7 @@ function renderCrow(){
       '<span class="plate">' + esc(plate) + "</span></button>";
   const slots = [
     box("Replies", replies.length, replies.length ? replies[0].subject : "", "empty", "ask"),
-    box("You are down for", mineSoon.length, mineSoon.length ? mineSoon[0].title : "", "nothing booked", "cal"),
+    box("You are down for", mineSoon.length, mineSoon.length ? mineSoon[0].title : "", "nothing booked", "today"),
     box("To decide", votes, votes ? "Your vote is wanted" : "", "nothing to decide", "biz"),
     box("Notices", fresh, fresh ? "Read what has changed" : "", "nothing new", "lodge"),
     box("Your requests", rooms.length, rooms.length ? rooms[0].title : "", "none open", "ask"),
@@ -1541,7 +1577,6 @@ function renderCrow(){
 }
 function eventsOn(d){
   return (S.events || []).filter(e => e.date === d &&
-    (!catFilter || catOf(e) === catFilter) &&
     (!mineOnly || ["going","waitlist"].indexOf(myStatus(e.id)) >= 0));
 }
 function renderTodayUrgent(){
@@ -1552,7 +1587,7 @@ function renderTodayUrgent(){
    room is where the pigeonholes are and this is the same idea. */
 /* The week, on the front page. Seven columns from Monday, today lifted, so
    the shape of the week is visible before anything is tapped. */
-let homeWeek = null, mineOnly = false;
+let homeWeek = null;
 /* The week, on the front page, and you can walk through it without leaving.
    Arrows, swipe, and a way back to this week when you have wandered off. */
 function renderTodayWeek(){
@@ -1586,9 +1621,11 @@ function renderTodayOn(){
   const days = Object.keys(byDay).sort();
   put("todayOn",
     '<div class="grp"><b>What is on</b>' +
-      '<span class="weeknav"><button data-mineonly aria-pressed="' + mineOnly + '">' +
+      '<span class="weeknav">' +
+      (isCommittee() ? '<button data-newevent class="gold">Add an event</button>' : "") +
+      '<button data-mineonly aria-pressed="' + mineOnly + '">' +
       (mineOnly ? "Everything" : "Only mine &middot; " + mine.length) + "</button>" +
-      '<button data-goto="cal">The term</button></span></div>' +
+      '<button data-goto="today">The term</button></span></div>' +
     (days.length ? days.map(d =>
         '<div class="onday"><div class="ondh"><b>' + dnum(d) + "</b><span>" +
         (d === t ? "Today" : d === addDays(t, 1) ? "Tomorrow" : DOWL[dow(d)]) + " &middot; " +
@@ -1596,18 +1633,6 @@ function renderTodayOn(){
         byDay[d].map(evRow).join("") + "</div>").join("")
       : '<div class="card"><p>' + (mineOnly ? "You are not down for anything yet."
           : "Nothing in the diary. The committee is probably arranging something.") + "</p></div>"));
-}
-function renderThree(){
-  const t = todayLondon();
-  put("three", [0, 1, 2].map(i => {
-    const d = addDays(t, i);
-    const list = eventsOn(d);
-    const lab = i === 0 ? "Today" : i === 1 ? "Tomorrow" : DOWL[dow(d)];
-    return '<div class="d3"><div class="lab">' + esc(lab) + " &middot; " + dnum(d) + " " +
-      esc(MON[dobj(d).getUTCMonth()]) + "</div>" +
-      (list.length ? list.map(evRow).join("")
-        : '<div class="none">Nothing on.</div>') + "</div>";
-  }).join(""));
 }
 function renderTodayQuick(){
   const link = k => (S.links || []).filter(l => l.key === k)[0];
@@ -1632,63 +1657,10 @@ function renderTodayNews(){
 /* ============================================================
    CALENDAR
    ============================================================ */
-let mode = "month", month = null, week = null, selDay = null, catFilter = "";
+let mineOnly = false;
 /* Weeks start on Monday here, because Cambridge terms do. */
 const weekStart = date => addDays(date, -(((dow(date) + 6) % 7)));
 const weekDays = ws => [0,1,2,3,4,5,6].map(i => addDays(ws, i));
-function dayList(){
-  if (mode === "week"){ return weekDays(week || (week = weekStart(todayLondon()))); }
-  if (mode === "day") return [selDay || todayLondon()];
-  const ms = month || (month = monthStart(todayLondon()));
-  const out = [];
-  for (let i = 1; i <= daysIn(ms); i++) out.push(ms.slice(0, 8) + pad(i));
-  return out;
-}
-function renderCal(){
-  const ms = month || (month = monthStart(todayLondon()));
-  const ws = week || (week = weekStart(todayLondon()));
-  const label = mode === "week"
-    ? dnum(ws) + " " + MON[dobj(ws).getUTCMonth()].slice(0, 3) + " to " +
-      dnum(addDays(ws, 6)) + " " + MON[dobj(addDays(ws, 6)).getUTCMonth()].slice(0, 3)
-    : monthLabel(ms);
-  put("calBar", '<div class="seg">' +
-    [["month","Month"],["week","Week"],["day","Day"]].map(k =>
-      '<button data-mode="' + k[0] + '" aria-pressed="' + (mode === k[0]) + '">' + k[1] + "</button>").join("") +
-    "</div>" +
-    (mode === "day" ? "" : '<div class="mv"><button data-m="-1" aria-label="Back">&#8249;</button><b>' +
-      esc(label) + '</b><button data-m="1" aria-label="Forward">&#8250;</button></div>'));
-  put("calMonth", mode === "month" ? monthGrid(ms) : mode === "week" ? weekGrid(ws) : "");
-  put("calChips",
-    '<button data-mineonly aria-pressed="' + mineOnly + '">' +
-      (mineOnly ? "Showing only mine" : "Only what I am down for") + "</button>" +
-    (S.tags || []).map(t =>
-      '<button data-cat="' + esc(t.key) + '" aria-pressed="' + (catFilter === t.key) + '"><i class="c-' +
-      esc(t.key) + '"></i>' + esc(t.name) + "</button>").join("") +
-    (catFilter ? '<button data-cat="">Show everything</button>' : ""));
-}
-function monthGrid(ms){
-  const t = todayLondon(), lead = dow(ms), n = daysIn(ms);
-  const cells = [];
-  for (let i = 0; i < lead; i++) cells.push('<span class="cell out"></span>');
-  for (let d = 1; d <= n; d++){
-    const date = ms.slice(0, 8) + pad(d);
-    const list = eventsOn(date).filter(e => e.status !== "cancelled");
-    const seen = [];
-    let mineHere = false;
-    list.forEach(e => {
-      const c = catOf(e);
-      if (seen.indexOf(c) < 0 && seen.length < 4) seen.push(c);
-      if (["going","waitlist"].indexOf(myStatus(e.id)) >= 0) mineHere = true;
-    });
-    cells.push('<button class="cell' + (date === t ? " today" : "") + (date === selDay ? " sel" : "") +
-      '" data-day="' + date + '" aria-label="' + esc(longDate(date)) + ", " + list.length + ' on"><b>' + d +
-      '</b><span class="dots">' +
-      seen.map((c, i) => '<i class="c-' + c + (mineHere && i === 0 ? " ring" : "") + '"></i>').join("") +
-      "</span></button>");
-  }
-  return '<div class="month"><div class="dows">' + DOW.map(d => "<span>" + d[0] + "</span>").join("") +
-    '</div><div class="mgrid">' + cells.join("") + "</div></div>";
-}
 function weekGrid(ws){
   const t = todayLondon();
   return '<div class="week">' + weekDays(ws).map(d => {
@@ -1704,27 +1676,79 @@ function weekGrid(ws){
       }).join("") : '<div class="none">Nothing</div>') + "</div>";
   }).join("") + "</div>";
 }
-function renderBoard(){
-  if (!S) return;
-  const t = todayLondon();
-  const days = dayList();
-  const shown = (S.events || []).filter(e => (!catFilter || catOf(e) === catFilter) &&
-    (!mineOnly || ["going","waitlist"].indexOf(myStatus(e.id)) >= 0));
-  const byDate = {};
-  shown.forEach(e => (byDate[e.date] = byDate[e.date] || []).push(e));
-  $("calNote").textContent = shown.length + " in the term · " + goingCount() + " yours";
-  put("board", days.map(d => {
-    const list = byDate[d] || [];
-    if (!list.length && mode !== "day" && d !== t) return "";
-    return '<div class="daycard' + (d === t ? " today" : d < t ? " past" : "") + '" id="d-' + d + '">' +
-      '<div class="dh"><b>' + dnum(d) + "</b><span>" + DOWL[dow(d)] + " " + esc(MON[dobj(d).getUTCMonth()]) + "</span>" +
-      (d === t ? '<span class="flag">Today</span>' : "") + "</div>" +
-      (list.length ? list.map(evRow).join("")
-        : '<div class="rest">Nothing on.</div>') + "</div>";
-  }).join("") || '<div class="card"><p>Nothing in this month yet.</p></div>');
-}
 
 /* ---------- an event, opened ---------- */
+/* Where an event carries terms, they are read and accepted before the name
+   goes down, and the same words are on the event page. */
+/* Anybody on the committee can keep their own entry right: their photograph,
+   the spelling of their name, a role that has changed hands. An administrator
+   can edit anyone. */
+function openWhoEditor(key){
+  const p = (S.committee || []).filter(x => (x.email || x.role) === key)[0];
+  if (!p) return;
+  const own = p.email && p.email === S.me.email;
+  if (!own && !isAdmin()) return toast("Only an administrator can edit somebody else.");
+  let photo = faceOf(p) || "";
+  sheet(p.name || p.role,
+    '<div id="whoPrev">' + (photo ? '<img class="uplshot" src="' + photo + '">' : "") + "</div>" +
+    '<label class="f"><span>A photograph</span><input type="file" id="whoPhoto" accept="image/*"></label>' +
+    '<div class="f2"><label class="f"><span>Name</span><input id="whoName" value="' + esc(p.name) + '"></label>' +
+    '<label class="f"><span>Email</span><input id="whoMail" value="' + esc(p.email || "") + '"' +
+      (isAdmin() ? "" : " disabled") + "></label></div>" +
+    '<label class="f"><span>Role</span><input id="whoRole" value="' + esc(p.role) + '"' +
+      (isAdmin() ? "" : " disabled") + "></label>" +
+    '<label class="f"><span>Team</span><select id="whoTeam">' + (S.teams || []).map(t =>
+      '<option value="' + esc(t.key) + '"' + (t.key === p.team ? " selected" : "") + ">" +
+      esc(t.name) + "</option>").join("") + "</select></label>" +
+    '<div class="acts"><button class="btn gold" id="whoGo">Save</button></div>',
+    el => {
+      el.querySelector("#whoPhoto").addEventListener("change", ev => {
+        const f = ev.target.files[0];
+        if (!f) return;
+        put("whoPrev", '<div class="upl"><span class="spin"></span>Squeezing</div>');
+        const img = new Image();
+        img.onload = () => {
+          const c = document.createElement("canvas");
+          c.width = c.height = 168;
+          const side = Math.min(img.width, img.height);
+          c.getContext("2d").drawImage(img, (img.width - side) / 2, (img.height - side) * 0.14,
+            side, side, 0, 0, 168, 168);
+          photo = c.toDataURL("image/jpeg", 0.72);
+          URL.revokeObjectURL(img.src);
+          put("whoPrev", '<img class="uplshot" src="' + photo + '">');
+        };
+        img.src = URL.createObjectURL(f);
+      });
+      el.querySelector("#whoGo").addEventListener("click", async e => {
+        const b = e.currentTarget; spin(b, "Saving");
+        try{
+          await api("roster", { email: $("whoMail").value || p.email, name: $("whoName").value,
+            role: $("whoRole").value, team: $("whoTeam").value, photo: photo });
+          closeSheet(); await refresh(false); toast("Saved.");
+        }catch(err){ unspin(b); fail(err); }
+      });
+    });
+}
+function openTerms(id){
+  const ev = evById(id);
+  if (!ev) return;
+  sheet(ev.title,
+    '<div class="grp"><b>Before you put your name down</b></div>' +
+    '<div class="card"><p>' + esc(ev.terms) + "</p></div>" +
+    '<label class="check"><input type="checkbox" id="tmOk"> I have read this and I accept it.</label>' +
+    '<div class="acts"><button class="btn gold" id="tmGo">Accept and put me down</button></div>',
+    el => el.querySelector("#tmGo").addEventListener("click", async e => {
+      if (!$("tmOk").checked) return toast("Tick the box first.");
+      const b = e.currentTarget; spin(b, "One moment");
+      try{
+        const r = await api("rsvp", { eventId: id, status: "going", agree: true });
+        S.mine = r.mine;
+        S.events.forEach(x => { if (r.counts[x.id]) x.counts = r.counts[x.id]; });
+        closeSheet(); render();
+        toast(r.placed === "waitlist" ? "Full, so you are on the waiting list." : "You are down.");
+      }catch(err){ unspin(b); fail(err); }
+    }));
+}
 function openEvent(id){
   const ev = evById(id);
   if (!ev) return;
@@ -1751,9 +1775,10 @@ function openEvent(id){
     '<div class="rowline"><div class="t"><b>' + esc(f[1]) + "</b><span>" + esc(f[0]) + "</span></div></div>").join("") + "</div>");
   if ((ev.leads || []).length) lines.push('<div class="grp">Who is running it</div><div class="whogrid">' +
     ev.leads.map(l => '<div class="whoc">' +
-      (l.photo ? '<img class="ph" src="' + l.photo + '" alt="">' : '<span class="ph">' + esc(initials(l.name)) + "</span>") +
+      (faceOf(l) ? '<img class="ph" src="' + faceOf(l) + '" alt="">' : '<span class="ph">' + esc(initials(l.name)) + "</span>") +
       "<b>" + esc(l.name) + "</b><span>" + esc(l.role) + "</span></div>").join("") + "</div>");
   const pos = m.position ? " You are " + m.position + (m.position === 1 ? "st" : m.position === 2 ? "nd" : m.position === 3 ? "rd" : "th") + " on the waiting list." : "";
+  if (ev.terms) lines.push('<div class="grp"><b>Terms</b></div><div class="card"><p>' + esc(ev.terms) + "</p></div>");
   lines.push('<div class="acts">' +
     (ev.status === "cancelled" ? "" :
       closed && !st ? '<span class="lede">Names closed on ' + esc(shortDate(ev.signupBy)) + ".</span>" :
@@ -1883,35 +1908,41 @@ function lodgeBorrow(){
    first person to book gets ten to nine and two officers are never sitting in
    an empty room. Saying so out loud is the difference between it reading as a
    quirk and reading as a courtesy. */
+let hourWeek = 0;
+/* Compact on purpose: the next two Tuesdays, and arrows for the rest. It used
+   to take half the page for something most people book once a term. */
 function renderHours(){
-  const o = S.office, list = S.hours || [];
-  if (!o || !list.length){ put("askHours", ""); return; }
-  const next = list[0];
-  put("askHours", '<div class="grp">Talk to us in person</div>' +
-    '<div class="card"><h3>' + esc(o.who.join(" and ")) + ", every " + esc(o.day) +
-      ", " + esc(clock(o.from)) + " to " + esc(clock(o.to)) + "</h3>" +
-    "<p>Ten minutes each, no agenda needed. " + esc(o.where) + ".</p>" +
-    '<p class="lede">Slots fill from the end of the hour backwards, so the first person to book gets ' +
-      esc(clock(o.to.slice(0,2) === "21" ? "20:50" : o.from)) +
-      ". If one person books we come for ten minutes, if six book we are there for the hour. " +
-      "Nobody sits in an empty room.</p>" +
-    '<div class="hours">' + list.map(h => {
-      const full = h.free <= 0;
-      return '<div class="hrow' + (h.mine ? " mine" : "") + '">' +
-        '<div class="t"><b>' + esc(shortDate(h.date)) + "</b><span>" +
-        (h.mine ? "You are down for " + esc(clock(h.mine))
-          : full ? "Full" : h.free + (h.free === 1 ? " slot left" : " slots left")) + "</span></div>" +
-        (h.mine
-          ? '<button class="btn ghost sm" data-hourcancel="' + esc(h.date) + '">Cancel</button>'
-          : full ? '<span class="st closed">Full</span>'
-          : '<button class="btn gold sm" data-hour="' + esc(h.date) + '">Book a slot</button>') +
-        "</div>";
-    }).join("") + "</div>" +
-    (isCommittee() && next.list.length
-      ? '<div class="grp" style="margin-top:16px">Who is coming on ' + esc(shortDate(next.date)) + "</div>" +
-        next.list.map(x => '<div class="rowline"><div class="t"><b>' + esc(clock(x.slot)) + " &middot; " +
-          esc(x.who) + "</b><span>" + esc(x.note || x.email) + "</span></div></div>").join("")
-      : "") + "</div>");
+  const o = S.office, all = S.hours || [];
+  if (!o || !all.length){ put("askHours", ""); return; }
+  const max = Math.max(0, all.length - 2);
+  if (hourWeek > max) hourWeek = max;
+  const show = all.slice(hourWeek, hourWeek + 2);
+  const mine = all.filter(h => h.mine)[0];
+  put("askHours",
+    '<div class="grp"><b>Talk to us in person</b>' +
+      '<span class="weeknav">' +
+        '<button data-hwk="-1"' + (hourWeek <= 0 ? " disabled" : "") + ' aria-label="Earlier">&#8249;</button>' +
+        '<button data-hwk="1"' + (hourWeek >= max ? " disabled" : "") + ' aria-label="Later">&#8250;</button>' +
+      "</span></div>" +
+    '<div class="card ohr">' +
+      '<p class="lede">' + esc(o.who.join(" and ")) + ", every " + esc(o.day) + " " +
+        esc(clock(o.from)) + " to " + esc(clock(o.to)) + ", ten minutes each. Slots fill from the end of " +
+        "the hour backwards, so the first to book gets the last slot and nobody sits in an empty room.</p>" +
+      '<div class="ohgrid">' + show.map(h => {
+        const full = h.free <= 0;
+        return '<div class="oh' + (h.mine ? " mine" : "") + (full ? " full" : "") + '">' +
+          "<b>" + esc(shortDate(h.date)) + "</b>" +
+          "<span>" + (h.mine ? "You, at " + esc(clock(h.mine))
+            : full ? "Full" : h.free + (h.free === 1 ? " slot left" : " slots left")) + "</span>" +
+          (h.mine ? '<button class="btn ghost sm" data-hourcancel="' + esc(h.date) + '">Cancel</button>'
+            : full ? "" : '<button class="btn gold sm" data-hour="' + esc(h.date) + '">Book</button>') +
+          "</div>";
+      }).join("") + "</div>" +
+      (isCommittee() && show[0] && show[0].list.length
+        ? '<div class="ohlist">' + show[0].list.map(x =>
+            "<span><b>" + esc(clock(x.slot)) + "</b> " + esc(x.who) + "</span>").join("") + "</div>"
+        : "") +
+    "</div>");
 }
 function openHour(date){
   sheet("Book the Tuesday hour",
@@ -2020,10 +2051,6 @@ function openRoom(){
   const vs = (S.venues || []).filter(v => ok.indexOf(v.key) >= 0);
   sheet("Put something on in the MCR",
     '<div class="card"><p>The MCR is a common room and cannot be booked so that others are shut out. What this does is put your event on the calendar, so nobody arrives to a room that is already full, and so people can see what is on.</p></div>' +
-    (function(){ const l = (S.links||[]).filter(x => x.key === "permit")[0];
-      return l ? '<a class="linkcard" href="' + esc(l.url) + '" target="_blank" rel="noopener">' +
-        '<div class="t"><b>Anything bigger needs a permit</b><p>' + esc(l.note) + '</p></div>' +
-        '<span class="arw">&#8599;</span></a>' : ""; })() +
     '<label class="f"><span>What is it</span><input id="rmTitle" maxlength="90" placeholder="Pre-formal drinks for my birthday"></label>' +
     '<label class="f"><span>Where</span><select id="rmVenue">' + vs.map(v =>
       '<option value="' + esc(v.key) + '">' + esc(v.name) + "</option>").join("") + "</select></label>" +
@@ -2077,7 +2104,7 @@ function renderWho(){
   function card(p){
     const vacant = !p.name;
     return '<div class="whoc' + (vacant ? " vacant" : "") + '">' +
-      (p.photo ? '<img class="ph" src="' + p.photo + '" alt="' + esc(p.name) + '">'
+      (faceOf(p) ? '<img class="ph" src="' + faceOf(p) + '" alt="' + esc(p.name) + '">'
                : '<span class="ph">' + esc(vacant ? "vacant" : initials(p.name)) + "</span>") +
       "<b>" + esc(p.name || "This seat is open") + "</b><span>" + esc(p.role) + "</span>" +
       /* Two ways to reach anybody: a thread here, which keeps a record and
@@ -2088,6 +2115,7 @@ function renderWho(){
         : '<button data-ask="mcr" data-subject="' + esc("For " + p.name) + '">Write here</button>' +
           (p.email ? '<a class="mail" href="mailto:' + esc(p.email) + '?subject=' +
             encodeURIComponent("Jesus MCR") + '">or email them</a>' : "")) +
+      (isCommittee() ? '<button class="edithim" data-editwho="' + esc(p.email || p.role) + '">Edit</button>' : "") +
       "</div>";
   }
   /* What the MCR cannot do, said before somebody wastes a week finding out. */
@@ -2311,25 +2339,65 @@ function renderDesk(){
   put("deskList", '<div class="grp">The next three weeks</div>' +
     up.filter(e => e.date <= addDays(t, 21)).map(e => evRow(e)).join(""));
 }
+/* One inbox. Every conversation in the app is a ticket, including a room
+   request, so there is exactly one place to look and exactly one place to
+   forget somebody. Filters narrow it; nothing is hidden in another screen. */
+let inboxTab = "mine", inboxOpen = "";
 function renderQueue(){
   if (!isCommittee()) return;
-  const rooms = (S.allRooms || []).filter(r => r.status === "new");
-  const th = S.deskTickets || [];
-  $("queueNote").textContent = rooms.length + " room requests · " +
-    th.filter(x => x.status !== "closed").length + " threads open";
-  put("queueRooms", rooms.length
-    ? '<div class="grp">Room requests</div>' + rooms.map(r =>
-        '<div class="thread"><div class="top"><b>' + esc(r.title) + '</b><span class="ref">' +
-        esc(r.email) + "</span></div>" +
-        '<div class="ref">' + esc(r.venueName) + " &middot; " + esc(shortDate(r.date)) + " &middot; " +
-        esc(clock(r.start)) + " to " + esc(clock(r.end)) + " &middot; about " + r.people + "</div>" +
-        (r.note ? '<div class="msg">' + esc(r.note) + "</div>" : "") +
-        '<div class="acts"><button class="btn crimson sm" data-roomyes="' + esc(r.id) +
-        '">Put it on the calendar</button><button class="btn ghost sm" data-roomno="' + esc(r.id) +
-        '">Not this time</button></div></div>').join("") : "");
-  put("queueTickets", '<div class="grp">Threads</div>' +
-    (th.length ? th.map(x => threadHtml(x, true)).join("")
-      : '<div class="card"><p>Nothing waiting. Rare, and worth enjoying.</p></div>'));
+  const all = S.deskTickets || [];
+  const me = S.me.email;
+  const mineT = all.filter(t => t.assignee === me && t.status !== "closed");
+  const open = all.filter(t => t.status === "open");
+  const rooms = all.filter(t => t.category === "event" && t.status !== "closed");
+  const welf = all.filter(t => t.welfare && t.status !== "closed");
+  const tabs = [["mine","Mine",mineT.length],["open","Needs an answer",open.length],
+    ["rooms","Rooms",rooms.length],["welfare","Welfare",welf.length],
+    ["all","Everything",all.length]];
+  put("inboxSeg", tabs.map(t =>
+    '<button data-inbox="' + t[0] + '" aria-pressed="' + (inboxTab === t[0]) + '">' + esc(t[1]) +
+    (t[2] ? " &middot; " + t[2] : "") + "</button>").join(""));
+  const list = { mine: mineT, open: open, rooms: rooms, welfare: welf, all: all }[inboxTab] || all;
+  put("inboxNote", all.filter(t => t.status !== "closed").length + " open &middot; " +
+    mineT.length + " with you");
+  put("inboxList", list.length ? list.map(inboxRow).join("")
+    : '<div class="card"><p>Nothing here. Rare, and worth enjoying.</p></div>');
+}
+function inboxRow(t){
+  const lab = { open:"Open", college:"With College", answered:"Answered", closed:"Closed" };
+  const room = (S.allRooms || []).filter(r => r.id === t.id)[0];
+  const opened = inboxOpen === t.id;
+  const last = t.messages[t.messages.length - 1];
+  return '<div class="tk' + (opened ? " open" : "") + (t.welfare ? " welfare" : "") + '">' +
+    '<button class="tkhead" data-inboxopen="' + esc(t.id) + '">' +
+      '<span class="tkwho">' + esc(initials(t.who || t.catName)) + "</span>" +
+      '<span class="tkt"><b>' + esc(t.subject) + "</b><span>" + esc(t.catName) +
+        " &middot; " + esc(t.who || "Anonymous") + " &middot; " + esc(ago(t.lastAt)) + "</span></span>" +
+      '<span class="st ' + esc(t.status) + '">' + esc(lab[t.status] || t.status) + "</span>" +
+    "</button>" +
+    (opened ? '<div class="tkbody">' +
+      t.messages.map(m => '<div class="msg' + (m.internal ? " note" : m.mine ? "" : " mine") + '">' +
+        '<span class="m">' + esc(m.byName) + (m.internal ? " &middot; only the committee sees this" : "") +
+        " &middot; " + esc(ago(m.at)) + "</span>" + esc(m.body) + "</div>").join("") +
+      (room && room.status === "new"
+        ? '<div class="acts"><button class="btn gold sm" data-roomyes="' + esc(room.id) +
+          '">Put it on the calendar</button><button class="btn ghost sm" data-roomno="' + esc(room.id) +
+          '">Not this time</button></div>' : "") +
+      '<div class="tkform">' +
+        '<textarea id="tkr-' + esc(t.id) + '" placeholder="Reply to ' +
+          esc(first(t.who || "them") || "them") + '"></textarea>' +
+        '<div class="acts"><button class="btn gold sm" data-reply2="' + esc(t.id) + '">Send reply</button>' +
+        '<button class="btn ghost sm" data-note="' + esc(t.id) + '">Add a private note</button>' +
+        (S.officers ? '<select class="tkass" data-assign="' + esc(t.id) + '">' +
+          '<option value="">Hand it to\u2026</option>' +
+          S.officers.map(o => '<option value="' + esc(o.email) + '"' +
+            (o.email === t.assignee ? " selected" : "") + ">" + esc(o.name) + " &middot; " +
+            esc(o.role) + "</option>").join("") + "</select>" : "") +
+        ["open","college","answered","closed"].map(k =>
+          '<button class="btn ghost sm" data-tset="' + esc(t.id) + '" data-s="' + k + '"' +
+          (t.status === k ? " disabled" : "") + ">" + esc(lab[k]) + "</button>").join("") +
+        "</div></div></div>" : "") +
+    "</div>";
 }
 function renderMembers(){
   if (!isCommittee()) return;
@@ -2396,6 +2464,9 @@ function openEventEditor(id){
     '<label class="f"><span>Booking</span><select id="eMode">' +
       '<option value="preferred"' + (ev && ev.rsvpMode === "preferred" ? " selected" : "") + ">Nice to know</option>" +
       '<option value="required"' + (ev && ev.rsvpMode === "required" ? " selected" : "") + ">Required</option></select></label></div>" +
+    '<label class="f"><span>Terms people must accept, if any</span><textarea id="eTerms" maxlength="900" ' +
+      'placeholder="Left blank, nobody is asked to agree to anything. Filled in, this appears before the tick and has to be accepted.">' +
+      esc(ev ? (ev.terms || "") : "") + "</textarea></label>" +
     '<label class="f"><span>Bring</span><input id="eBring" maxlength="220" value="' + v("bring") + '"></label>' +
     '<label class="f"><span>Theme or dress</span><input id="eDress" maxlength="120" value="' + v("dress") + '"></label>' +
     '<label class="check"><input type="checkbox" id="eCost"' + (ev && ev.cost ? " checked" : "") + "> Bring money</label>" +
@@ -2412,7 +2483,7 @@ function openEventEditor(id){
             start: $("eStart").value, end: $("eEnd").value, venue: $("eVenue").value, desc: $("eDesc").value,
             tags: $("eTags").value, capacity: $("eCap").value, signupBy: $("eBy").value,
             rsvpMode: $("eMode").value, bring: $("eBring").value, dress: $("eDress").value,
-            cost: $("eCost").checked, leads: $("eLeads").value } });
+            cost: $("eCost").checked, leads: $("eLeads").value, terms: $("eTerms").value } });
           closeSheet();
           await refresh(false);
           toast("Saved. Everyone sees it within the minute.");
@@ -2602,7 +2673,7 @@ function vcard(m){
     : m.kind === "gift" ? "Free"
     : m.kind === "want" ? "Wanted" : k.name;
   return '<button class="vc' + (gone ? " gone" : "") + '" data-gift="' + esc(m.id) + '">' +
-    (m.photo ? '<img class="shot" src="' + m.photo + '" alt="' + esc(m.title) + '">'
+    (m.thumb ? '<img class="shot" loading="lazy" src="' + m.thumb + '" alt="' + esc(m.title) + '">'
              : '<div class="noshot">' + esc(m.title.slice(0, 1).toUpperCase()) + "</div>") +
     '<span class="tagk k-' + esc(m.kind) + '">' + esc(k.name) + "</span>" +
     (gone ? '<span class="sold">Gone</span>' : "") +
@@ -2614,11 +2685,18 @@ function vcard(m){
 function openGift(id){
   const m = (S.market || []).filter(x => x.id === id)[0];
   if (!m) return;
+  /* the thumbnail is already here, so it shows at once and the full
+     photograph swaps in behind it */
+  if (m.hasPhoto && !m.photo) api("marketPhoto", { id: id }).then(d => {
+    m.photo = d.photo;
+    const el = $("giftBig");
+    if (el && d.photo) el.src = d.photo;
+  }).catch(() => {});
   const k = (S.marketKinds || []).filter(x => x.key === m.kind)[0] || { name: m.kind };
   const mine = m.email === S.me.email, gone = m.status !== "open";
   const subj = encodeURIComponent("MCR Second Life: " + m.title);
   sheet(m.title,
-    (m.photo ? '<img class="vbig" src="' + m.photo + '" alt="">' : "") +
+    (m.hasPhoto ? '<img class="vbig" id="giftBig" src="' + (m.thumb || "") + '" alt="">' : "") +
     '<div class="rowline"><div class="t"><b>' +
       esc(m.kind === "sell" ? (m.price || "Ask") : m.kind === "gift" ? "Free to a good home" : k.name) +
       "</b><span>" + esc(k.name) + (m.venueName ? " &middot; " + esc(m.venueName) : "") +
@@ -2649,7 +2727,7 @@ function openMarket(){
     '<div id="mkPrev"></div>' +
     '<div class="acts"><button class="btn gold" id="mkGo">Put it up</button><button class="btn ghost" data-close>Cancel</button></div>',
     el => {
-      let photo = "";
+      let photo = "", thumb = "";
       const note = () => {
         const k = (S.marketKinds || []).filter(x => x.key === $("mkKind").value)[0];
         $("mkNote").textContent = k ? k.note : "";
@@ -2659,19 +2737,56 @@ function openMarket(){
       note(); showPrice();
       /* A phone camera makes something far too large for a spreadsheet cell,
          so it is shrunk here before it ever leaves the page. */
+      /* A phone photograph is three to eight megabytes and a spreadsheet cell
+         holds fifty thousand characters, so it has to come down a long way.
+         This shrinks and re-encodes until it fits under the target, showing
+         what it is doing, and never sends anything the server would refuse. */
+      const TARGET = 90 * 1024;
       el.querySelector("#mkPhoto").addEventListener("change", ev => {
         const f = ev.target.files[0];
         if (!f) return;
+        put("mkPrev", '<div class="upl"><span class="spin"></span>' +
+          "Reading " + Math.round(f.size / 1024) + " KB</div>");
         const img = new Image();
         img.onload = () => {
-          const max = 900, sc = Math.min(1, max / Math.max(img.width, img.height));
+          let w = img.width, h = img.height;
+          const long = Math.max(w, h);
+          const shrink = Math.min(1, 1400 / long);
+          w = Math.round(w * shrink); h = Math.round(h * shrink);
           const c = document.createElement("canvas");
-          c.width = Math.round(img.width * sc); c.height = Math.round(img.height * sc);
-          c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
-          photo = c.toDataURL("image/jpeg", 0.72);
-          put("mkPrev", '<img src="' + photo + '" style="width:100%;border-radius:12px;margin-bottom:12px">');
-          URL.revokeObjectURL(img.src);
+          const step = (side, q) => {
+            c.width = Math.round(w * side); c.height = Math.round(h * side);
+            const ctx = c.getContext("2d");
+            ctx.imageSmoothingQuality = "high";
+            ctx.drawImage(img, 0, 0, c.width, c.height);
+            return c.toDataURL("image/jpeg", q);
+          };
+          let side = 1, q = 0.74, out = step(side, q), tries = 0;
+          const grind = () => {
+            if (out.length <= TARGET || tries++ > 7){
+              photo = out;
+              /* a small one for the grid so a board of twenty things is not
+                 two megabytes to look at */
+              const tc = document.createElement("canvas");
+              const ts = 300 / Math.max(c.width, c.height);
+              tc.width = Math.round(c.width * ts); tc.height = Math.round(c.height * ts);
+              tc.getContext("2d").drawImage(c, 0, 0, tc.width, tc.height);
+              thumb = tc.toDataURL("image/jpeg", 0.62);
+              URL.revokeObjectURL(img.src);
+              put("mkPrev", '<img class="uplshot" src="' + photo + '">' +
+                '<div class="upl done">Ready &middot; ' + Math.round(photo.length / 1024) + " KB, " +
+                c.width + " by " + c.height + "</div>");
+              return;
+            }
+            if (q > 0.42) q -= 0.09; else side *= 0.82;
+            put("mkPrev", '<div class="upl"><span class="spin"></span>Squeezing, ' +
+              Math.round(out.length / 1024) + " KB so far</div>");
+            out = step(side, q);
+            setTimeout(grind, 16);
+          };
+          setTimeout(grind, 16);
         };
+        img.onerror = () => put("mkPrev", '<div class="upl">That file is not an image the browser can read.</div>');
         img.src = URL.createObjectURL(f);
       });
       el.querySelector("#mkGo").addEventListener("click", async e => {
@@ -2680,7 +2795,7 @@ function openMarket(){
         try{
           const d = await api("marketNew", { kind: $("mkKind").value, title: $("mkTitle").value,
             body: $("mkBody").value, venue: $("mkVenue").value, photo: photo,
-            price: $("mkPrice") ? $("mkPrice").value : "" });
+            thumb: thumb, price: $("mkPrice") ? $("mkPrice").value : "" });
           S.market = d.market;
           closeSheet(); renderMarket(); go("gifts"); toast("Up on the board, with your address on it.");
         }catch(err){ unspin(b); fail(err); }
@@ -2796,7 +2911,7 @@ function voiceCard(){
 /* ============================================================
    Render, navigate, wire
    ============================================================ */
-const VIEWS = ["today","cal","gifts","lodge","ask","biz","me","desk","queue","members","admin"];
+const VIEWS = ["today","gifts","lodge","ask","biz","me","desk","inbox","members","admin"];
 /* Stagger the first children of whatever has just been shown. Sixty
    milliseconds apart is enough to read as unfolding and not as waiting. */
 function stagger(id){
@@ -2820,9 +2935,10 @@ function go(v, scroll){
   document.querySelectorAll("#nav .tabbtn").forEach(b =>
     b.setAttribute("aria-current", String(b.dataset.view === v)));
   VIEWS.forEach(id => { const el = $("v-" + id); if (el) el.hidden = id !== v; });
-  document.documentElement.dataset.room = v;
+  document.documentElement.dataset.place = v;
   if (v === "lodge") seen();
   if (v === "members") renderMembers();
+  if (v === "inbox") renderQueue();
   stagger(v);
   const tab = document.querySelector('#nav .tabbtn[data-view="' + v + '"]');
   if (tab && tab.scrollIntoView) { try{ tab.scrollIntoView({ inline:"center", block:"nearest", behavior:"smooth" }); }catch(e){} }
@@ -2837,6 +2953,7 @@ async function seen(){
   if (!window.__landed){ window.__landed = true; stagger(view); }
 }
 function renderBadges(){
+  if (!S) return;
   const set = (id, n) => { const el = $(id); if (el){ el.hidden = !n; el.textContent = n; } };
   set("bdgCal", goingCount());
   set("bdgLodge", (S.updates || []).filter(u => u.at > (S.me.seenAt || 0)).length);
@@ -2863,11 +2980,9 @@ function render(){
   document.querySelectorAll("[data-committee]").forEach(el => el.hidden = !isCommittee());
   document.querySelectorAll("[data-admin]").forEach(el => el.hidden = !isAdmin());
   document.querySelectorAll("[data-owner]").forEach(el => el.hidden = !S.me.owner);
-  if (!month) month = monthStart(todayLondon());
   applySeason();
-  renderCrow(); renderBumps(); renderTodayUrgent(); renderTodayWeek(); renderTodayOn(); renderThree();
+  renderCrow(); renderBumps(); renderTodayUrgent(); renderTodayWeek(); renderTodayOn();
   renderTodayQuick(); renderTodayNews();
-  renderCal(); renderBoard();
   renderLodge(); renderMarket(); renderHours(); renderAsk(); renderWho();
   renderIdeas(); renderPolls(); renderBiz();
   if (!typingIn("v-me")) renderMe();
@@ -2881,13 +2996,17 @@ document.addEventListener("click", async e => {
      below reads it. Swallowing the click is better than throwing behind a
      loading screen, which is what it did before. */
   if (!S) return;
+  /* closest() walks all the way to <html>, so any attribute set on the root
+     used to match every click in the app. Stopping at the wrapper means a
+     state marker can never be mistaken for a button again. */
+  if (!e.target.closest("#app, #nav, #sheet, header")) return;
   const t = e.target.closest("[data-open],[data-tick],[data-mode],[data-m],[data-day],[data-cat]," +
     "[data-goto],[data-ask],[data-room],[data-reply],[data-tset],[data-lendtake],[data-lendback]," +
     "[data-noticeoff],[data-editres],[data-roomyes],[data-roomno],[data-rsvp],[data-edit],[data-cancel]," +
     "[data-skip],[data-editser],[data-second],[data-vote],[data-mset],[data-code],[data-checkin]," +
     "[data-delupdate],[data-rosteredit],[data-rosterdel],[data-newidea],[data-back]," +
     "[data-setidea],[data-dropidea],[data-pollvote],[data-pollclose]," +
-    "[data-marketnew],[data-markettake],[data-marketdrop],[data-bumpedit],[data-gk],[data-gift],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-hw],[data-mineonly]");
+    "[data-marketnew],[data-markettake],[data-marketdrop],[data-bumpedit],[data-gk],[data-gift],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
   if (!t) return;
   const d = t.dataset;
   try{
@@ -2902,8 +3021,28 @@ document.addEventListener("click", async e => {
     }
     if (t.hasAttribute("data-mineonly")){
       mineOnly = !mineOnly;
-      renderTodayWeek(); renderTodayOn(); renderCal(); renderBoard(); return;
+      renderTodayWeek(); renderTodayOn(); return;
     }
+    if (d.inbox){ inboxTab = d.inbox; inboxOpen = ""; renderQueue(); return; }
+    if (d.inboxopen){ inboxOpen = inboxOpen === d.inboxopen ? "" : d.inboxopen; renderQueue(); return; }
+    if (d.reply2){
+      const box = $("tkr-" + d.reply2);
+      if (!box || !box.value.trim()) return toast("Write the reply first.");
+      spin(t, "Sending");
+      const r = await api("ticketReply", { id: d.reply2, body: box.value });
+      if (r.deskTickets) S.deskTickets = r.deskTickets;
+      renderQueue(); renderBadges(); return toast("Sent.");
+    }
+    if (d.note){
+      const box = $("tkr-" + d.note);
+      if (!box || !box.value.trim()) return toast("Write the note first.");
+      const r = await api("ticketNote", { id: d.note, body: box.value });
+      S.deskTickets = r.deskTickets; renderQueue(); return toast("Noted, for the committee only.");
+    }
+    if (d.hwk){ hourWeek = Math.max(0, hourWeek + (+d.hwk)); renderHours(); return; }
+    if (t.hasAttribute("data-newevent")) return openEventEditor("");
+    if (d.editwho) return openWhoEditor(d.editwho);
+    if (d.terms) return openTerms(d.terms);
     if (d.hour) return openHour(d.hour);
     if (d.hourcancel){ S.hours = (await api("hourCancel", { date: d.hourcancel })).hours;
       renderHours(); renderCrow(); return toast("Cancelled."); }
@@ -2929,11 +3068,12 @@ document.addEventListener("click", async e => {
     if (d.pollclose){ S.polls = (await api("pollClose", { id: d.pollclose })).polls; renderPolls(); return; }
     if (d.open) return openEvent(d.open);
     if (d.tick){
+      const evT = evById(d.tick);
+      if (evT && evT.terms && !myStatus(d.tick)) return openTerms(d.tick);
       const st = myStatus(d.tick);
       const r = await api("rsvp", { eventId: d.tick, status: st === "going" || st === "waitlist" ? "no" : "going" });
       S.mine = r.mine;
-      S.events.forEach(x => { if (r.counts[x.id]) x.counts = r.counts[x.id]; });
-      renderBoard(); renderThree(); renderBadges();       if (r.placed === "waitlist") toast("Full, so you are on the waiting list.");
+      S.events.forEach(x => { if (r.counts[x.id]) x.counts = r.counts[x.id]; }); renderBadges();       if (r.placed === "waitlist") toast("Full, so you are on the waiting list.");
       return;
     }
     if (d.rsvp){
@@ -2944,20 +3084,6 @@ document.addEventListener("click", async e => {
       toast(d.rsvp === "no" ? "Taken off." : r.placed === "waitlist" ? "Full, so you are on the waiting list." : "You are down.");
       return;
     }
-    if (d.mode){ mode = d.mode; renderCal(); renderBoard(); return; }
-    if (d.m){
-    if (mode === "week") week = addDays(week || weekStart(todayLondon()), +d.m * 7);
-    else month = monthShift(month, +d.m);
-    renderCal(); renderBoard(); return;
-  }
-    if (d.day){
-      selDay = d.day; renderCal();
-      const el = $("d-" + selDay);
-      if (el) el.scrollIntoView({ behavior:"smooth", block:"center" });
-      else { mode = "day"; renderCal(); renderBoard(); }
-      return;
-    }
-    if (t.hasAttribute("data-cat")){ catFilter = d.cat; renderCal(); renderBoard(); renderThree(); return; }
     if (d.goto){ closeSheet(); return go(d.goto); }
     if (t.hasAttribute("data-room")) return openRoom();
     if (d.ask) return openAsk(d.ask, d.subject || "");
@@ -3040,7 +3166,7 @@ document.addEventListener("click", async e => {
 });
 /* The gate's own buttons. It sits outside the app, so it gets its own
    listener rather than borrowing the one that needs S to exist. */
-$("gate").addEventListener("click", e => {
+on("gate", "click", e => {
   const t = e.target.closest("[data-retry],[data-diag],[data-prompt],[data-tryanyway]");
   if (!t) return;
   if (t.hasAttribute("data-retry")){ gsiUp = false; gsiComplaint = ""; return probe(); }
@@ -3063,8 +3189,20 @@ $("gate").addEventListener("click", e => {
     return;
   }
 });
-$("bDiag").addEventListener("click", () => { renderDiag(); $("diag").hidden = !$("diag").hidden; });
+on("bDiag", "click", () => { renderDiag(); $("diag").hidden = !$("diag").hidden; });
 
+/* handing a thread to somebody else */
+document.addEventListener("change", async e => {
+  const sel = e.target.closest("[data-assign]");
+  if (!sel || !S) return;
+  if (!sel.value) return;
+  try{
+    const r = await api("ticketSet", { id: sel.dataset.assign, status: "open", assignee: sel.value });
+    S.deskTickets = r.deskTickets;
+    renderQueue(); renderBadges();
+    toast("Handed over.");
+  }catch(err){ fail(err); }
+});
 document.querySelectorAll("#nav .tabbtn").forEach(b => b.addEventListener("click", () => go(b.dataset.view)));
 document.addEventListener("keydown", e => {
   if (e.key === "Escape" && sheetOpen) return closeSheet();
@@ -3092,36 +3230,29 @@ document.addEventListener("keydown", e => {
     }
   }, { passive: true });
 })();
-$("bMe").addEventListener("click", () => go("me"));
-$("bRefresh").addEventListener("click", () => refresh(true));
-$("bToday").addEventListener("click", () => {
-  const t = todayLondon();
-  month = monthStart(t); mode = "month"; selDay = t;
-  renderCal(); renderBoard();
-  const el = $("d-" + t);
-  if (el) setTimeout(() => el.scrollIntoView({ behavior:"smooth", block:"start" }), 60);
-});
-$("bNewEvent").addEventListener("click", () => openEventEditor(""));
-$("bNewEvent2").addEventListener("click", () => openEventEditor(""));
-$("bNewSeries").addEventListener("click", () => openSeriesEditor(""));
-$("bNewNotice").addEventListener("click", openNoticeEditor);
-$("bNewMotion").addEventListener("click", openMotion);
-$("bNewIdea").addEventListener("click", openIdea);
-$("bNewGift").addEventListener("click", openMarket);
-$("bNewPoll").addEventListener("click", openPoll);
-$("memQ").addEventListener("input", renderMembers);
-$("bBumpsAdd").addEventListener("click", () => openBumps("", ""));
-$("bVoice").addEventListener("click", async e => {
+on("bMe", "click", () => go("me"));
+on("bRefresh", "click", () => refresh(true));
+// calendar tab removed
+on("bNewEvent2", "click", () => openEventEditor(""));
+on("bNewSeries", "click", () => openSeriesEditor(""));
+on("bNewNotice", "click", openNoticeEditor);
+on("bNewMotion", "click", openMotion);
+on("bNewIdea", "click", openIdea);
+on("bNewGift", "click", openMarket);
+on("bNewPoll", "click", openPoll);
+on("memQ", "input", renderMembers);
+on("bBumpsAdd", "click", () => openBumps("", ""));
+on("bVoice", "click", async e => {
   const b = e.currentTarget;
   spin(b, "Saving");
   try{ const d = await api("saveVoice", { voice: $("voiceText").value }); S.voice = d.voice; unspin(b); toast("Saved."); }
   catch(err){ unspin(b); fail(err); }
 });
-$("bSignOut").addEventListener("click", async () => {
+on("bSignOut", "click", async () => {
   try{ await api("signOut"); }catch(e){}
   signedOut("Signed out.");
 });
-$("bSaveMe").addEventListener("click", async e => {
+on("bSaveMe", "click", async e => {
   const b = e.currentTarget;
   spin(b, "Saving");
   try{
@@ -3135,20 +3266,20 @@ $("bSaveMe").addEventListener("click", async e => {
     render();
   }catch(err){ unspin(b); fail(err); }
 });
-$("bSaveFeed").addEventListener("click", async e => {
+on("bSaveFeed", "click", async e => {
   const b = e.currentTarget;
   spin(b, "Saving");
   try{ const d = await api("saveProfile", { remind: $("pRemind").value }); S.me = d.me; unspin(b); toast("Saved."); }
   catch(err){ unspin(b); fail(err); }
 });
-$("bResetFeed").addEventListener("click", async () => {
+on("bResetFeed", "click", async () => {
   if (!confirm("The old link stops working straight away. Carry on?")) return;
   const d = await api("resetFeed");
   S.me.feedUrl = d.feedUrl;
   renderMe();
   toast("New link. Subscribe again on your phone.");
 });
-$("bRosterAdd").addEventListener("click", async e => {
+on("bRosterAdd", "click", async e => {
   const b = e.currentTarget;
   spin(b, "Saving");
   try{
@@ -3162,36 +3293,36 @@ $("bRosterAdd").addEventListener("click", async e => {
     toast("Saved.");
   }catch(err){ unspin(b); fail(err); }
 });
-$("bOwnerAdd").addEventListener("click", async e => {
+on("bOwnerAdd", "click", async e => {
   const list = (S.owners || []).concat([$("ownerEmail").value]).join(",");
   try{ const d = await api("saveOwners", { owners: list }); S.owners = d.owners; $("ownerEmail").value = ""; renderAdmin(); toast("Done."); }
   catch(err){ fail(err); }
 });
-$("bAllow").addEventListener("click", async e => {
+on("bAllow", "click", async e => {
   const b = e.currentTarget;
   spin(b, "Saving");
   try{ const d = await api("saveSettings", { allowlist: $("allowlist").value }); S.allowlist = d.allowlist; unspin(b); toast("Saved."); }
   catch(err){ unspin(b); fail(err); }
 });
-$("bAnnounce").addEventListener("click", async e => {
+on("bAnnounce", "click", async e => {
   const b = e.currentTarget;
   spin(b, "Posting");
   try{ await api("announce", { text: $("annText").value }); $("annText").value = ""; unspin(b); await refresh(false); toast("Posted."); }
   catch(err){ unspin(b); fail(err); }
 });
-$("bPhotos").addEventListener("click", async e => {
+on("bPhotos", "click", async e => {
   const b = e.currentTarget; spin(b, "Writing");
   try{ const d = await api("refreshPhotos"); unspin(b); await refresh(false); toast(d.done); }
   catch(err){ unspin(b); fail(err); }
 });
-$("bReseed").addEventListener("click", async e => {
+on("bReseed", "click", async e => {
   const b = e.currentTarget;
   spin(b, "Checking");
   try{ const d = await api("reseed"); unspin(b); await refresh(false);
     toast("Added " + d.resources + " cards, " + d.clubs + " clubs, " + d.series + " weeklies."); }
   catch(err){ unspin(b); fail(err); }
 });
-$("bNewMeeting").addEventListener("click", () => {
+on("bNewMeeting", "click", () => {
   sheet("Add a general meeting",
     '<label class="f"><span>Title</span><input id="mtTitle" value="General meeting"></label>' +
     '<div class="f2"><label class="f"><span>Date</span><input type="date" id="mtDate"></label>' +
