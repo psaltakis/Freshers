@@ -146,11 +146,18 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 
 /* ---------- the pigeonhole: tiles with gaps ---------- */
 .wall{margin:0 0 var(--g)}
-.wall .when{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--gold-2);font-weight:600}
-.wall h3{font-family:var(--display);font-size:clamp(28px,6.4vw,44px);margin:7px 0 6px;font-weight:600;
-  line-height:.98;letter-spacing:-.048em;font-variation-settings:"SOFT" 0,"WONK" 1,"opsz" 144}
-.wall h3 em{font-style:italic;color:var(--gold-2)}
+.wall .when{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--cream-4);font-weight:700;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.wall .when em{font-style:normal;color:var(--gold-ink);background:var(--gold);border-radius:999px;
+  padding:3px 10px;letter-spacing:.14em}
+.wall h3{font-family:var(--display);font-size:clamp(28px,6.4vw,44px);margin:10px 0 5px;font-weight:600;
+  line-height:.98;letter-spacing:-.048em;font-variation-settings:"SOFT" 0,"WONK" 1,"opsz" 144;
+  display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.wall h3 i{font-style:italic;color:var(--gold-2)}
+.wall h3 em{font-style:normal;font-family:var(--ui);font-size:15px;font-weight:600;color:var(--cream-2);
+  letter-spacing:-.01em;white-space:nowrap}
+@media(max-width:520px){.wall h3{display:block}
+  .wall h3 em{display:block;margin-top:5px;font-size:14.5px;white-space:normal}}
 .wall .line{margin:0;color:var(--cream-2);font-size:17.5px;max-width:44ch;letter-spacing:-.01em;font-weight:500}
 .slots{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:16px}
 @media(min-width:560px){.slots{grid-template-columns:repeat(4,1fr)}}
@@ -225,46 +232,43 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 @media(min-width:920px){.dots{gap:5px;height:10px}.dots i{width:10px;height:10px}}
 .dots i.ring{box-shadow:0 0 0 2px var(--cream)}
 .cell.sel .dots i.ring{box-shadow:0 0 0 2px var(--gold-ink)}
-/* Seven columns, always, at every width. A week that reflows into two
-   columns stops being a week. Below the point where a title fits, the
-   columns keep the dates and the dots and the detail moves to the list
-   underneath, which is there anyway. */
-.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin-bottom:16px}
-.wcol{background:var(--t1);border-radius:var(--r3);padding:9px 7px 10px;min-height:88px}
-.wcol .wh{display:block;margin-bottom:7px}
-.wcol .wh b{font-size:17px;display:block}
-.wcol .wh span{display:block;font-size:8.5px;margin-top:1px}
-.wev{padding:5px 6px;margin-bottom:4px;border-left-width:2px}
-.wev b{font-size:11px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.wev span{font-size:9px}
-@media(max-width:760px){
-  .wcol{min-height:66px;padding:8px 5px 9px}
-  .wcol .wh b{font-size:15px}
-  .wev{padding:0;background:none;border-left:0;margin-bottom:3px}
-  .wev b{display:none}
-  .wev span{display:none}
-  .wev::before{content:"";display:block;width:7px;height:7px;border-radius:50%;background:currentColor;
-    margin:0 auto}
-  .wcol .none{display:none}}
-@media(min-width:900px){.wcol{min-height:118px;padding:12px 10px}
-  .wcol .wh b{font-size:21px}.wcol .wh span{font-size:9px}
-  .wev{padding:6px 8px;background:var(--t3);border-left-width:3px}
-  .wev b{font-size:12px}.wev span{font-size:10px;display:block}}
-.wcol{background:var(--t1);border-radius:var(--r2);padding:12px 11px;min-height:112px}
-.wcol.today{background:rgba(235,183,83,.16)}
-.wcol.past{opacity:.45}
-.wcol .wh{display:flex;align-items:baseline;gap:6px;margin-bottom:10px}
-.wcol .wh b{font-family:var(--display);font-size:21px;font-weight:600;line-height:1;letter-spacing:-.04em}
+/* Seven columns at every width. What changes is how much fits in one: on a
+   phone a day is its date and a row of coloured dots, on a desk it is the
+   events written out. The list underneath always has the detail, so nothing
+   is lost by the small version. */
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin-bottom:16px}
+.wcol{background:var(--t1);border-radius:var(--r3);padding:8px 4px 9px;min-height:62px;
+  display:flex;flex-direction:column;align-items:center;text-align:center}
+.wcol.today{background:rgba(235,183,83,.18)}
+.wcol.past{opacity:.42}
+.wcol .wh{display:block;margin:0 0 6px}
+.wcol .wh b{display:block;font-family:var(--display);font-size:16px;font-weight:600;line-height:1;
+  letter-spacing:-.04em}
 .wcol.today .wh b{color:var(--gold-2)}
-.wcol .wh span{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--cream-4);font-weight:600}
-.wev{display:block;width:100%;text-align:left;padding:7px 9px;margin-bottom:5px;background:var(--t3);
-  border-radius:var(--r3);border-left:3px solid;transition:background .16s}
-.wev:hover{background:rgba(0,0,0,.48)}
-.wev b{display:block;font-size:13px;font-weight:700;line-height:1.28;letter-spacing:-.015em}
-.wev span{display:block;font-family:var(--mono);font-size:10.5px;color:var(--cream-4);margin-top:2px;font-weight:600}
-.wev.mine{background:rgba(235,183,83,.2)}
-.wcol .none{font-size:12px;color:var(--cream-4);font-weight:500}
+.wcol .wh span{display:block;font-family:var(--mono);font-size:8px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--cream-4);font-weight:700;margin-top:3px}
+/* the phone version: a dot per event, nothing else */
+.wev{display:block;width:9px;height:9px;border-radius:50%;background:currentColor;padding:0;margin:0 0 4px;
+  border:0;text-align:center;flex:0 0 auto}
+.wev b,.wev span{display:none}
+.wev.mine{box-shadow:0 0 0 2px var(--cream)}
+.wcol .none{display:none}
+@media(min-width:860px){
+  .week{gap:6px}
+  .wcol{padding:11px 9px 12px;min-height:116px;align-items:stretch;text-align:left}
+  .wcol .wh{display:flex;align-items:baseline;gap:6px;margin-bottom:9px}
+  .wcol .wh b{font-size:20px}
+  .wcol .wh span{margin-top:0;font-size:9px}
+  .wev{display:block;width:auto;height:auto;border-radius:var(--r3);background:var(--t3);
+    border-left:3px solid currentColor;padding:6px 8px;margin-bottom:5px;text-align:left;
+    box-shadow:none;transition:background .16s}
+  .wev:hover{background:rgba(0,0,0,.48)}
+  .wev b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+    font-size:12px;font-weight:700;line-height:1.28;letter-spacing:-.015em;color:var(--cream)}
+  .wev span{display:block;font-family:var(--mono);font-size:9.5px;color:var(--cream-4);margin-top:2px;font-weight:600}
+  .wev.mine{background:rgba(235,183,83,.2)}
+  .wev.mine b{color:var(--gold-2)}
+  .wcol .none{display:block;font-size:11.5px;color:var(--cream-4);font-weight:500}}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
 .chips button{background:var(--t1);color:var(--cream-3);font-size:13px;padding:6px 12px;border-radius:999px;
   display:flex;align-items:center;gap:7px;transition:.18s;font-weight:600}
@@ -301,10 +305,14 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
   font-size:15px;font-weight:700;text-align:left;line-height:1.3;text-decoration:none;display:block;
   letter-spacing:-.02em;transition:background .16s,transform .16s var(--ease)}
 .tilegrid button:hover,.tilegrid a:hover{background:var(--t2);transform:translateY(-2px)}
-.tilegrid .fresh{grid-column:1/-1;background:linear-gradient(100deg,var(--gold),#F3C86E);color:var(--gold-ink)}
-.tilegrid .fresh b{font-family:var(--display);font-size:19px;font-weight:600;letter-spacing:-.03em;display:block}
-.tilegrid .fresh small{color:rgba(58,39,0,.78);font-weight:600}
-.tilegrid .fresh:hover{background:linear-gradient(100deg,#F3C86E,var(--gold-2))}
+.fresh{display:flex;align-items:center;gap:14px;background:linear-gradient(100deg,var(--gold),#F5CE76);
+  color:var(--gold-ink);border-radius:var(--r);padding:13px 16px;margin-top:14px;text-decoration:none;
+  transition:transform .18s var(--ease),background .18s}
+.fresh:hover{transform:translateY(-2px);background:linear-gradient(100deg,#F5CE76,var(--gold-2))}
+.fresh .t{flex:1;min-width:0}
+.fresh b{display:block;font-family:var(--display);font-size:18px;font-weight:600;letter-spacing:-.032em}
+.fresh small{display:block;font-size:12.5px;color:rgba(58,39,0,.76);font-weight:600;margin-top:2px;line-height:1.42}
+.fresh .arw{flex:0 0 auto;font-size:17px;font-weight:700}
 .tilegrid small{display:block;font-weight:500;font-size:12px;color:var(--cream-4);margin-top:4px;line-height:1.42}
 .linkcard{display:flex;gap:13px;align-items:center;background:var(--t1);border-radius:var(--r2);padding:14px 16px;
   margin-bottom:6px;text-decoration:none;color:var(--cream);transition:background .16s,transform .16s var(--ease)}
@@ -405,6 +413,14 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
   font-size:13px;color:var(--cream-3);font-weight:600;margin-bottom:12px}
 .upl.done{color:var(--gold-2)}
 .uplshot{width:100%;border-radius:var(--r2);margin-bottom:8px;display:block}
+.boscale{display:flex;align-items:flex-end;gap:10px;padding:0 11px 4px}
+.boscale .bobar{position:relative;height:16px;background:none;overflow:visible}
+.boscale i{position:absolute;bottom:0;transform:translateX(-50%);font-family:var(--mono);font-size:9px;
+  letter-spacing:.04em;color:var(--cream-4);font-weight:700;font-style:normal;white-space:nowrap;
+  padding-bottom:6px}
+.boscale i::after{content:"";position:absolute;left:50%;bottom:0;width:1px;height:4px;
+  background:rgba(255,255,255,.22)}
+@media(max-width:480px){.boscale i:nth-child(2n){display:none}}
 .bocal{display:grid;gap:3px;margin-bottom:12px}
 .boday{display:flex;align-items:center;gap:10px;background:var(--t1);border-radius:var(--r3);padding:7px 11px}
 .boday.today{background:rgba(235,183,83,.16)}
@@ -478,17 +494,22 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 #boot::before{content:"";position:absolute;inset:0;
   background:radial-gradient(760px 460px at 78% -10%, rgba(235,183,83,.16), transparent 58%),
     linear-gradient(172deg,#B4141B 0%,#8E0F14 48%,#5B070C 100%)}
-.bootin{position:relative;text-align:center;width:min(280px,74vw)}
-.ring4{position:absolute;left:50%;top:34px;width:132px;height:132px;margin:-66px 0 0 -66px;pointer-events:none}
+.bootin{position:relative;text-align:center;width:min(280px,74vw);display:flex;flex-direction:column;
+  align-items:center;gap:22px}
+/* the rings belong to the crest and nothing else, so they live in a box the
+   crest owns rather than floating over whatever is underneath */
+.crestwrap{position:relative;width:110px;height:110px;display:grid;place-items:center}
+.ring4{position:absolute;inset:0;pointer-events:none}
 .ring4 i{position:absolute;inset:0;border-radius:50%;border:2px solid transparent;display:block}
-.ring4 i:first-child{border-top-color:rgba(252,245,238,.9);animation:spin 1.15s linear infinite}
-.ring4 i:last-child{inset:11px;border-bottom-color:rgba(235,183,83,.75);animation:spin 1.9s linear infinite reverse}
-#boot .crest.big{position:relative;margin:0 auto 22px;display:block}
+.ring4 i:first-child{border-top-color:rgba(252,245,238,.85);animation:spin 1.15s linear infinite}
+.ring4 i:last-child{inset:10px;border-bottom-color:rgba(235,183,83,.7);animation:spin 1.9s linear infinite reverse}
+#boot .crest.big{position:relative;width:62px;height:62px;flex-basis:62px;margin:0;display:block}
 .bootline{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;
   color:var(--gold-2);font-weight:700;min-height:17px}
-.loadtrack{display:block;height:3px;border-radius:3px;background:rgba(0,0,0,.3);overflow:hidden;margin-top:18px}
+.loadtrack{display:block;height:3px;border-radius:3px;background:rgba(0,0,0,.3);overflow:hidden;
+  width:100%;margin:0}
 .loadtrack i{display:block;height:100%;width:8%;border-radius:3px;background:var(--gold);transition:width .6s var(--ease)}
-.bootslow{margin-top:16px;font-size:13px;color:var(--cream-3);line-height:1.55;font-weight:500}
+.bootslow{margin:0;font-size:13px;color:var(--cream-3);line-height:1.55;font-weight:500}
 /* the skeleton a section wears while it waits */
 .sk{background:var(--t1);border-radius:var(--r2);animation:glow 1.4s ease-in-out infinite}
 .skwall{height:120px;border-radius:var(--r);margin-bottom:8px}
@@ -560,6 +581,7 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
   text-transform:uppercase;padding:2px 9px;border-radius:999px;margin-left:8px;vertical-align:3px}
 .stamp.doing{background:rgba(79,200,148,.26);color:#B7F0D6}
 .stamp.done{background:var(--t2);color:var(--cream-3)}
+.stamp.pending{background:rgba(99,173,238,.26);color:#CFE6FA}
 .stamp.no{background:rgba(232,83,92,.26);color:#FFD9DB}
 .bar{height:4px;border-radius:4px;background:rgba(0,0,0,.34);overflow:hidden;margin-top:10px}
 .bar i{display:block;height:100%;background:var(--gold);transition:width .5s var(--ease)}
@@ -593,8 +615,11 @@ nav .railtop{display:none}
   nav .railtop{display:flex;align-items:center;gap:10px;padding:2px 9px 18px}
   nav .railtop .crest{width:34px;height:34px;flex-basis:34px}
   /* the rail carries the crest, so the bar above the page does not repeat it */
-  header .crest,header .wm i{display:none}
-  .hbar{padding-top:12px}
+  /* the rail already says who this is, so the bar above the page carries
+     nothing but the two buttons */
+  header .crest,header .wm{display:none}
+  .hbar{padding:10px 38px 12px;justify-content:flex-end}
+  header{background:linear-gradient(180deg,rgba(72,5,10,.86),rgba(72,5,10,0))}
   nav .railtop b{font-family:var(--display);font-size:15px;font-weight:600;letter-spacing:-.03em;line-height:1.1}
   nav .railtop i{display:block;font-style:normal;font-size:8.5px;color:var(--gold-2);letter-spacing:.16em;
     text-transform:uppercase;margin-top:3px;font-weight:700}
@@ -723,8 +748,8 @@ code{font-family:var(--mono);font-size:12.5px;background:rgba(0,0,0,.3);padding:
 
 <div id="boot">
   <div class="bootin">
-    <span class="ring4"><i></i><i></i></span>
-    <img class="crest big" id="crestBoot" alt="Jesus College MCR">
+    <span class="crestwrap"><span class="ring4"><i></i><i></i></span>
+      <img class="crest big" id="crestBoot" alt="Jesus College MCR"></span>
     <div class="bootline" id="bootLine">Waking the porters</div>
     <span class="loadtrack"><i id="bootBar"></i></span>
     <div class="bootslow" id="bootSlow" hidden>Still waiting. The server sleeps between visits and takes a moment to wake the first time each day.</div>
@@ -745,7 +770,6 @@ code{font-family:var(--mono);font-size:12.5px;background:rgba(0,0,0,.3);padding:
 
   <!-- ===================== TODAY ===================== -->
   <section id="v-today">
-    <div class="vh"><h2>Your <i>pigeonhole</i></h2><span class="note" id="seasonNote"></span></div>
     <div id="crow"></div>
     <div id="todayUrgent"></div>
     <div id="bumpsCard"></div>
@@ -785,8 +809,7 @@ code{font-family:var(--mono);font-size:12.5px;background:rgba(0,0,0,.3);padding:
   <!-- ===================== BUSINESS ===================== -->
   <section id="v-biz" hidden>
     <div class="vh"><h2>MCR <i>business</i></h2><span class="note">Meetings, motions and the vote</span>
-      <div class="right"><a class="btn ghost sm" href="https://jcollegemcr.co.uk/treasury" target="_blank" rel="noopener">Claim money back</a>
-        <button class="btn gold sm" id="bNewIdea">Suggest something</button>
+      <div class="right"><button class="btn gold sm" id="bNewIdea">Suggest something</button>
         <button class="btn ghost sm" id="bNewMotion">Motion</button>
         <button class="btn ghost sm" id="bNewPoll" data-committee hidden>Poll</button></div></div>
     <div id="bizMoney"></div>
@@ -912,7 +935,7 @@ code{font-family:var(--mono);font-size:12.5px;background:rgba(0,0,0,.3);padding:
 </div>
 
 <nav id="nav" aria-label="Sections" hidden>
-  <div class="railtop"><img class="crest" id="crestRail" alt=""><span><b>Jesus MCR</b><i id="railYear"></i></span></div>
+  <div class="railtop"><img class="crest" id="crestRail" alt="Jesus College MCR"><span><b>Jesus MCR</b><i id="railYear"></i></span></div>
   <button class="tabbtn" data-view="today" aria-current="true"><svg viewBox="0 0 24 24"><path d="M4 15a8 8 0 0 1 16 0"/><path d="M12 3v3M4.2 6.6l2.1 2.1M19.8 6.6l-2.1 2.1M2 15h20"/></svg>Today<span class="badge" id="bToday_" hidden>0</span></button>
   <button class="tabbtn" data-view="lodge"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>Lodge<span class="badge" id="bdgLodge" hidden>0</span></button>
   <button class="tabbtn" data-view="gifts"><svg viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="12" rx="1.6"/><path d="M2 6.5h20V9H2zM12 6.5V21"/><path d="M12 6.5S10.6 3 8.6 3a2 2 0 1 0 0 4M12 6.5S13.4 3 15.4 3a2 2 0 1 1 0 4"/></svg>Second life<span class="badge" id="bdgGifts" hidden>0</span></button>
@@ -952,7 +975,7 @@ code{font-family:var(--mono);font-size:12.5px;background:rgba(0,0,0,.3);padding:
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbxr7MJ6HYFsyaaPfo9zL845mIPNdCpKTMlrfazApPfDxCen0dGhhfiFoInavn-MMkK3/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycby6dV5xPxXoYIJLB2_ivjEd9WNzljxYvdAinyJJs0FqdvH7By8BnigOTXfaRulu-3tFeQ/exec";
 
 /* JavaScript is alive, so the ring painted before the page was parsed can go.
    It is a pseudo element on <html>, so nothing else can remove it. */
@@ -1420,9 +1443,12 @@ function cachedState(){
   }catch(e){ return null; }
 }
 async function boot(fresh){
-  [["crestBoot","big"],["crestTop",""],["crestGate",""]].forEach(function(c){
-    const el = $(c[0]);
-    if (el) el.outerHTML = '<img class="crest ' + c[1] + '" id="' + c[0] + '" src="' + CREST + '" alt="Jesus College MCR">';
+  /* Set the source rather than replacing the node. Swapping outerHTML threw
+     away the rings the crest sits inside, and it never touched the rail at all,
+     which is why the sidebar showed an empty box. */
+  ["crestBoot","crestTop","crestGate","crestRail"].forEach(function(id){
+    const el = $(id);
+    if (el && !el.getAttribute("src")) el.setAttribute("src", CREST);
   });
   loadPhotos();
   if (!getToken()){ bootTalk(false); return signedOut(); }
@@ -1600,6 +1626,14 @@ function skyAt(h){
   return { top: mix(a[1], b[1]), band: mix(a[2], b[2]), low: mix(a[3], b[3]),
     height: a[4] + (b[4] - a[4]) * t, sun: mix(a[5], b[5]) };
 }
+/* Straight under the greeting, because the people who need it are the ones
+   who have just arrived and will not go looking. */
+function freshCard(){
+  return '<a class="fresh" href="https://jcollegemcr.co.uk" target="_blank" rel="noopener">' +
+    '<span class="t"><b>Looking for Freshers\u2019 Fortnight?</b>' +
+    "<small>Your first two weeks live over there: every event, every sign up, the map and the lot.</small></span>" +
+    '<span class="arw">&#8599;</span></a>';
+}
 function renderCrow(){
   const now = new Date();
   const hm = londonStr(now).slice(11);
@@ -1659,10 +1693,13 @@ function renderCrow(){
   const mtg = (S.meetings || []).filter(m => m.date === t)[0];
   if (mtg) bits.push('<span class="warn">' + esc(mtg.title) + " at " + esc(clock(mtg.start)) + "</span>");
 
+  const sea = seasonOf(t), wk = termWeek(t);
   put("crow", '<div class="wall">' +
-    '<div class="when">' + esc(when) + " &middot; " + esc(longDate(t)) + "</div>" +
-    "<h3>" + esc(hello) + ", <em>" + esc(name) + "</em></h3>" +
+    '<div class="when">' + esc(longDate(t)) + " &middot; " + esc(when.toLowerCase()) +
+      '<em>' + esc(sea.name) + (wk ? ", " + esc(wk) : "") + "</em></div>" +
+    "<h3>Your <i>pigeonhole</i><em>" + esc(hello) + ", " + esc(name) + "</em></h3>" +
     '<p class="line">' + esc(line) + "</p>" +
+    freshCard() +
     '<div class="slots">' + slots + "</div>" +
     '<div class="state">' + bits.join("") + "</div></div>");
 }
@@ -1733,9 +1770,6 @@ function renderTodayQuick(){
   const link = k => (S.links || []).filter(l => l.key === k)[0];
   const permit = link("permit"), fix = link("maintenance");
   put("todayQuick", '<div class="grp">Quick things</div><div class="tilegrid">' +
-    '<a href="https://jcollegemcr.co.uk" target="_blank" rel="noopener" class="fresh">' +
-      "<b>Are you a fresher?</b><small>Freshers\u2019 Fortnight lives over here, with the whole of your first " +
-      "two weeks in it.</small></a>" +
     '<button data-goto="ask">Ask somebody</button>' +
     '<button data-room>Put something on in the MCR</button>' +
     (fix ? '<a href="' + esc(fix.url) + '" target="_blank" rel="noopener">Report something broken</a>' : "") +
@@ -1768,9 +1802,8 @@ function weekGrid(ws){
       (list.length ? list.map(e => {
         const mine = ["going","waitlist"].indexOf(myStatus(e.id)) >= 0;
         return '<button class="wev' + (mine ? " mine" : "") + '" data-open="' + esc(e.id) +
-          '" title="' + esc(e.title) + '" style="color:var(--' + (catOf(e) || "meeting") +
-          ');border-left-color:var(--' + ({social:"gold",sport:"moss",welfare:"sky",academic:"plum",
-            food:"clay",member:"rose"}[catOf(e)] || "cream-3") + ')"><b>' + esc(e.title) +
+          '" title="' + esc(e.title) + " at " + esc(clock(e.start)) +
+          '" style="color:var(--' + (catOf(e) || "meeting") + ')"><b>' + esc(e.title) +
           "</b><span>" + esc(clock(e.start)) + "</span></button>";
       }).join("") : '<div class="none">Nothing</div>') + "</div>";
   }).join("") + "</div>";
@@ -1782,6 +1815,38 @@ function weekGrid(ws){
 /* Anybody on the committee can keep their own entry right: their photograph,
    the spelling of their name, a role that has changed hands. An administrator
    can edit anyone. */
+/* Everything the committee can see, the committee can change, from where it
+   is rather than from a settings screen somewhere else. */
+function openClubEditor(id){
+  const c = (S.clubs || []).filter(x => x.id === id)[0] || {};
+  sheet(c.name ? "Edit " + c.name : "Add a club",
+    '<label class="f"><span>Name</span><input id="clName" value="' + esc(c.name || "") + '"></label>' +
+    '<div class="f2"><label class="f"><span>When</span><input id="clMeets" value="' + esc(c.meets || "") +
+      '" placeholder="Sundays, 2pm"></label>' +
+    '<label class="f"><span>Where</span><input id="clWhere" value="' + esc(c.where || "") + '"></label></div>' +
+    '<label class="f"><span>Who runs it</span><input id="clLead" value="' + esc(c.lead || "") + '"></label>' +
+    '<label class="f"><span>Anything else</span><textarea id="clNote" style="min-height:70px">' +
+      esc(c.note || "") + "</textarea></label>" +
+    '<div class="acts"><button class="btn gold" id="clGo">Save</button>' +
+      (c.id && isAdmin() ? '<button class="btn ghost" id="clDel">Delete</button>' : "") + "</div>",
+    el => {
+      el.querySelector("#clGo").addEventListener("click", async e => {
+        const b = e.currentTarget; spin(b, "Saving");
+        try{
+          const d = await api("saveClub", { club: { id: c.id || "", name: $("clName").value,
+            meets: $("clMeets").value, where: $("clWhere").value, lead: $("clLead").value,
+            note: $("clNote").value } });
+          S.clubs = d.clubs; closeSheet(); renderLodge(); toast("Saved.");
+        }catch(err){ unspin(b); fail(err); }
+      });
+      const del = el.querySelector("#clDel");
+      if (del) del.addEventListener("click", async () => {
+        if (!confirm("Remove " + c.name + "?")) return;
+        S.clubs = (await api("deleteClub", { id: c.id })).clubs;
+        closeSheet(); renderLodge();
+      });
+    });
+}
 function openWhoEditor(key){
   const p = (S.committee || []).filter(x => (x.email || x.role) === key)[0];
   if (!p) return;
@@ -1988,15 +2053,17 @@ function lodgeGuides(){
 }
 function lodgeSport(){
   const c = S.clubs || [];
+  const admin = isCommittee()
+    ? '<div class="acts"><button class="btn ghost sm" data-editclub="">Add a club</button></div>' : "";
   return '<div class="card"><p>Everything the MCR runs, plus the college clubs that take postgraduates. ' +
     "If the thing you want does not exist, the Sports and Societies Officer can usually start it.</p></div>" +
     (c.length ? '<div class="tilegrid">' + c.map(x =>
       '<button data-ask="sport" data-subject="' + esc("Joining " + x.name) + '">' + esc(x.name) +
-      "<small>" + esc([x.meets, x.where].filter(Boolean).join(" &middot; ") || "Ask to join") + "</small></button>").join("") +
-      "</div>" : "") +
-    (c.filter(x => x.note).length ? c.filter(x => x.note).map(x =>
-      '<div class="card"><h3>' + esc(x.name) + "</h3><p>" + esc(x.note) + "</p>" +
-      (x.lead ? '<div class="who">' + esc(x.lead) + "</div>" : "") + "</div>").join("") : "");
+      "<small>" + esc([x.meets, x.where, x.note].filter(Boolean).join(" \u00b7 ") || "Ask to join") +
+      "</small>" + "</button>").join("") + "</div>" : "") +
+    (isCommittee() ? '<div class="acts">' + c.map(x =>
+      '<button class="btn ghost sm" data-editclub="' + esc(x.id) + '">Edit ' + esc(x.name) + "</button>").join("") +
+      '<button class="btn gold sm" data-editclub="">Add a club</button></div>' : "");
 }
 /* When the room is free, drawn rather than described. Three weeks across,
    anything already on shaded in, so somebody can pick a slot before they ask
@@ -2017,6 +2084,11 @@ function lodgeRoom(){
       esc(((S.links || []).filter(l => l.key === "permit")[0] || {}).url || "#") +
       '" target="_blank" rel="noopener">The permit form</a></div></div>' +
     '<div class="grp"><b>The next three weeks</b></div>' +
+    '<div class="boscale"><span class="bod"></span><span class="bobar">' +
+      [10, 12, 14, 16, 18, 20, 22].map(h =>
+        '<i style="left:' + ((h - 8) / 16 * 100).toFixed(1) + '%">' +
+        (h === 12 ? "noon" : h > 12 ? (h - 12) + "pm" : h + "am") + "</i>").join("") +
+      '</span><span class="bow"></span></div>' +
     '<div class="bocal">' + days.map(d => {
       const on = byDay[d] || [];
       return '<div class="boday' + (on.length ? " busy" : "") + (d === t ? " today" : "") + '">' +
@@ -2272,17 +2344,20 @@ function renderWho(){
    answer in public. A suggestion box nobody replies to is a bin.
    ============================================================ */
 function renderTreasury(){
-  put("bizMoney", '<a class="linkcard" href="https://jcollegemcr.co.uk/treasury" target="_blank" rel="noopener">' +
-    '<div class="t"><b>Claim money back</b><p>Anything you have paid for on behalf of the MCR: a receipt, ' +
-    "the amount, and where to send it. The Treasurer pays out fortnightly.</p>" +
-    '<span class="who">The Treasurer</span></div><span class="arw">&#8599;</span></a>');
+  put("bizMoney", '<a class="fresh" style="margin-top:0" href="https://jcollegemcr.co.uk/treasury" ' +
+    'target="_blank" rel="noopener"><span class="t"><b>Claim money back</b>' +
+    "<small>Anything you have paid for on the MCR\u2019s behalf. A receipt, the amount, and where to send " +
+    "it. The Treasurer pays out fortnightly.</small></span><span class=\"arw\">&#8599;</span></a>");
 }
 function renderIdeas(){
   const list = S.ideas || [], need = S.backingToAnswer || 10;
-  const lab = { open:"", doing:"The committee is on it", done:"Done", no:"Not this time" };
+  const lab = { open:"", pending:"Waiting for the committee", doing:"The committee is on it",
+    done:"Done", no:"Not this time" };
   put("bizIdeas", '<div class="grp">What the MCR should buy, run or change</div>' +
     '<div class="card"><p class="lede">Put something up and other members back it. Once ' + need +
-    " have, the committee has to answer it here, in public, with a reason.</p>" +
+    " have, the committee has to answer it here, in public, with a reason." +
+    (isCommittee() ? "" : " Anything you put up is read by the committee before the rest of the MCR sees it.") +
+    "</p>" +
     '<div class="acts"><button class="btn gold sm" data-newidea>Suggest something</button></div></div>' +
     (list.length ? list.map(i =>
       '<div class="idea ' + esc(i.status) + '">' +
@@ -2294,13 +2369,16 @@ function renderIdeas(){
         " &middot; " + esc(i.name) + "</span>" +
       "<b>" + esc(i.title) + "</b>" + (i.body ? "<p>" + esc(i.body) + "</p>" : "") +
       (i.status !== "open" ? '<span class="stamp ' + esc(i.status) + '">' +
-        (i.status === "doing" ? "In hand" : i.status === "done" ? "Done" : "Declined") + "</span>" : "") +
+        (i.status === "pending" ? "Waiting" : i.status === "doing" ? "In hand"
+          : i.status === "done" ? "Done" : "Declined") + "</span>" : "") +
       (i.status === "open"
         ? '<div class="bar"><i style="width:' + Math.min(100, Math.round(i.backing / need * 100)) + '%"></i></div>' +
           '<span class="ref">' + (i.needs ? i.needs + " more and the committee has to answer" : "The committee owes an answer") + "</span>"
         : '<div class="msg"><span class="m">' + esc(lab[i.status]) + "</span>" + esc(i.reply) + "</div>") +
       '<div class="acts">' +
         (i.own && i.status === "open" ? '<button class="btn ghost sm" data-dropidea="' + esc(i.id) + '">Take it down</button>' : "") +
+        (isCommittee() && i.status === "pending"
+          ? '<button class="btn gold sm" data-setidea="' + esc(i.id) + '" data-s="open">Put it up</button>' : "") +
         (isCommittee() ? ["doing","done","no"].map(k =>
           '<button class="btn ghost sm" data-setidea="' + esc(i.id) + '" data-s="' + k + '"' +
           (i.status === k ? " disabled" : "") + ">" +
@@ -2488,24 +2566,28 @@ function renderQueue(){
   if (!isCommittee()) return;
   const all = S.deskTickets || [];
   const me = S.me.email;
-  const mineT = all.filter(t => t.assignee === me && t.status !== "closed");
+  const not = t => t.status !== "closed" && t.status !== "archived";
+  const mineT = all.filter(t => t.assignee === me && not(t));
   const open = all.filter(t => t.status === "open");
-  const rooms = all.filter(t => t.category === "event" && t.status !== "closed");
-  const welf = all.filter(t => t.welfare && t.status !== "closed");
+  const rooms = all.filter(t => t.category === "event" && not(t));
+  const welf = all.filter(t => t.welfare && not(t));
+  const live = all.filter(t => t.status !== "archived");
+  const arch = all.filter(t => t.status === "archived");
   const tabs = [["mine","Mine",mineT.length],["open","Needs an answer",open.length],
     ["rooms","Rooms",rooms.length],["welfare","Welfare",welf.length],
-    ["all","Everything",all.length]];
+    ["all","Everything",live.length],["archived","Archive",arch.length]];
   put("inboxSeg", tabs.map(t =>
     '<button data-inbox="' + t[0] + '" aria-pressed="' + (inboxTab === t[0]) + '">' + esc(t[1]) +
     (t[2] ? " &middot; " + t[2] : "") + "</button>").join(""));
-  const list = { mine: mineT, open: open, rooms: rooms, welfare: welf, all: all }[inboxTab] || all;
-  put("inboxNote", all.filter(t => t.status !== "closed").length + " open &middot; " +
+  const list = { mine: mineT, open: open, rooms: rooms, welfare: welf, all: live, archived: arch }[inboxTab] || live;
+  put("inboxNote", live.filter(t => t.status !== "closed").length + " open &middot; " +
     mineT.length + " with you");
   put("inboxList", list.length ? list.map(inboxRow).join("")
     : '<div class="card"><p>Nothing here. Rare, and worth enjoying.</p></div>');
 }
 function inboxRow(t){
-  const lab = { open:"Open", college:"With College", answered:"Answered", closed:"Closed" };
+  const lab = { open:"Open", college:"With College", answered:"Answered", closed:"Closed",
+    archived:"Archived" };
   const room = (S.allRooms || []).filter(r => r.id === t.id)[0];
   const opened = inboxOpen === t.id;
   const last = t.messages[t.messages.length - 1];
@@ -2534,7 +2616,7 @@ function inboxRow(t){
           S.officers.map(o => '<option value="' + esc(o.email) + '"' +
             (o.email === t.assignee ? " selected" : "") + ">" + esc(o.name) + " &middot; " +
             esc(o.role) + "</option>").join("") + "</select>" : "") +
-        ["open","college","answered","closed"].map(k =>
+        ["open","college","answered","closed","archived"].map(k =>
           '<button class="btn ghost sm" data-tset="' + esc(t.id) + '" data-s="' + k + '"' +
           (t.status === k ? " disabled" : "") + ">" + esc(lab[k]) + "</button>").join("") +
         "</div></div></div>" : "") +
@@ -2778,8 +2860,7 @@ function termWeek(date){
 function applySeason(){
   const t = todayLondon(), s = seasonOf(t), wk = termWeek(t);
   document.body.setAttribute("data-season", s.key);
-  const el = $("seasonNote");
-  if (el) el.innerHTML = '<span class="season">' + esc(s.name) + (wk ? " &middot; " + esc(wk) : "") + "</span>";
+  /* the term is drawn inside the greeting now, so this only sets the skin */
 }
 
 /* ============================================================
@@ -3170,7 +3251,7 @@ document.addEventListener("click", async e => {
     "[data-skip],[data-editser],[data-second],[data-vote],[data-mset],[data-code],[data-checkin]," +
     "[data-delupdate],[data-rosteredit],[data-rosterdel],[data-newidea],[data-back]," +
     "[data-setidea],[data-dropidea],[data-pollvote],[data-pollclose]," +
-    "[data-marketnew],[data-markettake],[data-marketdrop],[data-bumpedit],[data-gk],[data-gift],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
+    "[data-marketnew],[data-markettake],[data-marketdrop],[data-bumpedit],[data-gk],[data-gift],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
   if (!t) return;
   const d = t.dataset;
   try{
@@ -3205,6 +3286,7 @@ document.addEventListener("click", async e => {
     }
     if (d.hwk){ hourWeek = Math.max(0, hourWeek + (+d.hwk)); renderHours(); return; }
     if (t.hasAttribute("data-newevent")) return openEventEditor("");
+    if (t.hasAttribute("data-editclub")) return openClubEditor(d.editclub);
     if (d.noticeok){ S.notices = (await api("noticeDecide", { id: d.noticeok, ok: true })).notices;
       renderLodge(); renderTodayUrgent(); return toast("Up on the board."); }
     if (d.editwho) return openWhoEditor(d.editwho);
@@ -3223,9 +3305,12 @@ document.addEventListener("click", async e => {
     if (d.back){ S.ideas = (await api("ideaBack", { id: d.back })).ideas; renderIdeas(); renderCrow(); return; }
     if (d.dropidea){ S.ideas = (await api("ideaDrop", { id: d.dropidea })).ideas; renderIdeas(); return; }
     if (d.setidea){
-      const why = d.s === "doing" ? prompt("A line on what you are doing. People see this.")
-                                  : prompt("Why. People see this, and a reason is the point.");
-      if (why === null) return;
+      let why = "";
+      if (d.s !== "open"){
+        why = d.s === "doing" ? prompt("A line on what you are doing. People see this.")
+                              : prompt("Why. People see this, and a reason is the point.");
+        if (why === null) return;
+      }
       S.ideas = (await api("ideaSet", { id: d.setidea, status: d.s, reply: why })).ideas;
       renderIdeas(); await refresh(false); return;
     }
