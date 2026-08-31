@@ -657,16 +657,18 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .swap.editing{background:var(--cream);color:var(--ink);
   box-shadow:0 12px 26px -18px rgba(20,1,3,.75);padding:var(--pad)}
 .swap.editing::before{background:var(--gold)}
+.swap.editing{max-width:44rem}
 .swap.editing .swtop{display:grid;grid-template-columns:1fr;gap:var(--g2);align-items:start}
-@media(min-width:34rem){ .swap.editing .swtop{grid-template-columns:1fr 9.5rem} }
+@media(min-width:34rem){ .swap.editing .swtop{grid-template-columns:minmax(0,1fr) 9.5rem} }
 .swap.editing .swside{flex:none;text-align:left;display:grid;gap:2px}
-.swap.editing .sf{background:#F6EEE6;color:var(--ink);border:1px solid var(--cream-3);
-  border-radius:11px;padding:11px 13px;margin-bottom:9px;font-weight:600}
+.swap.editing .sf{background:#FFFDFA;color:var(--ink);border:1.5px solid rgba(180,20,27,.22);
+  border-radius:11px;padding:11px 13px;margin-bottom:9px;font-weight:600;width:100%;max-width:100%}
 .swap.editing .sf::placeholder{color:var(--ink-soft);opacity:.85;font-weight:500}
 .swap.editing .sf:focus{outline:0;border-color:var(--crimson);background:#fff}
 .swap.editing .swside .sf{text-align:left;margin-bottom:2px}
 .swap.editing .sfl{color:var(--ink-soft);text-align:left;margin-bottom:11px;font-size:.6rem}
-.swap.editing .swrow{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.swap.editing .swrow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:9px}
+.swap.editing input[type="date"],.swap.editing input[type="time"]{min-width:0}
 .swap.editing .swrow .sf{margin-bottom:9px}
 .swap.editing input[data-f="college"]{font-size:1.2rem;letter-spacing:-.03em;color:var(--crimson-3)}
 .swap.editing .swlogo-row{display:flex;align-items:center;gap:12px;margin:4px 0 12px}
@@ -1190,6 +1192,22 @@ nav .railtop{display:none}
   .repblock{background:#fff!important;border:1pt solid #ddd;page-break-inside:avoid}
 }
 
+.permitnote{background:#FFF8E8;border-radius:10px;padding:10px 12px;font-size:.78rem;
+  color:var(--ink);line-height:1.55;margin-top:9px}
+.permitnote b{color:var(--crimson)}
+
+/* A place held but not yet paid for. Said in the college red, because it is
+   the one thing on the card somebody has to act on, with the account details
+   underneath so nobody has to go looking. */
+.swyou.held .yt.owed b,.yt.owed b{color:var(--crimson)}
+.yt.owed span{color:var(--crimson-3)}
+.bankbox{display:grid;gap:5px;background:#FFF4F2;border-radius:11px;padding:11px 13px;margin-top:9px}
+.bankbox .k{font-family:var(--mono);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--crimson);font-weight:700}
+.bankbox span{display:flex;gap:8px;font-size:.8rem;color:var(--ink)}
+.bankbox span b{font-family:var(--mono);font-size:.66rem;color:var(--ink-soft);min-width:5.5rem;font-weight:700}
+.bankbox .hint{display:block;font-size:.74rem;color:var(--ink-soft);margin-top:2px}
+
 /* the direction of travel, and the committee's answer beneath it */
 .move{font-family:var(--mono);font-size:.66rem;font-weight:700;border-radius:7px;padding:2px 6px}
 .move.up{background:rgba(44,107,79,.16);color:#1E6B47}
@@ -1204,9 +1222,13 @@ nav .railtop{display:none}
    five faces run from crimson to green, which is the only place in the app
    colour is used to mean good or bad, and the run of months underneath is a
    plain bar chart: the shape is the argument. */
-.moods{display:grid;grid-template-columns:repeat(auto-fill,minmax(15rem,1fr));gap:var(--g);margin-bottom:var(--g3)}
-.mood{background:var(--cream);color:var(--ink);border-radius:var(--r);padding:var(--pad);
-  box-shadow:0 8px 20px -14px rgba(20,1,3,.7);display:flex;flex-direction:column;gap:9px}
+.moods{display:grid;grid-template-columns:repeat(auto-fill,minmax(12.5rem,1fr));gap:9px;margin-bottom:var(--g3)}
+.mood{background:var(--cream);color:var(--ink);border-radius:var(--r2);padding:12px 13px 11px;
+  box-shadow:0 8px 20px -14px rgba(20,1,3,.7);display:flex;flex-direction:column;gap:7px}
+.mood .mh b{font-size:.95rem}
+.mood .note{font-size:.71rem}
+.mood .run{height:2.6rem}
+.mood .mfoot{font-size:.66rem}
 .mood.said{box-shadow:0 8px 20px -14px rgba(20,1,3,.7),inset 0 0 0 1.6px var(--gold)}
 .mood .mh{display:flex;align-items:baseline;gap:10px}
 .mood .mh b{font-family:var(--display);font-size:1.02rem;font-weight:600;letter-spacing:-.03em;flex:1}
@@ -1220,8 +1242,20 @@ nav .railtop{display:none}
   font-weight:700;transition:.15s;cursor:pointer;border:0;font-family:var(--ui)}
 .faces button:hover{background:#F6EEE6;transform:translateY(-1px)}
 .faces button i{display:block;width:14px;height:14px;border-radius:50%;opacity:.42;transition:.15s}
-.faces button[aria-pressed="true"]{background:var(--ink);color:var(--cream)}
-.faces button[aria-pressed="true"] i{opacity:1;box-shadow:0 0 0 2px rgba(255,255,255,.35)}
+/* Choosing one should feel like putting a counter down, so the chosen face
+   drops in, the dot swells for a moment, and a ring goes out from it once. */
+.faces button[aria-pressed="true"]{background:var(--ink);color:var(--cream);animation:pick .34s var(--ease)}
+.faces button[aria-pressed="true"] i{opacity:1;box-shadow:0 0 0 2px rgba(255,255,255,.35);animation:swell .34s var(--ease)}
+.faces button[aria-pressed="true"]::after{content:"";position:absolute;inset:0;border-radius:10px;
+  border:1.5px solid var(--gold);animation:ring .55s var(--ease) forwards;pointer-events:none}
+.faces button{position:relative}
+@keyframes pick{0%{transform:translateY(-3px) scale(.96)}60%{transform:translateY(1px) scale(1.03)}100%{transform:none}}
+@keyframes swell{0%{transform:scale(.4)}65%{transform:scale(1.25)}100%{transform:scale(1)}}
+@keyframes ring{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(1.35)}}
+@media (prefers-reduced-motion:reduce){
+  .faces button[aria-pressed="true"],.faces button[aria-pressed="true"] i,
+  .faces button[aria-pressed="true"]::after{animation:none}
+}
 .faces button:hover i{opacity:.85}
 .faces button:disabled{opacity:.5;cursor:default;transform:none}
 .run{display:flex;align-items:flex-end;gap:4px;height:4rem;padding-top:4px}
@@ -1290,9 +1324,24 @@ nav .railtop{display:none}
   justify-content:center;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:fade .2s ease both}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 @keyframes slideup{from{transform:translateY(18px);opacity:0}to{transform:none;opacity:1}}
-.sheet .inner{background:linear-gradient(178deg,#921017,#63080E);border-radius:18px 18px 0 0;width:100%;
-  max-width:580px;max-height:100%;max-height:100dvh;display:flex;flex-direction:column;
-  box-shadow:0 -14px 40px rgba(20,1,3,.7);animation:slideup .3s var(--ease) both}
+/* Paper, and narrower than it was. These are short forms, and a wide dark
+   panel made three fields look like a chapter. */
+.sheet .inner{background:var(--cream);color:var(--ink);border-radius:20px 20px 0 0;width:100%;
+  max-width:30rem;max-height:100%;max-height:100dvh;display:flex;flex-direction:column;
+  box-shadow:0 -14px 40px rgba(20,1,3,.55);animation:slideup .3s var(--ease) both}
+@media(min-width:34rem){ .sheet{align-items:center} .sheet .inner{border-radius:20px} }
+.sheet h3{color:var(--crimson-3)}
+.sheet p,.sheet .lede{color:var(--ink-soft)}
+.sheet .card{background:var(--cream-2);color:var(--ink)}
+.sheet .card p{color:var(--ink-soft)}
+.sheet .f span{color:var(--ink-soft)}
+.sheet .f input,.sheet .f textarea,.sheet .f select{background:#F6EEE6;color:var(--ink);
+  border:1px solid var(--cream-3);border-radius:11px}
+.sheet .f input:focus,.sheet .f textarea:focus{border-color:var(--crimson);background:#fff;outline:0}
+.sheet .foot{background:var(--cream);border-top:1px solid var(--cream-3)}
+.sheet .btn.ghost{color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--cream-3)}
+.sheet .sback{color:var(--ink-soft)}
+.sheet .check{color:var(--ink)}
 .sheet .scroll{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
   padding:22px 22px 8px;flex:1;min-height:0}
 /* the buttons sit on the floor of the sheet and never scroll away, which is
@@ -1616,7 +1665,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbzcnA7KiIGDkD--3JG6fW0CRLmA-wNmupii4oz2Ka871bJh_uBtflcj2OWjzz8wH0SlMA/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzN3V9yy0DFBysTVfP04jEJV8UneYHMkC_Mq7-sDKXiwLtjzLZ8t0sb-huWK0_p8DYVCg/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -1625,7 +1674,7 @@ const BOOK_REGISTER = "https://jcollegemcr.co.uk/register";
 /* The build this page was written against. If the server reports a different
    one, the deployment answering is not this code, and the membership check it
    is running is whatever was deployed last. Shown under 'What is wrong?'. */
-const EXPECT_BUILD = "chimney-18";
+const EXPECT_BUILD = "chimney-19";
 
 /* JavaScript is alive, so the ring painted before the page was parsed can go.
    It is a pseudo element on <html>, so nothing else can remove it. */
@@ -2800,11 +2849,13 @@ function renderTodayQuick(){
   const link = k => (S.links || []).filter(l => l.key === k)[0];
   const permit = link("permit"), fix = link("maintenance");
   put("todayQuick", '<div class="grp">Quick things</div><div class="tilegrid">' +
-    '<button data-goto="ask">Ask somebody</button>' +
-    '<button data-room>Put something on in the MCR</button>' +
+    /* Each of these lands on the thing it names rather than on the front of a
+       section somebody then has to find their way around. */
+    '<button data-asktab="new">Ask something</button>' +
+    '<button data-runevent>Suggest running an event with the MCR</button>' +
     (fix ? '<a href="' + esc(fix.url) + '" target="_blank" rel="noopener">Report something broken</a>' : "") +
     (permit ? '<a href="' + esc(permit.url) + '" target="_blank" rel="noopener">Apply for an event permit</a>' : "") +
-    '<button data-goto="who">Who to ask</button></div>');
+    '<button data-asktab="who">Who to ask</button></div>');
 }
 function renderTodayNews(){
   const list = (S.updates || []).slice(0, 5);
@@ -3221,12 +3272,11 @@ function lodgeRoom(){
             '" style="left:' + ((a - 8) / 16 * 100).toFixed(1) + '%;width:' +
             ((z - a) / 16 * 100).toFixed(1) + '%"></i>';
         }).join("") + "</span>" +
-        /* the times it is held, and nothing else: whose party it is, is
-           nobody else's business */
-        '<span class="bow">' + (on.length
-          ? on.slice(0, 2).map(b => esc(clock(b.start)) + "\u2013" + esc(clock(b.end))).join(", ") +
-            (on.length > 2 ? " +" + (on.length - 2) : "")
-          : "") + "</span></div>";
+        /* The times used to be written out beside each bar as well, which on a
+           busy day read as "10:30am-11:30am, 6pm-8pm +1" and looked like a
+           fault. The bar shows when, the scale above says what o'clock, and
+           hovering gives the exact hours. */
+        "</div>";
     }).join("") + "</div>" +
     '<div class="bokey"><span><i class="event"></i>an MCR event</span>' +
     '<span><i class="booking"></i>taken by a member</span>' +
@@ -3349,6 +3399,7 @@ function askRooms(){
    Its own half of the page, so it has room to say where each one has got to and
    to let somebody take one back. A request has three states and they are worth
    distinguishing: waiting on the committee, granted, and refused. */
+const permitUrl = () => ((S.links || []).filter(l => l.key === "permit")[0] || {}).url || "";
 function roomMine(rooms){
   const t = todayLondon();
   const all = (rooms || []).slice().sort((a, b) => String(a.date).localeCompare(String(b.date)));
@@ -3365,10 +3416,19 @@ function roomMine(rooms){
       '<div class="ref">' + esc(longDate(r.date)) + " &middot; " + esc(clock(r.start)) + " to " +
         esc(clock(r.end)) + (r.venueName ? " &middot; " + esc(r.venueName) : "") + "</div>" +
       (r.reply ? '<div class="msg">' + esc(r.reply) + "</div>" : "") +
+      (r.status === "yes"
+        ? '<div class="permitnote">The room is yours. This is <b>not</b> an event permit: if you are ' +
+          'serving alcohol, expecting a crowd, playing amplified music or running past eleven, the Dean ' +
+          'has to sign one as well.</div>' : "") +
+      '<div class="acts">' +
+      (r.noteUrl ? '<a class="btn cream sm" href="' + esc(r.noteUrl) + '" target="_blank" rel="noopener">' +
+        'Your booking note</a>' : "") +
+      (r.status === "yes" && permitUrl()
+        ? '<a class="btn ghost sm" href="' + esc(permitUrl()) + '" target="_blank" rel="noopener">The permit form</a>' : "") +
       (r.date >= t && r.status !== "no"
-        ? '<div class="acts"><button class="btn ghost sm" data-roomdrop="' + esc(r.id) + '">' +
-          (r.status === "yes" ? "Give it back" : "Withdraw it") + "</button></div>"
-        : "") + "</div>";
+        ? '<button class="btn ghost sm" data-roomdrop="' + esc(r.id) + '">' +
+          (r.status === "yes" ? "Give it back" : "Withdraw it") + "</button>" : "") +
+      "</div></div>";
   };
   return '<div class="acts" style="margin:0 0 14px"><button class="btn gold sm" data-room>Ask for the room</button></div>' +
     (soon.length ? '<div class="grp">Coming up</div>' + soon.map(one).join("") : "") +
@@ -3480,6 +3540,36 @@ function openReply(id){
         closeSheet();
         renderAsk();
         renderQueue();
+      }catch(err){ unspin(b); fail(err); }
+    }));
+}
+/* SUGGEST RUNNING SOMETHING.
+   Not a room booking and not a complaint: somebody with an idea who needs the
+   MCR's money, its room or its name behind them. It lands on the committee's
+   desk as a suggestion, where it is answered in public, rather than in an
+   inbox where it is answered by whoever happens to read it. */
+function openRunEvent(){
+  sheet("Run something with the MCR",
+    '<div class="card"><p>Tell us what you have in mind and we will find the room, the money or the ' +
+    'permit. The MCR would rather pay for your idea than run another quiz.</p>' +
+    '<p class="lede" style="margin-top:8px">This goes to the committee&rsquo;s desk, where it is ' +
+    'answered in public with a reason, so you can see what happened to it.</p></div>' +
+    '<label class="f"><span>What is it</span><input id="reTitle" maxlength="120" ' +
+    'placeholder="A Greek night in the MCR, cooking for about thirty"></label>' +
+    '<label class="f"><span>What you would need from us</span><textarea id="reBody" maxlength="1500" ' +
+    'placeholder="The room on a Friday, about eighty pounds for ingredients, and somebody to sign the permit."></textarea></label>' +
+    '<div class="acts"><button class="btn gold" id="reGo">Send it to the committee</button>' +
+    '<button class="btn ghost" data-close>Cancel</button></div>',
+    el => el.querySelector("#reGo").addEventListener("click", async e => {
+      const b = e.currentTarget;
+      const title = ($("reTitle").value || "").trim();
+      if (!title) return toast("Say what it is, in one line.");
+      spin(b, "Sending");
+      try{
+        const d = await api("ideaNew", { kind: "run", title: title, body: $("reBody").value });
+        S.ideas = d.ideas;
+        closeSheet(); renderIdeas(); go("biz");
+        toast("On the desk. It needs backing from a few others next.");
       }catch(err){ unspin(b); fail(err); }
     }));
 }
@@ -4653,11 +4743,7 @@ function renderSay(){
   const openOnes = (say.soundings || []).filter(q => !q.closed);
   const shut = (say.soundings || []).filter(q => q.closed);
   put("sayBody",
-    '<div class="card"><p>Two things live here. Underneath, how the room feels about the ' +
-    'half dozen subjects that come up at every meeting, once a month each, in one tap. ' +
-    'And below that, whatever the committee has asked this term.</p>' +
-    '<p class="lede" style="margin-top:8px">Nobody is named, on either. What the committee sees is ' +
-    'how many said what, and anything you choose to write.</p></div>' +
+    '<div class="card"><p>How it is going, once a month, in one tap. Nobody is named.</p></div>' +
     '<div class="grp">How it is going<span class="ref" style="margin-left:auto">' +
       esc(monthName(say.period)) + '</span></div>' +
     '<div class="moods">' + (say.topics || []).map(moodCard).join("") + '</div>' +
@@ -4696,7 +4782,7 @@ function moodCard(t){
       '<span>' + esc(f.name) + '</span></button>').join("") + '</div>' +
     '<div class="run" aria-label="the last six months">' + t.run.map(r =>
       '<span class="' + (r.score ? "n" + Math.round(r.score) : "empty") + '" ' +
-      'style="height:' + (r.score ? Math.round(18 + (r.score - 1) * 11) : 4) + 'px" ' +
+      'style="height:' + (r.score ? Math.round(11 + (r.score - 1) * 7) : 3) + 'px" ' +
       'title="' + esc(monthName(r.month)) + (r.said ? ": " + r.score + " from " + r.said : ": nothing said") + '"></span>').join("") +
     '</div>' +
     '<div class="mfoot"><span>' +
@@ -4784,6 +4870,17 @@ function renderSwaps(){
 
 /* One card. In edit mode the same card becomes the form, in place, so the
    committee never loses sight of what it is changing. */
+/* Where the money goes, put in front of somebody at the moment they are told
+   to pay rather than left for them to go and find. */
+function bankHtml(w){
+  const b = w.bank || {};
+  if (!b.account && !b.sortCode) return "";
+  const line = (k, v) => v ? '<span><b>' + esc(k) + '</b>' + esc(v) + '</span>' : "";
+  return '<div class="bankbox"><span class="k">How to pay</span>' +
+    line("Name", b.name) + line("Sort code", b.sortCode) + line("Account", b.account) +
+    line("Reference", b.reference) +
+    (w.payTo ? '<span class="hint">' + esc(w.payTo) + '</span>' : "") + '</div>';
+}
 function swapCard(w, hold){
   const editing = isCommittee() && swapEdit === (w.id || "new");
   const m = w.mine, full = w.left <= 0;
@@ -4846,10 +4943,11 @@ function swapCard(w, hold){
         (m.status === "paid"
           ? '<span class="yt"><b>Paid, and yours</b><span>Nothing more to do. See you there.</span></span>'
           : m.status === "held"
-            ? '<span class="yt"><b>Held for you</b><span>' +
+            ? '<span class="yt owed"><b>Held for you</b><span>' +
               (days ? days + (days === 1 ? " day" : " days") + " to pay" + (w.payTo ? ", " + esc(w.payTo) : "")
                     : "Today is the last day to pay") +
-              ". After that it goes to the next person.</span></span>" +
+              ". After that the committee may pass it on.</span></span>" +
+              bankHtml(w) +
               '<span class="clock"><i style="width:' + Math.round(days / (hold || 5) * 100) + '%"></i></span>'
             : '<span class="yt"><b>' + m.place + ordinal(m.place) + " on the list</b>" +
               "<span>You will be told the moment a place opens.</span></span>") +
@@ -5168,7 +5266,7 @@ document.addEventListener("click", async e => {
     "[data-skip],[data-editser],[data-second],[data-vote],[data-mset],[data-code],[data-checkin]," +
     "[data-delupdate],[data-rosteredit],[data-rosterdel],[data-newidea],[data-back]," +
     "[data-setidea],[data-dropidea],[data-pollvote],[data-pollclose]," +
-    "[data-sayreport],[data-boardall],[data-tryrest],[data-mood],[data-moodline],[data-moodreply],[data-moodsay],[data-sound],[data-soundsay],[data-soundclose],[data-roomdrop],[data-roomtab],[data-formal],[data-copy],[data-copyboth],[data-bumpedit],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-polldrop],[data-motiondrop],[data-desktab],[data-tick2],[data-desk],[data-asktab],[data-thread],[data-mythreads],[data-swaptake],[data-swapdrop],[data-swappaid],[data-swapedit],[data-swapsave],[data-swapcancel],[data-swapdel],[data-swappast],[data-bank],[data-swapnudge],[data-swapkick],[data-swappromote],[data-copyaddrs],[data-swapdeskedit],[data-jcsu],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
+    "[data-runevent],[data-sayreport],[data-boardall],[data-tryrest],[data-mood],[data-moodline],[data-moodreply],[data-moodsay],[data-sound],[data-soundsay],[data-soundclose],[data-roomdrop],[data-roomtab],[data-formal],[data-copy],[data-copyboth],[data-bumpedit],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-polldrop],[data-motiondrop],[data-desktab],[data-tick2],[data-desk],[data-asktab],[data-thread],[data-mythreads],[data-swaptake],[data-swapdrop],[data-swappaid],[data-swapedit],[data-swapsave],[data-swapcancel],[data-swapdel],[data-swappast],[data-bank],[data-swapnudge],[data-swapkick],[data-swappromote],[data-copyaddrs],[data-swapdeskedit],[data-jcsu],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
   if (!t) return;
   const d = t.dataset;
   try{
@@ -5458,6 +5556,11 @@ document.addEventListener("click", async e => {
       return;
     }
     if (d.goto){ closeSheet(); return go(d.goto); }
+    /* Straight to the half of Ask that was asked for, not to its front page. */
+    if (d.asktab){
+      closeSheet(); askTab = d.asktab; go("ask"); renderAsk(); window.scrollTo(0, 0); return;
+    }
+    if (t.hasAttribute("data-runevent")) return openRunEvent();
     if (t.hasAttribute("data-room")) return openRoom();
     if (d.ask) return openAsk(d.ask, d.subject || "");
     if (d.reply) return openReply(d.reply);
