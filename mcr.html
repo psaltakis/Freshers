@@ -243,19 +243,21 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 /* A tile that holds a fact is a card on the desk, not a hole in the wall. On
    paper the figures and the names read at a glance, which is the entire job of
    the pigeonhole, and the red behind it is left to do the framing. */
-.slot{position:relative;text-align:left;padding:var(--pad-s);min-height:70px;background:var(--cream);
-  color:var(--ink);border-radius:var(--r2);display:flex;flex-direction:column;justify-content:space-between;
+.slot{position:relative;text-align:left;padding:var(--pad-s);min-height:70px;
+  background:rgba(255,255,255,.88);color:var(--crimson-3);border-radius:var(--r2);
+  display:flex;flex-direction:column;justify-content:space-between;
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
   transition:background .18s,transform .18s var(--ease),box-shadow .18s;
-  box-shadow:0 6px 16px -12px rgba(20,1,3,.7)}
-.slot.has{background:var(--paper)}
-.slot:hover{background:#fff;transform:translateY(-2px);box-shadow:0 12px 22px -14px rgba(20,1,3,.75)}
+  box-shadow:0 6px 16px -12px rgba(20,1,3,.55)}
+.slot.has{background:rgba(255,255,255,.95)}
+.slot:hover{background:#fff;transform:translateY(-2px);box-shadow:0 12px 22px -14px rgba(20,1,3,.7)}
 .slot .plate{font-family:var(--mono);font-size:0.66rem;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--ink-soft);display:flex;align-items:center;gap:6px;font-weight:600}
+  color:rgba(107,8,13,.62);display:flex;align-items:center;gap:6px;font-weight:600}
 .slot.has .plate{color:var(--crimson)}
 .slot.has .plate::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--crimson);flex:0 0 5px}
 .slot .slip b{display:block;font-size:.85rem;font-weight:700;line-height:1.24;letter-spacing:-.022em;
-  color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.slot .hollow{display:block;font-size:.8rem;color:var(--ink-soft);font-weight:500}
+  color:var(--crimson-3);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.slot .hollow{display:block;font-size:.8rem;color:rgba(107,8,13,.5);font-weight:500}
 .slot .n{position:absolute;top:9px;right:11px;font-family:var(--display);font-size:0.737rem;font-weight:600;color:var(--crimson-3)}
 .state{display:flex;flex-wrap:wrap;gap:var(--g);margin-top:var(--g)}
 .state span{display:flex;align-items:center;gap:7px;font-size:0.684rem;color:var(--cream-3);background:var(--t1);
@@ -375,8 +377,9 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 
 /* ---------- tiles and links ---------- */
 .tilegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:var(--g);margin-bottom:14px}
-.tilegrid button,.tilegrid a{background:var(--cream);border-radius:var(--r2);color:var(--ink);padding:15px 16px;
-  box-shadow:0 6px 16px -12px rgba(20,1,3,.7);
+.tilegrid button,.tilegrid a{background:rgba(255,255,255,.88);border-radius:var(--r2);color:var(--crimson-3);
+  padding:15px 16px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  box-shadow:0 6px 16px -12px rgba(20,1,3,.55);
   font-size:.92rem;font-weight:700;text-align:left;line-height:1.3;text-decoration:none;display:block;
   letter-spacing:-.02em;transition:background .16s,transform .16s var(--ease)}
 .tilegrid button:hover,.tilegrid a:hover{background:#fff;transform:translateY(-2px)}
@@ -400,7 +403,7 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .gymcard b,.gymcard .arw{color:#06301C}
 .gymcard small{color:rgba(6,48,28,.78)}
 .gymcard .ic{background:rgba(6,48,28,.14);color:#06301C}
-.tilegrid small{display:block;font-weight:500;font-size:0.66rem;color:var(--ink-soft);margin-top:4px;line-height:1.42}
+.tilegrid small{display:block;font-weight:500;font-size:0.66rem;color:rgba(107,8,13,.6);margin-top:4px;line-height:1.42}
 .linkcard{display:flex;gap:var(--g2);align-items:center;background:var(--t1);border-radius:var(--r2);
   padding:var(--pad);margin-bottom:var(--g);text-decoration:none;color:var(--cream);transition:background .16s,transform .16s var(--ease)}
 .linkcard:hover{background:var(--t2);transform:translateY(-2px)}
@@ -645,11 +648,34 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .swap .swroster b{color:var(--ink)}
 .swap .swroster span,.swap .swroster small{color:var(--ink-soft)}
 .swap .swdc{color:var(--ink-soft)}
-/* the editor stays on the red, because it is a form and not an invitation */
-.swap.editing{background:var(--t1);color:var(--cream);box-shadow:none}
-.swap.editing .sf{color:var(--cream)}
-.swap.editing .sfl{color:var(--cream-4)}
-.swap.editing .btn.ghost{color:var(--cream);box-shadow:inset 0 0 0 1.5px var(--line)}
+/* THE EDITOR IS A FORM, SO IT IS LAID OUT AS ONE.
+   It was inheriting the invitation's layout: fields at odd widths, a date and
+   a time squeezed against a column of numbers, labels floating under the wrong
+   boxes. It is now a plain stack with the numbers in their own column, each
+   field labelled above rather than below, and it sits on paper like everything
+   else that is being filled in. */
+.swap.editing{background:var(--cream);color:var(--ink);
+  box-shadow:0 12px 26px -18px rgba(20,1,3,.75);padding:var(--pad)}
+.swap.editing::before{background:var(--gold)}
+.swap.editing .swtop{display:grid;grid-template-columns:1fr;gap:var(--g2);align-items:start}
+@media(min-width:34rem){ .swap.editing .swtop{grid-template-columns:1fr 9.5rem} }
+.swap.editing .swside{flex:none;text-align:left;display:grid;gap:2px}
+.swap.editing .sf{background:#F6EEE6;color:var(--ink);border:1px solid var(--cream-3);
+  border-radius:11px;padding:11px 13px;margin-bottom:9px;font-weight:600}
+.swap.editing .sf::placeholder{color:var(--ink-soft);opacity:.85;font-weight:500}
+.swap.editing .sf:focus{outline:0;border-color:var(--crimson);background:#fff}
+.swap.editing .swside .sf{text-align:left;margin-bottom:2px}
+.swap.editing .sfl{color:var(--ink-soft);text-align:left;margin-bottom:11px;font-size:.6rem}
+.swap.editing .swrow{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.swap.editing .swrow .sf{margin-bottom:9px}
+.swap.editing input[data-f="college"]{font-size:1.2rem;letter-spacing:-.03em;color:var(--crimson-3)}
+.swap.editing .swlogo-row{display:flex;align-items:center;gap:12px;margin:4px 0 12px}
+.swap.editing .swlogo.big{background:var(--cream-2);color:var(--ink-soft);border-radius:10px}
+.swap.editing textarea.sf{min-height:5rem}
+.swap.editing select{background:#F6EEE6;color:var(--ink);border:1px solid var(--cream-3);
+  border-radius:11px;padding:10px 12px;font:inherit;font-weight:600}
+.swap.editing .acts{display:flex;gap:9px;align-items:center;margin-top:6px;flex-wrap:wrap}
+.swap.editing .acts .btn.ghost{color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--cream-3)}
 .swap::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--member)}
 .swap.mine::before{background:var(--gold)}
 .swap.shut,.swap.past{opacity:.55}
@@ -1143,6 +1169,27 @@ nav .railtop{display:none}
 /* and the pointer never gets an outline it did not ask for */
 :where(button,a):focus:not(:focus-visible){outline:none}
 
+/* A month, gathered. Printed as often as it is read, so it is laid out for
+   paper as much as for the screen. */
+.repblock{background:var(--cream-2);border-radius:var(--r2);padding:14px;margin-bottom:var(--g)}
+.repblock .rh{display:flex;align-items:baseline;gap:9px;margin-bottom:3px}
+.repblock .rh b{font-family:var(--display);font-size:1.05rem;font-weight:600;letter-spacing:-.03em;flex:1;color:var(--ink)}
+.repblock .ref{font-size:.72rem;color:var(--ink-soft);font-weight:600}
+.spread{display:flex;gap:6px;align-items:flex-end;margin:10px 0 8px;height:3.2rem}
+.spread span{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px}
+.spread i{display:block;width:100%;border-radius:3px 3px 1px 1px}
+.spread em{font-style:normal;font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);font-weight:700}
+.repnotes p{display:flex;gap:8px;align-items:flex-start;font-size:.82rem;color:var(--ink);
+  margin:8px 0 0;line-height:1.5}
+.repnotes p i{display:block;width:9px;height:9px;border-radius:50%;flex:0 0 9px;margin-top:5px}
+@media print{
+  body>*:not(#sheet){display:none!important}
+  #sheet,#sheet .inner,#sheet .scroll{position:static!important;background:#fff!important;color:#000!important;
+    max-height:none!important;overflow:visible!important;box-shadow:none!important}
+  #sheet .sback,#sheet .foot{display:none!important}
+  .repblock{background:#fff!important;border:1pt solid #ddd;page-break-inside:avoid}
+}
+
 /* the direction of travel, and the committee's answer beneath it */
 .move{font-family:var(--mono);font-size:.66rem;font-weight:700;border-radius:7px;padding:2px 6px}
 .move.up{background:rgba(44,107,79,.16);color:#1E6B47}
@@ -1526,11 +1573,11 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
   <div class="railtop"><img class="crest" id="crestRail" alt="Jesus College MCR"><span><b>Jesus MCR</b><i id="railYear"></i></span></div>
   <button class="tabbtn" data-view="today" aria-current="true"><svg viewBox="0 0 24 24"><path d="M4 15a8 8 0 0 1 16 0"/><path d="M12 3v3M4.2 6.6l2.1 2.1M19.8 6.6l-2.1 2.1M2 15h20"/></svg>Today</button>
   <button class="tabbtn" data-view="board"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="15" rx="1.8"/><path d="M7 9h10M7 13h6"/><path d="M12 2v2"/></svg>Board<span class="badge" id="bdgLodge" hidden>0</span></button>
+  <button class="tabbtn" data-view="say"><svg viewBox="0 0 24 24"><path d="M4 5h16v10H9l-5 4z"/><path d="M8 8.5h8M8 11.5h5"/></svg>Soundings<span class="badge" id="bdgSay" hidden>0</span></button>
   <button class="tabbtn" data-view="room"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M9.5 20v-5h5v5"/></svg>MCR room</button>
   <button class="tabbtn" data-view="swaps"><svg viewBox="0 0 24 24"><path d="M6 4v7a6 6 0 0 0 12 0V4"/><path d="M12 17v3M8 20h8"/></svg>Formals<span class="badge" id="bdgSwaps" hidden>0</span></button>
   <button class="tabbtn" data-view="ask"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/><path d="M12 12.4v-.5c0-1 .7-1.5 1.3-1.9.6-.4 1-.9 1-1.6a2.3 2.3 0 0 0-4.6 0"/><path d="M12 14.4h.01"/></svg>Ask<span class="badge" id="bdgAsk" hidden>0</span></button>
   <button class="tabbtn" data-view="biz"><svg viewBox="0 0 24 24"><path d="M4 20h16M12 4v3M6 20V9l6-4 6 4v11"/><path d="M9 13h6"/></svg>MCR business<span class="badge" id="bdgBiz" hidden>0</span></button>
-  <button class="tabbtn" data-view="say"><svg viewBox="0 0 24 24"><path d="M4 5h16v10H9l-5 4z"/><path d="M8 8.5h8M8 11.5h5"/></svg>Soundings<span class="badge" id="bdgSay" hidden>0</span></button>
   <button class="tabbtn" data-view="info"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5"/><path d="M12 7.6h.01"/></svg>Info</button>
   <span class="sep" data-committee hidden></span>
   <button class="tabbtn committee" data-view="desk" data-committee hidden><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="7" rx="1.6"/><rect x="3" y="13" width="18" height="7" rx="1.6"/><path d="M7 7.5h.01M7 16.5h.01"/></svg>Desk<span class="badge" id="bdgDesk" hidden>0</span></button>
@@ -1569,7 +1616,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycby2CZgSht7UIxZJpE7-MdiPv2XWsv-EzKCvL0XZhxrijPVXrdscYimxZGk72fhOEnCj/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzcnA7KiIGDkD--3JG6fW0CRLmA-wNmupii4oz2Ka871bJh_uBtflcj2OWjzz8wH0SlMA/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -1578,7 +1625,7 @@ const BOOK_REGISTER = "https://jcollegemcr.co.uk/register";
 /* The build this page was written against. If the server reports a different
    one, the deployment answering is not this code, and the membership check it
    is running is whatever was deployed last. Shown under 'What is wrong?'. */
-const EXPECT_BUILD = "chimney-17";
+const EXPECT_BUILD = "chimney-18";
 
 /* JavaScript is alive, so the ring painted before the page was parsed can go.
    It is a pseudo element on <html>, so nothing else can remove it. */
@@ -2246,12 +2293,13 @@ async function bootFetch(){
 }
 /* Fetched once the page is up. Anything already on screen stays exactly where
    it is; the sections that were waiting simply fill in. */
-let restPending = false;
+let restPending = false, restTries = 0;
 async function fetchRest(){
   if (restPending || !S || S.part !== "core") return;
   restPending = true;
   try{
     const full = await api("state");
+    restTries = 0;
     /* Merged rather than swapped, so a section somebody is looking at is not
        pulled out from under them, and so anything they have changed in the
        meantime is not undone by an older answer. */
@@ -2267,14 +2315,30 @@ async function fetchRest(){
     if (keep){ const el = $(keep); if (el && el.focus) el.focus(); }
     cacheState();
   }catch(e){
-    /* The page is already usable, so this is not worth a red banner. The
-       sections that need it say so, and a refresh tries again. */
+    /* Half the app lives in this call: the guides, the societies, the swaps,
+       the threads. Losing it silently and leaving those sections looking empty
+       is the worst of both worlds, so it is tried again, and if it still will
+       not come the sections say so instead of pretending there is nothing
+       there. */
     if (typeof console !== "undefined") console.warn("The rest of the page did not load:", e);
+    restPending = false;
+    if (++restTries <= 3){
+      await new Promise(f => setTimeout(f, restTries * 1200));
+      return fetchRest();
+    }
+    restFailed = String((e && e.message) || e);
+    render();
+    return;
   }finally{ restPending = false; }
 }
+let restFailed = "";
 /* A section whose part has not landed yet says so rather than claiming to be
    empty, which is the difference between "nothing on" and "not here yet". */
 function waitingFor(what){
+  if (restFailed)
+    return '<div class="card"><h3>' + esc(what.charAt(0).toUpperCase() + what.slice(1)) +
+      ' did not load</h3><p class="lede">' + esc(restFailed) + '</p>' +
+      '<div class="acts"><button class="btn cream sm" data-tryrest>Try again</button></div></div>';
   return '<div class="card"><p class="lede"><span class="spin" style="margin-right:8px"></span>' +
     'Fetching ' + esc(what) + '.</p></div>';
 }
@@ -3004,21 +3068,26 @@ function renderLodge(){
    stopped being news, and a board that keeps everything is a board nobody
    reads. The committee still sees what is waiting for a yes. */
 const BOARD_DAYS = 7;
+let boardAll = false;
 function lodgeNow(){
   const all = S.notices || [];
   const since = Date.now() - BOARD_DAYS * 86400000;
-  const fresh = all.filter(x => (x.at || 0) >= since || x.pin);
+  /* A notice with no date at all is kept. Anything seeded, or written straight
+     into the spreadsheet, has no timestamp, and dropping those made the board
+     look broken: things that had plainly been posted were simply not there. */
+  const fresh = all.filter(x => !x.at || x.at >= since || x.pin);
   const older = all.length - fresh.length;
-  const n = fresh;
+  const n = boardAll ? all : fresh;
   const waiting = n.filter(x => x.status === "pending");
   return '<div class="noticecols">' + (isCommittee() && waiting.length
     ? '<div class="grp"><b>Waiting for a yes</b></div>' + waiting.map(noticeHtml).join("") +
       '<div class="grp"><b>On the board</b></div>' : "") +
     (n.length ? '<div class="notes">' +
       n.filter(x => x.status !== "pending" || !isCommittee()).map(noticeHtml).join("") + '</div>' +
-      (older ? '<p class="lede" style="margin-top:12px">' + older +
-        (older === 1 ? " older notice is" : " older notices are") + " off the board. The last " +
-        BOARD_DAYS + " days are what is shown.</p>" : "")
+      (older ? '<div class="acts" style="margin-top:12px"><button class="btn ghost sm" data-boardall="' +
+        (boardAll ? "0" : "1") + '">' +
+        (boardAll ? "Just the last " + BOARD_DAYS + " days" :
+          "Show " + older + " older " + (older === 1 ? "notice" : "notices")) + "</button></div>" : "")
     : '<div class="card"><p>Nothing on the board this week, which is usually good news.</p>' +
       '<p class="lede">Gates, building work, lost property and anything the Porters want the MCR to know lands here.</p></div>') + '</div>';
 }
@@ -4513,6 +4582,70 @@ function newHall(){
 
    Everything here is anonymous. The address is kept so that one person cannot
    answer twice, and the committee sees counts and comments and nothing else. */
+/* Asked at the moment somebody has just said how it is going, because that is
+   when they know what they meant. Low marks are asked what is wrong; high ones
+   are asked what is working, which is worth knowing too and is never collected.
+   Either can be skipped without losing the reading. */
+/* A month, laid out to be read at a meeting and quoted in a letter: the mark
+   out of five, which way it moved, how the answers were spread, and every word
+   anybody wrote underneath it. */
+function showReport(rep){
+  const face = ["Bad","Poor","Fair","Good","Very good"];
+  sheet("Soundings, " + monthName(rep.month),
+    '<p class="lede">' + rep.people + (rep.people === 1 ? " person" : " people") +
+    ' said something this month. Averages are out of five. The words are as they were written, ' +
+    'and none of them carries a name.</p>' +
+    rep.topics.map(t =>
+      '<div class="repblock"><div class="rh"><b>' + esc(t.name) + '</b>' +
+      (t.score ? '<span class="avg n' + Math.round(t.score) + '">' + t.score.toFixed(1) + '</span>' : '<span class="avg none">&mdash;</span>') +
+      (t.move ? '<span class="move ' + (t.move > 0 ? "up" : "down") + '">' +
+        (t.move > 0 ? "\u2191" : "\u2193") + Math.abs(t.move).toFixed(1) + '</span>' : "") +
+      '</div>' +
+      '<div class="ref">' + (t.said ? t.said + (t.said === 1 ? " reading" : " readings") : "nothing said") +
+        (t.was ? " &middot; " + t.was.toFixed(1) + " the month before" : "") + '</div>' +
+      (t.said ? '<div class="spread">' + t.spread.map((n, i) =>
+        '<span title="' + face[i] + ': ' + n + '"><i class="n' + (i + 1) + '" style="height:' +
+        Math.round(6 + (n / Math.max(1, ...t.spread)) * 34) + 'px"></i><em>' + n + '</em></span>').join("") + '</div>' : "") +
+      (t.reply ? '<div class="mreply"><b>What the committee said</b>' + esc(t.reply) + '</div>' : "") +
+      (t.notes.length
+        ? '<div class="repnotes">' + t.notes.map(n =>
+            '<p><i class="n' + n.score + '"></i>' + esc(n.comment) + '</p>').join("") + '</div>'
+        : '<p class="ref">Nobody wrote anything.</p>') +
+      '</div>').join("") +
+    '<div class="grp">Another month</div><div class="chips">' +
+      rep.months.map(m => '<button data-sayreport data-month="' + esc(m) + '"' +
+        (m === rep.month ? ' aria-pressed="true"' : "") + '>' + esc(monthName(m)) + '</button>').join("") +
+    '</div>' +
+    '<div class="acts"><button class="btn gold" onclick="window.print()">Print it</button>' +
+    '<button class="btn ghost" data-close>Close</button></div>');
+}
+function sayLine(t, score){
+  if (!t) return;
+  const low = score <= 2, high = score >= 4;
+  sheet(t.name,
+    '<p class="lede">' +
+      (low ? "You have said this is not good enough. What is going wrong? One or two lines is plenty, " +
+             "and it is what the President can take to College and read out."
+       : high ? "You have said this is working. What is working? It is worth knowing what to protect."
+       : "Anything you would add? It is what turns a number into something the committee can act on.") +
+    '</p>' +
+    '<label class="f"><span>In your own words</span><textarea id="slC" maxlength="600" placeholder="' +
+      (low ? "The kitchens have been shut by seven every night this term."
+           : "The new chairs have made the room usable for working in.") + '">' +
+      esc(t.myComment || "") + '</textarea></label>' +
+    '<p class="lede" style="font-size:.72rem">Nobody is told it was you. The committee sees the words ' +
+    'and the number, not the name.</p>' +
+    '<div class="acts"><button class="btn gold" id="slGo">Add it</button>' +
+    '<button class="btn ghost" data-close>Not now</button></div>',
+    el => el.querySelector("#slGo").addEventListener("click", async e => {
+      const b = e.currentTarget;
+      spin(b, "Adding");
+      try{
+        const r = await api("moodSet", { topic: t.key, score: score || t.mine || 3, comment: $("slC").value });
+        S.say = r.say; closeSheet(); renderSay(); toast("Thank you, that helps.");
+      }catch(err){ unspin(b); fail(err); }
+    }));
+}
 function renderSay(){
   if (!S) return;
   if (stillLoading()) return put("sayBody", waitingFor("what the MCR has said"));
@@ -4528,6 +4661,10 @@ function renderSay(){
     '<div class="grp">How it is going<span class="ref" style="margin-left:auto">' +
       esc(monthName(say.period)) + '</span></div>' +
     '<div class="moods">' + (say.topics || []).map(moodCard).join("") + '</div>' +
+    (isCommittee()
+      ? '<div class="acts" style="margin-bottom:var(--g3)">' +
+        '<button class="btn ghost sm" data-sayreport>Read a month, gathered</button></div>'
+      : "") +
     '<div class="grp">Questions from the committee' +
       (openOnes.length ? '<span class="ref" style="margin-left:auto">' + openOnes.length + ' open</span>' : "") + '</div>' +
     (openOnes.length ? openOnes.map(soundCard).join("")
@@ -4565,7 +4702,7 @@ function moodCard(t){
     '<div class="mfoot"><span>' +
       (t.said ? t.said + (t.said === 1 ? " has said" : " have said") + " this month" : "nobody yet this month") +
       (t.wrote ? " &middot; " + t.wrote + (t.wrote === 1 ? " wrote a line" : " wrote a line") : "") + '</span>' +
-      (t.mine ? '<button class="lnk" data-moodsay="' + esc(t.key) + '">' +
+      (t.mine ? '<button class="lnk" data-moodline="' + esc(t.key) + '">' +
         (t.myComment ? "Change what you wrote" : "Add a line") + '</button>' : "") + '</div>' +
     /* What was done about it. A falling line with nothing beside it teaches
        people that saying so achieves nothing, which is how these die. */
@@ -4905,7 +5042,7 @@ function voiceCard(){
    ============================================================ */
 /* Second life is gone. The Lodge has become three: the board on its own, the
    MCR room on its own, and Info for the links, the guides and the sport. */
-const VIEWS = ["today","board","room","swaps","ask","biz","say","info","me","desk","inbox","swapdesk","members","admin"];
+const VIEWS = ["today","board","say","room","swaps","ask","biz","info","me","desk","inbox","swapdesk","members","admin"];
 /* Stagger the first children of whatever has just been shown. Sixty
    milliseconds apart is enough to read as unfolding and not as waiting. */
 function stagger(id){
@@ -5031,7 +5168,7 @@ document.addEventListener("click", async e => {
     "[data-skip],[data-editser],[data-second],[data-vote],[data-mset],[data-code],[data-checkin]," +
     "[data-delupdate],[data-rosteredit],[data-rosterdel],[data-newidea],[data-back]," +
     "[data-setidea],[data-dropidea],[data-pollvote],[data-pollclose]," +
-    "[data-mood],[data-moodreply],[data-moodsay],[data-sound],[data-soundsay],[data-soundclose],[data-roomdrop],[data-roomtab],[data-formal],[data-copy],[data-copyboth],[data-bumpedit],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-polldrop],[data-motiondrop],[data-desktab],[data-tick2],[data-desk],[data-asktab],[data-thread],[data-mythreads],[data-swaptake],[data-swapdrop],[data-swappaid],[data-swapedit],[data-swapsave],[data-swapcancel],[data-swapdel],[data-swappast],[data-bank],[data-swapnudge],[data-swapkick],[data-swappromote],[data-copyaddrs],[data-swapdeskedit],[data-jcsu],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
+    "[data-sayreport],[data-boardall],[data-tryrest],[data-mood],[data-moodline],[data-moodreply],[data-moodsay],[data-sound],[data-soundsay],[data-soundclose],[data-roomdrop],[data-roomtab],[data-formal],[data-copy],[data-copyboth],[data-bumpedit],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-polldrop],[data-motiondrop],[data-desktab],[data-tick2],[data-desk],[data-asktab],[data-thread],[data-mythreads],[data-swaptake],[data-swapdrop],[data-swappaid],[data-swapedit],[data-swapsave],[data-swapcancel],[data-swapdel],[data-swappast],[data-bank],[data-swapnudge],[data-swapkick],[data-swappromote],[data-copyaddrs],[data-swapdeskedit],[data-jcsu],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
   if (!t) return;
   const d = t.dataset;
   try{
@@ -5040,6 +5177,10 @@ document.addEventListener("click", async e => {
     /* One tap says how it is going. Pressing the same one again takes it back,
        because somebody who changes their mind should not be stuck with a
        reading they no longer stand behind. */
+    if (t.hasAttribute("data-boardall")){ boardAll = d.boardall === "1"; renderLodge(); return; }
+    if (t.hasAttribute("data-tryrest")){
+      restFailed = ""; restTries = 0; render(); fetchRest(); return;
+    }
     if (t.hasAttribute("data-mood")){
       const now = ((S.say || {}).topics || []).filter(x => x.key === d.mood)[0];
       const n = Number(d.n), same = now && now.mine === n;
@@ -5047,8 +5188,28 @@ document.addEventListener("click", async e => {
         const r = await api("moodSet", { topic: d.mood, score: same ? 0 : n,
           comment: same ? "" : (now ? now.myComment : "") });
         S.say = r.say; renderSay(); renderBadges();
-        toast(same ? "Taken back." : "Noted, and nobody is told it was you.");
+        if (same) return toast("Taken back.");
+        /* A number on its own tells the committee that something is wrong and
+           nothing about what. So the line is asked for at the moment the
+           opinion is formed, rather than left behind a second press that
+           nobody makes. It can be skipped. */
+        const tp = (r.say.topics || []).filter(x => x.key === d.mood)[0];
+        return sayLine(tp, n);
       }catch(e){ fail(e); }
+      return;
+    }
+    if (t.hasAttribute("data-sayreport")){
+      spin(t, "Gathering");
+      try{
+        const rep = await api("sayReport", { month: d.month || "" });
+        unspin(t);
+        showReport(rep);
+      }catch(e){ unspin(t); fail(e); }
+      return;
+    }
+    if (t.hasAttribute("data-moodline")){
+      const tp = ((S.say || {}).topics || []).filter(x => x.key === d.moodline)[0];
+      if (tp) sayLine(tp, tp.mine);
       return;
     }
     if (t.hasAttribute("data-moodreply")){
@@ -5638,6 +5799,54 @@ on("bNewMeeting", "click", () => {
       }catch(err){ unspin(b); fail(err); }
     }));
 });
+
+/* KEPT ON THE DEVICE.
+
+   The page is a third of a megabyte and changes a few times a term, so fetching
+   it fresh every morning wastes somebody's data and the seconds before anything
+   appears. A small worker keeps a copy: the copy is shown at once and a fresh
+   one is fetched quietly behind it for next time, which is what makes the
+   second visit feel instant.
+
+   It is registered from a blob rather than a separate file, so there is still
+   only one thing to upload, and it never touches the API: an answer about who
+   is coming to dinner must not come from yesterday. */
+(function keepOnDevice(){
+  if (!("serviceWorker" in navigator)) return;
+  if (location.protocol !== "https:") return;
+  /* Inside the Apps Script preview the page is served from a sandbox where a
+     worker would have nothing useful to hold. */
+  if (location.hostname.indexOf("script.google") >= 0) return;
+  const src = [
+    "const CACHE = 'mcr-" + EXPECT_BUILD + "';",
+    "self.addEventListener('install', () => self.skipWaiting());",
+    "self.addEventListener('activate', e => e.waitUntil((async () => {",
+    "  const keys = await caches.keys();",
+    "  await Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)));",
+    "  await self.clients.claim();",
+    "})()));",
+    "self.addEventListener('fetch', e => {",
+    "  const r = e.request;",
+    "  if (r.method !== 'GET') return;",
+    "  const u = new URL(r.url);",
+    "  if (u.hostname.indexOf('script.google') >= 0) return;",
+    "  const isPage = r.mode === 'navigate' || u.pathname.endsWith('/') || u.pathname.endsWith('.html');",
+    "  const isFont = u.hostname.indexOf('fonts.') >= 0;",
+    "  if (!isPage && !isFont) return;",
+    "  e.respondWith((async () => {",
+    "    const cache = await caches.open(CACHE);",
+    "    const hit = await cache.match(r, { ignoreSearch: isPage });",
+    "    const fresh = fetch(r).then(res => { if (res && res.ok) cache.put(r, res.clone()); return res; })",
+    "      .catch(() => hit);",
+    "    return hit || fresh;",
+    "  })());",
+    "});"
+  ].join("\n");
+  try{
+    const url = URL.createObjectURL(new Blob([src], { type: "text/javascript" }));
+    navigator.serviceWorker.register(url, { scope: "./" }).catch(function(){});
+  }catch(e){}
+})();
 
 /* ---------- off we go ---------- */
 document.addEventListener("visibilitychange", () => { if (!document.hidden && S) pollTick(); });
