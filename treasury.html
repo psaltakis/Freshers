@@ -2,6 +2,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#A9111A">
 <style>
+/* The membership card at the gate. Kept here so it needs nothing from the rest
+   of the stylesheet and cannot be broken by a later change to it. */
+#gateFix:empty{display:none}
+#gateFix{margin-top:16px;text-align:left;background:#FCF3F1;border:1px solid #F3E0DC;
+  border-left:4px solid #A9111A;border-radius:0 12px 12px 0;padding:16px 18px}
+#gateFix b.t{display:block;font-size:15px;color:#26090B;margin-bottom:6px}
+#gateFix p{font-size:13.5px;line-height:1.6;color:#4A2523;margin:0}
+#gateFix .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+#gateFix a.b,#gateFix button.b{appearance:none;border:0;cursor:pointer;font:inherit;font-size:13px;
+  font-weight:600;padding:10px 16px;border-radius:999px;text-decoration:none;display:inline-block}
+#gateFix a.b{background:#A9111A;color:#fff}
+#gateFix button.b{background:#fff;color:#26090B;box-shadow:inset 0 0 0 1px #E4CFCB}
+#gateFix button.b:disabled{opacity:.55;cursor:default}
 /* The first rule in the file, so the very first frame the browser paints already
    has something turning on it. #boot draws the same ring in the same place the
    moment its tag is parsed, and the crest lands inside it; all three sit at the
@@ -876,10 +889,11 @@ ul.notes li:last-child{margin-bottom:0}
         <div><span class="eyebrow">Jesus College MCR</span><h2>Treasury and reimbursements</h2></div>
       </div>
       <div class="gatebody">
-        <p class="lede">Sign in with your University of Cambridge Google account.</p>
+        <p class="lede">Sign in with your University of Cambridge Google account. Your MCR membership is then confirmed against the register before access is granted.</p>
         <div id="gBtn"></div>
         <p class="hintline" id="gateHint">Checking whether you are already signed in&hellip;</p>
         <div class="actions" style="justify-content:center"><span class="msg" id="gateMsg"></span></div>
+        <div id="gateFix"></div>
 
       </div>
     </div>
@@ -1405,7 +1419,7 @@ ul.notes li:last-child{margin-bottom:0}
    ============================================================ */
 
 /* PASTE YOUR TREASURY WEB APP URL HERE. Deploy, Manage deployments, ends in /exec. */
-const API_URL = "https://script.google.com/macros/s/AKfycbxpFC_gQO7P9R4G5MpBFgw0h1z7WzqY8S_ASiilA28_a7-gbhSk80ziqeVCuT_eAS77/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwtIV3n_oklFht7M0th-17hnTr1T9aCsA1cBL7joWXHjoCv9Xof94LUPGHwHy_zO7_n/exec";
 
 /* The crest, once. It used to appear three times in this file, which made the
    page a third of a megabyte before a single figure had loaded. */
@@ -2157,17 +2171,90 @@ function bootGoogle(cfg){
   gateSay("Loading Google sign in\u2026");
   gsiTimer=setInterval(()=>{ if(start()||++tries>80)clearInterval(gsiTimer) },100);
 }
+/* Where somebody goes to be written into the MCR register, and the credential
+   held so that anybody who registers in another tab can come straight back
+   without going round Google again. Google's token is good for about an hour,
+   which is far longer than registering takes. */
+const BOOK_REGISTER="https://jcollegemcr.co.uk/register";
+let lastCred="";
+
+/* Sign in happens here, at the gate, and finishes before the treasury begins to
+   load. Google confirms who somebody is and the MCR register confirms that they
+   are a member; the server asks both at once, so it is one round trip. */
 async function onGoogle(res){
   if(!res||!res.credential)return;
-  gateSay("Signing you in\u2026");
+  lastCred=res.credential;
+  gateClear();
+  gateSay("Verifying your Jesus College MCR membership\u2026");
   try{
     const r=await api("googleToken",{credential:res.credential});
+    if(r&&r.bookDown)  return bookUnreachable(r);
+    if(r&&r.needsBook) return notInBook(r);
+    gateClear();
     token=r.token;setToken(token);
     showWelcome(r.me);
     await boot(true);
   }catch(e){
     gateSay("",e.message);
     try{ google.accounts.id.disableAutoSelect() }catch(_){}
+  }
+}
+function gateClear(){ const f=$("gateFix"); if(f)f.innerHTML=""; }
+function gateCard(title,body,acts){
+  gateSay("","");
+  const f=$("gateFix");
+  if(f)f.innerHTML='<b class="t">'+esc(title)+'</b><p>'+body+'</p>'+
+    (acts?'<div class="acts">'+acts+'</div>':"");
+  try{ google.accounts.id.disableAutoSelect() }catch(_){}
+}
+/* Not a member. One step short of being in, so it is written as a next step
+   rather than a refusal, and the step is a button. */
+function notInBook(r){
+  gateCard("Membership could not be confirmed",
+    '<b>'+esc(r.email||"")+'</b> is not in the Jesus College MCR register. '+
+    'Registering takes a few minutes and gives you access to every MCR service.',
+    '<a class="b" href="'+BOOK_REGISTER+'" target="_blank" rel="noopener">Register for MCR membership</a>'+
+    '<button class="b" id="bBookAgain">I have registered, check again</button>');
+  wireBookAgain();
+}
+/* The register is not answering. Nobody is admitted on a guess, so this says
+   what has happened and offers both a retry and the register itself. */
+function bookUnreachable(){
+  gateCard("The membership register is not responding",
+    'Your Google sign in was accepted, but the Jesus College MCR register could not be '+
+    'reached, so your membership could not be confirmed. Access is not granted without '+
+    'that confirmation. This is usually temporary, so please try again in a moment.',
+    '<button class="b" id="bBookAgain">Try again</button>'+
+    '<a class="b" href="'+BOOK_REGISTER+'" target="_blank" rel="noopener">Open the register</a>');
+  wireBookAgain();
+}
+function wireBookAgain(){
+  const b=$("bBookAgain");
+  if(b)b.addEventListener("click",()=>bookAgain(b));
+}
+/* Asks the server to disregard anything it kept, so somebody approved a minute
+   ago is admitted at once. */
+async function bookAgain(btn){
+  if(!lastCred){ gateClear(); gateSay("Choose your University account again."); return bootGoogle(); }
+  const was=btn.textContent;
+  btn.disabled=true;btn.textContent="Checking\u2026";
+  try{
+    const r=await api("googleToken",{credential:lastCred,recheck:true});
+    if(r&&r.bookDown){ btn.disabled=false;btn.textContent=was; return bookUnreachable(r); }
+    if(r&&r.needsBook){
+      btn.disabled=false;btn.textContent=was;
+      gateSay("Not yet. Your registration must be approved by the President before access is granted.");
+      return;
+    }
+    gateClear();
+    token=r.token;setToken(token);
+    showWelcome(r.me);
+    await boot(true);
+  }catch(e){
+    btn.disabled=false;btn.textContent=was;
+    lastCred="";
+    gateCard("Your sign in has expired",
+      "Please sign in with Google once more and your membership will be checked again.","");
   }
 }
 function showWelcome(who){
@@ -2423,10 +2510,24 @@ async function boot(fromWelcome){
     // only a genuine rejection of the session ends it. A slow or missed request
     // must never sign somebody out, or a refresh on poor wifi loses their place.
     dropBoot();
-    if(/sign in|session has expired|no longer has access/i.test(e.message||"")){
+    const m=String(e.message||"");
+    /* The server distinguishes between somebody who is not a member and a
+       register that is not answering. Both end at the gate, and both get the
+       card that names what happened rather than a line of red text. */
+    if(m.indexOf("NOTMEMBER")===0){
       if(fromWelcome)$("welcome").hidden=true;
       signedOut();
-      gateSay("",e.message);
+      return notInBook({ email:m.slice(9).trim() });
+    }
+    if(m.indexOf("BOOKDOWN")===0){
+      if(fromWelcome)$("welcome").hidden=true;
+      signedOut();
+      return bookUnreachable({});
+    }
+    if(/sign in|session has expired|no longer has access/i.test(m)){
+      if(fromWelcome)$("welcome").hidden=true;
+      signedOut();
+      gateSay("",m);
       return;
     }
     if(fromWelcome)$("welcome").hidden=true;
