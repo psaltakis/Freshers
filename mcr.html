@@ -1196,6 +1196,9 @@ nav .railtop{display:none}
   color:var(--ink);line-height:1.55;margin-top:9px}
 .permitnote b{color:var(--crimson)}
 
+.tilegrid button.urgentquick{background:var(--gold);color:var(--gold-ink)}
+.tilegrid button.urgentquick small{color:rgba(58,39,0,.75)}
+
 /* A place held but not yet paid for. Said in the college red, because it is
    the one thing on the card somebody has to act on, with the account details
    underneath so nobody has to go looking. */
@@ -1303,7 +1306,17 @@ nav .railtop{display:none}
 .gcard .head small{display:block;font-family:var(--mono);font-size:0.635rem;color:var(--cream-4);letter-spacing:.22em;
   margin-bottom:6px;font-weight:700}
 .gcard .lede{color:var(--cream-2);font-size:0.737rem;line-height:1.6;margin-bottom:18px}
-.gcard .msg{color:var(--gold-2);font-size:0.658rem;min-height:18px;margin:11px 0 0;font-weight:600}
+/* This inherited .msg, which has a dark padded background meant for a message
+   inside a thread. Empty, it drew a filled bar under the sign in button that
+   looked like a fault, because it was one. */
+.gcard .msg{color:var(--gold-2);font-size:0.658rem;margin:11px 0 0;font-weight:600;
+  background:none;padding:0;min-height:0}
+.gcard .msg:empty{display:none}
+/* The Google button is drawn in its own frame, so it is centred and held to
+   the width of the card rather than being left to sit in a white strip. */
+#gsiBtn{display:flex;justify-content:center;margin-top:15px;min-height:44px}
+#gsiBtn>div{margin:0 auto}
+#gsiBtn iframe{margin:0 auto!important}
 .gcard .fix{margin-top:15px;padding:14px 15px;background:rgba(235,183,83,.16);border-radius:var(--r2)}
 .gcard .fix b{display:block;font-family:var(--display);font-size:0.842rem;font-weight:600;margin-bottom:6px;
   letter-spacing:-.03em;color:var(--gold-2)}
@@ -1330,11 +1343,50 @@ nav .railtop{display:none}
   max-width:30rem;max-height:100%;max-height:100dvh;display:flex;flex-direction:column;
   box-shadow:0 -14px 40px rgba(20,1,3,.55);animation:slideup .3s var(--ease) both}
 @media(min-width:34rem){ .sheet{align-items:center} .sheet .inner{border-radius:20px} }
+/* EVERYTHING INSIDE THE SHEET IS DRESSED FOR PAPER.
+   The sheet used to be dark, so every block that can appear in one was written
+   in cream. Turning the sheet white left those unreadable: a gold panel with
+   cream lettering on it is not a design, it is a blank. This is the whole list
+   of them, in one place, so the next thing dropped into a sheet inherits it. */
 .sheet h3{color:var(--crimson-3)}
 .sheet p,.sheet .lede{color:var(--ink-soft)}
 .sheet .card{background:var(--cream-2);color:var(--ink)}
-.sheet .card p{color:var(--ink-soft)}
+.sheet .card p,.sheet .card .lede{color:var(--ink-soft)}
+.sheet .card h3{color:var(--crimson-3)}
 .sheet .f span{color:var(--ink-soft)}
+.sheet .grp{color:var(--crimson)}
+.sheet .grp b{color:var(--ink)}
+.sheet .ref{color:var(--ink-soft)}
+.sheet .who{color:var(--crimson)}
+.sheet .hint{color:var(--ink-soft)}
+.sheet .check{color:var(--ink)}
+.sheet .msg{background:var(--cream-2);color:var(--ink)}
+/* the amber warning block, which is where the unreadable gold card was */
+.sheet .fix,.sheet .warn,.sheet .warnbox{background:#FFF4DC;color:var(--ink)}
+.sheet .fix b,.sheet .warnbox b{color:var(--crimson-3)}
+.sheet .fix p,.sheet .warn,.sheet .warnbox span{color:var(--ink)}
+.sheet .fix .btn.gold,.sheet .warnbox .btn.gold{background:var(--crimson);color:#fff}
+/* a link card in a sheet */
+.sheet .linkcard{background:var(--cream-2)}
+.sheet .linkcard b{color:var(--ink)}
+.sheet .linkcard p{color:var(--ink-soft)}
+.sheet .linkcard .who{color:var(--crimson)}
+.sheet .linkcard .arw{color:var(--ink-soft)}
+.sheet .kv b{color:var(--ink-soft)}
+.sheet .kv span{color:var(--ink)}
+.sheet .thread{background:var(--cream-2);color:var(--ink)}
+.sheet .thread b,.sheet .thread .msg{color:var(--ink)}
+.sheet .st{background:rgba(180,20,27,.1);color:var(--crimson-3)}
+.sheet .mono{color:var(--ink)}
+/* chips are used for the month picker in the report, and they were carrying
+   their on-the-red colours onto cream */
+.sheet .chips button{background:var(--cream-2);color:var(--ink)}
+.sheet .chips button:hover{background:#F6EEE6;color:var(--ink)}
+.sheet .chips button[aria-pressed="true"]{background:var(--crimson);color:#fff}
+.sheet .sback{color:var(--ink-soft)}
+.sheet .spin{border-color:rgba(0,0,0,.2);border-top-color:currentColor}
+.sheet label,.sheet .f{color:var(--ink)}
+.sheet select option{color:var(--ink)}
 .sheet .f input,.sheet .f textarea,.sheet .f select{background:#F6EEE6;color:var(--ink);
   border:1px solid var(--cream-3);border-radius:11px}
 .sheet .f input:focus,.sheet .f textarea:focus{border-color:var(--crimson);background:#fff;outline:0}
@@ -1498,7 +1550,11 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
         <button class="btn ghost sm" id="bNewMotion">Motion</button>
         <button class="btn ghost sm" id="bNewPoll" data-committee hidden>Poll</button></div></div>
     <div class="twocol">
-      <div class="colA"><div id="bizMoney"></div><div id="bizIdeas"></div><div id="bizPolls"></div></div>
+      <!-- Polls have gone. A question put in Soundings does the same job better:
+           it is anonymous, the result is held back until somebody has answered,
+           and it sits with everything else the room has been asked. -->
+      <div class="colA"><div id="bizMoney"></div><div id="bizIdeas"></div>
+        <div id="bizPollsGone"></div></div>
       <div class="colB"><div id="bizMeetings"></div><div id="bizMotions"></div></div>
     </div>
   </section>
@@ -1665,7 +1721,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbzN3V9yy0DFBysTVfP04jEJV8UneYHMkC_Mq7-sDKXiwLtjzLZ8t0sb-huWK0_p8DYVCg/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyYP1nyo5yR2SDAqNBehXgTDRBjZX7E8VrfvOBlY9naRWzBotoVpZ7vCkZFrLyYyuR6NA/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -1674,7 +1730,7 @@ const BOOK_REGISTER = "https://jcollegemcr.co.uk/register";
 /* The build this page was written against. If the server reports a different
    one, the deployment answering is not this code, and the membership check it
    is running is whatever was deployed last. Shown under 'What is wrong?'. */
-const EXPECT_BUILD = "chimney-19";
+const EXPECT_BUILD = "chimney-20";
 
 /* JavaScript is alive, so the ring painted before the page was parsed can go.
    It is a pseudo element on <html>, so nothing else can remove it. */
@@ -1900,8 +1956,18 @@ let gsiUp = false, probing = false, APP_URL = "", CLIENT_ID = "";
 const withTimeout = (p, ms, what) => Promise.race([p,
   new Promise((_, rej) => setTimeout(() => rej(new Error(what || "The server did not answer in time.")), ms))]);
 
+/* While something is happening the button is replaced by the waiting bar, and
+   when it is over the real button is drawn again. Emptying it and leaving it
+   empty was what left the card with nothing to press after a failed attempt. */
 function gateBusy(on){
-  put("gsiBtn", on ? '<span class="gsiskel" aria-hidden="true"></span>' : "");
+  if (on) return put("gsiBtn", '<span class="gsiskel" aria-hidden="true"></span>');
+  put("gsiBtn", "");
+  if (window.google && google.accounts && google.accounts.id && gsiUp){
+    try{
+      google.accounts.id.renderButton($("gsiBtn"), { theme:"outline", size:"large", shape:"pill",
+        text:"continue_with", width: 320 });
+    }catch(e){}
+  }
 }
 function gateFix(title, body, actions){
   gateBusy(false);
@@ -2331,67 +2397,42 @@ function bootTalk(on){
    There is no timeout on either. Signing in has already happened; this is the
    page being assembled, and throwing away a request that was about to succeed
    helps nobody. If it is slow the line says so. */
+/* THE WHOLE PAGE, BEFORE ANYBODY IS LET IN.
+
+   It used to come in two parts: enough for Today, then the rest behind it. That
+   was faster to first paint and worse to use. Somebody who opened Formals or
+   Info in the first second saw an empty section, and if the second call failed
+   they saw an empty section for ever, with nothing but a small line to explain
+   it. A loading screen is the right place to wait; a section that lies about
+   being empty is not.
+
+   So one call, everything in it, and the loading screen stays up until it is
+   here. The speed now comes from the server keeping what it built: the page for
+   a minute, the year's events for half an hour, the session for ninety seconds,
+   and the spreadsheet opened once per request rather than once per read. */
 async function bootFetch(){
   const slow = setTimeout(function(){
     const line = $("bootLine");
     if (line) line.textContent = "The server is waking up. This can take a moment the first time";
   }, 6000);
   try{
-    return await api("state", { lite: 1 });
+    return await api("state");
   }finally{ clearTimeout(slow); }
 }
 /* Fetched once the page is up. Anything already on screen stays exactly where
    it is; the sections that were waiting simply fill in. */
-let restPending = false, restTries = 0;
-async function fetchRest(){
-  if (restPending || !S || S.part !== "core") return;
-  restPending = true;
-  try{
-    const full = await api("state");
-    restTries = 0;
-    /* Merged rather than swapped, so a section somebody is looking at is not
-       pulled out from under them, and so anything they have changed in the
-       meantime is not undone by an older answer. */
-    if (S && full && full.now >= (S.now || 0)) S = Object.assign(S, full, { part: "full" });
-    /* Somebody may have started reading, or scrolled, in the second or two this
-       took. The section is redrawn underneath them, so the position is put back
-       rather than thrown to the top. */
-    const y = window.scrollY;
-    const active = document.activeElement;
-    const keep = active && active.id ? active.id : "";
-    render();
-    if (Math.abs(window.scrollY - y) > 2) window.scrollTo(0, y);
-    if (keep){ const el = $(keep); if (el && el.focus) el.focus(); }
-    cacheState();
-  }catch(e){
-    /* Half the app lives in this call: the guides, the societies, the swaps,
-       the threads. Losing it silently and leaving those sections looking empty
-       is the worst of both worlds, so it is tried again, and if it still will
-       not come the sections say so instead of pretending there is nothing
-       there. */
-    if (typeof console !== "undefined") console.warn("The rest of the page did not load:", e);
-    restPending = false;
-    if (++restTries <= 3){
-      await new Promise(f => setTimeout(f, restTries * 1200));
-      return fetchRest();
-    }
-    restFailed = String((e && e.message) || e);
-    render();
-    return;
-  }finally{ restPending = false; }
-}
-let restFailed = "";
 /* A section whose part has not landed yet says so rather than claiming to be
    empty, which is the difference between "nothing on" and "not here yet". */
+/* Only reachable if the page is ever split again. It is left because the call
+   sites read better with it than with a bare empty string. */
 function waitingFor(what){
-  if (restFailed)
-    return '<div class="card"><h3>' + esc(what.charAt(0).toUpperCase() + what.slice(1)) +
-      ' did not load</h3><p class="lede">' + esc(restFailed) + '</p>' +
-      '<div class="acts"><button class="btn cream sm" data-tryrest>Try again</button></div></div>';
   return '<div class="card"><p class="lede"><span class="spin" style="margin-right:8px"></span>' +
     'Fetching ' + esc(what) + '.</p></div>';
 }
-const stillLoading = () => !!(S && S.part === "core");
+/* Kept, and always false: the page arrives whole, so nothing is ever half
+   there. The guards that call this are left in place because they cost nothing
+   and they are the right shape if the page is ever split again. */
+const stillLoading = () => false;
 function bootStuck(msg){
   bootTalk(false);
   $("boot").hidden = true;
@@ -2502,8 +2543,6 @@ async function boot(fresh){
   render();
   startPolling();
   if (fresh) greet();
-  /* The page is on screen. Now the rest of it. */
-  fetchRest();
 }
 async function refresh(loud){
   if (loud){ const b = $("bRefresh"); if (b) b.classList.add("busy"); }
@@ -2851,6 +2890,13 @@ function renderTodayQuick(){
   put("todayQuick", '<div class="grp">Quick things</div><div class="tilegrid">' +
     /* Each of these lands on the thing it names rather than on the front of a
        section somebody then has to find their way around. */
+    /* A question waiting for an answer is the one thing here with a deadline,
+       so it comes first and says so. */
+    (function(){
+      const q = (((S.say || {}).soundings) || []).filter(x => !x.closed && !x.answered)[0];
+      return q ? '<button data-goto="say" class="urgentquick">A question to answer' +
+        '<small>' + esc(q.title) + '</small></button>' : "";
+    })() +
     '<button data-asktab="new">Ask something</button>' +
     '<button data-runevent>Suggest running an event with the MCR</button>' +
     (fix ? '<a href="' + esc(fix.url) + '" target="_blank" rel="noopener">Report something broken</a>' : "") +
@@ -3740,30 +3786,16 @@ function renderIdeas(){
       "</div></div></div>").join("")
       : '<div class="card"><p>Nothing suggested yet. Somebody has to be first, and it may as well be about the coffee machine.</p></div>'));
 }
+/* Kept only to say where polls went, once, to anybody who remembers them. */
 function renderPolls(){
-  const list = S.polls || [];
-  if (!list.length){ put("bizPolls", ""); return; }
-  put("bizPolls", '<div class="grp">Polls</div>' + list.map(p => {
-    const pct = o => p.total ? Math.round((p.counts[o] || 0) / p.total * 100) : 0;
-    return '<div class="card"><h3>' + esc(p.question) + "</h3>" +
-      '<p class="lede">' + esc(p.by) + " &middot; " + (p.open
-        ? (p.closes ? "closes " + esc(shortDate(p.closes)) : "open") : "closed") +
-      " &middot; " + p.total + (p.total === 1 ? " vote" : " votes") + "</p>" +
-      p.options.map(o =>
-        '<div class="opt' + (p.mine === o ? " picked" : "") + '"><div class="t"><b>' + esc(o) + "</b>" +
-        '<div class="bar"><i style="width:' + pct(o) + '%"></i></div></div>' +
-        (p.open ? '<button class="btn ' + (p.mine === o ? "gold" : "ghost") + ' sm" data-pollvote="' +
-          esc(p.id) + '" data-o="' + esc(o) + '">' + (p.mine === o ? "Yours" : "Pick") + "</button>"
-          : '<span class="ref">' + pct(o) + "%</span>") + "</div>").join("") +
-      /* Who voted what is the President's to see and nobody else's. It is here
-         because a poll that cannot be checked is not a vote, it is a mood. */
-      (p.who && p.who.length ? '<div class="whovote">' + p.who.map(x =>
-        "<span><b>" + esc(x.who) + "</b>" + esc(x.choice) + "</span>").join("") + "</div>" : "") +
-      (isCommittee() ? '<div class="acts">' +
-        (p.open ? '<button class="btn ghost sm" data-pollclose="' + esc(p.id) + '">Close it</button>' : "") +
-        (isAdmin() ? '<button class="btn ghost sm" data-polldrop="' + esc(p.id) + '">Delete it</button>' : "") +
-        "</div>" : "") + "</div>";
-  }).join(""));
+  if ($("bizPollsGone")){
+    const open = (((S.say || {}).soundings) || []).filter(q => !q.closed).length;
+    return put("bizPollsGone", '<div class="grp">Polls</div><div class="card">' +
+      '<p>Polls now live under <b>Soundings</b>, where an answer is anonymous and nobody sees the ' +
+      'result until they have given theirs.' + (open ? " There " + (open === 1 ? "is 1 question" :
+      "are " + open + " questions") + " open." : "") + '</p>' +
+      '<div class="acts"><button class="btn cream sm" data-goto="say">Go to Soundings</button></div></div>');
+  }
 }
 function openIdea(){
   sheet("Suggest something",
@@ -4743,19 +4775,25 @@ function renderSay(){
   const openOnes = (say.soundings || []).filter(q => !q.closed);
   const shut = (say.soundings || []).filter(q => q.closed);
   put("sayBody",
+    /* A question has a closing date; the standing marks have all month. So the
+       question comes first, and it is named as something waiting on them. */
+    (openOnes.length
+      ? '<div class="grp">Waiting on you<span class="ref" style="margin-left:auto">' + openOnes.length +
+        (openOnes.length === 1 ? ' question' : ' questions') + '</span></div>' +
+        openOnes.map(soundCard).join("")
+      : "") +
     '<div class="card"><p>How it is going, once a month, in one tap. Nobody is named.</p></div>' +
     '<div class="grp">How it is going<span class="ref" style="margin-left:auto">' +
       esc(monthName(say.period)) + '</span></div>' +
     '<div class="moods">' + (say.topics || []).map(moodCard).join("") + '</div>' +
     (isCommittee()
-      ? '<div class="acts" style="margin-bottom:var(--g3)">' +
+      ? '<div class="acts" style="margin:var(--g2) 0 0">' +
         '<button class="btn ghost sm" data-sayreport>Read a month, gathered</button></div>'
       : "") +
-    '<div class="grp">Questions from the committee' +
-      (openOnes.length ? '<span class="ref" style="margin-left:auto">' + openOnes.length + ' open</span>' : "") + '</div>' +
-    (openOnes.length ? openOnes.map(soundCard).join("")
-      : '<div class="card"><p>Nothing being asked at the moment. Anything the committee wants the ' +
-        'room\u2019s view on appears here, and closes on a date.</p></div>') +
+    (openOnes.length ? "" :
+      '<div class="grp">Questions from the committee</div>' +
+      '<div class="card"><p>Nothing being asked at the moment. Anything the committee wants the ' +
+      'room\u2019s view on appears here, and closes on a date.</p></div>') +
     (shut.length ? '<div class="grp">Answered</div>' + shut.slice(0, 8).map(soundCard).join("") : ""));
 }
 const MONTHNAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
@@ -5266,7 +5304,7 @@ document.addEventListener("click", async e => {
     "[data-skip],[data-editser],[data-second],[data-vote],[data-mset],[data-code],[data-checkin]," +
     "[data-delupdate],[data-rosteredit],[data-rosterdel],[data-newidea],[data-back]," +
     "[data-setidea],[data-dropidea],[data-pollvote],[data-pollclose]," +
-    "[data-runevent],[data-sayreport],[data-boardall],[data-tryrest],[data-mood],[data-moodline],[data-moodreply],[data-moodsay],[data-sound],[data-soundsay],[data-soundclose],[data-roomdrop],[data-roomtab],[data-formal],[data-copy],[data-copyboth],[data-bumpedit],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-polldrop],[data-motiondrop],[data-desktab],[data-tick2],[data-desk],[data-asktab],[data-thread],[data-mythreads],[data-swaptake],[data-swapdrop],[data-swappaid],[data-swapedit],[data-swapsave],[data-swapcancel],[data-swapdel],[data-swappast],[data-bank],[data-swapnudge],[data-swapkick],[data-swappromote],[data-copyaddrs],[data-swapdeskedit],[data-jcsu],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
+    "[data-runevent],[data-sayreport],[data-boardall],[data-mood],[data-moodline],[data-moodreply],[data-moodsay],[data-sound],[data-soundsay],[data-soundclose],[data-roomdrop],[data-roomtab],[data-formal],[data-copy],[data-copyboth],[data-bumpedit],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-polldrop],[data-motiondrop],[data-desktab],[data-tick2],[data-desk],[data-asktab],[data-thread],[data-mythreads],[data-swaptake],[data-swapdrop],[data-swappaid],[data-swapedit],[data-swapsave],[data-swapcancel],[data-swapdel],[data-swappast],[data-bank],[data-swapnudge],[data-swapkick],[data-swappromote],[data-copyaddrs],[data-swapdeskedit],[data-jcsu],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
   if (!t) return;
   const d = t.dataset;
   try{
@@ -5276,9 +5314,6 @@ document.addEventListener("click", async e => {
        because somebody who changes their mind should not be stuck with a
        reading they no longer stand behind. */
     if (t.hasAttribute("data-boardall")){ boardAll = d.boardall === "1"; renderLodge(); return; }
-    if (t.hasAttribute("data-tryrest")){
-      restFailed = ""; restTries = 0; render(); fetchRest(); return;
-    }
     if (t.hasAttribute("data-mood")){
       const now = ((S.say || {}).topics || []).filter(x => x.key === d.mood)[0];
       const n = Number(d.n), same = now && now.mine === n;
