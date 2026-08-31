@@ -10,8 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Manrope:wght@500..800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
-   The Porter's Book. One page: the register of the Jesus MCR.
-   The same cloth as The Chimney, cut smaller.
+   The Porter's Book. Two rooms: the door, and the President's desk.
    ============================================================ */
 :root{
   --crimson:#B4141B; --crimson-2:#8E0F14; --crimson-3:#6B080D; --crimson-4:#48050A;
@@ -31,9 +30,13 @@ body{min-height:100dvh;color:var(--cream);font-family:var(--body);font-weight:50
     radial-gradient(130% 100% at 100% 0%,#5E070C,transparent 55%),
     linear-gradient(178deg,#6B080D,#48050A 64%,#35040A);
   background-attachment:fixed;-webkit-font-smoothing:antialiased}
+body.desk{background:radial-gradient(110% 70% at 0% 0%,#3B2A05,transparent 55%),
+    radial-gradient(90% 60% at 100% 100%,#5E070C,transparent 60%),
+    linear-gradient(178deg,#2E1F08,#1E1406 60%,#150E05)}
 .wrap{max-width:620px;margin:0 auto;padding:26px 20px calc(48px + var(--sab))}
+body.desk .wrap{max-width:1020px}
 @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-.card,.gcard{animation:rise .5s var(--ease) both}
+.card,.gcard,.dk{animation:rise .5s var(--ease) both}
 header{display:flex;align-items:center;gap:13px;margin-bottom:22px}
 .arch{width:44px;height:44px;flex:0 0 44px;color:var(--gold)}
 .arch svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
@@ -41,10 +44,10 @@ header b{display:block;font-family:var(--display);font-size:1.32rem;font-weight:
 header b i{font-style:italic;color:var(--gold-2)}
 header small{display:block;font-family:var(--mono);font-size:.6rem;color:var(--cream-4);
   letter-spacing:.22em;text-transform:uppercase;font-weight:700;margin-bottom:4px}
-header .right{margin-left:auto}
+header .right{margin-left:auto;display:flex;gap:8px}
 .card{background:var(--t1);border-radius:var(--r);padding:19px 19px 16px;margin-bottom:14px}
-.card h3{font-family:var(--display);font-size:1.13rem;font-weight:600;letter-spacing:-.035em;margin:0 0 8px}
-.card h3 i{font-style:italic;color:var(--gold-2)}
+.card h3,.dk h3{font-family:var(--display);font-size:1.13rem;font-weight:600;letter-spacing:-.035em;margin:0 0 8px}
+h3 i{font-style:italic;color:var(--gold-2)}
 p{font-size:.86rem;color:var(--cream-2)}
 p+p{margin-top:8px}
 .lede{font-size:.755rem;color:var(--cream-3);line-height:1.6}
@@ -52,7 +55,7 @@ p+p{margin-top:8px}
 a{color:var(--gold-2)}
 .btn{appearance:none;border:0;cursor:pointer;font-family:var(--body);font-weight:800;font-size:.83rem;
   letter-spacing:-.01em;border-radius:999px;padding:12px 20px;color:var(--cream);background:var(--t2);
-  display:inline-flex;align-items:center;gap:8px;transition:transform .14s var(--ease),background .14s}
+  display:inline-flex;align-items:center;gap:8px;transition:transform .14s var(--ease),background .14s;text-decoration:none}
 .btn:hover{background:rgba(255,255,255,.18)}
 .btn:active{transform:scale(.97)}
 .btn:disabled{opacity:.45;cursor:default;transform:none}
@@ -60,6 +63,7 @@ a{color:var(--gold-2)}
 .btn.gold:hover{background:#F5C86E}
 .btn.ghost{background:transparent;box-shadow:inset 0 0 0 1px var(--edge)}
 .btn.sm{padding:8px 15px;font-size:.74rem}
+.btn.danger{color:#FFC9C9;box-shadow:inset 0 0 0 1px rgba(226,74,74,.5)}
 .acts{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:14px}
 .f{display:block;margin-bottom:13px}
 .f span{display:block;font-family:var(--mono);font-size:.63rem;color:var(--cream-4);margin-bottom:6px;
@@ -71,7 +75,10 @@ a{color:var(--gold-2)}
 .f select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--cream-3) 50%),
   linear-gradient(135deg,var(--cream-3) 50%,transparent 50%);
   background-position:calc(100% - 20px) 50%,calc(100% - 15px) 50%;background-size:5px 5px;background-repeat:no-repeat}
+.f select option{color:var(--ink)}
 .code input{font-family:var(--mono);font-size:1.5rem;letter-spacing:.42em;text-align:center;padding:14px 8px 14px 18px}
+.check{display:flex;align-items:center;gap:9px;font-size:.8rem;color:var(--cream-2);margin:4px 0 12px;cursor:pointer}
+.check input{width:18px;height:18px;accent-color:var(--gold)}
 .msg{font-size:.755rem;color:var(--gold-2);min-height:1.2em;margin-top:9px;font-weight:700}
 .steps{display:flex;gap:8px;margin:2px 0 16px}
 .steps i{flex:1;height:4px;border-radius:4px;background:var(--t2);font-style:normal}
@@ -82,6 +89,8 @@ a{color:var(--gold-2)}
 .stamp.in{background:rgba(79,200,148,.22);color:#B7F0D6}
 .stamp.wait{background:rgba(235,183,83,.2);color:var(--gold-2)}
 .stamp.no{background:rgba(226,74,74,.24);color:#FFC9C9}
+.stamp.fr{background:rgba(99,173,238,.22);color:#C9E3FA}
+.stamp.tiny{font-size:.56rem;padding:3px 9px}
 .row{display:flex;align-items:center;gap:11px;padding:9px 0;box-shadow:0 1px 0 rgba(255,255,255,.06);flex-wrap:wrap}
 .row:last-child{box-shadow:none}
 .row .t{flex:1;min-width:170px}
@@ -98,7 +107,7 @@ a{color:var(--gold-2)}
   text-overflow:ellipsis;white-space:nowrap}
 .filepick .hint{font-size:.68rem;color:var(--cream-4);font-weight:600}
 pre{background:rgba(0,0,0,.36);border-radius:12px;padding:13px 14px;font-family:var(--mono);
-  font-size:.66rem;line-height:1.7;overflow-x:auto;color:var(--cream-2);margin-top:10px}
+  font-size:.66rem;line-height:1.7;overflow-x:auto;color:var(--cream-2);margin-top:10px;white-space:pre}
 #gate{display:grid;place-items:center;min-height:70dvh;padding:10px 0}
 .gcard{max-width:400px;width:100%;background:var(--t1);border-radius:18px;padding:26px 24px}
 .gsiskel{display:block;height:44px;border-radius:999px;background:var(--t2)}
@@ -113,6 +122,40 @@ pre{background:rgba(0,0,0,.36);border-radius:12px;padding:13px 14px;font-family:
 .grp b{font-family:var(--display);font-size:.98rem;font-weight:600;letter-spacing:-.03em}
 .grp span{font-family:var(--mono);font-size:.63rem;color:var(--cream-4);font-weight:700}
 [hidden]{display:none!important}
+
+/* ---------- the desk: a different room ---------- */
+.deskband{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,rgba(235,183,83,.22),rgba(235,183,83,.06));
+  border:1px solid rgba(235,183,83,.35);border-radius:18px;padding:16px 18px;margin-bottom:16px}
+.deskband .seal{width:46px;height:46px;border-radius:50%;background:var(--gold);color:var(--gold-ink);
+  display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:1.2rem;flex:0 0 46px}
+.deskband b{display:block;font-family:var(--display);font-size:1.25rem;font-weight:600;letter-spacing:-.04em;line-height:1.05}
+.deskband small{display:block;font-family:var(--mono);font-size:.6rem;color:var(--gold-2);letter-spacing:.2em;
+  text-transform:uppercase;font-weight:700;margin-top:4px}
+.dnav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.dnav button{appearance:none;border:0;cursor:pointer;font-family:var(--body);font-weight:800;font-size:.76rem;
+  padding:9px 14px;border-radius:999px;background:var(--t1);color:var(--cream-2);display:inline-flex;gap:7px;align-items:center}
+.dnav button.on{background:var(--gold);color:var(--gold-ink)}
+.dnav button em{font-style:normal;font-family:var(--mono);font-size:.62rem;background:rgba(0,0,0,.25);
+  padding:2px 7px;border-radius:999px}
+.dnav button.on em{background:rgba(0,0,0,.14)}
+.dk{background:var(--t1);border-radius:var(--r);padding:19px;margin-bottom:14px;border-left:3px solid transparent}
+.dk.wait{border-left-color:var(--gold)}
+.apwrap{display:grid;gap:16px}
+@media(min-width:860px){.apwrap{grid-template-columns:1fr 1.15fr}}
+.proofbox{background:rgba(0,0,0,.3);border-radius:12px;min-height:180px;display:grid;place-items:center;overflow:hidden;padding:8px}
+.proofbox img{max-width:100%;max-height:520px;border-radius:8px;display:block}
+.proofbox iframe{width:100%;height:520px;border:0;border-radius:8px;background:#fff}
+.ledger{width:100%;border-collapse:collapse;font-size:.78rem}
+.ledger td{padding:8px 6px;vertical-align:middle;box-shadow:0 1px 0 rgba(255,255,255,.06)}
+.ledger td.k{font-family:var(--mono);font-size:.68rem;color:var(--cream-3);white-space:nowrap}
+.ledger td.a{text-align:right;white-space:nowrap}
+.ledger tr:last-child td{box-shadow:none}
+.twocol{display:grid;gap:14px}
+@media(min-width:860px){.twocol{grid-template-columns:1fr 1fr;align-items:start}}
+.stat{display:flex;gap:18px;flex-wrap:wrap;margin:4px 0 6px}
+.stat div b{display:block;font-family:var(--display);font-size:1.5rem;font-weight:600;letter-spacing:-.04em;line-height:1}
+.stat div span{font-family:var(--mono);font-size:.6rem;color:var(--cream-4);letter-spacing:.16em;text-transform:uppercase;font-weight:700}
+.ok{color:#B7F0D6}.bad{color:#FFC9C9}
 </style>
 </head>
 <body>
@@ -120,7 +163,8 @@ pre{background:rgba(0,0,0,.36);border-radius:12px;padding:13px 14px;font-family:
   <header>
     <span class="arch"><svg viewBox="0 0 44 44"><path d="M8 40V20a14 14 0 0 1 28 0v20"/><path d="M8 40h28"/><path d="M15 40V24a7 7 0 0 1 14 0v16"/><path d="M22 6v4M22 3.4h.01"/></svg></span>
     <span><small>Jesus College MCR</small><b>The Porter&rsquo;s <i>Book</i></b></span>
-    <span class="right"><button class="btn ghost sm" id="bOut" hidden>Sign out</button></span>
+    <span class="right"><button class="btn ghost sm" id="bBack" hidden>Back to the book</button>
+      <button class="btn ghost sm" id="bOut" hidden>Sign out</button></span>
   </header>
 
   <div id="gate" hidden>
@@ -142,9 +186,8 @@ pre{background:rgba(0,0,0,.36);border-radius:12px;padding:13px 14px;font-family:
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script>
 /* Put the deployed Apps Script Web App URL here when this page is hosted
-   anywhere other than inside Apps Script itself. Leave it empty when the
-   script serves the page and the google.script.run bridge is used instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbz0WzUCcLZ4aeSMH7lqbIVjWslClgkzUI4SubEPa2njIP2ykTMdhIkR4PPQnvNq8B6EOg/exec";
+   anywhere other than inside Apps Script itself. */
+const API_URL = "https://script.google.com/macros/s/AKfycbxXG-H7GAEZz4RXntwOBpMN6Yv6wyw3XotFJmjNA1OZC5VoLWxAF-E3GNGeccfyBXGFLA/exec";
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
@@ -185,9 +228,14 @@ function spin(b, label){ if (!b) return; b.disabled = true; b.dataset.was = b.in
 function unspin(b){ if (!b) return; b.disabled = false; if (b.dataset.was) b.innerHTML = b.dataset.was; }
 
 /* ---------- state ---------- */
-let S = null;                    /* whatever state() last said */
-let proof = null;                /* { name, mime, data } picked but not yet sent */
-let resendAt = 0;                /* when the resend link wakes up again */
+let S = null;
+let proof = null;                  /* the main paper */
+let proof2 = null;                 /* the first year paper, if they send one */
+let resendAt = 0;
+let deskTab = "waiting";
+const proofs = {};                 /* id:which -> loaded paper, fetched once */
+const proofShow = {};              /* id -> which paper is on show */
+const atDesk = () => location.hash === "#desk";
 
 async function load(){
   try{
@@ -200,6 +248,7 @@ async function load(){
     openGate();
   }
 }
+window.addEventListener("hashchange", () => { if (S) render(); });
 
 /* ---------- the gate ---------- */
 async function openGate(){
@@ -227,38 +276,74 @@ async function onCredential(resp){
 }
 $("bOut").onclick = async () => {
   try{ await api("signOut"); }catch(e){}
-  setToken(""); S = null; location.reload();
+  setToken(""); S = null; location.hash = ""; location.reload();
 };
+$("bBack").onclick = () => { location.hash = ""; };
 
-/* ---------- the page, in whatever state the person is in ---------- */
+/* ---------- render ---------- */
 function render(){
-  const a = [];
-  if (S.member) a.push(memberCard());
-  else a.push(applyFlow());
-  if (S.admin) a.push(adminBlock());
-  $("app").innerHTML = a.join("");
+  const desk = S.admin && atDesk();
+  document.body.classList.toggle("desk", desk);
+  $("bBack").hidden = !desk;
+  if (desk){ $("app").innerHTML = deskPage(); wireDesk(); return; }
+  if (!S.admin && atDesk()) location.hash = "";
+  $("app").innerHTML = S.member ? memberCard() : applyFlow();
   wire();
 }
 
 function memberCard(){
   const m = S.member;
   return '<div class="card"><span class="stamp in">In the book</span>' +
+    (m.fresher ? ' <span class="stamp fr">Fresher ' + esc(m.fresher) + '</span>' : '') +
     '<h3 style="margin-top:12px">' + esc(m.name || S.email) + '</h3>' +
     '<p>Your name is written in the register of the Jesus College MCR' +
     (m.since ? ', entered ' + esc(m.since) : '') + '. Anything the MCR runs online reads this same ' +
     'book, so this one yes opens all of it.</p>' +
-    '<div class="acts"><a class="btn gold sm" href="https://jcollegemcr.co.uk" target="_blank" rel="noopener">Open The Chimney</a></div></div>';
+    '<div class="acts"><a class="btn gold sm" href="https://jcollegemcr.co.uk" target="_blank" rel="noopener">Open The Chimney</a>' +
+    (S.admin ? '<a class="btn sm" href="#desk">Open the desk</a>' : '') + '</div></div>' +
+    claimCard();
 }
-
-/* Three steps, drawn as three bars: the code, the papers, the President. */
+/* In the book already, but arriving in October: the Fortnight is a
+   separate yes, asked for here. */
+function claimCard(){
+  const c = S.fresherClaim;
+  if (S.member && S.member.fresher)
+    return '<div class="card"><span class="stamp fr">Fortnight ' + esc(S.member.fresher) + '</span>' +
+      '<h3 style="margin-top:12px">The Fortnight is <i>yours</i></h3>' +
+      '<p>You are down as a first year, so every event is open to you, from the first evening to ' +
+      'the fireworks.</p></div>';
+  if (c && c.status === "new")
+    return '<div class="card"><span class="stamp wait">With the President</span>' +
+      '<h3 style="margin-top:12px">Your Fortnight papers are in</h3>' +
+      '<p>Sent ' + esc(c.at) + '. You will hear either way, and this page will change on its own.</p></div>';
+  if (!S.canClaimFortnight) return "";
+  return '<div class="card"><h3>Starting this <i>October</i>?</h3>' +
+    (c && c.status === "rejected"
+      ? '<p><span class="stamp no">Not this time</span></p>' + (c.reply ? '<p>' + esc(c.reply) + '</p>' : '') +
+        '<p class="lede">You can send fresh papers whenever you like.</p>'
+      : '<p>The full Freshers\u2019 Fortnight is kept for first years. If that is you, send one ' +
+        'paper that shows it and the President will open the whole thing up: your offer or admission ' +
+        'letter, a CamSIS page with the start date, or your college confirmation.</p>') +
+    '<label class="filepick" style="margin-top:14px"><input type="file" id="clFile" accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg">' +
+    '<span class="fn" id="clName">Attach the proof</span>' +
+    '<span class="hint">PDF, PNG or JPG &middot; up to 5 MB</span></label>' +
+    '<label class="f" style="margin-top:12px"><span>Anything worth adding</span>' +
+    '<input id="clNote" placeholder="Optional. MPhil in Physics, starting October."></label>' +
+    '<div class="acts"><button class="btn gold" id="bClaim">Send it to the President</button></div>' +
+    '<p class="msg" id="clMsg"></p></div>';
+}
 function stepper(n){
   return '<div class="steps">' + [1,2,3].map(i =>
     '<i class="' + (i < n ? "done" : i === n ? "on" : "") + '"></i>').join("") + '</div>';
 }
+const YEARS = () => ["MPhil or MRes","PhD, first year","PhD, second year","PhD, third year",
+  "PhD, fourth year or beyond","MBA or MFin",
+  "Undergraduate, fourth year or later (medicine, veterinary, MEng, MSci)",
+  "Fresher, arriving October " + (S.cohort || ""),
+  "Part-time, visiting or other"];
 
 function applyFlow(){
   const ap = S.application;
-  /* Already applied: show where it stands rather than the form again. */
   if (ap && ap.status === "new")
     return '<div class="card">' + stepper(3) +
       '<span class="stamp wait">With the President</span>' +
@@ -274,8 +359,7 @@ function applyFlow(){
       '<h3 style="margin-top:12px">The President said no</h3>' +
       (ap.reply ? '<p>' + esc(ap.reply) + '</p>' : '') +
       '<p class="lede">If something was missing you can go round again: same door, fresh code.</p>' +
-      startCard(true) + '</div>';
-  /* The three-step door. */
+      startCard() + '</div>';
   if (S.verified) return formCard();
   if (S.codeSentTo) return codeCard();
   return '<div class="card">' + stepper(1) +
@@ -283,24 +367,25 @@ function applyFlow(){
     '<p>You signed in as <span class="mono">' + esc(S.email) + '</span> and that name is not in the ' +
     'register. If you are a Jesus postgraduate, joining takes three short steps: a code to your ' +
     'college address to prove the CRSid is yours, a line or two about what you study, and a yes ' +
-    'from the President.</p>' + startCard(false) + '</div>';
+    'from the President.</p>' + startCard() + '</div>';
 }
-function startCard(bare){
+function startCard(){
   const jesus = S.jesusAddress || "";
-  const inner = jesus
+  return jesus
     ? '<p class="lede" style="margin-top:10px">The code goes to <b>' + esc(jesus) + '</b>, the Jesus ' +
-      'counterpart of the address you signed in with. Same inbox in Outlook for most people; look ' +
-      'in junk if it hides.</p>' +
+      'counterpart of the address you signed in with. It comes from the President\u2019s own account, ' +
+      'and Outlook sometimes files it under <b>Other</b> or <b>Junk</b> the first time, so look there ' +
+      'before asking for another.</p>' +
       '<div class="acts"><button class="btn gold" id="bCode">Email me a code</button></div>'
     : '<p class="lede" style="margin-top:10px">Your address is not a personal CRSid, so the code ' +
       'cannot be sent automatically. Write to the President instead and you will be added by hand.</p>';
-  return bare ? inner : inner;
 }
 function codeCard(){
   const wait = Math.max(0, Math.ceil((resendAt - Date.now()) / 1000));
   return '<div class="card">' + stepper(1) +
     '<h3>The code is on its <i>way</i></h3>' +
-    '<p>Sent to <b>' + esc(S.codeSentTo) + '</b>. Six digits, good for fifteen minutes.</p>' +
+    '<p>Sent to <b>' + esc(S.codeSentTo) + '</b>. Six digits, good for fifteen minutes. ' +
+    'Not in the inbox? Try Junk and the Other tab; drag it across once and Outlook learns.</p>' +
     '<label class="f code" style="margin-top:14px"><span>The code</span>' +
     '<input id="codeIn" inputmode="numeric" autocomplete="one-time-code" maxlength="7" placeholder="000000"></label>' +
     '<div class="acts"><button class="btn gold" id="bVerify">That is the one</button>' +
@@ -312,86 +397,212 @@ function formCard(){
   return '<div class="card">' + stepper(2) +
     '<h3>Now the <i>papers</i></h3>' +
     '<p class="lede">A minute of form. The proof can be anything that shows you are a Jesus ' +
-    'postgraduate: a CamSIS screenshot, your college confirmation letter, a student card. ' +
+    'student: a CamSIS screenshot, your college confirmation letter, a student card. ' +
     'It is seen by the President and nobody else.</p>' +
     '<label class="f" style="margin-top:14px"><span>Your name</span>' +
     '<input id="apName" value="' + esc(S.name || "") + '" autocomplete="name"></label>' +
     '<label class="f"><span>What you study</span>' +
     '<input id="apProg" placeholder="PhD in Electrical Engineering"></label>' +
     '<label class="f"><span>Year</span><select id="apYear">' +
-    ["MPhil or MRes","PhD, first year","PhD, second year","PhD, third year",
-     "PhD, fourth year or beyond","MBA or MFin","Part-time, visiting or other"]
-      .map(y => '<option>' + y + '</option>').join("") + '</select></label>' +
+    YEARS().map(y => '<option>' + esc(y) + '</option>').join("") + '</select></label>' +
     '<label class="f"><span>Anything worth adding</span>' +
     '<textarea id="apNote" placeholder="Optional. A line is plenty."></textarea></label>' +
     '<label class="filepick" id="pickWrap"><input type="file" id="apFile" accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg">' +
     '<span class="fn" id="pickName">Attach the proof</span>' +
     '<span class="hint">PDF, PNG or JPG &middot; up to 5 MB</span></label>' +
+    fortnightAsk() +
     '<div class="acts"><button class="btn gold" id="bApply">Send it to the President</button></div>' +
     '<p class="msg" id="apMsg"></p></div>';
 }
+/* The Fortnight is for first years, so it is asked for plainly and proved
+   the same way. Ticking opens a second picker; one paper often shows both,
+   so the second is optional. */
+function fortnightAsk(){
+  return '<div style="margin-top:16px;padding-top:14px;box-shadow:inset 0 1px 0 rgba(255,255,255,.09)">' +
+    '<label class="check"><input type="checkbox" id="apFresh"> ' +
+    'I am starting my first year this October, and would like the full Freshers\u2019 Fortnight</label>' +
+    '<div id="freshWrap" hidden>' +
+    '<p class="lede" style="margin-bottom:10px">The whole Fortnight, every event, is kept for first ' +
+    'years. Send something that shows this is your first year: your offer or admission letter, a ' +
+    'CamSIS page with the start date, or your college confirmation. If the paper above already ' +
+    'shows it, leave this empty.</p>' +
+    '<label class="filepick"><input type="file" id="apFile2" accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg">' +
+    '<span class="fn" id="pickName2">Attach the first year proof</span>' +
+    '<span class="hint">Optional</span></label></div></div>';
+}
 
-/* ---------- the admin desk ---------- */
-function adminBlock(){
+/* ---------- the desk ---------- */
+function deskPage(){
   const A = S.adminData || {};
   const pend = (A.applications || []).filter(x => x.status === "new");
+  const claims = pend.filter(x => x.kind === "fresher").length;
+  const tabs = [["waiting","Waiting", pend.length + (claims ? " \u00b7 " + claims + " fortnight" : "")],
+    ["book","The book", A.memberCount || 0],
+    ["freshers","Freshers " + esc(A.cohort || ""), (A.freshers || []).length],
+    ["post","Post", null], ["apps","Other apps", null]];
+  return '<div class="deskband"><span class="seal">P</span><span><b>The Desk</b>' +
+    '<small>President only &middot; ' + esc(A.president || S.email) + '</small></span></div>' +
+    '<div class="dnav">' + tabs.map(t => '<button data-tab="' + t[0] + '"' +
+      (deskTab === t[0] ? ' class="on"' : '') + '>' + t[1] +
+      (t[2] !== null ? '<em>' + t[2] + '</em>' : '') + '</button>').join("") + '</div>' +
+    '<div id="deskBody">' + deskBody() + '</div>';
+}
+function deskBody(){
+  const A = S.adminData || {};
+  if (deskTab === "waiting") return deskWaiting(A);
+  if (deskTab === "book") return deskBook(A);
+  if (deskTab === "freshers") return deskFreshers(A);
+  if (deskTab === "post") return deskPost(A);
+  return deskApps(A);
+}
+function deskWaiting(A){
+  const pend = (A.applications || []).filter(x => x.status === "new");
   const done = (A.applications || []).filter(x => x.status !== "new");
-  return '<div class="grp"><b>The desk</b><span>' + (A.memberCount || 0) + ' in the book</span></div>' +
-    (pend.length ? pend.map(appCard).join("")
-      : '<div class="card"><p>Nothing waiting. Rare, and worth enjoying.</p></div>') +
-    (done.length ? '<div class="grp"><b>Answered lately</b></div><div class="card">' +
-      done.slice(0, 8).map(x => '<div class="row"><div class="t"><b>' + esc(x.name || x.key) +
-      '</b><span>' + esc(x.programme) + ' &middot; ' + esc(x.decidedAt || "") + '</span></div>' +
+  return (pend.length ? pend.map(appCard).join("")
+      : '<div class="dk"><p>Nothing waiting. Rare, and worth enjoying.</p></div>') +
+    (done.length ? '<div class="grp"><b>Answered lately</b></div><div class="dk">' +
+      done.slice(0, 12).map(x => '<div class="row"><div class="t"><b>' + esc(x.name || x.key) +
+      (x.fresher ? ' <span class="stamp fr tiny">fresher</span>' : '') +
+      '</b><span>' + esc(x.programme) + ' &middot; ' + esc(x.year) + ' &middot; ' + esc(x.decidedAt || "") +
+      (x.reply ? ' &middot; \u201c' + esc(x.reply) + '\u201d' : '') + '</span></div>' +
+      (x.proofUrl ? '<a class="btn ghost sm" href="' + esc(x.proofUrl) + '" target="_blank" rel="noopener">Proof</a>' : '') +
       '<span class="stamp ' + (x.status === "approved" ? "in" : "no") + '">' + esc(x.status) +
-      '</span></div>').join("") + '</div>' : '') +
-    '<div class="grp"><b>The book itself</b></div>' +
-    '<div class="card"><label class="f"><span>Find somebody</span>' +
-    '<input id="findQ" placeholder="Name, CRSid or address"></label>' +
-    '<div id="findOut"></div>' +
-    '<div class="acts"><a class="btn gold sm" href="' + esc(A.sheetUrl || "#") +
-    '" target="_blank" rel="noopener">Open the spreadsheet</a>' +
-    '<span class="lede">The sheet is the register. Edit it by hand whenever you like; every site ' +
-    'reads it live.</span></div></div>' +
-    '<div class="card"><h3>Add somebody by hand</h3>' +
-    '<label class="f"><span>Address</span><input id="addEmail" placeholder="abc123@cam.ac.uk"></label>' +
-    '<label class="f"><span>Name</span><input id="addName"></label>' +
-    '<div class="acts"><button class="btn gold sm" id="bAdd">Write them in</button></div></div>' +
-    '<div class="card"><h3>For other apps</h3>' +
-    '<p class="lede">Any Apps Script the MCR runs can ask this register one question: is this ' +
-    'address in the book? Two lines, and the key below is the handshake.</p>' +
-    '<pre>' + esc('const r = JSON.parse(UrlFetchApp.fetch(\n  "' + (A.webUrl || "YOUR_WEB_APP_URL") +
-    '"\n  + "?verify=" + encodeURIComponent(email)\n  + "&key=' + (A.apiKey || "API_KEY") +
-    '").getContentText());\nif (r.member) { /* they are Jesus MCR */ }') + '</pre>' +
-    '<div class="acts"><button class="btn ghost sm" id="bKey">Copy the key</button>' +
-    '<span class="lede mono" style="font-size:.62rem">' + esc(A.apiKey || "") + '</span></div></div>';
+      '</span></div>').join("") + '</div>' : '');
+}
+function proofPane(x){
+  const which = proofShow[x.id] === "2" ? "2" : "1";
+  const id = which === "2" ? x.proof2Id : x.proofId;
+  const p = proofs[x.id + ":" + which];
+  const tabs = x.proof2Id
+    ? '<div class="dnav" style="margin:0 0 8px"><button data-pshow="' + esc(x.id) + '" data-w="1"' +
+      (which === "1" ? ' class="on"' : '') + '>The proof</button>' +
+      '<button data-pshow="' + esc(x.id) + '" data-w="2"' +
+      (which === "2" ? ' class="on"' : '') + '>First year</button></div>'
+    : '';
+  const box = p
+    ? (/^image\//.test(p.mime)
+        ? '<img alt="proof" src="data:' + esc(p.mime) + ';base64,' + p.data + '">'
+        : '<iframe title="proof" src="data:' + esc(p.mime || "application/pdf") + ';base64,' + p.data + '"></iframe>')
+    : '<button class="btn sm" data-proof="' + esc(x.id) + '" data-w="' + which + '"' +
+      (id ? '' : ' disabled') + '>' + (id ? 'Show the paper' : 'No paper attached') + '</button>';
+  return tabs + '<div class="proofbox">' + box + '</div>';
 }
 function appCard(x){
-  return '<div class="card"><span class="stamp wait">Waiting</span>' +
+  const claim = x.kind === "fresher";
+  return '<div class="dk wait"><div class="apwrap"><div>' +
+    '<span class="stamp wait">Waiting</span>' +
+    (claim ? ' <span class="stamp fr">Fortnight claim</span>'
+           : x.fresher ? ' <span class="stamp fr">Asking for the Fortnight</span>' : '') +
     '<h3 style="margin-top:12px">' + esc(x.name || x.key) + '</h3>' +
+    (claim ? '<p class="lede" style="margin-bottom:8px">Already in the book. Asking for the full ' +
+      'Fortnight as a first year.</p>' : '') +
     '<div class="kv"><b>Address</b><span class="mono">' + esc(x.email) + '</span>' +
     '<b>Programme</b><span>' + esc(x.programme) + '</span>' +
     '<b>Year</b><span>' + esc(x.year) + '</span>' +
     (x.note ? '<b>Note</b><span>' + esc(x.note) + '</span>' : '') +
-    '<b>Sent</b><span>' + esc(x.at) + '</span></div>' +
+    '<b>Sent</b><span>' + esc(x.at) + '</span>' +
+    (x.proofName ? '<b>File</b><span class="mono" style="font-size:.66rem">' + esc(x.proofName) + '</span>' : '') +
+    (x.proof2Name ? '<b>First year</b><span class="mono" style="font-size:.66rem">' + esc(x.proof2Name) + '</span>' : '') +
+    '</div>' +
     '<div class="acts">' +
-    (x.proofUrl ? '<a class="btn ghost sm" href="' + esc(x.proofUrl) +
-      '" target="_blank" rel="noopener">Open the proof</a>' : '') +
-    '<button class="btn gold sm" data-yes="' + esc(x.id) + '">Write them in</button>' +
-    '<button class="btn ghost sm" data-no="' + esc(x.id) + '">Say no</button></div>' +
+    (claim
+      ? '<button class="btn gold sm" data-yes="' + esc(x.id) + '" data-fr="1">Give them the Fortnight</button>'
+      : x.fresher
+        ? '<button class="btn gold sm" data-yes="' + esc(x.id) + '" data-fr="1">Write them in, with the Fortnight</button>' +
+          '<button class="btn sm" data-yes="' + esc(x.id) + '" data-fr="0">Write them in only</button>'
+        : '<button class="btn gold sm" data-yes="' + esc(x.id) + '" data-fr="0">Write them in</button>') +
+    '<button class="btn ghost sm" data-no="' + esc(x.id) + '">Say no</button>' +
+    (x.proofUrl ? '<a class="btn ghost sm" href="' + esc(x.proofUrl) + '" target="_blank" rel="noopener">Open in Drive</a>' : '') +
+    '</div>' +
     '<label class="f" id="why-' + esc(x.id) + '" hidden style="margin-top:12px"><span>Why not, in a line they will read</span>' +
-    '<input id="whyIn-' + esc(x.id) + '" placeholder="The proof does not show a Jesus course."></label></div>';
+    '<input id="whyIn-' + esc(x.id) + '" placeholder="' +
+      (claim ? 'The papers do not show a first year.' : 'The proof does not show a Jesus course.') +
+      '"></label>' +
+    '</div><div>' + proofPane(x) + '</div></div></div>';
+}
+function deskBook(A){
+  return '<div class="twocol"><div class="dk">' +
+    '<div class="stat"><div><b>' + (A.memberCount || 0) + '</b><span>in the book</span></div>' +
+    '<div><b>' + (A.fresherCount || 0) + '</b><span>flagged fresher</span></div></div>' +
+    '<label class="f" style="margin-top:12px"><span>Find somebody</span>' +
+    '<input id="findQ" placeholder="Name, CRSid or address"></label>' +
+    '<div id="findOut"></div>' +
+    '<div class="acts"><a class="btn gold sm" href="' + esc(A.sheetUrl || "#") + '" target="_blank" rel="noopener">Open the spreadsheet</a>' +
+    '<span class="lede">The sheet is the register. Edit it by hand whenever you like; every site reads it live.</span></div></div>' +
+    '<div class="dk"><h3>Write somebody in</h3>' +
+    '<label class="f"><span>Address</span><input id="addEmail" placeholder="abc123@cam.ac.uk"></label>' +
+    '<label class="f"><span>Name</span><input id="addName"></label>' +
+    '<label class="check"><input type="checkbox" id="addFresh"> Also a fresher this year</label>' +
+    '<div class="acts"><button class="btn gold sm" id="bAdd">Write them in</button></div></div></div>';
+}
+function deskFreshers(A){
+  const list = A.freshers || [];
+  return '<div class="twocol"><div class="dk">' +
+    '<div class="stat"><div><b>' + list.length + '</b><span>freshers ' + esc(A.cohort || "") + '</span></div></div>' +
+    '<p class="lede" style="margin:8px 0 12px">A separate list for the Fortnight. Anyone here is also in the ' +
+    'book, flagged with the year, and the Freshers app can check this list on its own with ' +
+    '<span class="mono">&amp;list=freshers</span>.</p>' +
+    (list.length ? '<table class="ledger">' + list.map(f =>
+      '<tr><td class="k">' + esc(f.key) + '</td><td><b>' + esc(f.name || "") + '</b></td>' +
+      '<td class="a"><button class="btn ghost sm danger" data-frdrop="' + esc(f.key) + '">Remove</button></td></tr>').join("") +
+      '</table>' : '<p class="lede">Nobody yet.</p>') + '</div>' +
+    '<div><div class="dk"><h3>Add one</h3>' +
+    '<label class="f"><span>Address</span><input id="frEmail" placeholder="abc123@cam.ac.uk"></label>' +
+    '<label class="f"><span>Name</span><input id="frName"></label>' +
+    '<div class="acts"><button class="btn gold sm" id="bFrAdd">Add to the freshers</button></div></div>' +
+    '<div class="dk"><h3>Or paste the whole list</h3>' +
+    '<p class="lede">One per line, address then name, however the college sent it. Commas, tabs and ' +
+    'spaces all work.</p>' +
+    '<label class="f" style="margin-top:10px"><span>The list</span>' +
+    '<textarea id="frLines" placeholder="abc123@cam.ac.uk, Ada Lovelace&#10;xyz789@cam.ac.uk Charles Babbage"></textarea></label>' +
+    '<div class="acts"><button class="btn gold sm" id="bFrBulk">Add them all</button></div></div></div></div>';
+}
+function deskPost(A){
+  const log = A.mail || [];
+  return '<div class="twocol"><div class="dk"><h3>Is the post getting through?</h3>' +
+    '<div class="stat"><div><b>' + (A.mailQuota >= 0 ? A.mailQuota : "?") + '</b><span>sends left today</span></div>' +
+    '<div><b style="font-size:1rem;padding-top:6px">' + esc(A.sendAs || A.president || "") + '</b><span>goes out as</span></div></div>' +
+    '<p class="lede" style="margin:10px 0">Every message leaves through Google from that account. ' +
+    'Cambridge\u2019s Exchange usually lets it in but files an unfamiliar sender under <b>Junk</b> or ' +
+    'the <b>Other</b> tab the first time. Moving one to the inbox teaches it. If the log below says ' +
+    'sent and nothing arrives at all, that is where it is.</p>' +
+    '<p class="lede">If you have a send-as alias set up in Gmail, such as president@mcr.jesus.cam.ac.uk, ' +
+    'put it in <span class="mono">SEND_AS</span> at the top of Register.gs: the college servers know that ' +
+    'name and it lands cleaner.</p>' +
+    '<div class="acts"><button class="btn gold sm" id="bMailTest">Send me a test</button></div></div>' +
+    '<div class="dk"><h3>The log</h3>' +
+    (log.length ? '<table class="ledger">' + log.map(m =>
+      '<tr><td class="k">' + esc(m.at) + '</td><td><b>' + esc(m.subject) + '</b><br><span class="mono" style="font-size:.62rem;color:var(--cream-4)">' +
+      esc(m.to) + '</span>' + (m.error ? '<br><span class="bad" style="font-size:.66rem">' + esc(m.error) + '</span>' : '') +
+      '</td><td class="a">' + (m.ok ? '<span class="ok">sent</span>' : '<span class="bad">failed</span>') + '</td></tr>').join("") +
+      '</table>' : '<p class="lede">Nothing sent yet.</p>') + '</div></div>';
+}
+function deskApps(A){
+  const url = A.webUrl || "YOUR_WEB_APP_URL", key = A.apiKey || "API_KEY";
+  return '<div class="twocol"><div class="dk"><h3>Ask the book from any app</h3>' +
+    '<p class="lede">Two lines from any Apps Script the MCR runs. The key is the handshake; keep it inside the code.</p>' +
+    '<pre>' + esc('const r = JSON.parse(UrlFetchApp.fetch(\n  "' + url + '"\n  + "?verify=" + encodeURIComponent(email)\n  + "&key=' + key +
+      '").getContentText());\nif (r.member)  { /* Jesus MCR */ }\nif (r.fresher) { /* this year\'s fresher */ }') + '</pre>' +
+    '<p class="lede" style="margin-top:12px">For the Freshers app, ask the freshers list only:</p>' +
+    '<pre>' + esc('"?verify=" + encodeURIComponent(email)\n  + "&list=freshers&key=' + key + '"') + '</pre>' +
+    '<div class="acts"><button class="btn ghost sm" id="bKey">Copy the key</button>' +
+    '<span class="lede mono" style="font-size:.62rem">' + esc(key) + '</span></div></div>' +
+    '<div class="dk"><h3>Or read the sheet itself</h3>' +
+    '<p class="lede">Any script you own can open the spreadsheet directly. Tab <span class="mono">Members</span>, ' +
+    'match on the <span class="mono">key</span> column, skip status <span class="mono">gone</span>. ' +
+    'Tab <span class="mono">Freshers</span> is the Fortnight list.</p>' +
+    '<pre>' + esc('SpreadsheetApp.openById("' + (A.sheetId || "SHEET_ID") + '")') + '</pre>' +
+    '<div class="acts"><a class="btn gold sm" href="' + esc(A.sheetUrl || "#") + '" target="_blank" rel="noopener">Open the spreadsheet</a></div></div></div>';
 }
 
-/* ---------- wiring ---------- */
+/* ---------- wiring: the door ---------- */
 function wire(){
   const on = (id, fn) => { const el = $(id); if (el) el.onclick = fn; };
   on("bCode", async () => {
     const b = $("bCode"); spin(b, "Sending");
-    try{
-      const r = await api("requestCode");
-      S.codeSentTo = r.sentTo; resendAt = Date.now() + 60000;
-      render(); tickResend();
-    }catch(e){ unspin(b); fail(e); }
+    try{ const r = await api("requestCode"); S.codeSentTo = r.sentTo;
+      resendAt = Date.now() + 60000; render(); tickResend(); }
+    catch(e){ unspin(b); fail(e); }
   });
   on("bResend", async () => {
     const b = $("bResend"); spin(b, "Sending");
@@ -401,112 +612,172 @@ function wire(){
   });
   on("bVerify", async () => {
     const b = $("bVerify"); spin(b, "Checking");
-    try{
-      await api("verifyCode", { code: ($("codeIn").value || "").replace(/\D/g, "") });
-      S.verified = true; render();
-    }catch(e){ unspin(b); $("codeMsg").textContent = e.message || String(e); }
+    try{ await api("verifyCode", { code: ($("codeIn").value || "").replace(/\D/g, "") });
+      S.verified = true; render(); }
+    catch(e){ unspin(b); $("codeMsg").textContent = e.message || String(e); }
   });
-  on("bAgain", async () => { S.application = null; S.verified = false; render(); });
-  const file = $("apFile");
-  if (file) file.onchange = () => {
-    proof = null; $("pickName").textContent = "Attach the proof";
-    const f = file.files && file.files[0];
-    if (!f) return;
-    if (f.size > 5 * 1024 * 1024){ $("apMsg").textContent = "That file is over 5 MB. A screenshot is plenty."; file.value = ""; return; }
-    if (!/pdf|png|jpe?g/i.test(f.type + f.name)){ $("apMsg").textContent = "PDF, PNG or JPG only."; file.value = ""; return; }
-    const rd = new FileReader();
-    rd.onload = () => {
-      proof = { name: f.name, mime: f.type || "application/octet-stream",
-        data: String(rd.result).split(",")[1] || "" };
-      $("pickName").textContent = f.name; $("apMsg").textContent = "";
-    };
-    rd.readAsDataURL(f);
+  on("bAgain", () => { S.application = null; S.verified = false; render(); });
+  pick("apFile", "pickName", "apMsg", "Attach the proof", p => proof = p);
+  pick("apFile2", "pickName2", "apMsg", "Attach the first year proof", p => proof2 = p);
+  pick("clFile", "clName", "clMsg", "Attach the proof", p => proof = p);
+  const tick = $("apFresh");
+  if (tick) tick.onchange = () => { $("freshWrap").hidden = !tick.checked; };
+  const ysel = $("apYear");
+  if (ysel) ysel.onchange = () => {
+    if (/fresher/i.test(ysel.value) && tick && !tick.checked){
+      tick.checked = true; $("freshWrap").hidden = false;
+    }
   };
+  on("bClaim", async () => {
+    const b = $("bClaim");
+    if (!proof) return $("clMsg").textContent = "Attach the proof first.";
+    spin(b, "Sending");
+    try{ const r = await api("fresherClaim", { proof: proof, note: $("clNote").value });
+      S.fresherClaim = r.fresherClaim; proof = null; render();
+      toast("Sent. The President has it."); }
+    catch(e){ unspin(b); $("clMsg").textContent = e.message || String(e); }
+  });
   on("bApply", async () => {
     const b = $("bApply");
     if (!$("apProg").value.trim()) return $("apMsg").textContent = "Say what you study.";
     if (!proof) return $("apMsg").textContent = "Attach the proof first.";
     spin(b, "Sending");
-    try{
-      const r = await api("apply", { name: $("apName").value, programme: $("apProg").value,
-        year: $("apYear").value, note: $("apNote").value, proof: proof });
-      S.application = r.application; S.verified = false; proof = null; render();
-      toast("Sent. The President has it.");
-    }catch(e){ unspin(b); $("apMsg").textContent = e.message || String(e); }
+    try{ const r = await api("apply", { name: $("apName").value, programme: $("apProg").value,
+        year: $("apYear").value, note: $("apNote").value, proof: proof,
+        fresher: !!($("apFresh") && $("apFresh").checked), proof2: proof2 });
+      S.application = r.application; S.verified = false; proof = proof2 = null; render();
+      toast("Sent. The President has it."); }
+    catch(e){ unspin(b); $("apMsg").textContent = e.message || String(e); }
   });
-  /* admin */
-  document.querySelectorAll("[data-yes]").forEach(el => el.onclick = async () => {
-    spin(el, "Writing in");
-    try{ S.adminData = (await api("decide", { id: el.dataset.yes, want: "yes" })).adminData;
-      render(); toast("In the book, and told so."); }
+}
+
+/* One picker, three inputs. Reads the file, checks it, hands it back. */
+function pick(inputId, labelId, msgId, blank, keep){
+  const el = $(inputId);
+  if (!el) return;
+  el.onchange = () => {
+    keep(null);
+    const lab = $(labelId); if (lab) lab.textContent = blank;
+    const msg = $(msgId);
+    const f = el.files && el.files[0];
+    if (!f) return;
+    const say = t => { if (msg) msg.textContent = t; el.value = ""; };
+    if (f.size > 5 * 1024 * 1024) return say("That file is over 5 MB. A screenshot is plenty.");
+    if (!/pdf|png|jpe?g/i.test(f.type + f.name)) return say("PDF, PNG or JPG only.");
+    const rd = new FileReader();
+    rd.onload = () => {
+      keep({ name: f.name, mime: f.type || "application/octet-stream",
+        data: String(rd.result).split(",")[1] || "" });
+      if (lab) lab.textContent = f.name;
+      if (msg) msg.textContent = "";
+    };
+    rd.readAsDataURL(f);
+  };
+}
+
+/* ---------- wiring: the desk ---------- */
+function wireDesk(){
+  const on = (id, fn) => { const el = $(id); if (el) el.onclick = () => fn(el); };
+  const all = (sel, fn) => document.querySelectorAll(sel).forEach(el => el.onclick = () => fn(el));
+  const take = async (el, label, action, payload, note) => {
+    spin(el, label);
+    try{ S.adminData = (await api(action, payload)).adminData; render(); if (note) toast(note); }
+    catch(e){ unspin(el); fail(e); }
+  };
+  all("[data-tab]", el => { deskTab = el.dataset.tab; render(); });
+  all("[data-proof]", async el => {
+    const w = el.dataset.w || "1";
+    spin(el, "Fetching");
+    try{ proofs[el.dataset.proof + ":" + w] = await api("proofGet", { id: el.dataset.proof, which: w });
+      render(); }
     catch(e){ unspin(el); fail(e); }
   });
-  document.querySelectorAll("[data-no]").forEach(el => el.onclick = async () => {
+  all("[data-pshow]", el => { proofShow[el.dataset.pshow] = el.dataset.w; render(); });
+  all("[data-yes]", el => take(el, "Writing in", "decide",
+    { id: el.dataset.yes, want: "yes", fresher: el.dataset.fr === "1" },
+    el.dataset.fr === "1" ? "Done, and the Fortnight is theirs." : "In the book, and told so."));
+  all("[data-no]", el => {
     const box = $("why-" + el.dataset.no);
     if (box.hidden){ box.hidden = false; $("whyIn-" + el.dataset.no).focus(); return; }
     const why = $("whyIn-" + el.dataset.no).value.trim();
     if (!why) return toast("Give them a line to go on.");
-    spin(el, "Sending");
-    try{ S.adminData = (await api("decide", { id: el.dataset.no, want: "no", reply: why })).adminData;
-      render(); toast("Answered."); }
-    catch(e){ unspin(el); fail(e); }
+    take(el, "Sending", "decide", { id: el.dataset.no, want: "no", reply: why }, "Answered.");
   });
   const fq = $("findQ");
-  if (fq){ let t; fq.oninput = () => { clearTimeout(t); t = setTimeout(find, 350); }; }
-  on("bAdd", async () => {
-    const b = $("bAdd");
+  if (fq){ let t; fq.oninput = () => { clearTimeout(t); t = setTimeout(find, 350); };
+    if (lastQ){ fq.value = lastQ; find(); } }
+  on("bAdd", el => {
     if (!$("addEmail").value.trim()) return toast("An address first.");
-    spin(b, "Writing in");
-    try{ S.adminData = (await api("memberAdd", { email: $("addEmail").value,
-        name: $("addName").value })).adminData;
-      render(); toast("In the book."); }
-    catch(e){ unspin(b); fail(e); }
+    const fresh = $("addFresh").checked;
+    take(el, "Writing in", fresh ? "fresherAdd" : "memberAdd",
+      { email: $("addEmail").value, name: $("addName").value }, "In the book.");
+  });
+  on("bFrAdd", el => {
+    if (!$("frEmail").value.trim()) return toast("An address first.");
+    take(el, "Adding", "fresherAdd", { email: $("frEmail").value, name: $("frName").value }, "Added.");
+  });
+  on("bFrBulk", async el => {
+    const lines = $("frLines").value.trim();
+    if (!lines) return toast("Paste the list first.");
+    spin(el, "Adding");
+    try{ const r = await api("fresherAdd", { lines: lines }); S.adminData = r.adminData; render();
+      toast("Added " + r.added + (r.skipped.length ? ", skipped " + r.skipped.length + " line" +
+        (r.skipped.length > 1 ? "s" : "") + " without an address" : "") + "."); }
+    catch(e){ unspin(el); fail(e); }
+  });
+  all("[data-frdrop]", el => {
+    if (!confirm("Take them off the freshers list? They stay in the book.")) return;
+    take(el, "Removing", "fresherDrop", { key: el.dataset.frdrop }, "Removed.");
+  });
+  on("bMailTest", async el => {
+    spin(el, "Sending");
+    try{ const r = await api("mailTest");
+      S.adminData.mail = r.mail; S.adminData.mailQuota = r.quota; render();
+      toast(r.ok ? "Sent to " + r.to + ". Now look in Junk and Other." : "Failed: " + r.error); }
+    catch(e){ unspin(el); fail(e); }
   });
   on("bKey", async () => {
     try{ await navigator.clipboard.writeText((S.adminData || {}).apiKey || ""); toast("Copied."); }
     catch(e){ toast("Copy it from the line beside the button."); }
   });
 }
+let lastQ = "";
 async function find(){
-  const q = ($("findQ").value || "").trim();
+  const q = ($("findQ").value || "").trim(); lastQ = q;
   if (!q){ $("findOut").innerHTML = ""; return; }
   try{
     const r = await api("membersFind", { q: q });
     $("findOut").innerHTML = (r.list || []).map(m =>
-      '<div class="row"><div class="t"><b>' + esc(m.name || m.key) + '</b><span class="mono">' +
-      esc(m.email) + ' &middot; ' + esc(m.source) + '</span></div>' +
-      '<button class="btn ghost sm" data-drop="' + esc(m.key) + '">Strike out</button></div>').join("") ||
+      '<div class="row"><div class="t"><b>' + esc(m.name || m.key) +
+      (m.fresher ? ' <span class="stamp fr tiny">fresher ' + esc(m.fresher) + '</span>' : '') +
+      '</b><span class="mono">' + esc(m.email) + ' &middot; ' + esc(m.source) + ' &middot; ' + esc(m.since) + '</span></div>' +
+      '<button class="btn ghost sm" data-frset="' + esc(m.key) + '" data-v="' + (m.fresher ? "0" : "1") + '">' +
+      (m.fresher ? "Not a fresher" : "Mark fresher") + '</button>' +
+      '<button class="btn ghost sm danger" data-drop="' + esc(m.key) + '">Strike out</button></div>').join("") ||
       '<p class="lede">Nobody by that name.</p>';
-    document.querySelectorAll("[data-drop]").forEach(el => el.onclick = async () => {
-      if (!confirm("Strike them from the book? They lose access everywhere that reads it.")) return;
-      spin(el, "Striking");
-      try{
-        S.adminData = (await api("memberDrop", { key: el.dataset.drop })).adminData;
-        const kept = q;
-        render();
-        const fq2 = $("findQ");
-        if (fq2){ fq2.value = kept; find(); }
-        toast("Struck out.");
-      }
+    const again = async (el, label, action, payload, note) => {
+      spin(el, label);
+      try{ S.adminData = (await api(action, payload)).adminData; render(); toast(note); }
       catch(e){ unspin(el); fail(e); }
+    };
+    document.querySelectorAll("[data-frset]").forEach(el => el.onclick = () =>
+      again(el, "Saving", "fresherSet", { key: el.dataset.frset, fresher: el.dataset.v === "1" }, "Saved."));
+    document.querySelectorAll("[data-drop]").forEach(el => el.onclick = () => {
+      if (!confirm("Strike them from the book? They lose access everywhere that reads it.")) return;
+      again(el, "Striking", "memberDrop", { key: el.dataset.drop }, "Struck out.");
     });
   }catch(e){ fail(e); }
 }
 let resendT;
 function tickResend(){
   clearTimeout(resendT);
+  const b = $("bResend");
   if (Date.now() < resendAt && S && S.codeSentTo && !S.verified){
-    const b = $("bResend");
-    if (b){ const w = Math.ceil((resendAt - Date.now()) / 1000);
-      b.textContent = "Send another in " + w + "s"; b.disabled = true; }
+    if (b){ b.textContent = "Send another in " + Math.ceil((resendAt - Date.now()) / 1000) + "s"; b.disabled = true; }
     resendT = setTimeout(tickResend, 1000);
-  }else{
-    const b = $("bResend");
-    if (b){ b.textContent = "Send another"; b.disabled = false; }
-  }
+  }else if (b){ b.textContent = "Send another"; b.disabled = false; }
 }
 
-/* ---------- off we go ---------- */
 if (getToken()) load(); else openGate();
 </script>
 </body>
