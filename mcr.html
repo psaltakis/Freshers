@@ -34,7 +34,7 @@ html.up::before{content:none}
      Second rule: nothing is set lighter than 500. Light weights go
      thin and grey on a dark ground, which is what made it look frail.
      --------------------------------------------------------------- */
-  --crimson:#B4141B; --crimson-2:#8E0F14; --crimson-3:#6B080D; --crimson-4:#48050A;
+  --crimson:#B4141B; --crimson-2:#A31319; --crimson-3:#7A0D12; --crimson-4:#48050A;
   --crimson-lite:#E8535C;
   --cream:#FBF3EC; --cream-2:#F2E4D8; --cream-3:#E2CDBC; --cream-4:#A78C77; --paper:#FFFDFA;
   --ink:#2A0F0C;
@@ -62,7 +62,10 @@ html.up::before{content:none}
   --pad-s:11px 13px;          /* inside something small */
   --gut:16px;                 /* the page gutter */
   --sat:env(safe-area-inset-top,0px); --sab:env(safe-area-inset-bottom,0px);
-  --navh:70px; --rail:216px;
+  --navh:70px;
+  /* The rail is in rem so it grows with the lettering, but not as fast: a
+     wider screen should buy more page, not more sidebar. */
+  --rail:11rem;
   /* Brought into line with Freshers' Fortnight: a warmer gold that sits better
      on the red, and cream with a little more paper in it. The two apps are
      seen on the same phone within a fortnight of each other and should look
@@ -81,12 +84,19 @@ html.up::before{content:none}
    larger again; a pixel root would have thrown their setting away. 118% of a
    default 16px is about 19px, and 118% of somebody's 24px is 28px. */
 html{font-size:118%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
-/* A big desktop screen was being given the same size type as a laptop, so the
-   app read as a small window blown up. It steps up instead, and a phone gets a
-   little more too, because it is read at arm's length on a walk to hall. */
-@media(min-width:1000px){html{font-size:114%}}
-@media(min-width:1400px){html{font-size:120%}}
-@media(min-width:1800px){html{font-size:126%}}
+/* A desktop screen was being given a laptop's type at a laptop's size, so the
+   whole app read as a small window blown up. It is set at about half again on
+   anything desktop sized. Everything downstream is in rem, including the rail
+   beside it, so the layout grows with the lettering rather than the lettering
+   rattling around inside a fixed frame. */
+/* Staged against the width, not the fact of being a desktop. A 1000px window
+   is a laptop with a browser at half the screen, and giving it 150% type left
+   a 647px column with a 285px rail beside it. The big sizes are kept for the
+   screens that are actually big. */
+@media(min-width:1000px){html{font-size:120%}}
+@media(min-width:1280px){html{font-size:132%}}
+@media(min-width:1600px){html{font-size:142%}}
+@media(min-width:1920px){html{font-size:150%}}
 @media(max-width:420px){html{font-size:114%}}
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;min-height:100%}
@@ -96,7 +106,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;transition:background 
   background:
     radial-gradient(820px 480px at 88% -8%, var(--wash), transparent 58%),
     radial-gradient(680px 600px at 2% 104%, rgba(72,5,10,.72), transparent 62%),
-    linear-gradient(172deg,#B4141B 0%,#8E0F14 48%,#5B070C 100%)}
+    linear-gradient(172deg,#C4181F 0%,#A31319 46%,#7A0D12 100%)}
 /* set on <html> so a season can never overwrite a section */
 :root{--wash:rgba(235,183,83,.18)}
 html[data-place="today"]{--wash:rgba(235,183,83,.20)}
@@ -133,8 +143,8 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
   .hbar{max-width:none;margin:0;padding-left:var(--gut);padding-right:var(--gut)}
 }
 @media(min-width:1780px){
-  .hbar{padding-left:calc((100vw - var(--rail) - 1560px)/2)!important;
-        padding-right:calc((100vw - var(--rail) - 1560px)/2)!important}
+  .hbar{padding-left:calc((100vw - var(--rail) - 82rem)/2)!important;
+        padding-right:calc((100vw - var(--rail) - 82rem)/2)!important}
 }
 .wm b{display:block;font-family:var(--display);font-size:.9rem;font-weight:600;line-height:1;
   letter-spacing:-.03em;white-space:nowrap}
@@ -230,19 +240,23 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .slots{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:16px}
 @media(min-width:560px){.slots{grid-template-columns:repeat(4,1fr)}}
 @media(min-width:1000px){.slots{grid-template-columns:repeat(8,1fr)}}
-.slot{position:relative;text-align:left;padding:var(--pad-s);min-height:70px;background:var(--t1);
-  border-radius:var(--r2);display:flex;flex-direction:column;justify-content:space-between;
-  transition:background .18s,transform .18s var(--ease)}
-.slot.has{background:var(--t2)}
-.slot:hover{background:rgba(255,255,255,.13);transform:translateY(-2px)}
+/* A tile that holds a fact is a card on the desk, not a hole in the wall. On
+   paper the figures and the names read at a glance, which is the entire job of
+   the pigeonhole, and the red behind it is left to do the framing. */
+.slot{position:relative;text-align:left;padding:var(--pad-s);min-height:70px;background:var(--cream);
+  color:var(--ink);border-radius:var(--r2);display:flex;flex-direction:column;justify-content:space-between;
+  transition:background .18s,transform .18s var(--ease),box-shadow .18s;
+  box-shadow:0 6px 16px -12px rgba(20,1,3,.7)}
+.slot.has{background:var(--paper)}
+.slot:hover{background:#fff;transform:translateY(-2px);box-shadow:0 12px 22px -14px rgba(20,1,3,.75)}
 .slot .plate{font-family:var(--mono);font-size:0.66rem;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--cream-4);display:flex;align-items:center;gap:6px;font-weight:600}
-.slot.has .plate{color:var(--gold)}
-.slot.has .plate::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--gold);flex:0 0 5px}
+  color:var(--ink-soft);display:flex;align-items:center;gap:6px;font-weight:600}
+.slot.has .plate{color:var(--crimson)}
+.slot.has .plate::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--crimson);flex:0 0 5px}
 .slot .slip b{display:block;font-size:.85rem;font-weight:700;line-height:1.24;letter-spacing:-.022em;
-  color:var(--cream);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.slot .hollow{display:block;font-size:.8rem;color:var(--cream-4);font-weight:500}
-.slot .n{position:absolute;top:9px;right:11px;font-family:var(--display);font-size:0.737rem;font-weight:600;color:var(--gold-2)}
+  color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.slot .hollow{display:block;font-size:.8rem;color:var(--ink-soft);font-weight:500}
+.slot .n{position:absolute;top:9px;right:11px;font-family:var(--display);font-size:0.737rem;font-weight:600;color:var(--crimson-3)}
 .state{display:flex;flex-wrap:wrap;gap:var(--g);margin-top:var(--g)}
 .state span{display:flex;align-items:center;gap:7px;font-size:0.684rem;color:var(--cream-3);background:var(--t1);
   border-radius:999px;padding:6px 13px;font-weight:600}
@@ -361,10 +375,11 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 
 /* ---------- tiles and links ---------- */
 .tilegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:var(--g);margin-bottom:14px}
-.tilegrid button,.tilegrid a{background:var(--t1);border-radius:var(--r2);color:var(--cream);padding:15px 16px;
+.tilegrid button,.tilegrid a{background:var(--cream);border-radius:var(--r2);color:var(--ink);padding:15px 16px;
+  box-shadow:0 6px 16px -12px rgba(20,1,3,.7);
   font-size:.92rem;font-weight:700;text-align:left;line-height:1.3;text-decoration:none;display:block;
   letter-spacing:-.02em;transition:background .16s,transform .16s var(--ease)}
-.tilegrid button:hover,.tilegrid a:hover{background:var(--t2);transform:translateY(-2px)}
+.tilegrid button:hover,.tilegrid a:hover{background:#fff;transform:translateY(-2px)}
 .termrule{display:flex;gap:4px;margin:12px 0 2px;height:4px}
 .termrule i{flex:1;border-radius:4px;background:rgba(255,255,255,.12);overflow:hidden;display:block}
 .termrule i.gone{background:rgba(235,183,83,.5)}
@@ -385,7 +400,7 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .gymcard b,.gymcard .arw{color:#06301C}
 .gymcard small{color:rgba(6,48,28,.78)}
 .gymcard .ic{background:rgba(6,48,28,.14);color:#06301C}
-.tilegrid small{display:block;font-weight:500;font-size:0.66rem;color:var(--cream-4);margin-top:4px;line-height:1.42}
+.tilegrid small{display:block;font-weight:500;font-size:0.66rem;color:var(--ink-soft);margin-top:4px;line-height:1.42}
 .linkcard{display:flex;gap:var(--g2);align-items:center;background:var(--t1);border-radius:var(--r2);
   padding:var(--pad);margin-bottom:var(--g);text-decoration:none;color:var(--cream);transition:background .16s,transform .16s var(--ease)}
 .linkcard:hover{background:var(--t2);transform:translateY(-2px)}
@@ -803,7 +818,7 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
   overflow:auto;padding:22px}
 #boot::before{content:"";position:absolute;inset:0;
   background:radial-gradient(760px 460px at 78% -10%, rgba(235,183,83,.16), transparent 58%),
-    linear-gradient(172deg,#B4141B 0%,#8E0F14 48%,#5B070C 100%)}
+    linear-gradient(172deg,#C4181F 0%,#A31319 46%,#7A0D12 100%)}
 .bootin{position:relative;text-align:center;width:min(280px,74vw);display:flex;flex-direction:column;
   align-items:center;gap:22px}
 /* the rings belong to the crest and nothing else, so they live in a box the
@@ -976,6 +991,8 @@ nav .railtop{display:none}
 @media(min-width:620px){:root{--gut:22px}}
 @media(min-width:1000px){:root{--gut:34px}}
 @media(min-width:1380px){:root{--gut:56px}}
+@media(min-width:1600px){:root{--rail:11.75rem}}
+@media(min-width:1920px){:root{--rail:12.5rem}}
 /* wide screens get more in a row, not a wider row of the same things */
 @media(min-width:1500px){
   .vgrid{grid-template-columns:repeat(6,1fr)}
@@ -1009,8 +1026,8 @@ nav .railtop{display:none}
   #swapList{display:grid;grid-template-columns:repeat(auto-fill,minmax(430px,1fr));gap:var(--g);align-items:start}
   #swapList>.swap{margin-bottom:0}
 }
-@media(min-width:1780px){.wrap{padding-left:calc((100vw - var(--rail) - 1560px)/2);
-  padding-right:calc((100vw - var(--rail) - 1560px)/2)}}
+@media(min-width:1780px){.wrap{padding-left:calc((100vw - var(--rail) - 82rem)/2);
+  padding-right:calc((100vw - var(--rail) - 82rem)/2)}}
 
 /* ---------- the swap desk roster ---------- */
 .swdc .swdh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
@@ -1082,7 +1099,7 @@ nav .railtop{display:none}
   line-height:1.2;color:var(--ink);margin-bottom:6px}
 .notes .notice p{font-size:.82rem;line-height:1.55;color:var(--ink-soft);white-space:pre-wrap;margin:0}
 .notes .notice small{display:block;margin-top:9px;font-family:var(--mono);font-size:.58rem;letter-spacing:.11em;
-  text-transform:uppercase;color:var(--cream-4);font-weight:700}
+  text-transform:uppercase;color:var(--ink-soft);font-weight:700}
 .notes .notice.urgent{background:#FFF4F2;box-shadow:0 8px 18px -10px rgba(140,10,16,.8)}
 .notes .notice.urgent::before{background:var(--crimson)}
 .notes .notice.waiting{background:#FBF4E4}
@@ -1115,6 +1132,84 @@ nav .railtop{display:none}
   text-transform:uppercase;color:var(--ink-soft);margin-top:3px}
 .roo.yes{box-shadow:inset 0 0 0 1.5px rgba(44,107,79,.5)}
 .roo.no{opacity:.6}
+
+/* Anything that can be pressed says so when the keyboard reaches it. One rule,
+   on the outline rather than the background, so it reads on paper and on red
+   alike and never moves the thing it is outlining. */
+:where(button,a,input,select,textarea,[tabindex]):focus-visible{
+  outline:2.5px solid var(--gold);outline-offset:2px;border-radius:6px}
+.slot:focus-visible,.tilegrid button:focus-visible,.notes .notice:focus-visible{
+  outline:2.5px solid var(--crimson);outline-offset:3px}
+/* and the pointer never gets an outline it did not ask for */
+:where(button,a):focus:not(:focus-visible){outline:none}
+
+/* the direction of travel, and the committee's answer beneath it */
+.move{font-family:var(--mono);font-size:.66rem;font-weight:700;border-radius:7px;padding:2px 6px}
+.move.up{background:rgba(44,107,79,.16);color:#1E6B47}
+.move.down{background:rgba(180,20,27,.12);color:var(--crimson-3)}
+.mreply{background:var(--cream-2);border-radius:11px;padding:10px 12px;font-size:.8rem;
+  color:var(--ink);line-height:1.5}
+.mreply b{display:block;font-family:var(--mono);font-size:.58rem;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--crimson);margin-bottom:4px;font-weight:700}
+
+/* SOUNDINGS.
+   Paper cards, because these hold figures somebody will read carefully. The
+   five faces run from crimson to green, which is the only place in the app
+   colour is used to mean good or bad, and the run of months underneath is a
+   plain bar chart: the shape is the argument. */
+.moods{display:grid;grid-template-columns:repeat(auto-fill,minmax(15rem,1fr));gap:var(--g);margin-bottom:var(--g3)}
+.mood{background:var(--cream);color:var(--ink);border-radius:var(--r);padding:var(--pad);
+  box-shadow:0 8px 20px -14px rgba(20,1,3,.7);display:flex;flex-direction:column;gap:9px}
+.mood.said{box-shadow:0 8px 20px -14px rgba(20,1,3,.7),inset 0 0 0 1.6px var(--gold)}
+.mood .mh{display:flex;align-items:baseline;gap:10px}
+.mood .mh b{font-family:var(--display);font-size:1.02rem;font-weight:600;letter-spacing:-.03em;flex:1}
+.mood .note{font-size:.76rem;color:var(--ink-soft);margin:0;line-height:1.45}
+.avg{font-family:var(--mono);font-size:.86rem;font-weight:700;border-radius:8px;padding:2px 8px;color:#fff}
+.avg.none{background:var(--cream-2);color:var(--ink-soft)}
+.n1{background:#B4141B}.n2{background:#D06A2A}.n3{background:#C9A227}.n4{background:#5C8C4A}.n5{background:#2C6B4F}
+.faces{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.faces button{flex:1 1 3.1rem;min-width:3.1rem;background:var(--cream-2);border-radius:10px;padding:7px 4px 6px;
+  display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--ink-soft);font-size:.6rem;
+  font-weight:700;transition:.15s;cursor:pointer;border:0;font-family:var(--ui)}
+.faces button:hover{background:#F6EEE6;transform:translateY(-1px)}
+.faces button i{display:block;width:14px;height:14px;border-radius:50%;opacity:.42;transition:.15s}
+.faces button[aria-pressed="true"]{background:var(--ink);color:var(--cream)}
+.faces button[aria-pressed="true"] i{opacity:1;box-shadow:0 0 0 2px rgba(255,255,255,.35)}
+.faces button:hover i{opacity:.85}
+.faces button:disabled{opacity:.5;cursor:default;transform:none}
+.run{display:flex;align-items:flex-end;gap:4px;height:4rem;padding-top:4px}
+.run span{flex:1;border-radius:3px 3px 1px 1px;background:var(--cream-3);min-height:4px;transition:height .3s var(--ease)}
+.run span.empty{background:var(--cream-2)}
+.mfoot{display:flex;align-items:center;gap:10px;font-size:.7rem;color:var(--ink-soft);font-weight:600}
+.mfoot span{flex:1}
+.lnk{background:none;border:0;padding:0;color:var(--crimson);font:inherit;font-size:.7rem;font-weight:700;
+  text-decoration:underline;cursor:pointer}
+.lnk:disabled{opacity:.5;cursor:default;text-decoration:none}
+.mnotes{margin-top:2px}
+.mnotes summary{font-family:var(--mono);font-size:.6rem;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ink-soft);font-weight:700;cursor:pointer}
+.mnotes p{display:flex;gap:8px;align-items:flex-start;font-size:.8rem;color:var(--ink);margin:8px 0 0;line-height:1.5}
+.mnotes p i{display:block;width:9px;height:9px;border-radius:50%;flex:0 0 9px;margin-top:5px}
+
+.sound{background:var(--cream);color:var(--ink);border-radius:var(--r);padding:var(--pad);
+  margin-bottom:var(--g);box-shadow:0 8px 20px -14px rgba(20,1,3,.7)}
+.sound.shut{opacity:.72}
+.sound .top{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+.sound .top b{font-family:var(--display);font-size:1.08rem;font-weight:600;letter-spacing:-.03em;flex:1;line-height:1.2}
+.sound .st{font-family:var(--mono);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;
+  border-radius:999px;padding:4px 9px;background:var(--cream-2);color:var(--ink-soft)}
+.sound .st.open{background:rgba(44,107,79,.15);color:#1E6B47}
+.sound .note{font-size:.85rem;color:var(--ink-soft);margin:0 0 11px;line-height:1.55}
+.opts{display:flex;flex-direction:column;gap:6px}
+.opts button{display:flex;align-items:center;gap:10px;background:var(--cream-2);border:0;border-radius:11px;
+  padding:11px 13px;font:inherit;font-size:.86rem;font-weight:700;color:var(--ink);cursor:pointer;
+  text-align:left;transition:.15s}
+.opts button:hover{background:#F6EEE6}
+.opts button[aria-pressed="true"]{background:var(--ink);color:var(--cream)}
+.opts button i{margin-left:auto;font-style:normal;font-family:var(--mono);font-size:.74rem;opacity:.7}
+.opts button:disabled{opacity:.6;cursor:default}
+.bars{display:flex;gap:3px;height:4px;margin-top:4px}
+.bars span{background:var(--crimson);border-radius:3px;min-width:2px}
 
 /* ---------- gate ---------- */
 #gate{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:22px;
@@ -1281,6 +1376,12 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
 
 
   <!-- ===================== LODGE ===================== -->
+  <section id="v-say" hidden>
+    <div class="vh"><h2><i>Soundings</i></h2><span class="note">How it is going, on the things that keep coming up</span>
+      <div class="right"><button class="btn gold sm" id="bNewSounding" data-committee hidden>Put a question</button></div></div>
+    <div id="sayBody"></div>
+  </section>
+
   <section id="v-info" hidden>
     <div class="vh"><h2><i>Info</i></h2><span class="note">Forms, how college works, and the sport</span></div>
     <div class="seg" id="lodgeSeg" style="margin-bottom:14px;overflow-x:auto"></div>
@@ -1429,6 +1530,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
   <button class="tabbtn" data-view="swaps"><svg viewBox="0 0 24 24"><path d="M6 4v7a6 6 0 0 0 12 0V4"/><path d="M12 17v3M8 20h8"/></svg>Formals<span class="badge" id="bdgSwaps" hidden>0</span></button>
   <button class="tabbtn" data-view="ask"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/><path d="M12 12.4v-.5c0-1 .7-1.5 1.3-1.9.6-.4 1-.9 1-1.6a2.3 2.3 0 0 0-4.6 0"/><path d="M12 14.4h.01"/></svg>Ask<span class="badge" id="bdgAsk" hidden>0</span></button>
   <button class="tabbtn" data-view="biz"><svg viewBox="0 0 24 24"><path d="M4 20h16M12 4v3M6 20V9l6-4 6 4v11"/><path d="M9 13h6"/></svg>MCR business<span class="badge" id="bdgBiz" hidden>0</span></button>
+  <button class="tabbtn" data-view="say"><svg viewBox="0 0 24 24"><path d="M4 5h16v10H9l-5 4z"/><path d="M8 8.5h8M8 11.5h5"/></svg>Soundings<span class="badge" id="bdgSay" hidden>0</span></button>
   <button class="tabbtn" data-view="info"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5"/><path d="M12 7.6h.01"/></svg>Info</button>
   <span class="sep" data-committee hidden></span>
   <button class="tabbtn committee" data-view="desk" data-committee hidden><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="7" rx="1.6"/><rect x="3" y="13" width="18" height="7" rx="1.6"/><path d="M7 7.5h.01M7 16.5h.01"/></svg>Desk<span class="badge" id="bdgDesk" hidden>0</span></button>
@@ -1467,7 +1569,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbyVA0bTOKDCFDdpSOShLedPD9DGiuddsUSrDu9pIjvS4ZDpTn6CCaMihWSU5_mmaSxEYQ/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycby2CZgSht7UIxZJpE7-MdiPv2XWsv-EzKCvL0XZhxrijPVXrdscYimxZGk72fhOEnCj/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -1476,7 +1578,7 @@ const BOOK_REGISTER = "https://jcollegemcr.co.uk/register";
 /* The build this page was written against. If the server reports a different
    one, the deployment answering is not this code, and the membership check it
    is running is whatever was deployed last. Shown under 'What is wrong?'. */
-const EXPECT_BUILD = "chimney-12";
+const EXPECT_BUILD = "chimney-17";
 
 /* JavaScript is alive, so the ring painted before the page was parsed can go.
    It is a pseudo element on <html>, so nothing else can remove it. */
@@ -2154,7 +2256,15 @@ async function fetchRest(){
        pulled out from under them, and so anything they have changed in the
        meantime is not undone by an older answer. */
     if (S && full && full.now >= (S.now || 0)) S = Object.assign(S, full, { part: "full" });
+    /* Somebody may have started reading, or scrolled, in the second or two this
+       took. The section is redrawn underneath them, so the position is put back
+       rather than thrown to the top. */
+    const y = window.scrollY;
+    const active = document.activeElement;
+    const keep = active && active.id ? active.id : "";
     render();
+    if (Math.abs(window.scrollY - y) > 2) window.scrollTo(0, y);
+    if (keep){ const el = $(keep); if (el && el.focus) el.focus(); }
     cacheState();
   }catch(e){
     /* The page is already usable, so this is not worth a red banner. The
@@ -4390,6 +4500,127 @@ function newHall(){
   }, 60);
   toast("Tag it formal and it shows here as well as on the calendar.");
 }
+/* SOUNDINGS.
+
+   The top half is the standing temperature. Six subjects that come up at every
+   meeting, each with a row of five, one tap to say how it is going, and the
+   run of months underneath so the shape is visible. A number on its own is
+   arguable; a line that has been falling since November is not, and that is
+   what the President can take to College Council.
+
+   The bottom half is whatever the committee has asked this term. The result is
+   held back until somebody has answered, so the room does not lead them.
+
+   Everything here is anonymous. The address is kept so that one person cannot
+   answer twice, and the committee sees counts and comments and nothing else. */
+function renderSay(){
+  if (!S) return;
+  if (stillLoading()) return put("sayBody", waitingFor("what the MCR has said"));
+  const say = S.say || { topics: [], soundings: [], faces: [] };
+  const openOnes = (say.soundings || []).filter(q => !q.closed);
+  const shut = (say.soundings || []).filter(q => q.closed);
+  put("sayBody",
+    '<div class="card"><p>Two things live here. Underneath, how the room feels about the ' +
+    'half dozen subjects that come up at every meeting, once a month each, in one tap. ' +
+    'And below that, whatever the committee has asked this term.</p>' +
+    '<p class="lede" style="margin-top:8px">Nobody is named, on either. What the committee sees is ' +
+    'how many said what, and anything you choose to write.</p></div>' +
+    '<div class="grp">How it is going<span class="ref" style="margin-left:auto">' +
+      esc(monthName(say.period)) + '</span></div>' +
+    '<div class="moods">' + (say.topics || []).map(moodCard).join("") + '</div>' +
+    '<div class="grp">Questions from the committee' +
+      (openOnes.length ? '<span class="ref" style="margin-left:auto">' + openOnes.length + ' open</span>' : "") + '</div>' +
+    (openOnes.length ? openOnes.map(soundCard).join("")
+      : '<div class="card"><p>Nothing being asked at the moment. Anything the committee wants the ' +
+        'room\u2019s view on appears here, and closes on a date.</p></div>') +
+    (shut.length ? '<div class="grp">Answered</div>' + shut.slice(0, 8).map(soundCard).join("") : ""));
+}
+const MONTHNAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+function monthName(p){
+  if (!p) return "";
+  const bits = String(p).split("-");
+  return (MONTHNAMES[Number(bits[1]) - 1] || "") + " " + bits[0];
+}
+/* One subject: what the room says this month, what you said, and the run. */
+function moodCard(t){
+  const faces = (S.say.faces || []);
+  const best = Math.max(1, ...t.run.map(r => r.said));
+  return '<div class="mood' + (t.mine ? " said" : "") + '">' +
+    '<div class="mh"><b>' + esc(t.name) + '</b>' +
+      (t.move ? '<span class="move ' + (t.move > 0 ? "up" : "down") + '" title="' +
+        (t.move > 0 ? "better" : "worse") + ' than last month">' + (t.move > 0 ? "\u2191" : "\u2193") +
+        Math.abs(t.move).toFixed(1) + '</span>' : "") +
+      (t.score ? '<span class="avg n' + Math.round(t.score) + '">' + t.score.toFixed(1) + '</span>' : '<span class="avg none">&mdash;</span>') +
+    '</div>' +
+    '<p class="note">' + esc(t.note) + '</p>' +
+    '<div class="faces">' + faces.map(f =>
+      '<button data-mood="' + esc(t.key) + '" data-n="' + f.n + '" title="' + esc(f.note) + '"' +
+      (t.mine === f.n ? ' aria-pressed="true"' : "") + '><i class="n' + f.n + '"></i>' +
+      '<span>' + esc(f.name) + '</span></button>').join("") + '</div>' +
+    '<div class="run" aria-label="the last six months">' + t.run.map(r =>
+      '<span class="' + (r.score ? "n" + Math.round(r.score) : "empty") + '" ' +
+      'style="height:' + (r.score ? Math.round(18 + (r.score - 1) * 11) : 4) + 'px" ' +
+      'title="' + esc(monthName(r.month)) + (r.said ? ": " + r.score + " from " + r.said : ": nothing said") + '"></span>').join("") +
+    '</div>' +
+    '<div class="mfoot"><span>' +
+      (t.said ? t.said + (t.said === 1 ? " has said" : " have said") + " this month" : "nobody yet this month") +
+      (t.wrote ? " &middot; " + t.wrote + (t.wrote === 1 ? " wrote a line" : " wrote a line") : "") + '</span>' +
+      (t.mine ? '<button class="lnk" data-moodsay="' + esc(t.key) + '">' +
+        (t.myComment ? "Change what you wrote" : "Add a line") + '</button>' : "") + '</div>' +
+    /* What was done about it. A falling line with nothing beside it teaches
+       people that saying so achieves nothing, which is how these die. */
+    (t.reply
+      ? '<div class="mreply"><b>The committee</b>' + esc(t.reply) +
+        (isCommittee() ? ' <button class="lnk" data-moodreply="' + esc(t.key) + '">Change</button>' : "") + '</div>'
+      : isCommittee()
+        ? '<div class="acts"><button class="lnk" data-moodreply="' + esc(t.key) + '">Say what was done</button></div>'
+        : "") +
+    (isCommittee() && t.notes.length
+      ? '<details class="mnotes"><summary>' + t.notes.length +
+        (t.notes.length === 1 ? " comment" : " comments") + '</summary>' +
+        t.notes.map(n => '<p><i class="n' + n.score + '"></i>' + esc(n.comment) + '</p>').join("") + '</details>'
+      : "") +
+    '</div>';
+}
+/* One question. The answers are hidden until you have given yours. */
+function soundCard(q){
+  const total = q.tally ? Object.keys(q.tally).reduce((a, k) => a + q.tally[k], 0) : 0;
+  return '<div class="sound' + (q.closed ? " shut" : "") + (q.answered ? " done" : "") + '">' +
+    '<div class="top"><b>' + esc(q.title) + '</b>' +
+      '<span class="st ' + (q.closed ? "closed" : "open") + '">' +
+      (q.closed ? "Closed" : q.closes ? "Until " + esc(shortDate(q.closes)) : "Open") + '</span></div>' +
+    (q.body ? '<p class="note">' + esc(q.body) + '</p>' : "") +
+    (q.kind === "choice"
+      ? '<div class="opts">' + q.options.map(o =>
+          '<button data-sound="' + esc(q.id) + '" data-choice="' + esc(o) + '"' +
+          (q.mine && q.mine.choice === o ? ' aria-pressed="true"' : "") +
+          (q.closed ? " disabled" : "") + '>' + esc(o) +
+          (q.tally ? '<i>' + q.tally[o] + '</i>' : "") + '</button>').join("") +
+          (q.tally && total ? '<div class="bars">' + q.options.map(o =>
+            '<span style="width:' + Math.round((q.tally[o] / total) * 100) + '%"></span>').join("") + '</div>' : "") +
+        '</div>'
+      : q.kind === "scale"
+        ? '<div class="faces">' + (S.say.faces || []).map(f =>
+            '<button data-sound="' + esc(q.id) + '" data-n="' + f.n + '"' +
+            (q.mine && q.mine.score === f.n ? ' aria-pressed="true"' : "") +
+            (q.closed ? " disabled" : "") + '><i class="n' + f.n + '"></i><span>' + esc(f.name) + '</span></button>').join("") +
+            (q.average ? '<span class="avg n' + Math.round(q.average) + '" style="margin-left:8px">' + q.average.toFixed(1) + '</span>' : "") +
+          '</div>'
+        : '<div class="acts"><button class="btn gold sm" data-soundsay="' + esc(q.id) + '"' +
+          (q.closed ? " disabled" : "") + '>' + (q.answered ? "Change what you wrote" : "Write your answer") + '</button></div>') +
+    (q.kind !== "text" ? '<div class="acts" style="margin-top:8px">' +
+      '<button class="lnk" data-soundsay="' + esc(q.id) + '"' + (q.closed ? " disabled" : "") + '>' +
+      (q.mine && q.mine.comment ? "Change your comment" : "Add a comment") + '</button></div>' : "") +
+    '<div class="mfoot"><span>' + (q.said ? q.said + (q.said === 1 ? " answer" : " answers") : "no answers yet") +
+      (q.answered ? " &middot; yours is in" : q.closed ? "" : " &middot; answers appear once you have given yours") + '</span>' +
+      (isCommittee() && !q.closed ? '<button class="lnk" data-soundclose="' + esc(q.id) + '">Close it</button>' : "") + '</div>' +
+    (q.notes && q.notes.length
+      ? '<details class="mnotes"><summary>' + q.notes.length +
+        (q.notes.length === 1 ? " comment" : " comments") + '</summary>' +
+        q.notes.map(n => '<p>' + (n.score ? '<i class="n' + n.score + '"></i>' : "") + esc(n.comment) + '</p>').join("") + '</details>'
+      : "") +
+    '</div>';
+}
 function renderSwaps(){
   if (stillLoading()){ put("swapList", waitingFor("the formals")); put("formalSeg", ""); return; }
   renderFormalSeg();
@@ -4674,7 +4905,7 @@ function voiceCard(){
    ============================================================ */
 /* Second life is gone. The Lodge has become three: the board on its own, the
    MCR room on its own, and Info for the links, the guides and the sport. */
-const VIEWS = ["today","board","room","swaps","ask","biz","info","me","desk","inbox","swapdesk","members","admin"];
+const VIEWS = ["today","board","room","swaps","ask","biz","say","info","me","desk","inbox","swapdesk","members","admin"];
 /* Stagger the first children of whatever has just been shown. Sixty
    milliseconds apart is enough to read as unfolding and not as waiting. */
 function stagger(id){
@@ -4699,7 +4930,10 @@ function go(v, scroll){
     b.setAttribute("aria-current", String(b.dataset.view === v)));
   VIEWS.forEach(id => { const el = $("v-" + id); if (el) el.hidden = id !== v; });
   document.documentElement.dataset.place = v;
-  if (v === "lodge") seen();
+  /* Drawn on the way in if it has not been drawn since the last change, which
+     is what lets render() leave the other thirteen alone. */
+  if (S && drawn[v] !== S.now) drawView(v);
+  if (v === "board") seen();
   if (v === "members") renderMembers();
   if (v === "inbox") renderQueue();
   if (v === "swapdesk") renderSwapDesk();
@@ -4724,6 +4958,8 @@ function renderBadges(){
   set("bdgSwapDesk", (S.swaps || []).reduce((n, w) => n +
     (w.list || []).filter(x => x.status === "held").length, 0));
   set("bdgSwaps", (S.swaps || []).filter(w => w.mine && w.mine.status === "held").length);
+  set("bdgSay", (((S.say || {}).soundings) || []).filter(q => !q.closed && !q.answered).length +
+    (((S.say || {}).topics) || []).filter(t => !t.mine).length);
   set("bdgBiz", (S.motions || []).filter(m => m.status === "voting" && !(S.myVotes || {})[m.id]).length +
     (S.polls || []).filter(p => p.open && !p.mine).length);
   if (isCommittee())
@@ -4735,6 +4971,31 @@ const typingIn = id => {
   const a = document.activeElement;
   return !!(a && $(id) && $(id).contains(a) && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName));
 };
+/* WHAT EACH SECTION IS DRAWN BY.
+   Every render used to redraw all fourteen sections, thirteen of which are
+   behind a hidden panel. On a poll, on a merge, on any small change, the app
+   rebuilt the swap list, the threads, the motions and the whole committee desk
+   so that nobody could see them. It now draws the section on screen and marks
+   the others as needing it, and they are drawn the moment they are opened.
+   Nothing renders twice and nothing renders unseen. */
+const DRAW = {
+  today: () => { renderCrow(); renderBumps(); renderTodayUrgent(); renderTodayWeek();
+                 renderTodayOn(); renderTodayQuick(); renderTodayNews(); },
+  board: renderLodge, room: renderLodge, info: renderLodge,
+  swaps: renderSwaps, ask: renderAsk, say: renderSay,
+  biz: () => { renderTreasury(); renderIdeas(); renderPolls(); renderBiz(); },
+  me: () => { if (!typingIn("v-me")) renderMe(); },
+  desk: renderDesk, swapdesk: renderSwapDesk, inbox: renderQueue,
+  members: renderDesk,
+  admin: () => { if (!typingIn("v-admin")){ renderAdmin(); renderBumpsAdmin(); } }
+};
+let drawn = {};
+function drawView(v){
+  const f = DRAW[v];
+  if (!f) return;
+  try{ f(); drawn[v] = S ? S.now : 1; }
+  catch(e){ if (typeof console !== "undefined") console.error("drawing " + v, e); }
+}
 function render(){
   if (!S) return;
   $("app").hidden = false;
@@ -4747,12 +5008,10 @@ function render(){
   document.querySelectorAll("[data-admin]").forEach(el => el.hidden = !isAdmin());
   document.querySelectorAll("[data-owner]").forEach(el => el.hidden = !S.me.owner);
   applySeason();
-  renderCrow(); renderBumps(); renderTodayUrgent(); renderTodayWeek(); renderTodayOn();
-  renderTodayQuick(); renderTodayNews();
-  renderLodge(); renderSwaps(); renderAsk();
-  renderTreasury(); renderIdeas(); renderPolls(); renderBiz();
-  if (!typingIn("v-me")) renderMe();
-  if (isCommittee()){ renderDesk(); renderSwapDesk(); renderQueue(); if (!typingIn("v-admin")){ renderAdmin(); renderBumpsAdmin(); } }
+  /* Everything drawn before is now out of date; only the one in front of
+     somebody is redrawn at once. */
+  drawn = {};
+  drawView(view || "today");
   renderBadges();
 }
 
@@ -4772,12 +5031,98 @@ document.addEventListener("click", async e => {
     "[data-skip],[data-editser],[data-second],[data-vote],[data-mset],[data-code],[data-checkin]," +
     "[data-delupdate],[data-rosteredit],[data-rosterdel],[data-newidea],[data-back]," +
     "[data-setidea],[data-dropidea],[data-pollvote],[data-pollclose]," +
-    "[data-roomdrop],[data-roomtab],[data-formal],[data-copy],[data-copyboth],[data-bumpedit],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-polldrop],[data-motiondrop],[data-desktab],[data-tick2],[data-desk],[data-asktab],[data-thread],[data-mythreads],[data-swaptake],[data-swapdrop],[data-swappaid],[data-swapedit],[data-swapsave],[data-swapcancel],[data-swapdel],[data-swappast],[data-bank],[data-swapnudge],[data-swapkick],[data-swappromote],[data-copyaddrs],[data-swapdeskedit],[data-jcsu],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
+    "[data-mood],[data-moodreply],[data-moodsay],[data-sound],[data-soundsay],[data-soundclose],[data-roomdrop],[data-roomtab],[data-formal],[data-copy],[data-copyboth],[data-bumpedit],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-polldrop],[data-motiondrop],[data-desktab],[data-tick2],[data-desk],[data-asktab],[data-thread],[data-mythreads],[data-swaptake],[data-swapdrop],[data-swappaid],[data-swapedit],[data-swapsave],[data-swapcancel],[data-swapdel],[data-swappast],[data-bank],[data-swapnudge],[data-swapkick],[data-swappromote],[data-copyaddrs],[data-swapdeskedit],[data-jcsu],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
   if (!t) return;
   const d = t.dataset;
   try{
     if (t.hasAttribute("data-formal")){ formalTab = d.formal; renderSwaps(); window.scrollTo(0, 0); return; }
     if (t.hasAttribute("data-roomtab")){ roomTab = d.roomtab; renderLodge(); window.scrollTo(0, 0); return; }
+    /* One tap says how it is going. Pressing the same one again takes it back,
+       because somebody who changes their mind should not be stuck with a
+       reading they no longer stand behind. */
+    if (t.hasAttribute("data-mood")){
+      const now = ((S.say || {}).topics || []).filter(x => x.key === d.mood)[0];
+      const n = Number(d.n), same = now && now.mine === n;
+      try{
+        const r = await api("moodSet", { topic: d.mood, score: same ? 0 : n,
+          comment: same ? "" : (now ? now.myComment : "") });
+        S.say = r.say; renderSay(); renderBadges();
+        toast(same ? "Taken back." : "Noted, and nobody is told it was you.");
+      }catch(e){ fail(e); }
+      return;
+    }
+    if (t.hasAttribute("data-moodreply")){
+      const tp = ((S.say || {}).topics || []).filter(x => x.key === d.moodreply)[0];
+      if (!tp) return;
+      return sheet("What was done about " + tp.name,
+        '<p class="lede">One or two lines, shown to everybody on the card. It is what stops a ' +
+        'falling line looking like nobody was listening.</p>' +
+        '<label class="f"><span>What would you tell the room</span><textarea id="mrC" maxlength="400">' +
+        esc(tp.reply || "") + '</textarea></label>' +
+        '<div class="acts"><button class="btn gold" id="mrGo">Put it up</button>' +
+        '<button class="btn ghost" data-close>Cancel</button></div>',
+        el => el.querySelector("#mrGo").addEventListener("click", async e => {
+          const b = e.currentTarget;
+          spin(b, "Saving");
+          try{
+            const r = await api("moodReply", { topic: tp.key, reply: $("mrC").value });
+            S.say = r.say; closeSheet(); renderSay(); toast("Up on the card.");
+          }catch(err){ unspin(b); fail(err); }
+        }));
+    }
+    if (t.hasAttribute("data-moodsay")){
+      const tp = ((S.say || {}).topics || []).filter(x => x.key === d.moodsay)[0];
+      if (!tp) return;
+      return sheet("A line about " + tp.name,
+        '<p class="lede">Written down as it is, without your name. It is what makes a number ' +
+        'arguable at a meeting.</p>' +
+        '<label class="f"><span>What would you say</span><textarea id="moodC" maxlength="600">' +
+        esc(tp.myComment || "") + '</textarea></label>' +
+        '<div class="acts"><button class="btn gold" id="moodGo">Save it</button>' +
+        '<button class="btn ghost" data-close>Cancel</button></div>',
+        el => el.querySelector("#moodGo").addEventListener("click", async e => {
+          const b = e.currentTarget;
+          spin(b, "Saving");
+          try{
+            const r = await api("moodSet", { topic: tp.key, score: tp.mine || 3, comment: $("moodC").value });
+            S.say = r.say; closeSheet(); renderSay(); toast("Written down.");
+          }catch(err){ unspin(b); fail(err); }
+        }));
+    }
+    if (t.hasAttribute("data-sound")){
+      try{
+        const r = await api("soundingAnswer", { id: d.sound,
+          choice: d.choice || "", score: Number(d.n) || 0 });
+        S.say = r.say; renderSay(); renderBadges(); toast("Answered.");
+      }catch(e){ fail(e); }
+      return;
+    }
+    if (t.hasAttribute("data-soundsay")){
+      const q = ((S.say || {}).soundings || []).filter(x => x.id === d.soundsay)[0];
+      if (!q) return;
+      return sheet(q.title,
+        (q.body ? '<p class="lede">' + esc(q.body) + '</p>' : "") +
+        '<label class="f"><span>' + (q.kind === "text" ? "Your answer" : "Anything you want to add") +
+        '</span><textarea id="soundC" maxlength="900">' + esc((q.mine && q.mine.comment) || "") + '</textarea></label>' +
+        '<div class="acts"><button class="btn gold" id="soundGo">Save it</button>' +
+        '<button class="btn ghost" data-close>Cancel</button></div>',
+        el => el.querySelector("#soundGo").addEventListener("click", async e => {
+          const b = e.currentTarget;
+          spin(b, "Saving");
+          try{
+            const r = await api("soundingAnswer", { id: q.id,
+              choice: (q.mine && q.mine.choice) || "", score: (q.mine && q.mine.score) || 0,
+              comment: $("soundC").value });
+            S.say = r.say; closeSheet(); renderSay(); toast("Answered.");
+          }catch(err){ unspin(b); fail(err); }
+        }));
+    }
+    if (t.hasAttribute("data-soundclose")){
+      if (!confirm("Close this one? Nobody will be able to answer after that.")) return;
+      try{ const r = await api("soundingSet", { id: d.soundclose, status: "closed" });
+        S.say = r.say; renderSay(); toast("Closed."); }catch(e){ fail(e); }
+      return;
+    }
     if (t.hasAttribute("data-roomdrop")){
       if (!confirm("Take this request back?")) return;
       try{
@@ -5114,6 +5459,44 @@ on("bNewEvent2", "click", () => openEventEditor(""));
 on("bNewSeries", "click", () => openSeriesEditor(""));
 on("bNewMotion", "click", openMotion);
 on("bNewIdea", "click", openIdea);
+on("bNewSounding", "click", () => {
+  const topics = ((S.say || {}).list || []);
+  sheet("Put a question to the MCR",
+    '<p class="lede">Short, and about one thing. Nobody sees the answers until they have given ' +
+    'theirs, so the room is not led.</p>' +
+    '<label class="f"><span>The question</span><input id="sqTitle" maxlength="140" placeholder="Should the MCR pay for a second coffee machine?"></label>' +
+    '<label class="f"><span>Anything they should know first</span><textarea id="sqBody" maxlength="900"></textarea></label>' +
+    '<div class="f2"><label class="f"><span>What kind</span><select id="sqKind">' +
+      '<option value="choice">Pick one of several</option>' +
+      '<option value="scale">How good or bad, one to five</option>' +
+      '<option value="text">In their own words</option></select></label>' +
+    '<label class="f"><span>Closes</span><input type="date" id="sqCloses"></label></div>' +
+    '<label class="f"><span>The answers to choose between, separated by a vertical bar</span>' +
+    '<input id="sqOpts" placeholder="Yes | No | Only if it is second hand"></label>' +
+    '<label class="f"><span>Which subject, if any</span><select id="sqTopic">' +
+      '<option value="">None in particular</option>' +
+      topics.map(t => '<option value="' + esc(t.key) + '">' + esc(t.name) + '</option>').join("") +
+    '</select></label>' +
+    '<div class="acts"><button class="btn gold" id="sqGo">Put it up</button>' +
+    '<button class="btn ghost" data-close>Cancel</button></div>',
+    el => {
+      /* The answers only mean anything for a question that has answers to pick
+         between, so the field shows itself only for that kind. */
+      const kind = el.querySelector("#sqKind"), opts = el.querySelector("#sqOpts").closest("label");
+      const look = () => { opts.hidden = kind.value !== "choice"; };
+      kind.addEventListener("change", look); look();
+      el.querySelector("#sqGo").addEventListener("click", async e => {
+        const b = e.currentTarget;
+        spin(b, "Putting it up");
+        try{
+          const r = await api("soundingNew", { title: $("sqTitle").value, body: $("sqBody").value,
+            kind: $("sqKind").value, options: $("sqOpts").value, closes: $("sqCloses").value,
+            topic: $("sqTopic").value });
+          S.say = r.say; closeSheet(); renderSay(); go("say"); toast("Up. It closes on its date.");
+        }catch(err){ unspin(b); fail(err); }
+      });
+    });
+});
 on("bNewSwap", "click", () => {
   /* One button, two jobs, because the section has two halves. On the swaps
      half it opens a blank swap. On the halls half a hall is simply an event
