@@ -18,6 +18,8 @@ html::before{content:"";position:fixed;left:50%;top:50%;width:120px;height:120px
 @keyframes bootspin{to{transform:rotate(360deg)}}
 html.up::before{content:none}
 </style>
+<link rel="preconnect" href="https://script.google.com" crossorigin>
+<link rel="dns-prefetch" href="https://script.googleusercontent.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -1340,7 +1342,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbzZCeRIi6MsBkZw8b1fF_BPYMk4gmnq69pFN0MJzxghF1du8-E_sR_yAhFvf3w1lOAuZQ/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzdBBnT92y9loTDiVX0CTUr4TObTsZKb4NZqiIyB7sxmvMrcs0WqB6qzE190_zymyREIQ/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -1349,7 +1351,7 @@ const BOOK_REGISTER = "https://jcollegemcr.co.uk/register";
 /* The build this page was written against. If the server reports a different
    one, the deployment answering is not this code, and the membership check it
    is running is whatever was deployed last. Shown under 'What is wrong?'. */
-const EXPECT_BUILD = "chimney-5";
+const EXPECT_BUILD = "chimney-7";
 
 /* JavaScript is alive, so the ring painted before the page was parsed can go.
    It is a pseudo element on <html>, so nothing else can remove it. */
@@ -1695,6 +1697,7 @@ function startGsi(cfg){
              on the server where it belongs. */
           callback: onCredential, ux_mode: "popup", auto_select: false, itp_support: true
         });
+        warmUp();
         const el = $("gsiBtn");
         el.innerHTML = "";
         google.accounts.id.renderButton(el, { theme:"outline", size:"large", shape:"pill",
@@ -1767,6 +1770,24 @@ async function onCredential(res){
 }
 /* The waiting state used to be a card of its own explaining itself. One quiet
    line does the same work without taking the screen over. */
+/* The server itself could not be reached, which is a different problem from
+   the register being unavailable, and is described as such. */
+/* Fired the moment the sign in card appears. It wakes this app's container and
+   the register's, so that by the time somebody has read the card and pressed
+   the button, the slow part has already happened. Nothing waits on it and
+   nothing is done with the answer. */
+let warmed = false;
+function warmUp(){
+  if (warmed) return;
+  warmed = true;
+  try{ api("warm").catch(function(){}); }catch(e){}
+}
+function gateFail(msg){
+  checkSay("no", "Could not reach the server");
+  lastCred = "";
+  return gateFix("Sign in could not be completed", esc(msg || "The server did not answer."),
+    '<button class="btn cream sm" data-retry>Try again</button>');
+}
 function gateStep(text){
   gateClear();
   gateBusy(true);
@@ -1783,24 +1804,49 @@ async function verifyAndEnter(cred, recheck){
   checkSay("busy", "Checking the MCR register");
   let d;
   try{
-    d = await withTimeout(api("googleToken", { credential: cred, recheck: !!recheck }), 20000);
-  }catch(e){
-    /* The server itself could not be reached, which is a different problem from
-       the register being unavailable, and is described as such. */
-    lastCred = "";
-    return gateFix("Sign in could not be completed",
-      esc(e && e.message ? e.message : String(e)),
-      '<button class="btn cream sm" data-retry>Try again</button>');
+    /* Apps Script containers go cold. The first call after a quiet spell takes
+       real seconds, and reporting that as a failure while asking somebody to
+       press the same button again is not a design, it is a shrug. It waits,
+       says so, and tries once more on its own. */
+    d = await withTimeout(api("googleToken", { credential: cred, recheck: !!recheck }), 20000, "SLOW");
+  }catch(first){
+    const fm = String((first && first.message) || "");
+    if (fm !== "SLOW" && !/timed out|too long/i.test(fm)) return gateFail(fm);
+    checkSay("busy", "The server is waking up");
+    try{
+      d = await withTimeout(api("googleToken", { credential: cred, recheck: !!recheck }), 25000,
+        "The server did not answer. Please try once more.");
+    }catch(e){
+      return gateFail(e && e.message ? e.message : String(e));
+    }
   }
   if (d && d.bookDown){ checkSay("no", "The register did not answer"); return bookUnreachable(d); }
   if (d && d.needsBook){ checkSay("no", "Not in the MCR register"); return notInBook(d); }
-  /* Confirmed. Now, and only now, the application loads. */
+  /* Confirmed. The page came back with the token, so there is nothing left to
+     fetch: it goes straight up. */
   checkSay("done", "Membership confirmed");
   gateClear();
   gateBusy(false);
   lastEmail = d.email || "";
   setToken(d.token);
   $("gateMsg").textContent = "";
+  if (d.state){
+    S = d.state;
+    paintCrests();
+    loadPhotos();
+    cacheState();
+    $("gate").hidden = true;
+    $("hdr").hidden = false;
+    $("boot").hidden = true;
+    bootTalk(false);
+    render();
+    syncPhotos(S.photoRev);
+    startPolling();
+    greet();
+    return;
+  }
+  /* No page came with it, which should not happen. Fetch it the old way rather
+     than leave somebody at a dead gate. */
   $("gate").hidden = true;
   $("boot").hidden = false;
   bootIdx = 0;
@@ -1815,6 +1861,11 @@ async function verifyAndEnter(cred, recheck){
       esc(e && e.message ? e.message : String(e)),
       '<button class="btn cream sm" data-retry>Try again</button>');
   }
+}
+/* A word on arrival, once, instead of a loading screen nobody reads. */
+function greet(){
+  const n = ((S && S.me && S.me.name) || "").split(/\s+/)[0];
+  toast(n ? "Welcome back, " + n + "." : "Welcome back.");
 }
 
 /* Not a member. This is one step short of being in, so it is written as a next
@@ -2009,14 +2060,18 @@ function cachedState(){
     return c.s;
   }catch(e){ return null; }
 }
-async function boot(fresh){
-  /* Set the source rather than replacing the node. Swapping outerHTML threw
-     away the rings the crest sits inside, and it never touched the rail at all,
-     which is why the sidebar showed an empty box. */
+/* Set the source rather than replacing the node. Swapping outerHTML threw away
+   the rings the crest sits inside, and it never touched the rail at all, which
+   is why the sidebar showed an empty box. Called from both ways in, because
+   signing in no longer goes through boot at all. */
+function paintCrests(){
   ["crestBoot","crestTop","crestGate","crestRail"].forEach(function(id){
     const el = $(id);
     if (el && !el.getAttribute("src")) el.setAttribute("src", CREST);
   });
+}
+async function boot(fresh){
+  paintCrests();
   loadPhotos();
   if (!getToken()){ bootTalk(false); return signedOut(); }
   /* Show the page already on this device while the fresh one is on its way.
