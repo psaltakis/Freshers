@@ -1300,7 +1300,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbxasg4qufK8ea70m5ZqF9lDRkJydhSHzwHqGTZKogPJYVz9-_HvucDob8mwd7F3jz-Yxw/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxniW9c5VLf73nikxDW1LM9WOtTkaqkv276VEwF_Y4wS0LnX0yXF35yTEv6idEZDM3iYA/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -1679,7 +1679,7 @@ function gsiFallback(cfg, why){
 /* Held so that somebody who registers in another tab can come straight back
    and be admitted without going round Google a second time. Google's token is
    valid for about an hour, which is far longer than registering takes. */
-let lastCred = "";
+let lastCred = "", lastEmail = "";
 
 /* The whole of the sign in happens here, on the sign in screen, before the
    loading screen is shown at all. Google confirms who somebody is and the
@@ -1715,6 +1715,7 @@ async function verifyAndEnter(cred, recheck){
   /* Confirmed. Now, and only now, the application loads. */
   gateClear();
   gateBusy(false);
+  lastEmail = d.email || "";
   setToken(d.token);
   $("gateMsg").textContent = "";
   $("gate").hidden = true;
@@ -1738,12 +1739,8 @@ async function verifyAndEnter(cred, recheck){
 function notInBook(d){
   lastCred = lastCred || "";
   gateFix("Membership could not be confirmed",
-    'You are signed in as <b>' + esc(d.email || "") + '</b>, but that address is not ' +
-    'recorded in the Jesus College MCR register. The register is the single membership ' +
-    'list used by every MCR service, so being entered in it once gives you access to all ' +
-    'of them, including this one.<br><br>Registration takes a few minutes: a verification ' +
-    'code sent to your college address, brief details of your course, and approval by the ' +
-    'President.',
+    '<b>' + esc(d.email || "") + '</b> is not in the Jesus College MCR register. ' +
+    'Registering takes a few minutes and gives you access to every MCR service.',
     '<a class="btn cream sm" href="' + BOOK_REGISTER + '" target="_blank" rel="noopener">Register for MCR membership</a>' +
     '<button class="btn ghost sm" data-book-again>I have registered, check again</button>');
 }
@@ -1777,6 +1774,7 @@ async function bookAgain(btn){
     }
     gateClear();
     gateBusy(false);
+    lastEmail = d.email || "";
     setToken(d.token);
     $("gate").hidden = true;
     $("boot").hidden = false;
@@ -1897,8 +1895,12 @@ async function boot(fresh){
   });
   loadPhotos();
   if (!getToken()){ bootTalk(false); return signedOut(); }
-  /* show the page we already have while the fresh one is on its way */
-  const warm = fresh ? null : cachedState();
+  /* Show the page already on this device while the fresh one is on its way.
+     This runs after a sign in too, provided the cached page belongs to the
+     person who has just signed in, which turns a returning member's sign in
+     from a wait into an instant one. */
+  let warm = cachedState();
+  if (warm && fresh && !(warm.me && lastEmail && warm.me.email === lastEmail)) warm = null;
   if (warm){
     S = warm;
     bootDone();
