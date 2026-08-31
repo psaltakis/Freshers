@@ -1277,9 +1277,9 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
   <div class="gcard">
     <div class="head"><img class="crest" id="crestGate" alt="">
       <span><small>JESUS COLLEGE</small><b>The <i>MCR</i></b></span></div>
-    <p class="lede" id="gLede">The postgraduate community at Jesus. The term calendar, the Lodge, and somebody to ask. Sign in with your University of Cambridge Google account.</p>
+    <p class="lede" id="gLede">The postgraduate community at Jesus College. The term calendar, the Lodge, and somebody to ask. Sign in with your University of Cambridge Google account; your MCR membership is then confirmed against the register before access is granted.</p>
     <div id="gsiBtn"><span class="gsiskel" aria-hidden="true"></span></div>
-    <p class="lede" style="margin:10px 0 0;font-size:12.5px">Use your <b>@cam.ac.uk</b> account. There is no password to make and nothing to verify. Your name is then checked against the MCR Book, the register every MCR site reads.</p>
+    <p class="lede" style="margin:10px 0 0;font-size:12.5px">Please use your <b>@cam.ac.uk</b> address. There is no password to create. Membership is verified against the MCR register, the single list used by every MCR service.</p>
     <p class="msg" id="gateMsg"></p>
     <div id="gateFix"></div>
     <div class="gfoot"><span id="gFootYear"></span>
@@ -1300,7 +1300,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbyxeJAxkUwHfocYMxDkJOyi2FSyxnlEPxxsA5ctGCw04M42UW7BGnp102gfjrn05RoTbg/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxasg4qufK8ea70m5ZqF9lDRkJydhSHzwHqGTZKogPJYVz9-_HvucDob8mwd7F3jz-Yxw/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -1676,87 +1676,119 @@ function gsiFallback(cfg, why){
     '<button class="btn ghost sm" data-diag>Show me the details</button>');
 }
 
+/* Held so that somebody who registers in another tab can come straight back
+   and be admitted without going round Google a second time. Google's token is
+   valid for about an hour, which is far longer than registering takes. */
+let lastCred = "";
+
+/* The whole of the sign in happens here, on the sign in screen, before the
+   loading screen is shown at all. Google confirms who somebody is and the
+   register confirms that they are a member of the MCR; the server asks both at
+   once, so this is one round trip rather than two. Only when both have answered
+   does the application begin to load, which is why the loading screen can now
+   be honest about what it is doing. */
 async function onCredential(res){
-  /* The moment Google hands the token back, the loading screen comes up. The
-     round trip after this can take a few seconds on a cold server, and leaving
-     somebody looking at a dead button for that long is the worst part of any
-     sign in. */
+  lastCred = res.credential;
+  await verifyAndEnter(res.credential, false);
+}
+function gateStep(text){
   gateClear();
+  gateBusy(true);
+  put("gateFix", '<div class="fix"><b>' + esc(text) + "</b>" +
+    '<p style="margin-top:6px">This takes a moment. Please do not close the page.</p></div>');
+}
+async function verifyAndEnter(cred, recheck){
+  gateStep("Verifying your Jesus College MCR membership");
+  let d;
+  try{
+    d = await withTimeout(api("googleToken", { credential: cred, recheck: !!recheck }), 20000);
+  }catch(e){
+    /* The server itself could not be reached, which is a different problem from
+       the register being unavailable, and is described as such. */
+    lastCred = "";
+    return gateFix("Sign in could not be completed",
+      esc(e && e.message ? e.message : String(e)),
+      '<button class="btn cream sm" data-retry>Try again</button>');
+  }
+  if (d && d.bookDown) return bookUnreachable(d);
+  if (d && d.needsBook) return notInBook(d);
+  /* Confirmed. Now, and only now, the application loads. */
+  gateClear();
+  gateBusy(false);
+  setToken(d.token);
+  $("gateMsg").textContent = "";
   $("gate").hidden = true;
   $("boot").hidden = false;
   bootIdx = 0;
-  $("bootLine").textContent = "Checking with Google";
+  $("bootLine").textContent = "Membership confirmed. Preparing your pages";
   bootTalk(true);
-  try{
-    lastCred = res.credential;
-    $("bootLine").textContent = "Looking you up in the MCR Book";
-    const d = await withTimeout(api("googleToken", { credential: res.credential }), 20000);
-    /* Google says who they are, the register says whether they are ours. A no
-       is not a failure and is not written like one: it is one step short of
-       being in, with the step named and a button on it. */
-    if (d && d.needsBook){
-      bootTalk(false);
-      $("boot").hidden = true;
-      $("gate").hidden = false;
-      return notInBook(d);
-    }
-    setToken(d.token);
-    $("gateMsg").textContent = "";
-    await boot(true);
-  }catch(e){
+  try{ await boot(true); }
+  catch(e){
     bootTalk(false);
     $("boot").hidden = true;
     $("gate").hidden = false;
-    $("gateMsg").textContent = "";
-    gateFix("That sign in did not go through", esc(e && e.message ? e.message : String(e)),
+    gateFix("The application could not be loaded",
+      esc(e && e.message ? e.message : String(e)),
       '<button class="btn cream sm" data-retry>Try again</button>');
   }
 }
 
-/* Held so somebody who registers in another tab can come straight back and be
-   let in without going round Google a second time. Google's token is good for
-   about an hour, which is far longer than registering takes. */
-let lastCred = "";
+/* Not a member. This is one step short of being in, so it is written as a next
+   step rather than as a refusal, and the step is a button. */
 function notInBook(d){
-  const who = esc(d.email || "");
-  gateFix("You are not in the MCR Book yet",
-    'Signed in as <b>' + who + '</b>, and that name is not in the register of the ' +
-    'Jesus College MCR. The register is the one list every MCR site reads, so writing ' +
-    'your name in it once opens all of them, this one included.<br><br>' +
-    'It takes a couple of minutes: a code to your college address, a line about what ' +
-    'you study, and a yes from the President.',
-    '<a class="btn cream sm" href="' + BOOK_REGISTER + '" target="_blank" rel="noopener" ' +
-      'data-book-open>Put my name in the book</a>' +
-    '<button class="btn ghost sm" data-book-again>I have done that, let me in</button>');
+  lastCred = lastCred || "";
+  gateFix("Membership could not be confirmed",
+    'You are signed in as <b>' + esc(d.email || "") + '</b>, but that address is not ' +
+    'recorded in the Jesus College MCR register. The register is the single membership ' +
+    'list used by every MCR service, so being entered in it once gives you access to all ' +
+    'of them, including this one.<br><br>Registration takes a few minutes: a verification ' +
+    'code sent to your college address, brief details of your course, and approval by the ' +
+    'President.',
+    '<a class="btn cream sm" href="' + BOOK_REGISTER + '" target="_blank" rel="noopener">Register for MCR membership</a>' +
+    '<button class="btn ghost sm" data-book-again>I have registered, check again</button>');
 }
+
+/* The register is not answering. Nobody is admitted on a guess, so this says
+   plainly what has happened, offers the register itself, and offers to try
+   again. It is deliberately not a dead end. */
+function bookUnreachable(d){
+  gateFix("The membership register is not responding",
+    'Your Google sign in was accepted, but the Jesus College MCR register could not be ' +
+    'reached, so your membership could not be confirmed. Access is not granted without ' +
+    'that confirmation.<br><br>This is usually temporary. Please try again in a moment. ' +
+    'If it continues, open the register directly and let the MCR Committee know.',
+    '<button class="btn cream sm" data-book-again>Try again</button>' +
+    '<a class="btn ghost sm" href="' + BOOK_REGISTER + '" target="_blank" rel="noopener">Open the register</a>');
+}
+
+/* Used by both cards. Asks the server to disregard anything it kept earlier, so
+   somebody approved a minute ago is admitted immediately. */
 async function bookAgain(btn){
   if (!lastCred){ gsiUp = false; gsiComplaint = ""; return probe(); }
   const was = btn ? btn.innerHTML : "";
-  if (btn){ btn.disabled = true; btn.innerHTML = '<span class="spin"></span>Checking the book'; }
+  if (btn){ btn.disabled = true; btn.innerHTML = '<span class="spin"></span>Checking'; }
   try{
-    /* recheck skips the few hours the last answer would otherwise be kept for,
-       so somebody approved a minute ago does not wait for it to lapse. */
     const d = await withTimeout(api("googleToken", { credential: lastCred, recheck: true }), 20000);
+    if (d && d.bookDown) return bookUnreachable(d);
     if (d && d.needsBook){
       if (btn){ btn.disabled = false; btn.innerHTML = was; }
-      toast("Not there yet. The President has to say yes before your name goes in.");
+      toast("Not yet. Your registration must be approved by the President before access is granted.");
       return;
     }
     gateClear();
+    gateBusy(false);
     setToken(d.token);
     $("gate").hidden = true;
     $("boot").hidden = false;
     bootIdx = 0;
-    $("bootLine").textContent = "Opening the gate";
+    $("bootLine").textContent = "Membership confirmed. Preparing your pages";
     bootTalk(true);
     await boot(true);
   }catch(e){
     if (btn){ btn.disabled = false; btn.innerHTML = was; }
-    /* An hour is up, or Google has moved on. Sending them round again is the
-       honest answer and takes one tap. */
     lastCred = "";
-    gateFix("That sign in has gone stale",
-      "Sign in with Google once more and the book will be checked again.",
+    gateFix("Your sign in has expired",
+      "Please sign in with Google once more and your membership will be checked again.",
       '<button class="btn cream sm" data-retry>Sign in again</button>');
   }
 }
@@ -1779,14 +1811,18 @@ function signedOut(msg){
 
 /* ---------- boot ---------- */
 /* The boot lines follow the term. Nobody is counting chairs in May Week. */
-const BOOT_BASE = ["Unlocking the gate", "Waking the porters", "Checking your pigeonhole"];
+/* The loading screen says what is actually happening, in order. Membership is
+   confirmed before any of this begins, so the first line records that rather
+   than promising it. */
+const BOOT_BASE = ["Jesus College MCR membership confirmed",
+  "Loading the term calendar", "Loading the Lodge and your messages"];
 const BOOT_SEASON = {
-  fortnight: ["Blowing up the balloons", "Learning everyone's names"],
-  michaelmas: ["Laying out the term", "Counting the chairs"],
-  vacation: ["Banking the fires", "Forwarding the post"],
-  lent: ["Scraping frost off the gate", "Watching the river"],
-  easter: ["Opening the Orchard", "Airing the gowns"],
-  mayweek: ["Fetching the punts", "Stringing the lights"]
+  fortnight: ["Preparing Freshers\u2019 Fortnight"],
+  michaelmas: ["Preparing the Michaelmas programme"],
+  vacation: ["Preparing the vacation programme"],
+  lent: ["Preparing the Lent programme"],
+  easter: ["Preparing the Easter programme"],
+  mayweek: ["Preparing the May Week programme"]
 };
 function bootLines(){
   let key = "michaelmas";
