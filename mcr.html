@@ -1300,11 +1300,16 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbwcy9cLTlgLVLZagzIDbL0QxcXCMK1TCrb9Bj04x3VCiDYHfhegkyjFrlzPYuOn9zwB/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzTOB1J_AUXdeaVTxj3L8BTS-mR3hbRjoLb1lGu6kTC37zdDnbXOjR50DYMQnI6fvpnbg/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
 const BOOK_REGISTER = "https://jcollegemcr.co.uk/register";
+
+/* The build this page was written against. If the server reports a different
+   one, the deployment answering is not this code, and the membership check it
+   is running is whatever was deployed last. Shown under 'What is wrong?'. */
+const EXPECT_BUILD = "membership-check-4";
 
 /* JavaScript is alive, so the ring painted before the page was parsed can go.
    It is a pseudo element on <html>, so nothing else can remove it. */
@@ -1528,6 +1533,7 @@ function gateClear(){ put("gateFix", ""); }
    thing people get wrong. */
 /* A page opened straight off the disk reports its origin as the string "null",
    which is worse than useless in a message somebody is going to act on. */
+let SRV_BUILD = "", SRV_BOOK;
 const originOf = () => (location.origin && location.origin !== "null")
   ? location.origin : "a local file, which Google will never accept";
 /* Four lines, not eight. Anything longer stops being read at the moment
@@ -1540,7 +1546,10 @@ function renderDiag(){
     ["client", CLIENT_ID ? CLIENT_ID.split("-")[0] : "not set", !!CLIENT_ID],
     ["google", gsiComplaint ? gsiComplaint.slice(0, 58)
       : (window.google && google.accounts && google.accounts.id) ? "loaded" : "blocked",
-      !gsiComplaint && !!(window.google && google.accounts && google.accounts.id)]
+      !gsiComplaint && !!(window.google && google.accounts && google.accounts.id)],
+    ["build", SRV_BUILD || "older deployment, redeploy needed", SRV_BUILD === EXPECT_BUILD],
+    ["members", SRV_BOOK === undefined ? "unknown"
+      : SRV_BOOK ? "register check on" : "REGISTER CHECK OFF", SRV_BOOK !== false]
   ];
   if (inFrame) rows.push(["frame", "Google refuses a framed page", false]);
   put("diag", rows.map(r => "<span" + ok(r[2]) + "><b>" + esc(r[0]) + "</b>" + esc(r[1]) + "</span>").join(""));
@@ -1569,6 +1578,12 @@ async function probe(){
         '<button class="btn cream sm" data-retry>Try again</button>');
     }
     APP_URL = d.url || "";
+    /* Which deployment is actually answering, and whether the membership check
+       is switched on in it. Apps Script serves the deployed version rather than
+       the saved file, so this is the one fact that settles 'I changed the code
+       and nothing happened'. */
+    SRV_BUILD = d.build || "";
+    SRV_BOOK = d.bookOn;
     CLIENT_ID = (d.signIn && d.signIn.clientId) || "";
     $("gFootYear").textContent = d.year || "";
     /* 3. has anybody set the client ID */
