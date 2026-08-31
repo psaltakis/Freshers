@@ -1279,7 +1279,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
       <span><small>JESUS COLLEGE</small><b>The <i>MCR</i></b></span></div>
     <p class="lede" id="gLede">The postgraduate community at Jesus. The term calendar, the Lodge, and somebody to ask. Sign in with your University of Cambridge Google account.</p>
     <div id="gsiBtn"><span class="gsiskel" aria-hidden="true"></span></div>
-    <p class="lede" style="margin:10px 0 0;font-size:12.5px">Use your <b>@cam.ac.uk</b> account. There is no password to make and nothing to verify.</p>
+    <p class="lede" style="margin:10px 0 0;font-size:12.5px">Use your <b>@cam.ac.uk</b> account. There is no password to make and nothing to verify. Your name is then checked against the MCR Book, the register every MCR site reads.</p>
     <p class="msg" id="gateMsg"></p>
     <div id="gateFix"></div>
     <div class="gfoot"><span id="gFootYear"></span>
@@ -1300,7 +1300,11 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbywp68TrjnCvJjKaNAwWf-Y2BErq2Jzf8z_lpuT6RSZgfCdVARSoglIoMZkdIO6VfU/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyxeJAxkUwHfocYMxDkJOyi2FSyxnlEPxxsA5ctGCw04M42UW7BGnp102gfjrn05RoTbg/exec";
+
+/* Where somebody goes to be written into the MCR Book. The server decides
+   membership; this is only the signpost shown when the answer is no. */
+const BOOK_REGISTER = "https://jcollegemcr.co.uk/register";
 
 /* JavaScript is alive, so the ring painted before the page was parsed can go.
    It is a pseudo element on <html>, so nothing else can remove it. */
@@ -1684,7 +1688,18 @@ async function onCredential(res){
   $("bootLine").textContent = "Checking with Google";
   bootTalk(true);
   try{
+    lastCred = res.credential;
+    $("bootLine").textContent = "Looking you up in the MCR Book";
     const d = await withTimeout(api("googleToken", { credential: res.credential }), 20000);
+    /* Google says who they are, the register says whether they are ours. A no
+       is not a failure and is not written like one: it is one step short of
+       being in, with the step named and a button on it. */
+    if (d && d.needsBook){
+      bootTalk(false);
+      $("boot").hidden = true;
+      $("gate").hidden = false;
+      return notInBook(d);
+    }
     setToken(d.token);
     $("gateMsg").textContent = "";
     await boot(true);
@@ -1695,6 +1710,54 @@ async function onCredential(res){
     $("gateMsg").textContent = "";
     gateFix("That sign in did not go through", esc(e && e.message ? e.message : String(e)),
       '<button class="btn cream sm" data-retry>Try again</button>');
+  }
+}
+
+/* Held so somebody who registers in another tab can come straight back and be
+   let in without going round Google a second time. Google's token is good for
+   about an hour, which is far longer than registering takes. */
+let lastCred = "";
+function notInBook(d){
+  const who = esc(d.email || "");
+  gateFix("You are not in the MCR Book yet",
+    'Signed in as <b>' + who + '</b>, and that name is not in the register of the ' +
+    'Jesus College MCR. The register is the one list every MCR site reads, so writing ' +
+    'your name in it once opens all of them, this one included.<br><br>' +
+    'It takes a couple of minutes: a code to your college address, a line about what ' +
+    'you study, and a yes from the President.',
+    '<a class="btn cream sm" href="' + BOOK_REGISTER + '" target="_blank" rel="noopener" ' +
+      'data-book-open>Put my name in the book</a>' +
+    '<button class="btn ghost sm" data-book-again>I have done that, let me in</button>');
+}
+async function bookAgain(btn){
+  if (!lastCred){ gsiUp = false; gsiComplaint = ""; return probe(); }
+  const was = btn ? btn.innerHTML : "";
+  if (btn){ btn.disabled = true; btn.innerHTML = '<span class="spin"></span>Checking the book'; }
+  try{
+    /* recheck skips the few hours the last answer would otherwise be kept for,
+       so somebody approved a minute ago does not wait for it to lapse. */
+    const d = await withTimeout(api("googleToken", { credential: lastCred, recheck: true }), 20000);
+    if (d && d.needsBook){
+      if (btn){ btn.disabled = false; btn.innerHTML = was; }
+      toast("Not there yet. The President has to say yes before your name goes in.");
+      return;
+    }
+    gateClear();
+    setToken(d.token);
+    $("gate").hidden = true;
+    $("boot").hidden = false;
+    bootIdx = 0;
+    $("bootLine").textContent = "Opening the gate";
+    bootTalk(true);
+    await boot(true);
+  }catch(e){
+    if (btn){ btn.disabled = false; btn.innerHTML = was; }
+    /* An hour is up, or Google has moved on. Sending them round again is the
+       honest answer and takes one tap. */
+    lastCred = "";
+    gateFix("That sign in has gone stale",
+      "Sign in with Google once more and the book will be checked again.",
+      '<button class="btn cream sm" data-retry>Sign in again</button>');
   }
 }
 
@@ -4524,6 +4587,8 @@ document.addEventListener("click", async e => {
 /* The gate's own buttons. It sits outside the app, so it gets its own
    listener rather than borrowing the one that needs S to exist. */
 on("gate", "click", e => {
+  const bk = e.target.closest("[data-book-again]");
+  if (bk){ e.preventDefault(); return bookAgain(bk); }
   const t = e.target.closest("[data-retry],[data-diag],[data-prompt],[data-tryanyway],[data-copyorigin]");
   if (!t) return;
   if (t.hasAttribute("data-retry")){ gsiUp = false; gsiComplaint = ""; return probe(); }
