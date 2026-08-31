@@ -41,28 +41,36 @@ html:has(#boot)::before,html.booted::before{content:none}
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://accounts.google.com">
 <link rel="preconnect" href="https://script.google.com">
-<link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,400;0,600;0,700;1,600&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Manrope:wght@400..800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 :root{
-  --red:#B4141B; --red-deep:#89090F; --red-mid:#C8262C;
-  --cream:#FCF3F1; --cream-2:#F3E0DC; --cream-3:#E4C6C1;
-  --gold:#E2A93C; --gold-2:#F2C76B; --ink:#26090B; --ink-2:#4A2523; --ink-soft:#8A5F5C;
-  --ok:#2C6B4F; --line:rgba(255,255,255,.22);
-  --display:'Bitter',Georgia,serif;
-  --body:'Source Sans 3','Helvetica Neue',Arial,sans-serif;
-  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  --red:#B4141B; --red-deep:#6B080D; --red-mid:#C8262C;
+  --cream:#FDF7F1; --cream-2:#EFE1D2; --cream-3:#D4BAA4; --cream-4:#A78C77;
+  --gold:#EBB753; --gold-2:#FCE7B6; --gold-ink:#3A2700;
+  --ink:#2A0F0C; --ink-2:#4A2523; --ink-soft:#8A5F5C;
+  --ok:#2C6B4F; --line:rgba(255,255,255,.14);
+  /* tints, so a panel is a filled tile rather than a box with a border */
+  --t1:rgba(255,255,255,.075); --t2:rgba(255,255,255,.12); --t3:rgba(0,0,0,.24);
+  --sab:env(safe-area-inset-bottom,0px); --sat:env(safe-area-inset-top,0px);
+  --ease:cubic-bezier(.22,.9,.3,1);
+  /* The Chimney and the Fortnight are set in Fraunces, Manrope and JetBrains
+     Mono. The treasury was set in three others, which is most of why it read as
+     a different institution. */
+  --display:'Fraunces',Georgia,serif;
+  --body:'Manrope','Helvetica Neue',Arial,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
   --card:0 1px 2px rgba(0,0,0,.10), 0 12px 28px -22px rgba(0,0,0,.6);
-  --r:14px; --pad:20px;
+  --r:18px; --r2:14px; --pad:17px; --g:12px; --g2:16px; --g3:26px;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;max-width:100%;overflow-x:hidden}
 body{
-  background:#A9111A;
-  background-image:radial-gradient(1200px 640px at 84% -12%,rgba(255,255,255,.10),transparent 66%),
-    linear-gradient(178deg,#B4141B 0%,#9C0F16 62%,#870C12 100%);
-  background-attachment:fixed;color:#fff;font-family:var(--body);font-size:17.5px;line-height:1.6;
-  -webkit-font-smoothing:antialiased;
+  background:radial-gradient(120% 90% at 12% -10%,#8E0F14,transparent 60%),
+    radial-gradient(130% 100% at 100% 0%,#5E070C,transparent 55%),
+    linear-gradient(178deg,#6B080D,#48050A 64%,#35040A);
+  background-attachment:fixed;color:var(--cream);font-family:var(--body);font-size:16.5px;
+  font-weight:500;line-height:1.55;-webkit-font-smoothing:antialiased;
 }
 button{font-family:var(--body)}
 [hidden]{display:none!important}
@@ -74,52 +82,125 @@ button{font-family:var(--body)}
 .topbar{padding-top:env(safe-area-inset-top)}
 .topbar .in{max-width:1200px;margin:0 auto;
   padding:11px max(24px,env(safe-area-inset-right)) 11px max(24px,env(safe-area-inset-left));display:flex;align-items:center;gap:16px;flex-wrap:wrap;min-width:0}
-.topbar .crest{height:44px;width:auto;flex:none;margin-right:14px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.35))}
+.topbar .crest{height:38px;width:auto;flex:none;margin-right:12px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.35))}
+/* Wordmark, eyebrow underneath, exactly as The Chimney sets it. */
+.topbar .brand h1{font-family:var(--display);font-weight:600;font-size:1.16rem;letter-spacing:-.035em;
+  line-height:1;margin:0;color:var(--cream)}
+.topbar .brand h1 i{font-style:italic;color:var(--gold-2);font-weight:400}
+.topbar .brand .eyebrow{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--gold-2);font-weight:600;margin-top:5px;order:2}
+.topbar .brand{display:flex;flex-direction:column}
 .brand{min-width:0;flex:0 1 auto}
 .brand .eyebrow{font-family:var(--display);font-style:italic;font-weight:600;font-size:11px;
   letter-spacing:.17em;text-transform:uppercase;opacity:.9;display:block;line-height:1}
-.brand h1{font-family:var(--display);font-weight:700;font-size:22px;margin:4px 0 0;letter-spacing:-.01em;line-height:1}
+.brand h1{font-family:var(--display);font-weight:600;font-size:1.16rem;margin:0;letter-spacing:-.035em;line-height:1}
 .brand h1,.brand .eyebrow{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sp{flex:1}
-.chip-user{display:flex;align-items:center;gap:12px;background:rgba(0,0,0,.24);border:1px solid var(--line);
-  border-radius:999px;padding:6px 8px 6px 16px;min-width:0;max-width:100%;flex-wrap:nowrap;box-sizing:border-box}
+.chip-user{display:flex;align-items:center;gap:10px;background:var(--t1);border:0;
+  border-radius:999px;padding:5px 6px 5px 14px;min-width:0;max-width:100%;flex-wrap:nowrap;box-sizing:border-box}
 .chip-user>div:first-child{min-width:0;flex:1 1 auto;overflow:hidden}
-.chip-user .nm{font-weight:600;font-size:15px;line-height:1.2}
-.chip-user .rl{font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;opacity:.8}
+.chip-user .nm{font-weight:700;font-size:.85rem;line-height:1.2;color:var(--cream)}
+.chip-user .rl{font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--gold-2);font-weight:600;margin-top:2px}
 .chip-user .nm,.chip-user .rl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;max-width:100%}
 .chip-user .iconbtn{flex:none;white-space:nowrap;margin-left:10px}
 .iconbtn{background:transparent;border:1px solid var(--line);color:#fff;border-radius:999px;cursor:pointer;
   font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;padding:7px 12px}
 .iconbtn:hover{background:rgba(255,255,255,.14)}
 .iconbtn:focus-visible,.nav button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-.wrap{max-width:1200px;margin:0 auto;
-  padding:0 max(24px,env(safe-area-inset-left)) calc(96px + env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-right))}
+.wrap{max-width:1180px;margin:0 auto;
+  padding:0 max(20px,env(safe-area-inset-left)) calc(92px + env(safe-area-inset-bottom)) max(20px,env(safe-area-inset-right))}
 
-.nav{display:flex;gap:7px;flex-wrap:wrap;padding:20px 0 4px}
-.nav button{background:rgba(0,0,0,.18);border:1px solid var(--line);border-radius:999px;color:rgba(255,255,255,.82);
-  cursor:pointer;padding:10px 19px;font-family:var(--display);font-weight:600;font-size:14.5px;letter-spacing:.04em;
-  transition:background .16s,color .16s}
-.nav button:hover{background:rgba(0,0,0,.32);color:#fff}
-.nav button[aria-current="true"]{background:var(--cream);border-color:var(--cream);color:var(--red-deep)}
-.nav .badge{display:inline-block;min-width:18px;height:18px;line-height:18px;border-radius:999px;background:var(--gold);
-  color:#452700;font-family:var(--mono);font-size:9.5px;font-weight:600;text-align:center;padding:0 5px;margin-left:7px}
-.nav button[aria-current="true"] .badge{background:var(--red);color:#fff}
+/* THE OPTIONS, AT THE FOOT.
+   A row of pills across the top pushed the figures down the page and read as a
+   website. At the foot, in a single floating bar with an icon over each label,
+   it reads as the same app as the other two, and the numbers start at the top
+   of the screen where they belong. It scrolls sideways when there are more
+   options than fit, which is what happens to a treasurer and nobody else. */
+.nav{position:fixed;left:50%;bottom:calc(10px + var(--sab));transform:translateX(-50%);z-index:45;
+  display:flex;gap:2px;overflow-x:auto;max-width:calc(100vw - 18px);padding:5px;
+  background:rgba(66,4,9,.94);border-radius:999px;
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  box-shadow:0 6px 22px -4px rgba(20,1,3,.8);scrollbar-width:none;scroll-behavior:smooth}
+.nav::-webkit-scrollbar{display:none}
+/* Nine options do not fit a phone, so the bar scrolls. A bar that scrolls with
+   no sign of it looks like a bar that is missing options, so the right edge
+   fades under a mask when there is more to reach. */
+.navwrap{position:fixed;left:50%;bottom:calc(10px + var(--sab));transform:translateX(-50%);
+  z-index:45;max-width:calc(100vw - 18px);border-radius:999px;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);
+  mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%)}
+.navwrap.atstart{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 14px),transparent 100%);
+  mask-image:linear-gradient(90deg,#000 calc(100% - 14px),transparent 100%)}
+.navwrap.atend{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 14px);
+  mask-image:linear-gradient(90deg,transparent 0,#000 14px)}
+.navwrap.fits{-webkit-mask-image:none;mask-image:none}
+.navwrap .nav{position:static;left:auto;bottom:auto;transform:none;max-width:none}
+/* momentum on iOS, or the bar feels stuck */
+.nav{-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+.nav button{flex:0 0 auto;background:none;border:0;cursor:pointer;color:var(--cream-4);
+  font-family:var(--body);font-size:.66rem;font-weight:700;line-height:1.2;
+  display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 11px;
+  border-radius:999px;position:relative;min-width:56px;transition:.2s}
+.nav button svg{width:1.15rem;height:1.15rem;fill:none;stroke:currentColor;stroke-width:1.9;
+  stroke-linecap:round;stroke-linejoin:round}
+.nav button:hover{color:var(--cream)}
+.nav button[aria-current="true"]{background:var(--gold);color:var(--gold-ink)}
+.nav .badge{position:absolute;top:2px;right:5px;background:#E8535C;color:#fff;font-size:.635rem;
+  font-weight:800;border-radius:999px;min-width:15px;padding:1px 4px;line-height:1.5;margin:0}
+.nav button[aria-current="true"] .badge{background:var(--gold-ink);color:var(--gold)}
+/* room for the bar, so the last card is never trapped underneath it */
+/* The wrap already leaves room for the bar. Paying for it twice left a
+   screenful of nothing under the last card. */
 
-.shead{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin:34px 0 14px}
-.shead h2{font-family:var(--display);font-weight:700;font-size:24px;margin:0 2px 0 0;letter-spacing:-.01em}
-.shead .note{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.72)}
+.shead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:var(--g3) 0 var(--g2)}
+.shead h2{font-family:var(--display);font-weight:600;font-size:clamp(1.5rem,5.6vw,2.05rem);
+  margin:0;letter-spacing:-.042em;line-height:1;color:var(--cream)}
+.shead h2 i{font-style:italic;color:var(--gold-2);font-weight:400}
+.shead .note{font-size:.66rem;color:var(--cream-4);font-weight:500;letter-spacing:0;
+  text-transform:none;font-family:var(--body)}
+/* A label above a run of cards, with the little dash the other two use. */
+.grp{font-family:var(--mono);font-size:.66rem;letter-spacing:.17em;text-transform:uppercase;
+  color:var(--gold-2);margin:var(--g3) 0 var(--g2);display:flex;align-items:center;gap:9px;
+  font-weight:600;flex-wrap:wrap}
+.grp::before{content:"";width:16px;height:3px;border-radius:3px;background:currentColor;flex:0 0 16px}
 section > .shead:first-child{margin-top:24px}
 
 /* ---------- panels ---------- */
-.panel{background:var(--cream);color:var(--ink);border-radius:var(--r);box-shadow:var(--card);padding:var(--pad);margin-bottom:16px}
-.panel h3.ph{font-family:var(--display);font-weight:700;font-size:18.5px;margin:0 0 5px;color:var(--red-deep)}
-.panel p.lede{margin:0 0 18px;color:var(--ink-soft);font-size:16px;max-width:68ch}
+/* ONE RULE, AS ON THE OTHER TWO: everything is a filled tile with a gap around
+   it. No hairlines on the background, no borders meeting borders. The cream
+   panels are kept for the things that are genuinely paper, a form being filled
+   in or a table of figures being read, and everything else sits on the red. */
+/* A form being filled in and a column of figures are paper, and stay paper:
+   The Chimney keeps its day cards on paper for the same reason. What changed is
+   everything around them, and the corners, which now match. Turning these dark
+   would have put ink text on a dark tile in about forty places. */
+.panel{background:var(--cream);color:var(--ink);border-radius:var(--r);box-shadow:var(--card);
+  padding:var(--pad);margin-bottom:var(--g)}
+.panel h3.ph{font-family:var(--display);font-weight:600;font-size:1.09rem;margin:0 0 5px;
+  letter-spacing:-.03em;color:var(--red-deep)}
+.panel h3.ph i{font-style:italic;color:var(--red);font-weight:400}
+.panel p.lede{margin:0 0 14px;color:var(--ink-soft);font-size:.92rem;line-height:1.55;max-width:68ch}
 .panel p.lede:last-child{margin-bottom:0}
-.panel.dark{background:var(--ink);color:#fff}
-.panel.dark h3.ph{color:#fff}
-.panel.dark p.lede{color:rgba(255,255,255,.72)}
+/* the tinted tile, for anything that is chrome rather than paper */
+.panel.dark{background:var(--t1);color:var(--cream);box-shadow:none}
+.panel.dark h3.ph{color:var(--cream)}
+.panel.dark h3.ph i{color:var(--gold-2)}
+.panel.dark p.lede{color:var(--cream-3)}
 
-.cash{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+/* The gold card, as on the other two: one thing worth doing, said plainly,
+   with an arrow. It is the only gold on a page, which is what makes it work. */
+.jump{display:flex;align-items:center;gap:var(--g2);background:linear-gradient(100deg,var(--gold),#F5CE76);
+  color:var(--gold-ink);border-radius:var(--r);padding:var(--pad);margin-bottom:var(--g);
+  text-decoration:none;transition:transform .18s var(--ease),background .18s;border:0;
+  width:100%;text-align:left;font:inherit;cursor:pointer}
+.jump:hover{transform:translateY(-2px);background:linear-gradient(100deg,#F5CE76,var(--gold-2))}
+.jump .t{flex:1;min-width:0}
+.jump b{display:block;font-family:var(--display);font-size:1.02rem;font-weight:600;letter-spacing:-.032em}
+.jump small{display:block;font-size:.72rem;color:rgba(58,39,0,.78);font-weight:600;margin-top:3px;line-height:1.45}
+.jump .arw{flex:0 0 auto;font-size:.95rem;font-weight:700}
+
+.cash{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:var(--g)}
 .cash .c{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:15px 17px}
 .cash .c.big{background:var(--gold);border-color:var(--gold);color:#3D2200}
 .cash .k{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
@@ -194,7 +275,7 @@ section > .shead:first-child{margin-top:24px}
 </style>
 <style>
 /* ---------- forms ---------- */
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px 16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px 14px}
 .grid.two{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
 .full{grid-column:1/-1}
 label.f{display:block;min-width:0}
@@ -219,20 +300,28 @@ textarea{min-height:74px}
 /* Nothing you have to hit should be smaller than a fingertip. */
 .btn{min-height:44px}
 .btn.small{min-height:38px}
-.iconbtn{min-height:34px}
+.iconbtn{min-height:34px;font-family:var(--body);font-size:.72rem;font-weight:700}
 textarea{resize:vertical;min-height:64px}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(180,20,27,.15)}
 input:disabled{background:var(--cream-2);color:var(--ink-soft);cursor:not-allowed}
 input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{
   -webkit-appearance:none;margin:0}
 input[type=number]{-moz-appearance:textfield}
-.actions{display:flex;flex-wrap:wrap;gap:11px;align-items:center;margin-top:20px}
-.btn{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;
-  background:var(--red);color:#fff;border:1px solid var(--red);border-radius:999px;padding:11px 21px;cursor:pointer;
-  transition:background .14s,border-color .14s,transform .1s}
-.btn:hover{background:var(--red-deep);border-color:var(--red-deep)}
-.btn:active{transform:translateY(1px)}
-.btn.ghost{background:transparent;color:var(--red-deep)}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-top:16px}
+/* Gold for the thing to press, a hairline ghost for the alternative. The
+   shouty mono capitals are gone: the other two set their buttons in the body
+   face and they read as something to press rather than a warning. */
+.btn{font-family:var(--body);font-size:.83rem;letter-spacing:-.01em;text-transform:none;font-weight:800;
+  background:var(--gold);color:var(--gold-ink);border:0;border-radius:999px;padding:11px 20px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:8px;line-height:1.15;
+  transition:transform .14s var(--ease),filter .14s,background .14s}
+.btn:hover{filter:brightness(1.05);transform:translateY(-1px)}
+.btn:active{transform:none}
+.btn.crimson{background:var(--red);color:#fff}
+.btn.ghost{background:transparent;color:var(--cream);box-shadow:inset 0 0 0 1.5px var(--line)}
+.panel .btn.ghost{color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--cream-3)}
+.panel.dark .btn.ghost{color:var(--cream);box-shadow:inset 0 0 0 1.5px var(--line)}
+.btn.small,.btn.sm{padding:8px 15px;font-size:.74rem}
 .btn.ghost:hover{background:var(--cream-2)}
 .btn.gold{background:var(--gold);border-color:var(--gold);color:#42260A}
 .btn.gold:hover{filter:brightness(.93)}
@@ -390,14 +479,16 @@ a.btn{display:inline-block;line-height:1.15}
 /* ---------- gate ---------- */
 .gate{min-height:calc(100vh - 130px);min-height:calc(100dvh - 130px);
   display:grid;place-items:center;padding:30px 0}
-.gatecard{background:var(--cream);color:var(--ink);border-radius:20px;box-shadow:0 30px 70px -34px rgba(0,0,0,.78);
+.gatecard{background:var(--cream);color:var(--ink);border-radius:22px;box-shadow:0 30px 70px -34px rgba(0,0,0,.78);
   max-width:530px;width:100%;overflow:hidden}
 .gatetop{background:var(--red-deep);padding:24px 30px;display:flex;align-items:center;gap:18px;min-width:0}
 .gatetop img{height:78px;width:auto;margin-right:16px;flex:none}
 .gatetop .t,.gatetop div{min-width:0}
-.gatetop .eyebrow{font-family:var(--display);font-style:italic;font-size:12px;letter-spacing:.15em;
-  text-transform:uppercase;color:rgba(255,255,255,.85);display:block}
-.gatetop h2{font-family:var(--display);font-size:25px;margin:5px 0 0;color:#fff;line-height:1.15}
+.gatetop .eyebrow{font-family:var(--mono);font-style:normal;font-size:.6rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--gold-2);display:block;font-weight:600}
+.gatetop h2{font-family:var(--display);font-weight:600;font-size:1.5rem;margin:6px 0 0;color:var(--cream);
+  line-height:1.08;letter-spacing:-.035em}
+.gatetop h2 i{font-style:italic;color:var(--gold-2);font-weight:400}
 .gatebody{padding:26px 30px 28px}
 .gatebody p.lede{margin:0 0 22px;color:var(--ink-soft);font-size:15px}
 #gBtn{display:flex;justify-content:center;min-height:46px}
@@ -421,7 +512,7 @@ a.btn{display:inline-block;line-height:1.15}
 .seg button[aria-pressed="true"]{background:#fff;color:var(--red-deep);box-shadow:0 1px 3px rgba(0,0,0,.14)}
 .seg button:focus-visible{outline:2px solid var(--red);outline-offset:1px}
 @media (max-width:420px){.seg button{font-size:13px;padding:12px 6px;letter-spacing:-.01em}}
-.toast{position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(16px);background:var(--ink);color:#fff;
+.toast{position:fixed;left:50%;bottom:calc(86px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(16px);background:var(--ink);color:#fff;
   font-family:var(--mono);font-size:12.5px;letter-spacing:.04em;padding:13px 20px;border-radius:999px;opacity:0;
   pointer-events:none;transition:.25s;z-index:90;max-width:90vw;text-align:center;box-shadow:0 14px 34px -14px rgba(0,0,0,.8)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -459,8 +550,8 @@ a.btn{display:inline-block;line-height:1.15}
    out at the moment they most want their money back that the app has never had
    their sort code. */
 #setup{position:fixed;inset:0;z-index:118;overflow-y:auto;
-  background:radial-gradient(1000px 560px at 50% -8%,rgba(255,255,255,.12),transparent 62%),
-    linear-gradient(178deg,#B4141B,#7E0A10);
+  background:radial-gradient(1000px 560px at 50% -8%,rgba(255,255,255,.14),transparent 62%),
+    linear-gradient(178deg,#8E0F14,#5E070C 64%,#48050A);
   padding:calc(26px + env(safe-area-inset-top)) 0 calc(34px + env(safe-area-inset-bottom))}
 #setup .in{max-width:520px;margin:0 auto;padding:0 max(18px,env(safe-area-inset-left))}
 #setup .brandline{display:flex;align-items:center;gap:13px;margin-bottom:22px;color:#FBF3EC}
@@ -591,15 +682,15 @@ section[id^="v-"]:not([hidden]){animation:viewIn .22s cubic-bezier(.2,.8,.3,1) b
 @keyframes viewIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
 
 #welcome{position:fixed;inset:0;z-index:120;display:grid;place-items:center;text-align:center;padding:30px;
-  background:radial-gradient(1200px 640px at 50% -10%,rgba(255,255,255,.12),transparent 66%),
-    linear-gradient(178deg,#B4141B 0%,#9C0F16 62%,#870C12 100%);
+  background:radial-gradient(1000px 560px at 50% -8%,rgba(255,255,255,.14),transparent 62%),
+    linear-gradient(178deg,#8E0F14,#5E070C 64%,#48050A);
   animation:welIn .35s ease both}
 #welcome.out{animation:welOut .3s ease both}
 @keyframes welIn{from{opacity:0}to{opacity:1}}
 @keyframes welOut{from{opacity:1}to{opacity:0;transform:scale(1.015)}}
 #welcome img{height:min(168px,26vh);width:auto;filter:drop-shadow(0 6px 18px rgba(0,0,0,.4));
   animation:welRise .45s cubic-bezier(.2,.8,.3,1) both}
-#welcome h2{font-family:var(--display);font-weight:700;font-size:clamp(30px,6vw,52px);margin:24px 0 0;
+#welcome h2{font-family:var(--display);font-weight:600;font-size:clamp(28px,6vw,50px);margin:22px 0 0;
   letter-spacing:-.02em;overflow-wrap:anywhere;max-width:min(900px,92vw);margin-left:auto;margin-right:auto;
   animation:welRise .45s .05s cubic-bezier(.2,.8,.3,1) both}
 #welcome p{margin:12px auto 0;font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;
@@ -773,7 +864,7 @@ ul.notes li:last-child{margin-bottom:0}
   .wrap{padding-left:16px;padding-right:16px}
   .topbar .in{padding:10px 16px;gap:10px}
   .topbar .crest{height:34px;margin-right:10px}
-  .brand h1{font-size:19px}
+  .brand h1,.topbar .brand h1{font-size:1.06rem}
   .sp{flex:1 1 100%;height:0}
   .chip-user{flex:1 1 100%;padding:7px 8px 7px 13px;gap:0}
   .chip-user .nm{font-size:13px}
@@ -826,9 +917,10 @@ ul.notes li:last-child{margin-bottom:0}
   .addrow .btn{width:100%}
   .bubble .who b,.bubble .who em{max-width:calc(100vw - 150px)}
   .nav{gap:6px;padding:16px 0 4px}
-  .nav button{padding:9px 15px;font-size:13.5px}
+  .nav button{padding:7px 9px;font-size:.62rem;min-width:52px}
+  .nav button svg{width:1.05rem;height:1.05rem}
   .shead{margin:26px 0 12px;gap:8px}
-  .shead h2{font-size:21px}
+  .shead h2{font-size:1.5rem}
   .footnote{font-size:10px;gap:10px}
 }
 @media (max-width:380px){
@@ -870,7 +962,7 @@ ul.notes li:last-child{margin-bottom:0}
 <header class="topbar">
   <div class="in">
     <img class="crest" alt="Jesus College MCR crest">
-    <div class="brand"><span class="eyebrow">Jesus College MCR</span><h1>Treasury 2026/27</h1></div>
+    <div class="brand"><h1>Jesus <i>MCR</i></h1><span class="eyebrow">Treasury &middot; 2026 to 2027</span></div>
     <span class="sp"></span>
     <div class="chip-user" id="chipUser" hidden>
       <div><div class="nm" id="whoName">&mdash;</div><div class="rl" id="whoRole">&mdash;</div></div>
@@ -886,7 +978,7 @@ ul.notes li:last-child{margin-bottom:0}
     <div class="gatecard">
       <div class="gatetop">
         <img src="treasury-logo.png" alt="" width="257" height="420">
-        <div><span class="eyebrow">Jesus College MCR</span><h2>Treasury and reimbursements</h2></div>
+        <div><span class="eyebrow">Jesus College MCR</span><h2>The <i>Treasury</i></h2></div>
       </div>
       <div class="gatebody">
         <p class="lede">Sign in with your University of Cambridge Google account. Your MCR membership is then confirmed against the register before access is granted.</p>
@@ -901,17 +993,32 @@ ul.notes li:last-child{margin-bottom:0}
 
   <!-- ================= APP ================= -->
   <div id="app" hidden>
+    <!-- The same bar as the other two apps: an icon over a short label, the
+         current one filled in gold, scrolling sideways when a treasurer has
+         more options than a member does. Every data-view is unchanged, so the
+         behaviour behind it is exactly what it was. -->
+    <div class="navwrap" id="navwrap">
     <nav class="nav" id="nav">
-      <button data-view="overview" data-budget aria-current="true">Budget</button>
-      <button data-view="mine">My claims</button>
-      <button data-view="people" data-admin>People</button>
-      <button data-view="planned" data-admin>Planned costs</button>
-      <button data-view="approvals" data-approver>Approvals <span class="badge" id="badge" hidden>0</span></button>
-      <button data-view="payments" data-approver>Payments <span class="badge" id="badgePay" hidden>0</span></button>
-      <button data-view="trends" data-admin>Trends</button>
-      <button data-view="ledger" data-admin>Ledger</button>
-      <button data-view="settings" data-admin>Settings</button>
+      <button data-view="overview" data-budget aria-current="true">
+        <svg viewBox="0 0 24 24"><path d="M4 19V9m5 10V5m5 14v-7m5 7V8"/></svg>Budget</button>
+      <button data-view="mine">
+        <svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M9 12h7M9 16h5"/></svg>My claims</button>
+      <button data-view="people" data-admin>
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M4.5 20c0-3.9 3.4-6.6 7.5-6.6s7.5 2.7 7.5 6.6"/></svg>People</button>
+      <button data-view="planned" data-admin>
+        <svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg>Planned</button>
+      <button data-view="approvals" data-approver>
+        <svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg>Approvals<span class="badge" id="badge" hidden>0</span></button>
+      <button data-view="payments" data-approver>
+        <svg viewBox="0 0 24 24"><rect x="2.5" y="6" width="19" height="12" rx="3"/><path d="M2.5 10.5h19"/></svg>Payments<span class="badge" id="badgePay" hidden>0</span></button>
+      <button data-view="trends" data-admin>
+        <svg viewBox="0 0 24 24"><path d="M4 16l5-5 4 3.5L20 7"/><path d="M20 7h-4M20 7v4"/></svg>Trends</button>
+      <button data-view="ledger" data-admin>
+        <svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>Ledger</button>
+      <button data-view="settings" data-admin>
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 3v2.2M12 18.8V21M21 12h-2.2M5.2 12H3M18.4 5.6l-1.6 1.6M7.2 16.8l-1.6 1.6M18.4 18.4l-1.6-1.6M7.2 7.2L5.6 5.6"/></svg>Settings</button>
     </nav>
+    </div>
 
     <!-- ---------- OVERVIEW ---------- -->
     <section id="v-overview">
@@ -1419,7 +1526,7 @@ ul.notes li:last-child{margin-bottom:0}
    ============================================================ */
 
 /* PASTE YOUR TREASURY WEB APP URL HERE. Deploy, Manage deployments, ends in /exec. */
-const API_URL = "https://script.google.com/macros/s/AKfycbwtIV3n_oklFht7M0th-17hnTr1T9aCsA1cBL7joWXHjoCv9Xof94LUPGHwHy_zO7_n/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxpFC_gQO7P9R4G5MpBFgw0h1z7WzqY8S_ASiilA28_a7-gbhSk80ziqeVCuT_eAS77/exec";
 
 /* The crest, once. It used to appear three times in this file, which made the
    page a third of a megabyte before a single figure had loaded. */
@@ -2601,14 +2708,43 @@ const RENDERERS={
 };
 $("nav").addEventListener("click",e=>{
   const b=e.target.closest("button[data-view]");if(b)setView(b.dataset.view)});
+(function(){
+  const n=$("nav");
+  if(n)n.addEventListener("scroll",navEdges,{passive:true});
+  addEventListener("resize",navEdges,{passive:true});
+  requestAnimationFrame(navEdges);
+})();
 /* Coming back to a tab puts you where you left it, rather than at the top of a
    list you have already scrolled through. A tab you have not opened yet still
    starts at the top, and does so gently. */
 const SCROLL_={};
+/* Keeps the bar readable on a narrow screen: the current option is scrolled
+   into view, and the fade is applied only on the side that still has options
+   behind it. Cheap enough to run on every scroll: two numbers and a class. */
+function navEdges(){
+  const w=$("navwrap"),n=$("nav");
+  if(!w||!n)return;
+  const more=n.scrollWidth-n.clientWidth;
+  w.classList.toggle("fits",more<=2);
+  w.classList.toggle("atstart",more>2&&n.scrollLeft<=2);
+  w.classList.toggle("atend",more>2&&n.scrollLeft>=more-2);
+}
+function navShow(){
+  const n=$("nav");
+  if(!n)return;
+  const cur=n.querySelector('button[aria-current="true"]:not([hidden])');
+  if(cur&&cur.scrollIntoView)cur.scrollIntoView({behavior:"smooth",block:"nearest",inline:"center"});
+  requestAnimationFrame(navEdges);
+}
+
 function setView(v,quiet){
   if(view&&view!==v)SCROLL_[view]=window.scrollY;
   view=v;
   document.querySelectorAll("#nav button").forEach(b=>b.setAttribute("aria-current",String(b.dataset.view===v)));
+  /* On a phone the bar is wider than the screen, so the option just chosen can
+     sit off the edge. It brings itself into view, and the fade at the edges is
+     kept honest about which way there is more to reach. */
+  navShow();
   ["overview","mine","people","planned","approvals","payments","trends","ledger","settings"].forEach(x=>{
     $("v-"+x).hidden=x!==v});
   render();
