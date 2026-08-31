@@ -1300,7 +1300,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbxniW9c5VLf73nikxDW1LM9WOtTkaqkv276VEwF_Y4wS0LnX0yXF35yTEv6idEZDM3iYA/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycby5N9jm6oI8-4EeMjROryHSa7IHqaLFdLwEXNRxsizPQOqxMhV1ysog9stVZt_9BDGnLA/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -1803,7 +1803,21 @@ function signedOut(msg){
   $("hdr").hidden = true;
   $("gate").hidden = false;
   gsiUp = false;
-  $("gateMsg").textContent = msg || "";
+  const m = String(msg || "");
+  /* The server distinguishes between somebody who is not a member and a
+     register that is not answering. Both end here, and both deserve the card
+     that names what happened rather than a line of red text. */
+  if (m.indexOf("NOTMEMBER") === 0){
+    $("gateMsg").textContent = "";
+    probe();
+    return notInBook({ email: m.slice(9).trim() });
+  }
+  if (m.indexOf("BOOKDOWN") === 0){
+    $("gateMsg").textContent = "";
+    probe();
+    return bookUnreachable({});
+  }
+  $("gateMsg").textContent = m;
   probe();
 }
 
@@ -1907,8 +1921,14 @@ async function boot(fresh){
     $("gate").hidden = true;
     $("hdr").hidden = false;
     render();
+    /* The cached page is shown while the fresh one is fetched. That fetch is
+       also the membership check, so if it comes back refused the cached page
+       is taken away again immediately and the person is put back at the gate. */
     api("state").then(d => { S = d; render(); cacheState(); syncPhotos(d.photoRev); startPolling(); })
-      .catch(() => {});
+      .catch(e => {
+        const m = String((e && e.message) || "");
+        if (m.indexOf("NOTMEMBER") === 0 || m.indexOf("BOOKDOWN") === 0) signedOut(m);
+      });
     return;
   }
   bootTalk(true);
