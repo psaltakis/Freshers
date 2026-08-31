@@ -961,6 +961,16 @@ nav .railtop{display:none}
 .swx{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
 .st.late{background:rgba(226,74,74,.3);color:#FFC9C9}
 
+/* The two strings another MCR app needs, set out to be copied rather than
+   hunted for in the Apps Script editor. */
+.wirerow{display:flex;align-items:center;gap:12px;background:var(--t1);border-radius:var(--r3);
+  padding:11px 13px;margin-bottom:8px}
+.wirerow>div{flex:1;min-width:0}
+.wirerow .k{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--gold-2);font-weight:700;margin-bottom:4px}
+.wirerow code{display:block;font-family:var(--mono);font-size:.72rem;color:var(--cream);word-break:break-all;line-height:1.4}
+.wirerow .hint{display:block;font-size:.68rem;color:var(--cream-4);margin-top:4px}
+
 /* ---------- gate ---------- */
 #gate{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:22px;
   overflow:auto;overscroll-behavior:contain}
@@ -1110,18 +1120,21 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
   </section>
 
   <!-- ===================== SECOND LIFE ===================== -->
-  <section id="v-gifts" hidden>
-    <div class="vh"><h2>Second <i>life</i></h2><span class="note">Gifts, sales and lost property, between members</span>
-      <div class="right"><button class="btn gold sm" id="bNewGift">Put something up</button></div></div>
-    <div id="giftIntro"></div>
-    <div id="giftFilter" class="chips"></div>
-    <div id="giftGrid"></div>
+  <section id="v-board" hidden>
+    <div class="vh"><h2>The <i>board</i></h2><span class="note">What is happening in college, and what to look out for</span>
+      <div class="right"><button class="btn gold sm" id="bNewNotice2">Put something up</button></div></div>
+    <div id="boardBody"></div>
   </section>
 
+  <section id="v-room" hidden>
+    <div class="vh"><h2>The MCR <i>room</i></h2><span class="note">Book it, and see what is already booked</span></div>
+    <div id="roomBody"></div>
+  </section>
+
+
   <!-- ===================== LODGE ===================== -->
-  <section id="v-lodge" hidden>
-    <div class="vh"><h2>The <i>lodge</i></h2><span class="note">Notices, and how the college works</span>
-      <div class="right"><button class="btn gold sm" data-newnotice>Post a notice</button></div></div>
+  <section id="v-info" hidden>
+    <div class="vh"><h2><i>Info</i></h2><span class="note">Forms, how college works, and the sport</span></div>
     <div class="seg" id="lodgeSeg" style="margin-bottom:14px;overflow-x:auto"></div>
     <div id="lodgeBody"></div>
   </section>
@@ -1253,15 +1266,20 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
       <div id="adminNote"></div>
       <p class="lede" id="adminLinks" style="margin-top:14px"></p>
     </div>
+    <div class="card">
+      <h3>Wiring for the other MCR apps</h3>
+      <div id="wireBox"></div>
+    </div>
   </section>
 </div>
 
 <nav id="nav" aria-label="Sections" hidden>
   <div class="railtop"><img class="crest" id="crestRail" alt="Jesus College MCR"><span><b>Jesus MCR</b><i id="railYear"></i></span></div>
   <button class="tabbtn" data-view="today" aria-current="true"><svg viewBox="0 0 24 24"><path d="M4 15a8 8 0 0 1 16 0"/><path d="M12 3v3M4.2 6.6l2.1 2.1M19.8 6.6l-2.1 2.1M2 15h20"/></svg>Today</button>
-  <button class="tabbtn" data-view="lodge"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>Lodge<span class="badge" id="bdgLodge" hidden>0</span></button>
+  <button class="tabbtn" data-view="board"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="15" rx="1.8"/><path d="M7 9h10M7 13h6"/><path d="M12 2v2"/></svg>Board<span class="badge" id="bdgLodge" hidden>0</span></button>
+  <button class="tabbtn" data-view="room"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M9.5 20v-5h5v5"/></svg>The MCR room</button>
+  <button class="tabbtn" data-view="info"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5"/><path d="M12 7.6h.01"/></svg>Info</button>
   <button class="tabbtn" data-view="swaps"><svg viewBox="0 0 24 24"><path d="M4 8h13l-3-3M20 16H7l3 3"/></svg>Swaps<span class="badge" id="bdgSwaps" hidden>0</span></button>
-  <button class="tabbtn" data-view="gifts"><svg viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="12" rx="1.6"/><path d="M2 6.5h20V9H2zM12 6.5V21"/><path d="M12 6.5S10.6 3 8.6 3a2 2 0 1 0 0 4M12 6.5S13.4 3 15.4 3a2 2 0 1 1 0 4"/></svg>Second life<span class="badge" id="bdgGifts" hidden>0</span></button>
   <button class="tabbtn" data-view="ask"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/><path d="M12 12.4v-.5c0-1 .7-1.5 1.3-1.9.6-.4 1-.9 1-1.6a2.3 2.3 0 0 0-4.6 0"/><path d="M12 14.4h.01"/></svg>Ask<span class="badge" id="bdgAsk" hidden>0</span></button>
   <button class="tabbtn" data-view="biz"><svg viewBox="0 0 24 24"><path d="M4 20h16M12 4v3M6 20V9l6-4 6 4v11"/><path d="M9 13h6"/></svg>MCR business<span class="badge" id="bdgBiz" hidden>0</span></button>
   <span class="sep" data-committee hidden></span>
@@ -1300,7 +1318,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbzTOB1J_AUXdeaVTxj3L8BTS-mR3hbRjoLb1lGu6kTC37zdDnbXOjR50DYMQnI6fvpnbg/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbw2IvyPXIjgeNJxwtrXYetUEJNcGWdMlg9mmxK263B5kacWY-42DsNlepAjufr1ihWltA/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -1469,6 +1487,24 @@ function toast(m){
   e.classList.add("show");
   clearTimeout(toastT);
   toastT = setTimeout(() => e.classList.remove("show"), 3800);
+}
+/* One way of copying, because the clipboard API is refused in more places than
+   people expect and a silent failure here is maddening. */
+function copyText(text, done){
+  const ok = () => toast(done || "Copied.");
+  try{
+    if (navigator.clipboard && navigator.clipboard.writeText)
+      return navigator.clipboard.writeText(text).then(ok, () => legacy());
+  }catch(e){}
+  legacy();
+  function legacy(){
+    try{
+      const ta = document.createElement("textarea");
+      ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      document.execCommand("copy"); ta.remove(); ok();
+    }catch(e){ toast("Could not copy. Select it by hand: " + text.slice(0, 60)); }
+  }
 }
 function fail(e){ toast(e && e.message ? e.message : String(e)); }
 function spin(b, label){
@@ -1875,6 +1911,20 @@ function bootTalk(on){
   }, 1100);
   slowTimer = setTimeout(() => { const el = $("bootSlow"); if (el) el.hidden = false; }, 7000);
 }
+/* The loading screen can no longer be a dead end. If the first call fails for
+   any reason that is not a refusal, this says so and offers the two things
+   worth trying, and the session is left alone. */
+function bootStuck(msg){
+  bootTalk(false);
+  $("boot").hidden = true;
+  $("gate").hidden = true;
+  $("hdr").hidden = false;
+  $("app").hidden = false;
+  put("app", '<div class="card" style="max-width:560px;margin:24px auto"><h3>That did not load</h3>' +
+    '<p class="lede">' + esc(msg || "The server did not answer.") + '</p>' +
+    '<div class="acts"><button class="btn cream sm" data-tryboot>Try again</button>' +
+    '<button class="btn ghost sm" data-signout>Sign out</button></div></div>');
+}
 function bootDone(){
   const bar = $("bootBar");
   if (bar) bar.style.width = "100%";
@@ -1949,10 +1999,16 @@ async function boot(fresh){
   bootTalk(true);
   skeletons();
   try{
-    S = await withTimeout(api("state"), 25000, "The server took too long to answer.");
+    S = await withTimeout(api("state"), 30000, "The server took too long to answer.");
   }catch(e){
     bootTalk(false);
-    return signedOut(e && e.message ? e.message : "");
+    const m = String((e && e.message) || "");
+    /* Only a refusal signs somebody out. A timeout or a dropped connection used
+       to clear the token as well, which is why a slow morning looked like being
+       thrown out of the app for no reason. Those now keep the session and offer
+       to try again. */
+    if (/sign in|session|NOTMEMBER|BOOKDOWN|expired/i.test(m)) return signedOut(m);
+    return bootStuck(m);
   }
   bootDone();
   cacheState();
@@ -2536,24 +2592,23 @@ function noticeHtml(n){
    true right now, the forms, the guides, sport, and what you can borrow.
    Nothing is longer than a screen. */
 let lodgeTab = "now", jcsuQ = "", jcsuOpen = false;
+/* Info is what is left of the old Lodge once the board and the room have rooms
+   of their own: the forms, how college works, and the sport. */
 const LODGE_TABS = [
-  ["now","On the board"], ["forms","Forms and links"], ["guides","How college works"],
-  ["sport","Sport"], ["room","The MCR room"]
+  ["forms","Forms and links"], ["guides","How college works"], ["sport","Sport"]
 ];
 function renderLodge(){
   if (!S) return;
-  const counts = {
-    now: (S.notices || []).length,
-    forms: (S.links || []).length,
-    guides: (S.resources || []).length,
-    sport: (S.clubs || []).length,
-    room: (S.blackouts || []).length
-  };
+  /* Three sections now, drawn from the same data as before. */
+  put("boardBody", lodgeNow());
+  put("roomBody", lodgeRoom());
+  const counts = { forms: (S.links || []).length, guides: (S.resources || []).length,
+    sport: (S.clubs || []).length };
+  if (["forms","guides","sport"].indexOf(lodgeTab) < 0) lodgeTab = "forms";
   put("lodgeSeg", LODGE_TABS.map(t =>
     '<button data-lodge="' + t[0] + '" aria-pressed="' + (lodgeTab === t[0]) + '">' + esc(t[1]) +
     (counts[t[0]] ? " &middot; " + counts[t[0]] : "") + "</button>").join(""));
-  put("lodgeBody", { now: lodgeNow, forms: lodgeForms, guides: lodgeGuides,
-    sport: lodgeSport, room: lodgeRoom }[lodgeTab]());
+  put("lodgeBody", { forms: lodgeForms, guides: lodgeGuides, sport: lodgeSport }[lodgeTab]());
 }
 function lodgeNow(){
   const n = S.notices || [];
@@ -3598,6 +3653,28 @@ function renderMembers(){
     all.map(p => "<tr><td>" + esc(p.name || p.email.split("@")[0]) + "</td><td>" + esc(p.programme) +
       "</td><td>" + esc(p.research) + "</td><td>" + esc(p.dietary) + "</td></tr>").join(""));
 }
+/* THE DETAILS ANOTHER MCR APP NEEDS.
+   The Lodge screen reads this app's notice board and posts to it, and to do
+   that it needs two strings: the spreadsheet's id and this app's deployed
+   address. They live in the Apps Script editor, which is a poor place to go
+   hunting, so they are set out here to be copied in one press. */
+function paintWiring(){
+  const w = (S && S.wiring) || null;
+  if (!$("wireBox")) return;
+  if (!w) return put("wireBox", "");
+  const row = (label, value, hint) =>
+    '<div class="wirerow"><div><span class="k">' + esc(label) + '</span>' +
+    '<code>' + esc(value || "not deployed yet") + '</code>' +
+    (hint ? '<span class="hint">' + esc(hint) + '</span>' : '') + '</div>' +
+    (value ? '<button class="btn ghost sm" data-copy="' + esc(value) + '">Copy</button>' : '') + '</div>';
+  put("wireBox",
+    '<p class="lede">The Lodge screen reads this board and posts to it. Give the Porters&rsquo; Lodge app ' +
+    'these two, and it wires itself up. Both are safe to pass on inside the college: neither one lets ' +
+    'anybody in on their own.</p>' +
+    row("CHIMNEY_SHEET_ID", w.sheetId, "the spreadsheet behind this app") +
+    row("CHIMNEY_URL", w.execUrl, "this app's deployed address, ending /exec") +
+    '<div class="acts"><button class="btn cream sm" data-copyboth>Copy both, ready to paste</button></div>');
+}
 function renderAdmin(){
   if (!isAdmin()) return;
   put("ownerList", (S.owners || []).map(o =>
@@ -3616,6 +3693,7 @@ function renderAdmin(){
   put("adminNote", pc === null ? "" :
     '<p class="lede">' + pc + " of " + S.seatCount + " committee seats have a photograph on them." +
     (pc < S.seatCount ? " Write them on with the button below." : "") + "</p>");
+  paintWiring();
   put("adminLinks", (S.sheetUrl ? 'The spreadsheet: <a href="' + esc(S.sheetUrl) +
     '" target="_blank" rel="noopener">open it</a>. ' : "") +
     (S.appUrl ? "The app lives at <code>" + esc(S.appUrl) + "</code>." : ""));
@@ -4001,7 +4079,11 @@ function openSwapTake(id){
       }catch(err){ unspin(b); fail(err); }
     }));
 }
+/* Second life has been taken out. The renderer is left standing so that any
+   stray handler is harmless, and so the section could be put back by restoring
+   its tab and its two lines in state_. */
 function renderMarket(){
+  if (!$("giftGrid")) return;
   const all = S.market || [], kinds = S.marketKinds || [];
   const list = all.filter(m => !giftKind || m.kind === giftKind);
   const open = k => all.filter(m => m.kind === k && m.status === "open").length;
@@ -4304,7 +4386,9 @@ function voiceCard(){
 /* ============================================================
    Render, navigate, wire
    ============================================================ */
-const VIEWS = ["today","swaps","gifts","lodge","ask","biz","me","desk","inbox","swapdesk","members","admin"];
+/* Second life is gone. The Lodge has become three: the board on its own, the
+   MCR room on its own, and Info for the links, the guides and the sport. */
+const VIEWS = ["today","board","room","info","swaps","ask","biz","me","desk","inbox","swapdesk","members","admin"];
 /* Stagger the first children of whatever has just been shown. Sixty
    milliseconds apart is enough to read as unfolding and not as waiting. */
 function stagger(id){
@@ -4354,7 +4438,6 @@ function renderBadges(){
   set("bdgSwapDesk", (S.swaps || []).reduce((n, w) => n +
     (w.list || []).filter(x => x.status === "held").length, 0));
   set("bdgSwaps", (S.swaps || []).filter(w => w.mine && w.mine.status === "held").length);
-  set("bdgGifts", (S.market || []).filter(m => m.status === "open" && m.at > (S.me.seenAt || 0)).length);
   set("bdgBiz", (S.motions || []).filter(m => m.status === "voting" && !(S.myVotes || {})[m.id]).length +
     (S.polls || []).filter(p => p.open && !p.mine).length);
   if (isCommittee())
@@ -4380,7 +4463,7 @@ function render(){
   applySeason();
   renderCrow(); renderBumps(); renderTodayUrgent(); renderTodayWeek(); renderTodayOn();
   renderTodayQuick(); renderTodayNews();
-  renderLodge(); renderSwaps(); renderMarket(); renderAsk();
+  renderLodge(); renderSwaps(); renderAsk();
   renderTreasury(); renderIdeas(); renderPolls(); renderBiz();
   if (!typingIn("v-me")) renderMe();
   if (isCommittee()){ renderDesk(); renderSwapDesk(); renderQueue(); if (!typingIn("v-admin")){ renderAdmin(); renderBumpsAdmin(); } }
@@ -4403,7 +4486,7 @@ document.addEventListener("click", async e => {
     "[data-skip],[data-editser],[data-second],[data-vote],[data-mset],[data-code],[data-checkin]," +
     "[data-delupdate],[data-rosteredit],[data-rosterdel],[data-newidea],[data-back]," +
     "[data-setidea],[data-dropidea],[data-pollvote],[data-pollclose]," +
-    "[data-marketnew],[data-markettake],[data-marketdrop],[data-bumpedit],[data-gk],[data-gift],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-polldrop],[data-motiondrop],[data-desktab],[data-tick2],[data-gp],[data-desk],[data-asktab],[data-thread],[data-mythreads],[data-swaptake],[data-swapdrop],[data-swappaid],[data-swapedit],[data-swapsave],[data-swapcancel],[data-swapdel],[data-swappast],[data-mailtest],[data-bank],[data-swapnudge],[data-swapkick],[data-swappromote],[data-copyaddrs],[data-swapdeskedit],[data-jcsu],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
+    "[data-copy],[data-copyboth],[data-marketnew],[data-markettake],[data-marketdrop],[data-bumpedit],[data-gk],[data-gift],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-polldrop],[data-motiondrop],[data-desktab],[data-tick2],[data-gp],[data-desk],[data-asktab],[data-thread],[data-mythreads],[data-swaptake],[data-swapdrop],[data-swappaid],[data-swapedit],[data-swapsave],[data-swapcancel],[data-swapdel],[data-swappast],[data-mailtest],[data-bank],[data-swapnudge],[data-swapkick],[data-swappromote],[data-copyaddrs],[data-swapdeskedit],[data-jcsu],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
   if (!t) return;
   const d = t.dataset;
   try{
@@ -4660,11 +4743,23 @@ document.addEventListener("click", async e => {
 /* The gate's own buttons. It sits outside the app, so it gets its own
    listener rather than borrowing the one that needs S to exist. */
 on("gate", "click", e => {
+  if (e.target.closest("[data-tryboot]")){ e.preventDefault(); $("app").innerHTML = ""; return boot(); }
+  if (e.target.closest("[data-signout]")){ e.preventDefault(); return signedOut(); }
   const bk = e.target.closest("[data-book-again]");
   if (bk){ e.preventDefault(); return bookAgain(bk); }
   const t = e.target.closest("[data-retry],[data-diag],[data-prompt],[data-tryanyway],[data-copyorigin]");
   if (!t) return;
   if (t.hasAttribute("data-retry")){ gsiUp = false; gsiComplaint = ""; return probe(); }
+  if (t.hasAttribute("data-copy")){
+    copyText(t.getAttribute("data-copy"), "Copied.");
+    return;
+  }
+  if (t.hasAttribute("data-copyboth")){
+    const w = (S && S.wiring) || {};
+    copyText("CHIMNEY_SHEET_ID = '" + (w.sheetId || "") + "';\n" +
+             "CHIMNEY_URL      = '" + (w.execUrl || "") + "';", "Both copied, ready to paste.");
+    return;
+  }
   if (t.hasAttribute("data-copyorigin")){
     const v = originOf();
     if (navigator.clipboard) navigator.clipboard.writeText(v).then(() => toast("Copied: " + v), () => toast(v));
