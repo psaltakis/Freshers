@@ -77,8 +77,13 @@ html.up::before{content:none}
    larger again; a pixel root would have thrown their setting away. 118% of a
    default 16px is about 19px, and 118% of somebody's 24px is 28px. */
 html{font-size:118%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
-@media(min-width:1000px){html{font-size:112%}}
-@media(max-width:420px){html{font-size:112%}}
+/* A big desktop screen was being given the same size type as a laptop, so the
+   app read as a small window blown up. It steps up instead, and a phone gets a
+   little more too, because it is read at arm's length on a walk to hall. */
+@media(min-width:1000px){html{font-size:114%}}
+@media(min-width:1400px){html{font-size:120%}}
+@media(min-width:1800px){html{font-size:126%}}
+@media(max-width:420px){html{font-size:114%}}
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;min-height:100%}
 body{background:var(--crimson-2);color:var(--cream);font-family:var(--ui);font-size:1rem;line-height:1.58;
@@ -116,6 +121,17 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
   background:linear-gradient(180deg,rgba(72,5,10,.94),rgba(72,5,10,.7) 62%,transparent);
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 .hbar{display:flex;align-items:center;gap:10px;max-width:1180px;margin:0 auto;padding:10px var(--gut) 14px}
+/* On a wide screen the page runs the full width beside the rail while the bar
+   went on centring itself at 1180px, which is why the refresh and the avatar
+   ended up floating in the middle of the screen instead of sitting at the top
+   right corner. The bar now follows exactly the same rule as the page. */
+@media(min-width:1000px){
+  .hbar{max-width:none;margin:0;padding-left:var(--gut);padding-right:var(--gut)}
+}
+@media(min-width:1780px){
+  .hbar{padding-left:calc((100vw - var(--rail) - 1560px)/2);
+        padding-right:calc((100vw - var(--rail) - 1560px)/2)}
+}
 .wm b{display:block;font-family:var(--display);font-size:.9rem;font-weight:600;line-height:1;
   letter-spacing:-.03em;white-space:nowrap}
 .wm .sm{display:none}
@@ -584,20 +600,37 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
    rather than a bar, and the clock on a held place is a real clock.
    ================================================================= */
 /* A formal is an invitation, and an invitation is printed on card. On the red
-   ground these read as warnings; on paper they read as what they are. */
+   ground these read as warnings, and most of them are not.
+
+   Everything below re-dresses the pieces the card is actually made of, which
+   are swcol, swwhen, swprice, pips and so on. Painting the card white without
+   these left cream lettering on cream paper, which is what made it unreadable:
+   a price with no colour, invisible pips, and a stray orange square where the
+   crest should be. */
 .swap{position:relative;background:var(--paper,#FFFDFA);color:var(--ink);
   border-radius:var(--r);padding:var(--pad);margin-bottom:var(--g2);overflow:hidden;
   box-shadow:0 12px 26px -18px rgba(20,1,3,.75)}
-.swap b,.swap .who b{color:var(--ink)}
-.swap .note,.swap .ref,.swap small,.swap .seats span{color:var(--ink-soft)}
-.swap .price{background:var(--cream-2);color:var(--ink);border-radius:999px;padding:4px 11px;
-  font-family:var(--mono);font-size:.72rem;font-weight:700}
+.swap::before{width:4px;background:var(--crimson)}
+.swap.mine::before{background:var(--gold)}
+.swap.hall::before{background:#2C6B4F}
+.swap .swcol{color:var(--ink)}
+.swap .swwhen,.swap .swwhere,.swap .swn,.swap .swline,.swap .swline b,.swap .swfoot{color:var(--ink-soft)}
+.swap .swprice{color:var(--crimson-3)}
+.swap .swside span{color:var(--ink-soft)}
+.swap .pips i{background:var(--cream-2)}
+.swap .pips i.gone{background:var(--ink-soft)}
+.swap .pips i.yours{background:var(--gold)}
+.swap .swlogo{background:var(--cream-2);border-radius:6px}
+.swap .swlogo.empty{color:var(--ink-soft);background:var(--cream-2)}
 .swap .btn.ghost{color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--cream-3)}
-.swap .top{display:flex;align-items:flex-start;gap:12px;justify-content:space-between}
-.swap .who span{display:block;font-size:.78rem;color:var(--ink-soft);margin-top:3px}
-.swap .seats{margin-top:10px;font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;
-  text-transform:uppercase;font-weight:700;color:var(--ink-soft)}
-.swap.hall::before{background:var(--gold)}
+.swap .swroster b{color:var(--ink)}
+.swap .swroster span,.swap .swroster small{color:var(--ink-soft)}
+.swap .swdc{color:var(--ink-soft)}
+/* the editor stays on the red, because it is a form and not an invitation */
+.swap.editing{background:var(--t1);color:var(--cream);box-shadow:none}
+.swap.editing .sf{color:var(--cream)}
+.swap.editing .sfl{color:var(--cream-4)}
+.swap.editing .btn.ghost{color:var(--cream);box-shadow:inset 0 0 0 1.5px var(--line)}
 .swap::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--member)}
 .swap.mine::before{background:var(--gold)}
 .swap.shut,.swap.past{opacity:.55}
@@ -1050,6 +1083,28 @@ nav .railtop{display:none}
 .notes .notice .acts .btn.gold{background:var(--gold);color:var(--gold-ink);box-shadow:none}
 @media(max-width:520px){ .notes{grid-template-columns:1fr 1fr;gap:9px} .notes .notice{padding:12px 12px 10px} }
 
+/* The three week strip of your own room requests. It slides rather than wraps,
+   because a fortnight of empty days stacked into a column is a lot of nothing
+   to scroll past. */
+.rooprail{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 10px;scroll-snap-type:x proximity;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none}
+.rooprail::-webkit-scrollbar{display:none}
+.rooday{flex:0 0 116px;scroll-snap-align:start;background:var(--t1);border-radius:var(--r2);
+  padding:10px;min-height:96px;display:flex;flex-direction:column;gap:6px}
+.rooday.has{background:var(--t2)}
+.rooday.today{box-shadow:inset 0 0 0 1.5px var(--gold)}
+.rooday .dd{font-family:var(--mono);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--cream-4);font-weight:700;display:flex;align-items:baseline;gap:5px}
+.rooday .dd b{font-family:var(--display);font-size:1.05rem;letter-spacing:-.03em;color:var(--cream)}
+.rooday .none{color:var(--cream-4);opacity:.5;font-size:.8rem}
+.roo{display:block;background:var(--paper,#FFFDFA);color:var(--ink);border-radius:8px;padding:7px 8px;
+  font-size:.74rem;font-weight:700;line-height:1.3}
+.roo b{display:block;font-family:var(--mono);font-size:.66rem;color:var(--crimson-3)}
+.roo i{display:block;font-style:normal;font-family:var(--mono);font-size:.56rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-soft);margin-top:3px}
+.roo.yes{box-shadow:inset 0 0 0 1.5px rgba(44,107,79,.5)}
+.roo.no{opacity:.6}
+
 /* ---------- gate ---------- */
 #gate{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:22px;
   overflow:auto;overscroll-behavior:contain}
@@ -1400,7 +1455,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbwxYdedCE8sY1CtQLuMbK_fBxQrfCKXnW7pSH9KqDzTD42Z5KQsHd18qIhDRcDHAc5J7w/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxBpA-PkZRjUpIgZ3p19yCKN0cnIcu4ZkGsjaXAAVmRqhAlHUzvVEOmHuvjJx9sZL1n6w/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -1409,7 +1464,7 @@ const BOOK_REGISTER = "https://jcollegemcr.co.uk/register";
 /* The build this page was written against. If the server reports a different
    one, the deployment answering is not this code, and the membership check it
    is running is whatever was deployed last. Shown under 'What is wrong?'. */
-const EXPECT_BUILD = "chimney-9";
+const EXPECT_BUILD = "chimney-10";
 
 /* JavaScript is alive, so the ring painted before the page was parsed can go.
    It is a pseudo element on <html>, so nothing else can remove it. */
@@ -2536,7 +2591,10 @@ function renderTodayQuick(){
 function renderTodayNews(){
   const list = (S.updates || []).slice(0, 5);
   if (!list.length){ put("todayNews", ""); return; }
-  put("todayNews", '<div class="grp">What has changed</div><div class="card">' +
+  /* The list of everything that has changed was a committee's view of the app
+     put on everybody's front page. It lives on the Desk, where it belongs. */
+  put("todayNews", "");
+  if (false) put("todayNews", '<div class="grp">What has changed</div><div class="card">' +
     list.map(u => '<div class="rowline"><div class="t"><b>' + esc(u.text) + "</b><span>" +
       esc(u.by) + " &middot; " + esc(ago(u.at)) + "</span></div>" +
       (isAdmin() ? '<button class="btn ghost sm" data-delupdate="' + esc(u.id) + '">Remove</button>' : "") +
@@ -3046,6 +3104,45 @@ function askThreads(){
         "afterwards so you can look it up.</p></div>");
 }
 function askRooms(){
+  const rooms = S.rooms || [];
+  /* The explanation and the two buttons are already at the top of this page, so
+     this is only the list of what somebody has asked for. */
+  return roomMine(rooms);
+}
+/* YOUR OWN REQUESTS, ON THE NEXT THREE WEEKS.
+   A request is a thing with a date, so it is shown against the dates rather
+   than as a list in the order it happened to be typed. Three weeks is what the
+   booking calendar above shows, so the two line up, and it slides sideways on a
+   phone rather than stacking into a column nobody scrolls. */
+function roomMine(rooms){
+  const t = todayLondon();
+  const days = [];
+  for (let i = 0; i < 21; i++) days.push(addDays(t, i));
+  const mine = (rooms || []).filter(r => r.date >= t && r.date <= days[days.length - 1]);
+  const later = (rooms || []).filter(r => r.date > days[days.length - 1]);
+  const past = (rooms || []).filter(r => r.date < t);
+  const byDay = {};
+  mine.forEach(r => (byDay[r.date] = byDay[r.date] || []).push(r));
+  const lab = s => s === "yes" ? "Yours" : s === "no" ? "Not this time" : "Waiting";
+  return '<div class="grp">Your requests<span class="ref" style="margin-left:auto">the next three weeks</span></div>' +
+    (mine.length
+      ? '<div class="rooprail">' + days.map(d => {
+          const list = byDay[d] || [];
+          return '<div class="rooday' + (list.length ? " has" : "") + (d === t ? " today" : "") + '">' +
+            '<span class="dd"><b>' + dnum(d) + '</b>' + DOW[dow(d)] + '</span>' +
+            (list.length
+              ? list.map(r => '<span class="roo ' + esc(r.status) + '">' +
+                  '<b>' + esc(clock(r.start)) + '</b>' + esc(r.title) +
+                  '<i>' + lab(r.status) + '</i></span>').join("")
+              : '<span class="none">&mdash;</span>') + '</div>';
+        }).join("") + '</div>'
+      : '<div class="card"><p>Nothing of yours in the next three weeks.</p></div>') +
+    (later.length ? '<p class="lede" style="margin-top:10px">' + later.length +
+      (later.length === 1 ? " request is" : " requests are") + " further ahead than three weeks.</p>" : "") +
+    (past.length ? '<p class="lede" style="margin-top:4px">' + past.length +
+      (past.length === 1 ? " has" : " have") + " been and gone.</p>" : "");
+}
+function askRoomsOld(){
   const rooms = S.rooms || [];
   return '<div class="card"><p>Asking for the MCR puts your time on the calendar so nobody walks in on ' +
     "you. It shows to other members as taken and nothing else: not what it is, and not whose it is.</p>" +
@@ -3643,7 +3740,7 @@ function renderSwapDesk(){
         " Nothing has been going out: not payment requests, not replies to questions, not room " +
         "permissions. Open the Apps Script editor, run <code>setup</code> once, accept the " +
         "permission it asks for, then Deploy, New version.</span>" +
-        '<button class="btn gold sm" data-mailtest>Send me a test email</button></div>' : "") +
+        '</div>' : "") +
     '<div class="stats">' + [
       [held.length, "waiting to pay"],
       ["\u00a3" + Math.round(owed), "owed to " + esc(t.name || "the Treasurer")],
@@ -3698,7 +3795,7 @@ function renderSwapDesk(){
           '<span class="st ' + (m2.ok ? "answered" : "open") + '">' +
           (m2.ok ? "sent" : esc((m2.error || "failed").slice(0, 40))) + "</span></div>").join("")
         : '<p class="lede">Nothing sent yet.</p>') +
-      '<div class="acts"><button class="btn ghost sm" data-mailtest>Send me a test email</button>' +
+      '<div class="acts">' +
       '<span class="lede">Quota left today: ' + (mail.quota === undefined || mail.quota < 0 ? "unknown" : mail.quota) +
       "</span></div></div>");
 }
@@ -4172,25 +4269,54 @@ function renderHalls(){
 }
 /* Laid out like a swap, because it is the same errand: a dinner, a date, a
    price, and a way of putting your name down. */
+/* Built from the same pieces as a swap, so the two read as one thing seen
+   twice rather than two designs. */
 function hallCard(e){
   const c = e.counts || {};
   const going = Number(c.going || 0);
   const cap = Number(e.capacity || 0);
   const left = cap ? Math.max(0, cap - going) : null;
   const mine = (S.mine || {})[e.id];
-  return '<div class="swap hall' + (mine && mine.status === "going" ? " mine" : "") + '">' +
-    '<div class="top"><div class="who"><b>' + esc(e.title) + '</b>' +
-      '<span>' + esc(longDate(e.date)) + (e.start ? " &middot; " + esc(clock(e.start)) : "") +
-      (e.venueName ? " &middot; " + esc(e.venueName) : "") + '</span></div>' +
-      (e.price ? '<span class="price">' + esc(e.price) + '</span>' : "") + '</div>' +
-    (e.desc ? '<p class="note">' + esc(String(e.desc).split("\n")[0]) + '</p>' : "") +
-    (e.dress ? '<p class="ref">Dress: ' + esc(e.dress) + '</p>' : "") +
-    '<div class="seats"><span>' + going + (cap ? " of " + cap : "") + " going" +
-      (left !== null ? " &middot; " + left + " left" : "") + '</span></div>' +
-    '<div class="acts">' +
-      '<button class="btn ' + (mine && mine.status === "going" ? "ghost" : "gold") + ' sm" data-ev="' + esc(e.id) + '">' +
-      (mine && mine.status === "going" ? "You are going, open it" : "Put your name down") + '</button></div>' +
-    '</div>';
+  const going_ = mine && mine.status === "going";
+  return '<div class="swap hall' + (going_ ? " mine" : "") + '">' +
+    '<div class="swtop"><div class="swmain">' +
+      '<b class="swcol">' + esc(e.title) + "</b>" +
+      '<span class="swwhen">' + esc(longDate(e.date)) +
+        (e.start ? " &middot; " + esc(clock(e.start)) : "") + "</span>" +
+      (e.venueName ? '<span class="swwhere">' + esc(e.venueName) + "</span>" : "") +
+    "</div>" +
+    '<div class="swside">' +
+      (e.price ? '<b class="swprice">' + esc(e.price) + "</b><span>a place</span>"
+               : '<b class="swprice free">Free</b><span>a place</span>') +
+    "</div></div>" +
+    (cap ? '<div class="pips" aria-label="' + going + " of " + cap + ' places taken">' +
+      Array.from({ length: Math.min(cap, 40) }, (_, i) =>
+        '<i class="' + (i < going ? (going_ && i === going - 1 ? "yours" : "gone") : "") + '"></i>').join("") +
+      (cap > 40 ? '<span class="pipmore">+' + (cap - 40) + "</span>" : "") + "</div>" : "") +
+    '<div class="swline"><span><b>' + going + "</b> going</span>" +
+      (left !== null ? "<span><b>" + left + "</b> " + (left === 1 ? "place left" : "places left") + "</span>" : "") +
+      (e.dress ? "<span>" + esc(e.dress) + "</span>" : "") + "</div>" +
+    (e.desc ? '<p class="swn">' + esc(String(e.desc).split("\n")[0]) + "</p>" : "") +
+    '<div class="acts"><button class="btn ' + (going_ ? "ghost" : "gold") + ' sm" data-ev="' + esc(e.id) + '">' +
+      (going_ ? "You are going, open it" : "Put your name down") + "</button></div>" +
+    "</div>";
+}
+/* A themed hall is an event with the tag on it, so this is the ordinary event
+   editor with the tag and a sensible starting point filled in. Anything the
+   committee can do to an event, they can do to a hall. */
+function newHall(){
+  openEventEditor("");
+  /* The editor is the ordinary one, so the tag is filled in after it opens
+     rather than a second editor being written that could drift from it. */
+  setTimeout(function(){
+    const t = $("eTags");
+    if (t && !t.value.trim()) t.value = "formal";
+    const d = $("eDress");
+    if (d && !d.value.trim()) d.value = "Gown";
+    const ti = $("eTitle");
+    if (ti) ti.focus();
+  }, 60);
+  toast("Tag it formal and it shows here as well as on the calendar.");
 }
 function renderSwaps(){
   renderFormalSeg();
@@ -4810,7 +4936,7 @@ document.addEventListener("click", async e => {
     if (t.hasAttribute("data-swapedit")){ swapEdit = d.swapedit || "new"; renderSwaps(); return; }
     if (t.hasAttribute("data-swapcancel")){ swapEdit = ""; renderSwaps(); return; }
     if (d.jcsu !== undefined){ jcsuOpen = d.jcsu === "1"; renderLodge(); return; }
-    if (t.hasAttribute("data-mailtest")){
+    if (false && t.hasAttribute("data-mailtest")){
       spin(t, "Sending");
       try{
         const r = await api("mailTest", {});
@@ -5091,7 +5217,14 @@ on("bNewSeries", "click", () => openSeriesEditor(""));
 on("bNewMotion", "click", openMotion);
 on("bNewIdea", "click", openIdea);
 on("bNewGift", "click", openMarket);
-on("bNewSwap", "click", () => { swapEdit = "new"; renderSwaps(); go("swaps"); window.scrollTo(0, 0); });
+on("bNewSwap", "click", () => {
+  /* One button, two jobs, because the section has two halves. On the swaps
+     half it opens a blank swap. On the halls half a hall is simply an event
+     tagged formal, so it opens the event editor with that tag already set,
+     rather than inventing a second kind of thing to keep. */
+  if (formalTab === "halls") return newHall();
+  swapEdit = "new"; renderSwaps(); go("swaps"); window.scrollTo(0, 0);
+});
 on("bNewPoll", "click", openPoll);
 on("memQ", "input", renderMembers);
 /* the door search keeps its focus, which a full redraw would take away */
