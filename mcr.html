@@ -955,9 +955,11 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .opt.picked .t b{color:var(--gold-2)}
 
 /* ---------- navigation ---------- */
+/* The tiles inside are rounded squares, so the bar around them is one too. A
+   pill holding squares reads as two ideas arguing. */
 nav{position:fixed;left:50%;bottom:calc(10px + var(--sab));transform:translateX(-50%);z-index:45;display:flex;
   gap:2px;overflow-x:auto;max-width:calc(100vw - 18px);padding:5px;background:rgba(66,4,9,.94);
-  border-radius:999px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-radius:20px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
   box-shadow:0 6px 22px -4px rgba(20,1,3,.8);scrollbar-width:none;scroll-behavior:smooth}
 nav::-webkit-scrollbar{display:none}
 nav .railtop{display:none}
@@ -1362,9 +1364,28 @@ button.busy{cursor:progress}
   box-shadow:0 -18px 50px rgba(20,1,3,.5);animation:slideup .28s var(--ease) both;overflow:hidden}
 @media(min-width:34rem){ .sheet{align-items:center} .sheet .inner{border-radius:18px} }
 .sheet .scroll{padding:0 0 var(--g2)}
-/* the band, and the title on it */
-.sheet .scroll>h3{background:var(--crimson);color:#fff;margin:0;padding:20px 22px 18px;
-  font-family:var(--display);font-size:1.3rem;font-weight:600;letter-spacing:-.035em;line-height:1.15}
+/* MONOCHROME.
+   One hue, four steps of it: paper, a tint for blocks, ink for words, crimson
+   for the one thing to press. No gold, no green, no amber inside a sheet. A
+   form is not a place for colour coding; it is a place to read a question and
+   answer it. */
+.sheet .scroll>h3{background:var(--paper);color:var(--crimson-3);margin:0;padding:22px 22px 6px;
+  font-family:var(--display);font-size:1.34rem;font-weight:600;letter-spacing:-.035em;line-height:1.15}
+.sheet .inner{--sh1:#F7EEE7;--sh2:#EFE2D8;--shr:#7A0D12}
+.sheet .card,.sheet .fix,.sheet .warn,.sheet .warnbox,.sheet .linkcard,.sheet .thread,.sheet .msg{
+  background:var(--sh1);color:var(--ink);border-left:3px solid var(--sh2)}
+.sheet .fix b,.sheet .warnbox b,.sheet .card h3{color:var(--shr)}
+.sheet .fix p,.sheet .warn,.sheet .warnbox span,.sheet .card p,.sheet .card .lede{color:var(--ink-soft)}
+.sheet .fix .btn,.sheet .warnbox .btn,.sheet .card .btn{background:var(--shr);color:#fff;box-shadow:none}
+.sheet .st,.sheet .chips button[aria-pressed="true"]{background:var(--sh2);color:var(--shr)}
+.sheet .grp,.sheet .who,.sheet .f span{color:var(--ink-soft)}
+.sheet .f input,.sheet .f textarea,.sheet .f select{background:var(--sh1);border-color:var(--sh2)}
+.sheet .f input:focus,.sheet .f textarea:focus{border-color:var(--shr);background:#fff}
+.sheet .foot{background:var(--sh1);border-top:1px solid var(--sh2)}
+.sheet .foot .btn.gold,.sheet .foot .btn.cream{background:var(--shr);color:#fff}
+.sheet .foot .btn.ghost{background:transparent;color:var(--ink-soft);box-shadow:inset 0 0 0 1.5px var(--sh2)}
+.sheet .sback{background:var(--sh2);color:var(--ink-soft)}
+.sheet .sback:hover{background:var(--sh1);color:var(--shr)}
 .sheet .scroll>*:not(h3):not(.sback){margin-left:22px;margin-right:22px}
 .sheet .sback{position:absolute;top:14px;right:14px;z-index:2;background:rgba(255,255,255,.16);
   color:#fff;border-radius:9px;padding:6px 11px;font-size:.72rem;font-weight:700;gap:5px;display:inline-flex;
@@ -1759,7 +1780,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbzb9n4BIJ5mVJtuN8kCjCuaJU9rrG9iAUG-yJ9WqT9CKIJNZy_zrKWMAUQ2m6q4AJVu2g/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxbL-c4q3OFE-41aSpkt-VNNwvJZCuO0WA2jj6aRsRbQBB4UfctuFPo2QMqxED401B2zA/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -1768,7 +1789,7 @@ const BOOK_REGISTER = "https://jcollegemcr.co.uk/register";
 /* The build this page was written against. If the server reports a different
    one, the deployment answering is not this code, and the membership check it
    is running is whatever was deployed last. Shown under 'What is wrong?'. */
-const EXPECT_BUILD = "chimney-21";
+const EXPECT_BUILD = "chimney-22";
 
 /* JavaScript is alive, so the ring painted before the page was parsed can go.
    It is a pseudo element on <html>, so nothing else can remove it. */
@@ -2437,6 +2458,9 @@ function bootTalk(on){
   const bar = $("bootBar");
   if (bar) bar.style.width = "8%";
   const L = bootLines();
+  /* A line that changes every second is a flicker, not a sentence: nobody can
+     read one before the next arrives. Four seconds is long enough to read a
+     short line and short enough that the screen still feels alive. */
   bootTimer = setInterval(() => {
     bootIdx = (bootIdx + 1) % L.length;
     const el = $("bootLine");
@@ -2445,7 +2469,7 @@ function bootTalk(on){
        sits at a hundred while nothing happens is a lie */
     bootPct = Math.min(90, bootPct + (90 - bootPct) * 0.28);
     if (bar) bar.style.width = bootPct.toFixed(0) + "%";
-  }, 1100);
+  }, 4000);
   slowTimer = setTimeout(() => { const el = $("bootSlow"); if (el) el.hidden = false; }, 7000);
 }
 /* The loading screen can no longer be a dead end. If the first call fails for
@@ -3540,8 +3564,12 @@ function roomMine(rooms){
           'serving alcohol, expecting a crowd, playing amplified music or running past eleven, the Dean ' +
           'has to sign one as well.</div>' : "") +
       '<div class="acts">' +
-      (r.noteUrl ? '<a class="btn cream sm" href="' + esc(r.noteUrl) + '" target="_blank" rel="noopener">' +
-        'Your booking note</a>' : "") +
+      (r.status === "yes"
+        ? (r.noteUrl
+            ? '<a class="btn cream sm" href="' + esc(r.noteUrl) + '" target="_blank" rel="noopener">' +
+              'Booking note, as a PDF</a>'
+            : '<button class="btn cream sm" data-roomnote="' + esc(r.id) + '">Booking note, as a PDF</button>')
+        : "") +
       (r.status === "yes" && permitUrl()
         ? '<a class="btn ghost sm" href="' + esc(permitUrl()) + '" target="_blank" rel="noopener">The permit form</a>' : "") +
       (r.date >= t && r.status !== "no"
@@ -4222,20 +4250,12 @@ function renderSwapDesk(){
           esc(t.sortCode) + " &middot; " + esc(t.account) + " &middot; reference: " + esc(t.reference) +
           "</span></div></div>"
         : '<p class="lede">No account details yet, so the payment email cannot give them.</p>') +
-      '<p class="lede">Places are held for ' + (S.swapHold || 3) + " days. After that they pass to the " +
-      "next person on their own, who is asked for the money by email the moment it happens.</p>" +
+      '<p class="lede">Places are held for ' + (S.swapHold || 3) + " days. After that the desk shows " +
+      "them as overdue and somebody on the committee decides. Nothing is taken away by a clock, and " +
+      "nobody is emailed: everything is said in the app.</p>" +
       '<div class="acts"><button class="btn ghost sm" data-bank>Edit these details</button></div></div>' +
 
-    '<div class="grp"><b>What the app has sent</b></div><div class="card">' +
-      (mail.recent && mail.recent.length
-        ? mail.recent.map(m2 => '<div class="rowline"><div class="t"><b>' + esc(m2.subject) +
-          "</b><span>" + esc(m2.to) + " &middot; " + esc(ago(m2.at)) + "</span></div>" +
-          '<span class="st ' + (m2.ok ? "answered" : "open") + '">' +
-          (m2.ok ? "sent" : esc((m2.error || "failed").slice(0, 40))) + "</span></div>").join("")
-        : '<p class="lede">Nothing sent yet.</p>') +
-      '<div class="acts">' +
-      '<span class="lede">Quota left today: ' + (mail.quota === undefined || mail.quota < 0 ? "unknown" : mail.quota) +
-      "</span></div></div>");
+    "");
 }
 /* One swap as its committee card: the header says how full it is, then every
    person in the order they arrived, each with exactly the buttons their state
@@ -5044,7 +5064,9 @@ function swapCard(w, hold){
     (w.note ? '<p class="swn">' + esc(w.note) + "</p>" : "") +
     /* Directly above the buttons, because this is the thing somebody needs at
        the moment they are deciding what to do about their place. */
-    (m && m.status !== "waiting" ? bankHtml(w) : "") +
+    /* On every place somebody holds, whatever its state, because the question
+       "where do I send the money" is asked at every one of them. */
+    (m ? bankHtml(w) : "") +
     (m
       ? '<div class="swyou ' + esc(m.status) + (urgent ? " urgent" : "") + '">' +
         (m.status === "paid"
@@ -5372,7 +5394,7 @@ document.addEventListener("click", async e => {
     "[data-skip],[data-editser],[data-second],[data-vote],[data-mset],[data-code],[data-checkin]," +
     "[data-delupdate],[data-rosteredit],[data-rosterdel],[data-newidea],[data-back]," +
     "[data-setidea],[data-dropidea],[data-pollvote],[data-pollclose]," +
-    "[data-runevent],[data-sayreport],[data-boardall],[data-mood],[data-moodline],[data-moodreply],[data-moodsay],[data-sound],[data-soundsay],[data-soundclose],[data-roomdrop],[data-roomtab],[data-formal],[data-copy],[data-copyboth],[data-bumpedit],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-polldrop],[data-motiondrop],[data-desktab],[data-tick2],[data-desk],[data-asktab],[data-thread],[data-mythreads],[data-swaptake],[data-swapdrop],[data-swappaid],[data-swapedit],[data-swapsave],[data-swapcancel],[data-swapdel],[data-swappast],[data-bank],[data-swapnudge],[data-swapkick],[data-swappromote],[data-copyaddrs],[data-swapdeskedit],[data-jcsu],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
+    "[data-roomnote],[data-runevent],[data-sayreport],[data-boardall],[data-mood],[data-moodline],[data-moodreply],[data-moodsay],[data-sound],[data-soundsay],[data-soundclose],[data-roomdrop],[data-roomtab],[data-formal],[data-copy],[data-copyboth],[data-bumpedit],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-polldrop],[data-motiondrop],[data-desktab],[data-tick2],[data-desk],[data-asktab],[data-thread],[data-mythreads],[data-swaptake],[data-swapdrop],[data-swappaid],[data-swapedit],[data-swapsave],[data-swapcancel],[data-swapdel],[data-swappast],[data-bank],[data-swapnudge],[data-swapkick],[data-swappromote],[data-copyaddrs],[data-swapdeskedit],[data-jcsu],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
   if (!t) return;
   const d = t.dataset;
   try{
@@ -5489,6 +5511,17 @@ document.addEventListener("click", async e => {
       if (!confirm("Close this one? Nobody will be able to answer after that.")) return;
       try{ const r = await api("soundingSet", { id: d.soundclose, status: "closed" });
         S.say = r.say; renderSay(); toast("Closed."); }catch(e){ fail(e); }
+      return;
+    }
+    if (t.hasAttribute("data-roomnote")){
+      sending(t, "Making it");
+      try{
+        const r = await api("roomNote", { id: d.roomnote });
+        sent(t);
+        S.rooms = r.rooms;
+        renderLodge();
+        window.open(r.url, "_blank", "noopener");
+      }catch(e){ sent(t); fail(e); }
       return;
     }
     if (t.hasAttribute("data-roomdrop")){
