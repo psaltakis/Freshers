@@ -36,9 +36,9 @@ html.up::before{content:none}
      --------------------------------------------------------------- */
   --crimson:#B4141B; --crimson-2:#8E0F14; --crimson-3:#6B080D; --crimson-4:#48050A;
   --crimson-lite:#E8535C;
-  --cream:#FDF7F1; --cream-2:#EFE1D2; --cream-3:#D4BAA4; --cream-4:#A78C77;
+  --cream:#FBF3EC; --cream-2:#F2E4D8; --cream-3:#E2CDBC; --cream-4:#A78C77; --paper:#FFFDFA;
   --ink:#2A0F0C;
-  --gold:#EBB753; --gold-2:#FCE7B6; --gold-ink:#3A2700;
+  --gold:#E2A93C; --gold-2:#F7DDA6; --gold-ink:#4A2E00;
   --social:#F2AB43; --sport:#4FC894; --welfare:#63ADEE; --academic:#B98FEC;
   --food:#F58A62; --formal:#E7C763; --trip:#4FD3C9; --meeting:#CDBBA8;
   --college:#95AECA; --member:#EC8AB4; --practical:#B5AD9A;
@@ -63,6 +63,10 @@ html.up::before{content:none}
   --gut:16px;                 /* the page gutter */
   --sat:env(safe-area-inset-top,0px); --sab:env(safe-area-inset-bottom,0px);
   --navh:70px; --rail:216px;
+  /* Brought into line with Freshers' Fortnight: a warmer gold that sits better
+     on the red, and cream with a little more paper in it. The two apps are
+     seen on the same phone within a fortnight of each other and should look
+     like one place. */
   --ease:cubic-bezier(.22,1,.36,1);
   --lift:0 2px 6px rgba(28,2,5,.34);
 }
@@ -129,8 +133,8 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
   .hbar{max-width:none;margin:0;padding-left:var(--gut);padding-right:var(--gut)}
 }
 @media(min-width:1780px){
-  .hbar{padding-left:calc((100vw - var(--rail) - 1560px)/2);
-        padding-right:calc((100vw - var(--rail) - 1560px)/2)}
+  .hbar{padding-left:calc((100vw - var(--rail) - 1560px)/2)!important;
+        padding-right:calc((100vw - var(--rail) - 1560px)/2)!important}
 }
 .wm b{display:block;font-family:var(--display);font-size:.9rem;font-weight:600;line-height:1;
   letter-spacing:-.03em;white-space:nowrap}
@@ -139,7 +143,7 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .wm i{display:block;font-style:normal;font-size:0.64rem;color:var(--gold-2);letter-spacing:.2em;
   text-transform:uppercase;margin-top:4px;font-weight:600}
 .sp{flex:1}
-.iconbtn{width:2.1rem;height:2.1rem;border-radius:50%;background:var(--t1);display:grid;place-items:center;
+.iconbtn{width:2.1rem;height:2.1rem;border-radius:13px;background:var(--t1);display:grid;place-items:center;
   color:var(--cream-2);transition:.18s}
 .iconbtn:hover{background:var(--t3);color:var(--cream)}
 .iconbtn svg{width:1.05rem;height:1.05rem;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
@@ -914,8 +918,11 @@ nav{position:fixed;left:50%;bottom:calc(10px + var(--sab));transform:translateX(
 nav::-webkit-scrollbar{display:none}
 nav .railtop{display:none}
 .railfoot{display:none}
+/* Rounded squares rather than pills, as on the Fortnight. A pill says "press
+   me and something happens"; a square tile says "this is a place", which is
+   what a section is. */
 .tabbtn{flex:0 0 auto;color:var(--cream-4);font-size:0.66rem;font-weight:700;display:flex;flex-direction:column;
-  align-items:center;gap:3px;padding:7px 11px;border-radius:999px;position:relative;min-width:54px;transition:.2s}
+  align-items:center;gap:3px;padding:8px 11px;border-radius:15px;position:relative;min-width:56px;transition:.2s}
 .tabbtn svg{width:1.15rem;height:1.15rem;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 .tabbtn:hover{color:var(--cream)}
 .tabbtn[aria-current="true"]{color:var(--gold-ink);background:var(--gold)}
@@ -959,7 +966,11 @@ nav .railtop{display:none}
   .wrap{margin-left:var(--rail);max-width:none;width:auto;
     padding:0 var(--gut) calc(var(--g3) + 24px)}
   header{margin-left:var(--rail)}
-  .hbar{padding:9px 38px 15px;max-width:940px;margin:0}
+  /* This used to cap the bar at 940px while the page beside it filled the
+     window, which parked the refresh and the avatar in the middle of the
+     screen. The bar takes the same width and the same gutters as the page, and
+     pushes its two buttons to the right hand end of it. */
+  .hbar{padding:9px var(--gut) 15px;max-width:none;margin:0;justify-content:flex-end}
   :root{--navh:0px}
 }
 @media(min-width:620px){:root{--gut:22px}}
@@ -1264,6 +1275,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
 
   <section id="v-room" hidden>
     <div class="vh"><h2>MCR <i>room</i></h2><span class="note">Book it, see what is taken, and follow your own requests</span></div>
+    <div class="seg" id="roomSeg" style="margin-bottom:14px"></div>
     <div id="roomBody"></div>
   </section>
 
@@ -1414,10 +1426,10 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
   <button class="tabbtn" data-view="today" aria-current="true"><svg viewBox="0 0 24 24"><path d="M4 15a8 8 0 0 1 16 0"/><path d="M12 3v3M4.2 6.6l2.1 2.1M19.8 6.6l-2.1 2.1M2 15h20"/></svg>Today</button>
   <button class="tabbtn" data-view="board"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="15" rx="1.8"/><path d="M7 9h10M7 13h6"/><path d="M12 2v2"/></svg>Board<span class="badge" id="bdgLodge" hidden>0</span></button>
   <button class="tabbtn" data-view="room"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M9.5 20v-5h5v5"/></svg>MCR room</button>
-  <button class="tabbtn" data-view="info"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5"/><path d="M12 7.6h.01"/></svg>Info</button>
   <button class="tabbtn" data-view="swaps"><svg viewBox="0 0 24 24"><path d="M6 4v7a6 6 0 0 0 12 0V4"/><path d="M12 17v3M8 20h8"/></svg>Formals<span class="badge" id="bdgSwaps" hidden>0</span></button>
   <button class="tabbtn" data-view="ask"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/><path d="M12 12.4v-.5c0-1 .7-1.5 1.3-1.9.6-.4 1-.9 1-1.6a2.3 2.3 0 0 0-4.6 0"/><path d="M12 14.4h.01"/></svg>Ask<span class="badge" id="bdgAsk" hidden>0</span></button>
   <button class="tabbtn" data-view="biz"><svg viewBox="0 0 24 24"><path d="M4 20h16M12 4v3M6 20V9l6-4 6 4v11"/><path d="M9 13h6"/></svg>MCR business<span class="badge" id="bdgBiz" hidden>0</span></button>
+  <button class="tabbtn" data-view="info"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5"/><path d="M12 7.6h.01"/></svg>Info</button>
   <span class="sep" data-committee hidden></span>
   <button class="tabbtn committee" data-view="desk" data-committee hidden><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="7" rx="1.6"/><rect x="3" y="13" width="18" height="7" rx="1.6"/><path d="M7 7.5h.01M7 16.5h.01"/></svg>Desk<span class="badge" id="bdgDesk" hidden>0</span></button>
   <button class="tabbtn committee" data-view="inbox" data-committee hidden><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Messages<span class="badge" id="bdgQueue" hidden>0</span></button>
@@ -1455,7 +1467,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbxBpA-PkZRjUpIgZ3p19yCKN0cnIcu4ZkGsjaXAAVmRqhAlHUzvVEOmHuvjJx9sZL1n6w/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyVA0bTOKDCFDdpSOShLedPD9DGiuddsUSrDu9pIjvS4ZDpTn6CCaMihWSU5_mmaSxEYQ/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -1464,7 +1476,7 @@ const BOOK_REGISTER = "https://jcollegemcr.co.uk/register";
 /* The build this page was written against. If the server reports a different
    one, the deployment answering is not this code, and the membership check it
    is running is whatever was deployed last. Shown under 'What is wrong?'. */
-const EXPECT_BUILD = "chimney-10";
+const EXPECT_BUILD = "chimney-12";
 
 /* JavaScript is alive, so the ring painted before the page was parsed can go.
    It is a pseudo element on <html>, so nothing else can remove it. */
@@ -2112,21 +2124,51 @@ function bootTalk(on){
 /* The loading screen can no longer be a dead end. If the first call fails for
    any reason that is not a refusal, this says so and offers the two things
    worth trying, and the session is left alone. */
-/* THE LOADING SCREEN IS ALLOWED TO TAKE ITS TIME.
-   Signing in has already happened by this point: the person is in, and this is
-   only the page being assembled. A timeout here does not protect anybody, it
-   just throws away a request that was about to succeed and makes them start
-   again. So there is no timeout. If it is slow the line says so, and if the
-   request genuinely fails the error comes back on its own and is handled. */
+/* THE PAGE ARRIVES IN TWO PARTS.
+   The first is what Today needs and is built from a handful of sheets, so it
+   comes back quickly and the page goes up. The second is everything else, and
+   it is fetched behind the page that is already on screen and folded in when it
+   lands. Nobody waits on a swap list to see what is on tonight.
+
+   There is no timeout on either. Signing in has already happened; this is the
+   page being assembled, and throwing away a request that was about to succeed
+   helps nobody. If it is slow the line says so. */
 async function bootFetch(){
   const slow = setTimeout(function(){
     const line = $("bootLine");
     if (line) line.textContent = "The server is waking up. This can take a moment the first time";
   }, 6000);
   try{
-    return await api("state");
+    return await api("state", { lite: 1 });
   }finally{ clearTimeout(slow); }
 }
+/* Fetched once the page is up. Anything already on screen stays exactly where
+   it is; the sections that were waiting simply fill in. */
+let restPending = false;
+async function fetchRest(){
+  if (restPending || !S || S.part !== "core") return;
+  restPending = true;
+  try{
+    const full = await api("state");
+    /* Merged rather than swapped, so a section somebody is looking at is not
+       pulled out from under them, and so anything they have changed in the
+       meantime is not undone by an older answer. */
+    if (S && full && full.now >= (S.now || 0)) S = Object.assign(S, full, { part: "full" });
+    render();
+    cacheState();
+  }catch(e){
+    /* The page is already usable, so this is not worth a red banner. The
+       sections that need it say so, and a refresh tries again. */
+    if (typeof console !== "undefined") console.warn("The rest of the page did not load:", e);
+  }finally{ restPending = false; }
+}
+/* A section whose part has not landed yet says so rather than claiming to be
+   empty, which is the difference between "nothing on" and "not here yet". */
+function waitingFor(what){
+  return '<div class="card"><p class="lede"><span class="spin" style="margin-right:8px"></span>' +
+    'Fetching ' + esc(what) + '.</p></div>';
+}
+const stillLoading = () => !!(S && S.part === "core");
 function bootStuck(msg){
   bootTalk(false);
   $("boot").hidden = true;
@@ -2237,6 +2279,8 @@ async function boot(fresh){
   render();
   startPolling();
   if (fresh) greet();
+  /* The page is on screen. Now the rest of it. */
+  fetchRest();
 }
 async function refresh(loud){
   if (loud){ const b = $("bRefresh"); if (b) b.classList.add("busy"); }
@@ -2825,10 +2869,17 @@ function renderLodge(){
   if (!S) return;
   /* Three sections now, drawn from the same data as before. */
   put("boardBody", lodgeNow());
-  /* Asking for the room and seeing what is booked are the same errand, so they
-     are on the same page. This used to be split between the Lodge and Ask,
-     which meant booking it and checking it were two different places. */
-  put("roomBody", lodgeRoom() + askRooms());
+  /* Booking it and following your own requests are two different jobs, so they
+     are two halves rather than one long page. */
+  const nR = (S.rooms || []).filter(r => r.status !== "no").length;
+  put("roomSeg",
+    '<button data-roomtab="free" aria-pressed="' + (roomTab === "free") + '">When it is free</button>' +
+    '<button data-roomtab="mine" aria-pressed="' + (roomTab === "mine") + '">Your requests' +
+      (nR ? " &middot; " + nR : "") + '</button>');
+  put("roomBody", roomTab === "mine"
+    ? (stillLoading() ? waitingFor("your requests") : roomMine(S.rooms || []))
+    : lodgeRoom());
+  if (stillLoading() && lodgeTab === "guides"){ put("lodgeBody", waitingFor("the guides")); }
   const counts = { forms: (S.links || []).length, guides: (S.resources || []).length,
     sport: (S.clubs || []).length };
   if (["forms","guides","sport"].indexOf(lodgeTab) < 0) lodgeTab = "forms";
@@ -3070,6 +3121,7 @@ let askTab = "new";
 const ASK_TABS = [["new","Ask something"],["threads","Your threads"],
   ["who","Who you are asking"]];
 function renderAsk(){
+  if (stillLoading()) return put("askBody", waitingFor("your threads")), put("askSeg", "");
   const th = S.tickets || [], rooms = S.rooms || [];
   const live = th.filter(t => t.status !== "closed" && t.status !== "archived");
   const n = { new: 0, threads: live.length, rooms: rooms.filter(r => r.status === "new").length, who: 0 };
@@ -3081,15 +3133,20 @@ function renderAsk(){
 }
 function askNew(){
   return '<div class="card"><p>Pick what it is about and it goes to one person, not to everybody. ' +
-    "The reply appears under Your threads.</p>" +
+    "Most of these open an email to that officer, so their reply comes back to your own inbox. " +
+    "The two welfare ones stay here instead, where they can be sent without your name.</p>" +
     '<p class="lede">If it cannot wait, ring the Porters on 01223 339339. They are there every hour of ' +
     "the year and they will find whoever is on duty.</p></div>" +
     '<div class="tilegrid">' + (S.ask || []).map(a =>
       '<button data-ask="' + esc(a.key) + '">' + esc(a.name) +
-      (a.welfare ? "<small>Only the officer you send it to, and the President</small>" : "") +
+      (a.ticket
+        ? "<small>Kept here, and you may send it without your name. Only the officer and the President see it</small>"
+        : "<small>Goes to " + esc(a.role || "the committee") + " as an email</small>") +
       "</button>").join("") + "</div>" +
-    notOursHtml() +
-    hoursHtml();
+    /* Somebody who can be spoken to in person is worth more than a list of
+       other people's forms, so the hour comes first. */
+    hoursHtml() +
+    notOursHtml();
 }
 function askThreads(){
   const th = S.tickets || [];
@@ -3109,54 +3166,34 @@ function askRooms(){
      this is only the list of what somebody has asked for. */
   return roomMine(rooms);
 }
-/* YOUR OWN REQUESTS, ON THE NEXT THREE WEEKS.
-   A request is a thing with a date, so it is shown against the dates rather
-   than as a list in the order it happened to be typed. Three weeks is what the
-   booking calendar above shows, so the two line up, and it slides sideways on a
-   phone rather than stacking into a column nobody scrolls. */
+/* YOUR OWN REQUESTS.
+   Its own half of the page, so it has room to say where each one has got to and
+   to let somebody take one back. A request has three states and they are worth
+   distinguishing: waiting on the committee, granted, and refused. */
 function roomMine(rooms){
   const t = todayLondon();
-  const days = [];
-  for (let i = 0; i < 21; i++) days.push(addDays(t, i));
-  const mine = (rooms || []).filter(r => r.date >= t && r.date <= days[days.length - 1]);
-  const later = (rooms || []).filter(r => r.date > days[days.length - 1]);
-  const past = (rooms || []).filter(r => r.date < t);
-  const byDay = {};
-  mine.forEach(r => (byDay[r.date] = byDay[r.date] || []).push(r));
-  const lab = s => s === "yes" ? "Yours" : s === "no" ? "Not this time" : "Waiting";
-  return '<div class="grp">Your requests<span class="ref" style="margin-left:auto">the next three weeks</span></div>' +
-    (mine.length
-      ? '<div class="rooprail">' + days.map(d => {
-          const list = byDay[d] || [];
-          return '<div class="rooday' + (list.length ? " has" : "") + (d === t ? " today" : "") + '">' +
-            '<span class="dd"><b>' + dnum(d) + '</b>' + DOW[dow(d)] + '</span>' +
-            (list.length
-              ? list.map(r => '<span class="roo ' + esc(r.status) + '">' +
-                  '<b>' + esc(clock(r.start)) + '</b>' + esc(r.title) +
-                  '<i>' + lab(r.status) + '</i></span>').join("")
-              : '<span class="none">&mdash;</span>') + '</div>';
-        }).join("") + '</div>'
-      : '<div class="card"><p>Nothing of yours in the next three weeks.</p></div>') +
-    (later.length ? '<p class="lede" style="margin-top:10px">' + later.length +
-      (later.length === 1 ? " request is" : " requests are") + " further ahead than three weeks.</p>" : "") +
-    (past.length ? '<p class="lede" style="margin-top:4px">' + past.length +
-      (past.length === 1 ? " has" : " have") + " been and gone.</p>" : "");
-}
-function askRoomsOld(){
-  const rooms = S.rooms || [];
-  return '<div class="card"><p>Asking for the MCR puts your time on the calendar so nobody walks in on ' +
-    "you. It shows to other members as taken and nothing else: not what it is, and not whose it is.</p>" +
-    '<div class="acts"><button class="btn gold sm" data-room>Ask for the room</button>' +
-    '<button class="btn ghost sm" data-goto="lodge">See when it is free</button></div></div>' +
-    (rooms.length ? rooms.map(r =>
-      '<div class="thread"><div class="top"><b>' + esc(r.title) + '</b><span class="st ' +
-      (r.status === "yes" ? "answered" : r.status === "no" ? "closed" : "open") + '">' +
-      (r.status === "yes" ? "Yours, and emailed to you" : r.status === "no" ? "Not this time"
-        : "With the committee") + "</span></div>" +
-      '<div class="ref">' + esc(r.venueName) + " &middot; " + esc(shortDate(r.date)) + " &middot; " +
-      esc(clock(r.start)) + " to " + esc(clock(r.end)) + "</div>" +
-      (r.reply ? '<div class="msg">' + esc(r.reply) + "</div>" : "") + "</div>").join("")
-      : '<div class="card"><p>You have not asked for the room.</p></div>');
+  const all = (rooms || []).slice().sort((a, b) => String(a.date).localeCompare(String(b.date)));
+  const soon = all.filter(r => r.date >= t);
+  const past = all.filter(r => r.date < t);
+  if (!all.length)
+    return '<div class="card"><p>You have not asked for the room yet.</p>' +
+      '<div class="acts"><button class="btn gold sm" data-room>Ask for the room</button></div></div>';
+  const one = r => {
+    const st = r.status === "yes" ? "answered" : r.status === "no" ? "closed" : "open";
+    const lab = r.status === "yes" ? "Yours" : r.status === "no" ? "Not this time" : "With the committee";
+    return '<div class="thread"><div class="top"><b>' + esc(r.title) + '</b>' +
+      '<span class="st ' + st + '">' + lab + "</span></div>" +
+      '<div class="ref">' + esc(longDate(r.date)) + " &middot; " + esc(clock(r.start)) + " to " +
+        esc(clock(r.end)) + (r.venueName ? " &middot; " + esc(r.venueName) : "") + "</div>" +
+      (r.reply ? '<div class="msg">' + esc(r.reply) + "</div>" : "") +
+      (r.date >= t && r.status !== "no"
+        ? '<div class="acts"><button class="btn ghost sm" data-roomdrop="' + esc(r.id) + '">' +
+          (r.status === "yes" ? "Give it back" : "Withdraw it") + "</button></div>"
+        : "") + "</div>";
+  };
+  return '<div class="acts" style="margin:0 0 14px"><button class="btn gold sm" data-room>Ask for the room</button></div>' +
+    (soon.length ? '<div class="grp">Coming up</div>' + soon.map(one).join("") : "") +
+    (past.length ? '<div class="grp">Been and gone</div>' + past.slice(-8).reverse().map(one).join("") : "");
 }
 function askWho(){
   return whoHtml();
@@ -3188,9 +3225,42 @@ function threadHtml(t, officer){
         (s === "college" ? "Raised with College" : s[0].toUpperCase() + s.slice(1)) + "</button>").join("") : "") +
       "</div>" : "") + "</div>";
 }
+/* The subject carries the section, so an officer opening a full inbox can see
+   at a glance what it is about and which hat they are wearing. */
+function askByEmail(cat, subject){
+  const to = cat.to || "";
+  const sub = "MCR \u00b7 " + cat.name + (subject ? ": " + subject : "");
+  const who = (S.me && S.me.name) || "";
+  const body = [
+    "",
+    "",
+    "\u2014",
+    who ? who + (S.me && S.me.email ? " (" + S.me.email + ")" : "") : "",
+    "Sent from the Jesus MCR site, " + cat.name + "."
+  ].join("\n");
+  const href = "mailto:" + encodeURIComponent(to) +
+    "?subject=" + encodeURIComponent(sub) + "&body=" + encodeURIComponent(body);
+  sheet(cat.name,
+    (cat.first ? '<div class="card"><p>' + esc(cat.first) + "</p></div>" : "") +
+    '<div class="card"><p>This one goes straight to <b>' + esc(cat.role || "the committee") + '</b> as an ' +
+    'ordinary email, so their reply lands in your own inbox rather than behind another login.</p>' +
+    '<div class="kv" style="margin-top:10px"><b>To</b><span class="mono">' + esc(to) + '</span>' +
+    '<b>Subject</b><span>' + esc(sub) + '</span></div>' +
+    '<div class="acts"><a class="btn gold" href="' + esc(href) + '">Write to them</a>' +
+    '<button class="btn ghost sm" data-copy="' + esc(to) + '">Copy the address</button></div></div>' +
+    '<p class="lede">If it cannot wait, ring the Porters on 01223 339339. They are there every hour of ' +
+    'the year and they will find whoever is on duty.</p>');
+}
 function openAsk(key, subject){
   const cat = (S.ask || []).filter(a => a.key === key)[0];
   if (!cat) return;
+  /* Only How I am doing and Harassment or discrimination are threads. They can
+     be sent without a name, only the officer and the President can read them,
+     and somebody has to be able to see whether they were answered.
+     Everything else is a letter to a person, opened in the member's own mail
+     with the officer, the subject and an opening line already written, because
+     that is where the reply was going to come from in any case. */
+  if (!cat.ticket) return askByEmail(cat, subject);
   sheet(cat.name,
     (cat.first ? '<div class="card"><p>' + esc(cat.first) + "</p></div>" : "") +
     (key === "room" ? (function(){ const l = (S.links||[]).filter(x => x.key === "maintenance")[0];
@@ -3467,6 +3537,7 @@ function openPoll(){
    BUSINESS
    ============================================================ */
 function renderBiz(){
+  if (stillLoading()){ put("bizMotions", waitingFor("the motions and the polls")); return; }
   const t = todayLondon();
   const next = (S.meetings || []).filter(m => m.date >= t)[0];
   put("bizMeetings", next
@@ -4239,6 +4310,7 @@ let swapEdit = "", swapPast = false;
    one of ours. The halls are simply the events the committee has tagged as
    formals, so nothing new has to be kept anywhere. */
 let formalTab = "swaps";
+let roomTab = "free";
 function hallFormals(){
   const t = todayLondon();
   return (S.events || []).filter(e => {
@@ -4319,6 +4391,7 @@ function newHall(){
   toast("Tag it formal and it shows here as well as on the calendar.");
 }
 function renderSwaps(){
+  if (stillLoading()){ put("swapList", waitingFor("the formals")); put("formalSeg", ""); return; }
   renderFormalSeg();
   const all = S.swaps || [], hold = S.swapHold || 5;
   const live = all.filter(w => !w.past), gone = all.filter(w => w.past);
@@ -4471,42 +4544,6 @@ function openSwapTake(id){
 /* Second life has been taken out. The renderer is left standing so that any
    stray handler is harmless, and so the section could be put back by restoring
    its tab and its two lines in state_. */
-function renderMarket(){
-  if (!$("giftGrid")) return;
-  const all = S.market || [], kinds = S.marketKinds || [];
-  const list = all.filter(m => !giftKind || m.kind === giftKind);
-  const open = k => all.filter(m => m.kind === k && m.status === "open").length;
-  put("giftIntro", '<div class="card"><p>Furnishing a room from nothing is the most expensive week of the year, ' +
-    "and every June a hundred people throw out exactly what every October a hundred people are buying.</p>" +
-    '<p class="lede">Put up a photograph and your address goes with it. Members write to each other directly, ' +
-    "the MCR holds nothing and takes nothing.</p></div>");
-  put("giftFilter",
-    '<button data-gk="" aria-pressed="' + (!giftKind) + '">Everything &middot; ' +
-      all.filter(m => m.status === "open").length + "</button>" +
-    kinds.map(k => '<button data-gk="' + esc(k.key) + '" aria-pressed="' + (giftKind === k.key) + '">' +
-      '<i class="k-' + esc(k.key) + '"></i>' + esc(k.name) + " &middot; " + open(k.key) + "</button>").join(""));
-  /* Twenty at a time. A board with a term of things on it is a slow page and
-     an unreadable one, and nobody scrolls past the first screen anyway. */
-  const pages = Math.max(1, Math.ceil(list.length / GIFT_PER_PAGE));
-  if (giftPage >= pages) giftPage = pages - 1;
-  const from = giftPage * GIFT_PER_PAGE;
-  const page = list.slice(from, from + GIFT_PER_PAGE);
-  put("giftGrid", list.length
-    ? '<div class="vgrid">' + page.map(vcard).join("") + "</div>" +
-      (pages > 1
-        ? '<div class="pager"><button data-gp="' + (giftPage - 1) + '"' +
-            (giftPage <= 0 ? " disabled" : "") + ">Back</button>" +
-          '<span>' + (from + 1) + " to " + Math.min(list.length, from + GIFT_PER_PAGE) +
-            " of " + list.length + "</span>" +
-          Array.from({ length: pages }, (_, i) =>
-            '<button class="pn" data-gp="' + i + '" aria-pressed="' + (i === giftPage) + '">' +
-            (i + 1) + "</button>").join("") +
-          '<button data-gp="' + (giftPage + 1) + '"' +
-            (giftPage >= pages - 1 ? " disabled" : "") + ">Next</button></div>"
-        : "")
-    : '<div class="card">' + GATE +
-      '<p style="text-align:center">Nothing through the gate yet. Somebody has to be first, and June is when it fills up.</p></div>');
-}
 function vcard(m){
   const k = (S.marketKinds || []).filter(x => x.key === m.kind)[0] || { name: m.kind };
   const gone = m.status !== "open";
@@ -4523,149 +4560,9 @@ function vcard(m){
     '<span class="by"><i>' + esc(initials(m.name)) + "</i>" + esc(first(m.name)) + "</span></span></button>";
 }
 /* The item, opened. Everything the grid left out, and the address. */
-function openGift(id){
-  const m = (S.market || []).filter(x => x.id === id)[0];
-  if (!m) return;
-  /* the thumbnail is already here, so it shows at once and the full
-     photograph swaps in behind it */
-  if (m.hasPhoto && !m.photo) api("marketPhoto", { id: id }).then(d => {
-    m.photo = d.photo;
-    const el = $("giftBig");
-    if (el && d.photo) el.src = d.photo;
-  }).catch(() => {});
-  const k = (S.marketKinds || []).filter(x => x.key === m.kind)[0] || { name: m.kind };
-  const mine = m.email === S.me.email, gone = m.status !== "open";
-  const subj = encodeURIComponent("MCR Second Life: " + m.title);
-  sheet(m.title,
-    (m.hasPhoto ? '<img class="vbig" id="giftBig" src="' + (m.thumb || "") + '" alt="">' : "") +
-    '<div class="rowline"><div class="t"><b>' +
-      esc(m.kind === "sell" ? (m.price || "Ask") : m.kind === "gift" ? "Free to a good home" : k.name) +
-      "</b><span>" + esc(k.name) + (m.venueName ? " &middot; " + esc(m.venueName) : "") +
-      " &middot; " + esc(ago(m.at)) + "</span></div></div>" +
-    (m.body ? '<div class="card"><p>' + esc(m.body) + "</p></div>" : "") +
-    '<div class="card"><div class="rowline"><div class="t"><b>' + esc(m.name) + "</b><span>" +
-      (gone ? "Taken by " + esc(m.takenBy) : esc(m.email)) + "</span></div></div></div>" +
-    '<div class="acts">' +
-    (gone ? '<span class="lede">This one has gone.</span>'
-      : mine ? '<button class="btn ghost" data-marketdrop="' + esc(m.id) + '">Take it down</button>'
-      : '<a class="btn gold" href="mailto:' + esc(m.email) + "?subject=" + subj + '">Write to ' +
-        esc(first(m.name)) + "</a>" +
-        '<button class="btn ghost" data-markettake="' + esc(m.id) + '">Mark it gone</button>') +
-    "</div>");
-}
 /* Putting something up, the way a selling app does it: the photograph first
    and big, because that is what decides whether anybody looks; then the one
    line; then the price only if you are selling. Nothing else is required. */
-function openMarket(){
-  let photo = "", thumb = "";
-  const kinds = S.marketKinds || [];
-  sheet("Put something up",
-    '<div class="upzone" id="mkZone">' +
-      '<input type="file" id="mkPhoto" accept="image/*" hidden>' +
-      '<div id="mkPrev" class="upempty">' +
-        '<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.7" ' +
-          'stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/>' +
-          '<circle cx="8.5" cy="10" r="1.6"/><path d="M21 15l-5-4.5L5.5 19"/></svg>' +
-        "<b>Add a photograph</b><small>One good picture is most of it. It is shrunk here before it is sent.</small>" +
-      "</div></div>" +
-    '<div class="kindrow" id="mkKindRow">' + kinds.map((k, i) =>
-      '<button type="button" data-kind="' + esc(k.key) + '" class="k-' + esc(k.key) + '"' +
-      (i === 0 ? ' aria-pressed="true"' : "") + ">" + esc(k.name) + "</button>").join("") + "</div>" +
-    '<input type="hidden" id="mkKind" value="' + esc(kinds[0] ? kinds[0].key : "gift") + '">' +
-    '<label class="f"><span>What is it</span><input id="mkTitle" maxlength="90" ' +
-      'placeholder="Desk lamp, works, slightly bent"></label>' +
-    '<label class="f" id="mkPriceRow" hidden><span>Price</span><input id="mkPrice" maxlength="24" ' +
-      'placeholder="\u00a310, or nearest offer"></label>' +
-    '<label class="f"><span>Anything else <i>optional</i></span><textarea id="mkBody" maxlength="700" ' +
-      'style="min-height:70px" placeholder="Where it came from, what is wrong with it, when you are around."></textarea></label>' +
-    '<label class="f"><span>Where to collect it <i>optional</i></span><input id="mkVenue" maxlength="80" ' +
-      'placeholder="Second Court, staircase N, or just say when you write"></label>' +
-    '<p class="lede" id="mkNote"></p>' +
-    '<div class="acts"><button class="btn gold" id="mkGo">Put it up</button></div>',
-    el => {
-      const zone = el.querySelector("#mkZone"), file = el.querySelector("#mkPhoto");
-      zone.addEventListener("click", () => file.click());
-      const setKind = k => {
-        $("mkKind").value = k;
-        el.querySelectorAll("[data-kind]").forEach(b =>
-          b.setAttribute("aria-pressed", String(b.dataset.kind === k)));
-        const row = $("mkPriceRow");
-        if (row) row.hidden = k !== "sell";
-        const kk = kinds.filter(x => x.key === k)[0];
-        $("mkNote").textContent = kk ? kk.note : "";
-      };
-      el.querySelectorAll("[data-kind]").forEach(b =>
-        b.addEventListener("click", () => setKind(b.dataset.kind)));
-      setKind($("mkKind").value);
-
-      /* A phone photograph is several megabytes and a spreadsheet cell holds
-         fifty thousand characters, so it comes down here, in the browser,
-         before anything is sent. */
-      const TARGET = 90 * 1024;
-      const shrink = f => {
-        put("mkPrev", '<div class="upbusy"><span class="spin"></span>Reading ' +
-          Math.round(f.size / 1024) + " KB</div>");
-        const img = new Image();
-        img.onload = () => {
-          const long = Math.max(img.width, img.height);
-          const fit = Math.min(1, 1400 / long);
-          const w = Math.round(img.width * fit), h = Math.round(img.height * fit);
-          const c = document.createElement("canvas");
-          const step = (side, q) => {
-            c.width = Math.round(w * side); c.height = Math.round(h * side);
-            const x = c.getContext("2d");
-            x.imageSmoothingQuality = "high";
-            x.drawImage(img, 0, 0, c.width, c.height);
-            return c.toDataURL("image/jpeg", q);
-          };
-          let side = 1, q = 0.74, out = step(side, q), n = 0;
-          const grind = () => {
-            if (out.length <= TARGET || n++ > 7){
-              photo = out;
-              const tc = document.createElement("canvas");
-              const ts = 320 / Math.max(c.width, c.height);
-              tc.width = Math.round(c.width * ts); tc.height = Math.round(c.height * ts);
-              tc.getContext("2d").drawImage(c, 0, 0, tc.width, tc.height);
-              thumb = tc.toDataURL("image/jpeg", 0.62);
-              URL.revokeObjectURL(img.src);
-              put("mkPrev", '<img src="' + photo + '" alt="">' +
-                '<span class="upswap">Change &middot; ' + Math.round(photo.length / 1024) + " KB</span>");
-              return;
-            }
-            if (q > 0.42) q -= 0.09; else side *= 0.82;
-            put("mkPrev", '<div class="upbusy"><span class="spin"></span>Squeezing, ' +
-              Math.round(out.length / 1024) + " KB</div>");
-            out = step(side, q);
-            setTimeout(grind, 16);
-          };
-          setTimeout(grind, 16);
-        };
-        img.onerror = () => put("mkPrev", '<div class="upbusy">The browser cannot read that file.</div>');
-        img.src = URL.createObjectURL(f);
-      };
-      file.addEventListener("change", ev => { if (ev.target.files[0]) shrink(ev.target.files[0]); });
-      zone.addEventListener("dragover", e => { e.preventDefault(); zone.classList.add("over"); });
-      zone.addEventListener("dragleave", () => zone.classList.remove("over"));
-      zone.addEventListener("drop", e => {
-        e.preventDefault(); zone.classList.remove("over");
-        if (e.dataTransfer.files[0]) shrink(e.dataTransfer.files[0]);
-      });
-
-      el.querySelector("#mkGo").addEventListener("click", async e => {
-        if (!$("mkTitle").value.trim()) return toast("It needs a name first.");
-        const b = e.currentTarget;
-        spin(b, "Putting it up");
-        try{
-          const d = await api("marketNew", { kind: $("mkKind").value, title: $("mkTitle").value,
-            body: $("mkBody").value, venue: $("mkVenue").value, photo: photo, thumb: thumb,
-            price: $("mkPrice") ? $("mkPrice").value : "" });
-          S.market = d.market;
-          closeSheet(); renderMarket(); go("gifts");
-          toast("Up on the board, with your address on it.");
-        }catch(err){ unspin(b); fail(err); }
-      });
-    });
-}
 
 /* ============================================================
    BUMPS
@@ -4777,7 +4674,7 @@ function voiceCard(){
    ============================================================ */
 /* Second life is gone. The Lodge has become three: the board on its own, the
    MCR room on its own, and Info for the links, the guides and the sport. */
-const VIEWS = ["today","board","room","info","swaps","ask","biz","me","desk","inbox","swapdesk","members","admin"];
+const VIEWS = ["today","board","room","swaps","ask","biz","info","me","desk","inbox","swapdesk","members","admin"];
 /* Stagger the first children of whatever has just been shown. Sixty
    milliseconds apart is enough to read as unfolding and not as waiting. */
 function stagger(id){
@@ -4875,15 +4772,22 @@ document.addEventListener("click", async e => {
     "[data-skip],[data-editser],[data-second],[data-vote],[data-mset],[data-code],[data-checkin]," +
     "[data-delupdate],[data-rosteredit],[data-rosterdel],[data-newidea],[data-back]," +
     "[data-setidea],[data-dropidea],[data-pollvote],[data-pollclose]," +
-    "[data-formal],[data-copy],[data-copyboth],[data-marketnew],[data-markettake],[data-marketdrop],[data-bumpedit],[data-gk],[data-gift],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-polldrop],[data-motiondrop],[data-desktab],[data-tick2],[data-gp],[data-desk],[data-asktab],[data-thread],[data-mythreads],[data-swaptake],[data-swapdrop],[data-swappaid],[data-swapedit],[data-swapsave],[data-swapcancel],[data-swapdel],[data-swappast],[data-mailtest],[data-bank],[data-swapnudge],[data-swapkick],[data-swappromote],[data-copyaddrs],[data-swapdeskedit],[data-jcsu],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
+    "[data-roomdrop],[data-roomtab],[data-formal],[data-copy],[data-copyboth],[data-bumpedit],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-polldrop],[data-motiondrop],[data-desktab],[data-tick2],[data-desk],[data-asktab],[data-thread],[data-mythreads],[data-swaptake],[data-swapdrop],[data-swappaid],[data-swapedit],[data-swapsave],[data-swapcancel],[data-swapdel],[data-swappast],[data-bank],[data-swapnudge],[data-swapkick],[data-swappromote],[data-copyaddrs],[data-swapdeskedit],[data-jcsu],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
   if (!t) return;
   const d = t.dataset;
   try{
-    if (t.hasAttribute("data-marketnew")) return openMarket();
     if (t.hasAttribute("data-formal")){ formalTab = d.formal; renderSwaps(); window.scrollTo(0, 0); return; }
-    if (t.hasAttribute("data-gk")){ giftKind = d.gk; giftPage = 0; renderMarket(); return; }
-    if (d.gp !== undefined){ giftPage = Math.max(0, +d.gp); renderMarket(); window.scrollTo(0, 0); return; }
-    if (d.gift) return openGift(d.gift);
+    if (t.hasAttribute("data-roomtab")){ roomTab = d.roomtab; renderLodge(); window.scrollTo(0, 0); return; }
+    if (t.hasAttribute("data-roomdrop")){
+      if (!confirm("Take this request back?")) return;
+      try{
+        const r = await api("roomWithdraw", { id: d.roomdrop });
+        S.rooms = r.rooms;
+        if (r.allRooms) S.allRooms = r.allRooms;
+        renderLodge(); toast("Taken back.");
+      }catch(e){ fail(e); }
+      return;
+    }
     if (d.lodge){ lodgeTab = d.lodge; renderLodge(); window.scrollTo(0, 0); return; }
     if (t.hasAttribute("data-newnotice")) return openNoticeEditor();
     if (d.hw !== undefined){
@@ -4936,7 +4840,7 @@ document.addEventListener("click", async e => {
     if (t.hasAttribute("data-swapedit")){ swapEdit = d.swapedit || "new"; renderSwaps(); return; }
     if (t.hasAttribute("data-swapcancel")){ swapEdit = ""; renderSwaps(); return; }
     if (d.jcsu !== undefined){ jcsuOpen = d.jcsu === "1"; renderLodge(); return; }
-    if (false && t.hasAttribute("data-mailtest")){
+    if (false){
       spin(t, "Sending");
       try{
         const r = await api("mailTest", {});
@@ -5012,12 +4916,6 @@ document.addEventListener("click", async e => {
     if (d.hour) return openHour(d.hour);
     if (d.hourcancel){ S.hours = (await api("hourCancel", { date: d.hourcancel })).hours;
       renderAsk(); renderCrow(); return toast("Cancelled."); }
-    if (d.markettake){
-      const r = await api("marketTake", { id: d.markettake });
-      S.market = r.market; closeSheet(); renderMarket();
-      return toast("Marked gone. Write to " + r.who + " to arrange it.");
-    }
-    if (d.marketdrop){ S.market = (await api("marketDrop", { id: d.marketdrop })).market; closeSheet(); renderMarket(); return; }
     if (d.bumpedit){ const q = d.bumpedit.split("|"); return openBumps(q[0], q[1]); }
     if (t.hasAttribute("data-newidea")) return openIdea();
     if (d.back){ S.ideas = (await api("ideaBack", { id: d.back })).ideas; renderIdeas(); renderCrow(); return; }
@@ -5216,7 +5114,6 @@ on("bNewEvent2", "click", () => openEventEditor(""));
 on("bNewSeries", "click", () => openSeriesEditor(""));
 on("bNewMotion", "click", openMotion);
 on("bNewIdea", "click", openIdea);
-on("bNewGift", "click", openMarket);
 on("bNewSwap", "click", () => {
   /* One button, two jobs, because the section has two halves. On the swaps
      half it opens a blank swap. On the halls half a hall is simply an event
