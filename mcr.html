@@ -971,6 +971,27 @@ nav .railtop{display:none}
 .wirerow code{display:block;font-family:var(--mono);font-size:.72rem;color:var(--cream);word-break:break-all;line-height:1.4}
 .wirerow .hint{display:block;font-size:.68rem;color:var(--cream-4);margin-top:4px}
 
+/* The membership check, reported in one line under the sign in button, in the
+   same mono lettering as the eyebrow above it. It should be noticed and not
+   read: the card that follows is where anything important is said. */
+#gateCheck:empty{display:none}
+#gateCheck{margin:10px 0 0;display:flex;align-items:center;justify-content:center;gap:8px;
+  font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;font-weight:700;
+  color:var(--cream-4);min-height:14px}
+#gateCheck .tick{width:10px;height:10px;flex:0 0 10px;border-radius:50%;position:relative;box-shadow:inset 0 0 0 1.4px currentColor}
+#gateCheck.busy .tick::after{content:"";position:absolute;inset:1.6px;border-radius:50%;
+  border:1.4px solid currentColor;border-top-color:transparent;animation:gspin .8s linear infinite}
+#gateCheck.done{color:var(--gold-2)}
+#gateCheck.done .tick{background:currentColor;box-shadow:none}
+#gateCheck.done .tick::after{content:"";position:absolute;left:3.4px;top:1.8px;width:2.4px;height:4.6px;
+  border:1.4px solid var(--ink);border-top:0;border-left:0;transform:rotate(42deg)}
+#gateCheck.no{color:var(--crimson-lite)}
+@keyframes gspin{to{transform:rotate(360deg)}}
+
+/* A CRSid beside a name, for the minute book. Committee only. */
+.crs{font-family:var(--mono);font-size:.62rem;letter-spacing:.06em;background:var(--t2);
+  border-radius:5px;padding:1px 5px;color:var(--gold-2);margin-left:4px}
+
 /* ---------- gate ---------- */
 #gate{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:22px;
   overflow:auto;overscroll-behavior:contain}
@@ -1295,10 +1316,11 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
   <div class="gcard">
     <div class="head"><img class="crest" id="crestGate" alt="">
       <span><small>JESUS COLLEGE</small><b>The <i>MCR</i></b></span></div>
-    <p class="lede" id="gLede">The postgraduate community at Jesus College. The term calendar, the Lodge, and somebody to ask. Sign in with your University of Cambridge Google account; your MCR membership is then confirmed against the register before access is granted.</p>
+    <p class="lede" id="gLede">The postgraduate community at Jesus College. The term calendar, the room, the board, and somebody to ask.</p>
     <div id="gsiBtn"><span class="gsiskel" aria-hidden="true"></span></div>
-    <p class="lede" style="margin:10px 0 0;font-size:12.5px">Please use your <b>@cam.ac.uk</b> address. There is no password to create. Membership is verified against the MCR register, the single list used by every MCR service.</p>
+    <p class="lede" style="margin:10px 0 0;font-size:12.5px">Your <b>@cam.ac.uk</b> address. No password to make.</p>
     <p class="msg" id="gateMsg"></p>
+    <div id="gateCheck"></div>
     <div id="gateFix"></div>
     <div class="gfoot"><span id="gFootYear"></span>
       <button id="bDiag" style="background:none;border:0;color:var(--cream-3);font-size:11.5px;padding:0;text-decoration:underline">What is wrong?</button></div>
@@ -1318,7 +1340,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbw2IvyPXIjgeNJxwtrXYetUEJNcGWdMlg9mmxK263B5kacWY-42DsNlepAjufr1ihWltA/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzZCeRIi6MsBkZw8b1fF_BPYMk4gmnq69pFN0MJzxghF1du8-E_sR_yAhFvf3w1lOAuZQ/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -1327,7 +1349,7 @@ const BOOK_REGISTER = "https://jcollegemcr.co.uk/register";
 /* The build this page was written against. If the server reports a different
    one, the deployment answering is not this code, and the membership check it
    is running is whatever was deployed last. Shown under 'What is wrong?'. */
-const EXPECT_BUILD = "membership-check-4";
+const EXPECT_BUILD = "chimney-5";
 
 /* JavaScript is alive, so the ring painted before the page was parsed can go.
    It is a pseudo element on <html>, so nothing else can remove it. */
@@ -1583,7 +1605,8 @@ function renderDiag(){
     ["google", gsiComplaint ? gsiComplaint.slice(0, 58)
       : (window.google && google.accounts && google.accounts.id) ? "loaded" : "blocked",
       !gsiComplaint && !!(window.google && google.accounts && google.accounts.id)],
-    ["build", SRV_BUILD || "older deployment, redeploy needed", SRV_BUILD === EXPECT_BUILD],
+    ["page", EXPECT_BUILD, true],
+    ["server", SRV_BUILD || "older deployment, redeploy needed", SRV_BUILD === EXPECT_BUILD],
     ["members", SRV_BOOK === undefined ? "unknown"
       : SRV_BOOK ? "register check on" : "REGISTER CHECK OFF", SRV_BOOK !== false]
   ];
@@ -1742,14 +1765,22 @@ async function onCredential(res){
   lastCred = res.credential;
   await verifyAndEnter(res.credential, false);
 }
+/* The waiting state used to be a card of its own explaining itself. One quiet
+   line does the same work without taking the screen over. */
 function gateStep(text){
   gateClear();
   gateBusy(true);
-  put("gateFix", '<div class="fix"><b>' + esc(text) + "</b>" +
-    '<p style="margin-top:6px">This takes a moment. Please do not close the page.</p></div>');
+  if (text) checkSay("busy", text);
+}
+function checkSay(state, text){
+  const b = $("gateCheck");
+  if (!b) return;
+  b.className = state;
+  b.innerHTML = '<span class="tick"></span><span>' + esc(text) + '</span>';
 }
 async function verifyAndEnter(cred, recheck){
-  gateStep("Verifying your Jesus College MCR membership");
+  gateStep("");
+  checkSay("busy", "Checking the MCR register");
   let d;
   try{
     d = await withTimeout(api("googleToken", { credential: cred, recheck: !!recheck }), 20000);
@@ -1761,9 +1792,10 @@ async function verifyAndEnter(cred, recheck){
       esc(e && e.message ? e.message : String(e)),
       '<button class="btn cream sm" data-retry>Try again</button>');
   }
-  if (d && d.bookDown) return bookUnreachable(d);
-  if (d && d.needsBook) return notInBook(d);
+  if (d && d.bookDown){ checkSay("no", "The register did not answer"); return bookUnreachable(d); }
+  if (d && d.needsBook){ checkSay("no", "Not in the MCR register"); return notInBook(d); }
   /* Confirmed. Now, and only now, the application loads. */
+  checkSay("done", "Membership confirmed");
   gateClear();
   gateBusy(false);
   lastEmail = d.email || "";
@@ -1914,6 +1946,19 @@ function bootTalk(on){
 /* The loading screen can no longer be a dead end. If the first call fails for
    any reason that is not a refusal, this says so and offers the two things
    worth trying, and the session is left alone. */
+async function bootFetch(){
+  try{
+    return await withTimeout(api("state"), 22000, "SLOW");
+  }catch(e){
+    const m = String((e && e.message) || "");
+    /* A refusal is passed straight on: there is no point asking twice. */
+    if (/sign in|session|NOTMEMBER|BOOKDOWN|expired/i.test(m)) throw e;
+    const line = $("bootLine");
+    if (line) line.textContent = "The server is waking up. One more moment";
+    return await withTimeout(api("state"), 25000,
+      "The server did not answer. It is usually awake by the second try.");
+  }
+}
 function bootStuck(msg){
   bootTalk(false);
   $("boot").hidden = true;
@@ -1998,15 +2043,17 @@ async function boot(fresh){
   }
   bootTalk(true);
   skeletons();
+  /* Apps Script runs on containers that go cold. The first call after a quiet
+     spell genuinely takes several seconds, which is why one attempt failed and
+     the next worked. Rather than report that as an error and make somebody
+     press the button themselves, it waits, says so, and tries again on its own.
+     The server keeps the built page for a minute, so the second attempt is
+     nearly always instant. */
   try{
-    S = await withTimeout(api("state"), 30000, "The server took too long to answer.");
+    S = await bootFetch();
   }catch(e){
     bootTalk(false);
     const m = String((e && e.message) || "");
-    /* Only a refusal signs somebody out. A timeout or a dropped connection used
-       to clear the token as well, which is why a slow morning looked like being
-       thrown out of the app for no reason. Those now keep the session and offer
-       to try again. */
     if (/sign in|session|NOTMEMBER|BOOKDOWN|expired/i.test(m)) return signedOut(m);
     return bootStuck(m);
   }
@@ -3195,7 +3242,17 @@ function renderBiz(){
     return '<div class="thread"><div class="top"><b>' + esc(m.title) + '</b><span class="st ' +
       (m.status === "passed" ? "answered" : m.status === "voting" ? "open" : m.status === "failed" ? "closed" : "") +
       '">' + esc(lab[m.status] || m.status) + '</span><span class="ref">' + esc(m.kind) + "</span></div>" +
-      '<div class="ref" style="margin-top:3px">' + esc(m.name) + " &middot; " + esc(ago(m.at)) + "</div>" +
+      '<div class="ref" style="margin-top:3px">' + esc(m.name) +
+        (isCommittee() && m.proposerCrsid ? ' <span class="crs">' + esc(m.proposerCrsid) + '</span>' : "") +
+        " &middot; " + esc(ago(m.at)) + "</div>" +
+      /* Seconding is what lets a motion go to a vote, so the minute book needs
+         the name and the CRSid. Everybody sees who seconded it; the committee
+         also sees the CRSid, and when. */
+      (m.seconderName
+        ? '<div class="ref" style="margin-top:2px">Seconded by ' + esc(m.seconderName) +
+          (isCommittee() && m.seconderCrsid ? ' <span class="crs">' + esc(m.seconderCrsid) + '</span>' : "") +
+          (isCommittee() && m.seconderAt ? " &middot; " + esc(ago(m.seconderAt)) : "") + "</div>"
+        : m.status === "proposed" ? '<div class="ref" style="margin-top:2px">Not yet seconded</div>' : "") +
       '<div class="msg">' + esc(m.body) + "</div>" +
       (["passed","failed"].indexOf(m.status) >= 0
         ? '<div class="ref" style="margin-top:8px">' + v.for + " for, " + v.against + " against" +
