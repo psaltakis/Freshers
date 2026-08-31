@@ -123,6 +123,63 @@ pre{background:rgba(0,0,0,.36);border-radius:12px;padding:13px 14px;font-family:
 .grp span{font-family:var(--mono);font-size:.63rem;color:var(--cream-4);font-weight:700}
 [hidden]{display:none!important}
 
+/* ---------- the moment after signing in ---------- */
+#load{position:fixed;inset:0;z-index:120;display:grid;place-items:center;padding:24px;
+  background:radial-gradient(120% 90% at 12% -10%,#8E0F14,transparent 60%),
+    linear-gradient(178deg,#6B080D,#48050A 64%,#35040A);
+  opacity:1;transition:opacity .45s var(--ease)}
+#load.out{opacity:0;pointer-events:none}
+.lcard{width:100%;max-width:420px;text-align:left}
+.lseal{width:64px;height:64px;color:var(--gold);margin-bottom:20px;position:relative}
+.lseal svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.lseal svg path{stroke-dasharray:120;stroke-dashoffset:120;animation:draw 1.5s var(--ease) forwards}
+.lseal svg path:nth-child(2){animation-delay:.15s}
+.lseal svg path:nth-child(3){animation-delay:.3s}
+.lseal svg path:nth-child(4){animation-delay:.45s}
+@keyframes draw{to{stroke-dashoffset:0}}
+.lcard h2{font-family:var(--display);font-size:1.5rem;font-weight:600;letter-spacing:-.04em;margin-bottom:6px}
+.lcard h2 i{font-style:italic;color:var(--gold-2)}
+.lcard>p{font-size:.8rem;color:var(--cream-3);margin-bottom:22px}
+.lbar{height:3px;border-radius:3px;background:var(--t2);overflow:hidden;margin-bottom:20px}
+.lbar i{display:block;height:100%;width:8%;background:linear-gradient(90deg,var(--gold),var(--gold-2));
+  border-radius:3px;transition:width .6s var(--ease)}
+.lsteps{list-style:none;padding:0;display:grid;gap:13px}
+.lsteps li{display:flex;align-items:center;gap:12px;font-size:.84rem;color:var(--cream-4);
+  font-weight:600;opacity:.45;transition:opacity .35s var(--ease),color .35s}
+.lsteps li.on{opacity:1;color:var(--cream-2)}
+.lsteps li.done{opacity:1;color:var(--cream-2)}
+.lsteps b{width:20px;height:20px;flex:0 0 20px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--edge);
+  display:grid;place-items:center;position:relative}
+.lsteps li.on b{box-shadow:inset 0 0 0 1.5px var(--gold)}
+.lsteps li.on b::after{content:"";width:9px;height:9px;border-radius:50%;border:2px solid var(--gold);
+  border-top-color:transparent;animation:sp .7s linear infinite}
+.lsteps li.done b{background:var(--gold);box-shadow:none}
+.lsteps li.done b::after{content:"";width:9px;height:5px;border:2px solid var(--gold-ink);
+  border-top:0;border-right:0;transform:rotate(-45deg) translate(1px,-1px)}
+.lskip{margin-top:26px;font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--cream-4);font-weight:700;opacity:0;transition:opacity .4s}
+.lskip.show{opacity:.8}
+
+/* ---------- the way in to the desk ---------- */
+.deskdoor{display:flex;align-items:center;gap:16px;width:100%;text-align:left;cursor:pointer;
+  appearance:none;border:0;font-family:var(--body);color:var(--cream);
+  background:linear-gradient(135deg,rgba(235,183,83,.26),rgba(235,183,83,.07));
+  box-shadow:inset 0 0 0 1px rgba(235,183,83,.42);border-radius:18px;padding:18px 20px;margin-bottom:14px;
+  transition:transform .16s var(--ease),background .16s}
+.deskdoor:hover{background:linear-gradient(135deg,rgba(235,183,83,.34),rgba(235,183,83,.12))}
+.deskdoor:active{transform:scale(.99)}
+.deskdoor .seal{width:48px;height:48px;flex:0 0 48px;border-radius:50%;background:var(--gold);
+  color:var(--gold-ink);display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:1.25rem}
+.deskdoor .txt{flex:1;min-width:0}
+.deskdoor .txt b{display:block;font-family:var(--display);font-size:1.2rem;font-weight:600;letter-spacing:-.04em;line-height:1.1}
+.deskdoor .txt span{display:block;font-size:.75rem;color:var(--cream-3);margin-top:3px}
+.deskdoor .cnt{font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.1em;
+  background:var(--gold);color:var(--gold-ink);padding:5px 11px;border-radius:999px;white-space:nowrap}
+.deskdoor .chev{width:22px;height:22px;flex:0 0 22px;color:var(--gold)}
+.deskdoor .chev svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+#bDesk{background:var(--gold);color:var(--gold-ink);font-size:.78rem}
+#bDesk:hover{background:#F5C86E}
+
 /* ---------- the desk: a different room ---------- */
 .deskband{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,rgba(235,183,83,.22),rgba(235,183,83,.06));
   border:1px solid rgba(235,183,83,.35);border-radius:18px;padding:16px 18px;margin-bottom:16px}
@@ -159,11 +216,23 @@ pre{background:rgba(0,0,0,.36);border-radius:12px;padding:13px 14px;font-family:
 </style>
 </head>
 <body>
+<div id="load" hidden>
+  <div class="lcard">
+    <span class="lseal"><svg viewBox="0 0 44 44"><path d="M8 40V20a14 14 0 0 1 28 0v20"/><path d="M8 40h28"/><path d="M15 40V24a7 7 0 0 1 14 0v16"/><path d="M22 6v4"/></svg></span>
+    <h2 id="loadTitle">Opening the <i>book</i></h2>
+    <p id="loadSub">One moment while the porter turns the pages.</p>
+    <div class="lbar"><i id="loadBar"></i></div>
+    <ul class="lsteps" id="loadSteps"></ul>
+    <div class="lskip" id="loadSkip">Tap anywhere to carry on</div>
+  </div>
+</div>
+
 <div class="wrap">
   <header>
     <span class="arch"><svg viewBox="0 0 44 44"><path d="M8 40V20a14 14 0 0 1 28 0v20"/><path d="M8 40h28"/><path d="M15 40V24a7 7 0 0 1 14 0v16"/><path d="M22 6v4M22 3.4h.01"/></svg></span>
     <span><small>Jesus College MCR</small><b>The Porter&rsquo;s <i>Book</i></b></span>
-    <span class="right"><button class="btn ghost sm" id="bBack" hidden>Back to the book</button>
+    <span class="right"><button class="btn sm" id="bDesk" hidden>The Desk</button>
+      <button class="btn ghost sm" id="bBack" hidden>Back to the book</button>
       <button class="btn ghost sm" id="bOut" hidden>Sign out</button></span>
   </header>
 
@@ -187,7 +256,12 @@ pre{background:rgba(0,0,0,.36);border-radius:12px;padding:13px 14px;font-family:
 <script>
 /* Put the deployed Apps Script Web App URL here when this page is hosted
    anywhere other than inside Apps Script itself. */
-const API_URL = "https://script.google.com/macros/s/AKfycbxXG-H7GAEZz4RXntwOBpMN6Yv6wyw3XotFJmjNA1OZC5VoLWxAF-E3GNGeccfyBXGFLA/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzJbCZ53lGKG9LSS_zazw7Ng7uATwfe3N0gKT494ik_KDpdm2BAoY1EtUi3P56UJPR-Ug/exec";
+
+/* The desk belongs to this address and no other. It matches PRESIDENT_EMAIL
+   in Register.gs, and both have to agree before the desk is even drawn.
+   Change them together when the presidency changes. */
+const PRESIDENT = "gp566@cam.ac.uk";
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
@@ -237,15 +311,70 @@ const proofs = {};                 /* id:which -> loaded paper, fetched once */
 const proofShow = {};              /* id -> which paper is on show */
 const atDesk = () => location.hash === "#desk";
 
-async function load(){
+/* ---------- the moment after signing in ----------
+   Real work, shown honestly: each line lights while the thing it names is
+   actually happening, and the last one says what the register found. */
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+let loadDone = false;
+function loadOpen(steps){
+  loadDone = false;
+  $("loadSteps").innerHTML = steps.map((s, i) =>
+    '<li id="ls' + i + '"><b></b><span>' + esc(s) + '</span></li>').join("");
+  $("loadBar").style.width = "8%";
+  $("loadSkip").classList.remove("show");
+  const el = $("load");
+  el.hidden = false; el.classList.remove("out");
+  el.onclick = () => { if (loadDone) loadShut(); };
+  setTimeout(() => { if (!$("load").hidden) $("loadSkip").classList.add("show"); }, 1200);
+}
+function loadMark(i, state, text){
+  const li = $("ls" + i);
+  if (!li) return;
+  li.className = state;
+  if (text) li.querySelector("span").textContent = text;
+  const total = $("loadSteps").children.length;
+  const at = state === "done" ? i + 1 : i + 0.4;
+  $("loadBar").style.width = Math.max(8, Math.round(at / total * 100)) + "%";
+}
+function loadShut(){
+  const el = $("load");
+  if (el.hidden) return;
+  el.classList.add("out");
+  setTimeout(() => { el.hidden = true; }, 460);
+}
+
+async function load(full){
+  if (full) loadOpen(["Checking your sign in",
+    "Looking for your name in the register", "Setting your page out"]);
   try{
-    S = await api("state");
+    if (full) await sleep(420);
+    if (full) loadMark(0, "done", "Signed in");
+    if (full) loadMark(1, "on");
+    const both = await Promise.all([api("state"), full ? sleep(700) : null]);
+    S = both[0];
     $("gate").hidden = true; $("app").hidden = false; $("bOut").hidden = false;
+    if (full){
+      loadMark(1, "done", S.member
+        ? "Found: " + (S.member.name || S.email) + (S.member.fresher ? ", first year" : "")
+        : "Not in the book yet");
+      loadMark(2, "on");
+      $("loadTitle").innerHTML = S.member
+        ? 'Welcome <i>back</i>' : 'Let us get you <i>written in</i>';
+      $("loadSub").textContent = S.member
+        ? (S.admin ? "The desk is yours." : "Everything the MCR runs is open to you.")
+        : "Three short steps and the book is open.";
+      await sleep(520);
+      loadMark(2, "done", "Ready");
+    }
     render();
+    if (full){ loadDone = true; await sleep(420); loadShut(); }
   }catch(e){
     setToken("");
-    $("app").hidden = true; $("bOut").hidden = true;
+    S = null;
+    $("app").hidden = true; $("bOut").hidden = true; $("bDesk").hidden = true;
+    loadDone = true; loadShut();
     openGate();
+    if (full) $("gateMsg").textContent = e.message || String(e);
   }
 }
 window.addEventListener("hashchange", () => { if (S) render(); });
@@ -271,7 +400,7 @@ async function onCredential(resp){
   try{
     const r = await api("googleToken", { cred: resp.credential });
     setToken(r.token);
-    await load();
+    await load(true);
   }catch(e){ $("gateMsg").textContent = e.message || String(e); }
 }
 $("bOut").onclick = async () => {
@@ -279,15 +408,27 @@ $("bOut").onclick = async () => {
   setToken(""); S = null; location.hash = ""; location.reload();
 };
 $("bBack").onclick = () => { location.hash = ""; };
+$("bDesk").onclick = () => { location.hash = "desk"; };
 
 /* ---------- render ---------- */
+/* The desk belongs to one address. The server decides it, and the page
+   asks twice: the flag, and the address it was granted to. Anyone else
+   who types #desk is simply put back where they were. */
+function isPresident(){
+  if (!S || S.admin !== true || !S.adminData) return false;
+  const me = String(S.email || "").toLowerCase();
+  /* Two agreements, not one: the server granted it, and the address is the
+     one written into this page. A tampered reply cannot satisfy both. */
+  return me === PRESIDENT.toLowerCase();
+}
 function render(){
-  const desk = S.admin && atDesk();
+  const desk = isPresident() && atDesk();
   document.body.classList.toggle("desk", desk);
   $("bBack").hidden = !desk;
+  $("bDesk").hidden = !isPresident() || desk;
   if (desk){ $("app").innerHTML = deskPage(); wireDesk(); return; }
-  if (!S.admin && atDesk()) location.hash = "";
-  $("app").innerHTML = S.member ? memberCard() : applyFlow();
+  if (!isPresident() && atDesk()) location.hash = "";
+  $("app").innerHTML = (S.member ? memberCard() : applyFlow() + deskDoor());
   wire();
 }
 
@@ -299,10 +440,24 @@ function memberCard(){
     '<p>Your name is written in the register of the Jesus College MCR' +
     (m.since ? ', entered ' + esc(m.since) : '') + '. Anything the MCR runs online reads this same ' +
     'book, so this one yes opens all of it.</p>' +
-    '<div class="acts"><a class="btn gold sm" href="https://jcollegemcr.co.uk" target="_blank" rel="noopener">Open The Chimney</a>' +
-    (S.admin ? '<a class="btn sm" href="#desk">Open the desk</a>' : '') + '</div></div>' +
-    claimCard();
+    '<div class="acts"><a class="btn gold sm" href="https://jcollegemcr.co.uk" target="_blank" rel="noopener">Open The Chimney</a></div></div>' +
+    claimCard() + deskDoor();
 }
+/* The way in to the desk. Only ever drawn for the one address the server
+   grants it to, and it stands on its own rather than sitting among the
+   ordinary buttons. */
+function deskDoor(){
+  if (!isPresident()) return "";
+  const A = S.adminData || {};
+  const waiting = (A.applications || []).filter(x => x.status === "new").length;
+  return '<button class="deskdoor" id="deskDoor">' +
+    '<span class="seal">P</span>' +
+    '<span class="txt"><b>The Desk</b><span>Applications, the book, the freshers and the post' +
+    (waiting ? '' : '. Nothing waiting just now') + '</span></span>' +
+    (waiting ? '<span class="cnt">' + waiting + ' waiting</span>' : '') +
+    '<span class="chev"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></span></button>';
+}
+
 /* In the book already, but arriving in October: the Fortnight is a
    separate yes, asked for here. */
 function claimCard(){
@@ -628,6 +783,7 @@ function wire(){
       tick.checked = true; $("freshWrap").hidden = false;
     }
   };
+  on("deskDoor", () => { location.hash = "desk"; });
   on("bClaim", async () => {
     const b = $("bClaim");
     if (!proof) return $("clMsg").textContent = "Attach the proof first.";
@@ -778,7 +934,7 @@ function tickResend(){
   }else if (b){ b.textContent = "Send another"; b.disabled = false; }
 }
 
-if (getToken()) load(); else openGate();
+if (getToken()) load(true); else openGate();
 </script>
 </body>
 </html>
