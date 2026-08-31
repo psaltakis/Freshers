@@ -110,7 +110,8 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;transition:background 
 /* set on <html> so a season can never overwrite a section */
 :root{--wash:rgba(235,183,83,.18)}
 html[data-place="today"]{--wash:rgba(235,183,83,.20)}
-html[data-place="lodge"]{--wash:rgba(79,200,148,.18)}
+html[data-place="board"],html[data-place="room"],html[data-place="info"]{--wash:rgba(79,200,148,.18)}
+html[data-place="say"]{--wash:rgba(185,143,236,.16)}
 html[data-place="ask"]{--wash:rgba(235,183,83,.18)}
 html[data-place="biz"]{--wash:rgba(185,143,236,.18)}
 html[data-place="gifts"]{--wash:rgba(79,211,201,.18)}
@@ -1199,6 +1200,17 @@ nav .railtop{display:none}
 .tilegrid button.urgentquick{background:var(--gold);color:var(--gold-ink)}
 .tilegrid button.urgentquick small{color:rgba(58,39,0,.75)}
 
+/* Pressed, and waiting on the server. */
+.faces button.busy,.opts button.busy{background:var(--crimson);color:#fff;cursor:progress}
+.faces button.busy .spin,.opts button.busy .spin{border-color:rgba(255,255,255,.35);border-top-color:#fff}
+.faces button.busy .lbl,.opts button.busy .lbl{font-size:.58rem}
+button.busy{cursor:progress}
+
+.beta{font-family:var(--mono);font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;
+  font-weight:700;color:var(--gold-ink);background:var(--gold);border-radius:6px;padding:3px 7px;
+  align-self:center;flex:0 0 auto}
+.gfoot .beta{margin-left:8px}
+
 /* A place held but not yet paid for. Said in the college red, because it is
    the one thing on the card somebody has to act on, with the account details
    underneath so nobody has to go looking. */
@@ -1337,12 +1349,40 @@ nav .railtop{display:none}
   justify-content:center;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:fade .2s ease both}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 @keyframes slideup{from{transform:translateY(18px);opacity:0}to{transform:none;opacity:1}}
-/* Paper, and narrower than it was. These are short forms, and a wide dark
-   panel made three fields look like a chapter. */
-.sheet .inner{background:var(--cream);color:var(--ink);border-radius:20px 20px 0 0;width:100%;
-  max-width:30rem;max-height:100%;max-height:100dvh;display:flex;flex-direction:column;
-  box-shadow:0 -14px 40px rgba(20,1,3,.55);animation:slideup .3s var(--ease) both}
-@media(min-width:34rem){ .sheet{align-items:center} .sheet .inner{border-radius:20px} }
+/* THE SHEET, REBUILT.
+
+   One solid colour, no gradient anywhere, and a crimson band across the top so
+   it reads as part of the college rather than as a browser dialogue that has
+   wandered in. The title sits on the band; the form sits on plain paper below
+   it with real room around the fields, because these are short forms and they
+   were being crushed. The footer is a solid bar so the button you came for is
+   always in the same place. */
+.sheet .inner{background:var(--paper);color:var(--ink);border-radius:20px 20px 0 0;width:100%;
+  max-width:31rem;max-height:100%;max-height:100dvh;display:flex;flex-direction:column;
+  box-shadow:0 -18px 50px rgba(20,1,3,.5);animation:slideup .28s var(--ease) both;overflow:hidden}
+@media(min-width:34rem){ .sheet{align-items:center} .sheet .inner{border-radius:18px} }
+.sheet .scroll{padding:0 0 var(--g2)}
+/* the band, and the title on it */
+.sheet .scroll>h3{background:var(--crimson);color:#fff;margin:0;padding:20px 22px 18px;
+  font-family:var(--display);font-size:1.3rem;font-weight:600;letter-spacing:-.035em;line-height:1.15}
+.sheet .scroll>*:not(h3):not(.sback){margin-left:22px;margin-right:22px}
+.sheet .sback{position:absolute;top:14px;right:14px;z-index:2;background:rgba(255,255,255,.16);
+  color:#fff;border-radius:9px;padding:6px 11px;font-size:.72rem;font-weight:700;gap:5px;display:inline-flex;
+  align-items:center}
+.sheet .sback svg{width:14px;height:14px}
+.sheet .sback:hover{background:rgba(255,255,255,.28)}
+.sheet .inner{position:relative}
+/* room to breathe */
+.sheet .f{margin:0 0 16px}
+.sheet .f span{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.15em;
+  text-transform:uppercase;font-weight:700;margin-bottom:7px}
+.sheet .f input,.sheet .f textarea,.sheet .f select{padding:13px 14px;font-size:.95rem}
+.sheet .f textarea{min-height:7rem;line-height:1.6}
+.sheet .f2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.sheet .foot{padding:14px 22px calc(14px + var(--sab));background:var(--cream-2);
+  border-top:1px solid var(--cream-3)}
+.sheet .foot .acts{margin:0}
+.sheet .btn{padding:13px 22px;font-size:.88rem}
 /* EVERYTHING INSIDE THE SHEET IS DRESSED FOR PAPER.
    The sheet used to be dark, so every block that can appear in one was written
    in cream. Turning the sheet white left those unreadable: a gold panel with
@@ -1481,6 +1521,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
   <div class="hbar">
     <img class="crest" id="crestTop" alt="">
     <div class="wm"><b><span class="lg">Jesus College MCR</span><span class="sm">Jesus MCR</span></b><i id="wmYear"></i></div>
+    <span class="beta" title="Still being built. Tell the committee what is wrong.">Beta</span>
     <span class="sp"></span>
     <button class="iconbtn" id="bRefresh" title="Pull the latest" aria-label="Refresh"><svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.3"/><path d="M20 5v6h-6"/></svg></button>
     <button class="iconbtn avatar" id="bMe" title="Settings" aria-label="Settings">?</button>
@@ -1512,7 +1553,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
   <!-- ===================== SECOND LIFE ===================== -->
   <section id="v-board" hidden>
     <div class="vh"><h2>The <i>board</i></h2><span class="note">What is happening in college, and what to look out for</span>
-      <div class="right"><button class="btn gold sm" id="bNewNotice2">Put something up</button></div></div>
+      <div class="right"><button class="btn gold sm" data-newnotice>Put something up</button></div></div>
     <div id="boardBody"></div>
   </section>
 
@@ -1550,11 +1591,8 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
         <button class="btn ghost sm" id="bNewMotion">Motion</button>
         <button class="btn ghost sm" id="bNewPoll" data-committee hidden>Poll</button></div></div>
     <div class="twocol">
-      <!-- Polls have gone. A question put in Soundings does the same job better:
-           it is anonymous, the result is held back until somebody has answered,
-           and it sits with everything else the room has been asked. -->
-      <div class="colA"><div id="bizMoney"></div><div id="bizIdeas"></div>
-        <div id="bizPollsGone"></div></div>
+      <!-- Polls have gone: a question in Soundings does the same job better. -->
+      <div class="colA"><div id="bizMoney"></div><div id="bizIdeas"></div></div>
       <div class="colB"><div id="bizMeetings"></div><div id="bizMotions"></div></div>
     </div>
   </section>
@@ -1703,7 +1741,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
     <p class="msg" id="gateMsg"></p>
     <div id="gateCheck"></div>
     <div id="gateFix"></div>
-    <div class="gfoot"><span id="gFootYear"></span>
+    <div class="gfoot"><span id="gFootYear"></span><span class="beta">Beta</span>
       <button id="bDiag" style="background:none;border:0;color:var(--cream-3);font-size:11.5px;padding:0;text-decoration:underline">What is wrong?</button></div>
     <div id="diag" hidden></div>
   </div>
@@ -1721,7 +1759,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbyYP1nyo5yR2SDAqNBehXgTDRBjZX7E8VrfvOBlY9naRWzBotoVpZ7vCkZFrLyYyuR6NA/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzb9n4BIJ5mVJtuN8kCjCuaJU9rrG9iAUG-yJ9WqT9CKIJNZy_zrKWMAUQ2m6q4AJVu2g/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -1730,7 +1768,7 @@ const BOOK_REGISTER = "https://jcollegemcr.co.uk/register";
 /* The build this page was written against. If the server reports a different
    one, the deployment answering is not this code, and the membership check it
    is running is whatever was deployed last. Shown under 'What is wrong?'. */
-const EXPECT_BUILD = "chimney-20";
+const EXPECT_BUILD = "chimney-21";
 
 /* JavaScript is alive, so the ring painted before the page was parsed can go.
    It is a pseudo element on <html>, so nothing else can remove it. */
@@ -1828,6 +1866,11 @@ function loadPhotos(){
 function photoRevHave(){
   try{ const raw = localStorage.getItem(PK); return raw ? JSON.parse(raw).rev : ""; }catch(e){ return ""; }
 }
+/* The committee's faces are fetched once and kept on the device against a
+   revision, so this is a no-op on all but the first visit and after a change.
+   It is the only thing that arrives after the page, and it arrives into places
+   that already have a name and initials in them, so nothing moves when it
+   lands. */
 async function syncPhotos(rev){
   if (!rev || photoRevHave() === rev) return;
   try{
@@ -1908,6 +1951,26 @@ function copyText(text, done){
       document.execCommand("copy"); ta.remove(); ok();
     }catch(e){ toast("Could not copy. Select it by hand: " + text.slice(0, 60)); }
   }
+}
+/* A control that has been pressed and is waiting on the server. It is held
+   open, its label swapped for a turning mark, and everything beside it is
+   stopped so nobody answers twice while the first answer is in the post. */
+function sending(el, label){
+  if (!el || el.dataset.busy) return;
+  el.dataset.busy = "1";
+  el.dataset.was = el.innerHTML;
+  el.classList.add("busy");
+  el.innerHTML = '<span class="spin"></span>' + (label ? '<span class="lbl">' + esc(label) + '</span>' : "");
+  const box = el.parentElement;
+  if (box) box.querySelectorAll("button").forEach(b => { if (b !== el) b.disabled = true; });
+}
+function sent(el){
+  if (!el || !el.dataset.busy) return;
+  delete el.dataset.busy;
+  el.classList.remove("busy");
+  if (el.dataset.was) el.innerHTML = el.dataset.was;
+  const box = el.parentElement;
+  if (box) box.querySelectorAll("button").forEach(b => { b.disabled = false; });
 }
 function fail(e){ toast(e && e.message ? e.message : String(e)); }
 function spin(b, label){
@@ -2764,12 +2827,22 @@ function renderCrow(){
   const slots = [
     box("Replies", replies.length, replies.length ? replies[0].subject : "", "none waiting", "ask"),
     box("You are down for", mineSoon.length, mineSoon.length ? mineSoon[0].title : "", "nothing booked", "today"),
-    box("To decide", votes, votes ? "Your vote is wanted" : "", "nothing to decide", "biz"),
-    box("Notices", fresh, fresh ? "Read what has changed" : "", "nothing new", "lodge"),
-    box("Your requests", rooms.length, rooms.length ? rooms[0].title : "", "none open", "ask"),
+    /* Deciding now means answering a question in Soundings, so this counts
+       those and goes there. Motions still needing a vote are counted with them,
+       because from the front page they are the same errand: something is
+       waiting on you. */
+    (function(){
+      const qs = (((S.say || {}).soundings) || []).filter(q => !q.closed && !q.answered);
+      const n = qs.length + votes;
+      return box("To decide", n,
+        qs.length ? qs[0].title : votes ? "Your vote is wanted" : "",
+        "nothing to decide", qs.length ? "say" : "biz");
+    })(),
+    box("Notices", fresh, fresh ? "Read what has changed" : "", "nothing new", "board"),
+    box("Your requests", rooms.length, rooms.length ? rooms[0].title : "", "none open", "room"),
     box("The room", (S.blackouts || []).filter(b => b.date === t).length,
       (S.blackouts || []).filter(b => b.date === t)[0]
-        ? (S.blackouts || []).filter(b => b.date === t)[0].title : "", "free today", "lodge"),
+        ? (S.blackouts || []).filter(b => b.date === t)[0].title : "", "free today", "room"),
     box("Your ideas", answered, answered ? "The committee answered" : "", "none up yet", "biz"),
     box("Tuesday hour", (S.hours || []).filter(h => h.mine).length,
       (S.hours || []).filter(h => h.mine)[0]
@@ -3786,17 +3859,10 @@ function renderIdeas(){
       "</div></div></div>").join("")
       : '<div class="card"><p>Nothing suggested yet. Somebody has to be first, and it may as well be about the coffee machine.</p></div>'));
 }
-/* Kept only to say where polls went, once, to anybody who remembers them. */
-function renderPolls(){
-  if ($("bizPollsGone")){
-    const open = (((S.say || {}).soundings) || []).filter(q => !q.closed).length;
-    return put("bizPollsGone", '<div class="grp">Polls</div><div class="card">' +
-      '<p>Polls now live under <b>Soundings</b>, where an answer is anonymous and nobody sees the ' +
-      'result until they have given theirs.' + (open ? " There " + (open === 1 ? "is 1 question" :
-      "are " + open + " questions") + " open." : "") + '</p>' +
-      '<div class="acts"><button class="btn cream sm" data-goto="say">Go to Soundings</button></div></div>');
-  }
-}
+/* Polls are gone. A question in Soundings does the same job and does it better:
+   anonymous, and the result held back until somebody has answered. Nothing is
+   drawn here at all. */
+function renderPolls(){}
 function openIdea(){
   sheet("Suggest something",
     '<div class="card"><p class="lede">Anything the MCR should buy, run or change. Other members back it, and once enough have, the committee has to answer here with a reason.</p></div>' +
@@ -4976,6 +5042,9 @@ function swapCard(w, hold){
         (w.waitLeft !== null ? " of " + (w.waiting + w.waitLeft) : "") + "</span>" : "") +
       (w.payTo ? "<span>pay " + esc(w.payTo) + "</span>" : "") + "</div>" +
     (w.note ? '<p class="swn">' + esc(w.note) + "</p>" : "") +
+    /* Directly above the buttons, because this is the thing somebody needs at
+       the moment they are deciding what to do about their place. */
+    (m && m.status !== "waiting" ? bankHtml(w) : "") +
     (m
       ? '<div class="swyou ' + esc(m.status) + (urgent ? " urgent" : "") + '">' +
         (m.status === "paid"
@@ -4985,7 +5054,6 @@ function swapCard(w, hold){
               (days ? days + (days === 1 ? " day" : " days") + " to pay" + (w.payTo ? ", " + esc(w.payTo) : "")
                     : "Today is the last day to pay") +
               ". After that the committee may pass it on.</span></span>" +
-              bankHtml(w) +
               '<span class="clock"><i style="width:' + Math.round(days / (hold || 5) * 100) + '%"></i></span>'
             : '<span class="yt"><b>' + m.place + ordinal(m.place) + " on the list</b>" +
               "<span>You will be told the moment a place opens.</span></span>") +
@@ -5317,9 +5385,13 @@ document.addEventListener("click", async e => {
     if (t.hasAttribute("data-mood")){
       const now = ((S.say || {}).topics || []).filter(x => x.key === d.mood)[0];
       const n = Number(d.n), same = now && now.mine === n;
+      /* An answer goes to a server and takes a moment. Without something to
+         look at, somebody presses again, and again. */
+      sending(t, same ? "Taking it back" : "Sending");
       try{
         const r = await api("moodSet", { topic: d.mood, score: same ? 0 : n,
           comment: same ? "" : (now ? now.myComment : "") });
+        sent(t);
         S.say = r.say; renderSay(); renderBadges();
         if (same) return toast("Taken back.");
         /* A number on its own tells the committee that something is wrong and
@@ -5328,7 +5400,7 @@ document.addEventListener("click", async e => {
            nobody makes. It can be skipped. */
         const tp = (r.say.topics || []).filter(x => x.key === d.mood)[0];
         return sayLine(tp, n);
-      }catch(e){ fail(e); }
+      }catch(e){ sent(t); fail(e); }
       return;
     }
     if (t.hasAttribute("data-sayreport")){
@@ -5384,11 +5456,13 @@ document.addEventListener("click", async e => {
         }));
     }
     if (t.hasAttribute("data-sound")){
+      sending(t, "Sending");
       try{
         const r = await api("soundingAnswer", { id: d.sound,
           choice: d.choice || "", score: Number(d.n) || 0 });
+        sent(t);
         S.say = r.say; renderSay(); renderBadges(); toast("Answered.");
-      }catch(e){ fail(e); }
+      }catch(e){ sent(t); fail(e); }
       return;
     }
     if (t.hasAttribute("data-soundsay")){
