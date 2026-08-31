@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#48050A">
-<title>The Porter&rsquo;s Book &middot; Jesus College MCR</title>
+<title>The MCR Book &middot; Jesus College MCR</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Manrope:wght@500..800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
-   The Porter's Book. Two rooms: the door, and the President's desk.
+   The MCR Book. Two rooms: the door, and the President's desk.
    ============================================================ */
 :root{
   --crimson:#B4141B; --crimson-2:#8E0F14; --crimson-3:#6B080D; --crimson-4:#48050A;
@@ -220,7 +220,7 @@ pre{background:rgba(0,0,0,.36);border-radius:12px;padding:13px 14px;font-family:
   <div class="lcard">
     <span class="lseal"><svg viewBox="0 0 44 44"><path d="M8 40V20a14 14 0 0 1 28 0v20"/><path d="M8 40h28"/><path d="M15 40V24a7 7 0 0 1 14 0v16"/><path d="M22 6v4"/></svg></span>
     <h2 id="loadTitle">Opening the <i>book</i></h2>
-    <p id="loadSub">One moment while the porter turns the pages.</p>
+    <p id="loadSub">One moment while we look you up in the register.</p>
     <div class="lbar"><i id="loadBar"></i></div>
     <ul class="lsteps" id="loadSteps"></ul>
     <div class="lskip" id="loadSkip">Tap anywhere to carry on</div>
@@ -230,7 +230,7 @@ pre{background:rgba(0,0,0,.36);border-radius:12px;padding:13px 14px;font-family:
 <div class="wrap">
   <header>
     <span class="arch"><svg viewBox="0 0 44 44"><path d="M8 40V20a14 14 0 0 1 28 0v20"/><path d="M8 40h28"/><path d="M15 40V24a7 7 0 0 1 14 0v16"/><path d="M22 6v4M22 3.4h.01"/></svg></span>
-    <span><small>Jesus College MCR</small><b>The Porter&rsquo;s <i>Book</i></b></span>
+    <span><small>Jesus College MCR</small><b>The <i>MCR</i> Book</b></span>
     <span class="right"><button class="btn sm" id="bDesk" hidden>The Desk</button>
       <button class="btn ghost sm" id="bBack" hidden>Back to the book</button>
       <button class="btn ghost sm" id="bOut" hidden>Sign out</button></span>
@@ -256,12 +256,8 @@ pre{background:rgba(0,0,0,.36);border-radius:12px;padding:13px 14px;font-family:
 <script>
 /* Put the deployed Apps Script Web App URL here when this page is hosted
    anywhere other than inside Apps Script itself. */
-const API_URL = "https://script.google.com/macros/s/AKfycbzJbCZ53lGKG9LSS_zazw7Ng7uATwfe3N0gKT494ik_KDpdm2BAoY1EtUi3P56UJPR-Ug/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbybvMOjnZB3ej2o_m9uIUBmPK-BOjbhJ7eHTGy1URfSxC2OLjcF1fnoew7lVCkTRULaig/exec";
 
-/* The desk belongs to this address and no other. It matches PRESIDENT_EMAIL
-   in Register.gs, and both have to agree before the desk is even drawn.
-   Change them together when the presidency changes. */
-const PRESIDENT = "gp566@cam.ac.uk";
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
@@ -303,6 +299,7 @@ function unspin(b){ if (!b) return; b.disabled = false; if (b.dataset.was) b.inn
 
 /* ---------- state ---------- */
 let S = null;
+let unchecked = false;             /* carrying on without the college check */
 let proof = null;                  /* the main paper */
 let proof2 = null;                 /* the first year paper, if they send one */
 let resendAt = 0;
@@ -414,12 +411,15 @@ $("bDesk").onclick = () => { location.hash = "desk"; };
 /* The desk belongs to one address. The server decides it, and the page
    asks twice: the flag, and the address it was granted to. Anyone else
    who types #desk is simply put back where they were. */
+/* Who keeps the desk is decided in one place only: the Config tab of the
+   spreadsheet, read live by the server on every request. This page never
+   holds the address. It draws the desk when the server says the signed in
+   person is the President and hands over the desk data, and every action
+   behind it is checked again server side, so editing this in a browser
+   gets somebody an empty room and nothing else. */
 function isPresident(){
-  if (!S || S.admin !== true || !S.adminData) return false;
-  const me = String(S.email || "").toLowerCase();
-  /* Two agreements, not one: the server granted it, and the address is the
-     one written into this page. A tampered reply cannot satisfy both. */
-  return me === PRESIDENT.toLowerCase();
+  return !!(S && S.admin === true && S.adminData &&
+    String(S.adminData.president || "").toLowerCase() === String(S.email || "").toLowerCase());
 }
 function render(){
   const desk = isPresident() && atDesk();
@@ -465,8 +465,8 @@ function claimCard(){
   if (S.member && S.member.fresher)
     return '<div class="card"><span class="stamp fr">Fortnight ' + esc(S.member.fresher) + '</span>' +
       '<h3 style="margin-top:12px">The Fortnight is <i>yours</i></h3>' +
-      '<p>You are down as a first year, so every event is open to you, from the first evening to ' +
-      'the fireworks.</p></div>';
+      '<p>You are down as a first year, so every event is open to you, first evening to last, ' +
+      'including the things that are not on the programme yet.</p></div>';
   if (c && c.status === "new")
     return '<div class="card"><span class="stamp wait">With the President</span>' +
       '<h3 style="margin-top:12px">Your Fortnight papers are in</h3>' +
@@ -503,8 +503,10 @@ function applyFlow(){
     return '<div class="card">' + stepper(3) +
       '<span class="stamp wait">With the President</span>' +
       '<h3 style="margin-top:12px">Your application is in</h3>' +
-      '<p>Sent ' + esc(ap.at) + '. The President reads these in person, so give it a day or two. ' +
-      'The yes or the no lands in your inbox either way, and this page will change on its own.</p>' +
+      '<p>Sent ' + esc(ap.at) + '. ' + (ap.verified === false
+        ? 'Without the college check this one is confirmed by hand, so allow up to a week.'
+        : 'The President reads these in person, so give it a day or two.') +
+      ' The yes or the no lands in your inbox either way, and this page will change on its own.</p>' +
       '<div class="kv"><b>Programme</b><span>' + esc(ap.programme) + '</span>' +
       '<b>Year</b><span>' + esc(ap.year) + '</span>' +
       (ap.note ? '<b>Note</b><span>' + esc(ap.note) + '</span>' : '') + '</div>' +
@@ -515,7 +517,7 @@ function applyFlow(){
       (ap.reply ? '<p>' + esc(ap.reply) + '</p>' : '') +
       '<p class="lede">If something was missing you can go round again: same door, fresh code.</p>' +
       startCard() + '</div>';
-  if (S.verified) return formCard();
+  if (S.verified || unchecked) return formCard();
   if (S.codeSentTo) return codeCard();
   return '<div class="card">' + stepper(1) +
     '<h3>Not in the book <i>yet</i></h3>' +
@@ -525,32 +527,52 @@ function applyFlow(){
     'from the President.</p>' + startCard() + '</div>';
 }
 function startCard(){
-  const jesus = S.jesusAddress || "";
-  return jesus
-    ? '<p class="lede" style="margin-top:10px">The code goes to <b>' + esc(jesus) + '</b>, the Jesus ' +
-      'counterpart of the address you signed in with. It comes from the President\u2019s own account, ' +
-      'and Outlook sometimes files it under <b>Other</b> or <b>Junk</b> the first time, so look there ' +
-      'before asking for another.</p>' +
-      '<div class="acts"><button class="btn gold" id="bCode">Email me a code</button></div>'
-    : '<p class="lede" style="margin-top:10px">Your address is not a personal CRSid, so the code ' +
-      'cannot be sent automatically. Write to the President instead and you will be added by hand.</p>';
+  const to = S.codeAddresses || [];
+  if (!to.length)
+    return '<p class="lede" style="margin-top:10px">Your address is not a personal CRSid, so the ' +
+      'code cannot be sent automatically. Write to the President instead and you will be added by hand.</p>';
+  const left = S.codesLeft === undefined ? 2 : S.codesLeft;
+  if (!left) return outOfCodes();
+  return '<p class="lede" style="margin-top:10px">The code goes to ' + addrList(to) +
+    ', which forwards to your University inbox. That forwarding is the point: a code that ' +
+    'arrives proves you are at Jesus, not merely that the CRSid is yours. It lasts an hour.</p>' +
+    '<div class="acts"><button class="btn gold" id="bCode">Email me a code</button>' +
+    '<span class="lede">' + left + (left === 1 ? " code" : " codes") + ' left today</span></div>';
+}
+/* Both codes spent. The door does not close, it just gets slower. */
+function outOfCodes(){
+  return '<p class="lede" style="margin-top:10px">That is both of today\u2019s codes gone. You can ' +
+    'still apply without the college check, and the President will confirm you by hand instead. ' +
+    '<b>That can take up to a week</b>, where the code takes a minute. If you would rather wait for ' +
+    'tomorrow and try the code again, that is usually quicker.</p>' +
+    '<div class="acts"><button class="btn gold" id="bSkip">Carry on without it</button></div>';
+}
+function addrList(a){
+  const l = (a || []).map(x => '<b>' + esc(x) + '</b>');
+  return l.length < 2 ? (l[0] || "") : l.slice(0, -1).join(", ") + " and " + l[l.length - 1];
 }
 function codeCard(){
   const wait = Math.max(0, Math.ceil((resendAt - Date.now()) / 1000));
   return '<div class="card">' + stepper(1) +
     '<h3>The code is on its <i>way</i></h3>' +
-    '<p>Sent to <b>' + esc(S.codeSentTo) + '</b>. Six digits, good for fifteen minutes. ' +
-    'Not in the inbox? Try Junk and the Other tab; drag it across once and Outlook learns.</p>' +
+    '<p>Sent to ' + addrList(S.codeSentTo) + ', and forwarded on to your University inbox. ' +
+    'Six digits, good for an hour. Not there? Try Junk and the Other tab.</p>' +
     '<label class="f code" style="margin-top:14px"><span>The code</span>' +
     '<input id="codeIn" inputmode="numeric" autocomplete="one-time-code" maxlength="7" placeholder="000000"></label>' +
     '<div class="acts"><button class="btn gold" id="bVerify">That is the one</button>' +
-    '<button class="btn ghost sm" id="bResend"' + (wait ? " disabled" : "") + '>' +
-    (wait ? "Send another in " + wait + "s" : "Send another") + '</button></div>' +
+    ((S.codesLeft || 0) > 0
+      ? '<button class="btn ghost sm" id="bResend"' + (wait ? " disabled" : "") + '>' +
+        (wait ? "Send another in " + wait + "s" : "Send another") + '</button>'
+      : '<button class="btn ghost sm" id="bSkip">Carry on without it</button>') + '</div>' +
     '<p class="msg" id="codeMsg"></p></div>';
 }
 function formCard(){
+  const slow = !S.verified && unchecked;
   return '<div class="card">' + stepper(2) +
     '<h3>Now the <i>papers</i></h3>' +
+    (slow ? '<p class="lede" style="margin-bottom:12px;color:var(--gold-2)"><b>Without the college ' +
+      'check this takes up to a week.</b> The President has to confirm you against the college ' +
+      'lists by hand. Everything below matters more than usual, so be generous with the proof.</p>' : '') +
     '<p class="lede">A minute of form. The proof can be anything that shows you are a Jesus ' +
     'student: a CamSIS screenshot, your college confirmation letter, a student card. ' +
     'It is seen by the President and nobody else.</p>' +
@@ -648,9 +670,14 @@ function appCard(x){
     '<span class="stamp wait">Waiting</span>' +
     (claim ? ' <span class="stamp fr">Fortnight claim</span>'
            : x.fresher ? ' <span class="stamp fr">Asking for the Fortnight</span>' : '') +
+    (!claim && x.verified === false
+      ? ' <span class="stamp no">College address not checked</span>' : '') +
     '<h3 style="margin-top:12px">' + esc(x.name || x.key) + '</h3>' +
     (claim ? '<p class="lede" style="margin-bottom:8px">Already in the book. Asking for the full ' +
       'Fortnight as a first year.</p>' : '') +
+    (!claim && x.verified === false ? '<p class="lede" style="margin-bottom:8px">They used both of ' +
+      'their codes without one arriving, so no code confirmed this address. Worth checking against ' +
+      'the college lists before writing them in.</p>' : '') +
     '<div class="kv"><b>Address</b><span class="mono">' + esc(x.email) + '</span>' +
     '<b>Programme</b><span>' + esc(x.programme) + '</span>' +
     '<b>Year</b><span>' + esc(x.year) + '</span>' +
@@ -714,23 +741,54 @@ function deskFreshers(A){
 }
 function deskPost(A){
   const log = A.mail || [];
-  return '<div class="twocol"><div class="dk"><h3>Is the post getting through?</h3>' +
+  const route = A.codeTo || "both";
+  const opt = (v, label, why) => '<label class="check" style="align-items:flex-start">' +
+    '<input type="radio" name="codeTo" value="' + v + '"' + (route === v ? " checked" : "") + '>' +
+    '<span><b>' + label + '</b><br><span class="lede">' + why + '</span></span></label>';
+  return '<div class="twocol"><div class="dk"><h3>Why the post was <i>vanishing</i></h3>' +
+    '<p class="lede" style="margin-bottom:10px">Every message used to go out under the display name ' +
+    '<b>Jesus College MCR</b> while the envelope belonged to the Google account running the script. ' +
+    'To Microsoft Defender, which guards every cam.ac.uk mailbox, a friendly name claiming to be a ' +
+    'college body on a message from somewhere that is not the college is display name spoofing, and ' +
+    'the action for that is quarantine. Quarantine is silent: no bounce, nothing in Junk, because it ' +
+    'never reaches the mailbox. That is the symptom exactly, including why replying by hand worked.</p>' +
+    '<p class="lede" style="margin-bottom:12px">Forwarding made it likelier, not less. Relaying from ' +
+    'jesus.cam.ac.uk breaks SPF alignment, one more mark against a message already carrying a name ' +
+    'that does not match. So the name is gone, the HTML twin is gone, it is plain text, and it goes ' +
+    'through Gmail so a copy sits in your Sent and any bounce comes back where you can read it.</p>' +
+    opt("jesus", "Jesus only", "The default, and the point of the step: it forwards on, so arrival proves college membership.") +
+    opt("both", "Both addresses", "Belt and braces while you are testing. Two copies, same code.") +
+    opt("cam", "University only", "crsid@cam.ac.uk. Proves the CRSid, proves nothing about Jesus.") +
+    '<div class="acts"><button class="btn gold sm" id="bRoute">Save the route</button></div></div>' +
+    '<div class="dk"><h3>Prove it</h3>' +
     '<div class="stat"><div><b>' + (A.mailQuota >= 0 ? A.mailQuota : "?") + '</b><span>sends left today</span></div>' +
-    '<div><b style="font-size:1rem;padding-top:6px">' + esc(A.sendAs || A.president || "") + '</b><span>goes out as</span></div></div>' +
-    '<p class="lede" style="margin:10px 0">Every message leaves through Google from that account. ' +
-    'Cambridge\u2019s Exchange usually lets it in but files an unfamiliar sender under <b>Junk</b> or ' +
-    'the <b>Other</b> tab the first time. Moving one to the inbox teaches it. If the log below says ' +
-    'sent and nothing arrives at all, that is where it is.</p>' +
-    '<p class="lede">If you have a send-as alias set up in Gmail, such as president@mcr.jesus.cam.ac.uk, ' +
-    'put it in <span class="mono">SEND_AS</span> at the top of Register.gs: the college servers know that ' +
-    'name and it lands cleaner.</p>' +
-    '<div class="acts"><button class="btn gold sm" id="bMailTest">Send me a test</button></div></div>' +
-    '<div class="dk"><h3>The log</h3>' +
+    '<div><b style="font-size:.95rem;padding-top:8px">' + esc(A.sendAs || A.president || "") + '</b><span>goes out as</span></div></div>' +
+    '<p class="lede" style="margin:10px 0">This sends one test to each of your two addresses, ' +
+    'whatever the route says. Both should arrive now. Each one also lands in your Gmail Sent, so if ' +
+    'a message is refused later the bounce comes back into that same thread and names the reason.</p>' +
+    '<p class="lede">If you have a verified send-as alias in Gmail on a college domain, put it in ' +
+    '<span class="mono">SEND_AS</span> at the top of Register.gs. That is the only case where a ' +
+    'display name is safe, and you can then set <span class="mono">SEND_NAME</span> as well.</p>' +
+    '<div class="acts"><button class="btn gold sm" id="bMailTest">Send both tests</button></div>' +
+    '<div id="testOut"></div></div>' +
+    '</div><div class="grp"><b>The log</b><span>sent means handed to Google, not read</span></div>' +
+    '<div class="dk">' +
     (log.length ? '<table class="ledger">' + log.map(m =>
       '<tr><td class="k">' + esc(m.at) + '</td><td><b>' + esc(m.subject) + '</b><br><span class="mono" style="font-size:.62rem;color:var(--cream-4)">' +
       esc(m.to) + '</span>' + (m.error ? '<br><span class="bad" style="font-size:.66rem">' + esc(m.error) + '</span>' : '') +
       '</td><td class="a">' + (m.ok ? '<span class="ok">sent</span>' : '<span class="bad">failed</span>') + '</td></tr>').join("") +
-      '</table>' : '<p class="lede">Nothing sent yet.</p>') + '</div></div>';
+      '</table>' : '<p class="lede">Nothing sent yet.</p>') + '</div>';
+}
+function deskHandover(A){
+  return '<div class="dk"><h3>Who keeps the <i>desk</i></h3>' +
+    '<p class="lede">The desk is open to one address, kept in the spreadsheet under ' +
+    '<span class="mono">Config \u2192 president</span> and read live. Nothing is written into the ' +
+    'page or the code, so handing it on is a single edit and takes effect immediately.</p>' +
+    '<div class="kv" style="margin-top:12px"><b>Today</b><span class="mono">' + esc(A.president || "") + '</span></div>' +
+    '<label class="f" style="margin-top:12px"><span>Hand it to</span>' +
+    '<input id="presIn" placeholder="abc123@cam.ac.uk"></label>' +
+    '<div class="acts"><button class="btn ghost sm danger" id="bPres">Hand the desk on</button>' +
+    '<span class="lede">You lose the desk the moment this is saved.</span></div></div>';
 }
 function deskApps(A){
   const url = A.webUrl || "YOUR_WEB_APP_URL", key = A.apiKey || "API_KEY";
@@ -747,7 +805,8 @@ function deskApps(A){
     'match on the <span class="mono">key</span> column, skip status <span class="mono">gone</span>. ' +
     'Tab <span class="mono">Freshers</span> is the Fortnight list.</p>' +
     '<pre>' + esc('SpreadsheetApp.openById("' + (A.sheetId || "SHEET_ID") + '")') + '</pre>' +
-    '<div class="acts"><a class="btn gold sm" href="' + esc(A.sheetUrl || "#") + '" target="_blank" rel="noopener">Open the spreadsheet</a></div></div></div>';
+    '<div class="acts"><a class="btn gold sm" href="' + esc(A.sheetUrl || "#") + '" target="_blank" rel="noopener">Open the spreadsheet</a></div></div>' +
+    deskHandover(A) + '</div>';
 }
 
 /* ---------- wiring: the door ---------- */
@@ -755,13 +814,15 @@ function wire(){
   const on = (id, fn) => { const el = $(id); if (el) el.onclick = fn; };
   on("bCode", async () => {
     const b = $("bCode"); spin(b, "Sending");
-    try{ const r = await api("requestCode"); S.codeSentTo = r.sentTo;
+    try{ const r = await api("requestCode");
+      S.codeSentTo = r.sentTo; S.codesLeft = r.codesLeft;
       resendAt = Date.now() + 60000; render(); tickResend(); }
     catch(e){ unspin(b); fail(e); }
   });
   on("bResend", async () => {
     const b = $("bResend"); spin(b, "Sending");
-    try{ const r = await api("requestCode"); S.codeSentTo = r.sentTo;
+    try{ const r = await api("requestCode");
+      S.codeSentTo = r.sentTo; S.codesLeft = r.codesLeft;
       resendAt = Date.now() + 60000; render(); tickResend(); }
     catch(e){ unspin(b); fail(e); }
   });
@@ -771,7 +832,8 @@ function wire(){
       S.verified = true; render(); }
     catch(e){ unspin(b); $("codeMsg").textContent = e.message || String(e); }
   });
-  on("bAgain", () => { S.application = null; S.verified = false; render(); });
+  on("bAgain", () => { S.application = null; S.verified = false; unchecked = false; render(); });
+  on("bSkip", () => { unchecked = true; render(); });
   pick("apFile", "pickName", "apMsg", "Attach the proof", p => proof = p);
   pick("apFile2", "pickName2", "apMsg", "Attach the first year proof", p => proof2 = p);
   pick("clFile", "clName", "clMsg", "Attach the proof", p => proof = p);
@@ -801,7 +863,8 @@ function wire(){
     try{ const r = await api("apply", { name: $("apName").value, programme: $("apProg").value,
         year: $("apYear").value, note: $("apNote").value, proof: proof,
         fresher: !!($("apFresh") && $("apFresh").checked), proof2: proof2 });
-      S.application = r.application; S.verified = false; proof = proof2 = null; render();
+      S.application = r.application; S.verified = false; unchecked = false;
+      proof = proof2 = null; render();
       toast("Sent. The President has it."); }
     catch(e){ unspin(b); $("apMsg").textContent = e.message || String(e); }
   });
@@ -887,9 +950,34 @@ function wireDesk(){
   });
   on("bMailTest", async el => {
     spin(el, "Sending");
-    try{ const r = await api("mailTest");
-      S.adminData.mail = r.mail; S.adminData.mailQuota = r.quota; render();
-      toast(r.ok ? "Sent to " + r.to + ". Now look in Junk and Other." : "Failed: " + r.error); }
+    try{
+      const r = await api("mailTest");
+      S.adminData = r.adminData || S.adminData;
+      S.adminData.mail = r.mail; S.adminData.mailQuota = r.quota;
+      render();
+      const out = $("testOut");
+      if (out) out.innerHTML = '<table class="ledger" style="margin-top:12px">' +
+        (r.tried || []).map(t => '<tr><td class="k">' + esc(t.to) + '</td><td class="a">' +
+          (t.ok ? '<span class="ok">handed on</span>'
+                : '<span class="bad">' + esc(t.error || "failed") + '</span>') +
+          '</td></tr>').join("") + '</table>' +
+        '<p class="lede" style="margin-top:8px">Now go and look. The one that appears in your inbox ' +
+        'is the address that works.</p>';
+      toast(r.ok ? "Two tests away. Go and look." : "Failed: " + r.error);
+    }catch(e){ unspin(el); fail(e); }
+  });
+  on("bRoute", async el => {
+    const picked = document.querySelector('input[name="codeTo"]:checked');
+    if (!picked) return toast("Pick one first.");
+    take(el, "Saving", "codeRoute", { codeTo: picked.value }, "Saved. New codes go that way.");
+  });
+  on("bPres", async el => {
+    const next = ($("presIn").value || "").trim();
+    if (!next) return toast("An address first.");
+    if (!confirm("Hand the desk to " + next + "? You lose it as soon as this saves.")) return;
+    spin(el, "Handing over");
+    try{ await api("presidentSet", { email: next });
+      toast("Done. The desk is theirs."); location.hash = ""; await load(); }
     catch(e){ unspin(el); fail(e); }
   });
   on("bKey", async () => {
