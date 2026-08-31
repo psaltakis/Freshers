@@ -37,7 +37,7 @@ html.up::before{content:none}
   --crimson:#B4141B; --crimson-2:#A31319; --crimson-3:#7A0D12; --crimson-4:#48050A;
   --crimson-lite:#E8535C;
   --cream:#FBF3EC; --cream-2:#F2E4D8; --cream-3:#E2CDBC; --cream-4:#A78C77; --paper:#FFFDFA;
-  --ink:#2A0F0C;
+  --ink:#2A0F0C; --ink-soft:#6E4F4A;
   --gold:#E2A93C; --gold-2:#F7DDA6; --gold-ink:#4A2E00;
   --social:#F2AB43; --sport:#4FC894; --welfare:#63ADEE; --academic:#B98FEC;
   --food:#F58A62; --formal:#E7C763; --trip:#4FD3C9; --meeting:#CDBBA8;
@@ -555,16 +555,6 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .upbusy{display:flex;align-items:center;gap:10px;color:var(--cream-3);font-weight:600;font-size:0.711rem}
 .upswap{position:absolute;right:10px;bottom:10px;background:rgba(0,0,0,.66);color:var(--cream);
   border-radius:999px;padding:5px 12px;font-size:0.66rem;font-weight:700}
-.kindrow{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
-.kindrow button{background:var(--t3);color:var(--cream-3);border-radius:999px;padding:8px 14px;
-  font-size:0.684rem;font-weight:700;transition:.16s}
-.kindrow button:hover{color:var(--cream)}
-.kindrow button[aria-pressed="true"]{background:currentColor;color:var(--gold-ink)}
-.kindrow button[aria-pressed="true"].k-gift{color:#06301C;background:var(--sport)}
-.kindrow button[aria-pressed="true"].k-sell{color:var(--gold-ink);background:var(--gold)}
-.kindrow button[aria-pressed="true"].k-want{color:#0B2A45;background:var(--welfare)}
-.kindrow button[aria-pressed="true"].k-lost{color:#fff;background:var(--crimson-lite)}
-.kindrow button[aria-pressed="true"].k-found{color:#04322E;background:var(--trip)}
 .f span i{font-style:normal;color:var(--cream-4);opacity:.7;letter-spacing:0;text-transform:none}
 .whovote{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
 .whovote span{display:flex;gap:7px;background:var(--t3);border-radius:999px;padding:5px 11px;
@@ -886,40 +876,7 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .tb-leadership .r{color:var(--gold)} .tb-welfare .r{color:var(--welfare)}
 .tb-socials .r{color:var(--food)} .tb-academic .r{color:var(--sport)} .tb-other .r{color:var(--meeting)}
 
-/* =================================================================
-   SECOND LIFE, laid out the way people already know how to shop:
-   a dense grid of photographs, the price loud, everything else quiet.
-   ================================================================= */
-.vgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--g)}
-@media(min-width:560px){.vgrid{grid-template-columns:repeat(3,1fr)}}
-@media(min-width:860px){.vgrid{grid-template-columns:repeat(4,1fr)}}
-@media(min-width:1200px){.vgrid{grid-template-columns:repeat(5,1fr)}}
-.vc{position:relative;background:var(--t1);border-radius:var(--r2);overflow:hidden;text-align:left;
-  display:flex;flex-direction:column;transition:transform .18s var(--ease),background .18s}
-.vc:hover{transform:translateY(-3px);background:var(--t2)}
-.vc .shot{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;background:var(--t3)}
-.vc .noshot{width:100%;aspect-ratio:3/4;display:grid;place-items:center;background:var(--t3);
-  font-family:var(--display);font-size:2.316rem;font-weight:600;color:rgba(255,255,255,.28)}
-.vc .tagk{position:absolute;top:7px;left:7px;font-family:var(--mono);font-size:0.635rem;letter-spacing:.14em;
-  text-transform:uppercase;font-weight:700;padding:3px 8px;border-radius:999px;color:#1A0F02}
-.k-gift{background:var(--sport)} .k-sell{background:var(--gold)} .k-want{background:var(--welfare)}
-.k-lost{background:var(--crimson-lite);color:#fff} .k-found{background:var(--trip)}
-.vc .meta{padding:9px 10px 11px;display:flex;flex-direction:column;flex:1}
-.vc .price{font-size:1rem;font-weight:800;letter-spacing:-.02em;line-height:1}
-.vc .price.free{color:var(--sport)}
-.vc .ttl{font-size:.82rem;font-weight:600;color:var(--cream-2);margin-top:4px;line-height:1.3;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.vc .by{font-size:0.66rem;color:var(--cream-4);margin-top:auto;padding-top:7px;font-weight:600;
-  display:flex;align-items:center;gap:6px}
-.vc .by i{width:16px;height:16px;border-radius:50%;background:var(--t3);display:grid;place-items:center;
-  font-family:var(--display);font-size:0.635rem;font-style:normal;font-weight:700;color:var(--cream-3);flex:0 0 16px}
-.vc.gone .shot,.vc.gone .noshot{opacity:.35}
-.vc .sold{position:absolute;top:38%;left:0;right:0;text-align:center;font-family:var(--mono);font-size:0.66rem;
-  letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:#fff;background:rgba(0,0,0,.6);padding:5px 0}
-/* the item, opened */
-.vbig{width:100%;border-radius:var(--r2);aspect-ratio:4/3;object-fit:cover;background:var(--t3);margin-bottom:14px}
-
-/* ---------- ideas and polls ---------- */
+/* ---------- ideas ---------- */
 .idea{display:flex;gap:14px;padding:15px 17px;background:var(--t1);border-radius:var(--r);
   margin-bottom:var(--g);align-items:flex-start}
 .idea .back{flex:0 0 5.6rem;text-align:center}
@@ -1026,13 +983,11 @@ nav .railtop{display:none}
 @media(min-width:1920px){:root{--rail:12.5rem}}
 /* wide screens get more in a row, not a wider row of the same things */
 @media(min-width:1500px){
-  .vgrid{grid-template-columns:repeat(6,1fr)}
   .whogrid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
   .jgrid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
   .cols.two{grid-template-columns:1fr 1fr}
   .linkgrid{grid-template-columns:repeat(3,1fr)}
   .tilegrid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}}
-@media(min-width:1900px){.vgrid{grid-template-columns:repeat(7,1fr)}}
 /* and the reading column stays readable however wide the window is */
 @media(min-width:1000px){
   .card p,.notice p,.idea .t p,.swn,.wall .line{max-width:78ch}}
@@ -1215,15 +1170,18 @@ button.busy{cursor:progress}
 
 /* A place held but not yet paid for. Said in the college red, because it is
    the one thing on the card somebody has to act on, with the account details
-   underneath so nobody has to go looking. */
-.swyou.held .yt.owed b,.yt.owed b{color:var(--crimson)}
-.yt.owed span{color:var(--crimson-3)}
+   above so nobody has to go looking. The card is dark, so it is the light
+   step of the red: the deep crimson measured under two to one against this
+   ground and was there without being readable. */
+.swyou.held .yt.owed b,.yt.owed b{color:var(--crimson-lite)}
+.yt.owed span{color:var(--cream-2)}
 .bankbox{display:grid;gap:5px;background:#FFF4F2;border-radius:11px;padding:11px 13px;margin-top:9px}
 .bankbox .k{font-family:var(--mono);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;
   color:var(--crimson);font-weight:700}
 .bankbox span{display:flex;gap:8px;font-size:.8rem;color:var(--ink)}
 .bankbox span b{font-family:var(--mono);font-size:.66rem;color:var(--ink-soft);min-width:5.5rem;font-weight:700}
-.bankbox .hint{display:block;font-size:.74rem;color:var(--ink-soft);margin-top:2px}
+.bankbox .hint{display:block;font-size:.74rem;color:var(--ink-soft);margin-top:2px;line-height:1.5}
+.bankbox .hint a{color:var(--crimson);font-weight:700;text-decoration:underline}
 
 /* the direction of travel, and the committee's answer beneath it */
 .move{font-family:var(--mono);font-size:.66rem;font-weight:700;border-radius:7px;padding:2px 6px}
@@ -1351,131 +1309,91 @@ button.busy{cursor:progress}
   justify-content:center;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:fade .2s ease both}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 @keyframes slideup{from{transform:translateY(18px);opacity:0}to{transform:none;opacity:1}}
-/* THE SHEET, REBUILT.
+/* THE SHEET, IN ONE PLACE.
 
-   One solid colour, no gradient anywhere, and a crimson band across the top so
-   it reads as part of the college rather than as a browser dialogue that has
-   wandered in. The title sits on the band; the form sits on plain paper below
-   it with real room around the fields, because these are short forms and they
-   were being crushed. The footer is a solid bar so the button you came for is
-   always in the same place. */
-.sheet .inner{background:var(--paper);color:var(--ink);border-radius:20px 20px 0 0;width:100%;
+   This block used to be three generations deep: a dark sheet, then a paper
+   sheet written over it, then a monochrome pass written over that. The last
+   rule to load won each argument, which is how the footer ended up as a dark
+   crimson gradient carrying an ink-coloured button, and how an amber warning
+   block survived on what was meant to be plain paper. Everything the sheet
+   can contain is now painted here and nowhere else, so the next thing dropped
+   into a sheet inherits the right colours and cannot be repainted by accident.
+
+   MONOCHROME. One hue, in steps: paper for the ground, a tint for blocks, a
+   deeper tint for edges and pressed things, ink for words, a softer ink for
+   the words that matter less, and one crimson for the single thing to press.
+   No gold, no green, no amber, and no gradient anywhere inside a sheet. A
+   short form is a place to read a question and answer it, not a place for
+   colour coding. */
+.sheet .inner{--sh1:#F7EEE7;--sh2:#EADDD1;--shr:#7A0D12;
+  position:relative;background:var(--paper);color:var(--ink);border-radius:20px 20px 0 0;width:100%;
   max-width:31rem;max-height:100%;max-height:100dvh;display:flex;flex-direction:column;
   box-shadow:0 -18px 50px rgba(20,1,3,.5);animation:slideup .28s var(--ease) both;overflow:hidden}
-@media(min-width:34rem){ .sheet{align-items:center} .sheet .inner{border-radius:18px} }
-.sheet .scroll{padding:0 0 var(--g2)}
-/* MONOCHROME.
-   One hue, four steps of it: paper, a tint for blocks, ink for words, crimson
-   for the one thing to press. No gold, no green, no amber inside a sheet. A
-   form is not a place for colour coding; it is a place to read a question and
-   answer it. */
-.sheet .scroll>h3{background:var(--paper);color:var(--crimson-3);margin:0;padding:22px 22px 6px;
-  font-family:var(--display);font-size:1.34rem;font-weight:600;letter-spacing:-.035em;line-height:1.15}
-.sheet .inner{--sh1:#F7EEE7;--sh2:#EFE2D8;--shr:#7A0D12}
-.sheet .card,.sheet .fix,.sheet .warn,.sheet .warnbox,.sheet .linkcard,.sheet .thread,.sheet .msg{
-  background:var(--sh1);color:var(--ink);border-left:3px solid var(--sh2)}
-.sheet .fix b,.sheet .warnbox b,.sheet .card h3{color:var(--shr)}
-.sheet .fix p,.sheet .warn,.sheet .warnbox span,.sheet .card p,.sheet .card .lede{color:var(--ink-soft)}
-.sheet .fix .btn,.sheet .warnbox .btn,.sheet .card .btn{background:var(--shr);color:#fff;box-shadow:none}
-.sheet .st,.sheet .chips button[aria-pressed="true"]{background:var(--sh2);color:var(--shr)}
-.sheet .grp,.sheet .who,.sheet .f span{color:var(--ink-soft)}
-.sheet .f input,.sheet .f textarea,.sheet .f select{background:var(--sh1);border-color:var(--sh2)}
-.sheet .f input:focus,.sheet .f textarea:focus{border-color:var(--shr);background:#fff}
-.sheet .foot{background:var(--sh1);border-top:1px solid var(--sh2)}
-.sheet .foot .btn.gold,.sheet .foot .btn.cream{background:var(--shr);color:#fff}
-.sheet .foot .btn.ghost{background:transparent;color:var(--ink-soft);box-shadow:inset 0 0 0 1.5px var(--sh2)}
-.sheet .sback{background:var(--sh2);color:var(--ink-soft)}
+/* the body scrolls. The title and the buttons do not */
+.sheet .scroll{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+  padding:18px 22px 10px;flex:1;min-height:0}
+/* One obvious way back, at the top where a thumb starts, labelled in words. */
+.sheet .sback{display:inline-flex;align-items:center;gap:7px;background:var(--sh2);color:var(--ink);
+  border:0;border-radius:9px;padding:8px 14px 8px 10px;font-size:.78rem;font-weight:800;
+  letter-spacing:-.01em;margin:0 0 14px;cursor:pointer}
+.sheet .sback svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.6;
+  stroke-linecap:round;stroke-linejoin:round}
 .sheet .sback:hover{background:var(--sh1);color:var(--shr)}
-.sheet .scroll>*:not(h3):not(.sback){margin-left:22px;margin-right:22px}
-.sheet .sback{position:absolute;top:14px;right:14px;z-index:2;background:rgba(255,255,255,.16);
-  color:#fff;border-radius:9px;padding:6px 11px;font-size:.72rem;font-weight:700;gap:5px;display:inline-flex;
-  align-items:center}
-.sheet .sback svg{width:14px;height:14px}
-.sheet .sback:hover{background:rgba(255,255,255,.28)}
-.sheet .inner{position:relative}
-/* room to breathe */
-.sheet .f{margin:0 0 16px}
+.sheet .scroll>h3{color:var(--shr);margin:0 0 14px;padding:0;font-family:var(--display);
+  font-size:1.34rem;font-weight:600;letter-spacing:-.035em;line-height:1.15}
+/* words */
+.sheet p,.sheet .lede{color:var(--ink);font-size:.8rem;line-height:1.6}
+.sheet .hint,.sheet .ref,.sheet .kv b,.sheet .linkcard p,.sheet .linkcard .arw{color:var(--ink-soft)}
+.sheet .grp,.sheet .who,.sheet .linkcard .who{color:var(--ink-soft)}
+.sheet .grp b,.sheet .kv span,.sheet .mono,.sheet label,.sheet .check{color:var(--ink)}
+.sheet select option{color:var(--ink)}
+/* blocks: the same tint for every kind of block, because inside a form they
+   are all just "a box with something to read in it" */
+.sheet .card,.sheet .fix,.sheet .warn,.sheet .warnbox,.sheet .linkcard,.sheet .thread,.sheet .msg{
+  background:var(--sh1);color:var(--ink);border-left:3px solid var(--sh2);border-radius:11px;
+  padding:13px 15px;margin-bottom:12px}
+.sheet .card h3,.sheet .fix b,.sheet .warnbox b,.sheet .thread b,.sheet .linkcard b{color:var(--shr)}
+.sheet .card p,.sheet .card .lede,.sheet .fix p,.sheet .warn,.sheet .warnbox span,
+.sheet .thread .msg{color:var(--ink);background:none;padding:0}
+.sheet .msg .m{color:var(--ink-soft)}
+.sheet .st{background:var(--sh2);color:var(--shr)}
+/* a pressed chip is ink, not a second crimson: the month picker in the report
+   must not compete with the button you came for */
+.sheet .chips button{background:var(--sh1);color:var(--ink);box-shadow:none}
+.sheet .chips button:hover{background:var(--sh2);color:var(--ink)}
+.sheet .chips button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+/* fields, with real room around them because these are short forms and they
+   were being crushed */
+.sheet .f{margin:0 0 16px;color:var(--ink)}
 .sheet .f span{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.15em;
-  text-transform:uppercase;font-weight:700;margin-bottom:7px}
-.sheet .f input,.sheet .f textarea,.sheet .f select{padding:13px 14px;font-size:.95rem}
+  text-transform:uppercase;font-weight:700;margin-bottom:7px;color:var(--ink-soft)}
+.sheet .f span i{color:var(--ink-soft)}
+.sheet .f input,.sheet .f textarea,.sheet .f select{background:var(--sh1);color:var(--ink);
+  border:1px solid var(--sh2);border-radius:11px;padding:13px 14px;font-size:.95rem}
+.sheet .f input::placeholder,.sheet .f textarea::placeholder{color:var(--ink-soft);opacity:.7}
+.sheet .f input:focus,.sheet .f textarea:focus,.sheet .f select:focus{border-color:var(--shr);
+  background:#fff;outline:0}
 .sheet .f textarea{min-height:7rem;line-height:1.6}
 .sheet .f2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
-.sheet .foot{padding:14px 22px calc(14px + var(--sab));background:var(--cream-2);
-  border-top:1px solid var(--cream-3)}
+@media(max-width:400px){.sheet .f2{grid-template-columns:1fr}}
+.sheet .check input{accent-color:var(--shr)}
+.sheet .spin{border-color:rgba(0,0,0,.18);border-top-color:currentColor}
+/* the floor: a solid bar, so the button you came for is always in the same
+   place however long the form is, and never scrolls away */
+.sheet .foot{flex:0 0 auto;padding:13px 22px calc(15px + var(--sab));background:var(--sh1);
+  border-top:1px solid var(--sh2)}
 .sheet .foot .acts{margin:0}
-.sheet .btn{padding:13px 22px;font-size:.88rem}
-/* EVERYTHING INSIDE THE SHEET IS DRESSED FOR PAPER.
-   The sheet used to be dark, so every block that can appear in one was written
-   in cream. Turning the sheet white left those unreadable: a gold panel with
-   cream lettering on it is not a design, it is a blank. This is the whole list
-   of them, in one place, so the next thing dropped into a sheet inherits it. */
-.sheet h3{color:var(--crimson-3)}
-.sheet p,.sheet .lede{color:var(--ink-soft)}
-.sheet .card{background:var(--cream-2);color:var(--ink)}
-.sheet .card p,.sheet .card .lede{color:var(--ink-soft)}
-.sheet .card h3{color:var(--crimson-3)}
-.sheet .f span{color:var(--ink-soft)}
-.sheet .grp{color:var(--crimson)}
-.sheet .grp b{color:var(--ink)}
-.sheet .ref{color:var(--ink-soft)}
-.sheet .who{color:var(--crimson)}
-.sheet .hint{color:var(--ink-soft)}
-.sheet .check{color:var(--ink)}
-.sheet .msg{background:var(--cream-2);color:var(--ink)}
-/* the amber warning block, which is where the unreadable gold card was */
-.sheet .fix,.sheet .warn,.sheet .warnbox{background:#FFF4DC;color:var(--ink)}
-.sheet .fix b,.sheet .warnbox b{color:var(--crimson-3)}
-.sheet .fix p,.sheet .warn,.sheet .warnbox span{color:var(--ink)}
-.sheet .fix .btn.gold,.sheet .warnbox .btn.gold{background:var(--crimson);color:#fff}
-/* a link card in a sheet */
-.sheet .linkcard{background:var(--cream-2)}
-.sheet .linkcard b{color:var(--ink)}
-.sheet .linkcard p{color:var(--ink-soft)}
-.sheet .linkcard .who{color:var(--crimson)}
-.sheet .linkcard .arw{color:var(--ink-soft)}
-.sheet .kv b{color:var(--ink-soft)}
-.sheet .kv span{color:var(--ink)}
-.sheet .thread{background:var(--cream-2);color:var(--ink)}
-.sheet .thread b,.sheet .thread .msg{color:var(--ink)}
-.sheet .st{background:rgba(180,20,27,.1);color:var(--crimson-3)}
-.sheet .mono{color:var(--ink)}
-/* chips are used for the month picker in the report, and they were carrying
-   their on-the-red colours onto cream */
-.sheet .chips button{background:var(--cream-2);color:var(--ink)}
-.sheet .chips button:hover{background:#F6EEE6;color:var(--ink)}
-.sheet .chips button[aria-pressed="true"]{background:var(--crimson);color:#fff}
-.sheet .sback{color:var(--ink-soft)}
-.sheet .spin{border-color:rgba(0,0,0,.2);border-top-color:currentColor}
-.sheet label,.sheet .f{color:var(--ink)}
-.sheet select option{color:var(--ink)}
-.sheet .f input,.sheet .f textarea,.sheet .f select{background:#F6EEE6;color:var(--ink);
-  border:1px solid var(--cream-3);border-radius:11px}
-.sheet .f input:focus,.sheet .f textarea:focus{border-color:var(--crimson);background:#fff;outline:0}
-.sheet .foot{background:var(--cream);border-top:1px solid var(--cream-3)}
-.sheet .btn.ghost{color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--cream-3)}
-.sheet .sback{color:var(--ink-soft)}
-.sheet .check{color:var(--ink)}
-.sheet .scroll{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
-  padding:22px 22px 8px;flex:1;min-height:0}
-/* the buttons sit on the floor of the sheet and never scroll away, which is
-   what made a long form look like it had no way to submit */
-.sheet .foot{flex:0 0 auto;padding:13px 22px calc(15px + var(--sab));
-  background:linear-gradient(180deg,rgba(99,8,14,0),#63080E 26%);
-  box-shadow:0 -1px 0 rgba(255,255,255,.09)}
-.sheet .foot .acts{margin-top:0}
+.sheet .btn{padding:13px 22px;font-size:.88rem;box-shadow:none}
+/* whatever colour a button was dressed in for the dark page, in here it is
+   the one crimson or it is a ghost */
+.sheet .btn.gold,.sheet .btn.cream,.sheet .btn:not(.ghost){background:var(--shr);color:#fff}
+.sheet .btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--sh2)}
+.sheet .btn.ghost:hover{background:var(--sh2)}
+.sheet .btn[disabled]{opacity:.55}
 @media(min-width:600px){.sheet{align-items:center;padding:22px}
   /* dvh follows the address bar as it hides; vh is the fallback where it does not */
   .sheet .inner{border-radius:16px;max-height:calc(100vh - 44px);max-height:calc(100dvh - 44px)}}
 @media(min-width:1000px){.sheet{padding-left:calc(var(--rail) + 22px)}}
-.sheet h3{font-family:var(--display);font-size:1.211rem;margin:0 0 14px;font-weight:600;letter-spacing:-.04em}
-.sheet .sback{display:inline-flex;align-items:center;gap:8px;background:var(--t2);border:1px solid var(--edge);
-  color:var(--cream);font-weight:800;font-size:.86rem;letter-spacing:-.01em;padding:10px 18px 10px 13px;
-  border-radius:999px;margin:0 0 15px;cursor:pointer}
-.sheet .sback svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
-.sheet .sback:hover{background:var(--t3)}
-.sheet .card p{font-size:0.763rem}
-.sheet .lede{font-size:0.711rem}
-.sheet .card{padding:0 0 4px;background:none}
 .f{display:block;margin-bottom:13px}
 .f span{display:block;font-family:var(--mono);font-size:0.66rem;color:var(--cream-4);margin-bottom:6px;
   letter-spacing:.14em;text-transform:uppercase;font-weight:700}
@@ -1571,7 +1489,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
     <div id="hallList" hidden></div>
   </section>
 
-  <!-- ===================== SECOND LIFE ===================== -->
+  <!-- ===================== THE BOARD ===================== -->
   <section id="v-board" hidden>
     <div class="vh"><h2>The <i>board</i></h2><span class="note">What is happening in college, and what to look out for</span>
       <div class="right"><button class="btn gold sm" data-newnotice>Put something up</button></div></div>
@@ -1609,8 +1527,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
   <section id="v-biz" hidden>
     <div class="vh"><h2>MCR <i>business</i></h2><span class="note">Meetings, motions and the vote</span>
       <div class="right"><button class="btn gold sm" id="bNewIdea">Suggest something</button>
-        <button class="btn ghost sm" id="bNewMotion">Motion</button>
-        <button class="btn ghost sm" id="bNewPoll" data-committee hidden>Poll</button></div></div>
+        <button class="btn ghost sm" id="bNewMotion">Motion</button></div></div>
     <div class="twocol">
       <!-- Polls have gone: a question in Soundings does the same job better. -->
       <div class="colA"><div id="bizMoney"></div><div id="bizIdeas"></div></div>
@@ -1630,7 +1547,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
     </div>
     <div class="card">
       <h3>Your calendar</h3>
-      <p class="lede">Subscribe once and everything you put your name down for appears in your own calendar, with the alerts built in. It stays up to date on its own, and it is how your phone reminds you. The app emails only when something genuinely needs your inbox: a reply to something you asked, permission for a room, or a swap place waiting to be paid for.</p>
+      <p class="lede">Subscribe once and everything you put your name down for appears in your own calendar, with the alerts built in. It stays up to date on its own, and it is how your phone reminds you. The app never emails you: replies, room permissions and swap places are all shown here, and the calendar does the reminding.</p>
       <div class="acts" id="feedBox"></div>
       <label class="f"><span>Alert before each event</span>
         <select id="pRemind"><option value="15">15 minutes before</option><option value="30">30 minutes before</option><option value="60">An hour before</option><option value="120">Two hours before</option><option value="1440">The day before</option><option value="0">No alert</option></select></label>
@@ -1780,7 +1697,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbxbL-c4q3OFE-41aSpkt-VNNwvJZCuO0WA2jj6aRsRbQBB4UfctuFPo2QMqxED401B2zA/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwm-WXMoHvR3_BGECEuC3_Ls4Yjc02Y91mzG99pqcERraOknrQM7Ud11ekolsTlY4qCxA/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -2506,20 +2423,9 @@ async function bootFetch(){
     return await api("state");
   }finally{ clearTimeout(slow); }
 }
-/* Fetched once the page is up. Anything already on screen stays exactly where
-   it is; the sections that were waiting simply fill in. */
-/* A section whose part has not landed yet says so rather than claiming to be
-   empty, which is the difference between "nothing on" and "not here yet". */
-/* Only reachable if the page is ever split again. It is left because the call
-   sites read better with it than with a bare empty string. */
-function waitingFor(what){
-  return '<div class="card"><p class="lede"><span class="spin" style="margin-right:8px"></span>' +
-    'Fetching ' + esc(what) + '.</p></div>';
-}
-/* Kept, and always false: the page arrives whole, so nothing is ever half
-   there. The guards that call this are left in place because they cost nothing
-   and they are the right shape if the page is ever split again. */
-const stillLoading = () => false;
+/* There is no second fetch and no "not here yet" state. The page arrives whole
+   behind the loading screen, so every section renders from a complete S. The
+   waitingFor and stillLoading helpers from the two-part days have gone. */
 function bootStuck(msg){
   bootTalk(false);
   $("boot").hidden = true;
@@ -2555,7 +2461,7 @@ function skeletons(){
 function cacheState(){
   try{
     const slim = Object.assign({}, S);
-    delete slim.people; delete slim.signups; delete slim.market;
+    delete slim.people; delete slim.signups;
     delete slim.signupsAll; delete slim.deskTickets; delete slim.allRooms; delete slim.pending;
     localStorage.setItem(CK, JSON.stringify({ at: Date.now(), s: slim }));
   }catch(e){}
@@ -2837,8 +2743,7 @@ function renderCrow(){
   const mineSoon = (S.events || []).filter(e =>
     ["going","waitlist"].indexOf(myStatus(e.id)) >= 0 && e.date >= t && e.status !== "cancelled");
   const replies = (S.tickets || []).filter(x => x.status === "answered");
-  const votes = (S.motions || []).filter(m => m.status === "voting" && !(S.myVotes || {})[m.id]).length +
-                (S.polls || []).filter(p => p.open && !p.mine).length;
+  const votes = (S.motions || []).filter(m => m.status === "voting" && !(S.myVotes || {})[m.id]).length;
   const rooms = (S.rooms || []).filter(r => r.status !== "new" && r.at > Date.now() - 6 * 864e5);
   const fresh = (S.updates || []).filter(u => u.at > (S.me.seenAt || 0)).length;
   const answered = (S.ideas || []).filter(i => i.own && i.status !== "open").length;
@@ -3244,10 +3149,7 @@ function renderLodge(){
     '<button data-roomtab="free" aria-pressed="' + (roomTab === "free") + '">When it is free</button>' +
     '<button data-roomtab="mine" aria-pressed="' + (roomTab === "mine") + '">Your requests' +
       (nR ? " &middot; " + nR : "") + '</button>');
-  put("roomBody", roomTab === "mine"
-    ? (stillLoading() ? waitingFor("your requests") : roomMine(S.rooms || []))
-    : lodgeRoom());
-  if (stillLoading() && lodgeTab === "guides"){ put("lodgeBody", waitingFor("the guides")); }
+  put("roomBody", roomTab === "mine" ? roomMine(S.rooms || []) : lodgeRoom());
   const counts = { forms: (S.links || []).length, guides: (S.resources || []).length,
     sport: (S.clubs || []).length };
   if (["forms","guides","sport"].indexOf(lodgeTab) < 0) lodgeTab = "forms";
@@ -3493,7 +3395,6 @@ let askTab = "new";
 const ASK_TABS = [["new","Ask something"],["threads","Your threads"],
   ["who","Who you are asking"]];
 function renderAsk(){
-  if (stillLoading()) return put("askBody", waitingFor("your threads")), put("askSeg", "");
   const th = S.tickets || [], rooms = S.rooms || [];
   const live = th.filter(t => t.status !== "closed" && t.status !== "archived");
   const n = { new: 0, threads: live.length, rooms: rooms.filter(r => r.status === "new").length, who: 0 };
@@ -3887,10 +3788,8 @@ function renderIdeas(){
       "</div></div></div>").join("")
       : '<div class="card"><p>Nothing suggested yet. Somebody has to be first, and it may as well be about the coffee machine.</p></div>'));
 }
-/* Polls are gone. A question in Soundings does the same job and does it better:
-   anonymous, and the result held back until somebody has answered. Nothing is
-   drawn here at all. */
-function renderPolls(){}
+/* Polls are gone entirely. A question in Soundings does the same job and does
+   it better: anonymous, and the result held back until somebody has answered. */
 function openIdea(){
   sheet("Suggest something",
     '<div class="card"><p class="lede">Anything the MCR should buy, run or change. Other members back it, and once enough have, the committee has to answer here with a reason.</p></div>' +
@@ -3913,26 +3812,10 @@ function openIdea(){
       });
     });
 }
-function openPoll(){
-  sheet("Run a poll",
-    '<label class="f"><span>The question</span><input id="poQ" maxlength="160" placeholder="Which night should Grad Hall move to?"></label>' +
-    '<label class="f"><span>The answers, one per line</span><textarea id="poO" placeholder="Tuesday\nThursday\nLeave it alone"></textarea></label>' +
-    '<label class="f"><span>Closes</span><input type="date" id="poC" value="' + esc(addDays(todayLondon(), 7)) + '"></label>' +
-    '<div class="acts"><button class="btn gold" id="poGo">Open it</button><button class="btn ghost" data-close>Cancel</button></div>',
-    el => el.querySelector("#poGo").addEventListener("click", async e => {
-      const b = e.currentTarget; spin(b, "Opening");
-      try{
-        const d = await api("pollNew", { question: $("poQ").value, options: $("poO").value, closes: $("poC").value });
-        S.polls = d.polls; closeSheet(); renderPolls(); toast("Open.");
-      }catch(err){ unspin(b); fail(err); }
-    }));
-}
-
 /* ============================================================
    BUSINESS
    ============================================================ */
 function renderBiz(){
-  if (stillLoading()){ put("bizMotions", waitingFor("the motions and the polls")); return; }
   const t = todayLondon();
   const next = (S.meetings || []).filter(m => m.date >= t)[0];
   put("bizMeetings", next
@@ -4188,32 +4071,22 @@ function renderSwapDesk(){
   const wait = rows.filter(r => r.x.status === "waiting");
   const owed = held.reduce((n, r) => n + (parseFloat(String(r.w.price).replace(/[^0-9.]/g, "")) || 0), 0);
   const late = held.filter(r => r.x.dueBy && r.x.dueBy < Date.now());
-  const t = S.treasurer || {}, mail = S.mail || {};
+  const t = S.treasurer || {};
   put("swdNote", live.length + (live.length === 1 ? " swap" : " swaps") + " &middot; " +
     rows.length + " on them");
   put("swdBody",
     /* the two things that stop everything working, first */
     (!t.ready
       ? '<div class="warnbox"><b>Nobody can pay yet</b><span>The account to pay into has not been ' +
-        "filled in, so the email asking for money tells people to write to " +
-        esc(t.name || "the Treasurer") + " instead of giving them the details.</span>" +
+        "filled in, so the card on a held place tells people to write to " +
+        esc(t.name || "the Treasurer") + " instead of showing them the details.</span>" +
         '<button class="btn gold sm" data-bank>Fill in the account details</button></div>' : "") +
-    (mail.quota === 0 || mail.scopeError
-      ? '<div class="warnbox"><b>The app cannot send email</b><span>' +
-        (mail.scopeError ? esc(mail.scopeError)
-          : "Today's sending quota reads zero, which usually means the deployment was never given " +
-            "permission to send.") +
-        " Nothing has been going out: not payment requests, not replies to questions, not room " +
-        "permissions. Open the Apps Script editor, run <code>setup</code> once, accept the " +
-        "permission it asks for, then Deploy, New version.</span>" +
-        '</div>' : "") +
     '<div class="stats">' + [
       [held.length, "waiting to pay"],
       ["\u00a3" + Math.round(owed), "owed to " + esc(t.name || "the Treasurer")],
       [paid.length, "paid"],
       [wait.length, "on waiting lists"],
-      [late.length, "overdue"],
-      [(mail.sent || 0) + "/" + ((mail.sent || 0) + (mail.failed || 0)), "emails sent"]
+      [late.length, "overdue"]
     ].map(x => '<div class="stat"><b>' + x[0] + "</b><span>" + x[1] + "</span></div>").join("") + "</div>" +
 
     /* the chase list: everybody who owes, most urgent first, one tap each */
@@ -4232,7 +4105,6 @@ function renderSwapDesk(){
             '<span class="ss ' + (d <= 0 ? "bad" : "") + '">' +
               (d <= 0 ? "overdue" : d + (d === 1 ? " day" : " days")) + "</span>" +
             '<button class="btn gold sm" data-swappaid="' + esc(r.x.id) + '" data-p="1">Paid</button>' +
-            '<button class="btn ghost sm" data-swapnudge="' + esc(r.x.id) + '">Nudge</button>' +
             "</div>";
         }).join("")
       : '<div class="card"><p>Nobody owes anything.</p></div>') +
@@ -4249,7 +4121,7 @@ function renderSwapDesk(){
         ? '<div class="rowline"><div class="t"><b>' + esc(t.bankName || t.name) + "</b><span>" +
           esc(t.sortCode) + " &middot; " + esc(t.account) + " &middot; reference: " + esc(t.reference) +
           "</span></div></div>"
-        : '<p class="lede">No account details yet, so the payment email cannot give them.</p>') +
+        : '<p class="lede">No account details yet, so the cards cannot show anybody how to pay.</p>') +
       '<p class="lede">Places are held for ' + (S.swapHold || 3) + " days. After that the desk shows " +
       "them as overdue and somebody on the committee decides. Nothing is taken away by a clock, and " +
       "nobody is emailed: everything is said in the app.</p>" +
@@ -4259,8 +4131,9 @@ function renderSwapDesk(){
 }
 /* One swap as its committee card: the header says how full it is, then every
    person in the order they arrived, each with exactly the buttons their state
-   allows. Paid people can only be unpaid; held people can be marked paid,
-   nudged, or released; waiting people can be promoted when there is room. */
+   allows. Paid people can only be unpaid; held people can be marked paid or
+   released; waiting people can be promoted when there is room. Chasing is done
+   from the committee member's own mail, through the address on the row. */
 function swapDeskCard(w){
   const list = w.list || [];
   const waitList = list.filter(x => x.status === "waiting");
@@ -4277,7 +4150,6 @@ function swapDeskCard(w){
   const act = x =>
     x.status === "held"
       ? '<button class="btn gold sm" data-swappaid="' + esc(x.id) + '" data-p="1">Paid</button>' +
-        '<button class="btn ghost sm" data-swapnudge="' + esc(x.id) + '">Nudge</button>' +
         '<button class="btn ghost sm" data-swapkick="' + esc(x.id) + '">Release</button>'
     : x.status === "paid"
       ? '<button class="btn ghost sm" data-swappaid="' + esc(x.id) + '" data-p="0">Undo</button>'
@@ -4305,12 +4177,12 @@ function swapDeskCard(w){
       : "") +
     "</div>";
 }
-/* The account the payment email gives out, edited here and kept in the
+/* The account the swap cards show, edited here and kept in the
    spreadsheet. A new treasurer types over it and never opens the code. */
 function openBank(){
   const t = S.treasurer || {};
   sheet("Where the money goes",
-    '<p class="lede">These lines go word for word into the email that asks somebody to pay, so write ' +
+    '<p class="lede">These lines are shown word for word on the card of every held place, so write ' +
     "them exactly as the bank shows them. They are kept in the spreadsheet, not the code.</p>" +
     '<label class="f"><span>Treasurer</span><input id="bk-name" value="' + esc(t.name || "") + '"></label>' +
     '<label class="f"><span>Treasurer address</span><input id="bk-email" type="email" value="' +
@@ -4335,7 +4207,7 @@ function openBank(){
             reference: $("bk-reference").value } });
           S.treasurer = r.treasurer;
           closeSheet(); renderSwapDesk();
-          toast("Saved. The payment email now gives these details.");
+          toast("Saved. Every held place now shows these details.");
         }catch(err){ unspin($("bkGo")); fail(err); }
       };
     });
@@ -4673,20 +4545,18 @@ function applySeason(){
 }
 
 /* ============================================================
-   SECOND LIFE, and lost property
+   FORMALS
+   Second Life and lost property used to live here. They have been
+   taken out entirely: the grid, its state, the renderer and the
+   server endpoints, rather than left idle to be tripped over.
    ============================================================ */
-let giftKind = "", giftPage = 0;
-const GIFT_PER_PAGE = 20;
-/* A dense grid of photographs, the price loud and everything else quiet. It is
-   the layout everybody already knows how to read, so nobody has to learn it.
-   The card carries the photograph, the price and who is offering; the detail
-   and the address are one tap away, which keeps the grid scannable. */
 /* Formal swaps.
 
    A swap is dinner at another college with their MCR. There are always fewer
    places than people who want them, so the only fair thing is first come with
-   a clock on it: taking a place means agreeing to pay, the place is held for
-   five days, and if the money has not arrived it goes to whoever is next.
+   a date on it: taking a place means agreeing to pay. A place that is not paid
+   for by the date is marked overdue and the committee decides. Nothing is
+   taken away by a timer.
 
    The places are drawn as pips rather than a bar, because "three left" is a
    number you should be able to count rather than estimate, and because a bar
@@ -4856,7 +4726,6 @@ function sayLine(t, score){
 }
 function renderSay(){
   if (!S) return;
-  if (stillLoading()) return put("sayBody", waitingFor("what the MCR has said"));
   const say = S.say || { topics: [], soundings: [], faces: [] };
   const openOnes = (say.soundings || []).filter(q => !q.closed);
   const shut = (say.soundings || []).filter(q => q.closed);
@@ -4969,7 +4838,6 @@ function soundCard(q){
     '</div>';
 }
 function renderSwaps(){
-  if (stillLoading()){ put("swapList", waitingFor("the formals")); put("formalSeg", ""); return; }
   renderFormalSeg();
   const all = S.swaps || [], hold = S.swapHold || 5;
   const live = all.filter(w => !w.past), gone = all.filter(w => w.past);
@@ -4996,13 +4864,19 @@ function renderSwaps(){
    committee never loses sight of what it is changing. */
 /* Where the money goes, put in front of somebody at the moment they are told
    to pay rather than left for them to go and find. */
+/* Shown on every place somebody holds, in every state, because "where do I
+   send the money" is asked at all of them. If the committee has not filled the
+   account in yet the box says who to ask rather than showing nothing. */
 function bankHtml(w){
   const b = w.bank || {};
-  if (!b.account && !b.sortCode) return "";
   const line = (k, v) => v ? '<span><b>' + esc(k) + '</b>' + esc(v) + '</span>' : "";
-  return '<div class="bankbox"><span class="k">How to pay</span>' +
-    line("Name", b.name) + line("Sort code", b.sortCode) + line("Account", b.account) +
-    line("Reference", b.reference) +
+  const body = b.ready
+    ? line("Name", b.bankName || b.name) + line("Sort code", b.sortCode) + line("Account", b.account) +
+      line("Reference", b.reference)
+    : '<span class="hint">The account details have not been filled in yet. Write to ' +
+      (b.email ? '<a href="mailto:' + esc(b.email) + '">' + esc(b.name || "the Treasurer") + '</a>'
+               : esc(b.name || "the Treasurer")) + ' and they will give them to you.</span>';
+  return '<div class="bankbox"><span class="k">How to pay</span>' + body +
     (w.payTo ? '<span class="hint">' + esc(w.payTo) + '</span>' : "") + '</div>';
 }
 function swapCard(w, hold){
@@ -5078,7 +4952,7 @@ function swapCard(w, hold){
               ". After that the committee may pass it on.</span></span>" +
               '<span class="clock"><i style="width:' + Math.round(days / (hold || 5) * 100) + '%"></i></span>'
             : '<span class="yt"><b>' + m.place + ordinal(m.place) + " on the list</b>" +
-              "<span>You will be told the moment a place opens.</span></span>") +
+              "<span>Places pass down this list in order as they free up. Watch this card.</span></span>") +
         '<button class="btn ghost sm" data-swapdrop="' + esc(w.id) + '">Give it up</button></div>'
       : w.past ? ""
       : w.status !== "open" ? '<div class="swyou"><span class="yt"><b>Closed</b>' +
@@ -5135,29 +5009,6 @@ function openSwapTake(id){
       }catch(err){ unspin(b); fail(err); }
     }));
 }
-/* Second life has been taken out. The renderer is left standing so that any
-   stray handler is harmless, and so the section could be put back by restoring
-   its tab and its two lines in state_. */
-function vcard(m){
-  const k = (S.marketKinds || []).filter(x => x.key === m.kind)[0] || { name: m.kind };
-  const gone = m.status !== "open";
-  const price = m.kind === "sell" ? (m.price || "Ask")
-    : m.kind === "gift" ? "Free"
-    : m.kind === "want" ? "Wanted" : k.name;
-  return '<button class="vc' + (gone ? " gone" : "") + '" data-gift="' + esc(m.id) + '">' +
-    (m.thumb ? '<img class="shot" loading="lazy" src="' + m.thumb + '" alt="' + esc(m.title) + '">'
-             : '<div class="noshot">' + esc(m.title.slice(0, 1).toUpperCase()) + "</div>") +
-    '<span class="tagk k-' + esc(m.kind) + '">' + esc(k.name) + "</span>" +
-    (gone ? '<span class="sold">Gone</span>' : "") +
-    '<span class="meta"><span class="price' + (m.kind === "gift" ? " free" : "") + '">' + esc(price) + "</span>" +
-    '<span class="ttl">' + esc(m.title) + "</span>" +
-    '<span class="by"><i>' + esc(initials(m.name)) + "</i>" + esc(first(m.name)) + "</span></span></button>";
-}
-/* The item, opened. Everything the grid left out, and the address. */
-/* Putting something up, the way a selling app does it: the photograph first
-   and big, because that is what decides whether anybody looks; then the one
-   line; then the price only if you are selling. Nothing else is required. */
-
 /* ============================================================
    BUMPS
    Four days, one line per crew. Going up is going up the page,
@@ -5323,8 +5174,7 @@ function renderBadges(){
   set("bdgSwaps", (S.swaps || []).filter(w => w.mine && w.mine.status === "held").length);
   set("bdgSay", (((S.say || {}).soundings) || []).filter(q => !q.closed && !q.answered).length +
     (((S.say || {}).topics) || []).filter(t => !t.mine).length);
-  set("bdgBiz", (S.motions || []).filter(m => m.status === "voting" && !(S.myVotes || {})[m.id]).length +
-    (S.polls || []).filter(p => p.open && !p.mine).length);
+  set("bdgBiz", (S.motions || []).filter(m => m.status === "voting" && !(S.myVotes || {})[m.id]).length);
   if (isCommittee())
     set("bdgDesk", (S.pending || []).length);
   set("bdgQueue", (S.allRooms || []).filter(r => r.status === "new").length +
@@ -5346,7 +5196,7 @@ const DRAW = {
                  renderTodayOn(); renderTodayQuick(); renderTodayNews(); },
   board: renderLodge, room: renderLodge, info: renderLodge,
   swaps: renderSwaps, ask: renderAsk, say: renderSay,
-  biz: () => { renderTreasury(); renderIdeas(); renderPolls(); renderBiz(); },
+  biz: () => { renderTreasury(); renderIdeas(); renderBiz(); },
   me: () => { if (!typingIn("v-me")) renderMe(); },
   desk: renderDesk, swapdesk: renderSwapDesk, inbox: renderQueue,
   members: renderDesk,
@@ -5393,8 +5243,8 @@ document.addEventListener("click", async e => {
     "[data-noticeoff],[data-editres],[data-roomyes],[data-roomno],[data-rsvp],[data-edit],[data-cancel]," +
     "[data-skip],[data-editser],[data-second],[data-vote],[data-mset],[data-code],[data-checkin]," +
     "[data-delupdate],[data-rosteredit],[data-rosterdel],[data-newidea],[data-back]," +
-    "[data-setidea],[data-dropidea],[data-pollvote],[data-pollclose]," +
-    "[data-roomnote],[data-runevent],[data-sayreport],[data-boardall],[data-mood],[data-moodline],[data-moodreply],[data-moodsay],[data-sound],[data-soundsay],[data-soundclose],[data-roomdrop],[data-roomtab],[data-formal],[data-copy],[data-copyboth],[data-bumpedit],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-polldrop],[data-motiondrop],[data-desktab],[data-tick2],[data-desk],[data-asktab],[data-thread],[data-mythreads],[data-swaptake],[data-swapdrop],[data-swappaid],[data-swapedit],[data-swapsave],[data-swapcancel],[data-swapdel],[data-swappast],[data-bank],[data-swapnudge],[data-swapkick],[data-swappromote],[data-copyaddrs],[data-swapdeskedit],[data-jcsu],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
+    "[data-setidea],[data-dropidea]," +
+    "[data-roomnote],[data-runevent],[data-sayreport],[data-boardall],[data-mood],[data-moodline],[data-moodreply],[data-moodsay],[data-sound],[data-soundsay],[data-soundclose],[data-roomdrop],[data-roomtab],[data-formal],[data-copy],[data-copyboth],[data-bumpedit],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-motiondrop],[data-desktab],[data-tick2],[data-desk],[data-asktab],[data-thread],[data-mythreads],[data-swaptake],[data-swapdrop],[data-swappaid],[data-swapedit],[data-swapsave],[data-swapcancel],[data-swapdel],[data-swappast],[data-bank],[data-swapkick],[data-swappromote],[data-copyaddrs],[data-swapdeskedit],[data-jcsu],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
   if (!t) return;
   const d = t.dataset;
   try{
@@ -5563,10 +5413,6 @@ document.addEventListener("click", async e => {
     }
     if (d.hwk){ hourWeek = Math.max(0, hourWeek + (+d.hwk)); renderAsk(); return; }
     if (t.hasAttribute("data-newevent")) return openEventEditor("");
-    if (d.polldrop){
-      if (!confirm("Delete this poll and every vote in it? There is no undo.")) return;
-      S.polls = (await api("pollDrop", { id: d.polldrop })).polls; renderPolls(); return toast("Gone.");
-    }
     if (d.motiondrop){
       if (!confirm("Delete this motion and every vote on it? There is no undo.")) return;
       const r = await api("motionDrop", { id: d.motiondrop });
@@ -5586,15 +5432,6 @@ document.addEventListener("click", async e => {
     if (t.hasAttribute("data-swapedit")){ swapEdit = d.swapedit || "new"; renderSwaps(); return; }
     if (t.hasAttribute("data-swapcancel")){ swapEdit = ""; renderSwaps(); return; }
     if (d.jcsu !== undefined){ jcsuOpen = d.jcsu === "1"; renderLodge(); return; }
-    if (false){
-      spin(t, "Sending");
-      try{
-        const r = await api("mailTest", {});
-        await refresh(false);
-        toast("Sent to " + r.sentTo + ". Look in your inbox.");
-      }catch(err){ unspin(t); fail(err); }
-      return;
-    }
     if (d.swappast !== undefined){ swapPast = d.swappast === "1"; renderSwaps(); window.scrollTo(0, 0); return; }
     if (t.hasAttribute("data-swapsave")){
       const card = t.closest(".swap");
@@ -5621,29 +5458,20 @@ document.addEventListener("click", async e => {
     }
     if (d.swappaid){ await api("swapPaid", { spot: d.swappaid, paid: d.p === "1" });
       await refresh(false); return toast(d.p === "1"
-        ? "Marked paid, and they have been told their place is confirmed." : "Marked unpaid."); }
+        ? "Marked paid. Their card now says the place is theirs." : "Marked unpaid."); }
     if (t.hasAttribute("data-bank")) return openBank();
-    if (d.swapnudge){
-      spin(t, "Sending");
-      try{
-        const r = await api("swapNudge", { spot: d.swapnudge });
-        S.swaps = r.swaps; S.mail = r.mail; renderSwapDesk();
-        toast("Asked again, by email.");
-      }catch(err){ unspin(t); fail(err); }
-      return;
-    }
     if (d.swapkick){
       if (!confirm("Let this place go? It offers itself to the waiting list straight away.")) return;
       const r = await api("swapKick", { spot: d.swapkick });
-      S.swaps = r.swaps; S.mail = r.mail; renderSwapDesk();
+      S.swaps = r.swaps; renderSwapDesk();
       return toast("Released.");
     }
     if (d.swappromote){
       spin(t, "Promoting");
       try{
         const r = await api("swapPromote", { spot: d.swappromote });
-        S.swaps = r.swaps; S.mail = r.mail; renderSwapDesk();
-        toast("Promoted, and asked for the money.");
+        S.swaps = r.swaps; renderSwapDesk();
+        toast("Promoted. Their card now shows what to pay.");
       }catch(err){ unspin(t); fail(err); }
       return;
     }
@@ -5676,9 +5504,6 @@ document.addEventListener("click", async e => {
       await api("ideaSet", { id: d.setidea, status: d.s, reply: why });
       await refresh(false); return toast(d.s === "open" ? "Up for backing." : "Answered.");
     }
-    if (d.pollvote){ S.polls = (await api("pollVote", { id: d.pollvote, choice: d.o })).polls;
-      renderPolls(); renderCrow(); renderBadges(); return; }
-    if (d.pollclose){ S.polls = (await api("pollClose", { id: d.pollclose })).polls; renderPolls(); return; }
     if (d.open) return openEvent(d.open);
     if (d.tick){
       const evT = evById(d.tick);
@@ -5719,7 +5544,7 @@ document.addEventListener("click", async e => {
       const r = await api("roomDecide", { id: d.roomyes || d.roomno, status: d.roomyes ? "yes" : "no" });
       S.allRooms = r.allRooms;
       await refresh(false);
-      return toast(d.roomyes ? "Approved, and emailed to them." : "Declined, and they have been told.");
+      return toast(d.roomyes ? "Approved. Their booking note is on their Lodge page." : "Declined. The reason is on their thread.");
     }
     if (d.edit) return openEventEditor(d.edit);
     if (d.editser) return openSeriesEditor(d.editser);
@@ -5911,7 +5736,6 @@ on("bNewSwap", "click", () => {
   if (formalTab === "halls") return newHall();
   swapEdit = "new"; renderSwaps(); go("swaps"); window.scrollTo(0, 0);
 });
-on("bNewPoll", "click", openPoll);
 on("memQ", "input", renderMembers);
 /* the door search keeps its focus, which a full redraw would take away */
 /* a college crest, shrunk to something a spreadsheet cell will hold */
