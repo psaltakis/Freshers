@@ -583,8 +583,21 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
    The college's name is the headline, the places are countable pips
    rather than a bar, and the clock on a held place is a real clock.
    ================================================================= */
-.swap{position:relative;background:linear-gradient(168deg,rgba(236,138,180,.13),var(--t1) 46%);
-  border-radius:var(--r);padding:var(--pad);margin-bottom:var(--g2);overflow:hidden}
+/* A formal is an invitation, and an invitation is printed on card. On the red
+   ground these read as warnings; on paper they read as what they are. */
+.swap{position:relative;background:var(--paper,#FFFDFA);color:var(--ink);
+  border-radius:var(--r);padding:var(--pad);margin-bottom:var(--g2);overflow:hidden;
+  box-shadow:0 12px 26px -18px rgba(20,1,3,.75)}
+.swap b,.swap .who b{color:var(--ink)}
+.swap .note,.swap .ref,.swap small,.swap .seats span{color:var(--ink-soft)}
+.swap .price{background:var(--cream-2);color:var(--ink);border-radius:999px;padding:4px 11px;
+  font-family:var(--mono);font-size:.72rem;font-weight:700}
+.swap .btn.ghost{color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--cream-3)}
+.swap .top{display:flex;align-items:flex-start;gap:12px;justify-content:space-between}
+.swap .who span{display:block;font-size:.78rem;color:var(--ink-soft);margin-top:3px}
+.swap .seats{margin-top:10px;font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;
+  text-transform:uppercase;font-weight:700;color:var(--ink-soft)}
+.swap.hall::before{background:var(--gold)}
 .swap::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--member)}
 .swap.mine::before{background:var(--gold)}
 .swap.shut,.swap.past{opacity:.55}
@@ -994,6 +1007,49 @@ nav .railtop{display:none}
 .crs{font-family:var(--mono);font-size:.62rem;letter-spacing:.06em;background:var(--t2);
   border-radius:5px;padding:1px 5px;color:var(--gold-2);margin-left:4px}
 
+/* Who is backing a suggestion. Names, not a number, because the committee has
+   to answer these people by name. */
+.backers{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px}
+.backers .hd{font-family:var(--mono);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--cream-4);font-weight:700;margin-right:2px}
+.backers .who{display:inline-flex;align-items:center;gap:5px;background:var(--t1);border-radius:999px;
+  padding:4px 10px;font-size:.75rem;font-weight:700;color:var(--cream-2)}
+.backers .who.you{background:var(--gold);color:var(--gold-ink)}
+.backers .who i{font-style:normal;font-family:var(--mono);font-size:.62rem;opacity:.72}
+.backers .none{font-size:.75rem;color:var(--cream-4)}
+.backers .prop{width:100%;font-size:.7rem;color:var(--cream-4);margin-top:2px}
+.backers .prop i{font-style:normal;font-family:var(--mono)}
+
+/* THE BOARD, AS A BOARD.
+   Squares of paper on a wall. Cream, because a notice on a red ground reads as
+   a warning and most of these are not. They tilt very slightly, alternately,
+   which is what stops a grid of rectangles looking like a spreadsheet. */
+.notes{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;align-items:start}
+.notes .notice{background:var(--paper,#FFFDFA);color:var(--ink);border-radius:3px;padding:15px 15px 12px;
+  box-shadow:0 8px 18px -10px rgba(20,1,3,.65);position:relative;transform:rotate(-.35deg);
+  transition:transform .18s var(--ease),box-shadow .18s}
+.notes .notice:nth-child(2n){transform:rotate(.4deg)}
+.notes .notice:nth-child(3n){transform:rotate(-.15deg)}
+.notes .notice:hover{transform:rotate(0) translateY(-2px);box-shadow:0 14px 26px -12px rgba(20,1,3,.7)}
+.notes .notice::before{content:"";position:absolute;top:-5px;left:50%;margin-left:-16px;width:32px;height:11px;
+  background:rgba(180,20,27,.22);border-radius:2px;transform:rotate(-2deg)}
+.notes .notice.pinned::before{background:var(--gold);box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.notes .notice b{display:block;font-family:var(--display);font-size:1rem;font-weight:600;letter-spacing:-.03em;
+  line-height:1.2;color:var(--ink);margin-bottom:6px}
+.notes .notice p{font-size:.82rem;line-height:1.55;color:var(--ink-soft);white-space:pre-wrap;margin:0}
+.notes .notice small{display:block;margin-top:9px;font-family:var(--mono);font-size:.58rem;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--cream-4);font-weight:700}
+.notes .notice.urgent{background:#FFF4F2;box-shadow:0 8px 18px -10px rgba(140,10,16,.8)}
+.notes .notice.urgent::before{background:var(--crimson)}
+.notes .notice.waiting{background:#FBF4E4}
+.notes .notice .st{display:inline-block;font-family:var(--mono);font-size:.56rem;letter-spacing:.12em;
+  text-transform:uppercase;font-weight:700;background:rgba(180,20,27,.1);color:var(--crimson-3);
+  border-radius:999px;padding:3px 8px;margin-bottom:7px}
+.notes .notice .acts{margin-top:10px}
+.notes .notice .acts .btn{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.4px var(--cream-3)}
+.notes .notice .acts .btn.gold{background:var(--gold);color:var(--gold-ink);box-shadow:none}
+@media(max-width:520px){ .notes{grid-template-columns:1fr 1fr;gap:9px} .notes .notice{padding:12px 12px 10px} }
+
 /* ---------- gate ---------- */
 #gate{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:22px;
   overflow:auto;overscroll-behavior:contain}
@@ -1137,9 +1193,11 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
 
   <!-- ===================== SWAPS ===================== -->
   <section id="v-swaps" hidden>
-    <div class="vh"><h2>Formal <i>swaps</i></h2><span class="note">Dinner at another college, and them at ours</span>
+    <div class="vh"><h2><i>Formals</i></h2><span class="note">Swaps with other colleges, and our own themed halls</span>
       <div class="right"><button class="btn gold sm" id="bNewSwap" data-committee hidden>Add a swap</button></div></div>
+    <div class="seg" id="formalSeg" style="margin-bottom:14px"></div>
     <div id="swapList"></div>
+    <div id="hallList" hidden></div>
   </section>
 
   <!-- ===================== SECOND LIFE ===================== -->
@@ -1150,7 +1208,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
   </section>
 
   <section id="v-room" hidden>
-    <div class="vh"><h2>The MCR <i>room</i></h2><span class="note">Book it, and see what is already booked</span></div>
+    <div class="vh"><h2>MCR <i>room</i></h2><span class="note">Book it, see what is taken, and follow your own requests</span></div>
     <div id="roomBody"></div>
   </section>
 
@@ -1300,9 +1358,9 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
   <div class="railtop"><img class="crest" id="crestRail" alt="Jesus College MCR"><span><b>Jesus MCR</b><i id="railYear"></i></span></div>
   <button class="tabbtn" data-view="today" aria-current="true"><svg viewBox="0 0 24 24"><path d="M4 15a8 8 0 0 1 16 0"/><path d="M12 3v3M4.2 6.6l2.1 2.1M19.8 6.6l-2.1 2.1M2 15h20"/></svg>Today</button>
   <button class="tabbtn" data-view="board"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="15" rx="1.8"/><path d="M7 9h10M7 13h6"/><path d="M12 2v2"/></svg>Board<span class="badge" id="bdgLodge" hidden>0</span></button>
-  <button class="tabbtn" data-view="room"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M9.5 20v-5h5v5"/></svg>The MCR room</button>
+  <button class="tabbtn" data-view="room"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M9.5 20v-5h5v5"/></svg>MCR room</button>
   <button class="tabbtn" data-view="info"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5"/><path d="M12 7.6h.01"/></svg>Info</button>
-  <button class="tabbtn" data-view="swaps"><svg viewBox="0 0 24 24"><path d="M4 8h13l-3-3M20 16H7l3 3"/></svg>Swaps<span class="badge" id="bdgSwaps" hidden>0</span></button>
+  <button class="tabbtn" data-view="swaps"><svg viewBox="0 0 24 24"><path d="M6 4v7a6 6 0 0 0 12 0V4"/><path d="M12 17v3M8 20h8"/></svg>Formals<span class="badge" id="bdgSwaps" hidden>0</span></button>
   <button class="tabbtn" data-view="ask"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/><path d="M12 12.4v-.5c0-1 .7-1.5 1.3-1.9.6-.4 1-.9 1-1.6a2.3 2.3 0 0 0-4.6 0"/><path d="M12 14.4h.01"/></svg>Ask<span class="badge" id="bdgAsk" hidden>0</span></button>
   <button class="tabbtn" data-view="biz"><svg viewBox="0 0 24 24"><path d="M4 20h16M12 4v3M6 20V9l6-4 6 4v11"/><path d="M9 13h6"/></svg>MCR business<span class="badge" id="bdgBiz" hidden>0</span></button>
   <span class="sep" data-committee hidden></span>
@@ -1342,7 +1400,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbzdBBnT92y9loTDiVX0CTUr4TObTsZKb4NZqiIyB7sxmvMrcs0WqB6qzE190_zymyREIQ/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwxYdedCE8sY1CtQLuMbK_fBxQrfCKXnW7pSH9KqDzTD42Z5KQsHd18qIhDRcDHAc5J7w/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -1351,7 +1409,7 @@ const BOOK_REGISTER = "https://jcollegemcr.co.uk/register";
 /* The build this page was written against. If the server reports a different
    one, the deployment answering is not this code, and the membership check it
    is running is whatever was deployed last. Shown under 'What is wrong?'. */
-const EXPECT_BUILD = "chimney-7";
+const EXPECT_BUILD = "chimney-9";
 
 /* JavaScript is alive, so the ring painted before the page was parsed can go.
    It is a pseudo element on <html>, so nothing else can remove it. */
@@ -1644,6 +1702,11 @@ async function probe(){
        the saved file, so this is the one fact that settles 'I changed the code
        and nothing happened'. */
     SRV_BUILD = d.build || "";
+    /* If the page is talking to an older deployment, nothing anybody changes in
+       the script will appear to work, and every symptom will look like a
+       mystery. It is said here, at the gate, rather than left in a panel
+       nobody opens. */
+    if (SRV_BUILD && SRV_BUILD !== EXPECT_BUILD) staleWarn(SRV_BUILD);
     SRV_BOOK = d.bookOn;
     CLIENT_ID = (d.signIn && d.signIn.clientId) || "";
     $("gFootYear").textContent = d.year || "";
@@ -1782,6 +1845,18 @@ function warmUp(){
   warmed = true;
   try{ api("warm").catch(function(){}); }catch(e){}
 }
+/* The page and the script are versioned together. When they disagree, the
+   deployment is the thing to fix, and this says exactly which end is behind. */
+function staleWarn(srv){
+  const box = $("gateFix");
+  if (!box) return;
+  box.innerHTML = '<div class="fix"><b>This page is talking to an older copy of the server</b>' +
+    '<p>The page is <span class="mono">' + esc(EXPECT_BUILD) + '</span> and the server answering it is ' +
+    '<span class="mono">' + esc(srv) + '</span>. Signing in may be slow or fail until they match.</p>' +
+    '<p style="margin-top:6px">In the Apps Script editor: <b>Deploy</b>, <b>Manage deployments</b>, edit the ' +
+    'live one, set <b>Version</b> to <b>New version</b>, then <b>Deploy</b>. The address must end ' +
+    '<span class="mono">/exec</span> and be the same one in API_URL.</p></div>';
+}
 function gateFail(msg){
   checkSay("no", "Could not reach the server");
   lastCred = "";
@@ -1808,7 +1883,9 @@ async function verifyAndEnter(cred, recheck){
        real seconds, and reporting that as a failure while asking somebody to
        press the same button again is not a design, it is a shrug. It waits,
        says so, and tries once more on its own. */
-    d = await withTimeout(api("googleToken", { credential: cred, recheck: !!recheck }), 20000, "SLOW");
+    /* Two questions only, so this should be quick. If it is not, it is asked
+       once more before anybody is told anything went wrong. */
+    d = await withTimeout(api("googleToken", { credential: cred, recheck: !!recheck }), 15000, "SLOW");
   }catch(first){
     const fm = String((first && first.message) || "");
     if (fm !== "SLOW" && !/timed out|too long/i.test(fm)) return gateFail(fm);
@@ -1830,23 +1907,6 @@ async function verifyAndEnter(cred, recheck){
   lastEmail = d.email || "";
   setToken(d.token);
   $("gateMsg").textContent = "";
-  if (d.state){
-    S = d.state;
-    paintCrests();
-    loadPhotos();
-    cacheState();
-    $("gate").hidden = true;
-    $("hdr").hidden = false;
-    $("boot").hidden = true;
-    bootTalk(false);
-    render();
-    syncPhotos(S.photoRev);
-    startPolling();
-    greet();
-    return;
-  }
-  /* No page came with it, which should not happen. Fetch it the old way rather
-     than leave somebody at a dead gate. */
   $("gate").hidden = true;
   $("boot").hidden = false;
   bootIdx = 0;
@@ -1997,18 +2057,20 @@ function bootTalk(on){
 /* The loading screen can no longer be a dead end. If the first call fails for
    any reason that is not a refusal, this says so and offers the two things
    worth trying, and the session is left alone. */
+/* THE LOADING SCREEN IS ALLOWED TO TAKE ITS TIME.
+   Signing in has already happened by this point: the person is in, and this is
+   only the page being assembled. A timeout here does not protect anybody, it
+   just throws away a request that was about to succeed and makes them start
+   again. So there is no timeout. If it is slow the line says so, and if the
+   request genuinely fails the error comes back on its own and is handled. */
 async function bootFetch(){
-  try{
-    return await withTimeout(api("state"), 22000, "SLOW");
-  }catch(e){
-    const m = String((e && e.message) || "");
-    /* A refusal is passed straight on: there is no point asking twice. */
-    if (/sign in|session|NOTMEMBER|BOOKDOWN|expired/i.test(m)) throw e;
+  const slow = setTimeout(function(){
     const line = $("bootLine");
-    if (line) line.textContent = "The server is waking up. One more moment";
-    return await withTimeout(api("state"), 25000,
-      "The server did not answer. It is usually awake by the second try.");
-  }
+    if (line) line.textContent = "The server is waking up. This can take a moment the first time";
+  }, 6000);
+  try{
+    return await api("state");
+  }finally{ clearTimeout(slow); }
 }
 function bootStuck(msg){
   bootTalk(false);
@@ -2119,6 +2181,7 @@ async function boot(fresh){
   $("hdr").hidden = false;
   render();
   startPolling();
+  if (fresh) greet();
 }
 async function refresh(loud){
   if (loud){ const b = $("bRefresh"); if (b) b.classList.add("busy"); }
@@ -2674,12 +2737,13 @@ function openEvent(id){
    ============================================================ */
 function noticeHtml(n){
   const waiting = n.status === "pending";
-  return '<div class="notice' + (n.kind === "urgent" ? " urgent" : "") + (waiting ? " waiting" : "") +
-    '">' + (waiting ? '<span class="st open">Waiting for the committee</span>' : "") +
+  return '<div class="notice note' + (n.kind === "urgent" ? " urgent" : "") + (waiting ? " waiting" : "") +
+    (n.pin ? " pinned" : "") + '">' +
+    (waiting ? '<span class="st open">Waiting for the committee</span>' : "") +
     "<b>" + esc(n.title) + "</b>" +
+    (n.body ? "<p>" + esc(n.body) + "</p>" : "") +
     "<small>" + esc(n.source || n.by || "MCR committee") + " &middot; " + esc(ago(n.at)) +
     (n.until ? " &middot; until " + esc(shortDate(n.until)) : "") + "</small>" +
-    (n.body ? "<p>" + esc(n.body) + "</p>" : "") +
     (isCommittee()
       ? '<div class="acts">' +
         (waiting ? '<button class="btn gold sm" data-noticeok="' + esc(n.id) + '">Put it up</button>' : "") +
@@ -2703,7 +2767,10 @@ function renderLodge(){
   if (!S) return;
   /* Three sections now, drawn from the same data as before. */
   put("boardBody", lodgeNow());
-  put("roomBody", lodgeRoom());
+  /* Asking for the room and seeing what is booked are the same errand, so they
+     are on the same page. This used to be split between the Lodge and Ask,
+     which meant booking it and checking it were two different places. */
+  put("roomBody", lodgeRoom() + askRooms());
   const counts = { forms: (S.links || []).length, guides: (S.resources || []).length,
     sport: (S.clubs || []).length };
   if (["forms","guides","sport"].indexOf(lodgeTab) < 0) lodgeTab = "forms";
@@ -2712,14 +2779,28 @@ function renderLodge(){
     (counts[t[0]] ? " &middot; " + counts[t[0]] : "") + "</button>").join(""));
   put("lodgeBody", { forms: lodgeForms, guides: lodgeGuides, sport: lodgeSport }[lodgeTab]());
 }
+/* THE BOARD.
+   A cork board, not a filing cabinet: small squares of paper, the newest first,
+   and only the last week. Anything older has either been dealt with or has
+   stopped being news, and a board that keeps everything is a board nobody
+   reads. The committee still sees what is waiting for a yes. */
+const BOARD_DAYS = 7;
 function lodgeNow(){
-  const n = S.notices || [];
+  const all = S.notices || [];
+  const since = Date.now() - BOARD_DAYS * 86400000;
+  const fresh = all.filter(x => (x.at || 0) >= since || x.pin);
+  const older = all.length - fresh.length;
+  const n = fresh;
   const waiting = n.filter(x => x.status === "pending");
   return '<div class="noticecols">' + (isCommittee() && waiting.length
     ? '<div class="grp"><b>Waiting for a yes</b></div>' + waiting.map(noticeHtml).join("") +
       '<div class="grp"><b>On the board</b></div>' : "") +
-    (n.length ? n.filter(x => x.status !== "pending" || !isCommittee()).map(noticeHtml).join("")
-    : '<div class="card"><p>Nothing on the board, which is usually good news.</p>' +
+    (n.length ? '<div class="notes">' +
+      n.filter(x => x.status !== "pending" || !isCommittee()).map(noticeHtml).join("") + '</div>' +
+      (older ? '<p class="lede" style="margin-top:12px">' + older +
+        (older === 1 ? " older notice is" : " older notices are") + " off the board. The last " +
+        BOARD_DAYS + " days are what is shown.</p>" : "")
+    : '<div class="card"><p>Nothing on the board this week, which is usually good news.</p>' +
       '<p class="lede">Gates, building work, lost property and anything the Porters want the MCR to know lands here.</p></div>') + '</div>';
 }
 function lodgeForms(){
@@ -2928,7 +3009,7 @@ let askTab = "new";
 /* Four shelves rather than one long column: what you want to ask, the threads
    you have open, the room you have asked for, and the people you would be
    asking. Each one fits on a screen. */
-const ASK_TABS = [["new","Ask something"],["threads","Your threads"],["rooms","Your room requests"],
+const ASK_TABS = [["new","Ask something"],["threads","Your threads"],
   ["who","Who you are asking"]];
 function renderAsk(){
   const th = S.tickets || [], rooms = S.rooms || [];
@@ -2937,7 +3018,8 @@ function renderAsk(){
   put("askSeg", ASK_TABS.map(t =>
     '<button data-asktab="' + t[0] + '" aria-pressed="' + (askTab === t[0]) + '">' + esc(t[1]) +
     (n[t[0]] ? " &middot; " + n[t[0]] : "") + "</button>").join(""));
-  put("askBody", { new: askNew, threads: askThreads, rooms: askRooms, who: askWho }[askTab]());
+  if (askTab === "rooms") askTab = "new";
+  put("askBody", { new: askNew, threads: askThreads, who: askWho }[askTab]());
 }
 function askNew(){
   return '<div class="card"><p>Pick what it is about and it goes to one person, not to everybody. ' +
@@ -3168,6 +3250,15 @@ function renderTreasury(){
     "<small>Anything you have paid for on the MCR\u2019s behalf. A receipt, the amount, and where to send " +
     "it. The Treasurer pays out fortnightly.</small></span><span class=\"arw\">&#8599;</span></a>");
 }
+function backersHtml(i){
+  const b = i.backers || [];
+  if (!b.length) return '<div class="backers"><span class="none">Nobody has backed this yet</span></div>';
+  return '<div class="backers"><span class="hd">Backed by</span>' +
+    b.map(p => '<span class="who' + (p.you ? " you" : "") + '">' + esc(p.name) +
+      (p.crsid ? '<i>' + esc(p.crsid) + '</i>' : "") + '</span>').join("") +
+    (i.proposerCrsid ? '<span class="prop">put up by ' + esc(i.name) + ' <i>' + esc(i.proposerCrsid) + '</i></span>' : "") +
+    '</div>';
+}
 function renderIdeas(){
   const list = S.ideas || [], need = S.backingToAnswer || 10;
   const lab = { open:"", pending:"Waiting for the committee", doing:"The committee is on it",
@@ -3198,6 +3289,10 @@ function renderIdeas(){
         ? '<div class="bar"><i style="width:' + Math.min(100, Math.round(i.backing / need * 100)) + '%"></i></div>' +
           '<span class="ref">' + (i.needs ? i.needs + " more and the committee has to answer" : "The committee owes an answer") + "</span>"
         : '<div class="msg"><span class="m">' + esc(lab[i.status]) + "</span>" + esc(i.reply) + "</div>") +
+      /* Backing something in public is what obliges the committee to answer, so
+         the people who did it are named rather than counted. The committee also
+         sees CRSids, which is what the minutes need. */
+      backersHtml(i) +
       '<div class="acts">' +
         (i.own && i.status === "open" ? '<button class="btn ghost sm" data-dropidea="' + esc(i.id) + '">Take it down</button>' : "") +
         (isCommittee() && i.status === "pending"
@@ -4042,7 +4137,63 @@ const GIFT_PER_PAGE = 20;
    number you should be able to count rather than estimate, and because a bar
    at 75% tells you nothing about whether you can still get in. */
 let swapEdit = "", swapPast = false;
+/* Formals come in two sorts and they read the same way, so they sit under one
+   heading with a switch: a swap is dinner at another college, a themed hall is
+   one of ours. The halls are simply the events the committee has tagged as
+   formals, so nothing new has to be kept anywhere. */
+let formalTab = "swaps";
+function hallFormals(){
+  const t = todayLondon();
+  return (S.events || []).filter(e => {
+    const tags = String(e.tags || "").toLowerCase();
+    return e.date >= t && (tags.indexOf("formal") >= 0 || tags.indexOf("hall") >= 0);
+  }).sort((a, b) => String(a.date).localeCompare(String(b.date)));
+}
+function renderFormalSeg(){
+  const nS = (S.swaps || []).filter(w => !w.past).length, nH = hallFormals().length;
+  put("formalSeg",
+    '<button data-formal="swaps" aria-pressed="' + (formalTab === "swaps") + '">Swaps' +
+      (nS ? " &middot; " + nS : "") + '</button>' +
+    '<button data-formal="halls" aria-pressed="' + (formalTab === "halls") + '">Our themed halls' +
+      (nH ? " &middot; " + nH : "") + '</button>');
+  const sw = $("swapList"), hl = $("hallList");
+  if (sw) sw.hidden = formalTab !== "swaps";
+  if (hl) hl.hidden = formalTab !== "halls";
+  const nb = $("bNewSwap");
+  if (nb) nb.textContent = formalTab === "swaps" ? "Add a swap" : "Add a hall";
+  if (formalTab === "halls") renderHalls();
+}
+function renderHalls(){
+  const list = hallFormals();
+  put("hallList", list.length
+    ? list.map(hallCard).join("")
+    : '<div class="card"><p>No themed halls in the diary yet. The committee adds them as events ' +
+      'tagged <span class="mono">formal</span>, and they appear here as well as on the calendar.</p></div>');
+}
+/* Laid out like a swap, because it is the same errand: a dinner, a date, a
+   price, and a way of putting your name down. */
+function hallCard(e){
+  const c = e.counts || {};
+  const going = Number(c.going || 0);
+  const cap = Number(e.capacity || 0);
+  const left = cap ? Math.max(0, cap - going) : null;
+  const mine = (S.mine || {})[e.id];
+  return '<div class="swap hall' + (mine && mine.status === "going" ? " mine" : "") + '">' +
+    '<div class="top"><div class="who"><b>' + esc(e.title) + '</b>' +
+      '<span>' + esc(longDate(e.date)) + (e.start ? " &middot; " + esc(clock(e.start)) : "") +
+      (e.venueName ? " &middot; " + esc(e.venueName) : "") + '</span></div>' +
+      (e.price ? '<span class="price">' + esc(e.price) + '</span>' : "") + '</div>' +
+    (e.desc ? '<p class="note">' + esc(String(e.desc).split("\n")[0]) + '</p>' : "") +
+    (e.dress ? '<p class="ref">Dress: ' + esc(e.dress) + '</p>' : "") +
+    '<div class="seats"><span>' + going + (cap ? " of " + cap : "") + " going" +
+      (left !== null ? " &middot; " + left + " left" : "") + '</span></div>' +
+    '<div class="acts">' +
+      '<button class="btn ' + (mine && mine.status === "going" ? "ghost" : "gold") + ' sm" data-ev="' + esc(e.id) + '">' +
+      (mine && mine.status === "going" ? "You are going, open it" : "Put your name down") + '</button></div>' +
+    '</div>';
+}
 function renderSwaps(){
+  renderFormalSeg();
   const all = S.swaps || [], hold = S.swapHold || 5;
   const live = all.filter(w => !w.past), gone = all.filter(w => w.past);
   const list = swapPast ? gone : live;
@@ -4598,11 +4749,12 @@ document.addEventListener("click", async e => {
     "[data-skip],[data-editser],[data-second],[data-vote],[data-mset],[data-code],[data-checkin]," +
     "[data-delupdate],[data-rosteredit],[data-rosterdel],[data-newidea],[data-back]," +
     "[data-setidea],[data-dropidea],[data-pollvote],[data-pollclose]," +
-    "[data-copy],[data-copyboth],[data-marketnew],[data-markettake],[data-marketdrop],[data-bumpedit],[data-gk],[data-gift],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-polldrop],[data-motiondrop],[data-desktab],[data-tick2],[data-gp],[data-desk],[data-asktab],[data-thread],[data-mythreads],[data-swaptake],[data-swapdrop],[data-swappaid],[data-swapedit],[data-swapsave],[data-swapcancel],[data-swapdel],[data-swappast],[data-mailtest],[data-bank],[data-swapnudge],[data-swapkick],[data-swappromote],[data-copyaddrs],[data-swapdeskedit],[data-jcsu],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
+    "[data-formal],[data-copy],[data-copyboth],[data-marketnew],[data-markettake],[data-marketdrop],[data-bumpedit],[data-gk],[data-gift],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-polldrop],[data-motiondrop],[data-desktab],[data-tick2],[data-gp],[data-desk],[data-asktab],[data-thread],[data-mythreads],[data-swaptake],[data-swapdrop],[data-swappaid],[data-swapedit],[data-swapsave],[data-swapcancel],[data-swapdel],[data-swappast],[data-mailtest],[data-bank],[data-swapnudge],[data-swapkick],[data-swappromote],[data-copyaddrs],[data-swapdeskedit],[data-jcsu],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
   if (!t) return;
   const d = t.dataset;
   try{
     if (t.hasAttribute("data-marketnew")) return openMarket();
+    if (t.hasAttribute("data-formal")){ formalTab = d.formal; renderSwaps(); window.scrollTo(0, 0); return; }
     if (t.hasAttribute("data-gk")){ giftKind = d.gk; giftPage = 0; renderMarket(); return; }
     if (d.gp !== undefined){ giftPage = Math.max(0, +d.gp); renderMarket(); window.scrollTo(0, 0); return; }
     if (d.gift) return openGift(d.gift);
