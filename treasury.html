@@ -367,10 +367,12 @@ input[type=number]{-moz-appearance:textfield}
   color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--cream-3)}
 .req .btn.ghost:hover,.box .btn.ghost:hover,.tbl .btn.ghost:hover,.lg .btn.ghost:hover{background:var(--cream-2)}
 .btn:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-a.btn{display:inline-block;line-height:1.15}
+a.btn{display:inline-flex;line-height:1.15;text-decoration:none}
 .msg{font-size:14px;font-weight:600;color:var(--red-deep);line-height:1.4}
 .msg.good{color:var(--ok)}
 .hintline{font-size:14.5px;color:var(--ink-soft);margin:10px 0 0;line-height:1.5}
+/* The same line, but standing on the crimson rather than inside a panel. */
+.hintline.onband{color:var(--cream-3)}
 
 .drop{border:1.5px dashed var(--red-mid);background:#fff;border-radius:11px;padding:16px;display:flex;
   gap:16px;align-items:center;flex-wrap:wrap}
@@ -1450,6 +1452,7 @@ ul.notes li:last-child{margin-bottom:0}
           <option value="all">Including rejected and cancelled</option>
         </select>
         <span class="sp"></span>
+        <a class="btn ghost small" data-desk data-desklink target="_blank" rel="noopener" hidden>Open the desk</a>
         <button class="btn ghost small" id="bExportClaims">Export claims</button>
       </div>
       <div id="approvalList"></div>
@@ -1465,7 +1468,12 @@ ul.notes li:last-child{margin-bottom:0}
           <option value="paid">Already paid</option>
           <option value="all">Everything</option>
         </select>
+        <span class="sp"></span>
+        <a class="btn small" data-desk data-desklink target="_blank" rel="noopener" hidden>Pay from the desk</a>
       </div>
+      <p class="hintline onband" data-desk hidden style="margin:-6px 0 14px">Everything on this page can also be
+        done in the spreadsheet, a row at a time, with the bank details beside each claim. Tick one paid
+        there and it closes here too, and the claimant is emailed either way.</p>
       <div id="paymentList"></div>
     </section>
 
@@ -1505,6 +1513,38 @@ ul.notes li:last-child{margin-bottom:0}
 
     <!-- ---------- SETTINGS ---------- -->
     <section id="v-settings" hidden>
+
+      <div data-approver>
+        <div class="shead"><h2>The desk</h2><span class="note">President and Treasurer only</span></div>
+        <div class="panel">
+          <p class="lede">A spreadsheet holding every claim the MCR has, from which the whole job can
+            be done: approve one, approve a smaller amount than was asked for, move a claim to a
+            different budget line, put it to the college, turn it down, and tick it paid. Each of
+            those does exactly what the button on this page does, emails and all, and what you change
+            there appears here on the next refresh.</p>
+          <div class="actions" style="margin-top:0" data-desk hidden>
+            <a class="btn" data-desklink target="_blank" rel="noopener">Open the desk</a>
+            <button class="btn ghost" id="bDeskCopy">Copy the link</button>
+            <span class="msg" id="deskMsg"></span>
+          </div>
+          <dl class="kv" style="margin-top:16px" data-desk hidden>
+            <dt>Shared with</dt><dd id="deskWho">&mdash;</dd>
+            <dt>Address</dt><dd id="deskUrlShow" style="word-break:break-all">&mdash;</dd>
+          </dl>
+          <p class="hintline" data-desk hidden>It is a separate file from the books, shared with the
+            people holding the President and Treasurer roles and with nobody else, because the
+            Payments tab carries claimants&rsquo; bank details. Change the committee below and the
+            sharing follows on its own. The last tab of the spreadsheet explains every column.</p>
+          <div class="box warn" data-nodesk hidden>
+            <h4>Not built yet</h4>
+            <p>The desk is made once, from the Apps Script editor, by running <b>setupDesk</b>. It
+              creates the file, shares it with whoever holds the two roles today, and hangs the
+              triggers on it that make an edit take effect. Until then everything still works from
+              this page.</p>
+          </div>
+        </div>
+      </div>
+
       <div class="shead"><h2>Committee</h2><span class="note">Roles are set on the server</span></div>
       <div class="panel">
         <p class="lede">People sign in with their own University account, and the address decides what they
@@ -1738,7 +1778,7 @@ ul.notes li:last-child{margin-bottom:0}
    ============================================================ */
 
 /* PASTE YOUR TREASURY WEB APP URL HERE. Deploy, Manage deployments, ends in /exec. */
-const API_URL = "https://script.google.com/macros/s/AKfycbxpFC_gQO7P9R4G5MpBFgw0h1z7WzqY8S_ASiilA28_a7-gbhSk80ziqeVCuT_eAS77/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxs8fIbs6EVYMz0brkvA_QVnTRPxpECPsUUbYcHv905WzPermmwY0tEZr8HjHTMrG24/exec";
 
 /* The crest, once. It used to appear three times in this file, which made the
    page a third of a megabyte before a single figure had loaded. */
@@ -4277,8 +4317,33 @@ function fillSettings(){
   if($("linkWarn"))$("linkWarn").textContent=s.publicLinks
     ?"Reports and receipts open from a Drive link, so anyone holding the link can view them. The link is the secret."
     :"Reports and receipts open only for people the Drive folder is shared with.";
-  renderRoles();renderViewers();
+  renderRoles();renderViewers();paintDeskLinks();
 }
+/* The spreadsheet the Treasurer and the President work from. The server only
+   hands the address to those two, so for everybody else there is nothing here to
+   hide: the field simply never arrives. */
+function paintDeskLinks(){
+  const url=(S&&S.settings&&S.settings.deskUrl)||"";
+  document.querySelectorAll("[data-desk]").forEach(el=>el.hidden=!url);
+  document.querySelectorAll("[data-nodesk]").forEach(el=>el.hidden=!!url);
+  document.querySelectorAll("[data-desklink]").forEach(a=>{a.href=url||"#"});
+  if($("deskUrlShow"))$("deskUrlShow").textContent=url||"not made yet";
+  if($("deskWho")){
+    const r=(S.settings&&S.settings.roles)||[];
+    const of=n=>{const x=r.filter(y=>y.role===n)[0];return x?x.people:[]};
+    const all=of("president").concat(of("treasurer")).filter(Boolean);
+    $("deskWho").textContent=all.length?all.join(", "):"the President and the Treasurer";
+  }
+}
+/* Handy on a phone, where opening a Google Sheet in the app rather than the
+   browser is easier done by pasting the address than by following a link. */
+$("bDeskCopy").addEventListener("click",async()=>{
+  const url=(S&&S.settings&&S.settings.deskUrl)||"",m=$("deskMsg");
+  if(!url)return;
+  try{await navigator.clipboard.writeText(url);m.className="msg good";m.textContent="Link copied"}
+  catch(e){m.className="msg";m.textContent="Copy it from the address below"}
+  setTimeout(()=>m.textContent="",2600);
+});
 $("bSaveBalances").addEventListener("click",async()=>{
   const m=$("balMsg");m.className="msg";
   const btn=$("bSaveBalances");btn.disabled=true;
