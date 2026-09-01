@@ -371,6 +371,8 @@ a.btn{display:inline-flex;line-height:1.15;text-decoration:none}
 .msg{font-size:14px;font-weight:600;color:var(--red-deep);line-height:1.4}
 .msg.good{color:var(--ok)}
 .hintline{font-size:14.5px;color:var(--ink-soft);margin:10px 0 0;line-height:1.5}
+/* The reason a claim exists, which is the line the committee actually reads. */
+.req .sub .why{color:var(--red-deep);font-weight:700}
 /* The same line, but standing on the crimson rather than inside a panel. */
 .hintline.onband{color:var(--cream-3)}
 
@@ -1338,15 +1340,16 @@ ul.notes li:last-child{margin-bottom:0}
           <button data-kind="reimbursement" aria-pressed="true">I have already paid</button>
           <button data-kind="allocation" aria-pressed="false">Ask for money first</button>
         </div>
-        <p class="lede" id="kindLede">Attach the receipt now. Once the President or Treasurer approves, a payment report is produced with the receipt inside it, filed to Drive and sent to the Treasurer automatically.</p>
+        <p class="lede" id="kindLede">Attach the receipt now. Once the President or Treasurer approves, a payment report is produced with the receipt inside it, filed to Drive, and the claim appears on the Treasurer&rsquo;s desk ready to pay.</p>
         <p class="lede" id="bigWarn" hidden style="background:#FFF8E9;border:1px solid var(--gold);
           border-radius:11px;padding:13px 15px;color:var(--ink-2);margin-bottom:16px"></p>
         <div class="grid">
           <label class="f"><span class="l" id="dateLbl">Date of spend</span><input type="date" id="iDate"></label>
           <label class="f"><span class="l" id="amtLbl">Amount (&pound;)</span><input type="number" id="iAmt" step="0.01" min="0" inputmode="decimal" enterkeyhint="done" placeholder="0.00"></label>
           <label class="f full"><span class="l">Budget line</span><select id="iLine"></select></label>
-          <label class="f full"><span class="l">What it was for</span><input type="text" id="iWhat" placeholder="e.g. Charcoal and burgers for the Saturday BBQ"></label>
-          <label class="f full"><span class="l">Anything the committee should know</span><textarea id="iNote" placeholder="Optional. Who agreed it, or anything unusual about the spend"></textarea></label>
+          <label class="f full"><span class="l">What it was for</span><input type="text" id="iWhat" maxlength="200" autocomplete="off" placeholder="e.g. Charcoal and burgers for the Saturday BBQ"></label>
+          <label class="f full"><span class="l">Reason for the claim</span><textarea id="iNote" maxlength="600" placeholder="Why the MCR should pay for this. Who agreed it, which event it was for, anything unusual about the spend."></textarea>
+            <span class="hintline">Required. It sits beside the claim on the Treasurer&rsquo;s desk, and it is the first thing read when your claim is decided.</span></label>
         </div>
         <div style="margin-top:16px" id="rcWrap">
           <span class="l" style="font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:8px">Receipt</span>
@@ -1520,8 +1523,12 @@ ul.notes li:last-child{margin-bottom:0}
           <p class="lede">A spreadsheet holding every claim the MCR has, from which the whole job can
             be done: approve one, approve a smaller amount than was asked for, move a claim to a
             different budget line, put it to the college, turn it down, and tick it paid. Each of
-            those does exactly what the button on this page does, emails and all, and what you change
-            there appears here on the next refresh.</p>
+            those does exactly what the button on this page does, and what you change there appears
+            here on the next refresh.</p>
+          <p class="lede"><b>The Treasurer is not on email at all.</b> No payment requests, no claims
+            to put to the Bursar, no reminders. All of it arrives on the desk instead, colour coded:
+            amber for a claim waiting on the money, green once it is paid. Claimants still hear at
+            every step, because they have nowhere else to look.</p>
           <div class="actions" style="margin-top:0" data-desk hidden>
             <a class="btn" data-desklink target="_blank" rel="noopener">Open the desk</a>
             <button class="btn ghost" id="bDeskCopy">Copy the link</button>
@@ -1778,7 +1785,7 @@ ul.notes li:last-child{margin-bottom:0}
    ============================================================ */
 
 /* PASTE YOUR TREASURY WEB APP URL HERE. Deploy, Manage deployments, ends in /exec. */
-const API_URL = "https://script.google.com/macros/s/AKfycbxs8fIbs6EVYMz0brkvA_QVnTRPxpECPsUUbYcHv905WzPermmwY0tEZr8HjHTMrG24/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycby-fZUGowQof9F729fW1wXinkYnR_x2vg1KDgp5i1507rFOl3i2F8lKROMXSTVylUrl/exec";
 
 /* The crest, once. It used to appear three times in this file, which made the
    page a third of a megabyte before a single figure had loaded. */
@@ -2170,6 +2177,24 @@ const ESC_={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"};
 const ESC_RE=/[&<>"']/g;
 /* Called a few thousand times per draw, so it skips the replace entirely for the
    great majority of strings that contain none of these characters. */
+/* Everything a person types is cleaned on the way to the server as well as
+   escaped on the way back to the screen. The server does this again and does not
+   trust any of it, which is where the real defence is; this is here so that what
+   the sheet stores is what the person meant, and so somebody pasting a page of
+   formatting out of Word does not have it silently trimmed at the far end.
+
+   Control characters go. So do the invisible ones, the zero width spaces and the
+   direction overrides, which are the only characters in a claim that can make a
+   line of text read as something other than what it says. */
+const CLEAN_RE=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F\u200B-\u200F\u202A-\u202E\u2060-\u2064\u2066-\u206F\uFEFF]/g;
+const clean=(v,max)=>{
+  let t=String(v==null?"":v).replace(CLEAN_RE,"").replace(/[\r\n\t]+/g," ").replace(/\s{3,}/g,"  ").trim();
+  if(max&&t.length>max)t=t.slice(0,max);
+  return t;
+};
+/* Whether anything survives the cleaning. A box filled with spaces and zero
+   width characters is an empty box. */
+const said=v=>/[\p{L}\p{N}]/u.test(clean(v));
 const esc=s=>{
   const t=s==null?"":String(s);
   ESC_RE.lastIndex=0;
@@ -3264,7 +3289,7 @@ function paintKind(){
   paintBig();
   $("kindLede").textContent=alloc
     ? "For something not paid for yet. The committee sets the money aside against the budget line, then asks you for the receipt once you have spent it. Only then does it reach the Treasurer."
-    : "Attach the receipt now. Once the President or Treasurer approves, a payment report is produced with the receipt inside it, filed to Drive and emailed to the Treasurer automatically.";
+    : "Attach the receipt now. Once the President or Treasurer approves, a payment report is produced with the receipt inside it, filed to Drive, and the claim appears on the Treasurer\u2019s desk ready to pay.";
 }
 /* One switch for the whole claim form, whether it was the allowance or the
    President that closed it. The form itself is dimmed rather than hidden, so
@@ -3315,9 +3340,12 @@ $("iAmt").addEventListener("input",paintBig);
 $("bSubmit").addEventListener("click",async()=>{
   const m=$("formMsg");m.className="msg";
   if(!profileReady()){m.textContent="Fill in your details above first.";return}
-  const amt=money($("iAmt").value),what=$("iWhat").value.trim();
+  const amt=money($("iAmt").value),what=clean($("iWhat").value,200),why=clean($("iNote").value,600);
   if(amt===null){m.textContent=moneyWhy($("iAmt").value);$("iAmt").focus();return}
-  if(!what){m.textContent="Say what the money is for.";$("iWhat").focus();return}
+  if(!said(what)){m.textContent="Say what the money is for.";$("iWhat").focus();return}
+  if(!said(why)){
+    m.textContent="Give a reason for the claim. It is what the President and the Treasurer read when they decide.";
+    $("iNote").focus();return}
   if(!mailOk()){m.textContent=MAIL_OUT;return}
   if(claimKind==="reimbursement"&&!formReceipt.length&&!editingId){
     m.textContent="Attach the receipt, or switch to asking for the money first.";return}
@@ -3343,7 +3371,7 @@ $("bSubmit").addEventListener("click",async()=>{
     formReceipt?"Filing the receipt and telling the committee":"Telling the committee");
   try{
     await api("submitClaim",{id:editingId,kind:claimKind,amount:amt,what,
-      lineId:$("iLine").value,date:$("iDate").value||today(),note:$("iNote").value.trim(),
+      lineId:$("iLine").value,date:$("iDate").value||today(),note:why,
       receipts:formReceipt.map(f=>({data:f.data,name:f.name}))});
     resetForm();await refresh();
     sendingDone(claimKind==="allocation"?"Request sent":"Claim sent",
@@ -3382,7 +3410,7 @@ $("bSendReceipt").addEventListener("click",async()=>{
   if(amt===null){m.textContent=moneyWhy($("nAmt").value);$("nAmt").focus();return}
   if(!mailOk()){m.textContent=MAIL_OUT;return}
   const btn=$("bSendReceipt");btn.disabled=true;
-  sending(true,"Sending your receipt","Building the payment report and emailing the Treasurer");
+  sending(true,"Sending your receipt","Building the payment report and putting it on the Treasurer\u2019s desk");
   try{
     const r=await api("sendReceipt",{id:c.id,amount:amt,date:$("nDate").value||today(),
       receipts:needReceipt.map(f=>({data:f.data,name:f.name}))});
@@ -3390,8 +3418,8 @@ $("bSendReceipt").addEventListener("click",async()=>{
     await refresh();
     if(r.over){sending(false);m.className="msg";
       m.textContent="That is more than was set aside, so it has gone back to the committee."}
-    else{sendingDone("Receipt sent","The Treasurer has the report and your bank details.");
-      m.className="msg good";m.textContent="Sent to the Treasurer."}
+    else{sendingDone("Receipt sent","It is on the Treasurer\u2019s desk with the report and your bank details.");
+      m.className="msg good";m.textContent="It is with the Treasurer now."}
   }catch(e){sending(false);m.className="msg";m.textContent=e.message}
   btn.disabled=false;btn.textContent="Send receipt to the Treasurer";
 });
@@ -3484,8 +3512,8 @@ function claimCard(c,mode){
          '<button class="btn ghost small" data-part="'+c.id+'">Approve a smaller amount</button>')+
         '<button class="btn danger small" data-reject="'+c.id+'">Reject</button>';
       extra=route+'<p class="hintline">'+gbp.format(rem)+' left on this line. '+
-        (c.receipt?'Approving files the report to Drive, emails '+esc(S.settings.treasName||"the Treasurer")+
-          ' with the report and the receipt attached, and moves this to Payments.'
+        (c.receipt?'Approving files the report to Drive and puts this on the Payments tab, here and on '+
+          'the desk, with the bank details ready.'
          :'Nothing is asked of the Treasurer yet. The claimant is asked for the receipt, and only then does it become a payment.')+
         (c.overBy?' <b>'+gbp.format(c.overBy)+' more than was originally set aside.</b>':'')+'</p>';
     }else if(c.status==="college"){
@@ -3497,7 +3525,7 @@ function claimCard(c,mode){
         'the MCR may '+(c.kind==="allocation"?"set the money aside":"pay it")+'. '+
         esc(actor(c.committeeBy)||"The President")+' agreed to it'+
         (c.committeeAt?" on "+esc(stamp(c.committeeAt)):"")+
-        ', and the Treasurer has been sent what to put to the Bursar.</p>'+
+        ', and it is on the desk for the Treasurer to put to the Bursar.</p>'+
         '<p>When the Bursar answers, record it here. Nothing else in the app can move this on, '+
         'and it cannot be paid until you do.</p></div>';
     }else if(c.status==="allocated"){
@@ -3510,7 +3538,7 @@ function claimCard(c,mode){
       acts=openBtn(c,"pdf","gold")+openBtn(c,"receipt","ghost")+
         '<button class="btn dark small" data-pay="'+c.id+'">Mark as paid</button>'+
         (S.me.role!=="treasurer"
-          ?'<button class="btn ghost small" data-renotify="'+c.id+'">Email the Treasurer again</button>':'');
+          ?'<button class="btn ghost small" data-renotify="'+c.id+'">Rebuild the payment report</button>':'');
       extra=route+payBox(c);
     }else if(c.status==="paid"){
       acts=openBtn(c,"pdf","ghost")+openBtn(c,"receipt","ghost");
@@ -3541,8 +3569,8 @@ function claimCard(c,mode){
       const wait=(S.settings.remindAfterDays||7)-days;
       acts=openBtn(c,"pdf","ghost")+openBtn(c,"receipt","ghost")+
         (wait>0?'<button class="btn ghost small" disabled title="Available in '+wait+' day'+
-          (wait===1?"":"s")+'">Remind the Treasurer in '+wait+'d</button>'
-         :'<button class="btn gold small" data-remind="'+c.id+'">Remind the Treasurer</button>')+
+          (wait===1?"":"s")+'">Nudge the Treasurer in '+wait+'d</button>'
+         :'<button class="btn gold small" data-remind="'+c.id+'">Nudge the Treasurer</button>')+
         '<button class="btn danger small" data-cancel="'+c.id+'">Cancel this claim</button>';
     }
     if(c.status==="paid")
@@ -3558,7 +3586,7 @@ function claimCard(c,mode){
     c.approvedAt?(c.kind==="allocation"&&c.status==="allocated"?"Set aside by ":"Approved by ")+esc(actor(c.approvedBy))+", "+stamp(c.approvedAt):"",
     c.receiptAt?"Receipt in "+stamp(c.receiptAt):"",
     c.pdfAt?"Report filed "+stamp(c.pdfAt):"",
-    c.notifiedAt?"Treasurer notified "+stamp(c.notifiedAt):"",
+    c.notifiedAt?"On the Treasurer\u2019s desk "+stamp(c.notifiedAt):"",
     c.paidAt?"Paid by "+esc(actor(c.paidBy))+", "+stamp(c.paidAt):"",
     c.rejectedBy?"Rejected by "+esc(actor(c.rejectedBy))+(c.reason?": "+esc(c.reason):""):"",
     c.cancelledAt?"Cancelled by "+esc(c.who)+", "+stamp(c.cancelledAt)+(c.reason?": "+esc(c.reason):""):""]
@@ -3569,7 +3597,7 @@ function claimCard(c,mode){
     '<span class="chip '+c.status+'">'+STATUS[c.status]+'</span> '+
     '<span class="ref">'+esc(c.ref||"")+' \u00b7 '+esc(KIND[c.kind]||"")+' \u00b7 '+
     (c.receipt?"receipt attached":"no receipt yet")+'</span>'+
-    (c.note?'<br>'+esc(c.note):'')+'</div></div>'+
+    (c.note?'<br><b class="why">Why: </b>'+esc(c.note):'')+'</div></div>'+
     '<div class="amt">'+gbp.format(c.amount)+'<small>'+
       (c.status==="paid"?"reimbursed":c.status==="allocated"?"set aside":"claimed")+'</small></div></div>'+
     '<div class="bd">'+trackHtml(c)+(acts?'<div class="rowacts">'+acts+'</div>':'')+extra+
@@ -3710,11 +3738,11 @@ document.addEventListener("click",async e=>{
       title:c.receipt?"Approve "+gbp.format(c.amount)+"?":"Set aside "+gbp.format(c.amount)+"?",
       body:(own?"<b>This is your own claim.</b> It will be recorded as a self approval and the Vice President will be sent a copy for the record.<br><br>":"")+
         (c.receipt
-        ?"A payment report will be filed to Drive and emailed to the Treasurer with the receipt attached."
+        ?"A payment report will be filed to Drive and the claim will appear on the Treasurer\u2019s desk, ready to pay."
         :"The money is held against the budget line. Nothing reaches the Treasurer until "+esc(c.who)+" sends the receipt."),
       yes:c.receipt?"Approve":"Set aside"}))return;
     await act(()=>api("decide",{id:d.approve,decision:"approve"}),
-      c.receipt?"Approved, and the Treasurer has been emailed":"Money set aside, the claimant has been asked for the receipt",
+      c.receipt?"Approved, and it is on the Treasurer\u2019s desk":"Money set aside, the claimant has been asked for the receipt",
       t,"Filing");
     return;
   }
@@ -3776,7 +3804,7 @@ document.addEventListener("click",async e=>{
     return;
   }
   if(d.renotify!==undefined){
-    await act(()=>api("renotify",{id:d.renotify}),"The Treasurer has been emailed again",t,"Sending");
+    await act(()=>api("renotify",{id:d.renotify}),"The payment report has been rebuilt",t,"Rebuilding");
     return;
   }
   if(d.chase!==undefined){
@@ -3784,7 +3812,7 @@ document.addEventListener("click",async e=>{
     return;
   }
   if(d.remind!==undefined){
-    await act(()=>api("remind",{id:d.remind}),"The Treasurer has been reminded",t,"Sending");
+    await act(()=>api("remind",{id:d.remind}),"Flagged on the Treasurer\u2019s desk",t,"Flagging");
     return;
   }
   if(d.cancel!==undefined){
