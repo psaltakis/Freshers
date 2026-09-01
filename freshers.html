@@ -2817,6 +2817,28 @@ const myStatus = id => (S.mine && S.mine[id] && S.mine[id].status) || "";
 const inMine = id => ["going","waitlist","maybe"].indexOf(myStatus(id)) >= 0;
 const myEvents = () => S.events.filter(e => inMine(e.id));
 const goingEvents = () => S.events.filter(e => ["going","waitlist"].indexOf(myStatus(e.id)) >= 0 && e.status !== "cancelled");
+/* FRESHERS' FORTNIGHT ITSELF. Sixteen days, 15 to 30 September 2026: the same
+   window the calendar on the boot screen turns through, and the "sixteen days"
+   the welcome counts out.
+
+   The page reads S.fortnight for the day strip. Not every deployment of the
+   server sends it: the current one sends `term` instead, which is the whole
+   academic year, 13 September to 31 July. They are not the same thing and the
+   year must never be used here, or the strip tries to lay out three hundred and
+   twenty days. So the programme's own value is used when it sends one and this
+   is used when it does not, and nothing reads S.fortnight without going through
+   here. To move the fortnight in a later year, change these two dates. */
+const FORTNIGHT = { start: "2026-09-15", end: "2026-09-30" };
+function fortnightOf(s){
+  const f = s && s.fortnight;
+  return (f && f.start && f.end) ? f : FORTNIGHT;
+}
+/* Every programme that arrives goes through here before anything draws it, so
+   the rest of the page can read S.fortnight without checking it exists. */
+function takeState(s){
+  if (s) s.fortnight = fortnightOf(s);
+  return s;
+}
 function dayList(){ const out = []; let d = S.fortnight.start; while (d <= S.fortnight.end){ out.push(d); d = addDays(d, 1); } return out; }
 const overlaps = (a, b) => startOf(a) < endOf(b) && startOf(b) < endOf(a);
 function clashes(){
@@ -2833,7 +2855,7 @@ function evState(ev){
   return (startOf(ev) - now < 5400000) ? "soon" : "ahead";
 }
 async function refresh(loud){
-  try{ S = await api("state"); render(); if (loud) toast("Latest programme pulled in"); }
+  try{ S = takeState(await api("state")); render(); if (loud) toast("Latest programme pulled in"); }
   catch(e){ fail(e); }
 }
 /* Nothing empty is ever shown. The crest holds until either the gate or the
@@ -2850,7 +2872,7 @@ function bootProgress(){
   if (!bar) return { to(){}, done(){} };
   /* Hand the bar over from the CSS animation to a real measurement. */
   if (bar.parentElement) bar.parentElement.classList.add("go");
-  let at = 4, i = 0, held = false;
+  let at = 1, aim = 16, i = 0, held = false;
   const paint = () => { bar.style.width = at.toFixed(1) + "%"; if (pct) pct.textContent = Math.round(at) + "%"; };
   const say = text => {
     if (!note) return;
@@ -2872,17 +2894,24 @@ function bootProgress(){
      longer than the wait is ever allowed to last, so there is no state in which
      somebody is looking at a number that has stopped. Only done() reaches a
      hundred; on its own it never gets there. */
+  /* Two movements, which is what stops it both jumping and stalling.
+
+     The target drifts up on its own, quickly at first and slower as it goes, so
+     there is never a number the bar is allowed to settle on. The bar then walks
+     towards the target rather than being set to it, so a step forward is a climb
+     you can watch and not a jump: the bar leaves 1% and travels the whole way
+     up rather than appearing at 64 already. */
   const creep = setInterval(() => {
-    const room = 99.5 - at;
-    if (room <= 0) return;
-    at = Math.min(99.5, at + Math.max(.015, room * .005));
+    aim = Math.min(99.5, aim + Math.max(.02, (99.5 - aim) * .004));
+    at = Math.min(aim, at + Math.max(.12, (aim - at) * .14));
     paint();
   }, 90);
   const talk = setInterval(() => { if (!held){ i = (i + 1) % BOOT_LINES.length; say(BOOT_LINES[i]); } }, 1400);
   return {
-    /* A step is a shove forward, never a ceiling. If the bar has already crept
-       past the step on its own it is left where it is rather than yanked back. */
-    to(p, text){ const want = Math.min(99, p); if (want > at) at = want; paint(); if (text){ held = true; say(text); } },
+    /* A step raises where the bar is heading, never where it is. That is the
+       whole difference: the old one assigned the number and the screen showed
+       64% before it had shown anything else. */
+    to(p, text){ const want = Math.min(99, p); if (want > aim) aim = want; if (text){ held = true; say(text); } },
     slow(){ held = true; say(SLOW_LINE); },
     done(){ clearInterval(creep); clearInterval(talk); at = 100; paint(); }
   };
@@ -3018,7 +3047,7 @@ async function boot(fresh){
   BOOT.to(64, "Pulling in the programme");
   /* If the sign in already started this fetch, join it rather than asking twice:
      it has had a head start of the whole confirmation. */
-  try{ const p = statePrefetch; statePrefetch = null; S = await (p || api("state")); }
+  try{ const p = statePrefetch; statePrefetch = null; S = takeState(await (p || api("state"))); }
   catch(e){
     dropBoot();
     if (/sign in|session has expired/i.test(e.message || "")){ signedOut(); const m = $("gateMsg"); m.className = "msg"; m.textContent = e.message; return; }
@@ -4297,7 +4326,7 @@ function paintSetup(){
     fix.innerHTML = '<span class="dot spin"></span>Asking the register';
     try{
       const r = await api("state");
-      S = r;
+      S = takeState(r);
       if (!isRemainer()){
         toast("Your record has been corrected. The whole Fortnight is yours.");
         setupIdx = 0;
