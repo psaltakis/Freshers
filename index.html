@@ -832,93 +832,151 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .ohlist em{font-style:normal;color:var(--cream-4);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .iconbtn.busy svg{animation:spin .9s linear infinite}
 /* THE CHIMNEY, WALKED.
-   The Chimney is the walled walk that leads to the college gate, and it is
-   what this app is named after, so the wait to get in is the walk in. The
-   scene is built in three dimensions: two brick walls running away to the
-   gate, a flagged path underfoot, the evening light over the top of the
-   walls, and at the end the gate with the crest hung above it. The bricks
-   and the flags slide past as you walk, the gate comes closer, and as you
-   reach it the two doors swing open onto warm light. Once you are there the
-   crest turns gently on its hook until the page is ready. Under reduced
-   motion the doors stand open and nothing moves. */
+   The Chimney is the walled walk up to the college gate, and it is what this
+   app is named after, so the wait to get in is the walk in. The scene is the
+   real one, built in three dimensions from the photograph: the flagged path
+   with gravel either side, the low brick walls, the trees leaning over them,
+   and at the end the gatehouse, a tall diapered tower with its battlements and
+   flagpole between two lower ranges of windows and chimneys, the pointed arch
+   in its foot and the college arms above the door. The flags and the gravel
+   slide past as you walk, the gatehouse draws nearer, and as you reach it the
+   two doors open onto the court. Under reduced motion it all stands still with
+   the doors open. */
 #boot{position:fixed;inset:0;display:grid;place-items:center;z-index:70;background:var(--crimson-2);
   overflow:auto;padding:22px}
 #boot::before{content:"";position:absolute;inset:0;
   background:radial-gradient(760px 460px at 78% -10%, rgba(235,183,83,.16), transparent 58%),
     linear-gradient(172deg,#C4181F 0%,#A31319 46%,#7A0D12 100%)}
-.bootin{position:relative;text-align:center;width:min(300px,80vw);display:flex;flex-direction:column;
+.bootin{position:relative;text-align:center;width:min(320px,84vw);display:flex;flex-direction:column;
   align-items:center;gap:20px}
-.chimney{position:relative;width:100%;height:180px;perspective:380px;perspective-origin:50% 44%;
+.chimney{position:relative;width:100%;height:210px;perspective:360px;perspective-origin:50% 46%;
   overflow:hidden;border-radius:16px;
-  background:linear-gradient(180deg,#F1C78B 0%,#D98A5A 26%,#A2262B 52%,#4A060A 100%);
-  box-shadow:0 24px 44px -22px rgba(20,1,3,.85),inset 0 0 0 1px rgba(255,255,255,.08)}
-.chimney .cam{position:absolute;inset:0;transform-style:preserve-3d}
-/* the two walls, laid along the depth of the scene. rotateY(90deg) about the
-   left edge sends the wall's length away from the viewer */
-.chimney .wall{position:absolute;left:50%;top:0;width:820px;height:180px;transform-origin:left center;
+  background:linear-gradient(180deg,#6FA7DD 0%,#9FC6EA 46%,#C9DDEE 62%,#7B8A6B 62.5%,#5C6A50 100%);
+  box-shadow:0 24px 44px -22px rgba(20,1,3,.85),inset 0 0 0 1px rgba(255,255,255,.12)}
+.chimney *{position:absolute;box-sizing:border-box}
+.chimney .cam{inset:0;transform-style:preserve-3d}
+/* ground: gravel the width of the walk, the flagged path down the middle,
+   both laid flat and running away to the gate */
+.chimney .gravel{left:50%;top:100%;width:230px;height:900px;margin-left:-115px;transform-origin:top center;
+  transform:rotateX(-90deg);
   background:
-    linear-gradient(90deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.35) 45%,rgba(0,0,0,.72) 100%),
-    repeating-linear-gradient(0deg,rgba(40,4,6,.55) 0 2px,transparent 2px 15px),
-    repeating-linear-gradient(90deg,rgba(40,4,6,.45) 0 2px,transparent 2px 34px),
-    linear-gradient(180deg,#A4272D,#7A1216 60%,#5A0B0F);
-  background-size:auto,auto,68px 30px,auto;
-  animation:bricks .95s linear infinite}
-.chimney .wall.l{transform:translateX(-118px) rotateY(90deg)}
-.chimney .wall.r{transform:translateX(118px) rotateY(90deg)}
-.chimney .wall::after{content:"";position:absolute;left:0;right:0;top:0;height:9px;
-  background:linear-gradient(180deg,#E2CDBC,#B8998A);opacity:.9}
-/* the flagged path, laid flat and running away */
-.chimney .floor{position:absolute;left:50%;top:100%;width:236px;height:820px;transform-origin:top center;
-  transform:translateX(-50%) rotateX(-90deg);
+    linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(30,20,10,.55) 60%,rgba(30,20,10,.85) 100%),
+    radial-gradient(circle,rgba(255,255,255,.18) 0 1px,transparent 1.5px) 0 0/9px 9px,
+    radial-gradient(circle,rgba(0,0,0,.18) 0 1px,transparent 1.5px) 4px 5px/11px 11px,
+    linear-gradient(180deg,#D6BC90,#B39A74)}
+.chimney .path{left:50%;top:100%;width:104px;height:900px;margin-left:-52px;transform-origin:top center;
+  transform:rotateX(-90deg) translateZ(2.5px);
   background:
-    linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.45) 55%,rgba(0,0,0,.8) 100%),
-    repeating-linear-gradient(0deg,rgba(30,10,8,.5) 0 2px,transparent 2px 40px),
-    repeating-linear-gradient(90deg,rgba(30,10,8,.4) 0 2px,transparent 2px 58px),
-    linear-gradient(180deg,#8C7368,#5E4A43);
-  animation:flags .95s linear infinite}
-@keyframes bricks{to{background-position:0 0,0 0,-68px 0,0 0}}
-@keyframes flags{to{background-position:0 0,0 -40px,0 0,0 0}}
-/* the gate, at the far end, drawing nearer */
-.chimney .gate{position:absolute;left:50%;top:14px;width:236px;height:166px;margin-left:-118px;
-  transform-style:preserve-3d;transform:translateZ(-640px);animation:approach 3s cubic-bezier(.3,.6,.2,1) both}
-@keyframes approach{to{transform:translateZ(-300px)}}
-.chimney .arch{position:absolute;inset:0;border-radius:110px 110px 0 0;
-  background:linear-gradient(180deg,#5A0B0F,#3A0507);
-  box-shadow:inset 0 0 0 10px #7A1216,inset 0 0 0 12px rgba(0,0,0,.35)}
-.chimney .light{position:absolute;left:14px;right:14px;top:14px;bottom:0;border-radius:96px 96px 0 0;overflow:hidden;
-  background:radial-gradient(ellipse at 50% 70%,#FFE8B8 0%,#F0B860 38%,#B8542E 72%,#6B1A14 100%);
-  opacity:0;animation:glow 1.4s ease 1.6s both,breathe 3.4s ease-in-out 3s infinite}
+    linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(20,20,20,.5) 60%,rgba(20,20,20,.85) 100%),
+    repeating-linear-gradient(0deg,rgba(60,55,50,.55) 0 2px,transparent 2px 38px),
+    repeating-linear-gradient(90deg,rgba(60,55,50,.4) 0 2px,transparent 2px 52px) 0 19px,
+    linear-gradient(180deg,#A8A296,#7E786E);
+  animation:flags 1s linear infinite}
+@keyframes flags{to{background-position:0 0,0 -38px,0 -19px,0 0}}
+/* the low walls either side, brick, with a course of coping on top */
+.chimney .wall{left:50%;top:170px;width:900px;height:34px;transform-origin:left center;
+  background:
+    linear-gradient(90deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.3) 50%,rgba(0,0,0,.7) 100%),
+    repeating-linear-gradient(0deg,rgba(70,40,30,.55) 0 1.5px,transparent 1.5px 9px),
+    repeating-linear-gradient(90deg,rgba(70,40,30,.45) 0 1.5px,transparent 1.5px 22px),
+    linear-gradient(180deg,#A86A4E,#8E5540);
+  animation:bricks 1s linear infinite}
+@keyframes bricks{to{background-position:0 0,0 0,-44px 0,0 0}}
+.chimney .wall::after{content:"";position:absolute;left:0;right:0;top:0;height:6px;
+  background:linear-gradient(180deg,#D9C7B0,#A98F78)}
+.chimney .wall.l{transform:translateX(-116px) rotateY(90deg)}
+.chimney .wall.r{transform:translateX(116px) rotateY(90deg)}
+/* the trees leaning over the walls: soft green masses, set back at intervals */
+.chimney .tree{border-radius:52% 48% 46% 54%/58% 62% 38% 42%;
+  background:
+    radial-gradient(circle at 28% 34%,rgba(170,200,110,.95) 0%,rgba(170,200,110,0) 26%),
+    radial-gradient(circle at 66% 28%,rgba(140,180,90,.9) 0%,rgba(140,180,90,0) 24%),
+    radial-gradient(circle at 46% 64%,rgba(90,140,60,.9) 0%,rgba(90,140,60,0) 30%),
+    radial-gradient(circle at 78% 66%,rgba(60,100,40,.9) 0%,rgba(60,100,40,0) 28%),
+    radial-gradient(ellipse at 50% 50%,#6C9A44 0%,#4E7A34 55%,#2F5222 100%);
+  box-shadow:inset -14px -18px 30px rgba(15,35,10,.55),0 12px 22px -10px rgba(0,0,0,.6)}
+.chimney .tree::before{content:"";position:absolute;left:-14px;top:38%;width:46%;height:54%;
+  border-radius:60% 40% 55% 45%/50% 60% 40% 50%;
+  background:radial-gradient(circle at 40% 35%,#7FAA50,#476E30 70%,#2F5222 100%);opacity:.95}
+.chimney .tree::after{content:"";position:absolute;right:-10px;top:26%;width:44%;height:50%;
+  border-radius:45% 55% 50% 50%/55% 45% 60% 40%;
+  background:radial-gradient(circle at 40% 35%,#9BC062,#5C8A3C 70%,#365A22 100%);opacity:.9}
+/* The trees sit flat behind the three dimensional walk rather than inside it.
+   As planes in the scene they cut through the walls where the two crossed,
+   which left a hard vertical edge down every tree; drawn behind, the walls
+   and the gatehouse still stand in front of them, which is all that matters. */
+.chimney .trees{inset:0;z-index:0}
+.chimney .cam{z-index:1}
+.chimney .t1{left:-40px;top:52px;width:170px;height:140px;transform:rotate(-5deg)}
+.chimney .t2{left:242px;top:86px;width:120px;height:100px;transform:rotate(4deg)}
+.chimney .t3{left:-4px;top:66px;width:140px;height:118px;transform:rotate(3deg)}
+.chimney .t4{left:262px;top:84px;width:100px;height:88px;transform:rotate(-3deg)}
+.chimney .t5{left:60px;top:90px;width:90px;height:80px}
+/* the gatehouse, at the end, drawing nearer */
+.chimney .gate{left:50%;top:0;width:420px;height:210px;margin-left:-210px;transform-style:preserve-3d;
+  transform:translateZ(-880px);animation:approach 3.6s cubic-bezier(.3,.6,.2,1) both}
+@keyframes approach{to{transform:translateZ(-360px)}}
+/* the two lower ranges, two rows of windows each, chimneys on the roofline */
+.chimney .range{bottom:0;width:170px;height:118px;
+  background:
+    repeating-linear-gradient(90deg,transparent 0 12px,#2E2420 12px 24px,transparent 24px 36px) 6px 26px/100% 24px no-repeat,
+    repeating-linear-gradient(90deg,transparent 0 12px,#2E2420 12px 24px,transparent 24px 36px) 6px 70px/100% 24px no-repeat,
+    repeating-linear-gradient(0deg,rgba(70,35,25,.35) 0 1px,transparent 1px 7px),
+    linear-gradient(180deg,#B9714E,#9A5A3F)}
+.chimney .range.l{left:0}.chimney .range.r{right:0}
+.chimney .range::before{content:"";position:absolute;left:0;right:0;top:0;height:8px;background:#6E4A3C}
+.chimney .range::after{content:"";position:absolute;top:-22px;width:11px;height:26px;background:#8E5540;
+  box-shadow:44px 4px 0 #8E5540,-1px -3px 0 1px #7A4736}
+.chimney .range.l::after{left:34px}.chimney .range.r::after{right:70px}
+/* the tower: diapered brick, battlements, two windows, the flagpole */
+.chimney .tower{left:50%;bottom:0;width:104px;height:200px;margin-left:-52px;transform-style:preserve-3d;
+  background:
+    repeating-linear-gradient(45deg,rgba(60,25,20,.28) 0 2px,transparent 2px 20px),
+    repeating-linear-gradient(-45deg,rgba(60,25,20,.28) 0 2px,transparent 2px 20px),
+    linear-gradient(180deg,#C07A55,#A46043)}
+.chimney .tower::before{content:"";position:absolute;left:-3px;right:-3px;top:-12px;height:14px;
+  background:repeating-linear-gradient(90deg,#A46043 0 11px,transparent 11px 19px);
+  box-shadow:0 14px 0 -8px #8A4C36}
+.chimney .tower .win{left:50%;width:30px;height:24px;margin-left:-15px;background:#2A211E;
+  border-radius:8px 8px 0 0;box-shadow:inset 0 0 0 2px #D9CFC0}
+.chimney .tower .win::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:2px;margin-left:-1px;background:#D9CFC0}
+.chimney .tower .w1{top:26px}.chimney .tower .w2{top:64px}
+.chimney .pole{left:50%;top:-74px;width:2px;height:64px;margin-left:-1px;background:linear-gradient(#fff,#bbb)}
+.chimney .pole::before{content:"";position:absolute;left:-2px;top:-3px;width:6px;height:6px;border-radius:50%;background:#e8d9a8}
+/* the pointed arch, the court beyond it, and the two doors */
+.chimney .arch{left:50%;bottom:0;width:66px;height:80px;margin-left:-33px;
+  clip-path:polygon(0 100%,0 30%,50% 0,100% 30%,100% 100%);background:#4A2A20}
+.chimney .light{left:50%;bottom:0;width:58px;height:74px;margin-left:-29px;
+  clip-path:polygon(0 100%,0 30%,50% 0,100% 30%,100% 100%);
+  background:radial-gradient(ellipse at 50% 80%,#FFF1CF 0%,#E9C07A 40%,#8C6A3F 75%,#3A2A1C 100%);
+  opacity:.25;animation:glow 1.6s ease 2.2s both,breathe 3.4s ease-in-out 3.8s infinite}
 @keyframes glow{to{opacity:1}}
 @keyframes breathe{50%{filter:brightness(1.12)}}
-.chimney .door{position:absolute;top:14px;bottom:0;width:104px;
-  background:
-    repeating-linear-gradient(90deg,rgba(0,0,0,.28) 0 2px,transparent 2px 18px),
-    linear-gradient(180deg,#3B2A22,#20140F);
-  box-shadow:inset 0 0 0 2px rgba(0,0,0,.4);transform-style:preserve-3d;backface-visibility:visible}
-.chimney .door::after{content:"";position:absolute;top:50%;width:6px;height:6px;border-radius:50%;background:#D7B26A;
-  box-shadow:0 0 6px rgba(255,220,150,.8)}
-.chimney .door.l{left:14px;border-radius:96px 0 0 0;transform-origin:left center;animation:openL 1.5s cubic-bezier(.6,0,.2,1) 1.6s both}
-.chimney .door.r{right:14px;border-radius:0 96px 0 0;transform-origin:right center;animation:openR 1.5s cubic-bezier(.6,0,.2,1) 1.6s both}
-.chimney .door.l::after{right:9px}.chimney .door.r::after{left:9px}
-@keyframes openL{to{transform:rotateY(-108deg)}}
-@keyframes openR{to{transform:rotateY(108deg)}}
-/* the crest, hung above the gate, turning on its hook once you have arrived */
-#boot .crest.big{position:absolute;left:50%;top:-22px;width:58px;height:58px;margin:0 0 0 -29px;display:block;
-  filter:drop-shadow(0 6px 10px rgba(20,1,3,.7));transform-style:preserve-3d;
-  animation:hang 5.2s ease-in-out 3s infinite alternate}
-@keyframes hang{from{transform:translateZ(30px) rotateY(-28deg)}to{transform:translateZ(30px) rotateY(28deg)}}
-#boot .crest.big::before{content:none}
-/* evening haze at the far end, so the walls go into distance rather than to a hard edge */
-.chimney .haze{position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(ellipse at 50% 46%,rgba(255,224,170,.28) 0%,rgba(255,224,170,0) 30%),
-    linear-gradient(180deg,rgba(0,0,0,0) 60%,rgba(20,1,3,.35) 100%)}
+.chimney .door{bottom:0;width:29px;height:74px;
+  background:repeating-linear-gradient(90deg,rgba(0,0,0,.3) 0 1.5px,transparent 1.5px 7px),linear-gradient(180deg,#3A2A22,#1E140F);
+  transform-style:preserve-3d}
+.chimney .door.l{left:50%;margin-left:-29px;clip-path:polygon(0 100%,0 30%,100% 0,100% 100%);
+  transform-origin:left center;animation:openL 1.7s cubic-bezier(.6,0,.2,1) 2.2s both}
+.chimney .door.r{left:50%;margin-left:0;clip-path:polygon(0 0,100% 30%,100% 100%,0 100%);
+  transform-origin:right center;animation:openR 1.7s cubic-bezier(.6,0,.2,1) 2.2s both}
+@keyframes openL{to{transform:rotateY(-112deg)}}
+@keyframes openR{to{transform:rotateY(112deg)}}
+/* the arms above the door, turning gently on the wall once you have arrived */
+#boot .crest.big{left:50%;top:98px;width:30px;height:30px;margin:0 0 0 -15px;display:block;
+  filter:drop-shadow(0 3px 5px rgba(20,1,3,.7));transform-style:preserve-3d;
+  animation:hang 5.2s ease-in-out 3.6s infinite alternate}
+@keyframes hang{from{transform:translateZ(6px) rotateY(-24deg)}to{transform:translateZ(6px) rotateY(24deg)}}
+/* haze over the distance and a little warmth low in the sky */
+.chimney .haze{inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 50%,rgba(255,240,210,.22) 0%,rgba(255,240,210,0) 28%),
+    linear-gradient(180deg,rgba(0,0,0,0) 70%,rgba(20,10,5,.3) 100%)}
 @media(prefers-reduced-motion:reduce){
-  .chimney .wall,.chimney .floor{animation:none}
-  .chimney .gate{animation:none;transform:translateZ(-300px)}
+  .chimney .wall,.chimney .path{animation:none}
+  .chimney .gate{animation:none;transform:translateZ(-360px)}
   .chimney .light{animation:none;opacity:1}
-  .chimney .door.l{animation:none;transform:rotateY(-108deg)}
-  .chimney .door.r{animation:none;transform:rotateY(108deg)}
-  #boot .crest.big{animation:none;transform:translateZ(30px)}}
+  .chimney .door.l{animation:none;transform:rotateY(-112deg)}
+  .chimney .door.r{animation:none;transform:rotateY(112deg)}
+  #boot .crest.big{animation:none;transform:translateZ(6px)}}
 .bootline{font-family:var(--mono);font-size:0.66rem;letter-spacing:.24em;text-transform:uppercase;
   color:var(--gold-2);font-weight:700;min-height:17px}
 .loadtrack{display:block;height:3px;border-radius:3px;background:rgba(0,0,0,.3);overflow:hidden;
@@ -1540,14 +1598,22 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
 <div id="boot">
   <div class="bootin">
     <div class="chimney" aria-hidden="true">
+      <div class="trees">
+        <span class="tree t5"></span><span class="tree t4"></span><span class="tree t3"></span>
+        <span class="tree t2"></span><span class="tree t1"></span>
+      </div>
       <div class="cam">
+        <span class="gravel"></span><span class="path"></span>
         <span class="wall l"></span><span class="wall r"></span>
-        <span class="floor"></span>
         <div class="gate">
-          <span class="arch"></span>
-          <span class="light"></span>
-          <span class="door l"></span><span class="door r"></span>
-          <img class="crest big" id="crestBoot" alt="">
+          <span class="range l"></span><span class="range r"></span>
+          <div class="tower">
+            <span class="pole"></span>
+            <span class="win w1"></span><span class="win w2"></span>
+            <span class="arch"></span><span class="light"></span>
+            <span class="door l"></span><span class="door r"></span>
+            <img class="crest big" id="crestBoot" alt="">
+          </div>
         </div>
       </div>
       <span class="haze"></span>
