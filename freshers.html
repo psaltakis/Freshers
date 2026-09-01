@@ -1084,6 +1084,12 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--crimson)
 .notes .notice .acts{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
 .notes .notice .acts .btn{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.4px var(--cream-3)}
 @media(max-width:520px){ .notes{grid-template-columns:1fr 1fr;gap:9px} .notes .notice{padding:12px 12px 10px} }
+/* The pager sits on the crimson rather than on paper, so it borrows the
+   light-on-dark ghost button used everywhere else off a card. */
+.newspager{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:16px 0 2px}
+.newspager span{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:rgba(251,243,236,.6)}
+.newspager .btn.ghost{color:var(--cream);box-shadow:inset 0 0 0 1.5px var(--line-2)}
+.newspager .btn.ghost:hover:not(:disabled){background:rgba(255,255,255,.1)}
 .nitem{background:var(--cream);color:var(--ink);border-radius:14px;padding:13px 16px;margin-bottom:9px;display:flex;gap:12px;align-items:flex-start;border-left:5px solid var(--gold);box-shadow:var(--shadow)}
 .nitem.cancel{border-left-color:var(--crimson)} .nitem.change{border-left-color:var(--crimson-lite)} .nitem.new{border-left-color:var(--moss)} .nitem.message{border-left-color:var(--sky)}
 .nitem .t{flex:1;min-width:0}
@@ -1670,6 +1676,9 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--crimson)
 #boot p.swap{opacity:0}
 #boot .pct{display:block;min-height:14px;margin-top:5px;font-family:var(--mono);font-size:11px;
   letter-spacing:.1em;color:var(--gold);font-variant-numeric:tabular-nums}
+/* A minute of waiting is only frightening if nobody said it was coming. */
+#boot .firstrun{display:block;margin:13px auto 0;max-width:262px;font-size:11.5px;line-height:1.5;
+  color:rgba(251,243,236,.62);text-wrap:balance}
 
 /* the map, while it is being drawn */
 .mapskel .mk{display:grid;justify-items:center;gap:11px;width:min(230px,72%)}
@@ -2127,6 +2136,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--crimson)
   <b class="wm">Freshers&rsquo; Fortnight <i>2026</i></b>
   <div class="bar"><i id="bootBar"></i></div>
   <p id="bootNote">Waking the porters</p><span class="pct" id="bootPct"></span>
+  <small class="firstrun">The first time takes about a minute while the server wakes up. Leave this open &mdash; it is working.</small>
   <script>
   /* The calendar turns its leaves through the fortnight, 15 to 30 September,
      and round again. Two leaves: the top one turns, and the moment its turn
@@ -2803,7 +2813,7 @@ function bootProgress(){
   if (!bar) return { to(){}, done(){} };
   /* Hand the bar over from the CSS animation to a real measurement. */
   if (bar.parentElement) bar.parentElement.classList.add("go");
-  let at = 4, aim = 24, i = 0, held = false;
+  let at = 1, aim = 24, i = 0, held = false;
   const paint = () => { bar.style.width = at.toFixed(1) + "%"; if (pct) pct.textContent = Math.round(at) + "%"; };
   const say = text => {
     if (!note) return;
@@ -2811,7 +2821,19 @@ function bootProgress(){
     setTimeout(() => { note.textContent = text; note.classList.remove("swap"); }, 220);
   };
   paint();
-  const creep = setInterval(() => { at += Math.max(.25, (aim - at) * .1); if (at > aim) at = aim; paint(); }, 90);
+  /* The bar used to appear at whatever the last step asked for and then stop
+     dead there while the server thought, which reads as a page that has died.
+     Two changes, both to the drawing of it and neither to the steps. The aim
+     drifts on by itself towards 99, slower the nearer it gets, so the number
+     is always climbing even when nothing else is happening. And the bar walks
+     up to the aim at a capped pace instead of leaping, so it counts the whole
+     way from 1 rather than starting at the first step it is handed. The steps
+     still push the aim on exactly as before, and only ever further ahead. */
+  const creep = setInterval(() => {
+    aim += (99 - aim) * .003;
+    at += Math.min(Math.max(.12, (aim - at) * .05), .42); if (at > aim) at = aim;
+    paint();
+  }, 90);
   const talk = setInterval(() => { if (!held){ i = (i + 1) % BOOT_LINES.length; say(BOOT_LINES[i]); } }, 1400);
   return {
     to(p, text){ aim = Math.max(aim, Math.min(99, p)); if (text){ held = true; say(text); } },
@@ -5083,15 +5105,27 @@ $("bRedoSetup").addEventListener("click", () => openSetup());
 /* ---------------- news, me ---------------- */
 /* Nothing is offered here any more: see the note above on notifications. */
 function renderNewsOffer(){}
+/* Six notes go up at a time, newest first. Everything older is still there,
+   a page back, so the board stays a board rather than a wall of paper. */
+const NEWS_PER_PAGE = 6;
+let newsPage = 0;
 function renderNews(){
   renderNewsOffer();
   const seenAt = S.me.seenAt || 0, list = S.updates || [];
+  const pages = Math.max(1, Math.ceil(list.length / NEWS_PER_PAGE));
+  newsPage = Math.min(Math.max(newsPage, 0), pages - 1);
+  const from = newsPage * NEWS_PER_PAGE, shown = list.slice(from, from + NEWS_PER_PAGE);
   const KIND = {change:"Change", cancel:"Cancelled", new:"New event", announce:"Announcement", message:"Message", remove:"Removed"};
   /* Drawn as notes on a board, the way The Chimney draws its notices: the
      kind as a small stamp, the event as the title when there is one, the
      text, and who and when underneath. A cancellation is pinned on pink;
      anything since you last looked gets the gold pin. */
-  $("newsList").innerHTML = list.length ? '<div class="notes">' + list.map(u => {
+  const pager = pages > 1 ? '<div class="newspager">' +
+    '<button class="btn ghost xs" data-newspage="' + (newsPage - 1) + '"' + (newsPage === 0 ? ' disabled' : '') + '>&larr; Newer</button>' +
+    '<span>' + (from + 1) + '&ndash;' + (from + shown.length) + ' of ' + list.length + ' &middot; page ' + (newsPage + 1) + ' of ' + pages + '</span>' +
+    '<button class="btn ghost xs" data-newspage="' + (newsPage + 1) + '"' + (newsPage === pages - 1 ? ' disabled' : '') + '>Older &rarr;</button>' +
+    '</div>' : '';
+  $("newsList").innerHTML = list.length ? '<div class="notes">' + shown.map(u => {
     const ev = u.eventId ? evById(u.eventId) : null;
     const cls = (u.kind === "cancel" || u.kind === "remove") ? " urgent" : u.kind === "change" ? " waiting" : "";
     return '<div class="notice' + cls + (u.at > seenAt ? " pinned" : "") + '">' +
@@ -5103,7 +5137,7 @@ function renderNews(){
         (ev ? '<button class="btn ghost xs" data-open="' + esc(ev.id) + '">Open</button>' : '') +
         (isAdmin() ? '<button class="btn ghost xs" data-delupd="' + esc(u.id) + '">Remove</button>' : '') +
         '</div>' : '') + '</div>';
-  }).join("") + '</div>' : '<div class="empty"><b>Nothing has changed yet</b><span>When the committee moves an event, cancels one or posts a notice, it shows here first.</span></div>';
+  }).join("") + '</div>' + pager : '<div class="empty"><b>Nothing has changed yet</b><span>When the committee moves an event, cancels one or posts a notice, it shows here first.</span></div>';
 }
 $("bAnnounce").addEventListener("click", async () => {
   const text = $("annText").value.trim(); if (!text){ $("annText").focus(); return; }
@@ -5528,7 +5562,7 @@ $("bReseed").addEventListener("click", async () => { const b = $("bReseed"); spi
 
 /* ---------------- one listener ---------------- */
 document.addEventListener("click", async e => {
-  const t = e.target.closest("[data-open],[data-tick],[data-go],[data-out],[data-close],[data-cclose],[data-edit],[data-att],[data-lead],[data-sendmsg],[data-rremove],[data-delupd],[data-status],[data-ownerout],[data-assign],[data-showon],[data-vf],[data-jump],[data-evback],[data-gmapsev],[data-walkev]");
+  const t = e.target.closest("[data-open],[data-tick],[data-go],[data-out],[data-close],[data-cclose],[data-edit],[data-att],[data-lead],[data-sendmsg],[data-rremove],[data-delupd],[data-status],[data-ownerout],[data-assign],[data-showon],[data-vf],[data-jump],[data-evback],[data-gmapsev],[data-walkev],[data-newspage]");
   if (!t) return;
   if (t.dataset.close !== undefined){ closeModal(); return; }
   if (t.dataset.cclose !== undefined){ closeCallout(); return; }
@@ -5565,6 +5599,11 @@ document.addEventListener("click", async e => {
   if (t.dataset.status){ setEventStatus(t.dataset.status.split("|")[0], t.dataset.status.split("|")[1]); return; }
   if (t.dataset.ownerout){ if (!confirm("Take full access away from " + t.dataset.ownerout + "?")) return; saveOwners((S.owners || []).filter(x => x !== t.dataset.ownerout)); return; }
   if (t.dataset.delupd){ try{ await api("deleteUpdate", {id: t.dataset.delupd}); await refresh(false); }catch(err){ fail(err); } return; }
+  if (t.dataset.newspage !== undefined){
+    newsPage = +t.dataset.newspage; renderNews();
+    const l = $("newsList"); if (l) l.scrollIntoView({behavior: "smooth", block: "start"});
+    return;
+  }
 });
 document.addEventListener("change", async e => {
   const flag = e.target.closest("[data-adminflag]");
