@@ -1056,6 +1056,34 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--crimson)
 .dayhead b{font-family:var(--display);font-weight:700;font-size:26px;letter-spacing:-.03em}
 .dayhead span{font-family:var(--display);font-style:italic;font-size:14px;color:rgba(251,243,236,.66)}
 .dayhead .n{margin-left:auto;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:rgba(251,243,236,.55)}
+/* News as notes on a board, exactly as The Chimney draws them: paper, a pin
+   at the top, a small tilt, and the urgent ones on pink. The .nitem rules
+   below are no longer used by the news list and are left as they were. */
+.notes{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;align-items:start}
+.notes .notice{background:var(--paper,#FFFDFA);color:var(--ink);border-radius:3px;padding:15px 15px 12px;
+  box-shadow:0 8px 18px -10px rgba(20,1,3,.65);position:relative;transform:rotate(-.35deg);
+  transition:transform .18s ease,box-shadow .18s}
+.notes .notice:nth-child(2n){transform:rotate(.4deg)}
+.notes .notice:nth-child(3n){transform:rotate(-.15deg)}
+.notes .notice:hover{transform:rotate(0) translateY(-2px);box-shadow:0 14px 26px -12px rgba(20,1,3,.7)}
+.notes .notice::before{content:"";position:absolute;top:-5px;left:50%;margin-left:-16px;width:32px;height:11px;
+  background:rgba(180,20,27,.22);border-radius:2px;transform:rotate(-2deg)}
+.notes .notice.pinned::before{background:var(--gold);box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.notes .notice b{display:block;font-family:var(--display);font-size:1rem;font-weight:600;letter-spacing:-.03em;
+  line-height:1.2;color:var(--ink);margin-bottom:6px}
+.notes .notice p{font-size:.82rem;line-height:1.55;color:var(--ink-soft);white-space:pre-wrap;margin:0;overflow-wrap:anywhere}
+.notes .notice small{display:block;margin-top:9px;font-family:var(--mono);font-size:.58rem;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--ink-soft);font-weight:700}
+.notes .notice.urgent{background:#FFF4F2;box-shadow:0 8px 18px -10px rgba(140,10,16,.8)}
+.notes .notice.urgent::before{background:var(--crimson)}
+.notes .notice.waiting{background:#FBF4E4}
+.notes .notice .st{display:inline-block;font-family:var(--mono);font-size:.56rem;letter-spacing:.12em;
+  text-transform:uppercase;font-weight:700;background:rgba(180,20,27,.1);color:var(--crimson-3);
+  border-radius:999px;padding:3px 8px;margin-bottom:7px}
+.notes .notice.urgent .st{background:var(--crimson);color:#fff}
+.notes .notice .acts{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
+.notes .notice .acts .btn{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.4px var(--cream-3)}
+@media(max-width:520px){ .notes{grid-template-columns:1fr 1fr;gap:9px} .notes .notice{padding:12px 12px 10px} }
 .nitem{background:var(--cream);color:var(--ink);border-radius:14px;padding:13px 16px;margin-bottom:9px;display:flex;gap:12px;align-items:flex-start;border-left:5px solid var(--gold);box-shadow:var(--shadow)}
 .nitem.cancel{border-left-color:var(--crimson)} .nitem.change{border-left-color:var(--crimson-lite)} .nitem.new{border-left-color:var(--moss)} .nitem.message{border-left-color:var(--sky)}
 .nitem .t{flex:1;min-width:0}
@@ -1104,6 +1132,39 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--crimson)
 .tabbtn.committee{color:rgba(247,221,166,.78)}
 .tabbtn.committee[aria-current="true"]{background:var(--gold);color:var(--gold-ink)}
 #nav .sep{width:1px;background:var(--line);margin:8px 3px;flex:none}
+/* The beta mark, set as The Chimney sets it. */
+.beta{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;
+  color:var(--gold-ink);background:var(--gold);border-radius:6px;padding:3px 7px;display:inline-block;
+  vertical-align:middle;margin-left:6px;line-height:1.3;letter-spacing:.14em}
+/* THE RAIL.
+   From 1000px the bar leaves the foot and becomes a column down the left,
+   exactly as The Chimney does it: the crest and the name move into the top
+   of it, the header keeps only its two buttons, and the page fills the rest
+   of the window. Only once somebody is in: at the gate there is no bar. */
+#nav .railtop{display:none}
+@media(min-width:1000px){
+  #nav{left:0;top:0;bottom:0;transform:none;width:11rem;max-width:none;flex-direction:column;align-items:stretch;
+    border-radius:0;border:0;background:rgba(66,4,9,.42);box-shadow:none;padding:calc(18px + var(--sat)) 12px calc(18px + var(--sab));
+    overflow-y:auto;overflow-x:hidden;backdrop-filter:none}
+  #nav .railtop{display:flex;align-items:center;gap:10px;padding:2px 9px 18px;color:var(--cream)}
+  #nav .railtop .crestmark{--ch:34px;flex:0 0 auto}
+  #nav .railtop b{display:block;font-family:var(--display);font-size:14px;font-weight:600;letter-spacing:-.03em;line-height:1.1}
+  #nav .railtop i{display:block;font-style:normal;font-size:10px;color:var(--gold-2);letter-spacing:.16em;
+    text-transform:uppercase;margin-top:3px;font-weight:700}
+  .tabbtn{flex-direction:row;justify-content:flex-start;gap:11px;padding:9px 10px;border-radius:8px;font-size:12.5px;
+    min-width:0;text-align:left;letter-spacing:-.01em}
+  .tabbtn svg{width:18px;height:18px;flex:0 0 18px}
+  .tabbtn .badge{position:static;margin-left:auto;border:0;height:17px;min-width:17px}
+  .tabbtn[aria-current="true"]{position:relative}
+  .tabbtn[aria-current="true"]::before{content:"";position:absolute;left:-12px;top:9px;bottom:9px;width:3px;
+    border-radius:3px;background:var(--gold)}
+  #nav .sep{height:1px;width:auto;margin:10px 10px}
+  html:has(#nav:not([hidden])) .top .crest,html:has(#nav:not([hidden])) .top .wm{display:none}
+  html:has(#nav:not([hidden])) .top{margin-left:11rem;background:linear-gradient(180deg,rgba(72,5,10,.86),rgba(72,5,10,0));
+    border-bottom:0;backdrop-filter:none}
+  html:has(#nav:not([hidden])) .top .in{max-width:none;margin:0;padding-left:34px;padding-right:34px;justify-content:flex-end}
+  html:has(#nav:not([hidden])) .wrap{margin-left:11rem;max-width:none;padding:0 34px calc(var(--sab) + 34px)}
+}
 
 /* The membership check, shown on the sign in screen while it runs. Three lines
    that light in turn, so nobody is looking at a dead button while two servers
@@ -2018,7 +2079,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--crimson)
 <header class="top">
   <div class="in">
     <span class="crest crestmark" id="crestTop" role="img" aria-label="Jesus College MCR"></span>
-    <div class="wm"><b>Jesus College MCR</b><i>Freshers' Fortnight 2026</i></div>
+    <div class="wm"><b>Jesus College MCR <span class="beta">Beta</span></b><i>Freshers' Fortnight 2026</i></div>
     <span class="sp"></span>
     <button class="iconbtn" id="bRefresh" title="Pull the latest programme" aria-label="Refresh" hidden><svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.3"/><path d="M20 5v6h-6"/></svg></button>
     <button class="iconbtn avatar" id="bMe" title="Me" aria-label="Me" hidden>?</button>
@@ -2199,6 +2260,9 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--crimson)
 </div>
 
 <nav id="nav" aria-label="Sections" hidden>
+  <!-- Shown only when the bar becomes a rail down the left of a wide screen:
+       the crest and the name move in here and leave the top bar. -->
+  <div class="railtop"><span class="crestmark" role="img" aria-label="Jesus College MCR"></span><span><b>Jesus MCR</b><i>Freshers' Fortnight</i></span></div>
   <button class="tabbtn" data-view="board" aria-current="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Fortnight</button>
   <button class="tabbtn" data-view="mine"><svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.4 5.9.9-4.3 4.1 1 5.9L12 17l-5.2 2.8 1-5.9-4.3-4.1 5.9-.9z"/></svg>Mine<span class="badge" id="badgeMine" hidden>0</span></button>
   <button class="tabbtn" data-view="map"><svg viewBox="0 0 24 24"><path d="M3 6.5l6-2 6 2 6-2v13l-6 2-6-2-6 2z"/><path d="M9 4.5v13M15 6.5v13"/></svg>Map</button>
@@ -2217,7 +2281,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--crimson)
 <!-- ================= GATE ================= -->
 <div id="gate" hidden>
   <div class="gcard">
-    <div class="crest" id="crestGate"><span class="crestmark" role="img" aria-label="Jesus College MCR"></span><span><small>Jesus College MCR</small><b id="gateTitle">Freshers' <i>Fortnight</i></b></span></div>
+    <div class="crest" id="crestGate"><span class="crestmark" role="img" aria-label="Jesus College MCR"></span><span><small>Jesus College MCR <span class="beta">Beta</span></small><b id="gateTitle">Freshers' <i>Fortnight</i></b></span></div>
     <p class="lede" id="gLede">Sixteen days of events at Jesus. Sign in with your University of Cambridge Google account to see the programme and put your name down.</p>
     <div id="gateGsi">
       <div id="gsiBtn"><span class="gsiskel" aria-hidden="true"></span></div>
@@ -5038,12 +5102,23 @@ function renderNews(){
   renderNewsOffer();
   const seenAt = S.me.seenAt || 0, list = S.updates || [];
   const KIND = {change:"Change", cancel:"Cancelled", new:"New event", announce:"Announcement", message:"Message", remove:"Removed"};
-  $("newsList").innerHTML = list.length ? list.map(u => {
+  /* Drawn as notes on a board, the way The Chimney draws its notices: the
+     kind as a small stamp, the event as the title when there is one, the
+     text, and who and when underneath. A cancellation is pinned on pink;
+     anything since you last looked gets the gold pin. */
+  $("newsList").innerHTML = list.length ? '<div class="notes">' + list.map(u => {
     const ev = u.eventId ? evById(u.eventId) : null;
-    return '<div class="nitem ' + esc(u.kind) + (u.at > seenAt ? " fresh" : "") + '"><div class="t"><span class="meta">' + esc(KIND[u.kind] || u.kind) + ' · ' + esc(ago(u.at)) + ' · ' + esc(u.by) + '</span><p>' + esc(u.text) + '</p>' +
-      (ev ? '<div style="margin-top:8px"><button class="btn ghost xs" data-open="' + esc(ev.id) + '">Open ' + esc(ev.title) + '</button></div>' : '') + '</div>' +
-      (isAdmin() ? '<button class="btn ghost xs" data-delupd="' + esc(u.id) + '">Remove</button>' : '') + '</div>';
-  }).join("") : '<div class="empty"><b>Nothing has changed yet</b><span>When the committee moves an event, cancels one or posts a notice, it shows here first.</span></div>';
+    const cls = (u.kind === "cancel" || u.kind === "remove") ? " urgent" : u.kind === "change" ? " waiting" : "";
+    return '<div class="notice' + cls + (u.at > seenAt ? " pinned" : "") + '">' +
+      '<span class="st">' + esc(KIND[u.kind] || u.kind) + '</span>' +
+      (ev ? '<b>' + esc(ev.title) + '</b>' : '') +
+      '<p>' + esc(u.text) + '</p>' +
+      '<small>' + esc(ago(u.at)) + ' · ' + esc(u.by) + '</small>' +
+      ((ev || isAdmin()) ? '<div class="acts">' +
+        (ev ? '<button class="btn ghost xs" data-open="' + esc(ev.id) + '">Open</button>' : '') +
+        (isAdmin() ? '<button class="btn ghost xs" data-delupd="' + esc(u.id) + '">Remove</button>' : '') +
+        '</div>' : '') + '</div>';
+  }).join("") + '</div>' : '<div class="empty"><b>Nothing has changed yet</b><span>When the committee moves an event, cancels one or posts a notice, it shows here first.</span></div>';
 }
 $("bAnnounce").addEventListener("click", async () => {
   const text = $("annText").value.trim(); if (!text){ $("annText").focus(); return; }
