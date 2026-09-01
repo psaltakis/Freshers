@@ -26,11 +26,6 @@ html:has(#boot)::before,html.booted::before{content:none}
 <link rel="manifest" href="/manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- The two hosts every sign in has to talk to. Opening the connections while
-     the page is still being read takes the handshake off the critical path, so
-     the first real request to each is a request rather than a negotiation. -->
-<link rel="preconnect" href="https://accounts.google.com" crossorigin>
-<link rel="preconnect" href="https://script.google.com" crossorigin>
 <style>
 /* required styles */
 
@@ -1064,12 +1059,6 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--crimson)
 /* News as notes on a board, exactly as The Chimney draws them: paper, a pin
    at the top, a small tilt, and the urgent ones on pink. The .nitem rules
    below are no longer used by the news list and are left as they were. */
-/* The turn of the page under the board. Centred, quiet, and the count between
-   the two buttons so it is clear which way is which. */
-.newspager{display:flex;align-items:center;justify-content:center;gap:14px;margin:18px 0 4px;flex-wrap:wrap}
-.newspager span{font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;
-  color:rgba(251,243,236,.6);white-space:nowrap}
-.newspager .btn[disabled]{opacity:.35;pointer-events:none}
 .notes{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;align-items:start}
 .notes .notice{background:var(--paper,#FFFDFA);color:var(--ink);border-radius:3px;padding:15px 15px 12px;
   box-shadow:0 8px 18px -10px rgba(20,1,3,.65);position:relative;transform:rotate(-.35deg);
@@ -2429,7 +2418,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--crimson)
 </div>
 
 
-<script type="text/plain" id="leafletjs">
+<script>
 /* @preserve
  * Leaflet 1.9.4, a JS library for interactive maps. https://leafletjs.com
  * (c) 2010-2023 Vladimir Agafonkin, (c) 2010-2011 CloudMade
@@ -2555,10 +2544,7 @@ function viaBridge(body){
       .apiCall(JSON.stringify(body));
   });
 }
-/* Reads only. These can be asked for twice without anything happening twice,
-   which is what makes retrying them safe; nothing that writes is on this list. */
-const RETRYABLE = { ping: 1, state: 1, poll: 1, updates: 1, photos: 1 };
-async function viaFetch(body, again){
+async function viaFetch(body){
   if (API_URL.indexOf("PASTE_YOUR") === 0) throw new Error("This page is not connected to a server yet. Paste your Web App URL into index.html.");
   /* Only complain about /dev when this really is an Apps Script address. Behind a
      proxy the endpoint is a path on our own site and there is nothing to check. */
@@ -2571,20 +2557,7 @@ async function viaFetch(body, again){
     const res = await fetch(API_URL, {method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(body), redirect:"follow", signal: ctl ? ctl.signal : undefined});
     if (timer) clearTimeout(timer);
     txt = await res.text();
-  }catch(e){
-    if (RETRYABLE[body.action] && !again){ await new Promise(f => setTimeout(f, 800)); return viaFetch(body, true); }
-    throw new Error("Cannot reach the server. Check the Web App URL, and that the deployment is set to Anyone.");
-  }
-  /* A cold Apps Script container sometimes answers the first call with a page of
-     its own instead of our JSON: the redirect it serves gets followed before the
-     script is up. It is a first-call problem and asking once more clears it, so
-     one quiet retry saves showing somebody a deployment error that is not true.
-     If the second answer is a page as well then it really is the deployment, and
-     unpack says so. */
-  if (RETRYABLE[body.action] && !again && String(txt).trim().charAt(0) === "<"){
-    await new Promise(f => setTimeout(f, 800));
-    return viaFetch(body, true);
-  }
+  }catch(e){ throw new Error("Cannot reach the server. Check the Web App URL, and that the deployment is set to Anyone."); }
   return unpack(txt);
 }
 function unpack(txt){
@@ -2695,7 +2668,6 @@ async function bookAgain(btn){
     }
     gateWipe();
     token = r.token; setToken(token);
-    prefetchState();
     $("gate").hidden = true;
     raiseBoot("Membership confirmed. Opening the programme");
     await boot(true);
@@ -2707,26 +2679,6 @@ async function bookAgain(btn){
   }
 }
 
-/* Google's sign in script used to be asked for only after the server had
-   answered ping, so two slow things happened one after the other: Apps Script
-   waking up, and then a fetch to accounts.google.com. They have nothing to do
-   with each other, so they now happen at the same time. By the time ping comes
-   back the script is usually already there and the button draws at once. */
-let gsiWanted = null;
-function preloadGsi(){
-  if (gsiWanted) return gsiWanted;
-  gsiWanted = new Promise(resolve => {
-    const sc = document.createElement("script");
-    sc.src = "https://accounts.google.com/gsi/client";
-    sc.async = true; sc.defer = true;
-    sc.onload = () => resolve(true);
-    sc.onerror = () => resolve(false);
-    /* If Google is blocked rather than merely slow the error never fires. */
-    setTimeout(() => resolve(typeof window.google !== "undefined"), 8000);
-    document.head.appendChild(sc);
-  });
-  return gsiWanted;
-}
 let gsiUp = false;
 function startGsi(cfg){
   if (gsiUp) return;
@@ -2748,6 +2700,7 @@ function startGsi(cfg){
          both are shown happening rather than left to a spinner. */
       const r = await api("googleToken", {credential: res.credential});
       checkSay("busy", "Checking the MCR register");
+      await new Promise(f => setTimeout(f, 220));
       if (r && r.bookDown){
         checkSay("no", "The register did not answer");
         return bookUnreachable();
@@ -2758,33 +2711,35 @@ function startGsi(cfg){
       }
       checkSay("done", r.cohort === "remainer" ? "Returning member confirmed" : "Fresher confirmed");
       token = r.token; setToken(token);
-      /* The programme is asked for here rather than in boot(), so it travels
-         while the line above is being read and the welcome is playing. */
-      prefetchState();
-      /* The line above is worth seeing, but not worth waiting most of a second
-         for. Long enough to read, short enough not to be a queue. */
-      await new Promise(f => setTimeout(f, 140));
+      await new Promise(f => setTimeout(f, 420));
       gateWipe();
       $("gate").hidden = true;
       raiseBoot("Membership confirmed. Opening the programme");
       await boot(true);
     }catch(e){ checkShut(); msg.className = "msg"; msg.textContent = e.message; }
   };
-  const stuck = () => {
-    $("gsiBtn").innerHTML = '<p class="lede" style="text-align:center;margin:0">Google\'s sign in could not load.<br>Check the connection and reload the page.</p>';
-    $("gsiHint").hidden = true;
-  };
   const draw = () => {
-    if (!window.google || !window.google.accounts || !window.google.accounts.id){ setTimeout(draw, 120); return; }
+    if (!window.google || !window.google.accounts || !window.google.accounts.id){ setTimeout(draw, 250); return; }
     window.google.accounts.id.initialize({
       client_id: cfg.clientId, callback: window.handleGsi,
       hd: cfg.hd || undefined, ux_mode: "popup", auto_select: false
     });
     window.google.accounts.id.renderButton($("gsiBtn"),
       { theme: "filled_blue", size: "large", shape: "pill", width: 280, text: "signin_with", logo_alignment: "center" });
+      };
+  const sc = document.createElement("script");
+  sc.src = "https://accounts.google.com/gsi/client";
+  sc.async = true; sc.defer = true;
+  sc.onload = draw;
+  const stuck = () => {
+    $("gsiBtn").innerHTML = '<p class="lede" style="text-align:center;margin:0">Google\'s sign in could not load.<br>Check the connection and reload the page.</p>';
+    $("gsiHint").hidden = true;
   };
-  preloadGsi().then(ok => { if (ok) draw(); else stuck(); });
+  sc.onerror = stuck;
+  /* If Google is blocked rather than merely slow, the error never fires. Say
+     something after a while rather than leaving an empty box. */
   setTimeout(() => { if (!$("gsiBtn").firstChild) stuck(); }, 8000);
+  document.head.appendChild(sc);
 }
 function greeting(me){
   const h = Number(londonStr(new Date()).slice(11, 13));
@@ -2795,8 +2750,6 @@ function greeting(me){
 }
 function signedOut(){
   token = null; clearToken(); S = null;
-  /* Belongs to the session that asked for it; a new sign in asks again. */
-  statePrefetch = null;
   const su = $("setup"); if (su) su.hidden = true;
   document.body.classList.remove("locked"); stopPolling(); stopWatch(); closeCallout(); closeEvent(true); closeModal();
   $("app").hidden = true; $("nav").hidden = true; $("bMe").hidden = true; $("bRefresh").hidden = true; $("stalled").hidden = true;
@@ -2817,28 +2770,6 @@ const myStatus = id => (S.mine && S.mine[id] && S.mine[id].status) || "";
 const inMine = id => ["going","waitlist","maybe"].indexOf(myStatus(id)) >= 0;
 const myEvents = () => S.events.filter(e => inMine(e.id));
 const goingEvents = () => S.events.filter(e => ["going","waitlist"].indexOf(myStatus(e.id)) >= 0 && e.status !== "cancelled");
-/* FRESHERS' FORTNIGHT ITSELF. Sixteen days, 15 to 30 September 2026: the same
-   window the calendar on the boot screen turns through, and the "sixteen days"
-   the welcome counts out.
-
-   The page reads S.fortnight for the day strip. Not every deployment of the
-   server sends it: the current one sends `term` instead, which is the whole
-   academic year, 13 September to 31 July. They are not the same thing and the
-   year must never be used here, or the strip tries to lay out three hundred and
-   twenty days. So the programme's own value is used when it sends one and this
-   is used when it does not, and nothing reads S.fortnight without going through
-   here. To move the fortnight in a later year, change these two dates. */
-const FORTNIGHT = { start: "2026-09-15", end: "2026-09-30" };
-function fortnightOf(s){
-  const f = s && s.fortnight;
-  return (f && f.start && f.end) ? f : FORTNIGHT;
-}
-/* Every programme that arrives goes through here before anything draws it, so
-   the rest of the page can read S.fortnight without checking it exists. */
-function takeState(s){
-  if (s) s.fortnight = fortnightOf(s);
-  return s;
-}
 function dayList(){ const out = []; let d = S.fortnight.start; while (d <= S.fortnight.end){ out.push(d); d = addDays(d, 1); } return out; }
 const overlaps = (a, b) => startOf(a) < endOf(b) && startOf(b) < endOf(a);
 function clashes(){
@@ -2855,7 +2786,7 @@ function evState(ev){
   return (startOf(ev) - now < 5400000) ? "soon" : "ahead";
 }
 async function refresh(loud){
-  try{ S = takeState(await api("state")); render(); if (loud) toast("Latest programme pulled in"); }
+  try{ S = await api("state"); render(); if (loud) toast("Latest programme pulled in"); }
   catch(e){ fail(e); }
 }
 /* Nothing empty is ever shown. The crest holds until either the gate or the
@@ -2872,7 +2803,7 @@ function bootProgress(){
   if (!bar) return { to(){}, done(){} };
   /* Hand the bar over from the CSS animation to a real measurement. */
   if (bar.parentElement) bar.parentElement.classList.add("go");
-  let at = 1, aim = 16, i = 0, held = false;
+  let at = 4, aim = 24, i = 0, held = false;
   const paint = () => { bar.style.width = at.toFixed(1) + "%"; if (pct) pct.textContent = Math.round(at) + "%"; };
   const say = text => {
     if (!note) return;
@@ -2880,38 +2811,10 @@ function bootProgress(){
     setTimeout(() => { note.textContent = text; note.classList.remove("swap"); }, 220);
   };
   paint();
-  /* The bar used to creep towards the step it had been told about and then stop
-     dead on it. Waiting for the programme parks it on sixty four, and a number
-     that has not moved for ten seconds reads as broken however healthy the
-     thing behind it is: people watch the number, not the note.
-
-     So there is no longer a figure it is allowed to rest on. It always moves
-     towards the far end and never arrives, quickly at first and slower the
-     longer it goes, the way a wait actually feels. A step still pushes it
-     forward, which is what makes the steps feel like progress; between them it
-     keeps inching. The floor under the step is the important part: it keeps the
-     bar moving for a full minute even if nothing else ever happens, which is
-     longer than the wait is ever allowed to last, so there is no state in which
-     somebody is looking at a number that has stopped. Only done() reaches a
-     hundred; on its own it never gets there. */
-  /* Two movements, which is what stops it both jumping and stalling.
-
-     The target drifts up on its own, quickly at first and slower as it goes, so
-     there is never a number the bar is allowed to settle on. The bar then walks
-     towards the target rather than being set to it, so a step forward is a climb
-     you can watch and not a jump: the bar leaves 1% and travels the whole way
-     up rather than appearing at 64 already. */
-  const creep = setInterval(() => {
-    aim = Math.min(99.5, aim + Math.max(.02, (99.5 - aim) * .004));
-    at = Math.min(aim, at + Math.max(.12, (aim - at) * .14));
-    paint();
-  }, 90);
+  const creep = setInterval(() => { at += Math.max(.25, (aim - at) * .1); if (at > aim) at = aim; paint(); }, 90);
   const talk = setInterval(() => { if (!held){ i = (i + 1) % BOOT_LINES.length; say(BOOT_LINES[i]); } }, 1400);
   return {
-    /* A step raises where the bar is heading, never where it is. That is the
-       whole difference: the old one assigned the number and the screen showed
-       64% before it had shown anything else. */
-    to(p, text){ const want = Math.min(99, p); if (want > aim) aim = want; if (text){ held = true; say(text); } },
+    to(p, text){ aim = Math.max(aim, Math.min(99, p)); if (text){ held = true; say(text); } },
     slow(){ held = true; say(SLOW_LINE); },
     done(){ clearInterval(creep); clearInterval(talk); at = 100; paint(); }
   };
@@ -2929,9 +2832,9 @@ function watchBoot(on){
       const b = $("boot");
       if (b && !b.dataset.gone){
         dropBoot();
-        stalled("The server has not answered in three quarters of a minute. This is usually a cold server taking its time rather than anything being wrong, and trying again generally works.");
+        stalled("The server has not answered in half a minute. This is usually it waking up rather than anything wrong. Try again.");
       }
-    }, 45000)
+    }, 30000)
   };
 }
 /* The map takes a moment on a phone, so it says what it is doing meanwhile. */
@@ -2979,40 +2882,6 @@ function dropBoot(){
   b.classList.add("out");
   setTimeout(() => { b.hidden = true; }, 440);
 }
-/* Started the moment a token exists, so the programme is already on the wire
-   while the confirmation line and the welcome are still playing. Those used to
-   run first and the fetch second; now they overlap, and the wait people notice
-   is only whatever is left of the fetch when the welcome finishes. */
-let statePrefetch = null;
-function prefetchState(){
-  if (statePrefetch) return statePrefetch;
-  statePrefetch = api("state");
-  /* Held for boot() to await properly; this only stops the browser complaining
-     about a rejection nobody has looked at yet. */
-  statePrefetch.catch(() => {});
-  return statePrefetch;
-}
-/* Compiled and decoded once, in the browser's own spare moments. Everything
-   here is work the first screen would otherwise do while somebody watches. */
-let warmed = false;
-function warmEverything(){
-  if (warmed) return;
-  warmed = true;
-  const idle = window.requestIdleCallback || (f => setTimeout(f, 250));
-  idle(() => { try{ loadLeaflet(); }catch(e){} });
-  idle(() => {
-    /* The venue crests are inline base64 and are decoded the first time the
-       board paints one. Decoding them here moves that cost off the first
-       screen. decode() keeps it off the main thread where it is supported. */
-    try{
-      Object.keys(ICONS).forEach(k => {
-        const im = new Image();
-        im.src = ICONS[k];
-        if (im.decode) im.decode().catch(() => {});
-      });
-    }catch(e){}
-  });
-}
 async function boot(fresh){
   const b = $("boot");
   if (!BOOT || (b && b.dataset.gone)) BOOT = bootProgress();
@@ -3022,32 +2891,12 @@ async function boot(fresh){
     $("gate").hidden = false;
     BOOT.to(100, "Opening the gate");
     dropBoot();
-    /* Google's script is fetched from Google, so it costs this server nothing
-       and is started at the same time as ping.
-
-       There used to be an api("warm") here as well, on the theory that waking
-       the container early would make the real call faster. It does the
-       opposite. Apps Script runs a user's calls one at a time, so the warm up
-       does not run beside ping, it runs in front of it, and ping waits for a
-       UrlFetch to the register before it can even start. The thing meant to
-       shorten the wait was the wait. There is nothing to warm here: ping is
-       itself the small first call that wakes the container. */
-    preloadGsi();
-    /* The sign in card is the one stretch of this app where the person is busy
-       and the browser is not: reading the card, pressing the button, picking an
-       account in Google's window. That is several seconds of idle machine. The
-       work that used to land just after they got in is done here instead, so by
-       the time they are through the gate the map's library is compiled and the
-       crests are decoded, and the first screen is a draw rather than a build. */
-    warmEverything();
     try{ const p = await api("ping"); startGsi(p.signIn); }
     catch(e){ const m = $("gateMsg"); m.className = "msg"; m.textContent = e.message; }
     return;
   }
   BOOT.to(64, "Pulling in the programme");
-  /* If the sign in already started this fetch, join it rather than asking twice:
-     it has had a head start of the whole confirmation. */
-  try{ const p = statePrefetch; statePrefetch = null; S = takeState(await (p || api("state"))); }
+  try{ S = await api("state"); }
   catch(e){
     dropBoot();
     if (/sign in|session has expired/i.test(e.message || "")){ signedOut(); const m = $("gateMsg"); m.className = "msg"; m.textContent = e.message; return; }
@@ -3058,10 +2907,6 @@ async function boot(fresh){
   try{ render(); startPolling(); }
   catch(e){ dropBoot(); stalled("The programme came back but the page could not draw it: " + (e && e.message ? e.message : e)); return; }
   dropBoot();
-  /* Somebody with a session still open never sees the sign in card, so the
-     warming that happens there has not run for them. Do it here instead, in the
-     idle moments after the board is up rather than when they tap Map. */
-  warmEverything();
   const needsSetup = !S.me.ready;
   /* First time or fortieth, they are greeted by name. */
   $("welcome").hidden = false;
@@ -3080,27 +2925,19 @@ function showWelcome(newcomer){
   const lines = newcomer
     ? ["Opening the gate", "Laying out sixteen days", "Almost there"]
     : ["Pulling in the programme", "Checking what has changed", "Ready"];
-  /* This used to run for well over two seconds, and every one of them was
-     spent after the programme had already arrived: the lines were describing
-     work that was finished. Somebody signing in for the fortieth time does not
-     need to be told the gate is being opened, so they are greeted and let
-     straight through. A newcomer still gets the full welcome, because for them
-     it is the first thing the MCR says, but at a pace rather than a crawl. */
-  const STEP = newcomer ? 240 : 0, HOLD = newcomer ? 380 : 260, FADE = 300;
   return new Promise(resolve => {
     let i = 0;
     const step = () => {
-      if (STEP && i < lines.length){
+      if (i < lines.length){
         $("welLines").innerHTML = '<span>' + esc(lines[i]) + '</span>';
-        i++; setTimeout(step, STEP); return;
+        i++; setTimeout(step, 380); return;
       }
-      if (!STEP) $("welLines").innerHTML = '<span>' + esc(lines[lines.length - 1]) + '</span>';
       $("welFacts").innerHTML = welcomeFacts().map(f => '<span>' + esc(f) + '</span>').join("");
       setTimeout(() => {
         w.classList.add("out");
         const app = $("app"); if (app){ app.classList.remove("fadein"); void app.offsetWidth; app.classList.add("fadein"); }
-        setTimeout(() => { w.hidden = true; w.classList.remove("out"); resolve(); }, FADE);
-      }, HOLD);
+        setTimeout(() => { w.hidden = true; w.classList.remove("out"); resolve(); }, 440);
+      }, 620);
     };
     step();
   });
@@ -3122,7 +2959,7 @@ function welcomeFacts(){
   else if (firstEv && startOf(firstEv) > Date.now()) out.push("starts in " + untilText(startOf(firstEv) - Date.now()));
   return out;
 }
-function startPolling(){ stopPolling(); pollTimer = setInterval(pollTick, 45000); tickTimer = setInterval(() => { if (S){ renderHero(); repaintBoard(); refreshMarkers(); } }, 60000); }
+function startPolling(){ stopPolling(); pollTimer = setInterval(pollTick, 45000); tickTimer = setInterval(() => { if (S){ renderHero(); renderBoard(); refreshMarkers(); } }, 60000); }
 function stopPolling(){ clearInterval(pollTimer); clearInterval(tickTimer); pollTimer = tickTimer = null; }
 document.addEventListener("visibilitychange", () => { if (!document.hidden && S) pollTick(); });
 async function pollTick(){
@@ -3146,16 +2983,14 @@ async function pollTick(){
       /* Only the numbers have moved: repaint the counts rather than everything. */
       S.version = r.version;
       S.events.forEach(e => { e.counts = r.counts[e.id] || {going:0, maybe:0, waitlist:0, guests:0}; e.full = e.capacity > 0 && e.counts.going >= e.capacity; });
-      repaintBoard();
-      dirtyView.desk = true; dirtyView.mine = true; dirtyView.run = true; dirtyView.people = true;
-      paintView(view);
+      renderBoard(); if (view === "desk") renderDesk();
       if (openEventId) paintEventCounts();
     }
     /* The last night can be switched on at any moment, so it rides the poll. */
     if (r.finale !== undefined){
       const was = S.finale;
       S.finale = r.finale; S.finaleAt = r.finaleAt;
-      if (was !== S.finale){ dirtyView.me = true; dirtyView.admin = true; paintView(view); }
+      if (was !== S.finale){ renderMe(); if (isAdmin()) renderAdmin(); }
       maybeFinale();
     }
   }catch(e){}
@@ -3171,58 +3006,22 @@ function render(){
   document.querySelectorAll("[data-admin]").forEach(el => el.hidden = !isAdmin());
   document.querySelectorAll("[data-owner]").forEach(el => el.hidden = !S.me.owner);
   lastNewsId = (S.updates || [])[0] ? S.updates[0].id : null;
-  /* A new notice shifts every page along, so the pages held from before are no
-     longer the pages they were. They are dropped and fetched again if wanted;
-     the reader stays where they were rather than being thrown back to the top. */
-  if (S.pv !== feedPv){ feedPv = S.pv; newsPages = {}; }
-  if (newsPage > newsLastPage()) newsPage = newsLastPage();
   const sk = $("boardSkel"); if (sk) sk.hidden = true;
-  renderBadges(); renderHero(); renderHello(); renderStrip();
-  /* Eight tabs used to be built here, on every load and every poll, when seven
-     of them are behind hidden = true and nobody has asked for them. On a
-     committee phone that is the whole signup list, the whole desk and the whole
-     roster laid out before the board has been read once. Each tab is now marked
-     as needing a repaint and drawn when it is opened, which is the same work
-     spread over the moments somebody asks for it rather than all of it at the
-     one moment they are waiting to get in. */
-  Object.keys(PAINT).forEach(k => { dirtyView[k] = true; });
-  paintView(view);
+  renderBadges(); renderHero(); renderHello(); renderStrip(); renderBoard(); renderLegend();
+  renderMine(); renderNews(); if (!typingIn("v-me")) renderMe();
+  if (isCommittee()){ renderDesk(); renderRun(); renderPeople(); if (isAdmin() && !typingIn("v-admin")) renderAdmin(); }
   refreshMarkers();
   if (openEventId) openEvent(openEventId, true);
 }
-/* What each tab needs drawing, and whether it is currently out of date. */
-const PAINT = {
-  board:  () => { renderBoard(); renderLegend(); },
-  mine:   () => renderMine(),
-  news:   () => newsShow(),
-  me:     () => { if (!typingIn("v-me")) renderMe(); },
-  desk:   () => { if (isCommittee()) renderDesk(); },
-  run:    () => { if (isCommittee()) renderRun(); },
-  people: () => { if (isCommittee()) renderPeople(); },
-  admin:  () => { if (isAdmin() && !typingIn("v-admin")) renderAdmin(); }
-};
-const dirtyView = {};
-function paintView(v){
-  if (!S || !PAINT[v] || !dirtyView[v]) return;
-  dirtyView[v] = false;
-  try{ PAINT[v](); }catch(e){ dirtyView[v] = true; throw e; }
-}
-/* The board is the one that has to be right even when it is not on screen:
-   the hero and the strip read from it and the counts move on every poll. */
-function repaintBoard(){ dirtyView.board = true; if (view === "board") paintView("board"); }
 const typingIn = id => { const a = document.activeElement; return !!(a && $(id) && $(id).contains(a) && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)); };
 function renderBadges(){
   const n = goingEvents().length; $("badgeMine").hidden = !n; $("badgeMine").textContent = n;
-  /* Counted on the server across the whole feed, because only the first page
-     of it is here. The local count is the fallback for an older server. */
-  const fresh = S.updatesFresh !== undefined ? Number(S.updatesFresh)
-    : (S.updates || []).filter(u => u.at > (S.me.seenAt || 0)).length;
+  const fresh = (S.updates || []).filter(u => u.at > (S.me.seenAt || 0)).length;
   $("badgeNews").hidden = !fresh; $("badgeNews").textContent = fresh;
   if (isCommittee()){ const l = S.events.filter(e => (e.leads || []).some(x => x.email === S.me.email)).length; $("badgeRun").hidden = !l; $("badgeRun").textContent = l; }
 }
 function go(v, scroll){
   view = v;
-  paintView(v);
   document.querySelectorAll("#nav .tabbtn").forEach(b => b.setAttribute("aria-current", String(b.dataset.view === v)));
   ["board","map","mine","news","me","desk","run","people","admin"].forEach(id => { const el = $("v-" + id); if (el) el.hidden = id !== v; });
   if (v === "news") seen();
@@ -3236,11 +3035,10 @@ function go(v, scroll){
 }
 document.querySelectorAll("#nav .tabbtn").forEach(b => b.addEventListener("click", () => go(b.dataset.view)));
 async function seen(){
-  const fresh = S.updatesFresh !== undefined ? Number(S.updatesFresh)
-    : (S.updates || []).filter(u => u.at > (S.me.seenAt || 0)).length;
+  const fresh = (S.updates || []).filter(u => u.at > (S.me.seenAt || 0)).length;
   if (!fresh) return;
   try{ await api("markSeen"); }catch(e){}
-  S.me.seenAt = Date.now(); S.updatesFresh = 0; renderBadges();
+  S.me.seenAt = Date.now(); renderBadges();
 }
 
 /* ---------------- the hero ---------------- */
@@ -3491,23 +3289,8 @@ function evState(ev){
   return (startOf(ev) - now < 5400000) ? "soon" : "ahead";
 }
 
-/* Leaflet is a hundred and fifty kilobytes of library that only the map uses.
-   It used to be parsed on every single load, before anybody had seen anything,
-   which on a phone is a real pause with nothing on the screen. It now sits in
-   the page as inert text and is compiled the first time a map is actually
-   asked for. Nothing else changes: once this has run, L is where it always was. */
-let leafletUp = false;
-function loadLeaflet(){
-  if (leafletUp || typeof L !== "undefined") return leafletUp = true;
-  const tag = document.getElementById("leafletjs");
-  if (!tag) return false;
-  try{ (0, eval)(tag.textContent); }catch(e){ return false; }
-  leafletUp = typeof L !== "undefined";
-  return leafletUp;
-}
 function initMap(){
   if (MAP) return MAP;
-  loadLeaflet();
   if (typeof L === "undefined"){
     mapSkelTalk(false);
     const sk = $("mapSkel");
@@ -3709,9 +3492,7 @@ function handlePosition(pos, jump){
 let miniMap = null;
 function drawMiniMap(ev){
   const el = $("evmap");
-  if (!el) return;
-  loadLeaflet();
-  if (typeof L === "undefined") return;
+  if (!el || typeof L === "undefined") return;
   if (miniMap){ miniMap.remove(); miniMap = null; }
   const ll = evLatLng(ev);
   miniMap = L.map(el, { zoomControl: false, attributionControl: false, dragging: false, scrollWheelZoom: false, doubleClickZoom: false, touchZoom: false, keyboard: false })
@@ -4326,7 +4107,7 @@ function paintSetup(){
     fix.innerHTML = '<span class="dot spin"></span>Asking the register';
     try{
       const r = await api("state");
-      S = takeState(r);
+      S = r;
       if (!isRemainer()){
         toast("Your record has been corrected. The whole Fortnight is yours.");
         setupIdx = 0;
@@ -4901,9 +4682,7 @@ function openEvent(id, keepScroll){
   else if (ev.cost) notes.push(["What to bring", "Money" + (ev.price ? " (" + ev.price + ")" : "") + ", and a card as a backup."]);
   (ev.tags || []).forEach(t => { if (TAGNOTE[t]) notes.push([TAGS[t], TAGNOTE[t]]); });
 
-  /* Sent per event now that the global feed arrives a page at a time. */
-  const history = (S.evUpdates && S.evUpdates[ev.id]) ||
-    (S.updates || []).filter(u => u.eventId === ev.id).slice(0, 5);
+  const history = (S.updates || []).filter(u => u.eventId === ev.id).slice(0, 5);
 
   const c2 = ev.counts || {};
   /* Anything the booking needs beyond a yes. Folded away until they say yes. */
@@ -5236,10 +5015,9 @@ async function doRsvp(id, status, opts){
     else if (placed === "maybe"){ title = "Pencilled in"; sub = ev.title; }
     else { title = "You're in"; sub = ev.title + " · " + shortDate(ev.date) + " at " + clock(ev.start); }
     await waitDone(title, sub);
-    renderBadges(); renderHero(); renderStrip();
-    dirtyView.board = dirtyView.mine = dirtyView.desk = dirtyView.run = dirtyView.people = true;
-    paintView(view);
+    renderBadges(); renderHero(); renderStrip(); renderBoard(); renderMine();
     if (MAP) refreshMarkers();
+    if (isCommittee()){ renderDesk(); renderRun(); }
     if (openEventId === id) openEvent(id, true);
 
   }catch(e){
@@ -5305,54 +5083,9 @@ $("bRedoSetup").addEventListener("click", () => openSetup());
 /* ---------------- news, me ---------------- */
 /* Nothing is offered here any more: see the note above on notifications. */
 function renderNewsOffer(){}
-/* What's new is paged, six to a page. The programme brings the first page with
-   it and nothing else, so signing in no longer carries a term of notices that
-   nobody has asked to see. Turning a page fetches that page and keeps it, so
-   going back is instant and the same page is never fetched twice. */
-const NEWS_PER_PAGE = 6;
-let newsPage = 0, newsPages = {}, newsBusy = false, feedPv = null;
-/* Opening the tab draws what is held; if the page wanted was dropped because
-   the feed moved, it is fetched first. */
-function newsShow(){
-  if (newsPage > 0 && !newsHeld(newsPage) && !newsBusy) return void newsGo(newsPage);
-  renderNews();
-}
-/* Whether the server on the other end is paging or still sending the lot. An
-   older deployment sends every notice and no total, and the pages are then cut
-   here instead of being fetched. That way the two files can be out of step
-   without What's new breaking, which matters because they are deployed
-   separately and one of them is a copy and paste into an editor. */
-function serverPages(){ return S && S.updatesTotal !== undefined; }
-function newsTotal(){
-  const here = (S.updates || []).length;
-  return serverPages() ? Math.max(Number(S.updatesTotal) || 0, here) : here;
-}
-function newsLastPage(){ return Math.max(0, Math.ceil(newsTotal() / NEWS_PER_PAGE) - 1); }
-/* Page nought always comes from the programme itself, so a notice posted a
-   moment ago is on the board without a second call. */
-function newsHeld(n){
-  if (!serverPages()) return (S.updates || []).slice(n * NEWS_PER_PAGE, (n + 1) * NEWS_PER_PAGE);
-  return n === 0 ? (S.updates || []).slice(0, NEWS_PER_PAGE) : newsPages[n];
-}
-function newsReset(){ newsPage = 0; newsPages = {}; }
-async function newsGo(n){
-  const last = newsLastPage();
-  n = Math.min(Math.max(0, n), last);
-  if (n === newsPage && newsHeld(n)) return;
-  newsPage = n;
-  if (newsHeld(n) || !serverPages()) return renderNews();
-  newsBusy = true; renderNews();
-  try{
-    const r = await api("updates", { from: n * NEWS_PER_PAGE, count: NEWS_PER_PAGE });
-    newsPages[n] = r.items || [];
-    if (r.total !== undefined) S.updatesTotal = r.total;
-  }catch(e){ fail(e); newsPages[n] = []; }
-  newsBusy = false;
-  renderNews();
-}
 function renderNews(){
   renderNewsOffer();
-  const seenAt = S.me.seenAt || 0, list = newsHeld(newsPage) || [];
+  const seenAt = S.me.seenAt || 0, list = S.updates || [];
   const KIND = {change:"Change", cancel:"Cancelled", new:"New event", announce:"Announcement", message:"Message", remove:"Removed"};
   /* Drawn as notes on a board, the way The Chimney draws its notices: the
      kind as a small stamp, the event as the title when there is one, the
@@ -5370,32 +5103,14 @@ function renderNews(){
         (ev ? '<button class="btn ghost xs" data-open="' + esc(ev.id) + '">Open</button>' : '') +
         (isAdmin() ? '<button class="btn ghost xs" data-delupd="' + esc(u.id) + '">Remove</button>' : '') +
         '</div>' : '') + '</div>';
-  }).join("") + '</div>' + newsPager()
-    : newsBusy ? '<div class="empty"><b>Fetching that page</b><span>One moment.</span></div>'
-    : newsPage > 0 ? '<div class="empty"><b>Nothing further back</b><span>That is the end of the notices.</span></div>' + newsPager()
-    : '<div class="empty"><b>Nothing has changed yet</b><span>When the committee moves an event, cancels one or posts a notice, it shows here first.</span></div>';
-}
-/* Newer and older rather than numbers: there is one thread of notices and the
-   only thing anybody wants is a step along it. The count says where they are so
-   the buttons are not a guess. */
-function newsPager(){
-  const last = newsLastPage();
-  if (last <= 0) return "";
-  const total = newsTotal();
-  const from = newsPage * NEWS_PER_PAGE + 1;
-  const to = Math.min(total, from + NEWS_PER_PAGE - 1);
-  return '<div class="newspager">' +
-    '<button class="btn ghost sm" data-news="prev"' + (newsPage === 0 || newsBusy ? ' disabled' : '') + '>Newer</button>' +
-    '<span>' + from + '\u2013' + to + ' of ' + total + '</span>' +
-    '<button class="btn ghost sm" data-news="next"' + (newsPage >= last || newsBusy ? ' disabled' : '') + '>Older</button>' +
-    '</div>';
+  }).join("") + '</div>' : '<div class="empty"><b>Nothing has changed yet</b><span>When the committee moves an event, cancels one or posts a notice, it shows here first.</span></div>';
 }
 $("bAnnounce").addEventListener("click", async () => {
   const text = $("annText").value.trim(); if (!text){ $("annText").focus(); return; }
   const email = false;
   if (email && !confirm("Email this to everyone who has signed up?")) return;
   const b = $("bAnnounce"); spin(b, "Posting");
-  try{ await api("announce", {text, email}); $("annText").value = ""; toast("Posted"); newsReset(); await refresh(false); }
+  try{ await api("announce", {text, email}); $("annText").value = ""; toast("Posted"); await refresh(false); }
   catch(e){ fail(e); }
   unspin(b);
 });
@@ -5813,9 +5528,8 @@ $("bReseed").addEventListener("click", async () => { const b = $("bReseed"); spi
 
 /* ---------------- one listener ---------------- */
 document.addEventListener("click", async e => {
-  const t = e.target.closest("[data-open],[data-tick],[data-go],[data-out],[data-close],[data-cclose],[data-edit],[data-att],[data-lead],[data-sendmsg],[data-rremove],[data-delupd],[data-status],[data-ownerout],[data-assign],[data-showon],[data-vf],[data-jump],[data-evback],[data-gmapsev],[data-walkev],[data-news]");
+  const t = e.target.closest("[data-open],[data-tick],[data-go],[data-out],[data-close],[data-cclose],[data-edit],[data-att],[data-lead],[data-sendmsg],[data-rremove],[data-delupd],[data-status],[data-ownerout],[data-assign],[data-showon],[data-vf],[data-jump],[data-evback],[data-gmapsev],[data-walkev]");
   if (!t) return;
-  if (t.dataset.news){ newsGo(t.dataset.news === "next" ? newsPage + 1 : newsPage - 1); return; }
   if (t.dataset.close !== undefined){ closeModal(); return; }
   if (t.dataset.cclose !== undefined){ closeCallout(); return; }
   if (t.dataset.evback !== undefined){ closeEvent(); return; }
@@ -5877,7 +5591,7 @@ document.addEventListener("change", async e => {
 window.addEventListener("pagehide", () => { stopPolling(); stopWatch(); });
 
 /* For the console: __mcr.S is the state. */
-window.__mcr = { async signInWithToken(t){ token = t; setToken(t); prefetchState(); $("gate").hidden = true; raiseBoot("Letting you in"); await boot(true); },
+window.__mcr = { async signInWithToken(t){ token = t; setToken(t); $("gate").hidden = true; raiseBoot("Letting you in"); await boot(true); },
   get S(){ return S; }, get map(){ return MAP; }, model: MODEL, go, refresh, openEvent, closeEvent,
   pollTick, openVenue, render, initMap, doRsvp, openSetup, openAssign, routeTo, xyToLatLng, latLngToXY, locate, fitCollege };
 boot();
