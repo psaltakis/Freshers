@@ -1143,9 +1143,10 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--crimson)
    of the window. Only once somebody is in: at the gate there is no bar. */
 #nav .railtop{display:none}
 @media(min-width:1000px){
+  /* the rail keeps the bar's own colours: nothing here is repainted */
   #nav{left:0;top:0;bottom:0;transform:none;width:11rem;max-width:none;flex-direction:column;align-items:stretch;
-    border-radius:0;border:0;background:rgba(66,4,9,.42);box-shadow:none;padding:calc(18px + var(--sat)) 12px calc(18px + var(--sab));
-    overflow-y:auto;overflow-x:hidden;backdrop-filter:none}
+    border-radius:0;border-width:0 1px 0 0;box-shadow:none;padding:calc(18px + var(--sat)) 12px calc(18px + var(--sab));
+    overflow-y:auto;overflow-x:hidden}
   #nav .railtop{display:flex;align-items:center;gap:10px;padding:2px 9px 18px;color:var(--cream)}
   #nav .railtop .crestmark{--ch:34px;flex:0 0 auto}
   #nav .railtop b{display:block;font-family:var(--display);font-size:14px;font-weight:600;letter-spacing:-.03em;line-height:1.1}
@@ -1160,8 +1161,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--crimson)
     border-radius:3px;background:var(--gold)}
   #nav .sep{height:1px;width:auto;margin:10px 10px}
   html:has(#nav:not([hidden])) .top .crest,html:has(#nav:not([hidden])) .top .wm{display:none}
-  html:has(#nav:not([hidden])) .top{margin-left:11rem;background:linear-gradient(180deg,rgba(72,5,10,.86),rgba(72,5,10,0));
-    border-bottom:0;backdrop-filter:none}
+  html:has(#nav:not([hidden])) .top{margin-left:11rem}
   html:has(#nav:not([hidden])) .top .in{max-width:none;margin:0;padding-left:34px;padding-right:34px;justify-content:flex-end}
   html:has(#nav:not([hidden])) .wrap{margin-left:11rem;max-width:none;padding:0 34px calc(var(--sab) + 34px)}
 }
@@ -2137,9 +2137,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--crimson)
 
   <!-- ================= NEWS ================= -->
   <section id="v-news" hidden>
-    <div class="vh"><h2>What's <i>new</i></h2><span class="note">Changes, cancellations, notices</span>
-      <div class="right"><button class="btn ghost sm" id="bNotifyToggle"></button></div></div>
-    <div class="card gold" id="notifyOffer" hidden></div>
+    <div class="vh"><h2>What's <i>new</i></h2><span class="note">Changes, cancellations, notices</span></div>
     <div class="card" id="announcePanel" data-admin hidden>
       <h3>Post an announcement</h3>
       <p class="lede">This one goes to everybody. For a notice about a single event, use the box on that event's own page.</p>
@@ -2170,8 +2168,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--crimson)
     </div>
     <div class="card">
       <h3>How you hear from the app</h3>
-      <p class="lede">Alerts on your phone come from your personal calendar link, under My fortnight. The app sends no messages at all: everything reaches you here, and through that calendar.</p>
-      <div class="prow2" id="notifyRow"></div>
+      <p class="lede">Alerts on your phone come from your personal calendar link, under My fortnight. The app sends no messages and no notifications at all: everything reaches you here, and through that calendar.</p>
       <label class="f"><span class="l">Calendar alert before each event</span>
         <select id="pRemind"><option value="15">15 minutes before</option><option value="30">30 minutes before</option><option value="60">1 hour before</option><option value="120">2 hours before</option><option value="1440">The day before</option><option value="0">No alert</option></select></label>
       <div class="actions"><button class="btn crimson" id="bSaveMe">Save</button><span class="msg" id="meMsg"></span></div>
@@ -2430,16 +2427,6 @@ function winningChoice(ev){
   return best;
 }
 const voteOpen = ev => !ev.choiceBy || todayLondon() <= ev.choiceBy;
-/* The crest, for the corner of a notification. Read off the stylesheet so it is
-   not a second copy of the artwork. */
-const CREST_ICON = (() => {
-  try{
-    const m = /url\("(data:image\/png;base64,[^"]+)"\)/.exec(
-      [...document.styleSheets].flatMap(sh => { try{ return [...sh.cssRules]; }catch(e){ return []; } })
-        .filter(r => r.selectorText === ".crestmark").map(r => r.style.backgroundImage).join(""));
-    return m ? m[1] : "";
-  }catch(e){ return ""; }
-})();
 /* What one slot of an event will take. Where the slots share a limit every one
    returns the same number; the Gown Sale gives thirty five and fifteen. */
 function slotCap(ev, slot){
@@ -2515,70 +2502,10 @@ function sending(on, title, sub){
   el.hidden = false; void el.offsetWidth; el.classList.add("show");
 }
 function sendingDone(title, sub){ $("sending").classList.add("done"); $("sendTitle").textContent = title; $("sendSub").textContent = sub || ""; setTimeout(() => { sending(false); $("sending").classList.remove("done"); }, 900); }
-/* ---------------- notifications ----------------
-   The browser can tell somebody the programme has moved while the app is in
-   another tab or shut. It is off until they ask for it, it is remembered on the
-   device rather than on the server, and it never fires for a change somebody
-   made themselves. */
-const NOTE_KEY = "mcr-ff26-notify";
-const notifyOK = () => {
-  try{ return ("Notification" in window) && Notification.permission === "granted" && localStorage.getItem(NOTE_KEY) === "on"; }
-  catch(e){ return false; }
-};
-/* Safari only hands a page the Notification API once it has been added to the
-   Home Screen, so on an iPhone the answer is not "no", it is "not yet". */
-const isIOS = () => /iP(hone|ad|od)/.test(navigator.userAgent) ||
-  (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-const standalone = () => !!(window.navigator.standalone ||
-  (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches));
-const notifyState = () => {
-  if (!("Notification" in window)) return isIOS() && !standalone() ? "homescreen" : "unsupported";
-  if (Notification.permission === "denied") return "blocked";
-  try{ if (localStorage.getItem(NOTE_KEY) !== "on") return "off"; }catch(e){ return "off"; }
-  return Notification.permission === "granted" ? "on" : "off";
-};
-async function askNotify(){
-  if (!("Notification" in window)){
-    if (isIOS() && !standalone()){
-      showBanner("On an iPhone, add this page to your Home Screen first: press Share, then Add to Home Screen. Notifications work from there.", "Got it", null);
-      return "homescreen";
-    }
-    toast("This browser cannot show notifications");
-    return "unsupported";
-  }
-  let p = Notification.permission;
-  if (p === "default"){ try{ p = await Notification.requestPermission(); }catch(e){ p = Notification.permission; } }
-  if (p !== "granted"){ toast("The browser would not allow it"); return notifyState(); }
-  try{ localStorage.setItem(NOTE_KEY, "on"); }catch(e){}
-  notify("Notifications are on", "You will hear about changes to anything you have put your name down for.", "test");
-  return "on";
-}
-function stopNotify(){ try{ localStorage.setItem(NOTE_KEY, "off"); }catch(e){} }
-function notify(title, body, tag){
-  if (!notifyOK()) return;
-  try{
-    const n = new Notification(title, { body: body, tag: tag || "mcr", icon: CREST_ICON, badge: CREST_ICON, renotify: false });
-    n.onclick = () => { try{ window.focus(); }catch(e){} n.close(); };
-  }catch(e){}
-}
-/* An update is worth waking somebody's phone for if it is about an event they
-   are going to, or if it is an announcement to everybody. */
-function noteWorthy(u){
-  if (!u) return false;
-  if (!u.eventId) return u.kind === "announce" || u.kind === "cancel";
-  return inMine(u.eventId);
-}
-function announceUpdates(list){
-  if (!notifyOK() || !list || !list.length) return;
-  const me = (S && S.me && S.me.email) || "";
-  const mine = list.filter(u => u.by !== me && noteWorthy(u)).slice(0, 3);
-  mine.forEach(u => {
-    const ev = u.eventId ? evById(u.eventId) : null;
-    const head = ev ? ev.title + (ev.status === "cancelled" ? " is cancelled" : " has changed")
-      : "Freshers' Fortnight";
-    notify(head, u.text.length > 160 ? u.text.slice(0, 158) + "…" : u.text, u.eventId || "news");
-  });
-}
+/* Browser notifications have been taken out entirely. The app cannot deliver
+   them reliably (no service worker, no push, and iOS only allows them from
+   the Home Screen), so offering them was a promise that would be broken.
+   Changes reach people here, on What's new, and through the calendar link. */
 function showBanner(text, label, fn){
   const b = $("banner");
   b.hidden = false;
@@ -2966,7 +2893,6 @@ async function pollTick(){
         const cut = (S.updates || []).findIndex(u => u.id === before);
         fresh = cut < 0 ? (S.updates || []).slice(0, 3) : (S.updates || []).slice(0, cut);
       } else if (top) fresh = [top];
-      announceUpdates(fresh);
       if (top && top.id !== before && Date.now() - top.at < 600000) toast(top.text.length > 90 ? top.text.slice(0, 88) + "…" : top.text);
       else toast("Programme updated");
     } else if (r.version !== S.version){
@@ -5071,33 +4997,8 @@ $("bPrint").addEventListener("click", () => { go("mine"); setTimeout(() => windo
 $("bRedoSetup").addEventListener("click", () => openSetup());
 
 /* ---------------- news, me ---------------- */
-function renderNewsOffer(){
-  /* The same switch as under Me, at the top of the page it is about. */
-  const b = $("bNotifyToggle");
-  if (b){
-    const st = notifyState();
-    b.hidden = (st === "unsupported");
-    b.textContent = st === "on" ? "Notifications on" : st === "blocked" ? "Notifications blocked"
-      : st === "homescreen" ? "Notify me, how?" : "Notify me of changes";
-    b.className = "btn sm " + (st === "on" ? "moss" : st === "blocked" ? "ghost" : "cream");
-    b.onclick = async () => {
-      const now = notifyState();
-      if (now === "on"){ stopNotify(); toast("Notifications off"); }
-      else if (now === "blocked"){ showBanner("This page is blocked from showing notifications. Allow it in your browser's settings for this site, then come back.", "Got it", null); }
-      else await askNotify();
-      renderNewsOffer(); renderNotify();
-    };
-  }
-  const el = $("notifyOffer"); if (!el) return;
-  if (["off", "homescreen"].indexOf(notifyState()) < 0){ el.hidden = true; return; }
-  el.hidden = false;
-  el.innerHTML = '<h3 style="margin-bottom:2px">Hear about changes as they happen</h3>' +
-    '<p class="lede" style="margin:0 0 12px">Let the browser tell you when something you are going to moves or is called off, and when the committee posts to everybody. It works with the app shut.</p>' +
-    '<div class="actions" style="margin:0"><button class="btn ink sm" id="bNewsNotify">Turn notifications on</button>' +
-    '<button class="btn ghost sm" id="bNewsNotifyNo">Not now</button></div>';
-  $("bNewsNotify").addEventListener("click", async () => { await askNotify(); renderNewsOffer(); renderNotify(); });
-  $("bNewsNotifyNo").addEventListener("click", () => { el.hidden = true; });
-}
+/* Nothing is offered here any more: see the note above on notifications. */
+function renderNewsOffer(){}
 function renderNews(){
   renderNewsOffer();
   const seenAt = S.me.seenAt || 0, list = S.updates || [];
@@ -5129,28 +5030,7 @@ $("bAnnounce").addEventListener("click", async () => {
   catch(e){ fail(e); }
   unspin(b);
 });
-function renderNotify(){
-  const el = $("notifyRow"); if (!el) return;
-  const st = notifyState();
-  const say = { on: ["On", "Your browser will tell you when something you are going to changes, and when the committee posts to everybody."],
-    off: ["Off", "Turn this on and the browser will tell you when something you are going to changes, even with the app shut."],
-    blocked: ["Blocked", "This site is blocked from showing notifications. Allow it in your browser's settings for this page, then come back."],
-    homescreen: ["One step first", "On an iPhone, Safari only allows notifications once a page has been added to the Home Screen. Press Share, then Add to Home Screen, and open it from there."],
-    unsupported: ["Not available", "This browser cannot show notifications. Everything still appears under What's new."] }[st];
-  el.innerHTML = '<div class="t"><b>Notifications in this browser <span class="chip ' +
-    (st === "on" ? "moss" : st === "blocked" ? "crimson" : "") + '">' + esc(say[0]) + '</span></b>' +
-    '<span>' + esc(say[1]) + '</span></div>' +
-    (st === "on" ? '<button class="btn ghost sm" id="bNotifyOff">Turn off</button>'
-      : st === "unsupported" ? '' : '<button class="btn crimson sm" id="bNotifyOn">' +
-        (st === "homescreen" ? "How" : st === "blocked" ? "How" : "Turn on") + '</button>');
-  if ($("bNotifyOn")) $("bNotifyOn").addEventListener("click", async () => {
-    const b = $("bNotifyOn"); spin(b, "Asking");
-    if (notifyState() === "blocked") showBanner("This page is blocked from showing notifications. Allow it in your browser's settings for this site, then come back.", "Got it", null);
-    else await askNotify();
-    renderNotify();
-  });
-  if ($("bNotifyOff")) $("bNotifyOff").addEventListener("click", () => { stopNotify(); toast("Notifications off"); renderNotify(); });
-}
+function renderNotify(){}
 function renderMe(){
   const me = S.me;
   $("meEmail").textContent = me.email;
