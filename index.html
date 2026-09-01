@@ -2538,6 +2538,7 @@ async function verifyAndEnter(cred, recheck){
   $("boot").hidden = false;
   bootIdx = 0;
   $("bootLine").textContent = "Membership confirmed. Preparing your pages";
+  startWalk();
   bootTalk(true);
   try{ await boot(true); }
   catch(e){
@@ -2601,6 +2602,7 @@ async function bookAgain(btn){
     $("boot").hidden = false;
     bootIdx = 0;
     $("bootLine").textContent = "Membership confirmed. Preparing your pages";
+    startWalk();
     bootTalk(true);
     await boot(true);
   }catch(e){
@@ -2666,8 +2668,7 @@ let bootIdx = 0, bootTimer = null;
 let bootPct = 8, slowTimer = null;
 function bootTalk(on){
   clearInterval(bootTimer); clearTimeout(slowTimer);
-  const scene = $("chimneyScene"); if (scene) scene.classList.remove("open");
-  if (!on){ bootPct = 8; const be = $("boot"); if (be) be.classList.remove("walk"); return; }
+  if (!on){ bootPct = 8; stopWalk(); return; }
   const bar = $("bootBar");
   if (bar) bar.style.width = "8%";
   const L = bootLines();
@@ -2681,8 +2682,10 @@ function bootTalk(on){
     /* the bar creeps towards ninety and never reaches it, because a bar that
        sits at a hundred while nothing happens is a lie */
     bootPct = Math.min(90, bootPct + (90 - bootPct) * 0.28);
-    /* the doors of the gate open only once the page is more than half here */
-    if (bootPct >= 60){ const sc = $("chimneyScene"); if (sc) sc.classList.add("open"); }
+    /* the doors of the gate open only once the page is more than half here,
+       and never before twelve seconds of walking have been seen */
+    if (bootPct >= 60 && walkStart && Date.now() - walkStart > 12000){
+      const sc = $("chimneyScene"); if (sc) sc.classList.add("open"); }
     if (bar) bar.style.width = bootPct.toFixed(0) + "%";
   }, 4000);
   slowTimer = setTimeout(() => { const el = $("bootSlow"); if (el) el.hidden = false; }, 7000);
@@ -2778,6 +2781,33 @@ function cachedState(){
    the rings the crest sits inside, and it never touched the rail at all, which
    is why the sidebar showed an empty box. Called from both ways in, because
    signing in no longer goes through boot at all. */
+/* THE WALK STARTS WHEN IT IS SEEN, NOT WHEN THE PAGE LOADED.
+   The scene's animations are restarted here, explicitly, the moment the
+   walk is put on screen. Without this a phone that had been signing in for
+   a while showed the end of the walk straight away, because the browser
+   had counted the time from page load. The doors are also held shut for at
+   least twelve seconds of walking, so everybody sees the approach, however
+   far the loading bar has already got. */
+let walkStart = 0;
+function startWalk(){
+  const be = $("boot"), sc = $("chimneyScene");
+  if (!be || !sc) return;
+  if (be.classList.contains("walk")) return;
+  be.classList.add("walk");
+  sc.classList.remove("open");
+  walkStart = Date.now();
+  bootPct = 8;
+  const bar = $("bootBar"); if (bar) bar.style.width = "8%";
+  requestAnimationFrame(() => {
+    try{ sc.getAnimations({ subtree: true }).forEach(a => { a.cancel(); a.play(); }); }catch(e){}
+  });
+}
+function stopWalk(){
+  const be = $("boot"), sc = $("chimneyScene");
+  if (be) be.classList.remove("walk");
+  if (sc) sc.classList.remove("open");
+  walkStart = 0;
+}
 function paintCrests(){
   ["crestBoot","crestArms","crestTop","crestGate","crestRail"].forEach(function(id){
     const el = $(id);
@@ -2812,7 +2842,7 @@ async function boot(fresh){
   }
   /* The walk up the Chimney is for a sign in. A refresh by somebody already
      in, with nothing cached on this device, gets the quiet crest instead. */
-  const bootEl = $("boot"); if (bootEl) bootEl.classList.toggle("walk", !!fresh);
+  if (fresh) startWalk(); else stopWalk();
   bootTalk(true);
   skeletons();
   /* Apps Script runs on containers that go cold. The first call after a quiet
