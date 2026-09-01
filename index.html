@@ -1996,7 +1996,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbx8OVXYgNrlE81uB9Nl0qnl6sgCYxNumwk6Fn1FGH76PG3Y_7M_-7xT0CCGkzqjGEHflw/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyiovqaoXb2bCCAC0_wn5BbVAD6u_MxIEFKdCtAkJVXGjb0PLsIR1yD1fniQLReq7_MMQ/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -2921,8 +2921,10 @@ async function pollTick(){
     const p = await api("poll");
     if (p.pv !== S.pv) return refresh(false);
     if (p.version !== S.version){
-      S.version = p.version;
-      S.events.forEach(e => { if (p.counts[e.id]) e.counts = p.counts[e.id]; });
+      /* Version changes are authoritative state changes. The previous code only
+         refreshed event counts here, so a question created or closed elsewhere
+         could leave Soundings showing stale data until a manual page refresh. */
+      return refresh(false);
     }
   }catch(e){}
 }
@@ -5099,32 +5101,67 @@ function sayLine(t, score){
       }catch(err){ unspin(b); fail(err); }
     }));
 }
+function normaliseSounding(q){
+  q = q || {};
+  const kind = ["choice","scale","text"].indexOf(String(q.kind)) >= 0 ? String(q.kind) : "choice";
+  const options = kind === "choice" && Array.isArray(q.options) ? q.options.map(String).filter(Boolean).slice(0, 8) : [];
+  const tally = q.tally && typeof q.tally === "object" ? q.tally : null;
+  const notes = Array.isArray(q.notes) ? q.notes : [];
+  let closes = q.closes == null ? "" : String(q.closes);
+  /* Accept the canonical API form only. This keeps one malformed legacy row
+     from taking down the whole Soundings view. */
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(closes)) closes = "";
+  return Object.assign({}, q, {
+    id: String(q.id || ""),
+    title: String(q.title || ""),
+    body: String(q.body || ""),
+    kind: kind,
+    options: options,
+    tally: tally,
+    notes: notes,
+    closes: closes,
+    closed: !!q.closed,
+    answered: !!q.answered,
+    said: Number(q.said) || 0,
+    average: Number(q.average) || 0,
+    mine: q.mine || null
+  });
+}
+function soundingDateLabel(q){
+  return q.closes ? esc(shortDate(q.closes)) : "";
+}
 function renderSay(){
   if (!S) return;
   const say = S.say || { topics: [], soundings: [], faces: [] };
-  const openOnes = (say.soundings || []).filter(q => !q.closed);
-  const shut = (say.soundings || []).filter(q => q.closed);
+  const all = (Array.isArray(say.soundings) ? say.soundings : []).map(normaliseSounding).filter(q => q.id);
+  const waiting = all.filter(q => !q.closed && !q.answered);
+  const current = all.filter(q => !q.closed && q.answered);
+  const shut = all.filter(q => q.closed);
+  const currentCount = waiting.length + current.length;
   put("sayBody",
-    /* A question has a closing date; the standing marks have all month. So the
-       question comes first, and it is named as something waiting on them. */
-    (openOnes.length
-      ? '<div class="grp">Waiting on you<span class="ref" style="margin-left:auto">' + openOnes.length +
-        (openOnes.length === 1 ? ' question' : ' questions') + '</span></div>' +
-        openOnes.map(soundCard).join("")
+    (waiting.length
+      ? '<div class="grp">Waiting on you<span class="ref" style="margin-left:auto">' + waiting.length +
+        (waiting.length === 1 ? ' question' : ' questions') + '</span></div>' +
+        waiting.map(soundCard).join("")
+      : "") +
+    (current.length
+      ? '<div class="grp">Current questions<span class="ref" style="margin-left:auto">' + current.length +
+        (current.length === 1 ? ' question' : ' questions') + '</span></div>' +
+        current.map(soundCard).join("")
       : "") +
     '<div class="card"><p>How it is going, once a month, in one tap. Nobody is named.</p></div>' +
     '<div class="grp">How it is going<span class="ref" style="margin-left:auto">' +
       esc(monthName(say.period)) + '</span></div>' +
-    '<div class="moods">' + (say.topics || []).map(moodCard).join("") + '</div>' +
+    '<div class="moods">' + (Array.isArray(say.topics) ? say.topics.map(moodCard).join("") : "") + '</div>' +
     (isCommittee()
       ? '<div class="acts" style="margin:var(--g2) 0 0">' +
         '<button class="btn ghost sm" data-sayreport>Read a month, gathered</button></div>'
       : "") +
-    (openOnes.length ? "" :
+    (currentCount ? "" :
       '<div class="grp">Questions from the committee</div>' +
       '<div class="card"><p>Nothing being asked at the moment. Anything the committee wants the ' +
       'room\u2019s view on appears here, and closes on a date.</p></div>') +
-    (shut.length ? '<div class="grp">Answered</div>' + shut.slice(0, 8).map(soundCard).join("") : ""));
+    (shut.length ? '<div class="grp">Closed questions</div>' + shut.slice(0, 12).map(soundCard).join("") : ""));
 }
 const MONTHNAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 function monthName(p){
@@ -5174,26 +5211,28 @@ function moodCard(t){
     '</div>';
 }
 /* One question. The answers are hidden until you have given yours. */
-function soundCard(q){
-  const total = q.tally ? Object.keys(q.tally).reduce((a, k) => a + q.tally[k], 0) : 0;
+function soundCard(raw){
+  const q = normaliseSounding(raw);
+  const total = q.tally ? Object.keys(q.tally).reduce((a, k) => a + (Number(q.tally[k]) || 0), 0) : 0;
+  const faces = Array.isArray(S.say.faces) ? S.say.faces : [];
   return '<div class="sound' + (q.closed ? " shut" : "") + (q.answered ? " done" : "") + '">' +
     '<div class="top"><b>' + esc(q.title) + '</b>' +
       '<span class="st ' + (q.closed ? "closed" : "open") + '">' +
-      (q.closed ? "Closed" : q.closes ? "Until " + esc(shortDate(q.closes)) : "Open") + '</span></div>' +
+      (q.closed ? "Closed" : q.closes ? "Until " + soundingDateLabel(q) : "Open") + '</span></div>' +
     (q.body ? '<p class="note">' + esc(q.body) + '</p>' : "") +
     (q.kind === "choice"
       ? '<div class="opts">' + q.options.map(o =>
           '<button data-sound="' + esc(q.id) + '" data-choice="' + esc(o) + '"' +
           (q.mine && q.mine.choice === o ? ' aria-pressed="true"' : "") +
           (q.closed ? " disabled" : "") + '>' + esc(o) +
-          (q.tally ? '<i>' + q.tally[o] + '</i>' : "") + '</button>').join("") +
+          (q.tally ? '<i>' + (Number(q.tally[o]) || 0) + '</i>' : "") + '</button>').join("") +
           (q.tally && total ? '<div class="bars">' + q.options.map(o =>
-            '<span style="width:' + Math.round((q.tally[o] / total) * 100) + '%"></span>').join("") + '</div>' : "") +
+            '<span style="width:' + Math.round(((Number(q.tally[o]) || 0) / total) * 100) + '%"></span>').join("") + '</div>' : "") +
         '</div>'
       : q.kind === "scale"
-        ? '<div class="faces">' + (S.say.faces || []).map(f =>
+        ? '<div class="faces">' + faces.map(f =>
             '<button data-sound="' + esc(q.id) + '" data-n="' + f.n + '"' +
-            (q.mine && q.mine.score === f.n ? ' aria-pressed="true"' : "") +
+            (q.mine && Number(q.mine.score) === Number(f.n) ? ' aria-pressed="true"' : "") +
             (q.closed ? " disabled" : "") + '><i class="n' + f.n + '"></i><span>' + esc(f.name) + '</span></button>').join("") +
             (q.average ? '<span class="avg n' + Math.round(q.average) + '" style="margin-left:8px">' + q.average.toFixed(1) + '</span>' : "") +
           '</div>'
@@ -5205,7 +5244,7 @@ function soundCard(q){
     '<div class="mfoot"><span>' + (q.said ? q.said + (q.said === 1 ? " answer" : " answers") : "no answers yet") +
       (q.answered ? " &middot; yours is in" : q.closed ? "" : " &middot; answers appear once you have given yours") + '</span>' +
       (isCommittee() && !q.closed ? '<button class="lnk" data-soundclose="' + esc(q.id) + '">Close it</button>' : "") + '</div>' +
-    (q.notes && q.notes.length
+    (q.notes.length
       ? '<details class="mnotes"><summary>' + q.notes.length +
         (q.notes.length === 1 ? " comment" : " comments") + '</summary>' +
         q.notes.map(n => '<p>' + (n.score ? '<i class="n' + n.score + '"></i>' : "") + esc(n.comment) + '</p>').join("") + '</details>'
