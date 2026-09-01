@@ -143,24 +143,21 @@ pre{background:rgba(0,0,0,.36);border-radius:12px;padding:13px 14px;font-family:
   opacity:1;transition:opacity .45s var(--ease)}
 #load.out{opacity:0;pointer-events:none}
 .lcard{width:100%;max-width:420px;text-align:left}
-/* An open book, drawn in a few strokes while the register is checked: the
-   spine, the two leaves, the lines of writing, and then a single page that
-   keeps turning until the answer comes back. It replaces an arch that read as
-   a door, which is not what a register is. */
-.lseal{width:84px;height:64px;color:var(--gold);margin-bottom:20px;position:relative}
-.lseal svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;overflow:visible}
-.lseal .d{stroke-dasharray:160;stroke-dashoffset:160;animation:draw 1.1s var(--ease) forwards}
-.lseal .d:nth-child(2){animation-delay:.12s}
-.lseal .d:nth-child(3){animation-delay:.24s}
-.lseal .d:nth-child(4){animation-delay:.42s}
-.lseal .d:nth-child(5){animation-delay:.52s}
-.lseal .d:nth-child(6){animation-delay:.62s}
-.lseal .leaf{fill:rgba(247,221,166,.16);stroke:var(--gold-2);stroke-width:1.4;transform-origin:42px 34px;
-  animation:turn 1.9s cubic-bezier(.45,0,.2,1) 1.1s infinite}
+/* An open book in three strokes: the spine and the two leaves, drawn once
+   while the register is checked, and then one page turning slowly over the
+   spine until the answer comes back. Nothing else: no ruled lines, no base,
+   no shading. The drawing is quiet enough to look at for the whole wait. */
+.lseal{width:72px;height:52px;color:var(--gold);margin-bottom:22px;position:relative}
+.lseal svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;overflow:visible}
+.lseal .d{stroke-dasharray:130;stroke-dashoffset:130;animation:draw 1.3s var(--ease) forwards}
+.lseal .d:nth-child(2){animation-delay:.2s}
+.lseal .d:nth-child(3){animation-delay:.5s}
+.lseal .leaf{stroke:var(--gold-2);stroke-width:1.2;opacity:0;transform-origin:36px 26px;
+  animation:turn 3.2s cubic-bezier(.5,0,.25,1) 1.5s infinite}
 @keyframes draw{to{stroke-dashoffset:0}}
-@keyframes turn{0%{transform:scaleX(1);opacity:0}8%{opacity:1}50%{transform:scaleX(0);opacity:1}
-  51%{transform:scaleX(0);opacity:0}100%{transform:scaleX(-1);opacity:0}}
-@media(prefers-reduced-motion:reduce){.lseal .leaf{animation:none;opacity:.6}.lseal .d{animation:none;stroke-dashoffset:0}}
+@keyframes turn{0%{transform:scaleX(1);opacity:0}10%{opacity:.85}45%{transform:scaleX(0);opacity:.85}
+  50%{transform:scaleX(0);opacity:0}100%{transform:scaleX(-1);opacity:0}}
+@media(prefers-reduced-motion:reduce){.lseal .leaf{animation:none}.lseal .d{animation:none;stroke-dashoffset:0}}
 .lcard h2{font-family:var(--display);font-size:1.5rem;font-weight:600;letter-spacing:-.04em;margin-bottom:6px}
 .lcard h2 i{font-style:italic;color:var(--gold-2)}
 .lcard>p{font-size:.8rem;color:var(--cream-3);margin-bottom:22px}
@@ -242,14 +239,11 @@ pre{background:rgba(0,0,0,.36);border-radius:12px;padding:13px 14px;font-family:
 <body>
 <div id="load" hidden>
   <div class="lcard">
-    <span class="lseal"><svg viewBox="0 0 84 64" aria-hidden="true">
-      <path class="d" d="M42 14v44"/>
-      <path class="d" d="M42 14c-8-6-22-7-34-4v42c12-3 26-2 34 4"/>
-      <path class="d" d="M42 14c8-6 22-7 34-4v42c-12-3-26-2-34 4"/>
-      <path class="d" d="M16 22c6-1 12-1 19 1M16 30c6-1 12-1 19 1M16 38c6-1 12-1 19 1"/>
-      <path class="d" d="M49 23c7-2 13-2 19-1M49 31c7-2 13-2 19-1M49 39c7-2 13-2 19-1"/>
-      <path class="d" d="M4 54v3c12-3 26-2 38 4c12-6 26-7 38-4v-3"/>
-      <path class="leaf" d="M42 14c8-6 22-7 34-4v42c-12-3-26-2-34 4z"/>
+    <span class="lseal"><svg viewBox="0 0 72 52" aria-hidden="true">
+      <path class="d" d="M36 8c-8-5-19-5-30-2v38c11-3 22-3 30 3"/>
+      <path class="d" d="M36 8c8-5 19-5 30-2v38c-11-3-22-3-30 3"/>
+      <path class="d" d="M36 8v39"/>
+      <path class="leaf" d="M36 10c9-4 18-5 26-3v34c-8-2-17-1-26 4"/>
     </svg></span>
     <h2 id="loadTitle">Opening the <i>book</i></h2>
     <p id="loadSub">One moment while we look you up in the register.</p>
