@@ -70,7 +70,16 @@ html:has(#boot)::before,html.booted::before{content:none}
   --r:18px; --r2:14px; --pad:17px; --g:12px; --g2:16px; --g3:26px;
 }
 *{box-sizing:border-box}
+/* The Chimney sets the root at 118%, and everything in it is measured in rem,
+   so the bar, the headings and the buttons all read a size larger. The same
+   root here makes the two apps the same size in the hand. */
+html{font-size:118%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 html,body{margin:0;padding:0;max-width:100%;overflow-x:hidden}
+:root{--rail:11rem;--gut:20px}
+@media(min-width:1000px){:root{--gut:34px}}
+@media(min-width:1380px){:root{--gut:56px}}
+@media(min-width:1600px){:root{--rail:11.75rem}}
+@media(min-width:1920px){:root{--rail:12.5rem}}
 body{
   background:
     radial-gradient(820px 480px at 88% -8%, rgba(235,183,83,.18), transparent 58%),
@@ -267,7 +276,10 @@ section > .shead:first-child{margin-top:24px}
 .cat.clickable:active{transform:translateY(0) scale(.995)}
 .cat.clickable:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 .cat .in{padding:16px 18px 18px;display:block}
-.cat .ct{display:flex;align-items:center;gap:10px;margin-bottom:13px}
+/* A grid, not a flex row: the percentage sits in the top right corner and
+   the title wraps in its own column, so a long name on a narrow card can
+   never push the chip down onto the next line. */
+.cat .ct{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:8px 10px;margin-bottom:13px}
 .cat h3{font-family:var(--display);font-weight:700;font-size:19px;margin:0;line-height:1.25;flex:1;overflow-wrap:anywhere}
 .cat .pc{font-family:var(--mono);font-size:12px;font-weight:600;color:#fff;background:var(--c);
   border-radius:999px;padding:4px 10px;white-space:nowrap;flex:none}
@@ -338,12 +350,22 @@ input[type=number]{-moz-appearance:textfield}
 .btn.ghost:hover{background:var(--cream-2)}
 .btn.gold{background:var(--gold);border-color:var(--gold);color:#42260A}
 .btn.gold:hover{filter:brightness(.93)}
-.btn.dark{background:var(--ink);border-color:var(--ink)}
+.btn.dark{background:var(--ink);border-color:var(--ink);color:#fff}
 .btn.dark:hover{background:#3D1114}
-.btn.danger{background:transparent;color:var(--red-mid);border-color:var(--red-mid)}
+.btn.danger{background:transparent;color:var(--red);box-shadow:inset 0 0 0 1.5px var(--red-mid)}
 .btn.danger:hover{background:#F7E4E4}
-.btn.small{padding:9px 16px;font-size:10.5px}
+.btn.small{padding:9px 16px;font-size:.74rem}
 .btn:disabled{opacity:.4;cursor:not-allowed}
+/* A GHOST BUTTON ON PAPER IS INK.
+   The ghost is cream because it was drawn for the red page. The claim cards,
+   the boxes inside them, the tables and the sheets are all paper, and a cream
+   ghost on paper is a button that is not there. That is what made "Open
+   receipt", "Email the Treasurer again" and the rest disappear. */
+.req .btn.ghost,.box .btn.ghost,.tbl .btn.ghost,.lg .btn.ghost,.mo .btn.ghost,.upc .btn.ghost,
+.trendbox .btn.ghost,.askcard .btn.ghost,.gatecard .btn.ghost,.expand .btn.ghost,.cat .btn.ghost,
+.fig .btn.ghost,#install .btn.ghost,.sendcard .btn.ghost{
+  color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--cream-3)}
+.req .btn.ghost:hover,.box .btn.ghost:hover,.tbl .btn.ghost:hover,.lg .btn.ghost:hover{background:var(--cream-2)}
 .btn:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 a.btn{display:inline-block;line-height:1.15}
 .msg{font-size:14px;font-weight:600;color:var(--red-deep);line-height:1.4}
@@ -899,7 +921,7 @@ ul.notes li:last-child{margin-bottom:0}
   .cats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
   .cat .in{padding:12px 12px 13px}
   .cat h3{font-size:15px}
-  .cat .ct{gap:6px;margin-bottom:9px;flex-wrap:wrap}
+  .cat .ct{gap:6px;margin-bottom:9px}
   .cat .pc{font-size:10.5px;padding:3px 8px}
   .meter{height:8px;margin-bottom:10px}
   .rows .k{font-size:9.5px;letter-spacing:.08em}
@@ -962,6 +984,47 @@ ul.notes li:last-child{margin-bottom:0}
   .shead{margin:26px 0 12px;gap:8px}
   .shead h2{font-size:1.5rem}
   .footnote{font-size:10px;gap:10px}
+}
+/* THE RAIL.
+   On a wide screen the bar stops floating at the foot and becomes a column
+   down the left, exactly as The Chimney does it: the crest and the name move
+   into the top of it, the header keeps only the person and their two buttons,
+   and the page fills whatever is left of the window. Nothing about the
+   buttons changes, so nothing behind them changes either. */
+.nav .railtop{display:none}
+@media(min-width:1000px){
+  .navwrap{left:0;top:0;bottom:0;transform:none;width:var(--rail);max-width:none;border-radius:0;
+    -webkit-mask-image:none!important;mask-image:none!important}
+  .navwrap .nav{position:static;width:100%;height:100%;flex-direction:column;align-items:stretch;
+    border-radius:0;background:rgba(66,4,9,.42);box-shadow:none;overflow-x:hidden;overflow-y:auto;
+    padding:18px 12px calc(18px + var(--sab));max-width:none}
+  .nav .railtop{display:flex;align-items:center;gap:10px;padding:2px 9px 18px}
+  .nav .railtop .crest{width:34px;height:34px;flex:0 0 34px;object-fit:contain}
+  .nav .railtop b{display:block;font-family:var(--display);font-size:.789rem;font-weight:600;letter-spacing:-.03em;line-height:1.1;color:var(--cream)}
+  .nav .railtop i{display:block;font-style:normal;font-size:.635rem;color:var(--gold-2);letter-spacing:.16em;
+    text-transform:uppercase;margin-top:3px;font-weight:700}
+  .nav button{flex-direction:row;justify-content:flex-start;gap:11px;padding:9px 10px;border-radius:7px;
+    font-size:.711rem;font-weight:700;min-width:0;letter-spacing:-.015em;text-align:left}
+  .nav button svg{width:18px;height:18px;flex:0 0 18px}
+  .nav .badge{position:static;margin-left:auto}
+  .nav button[aria-current="true"]{position:relative}
+  .nav button[aria-current="true"]::before{content:"";position:absolute;left:-12px;top:9px;bottom:9px;width:3px;
+    border-radius:3px;background:var(--gold)}
+  /* the rail carries the crest and the name, so the bar above the page keeps
+     only the person and their two buttons, pushed to the right */
+  /* Only once somebody is in. At the gate there is no rail, so the header
+     keeps its crest and the page stays centred. */
+  html:has(#app:not([hidden])) .topbar .crest,html:has(#app:not([hidden])) .topbar .brand{display:none}
+  html:has(#app:not([hidden])) .topbar{margin-left:var(--rail);
+    background:linear-gradient(180deg,rgba(72,5,10,.86),rgba(72,5,10,0));
+    border-bottom:0;backdrop-filter:none;-webkit-backdrop-filter:none}
+  html:has(#app:not([hidden])) .topbar .in{max-width:none;margin:0;padding:9px var(--gut) 15px;justify-content:flex-end}
+  html:has(#app:not([hidden])) .topbar .sp{display:none}
+  html:has(#app:not([hidden])) .wrap{margin-left:var(--rail);max-width:none;width:auto;
+    padding:0 var(--gut) calc(var(--g3) + 24px)}
+  .chip-user{flex:0 1 auto}
+  .toast{bottom:calc(22px + var(--sab))}
+  #install{left:var(--rail)}
 }
 @media (max-width:380px){
   .cash .v,.fig .v{font-size:18px}
@@ -1041,6 +1104,9 @@ ul.notes li:last-child{margin-bottom:0}
          behaviour behind it is exactly what it was. -->
     <div class="navwrap" id="navwrap">
     <nav class="nav" id="nav">
+      <!-- Shown only when the bar becomes a rail down the left of a wide
+           screen: the crest and the name move in here, and leave the top bar. -->
+      <div class="railtop"><img class="crest" alt="Jesus College MCR"><span><b>Jesus MCR</b><i>Treasury</i></span></div>
       <button data-view="overview" data-budget aria-current="true">
         <svg viewBox="0 0 24 24"><path d="M4 19V9m5 10V5m5 14v-7m5 7V8"/></svg>Budget</button>
       <button data-view="mine">
