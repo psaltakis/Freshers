@@ -1056,6 +1056,34 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--crimson)
 .dayhead b{font-family:var(--display);font-weight:700;font-size:26px;letter-spacing:-.03em}
 .dayhead span{font-family:var(--display);font-style:italic;font-size:14px;color:rgba(251,243,236,.66)}
 .dayhead .n{margin-left:auto;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:rgba(251,243,236,.55)}
+/* News as notes on a board, exactly as The Chimney draws them: paper, a pin
+   at the top, a small tilt, and the urgent ones on pink. The .nitem rules
+   below are no longer used by the news list and are left as they were. */
+.notes{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;align-items:start}
+.notes .notice{background:var(--paper,#FFFDFA);color:var(--ink);border-radius:3px;padding:15px 15px 12px;
+  box-shadow:0 8px 18px -10px rgba(20,1,3,.65);position:relative;transform:rotate(-.35deg);
+  transition:transform .18s ease,box-shadow .18s}
+.notes .notice:nth-child(2n){transform:rotate(.4deg)}
+.notes .notice:nth-child(3n){transform:rotate(-.15deg)}
+.notes .notice:hover{transform:rotate(0) translateY(-2px);box-shadow:0 14px 26px -12px rgba(20,1,3,.7)}
+.notes .notice::before{content:"";position:absolute;top:-5px;left:50%;margin-left:-16px;width:32px;height:11px;
+  background:rgba(180,20,27,.22);border-radius:2px;transform:rotate(-2deg)}
+.notes .notice.pinned::before{background:var(--gold);box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.notes .notice b{display:block;font-family:var(--display);font-size:1rem;font-weight:600;letter-spacing:-.03em;
+  line-height:1.2;color:var(--ink);margin-bottom:6px}
+.notes .notice p{font-size:.82rem;line-height:1.55;color:var(--ink-soft);white-space:pre-wrap;margin:0;overflow-wrap:anywhere}
+.notes .notice small{display:block;margin-top:9px;font-family:var(--mono);font-size:.58rem;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--ink-soft);font-weight:700}
+.notes .notice.urgent{background:#FFF4F2;box-shadow:0 8px 18px -10px rgba(140,10,16,.8)}
+.notes .notice.urgent::before{background:var(--crimson)}
+.notes .notice.waiting{background:#FBF4E4}
+.notes .notice .st{display:inline-block;font-family:var(--mono);font-size:.56rem;letter-spacing:.12em;
+  text-transform:uppercase;font-weight:700;background:rgba(180,20,27,.1);color:var(--crimson-3);
+  border-radius:999px;padding:3px 8px;margin-bottom:7px}
+.notes .notice.urgent .st{background:var(--crimson);color:#fff}
+.notes .notice .acts{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
+.notes .notice .acts .btn{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.4px var(--cream-3)}
+@media(max-width:520px){ .notes{grid-template-columns:1fr 1fr;gap:9px} .notes .notice{padding:12px 12px 10px} }
 .nitem{background:var(--cream);color:var(--ink);border-radius:14px;padding:13px 16px;margin-bottom:9px;display:flex;gap:12px;align-items:flex-start;border-left:5px solid var(--gold);box-shadow:var(--shadow)}
 .nitem.cancel{border-left-color:var(--crimson)} .nitem.change{border-left-color:var(--crimson-lite)} .nitem.new{border-left-color:var(--moss)} .nitem.message{border-left-color:var(--sky)}
 .nitem .t{flex:1;min-width:0}
@@ -1104,6 +1132,40 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--crimson)
 .tabbtn.committee{color:rgba(247,221,166,.78)}
 .tabbtn.committee[aria-current="true"]{background:var(--gold);color:var(--gold-ink)}
 #nav .sep{width:1px;background:var(--line);margin:8px 3px;flex:none}
+/* The beta mark, set as The Chimney sets it. */
+.beta{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;
+  color:var(--gold-ink);background:var(--gold);border-radius:6px;padding:3px 7px;display:inline-block;
+  vertical-align:middle;margin-left:6px;line-height:1.3;letter-spacing:.14em}
+/* THE RAIL.
+   From 1000px the bar leaves the foot and becomes a column down the left,
+   exactly as The Chimney does it: the crest and the name move into the top
+   of it, the header keeps only its two buttons, and the page fills the rest
+   of the window. Only once somebody is in: at the gate there is no bar. */
+#nav .railtop{display:none}
+@media(min-width:1000px){
+  /* the rail is the same translucent column The Chimney uses, so it sits in
+     the page rather than standing on it */
+  #nav{left:0;top:0;bottom:0;transform:none;width:11rem;max-width:none;flex-direction:column;align-items:stretch;
+    border-radius:0;border:0;background:rgba(66,4,9,.42);box-shadow:none;padding:calc(18px + var(--sat)) 12px calc(18px + var(--sab));
+    overflow-y:auto;overflow-x:hidden;backdrop-filter:none}
+  #nav .railtop{display:flex;align-items:center;gap:10px;padding:2px 9px 18px;color:var(--cream)}
+  #nav .railtop .crestmark{--ch:34px;flex:0 0 auto}
+  #nav .railtop b{display:block;font-family:var(--display);font-size:14px;font-weight:600;letter-spacing:-.03em;line-height:1.1}
+  #nav .railtop i{display:block;font-style:normal;font-size:10px;color:var(--gold-2);letter-spacing:.16em;
+    text-transform:uppercase;margin-top:3px;font-weight:700}
+  .tabbtn{flex-direction:row;justify-content:flex-start;gap:11px;padding:9px 10px;border-radius:8px;font-size:12.5px;
+    min-width:0;text-align:left;letter-spacing:-.01em}
+  .tabbtn svg{width:18px;height:18px;flex:0 0 18px}
+  .tabbtn .badge{position:static;margin-left:auto;border:0;height:17px;min-width:17px}
+  .tabbtn[aria-current="true"]{position:relative}
+  .tabbtn[aria-current="true"]::before{content:"";position:absolute;left:-12px;top:9px;bottom:9px;width:3px;
+    border-radius:3px;background:var(--gold)}
+  #nav .sep{height:1px;width:auto;margin:10px 10px}
+  html:has(#nav:not([hidden])) .top .crest,html:has(#nav:not([hidden])) .top .wm{display:none}
+  html:has(#nav:not([hidden])) .top{margin-left:11rem}
+  html:has(#nav:not([hidden])) .top .in{max-width:none;margin:0;padding-left:34px;padding-right:34px;justify-content:flex-end}
+  html:has(#nav:not([hidden])) .wrap{margin-left:11rem;max-width:none;padding:0 34px calc(var(--sab) + 34px)}
+}
 
 /* The membership check, shown on the sign in screen while it runs. Three lines
    that light in turn, so nobody is looking at a dead button while two servers
@@ -1533,8 +1595,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--crimson)
 #boot .in{width:min(320px,calc(100vw - 44px))}
 /* THE CALENDAR. A tent calendar stood on the desk, seen a little from the
    side: a crimson head with the crest and the name, two rings, and a pad of
-   cream leaves. The top leaf turns down over the rings to show the next day,
-   through the fortnight and round again, until the programme is here. */
+   cream leaves. The top leaf turns up and over the rings, as a real one does,
+   to show the next day, through the fortnight and round again. */
 #boot .cal{position:relative;width:168px;height:196px;margin:0 auto 6px;perspective:700px;-webkit-perspective:700px}
 #boot .calbody{position:absolute;left:0;top:0;width:168px;height:176px;transform:rotateY(-12deg) rotateX(5deg);
   -webkit-transform-style:preserve-3d;transform-style:preserve-3d}
@@ -1542,27 +1604,34 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--crimson)
   background:radial-gradient(ellipse at center,rgba(20,1,3,.5),rgba(20,1,3,0) 70%)}
 #boot .calhead{position:absolute;left:0;right:0;top:0;height:60px;border-radius:12px 12px 0 0;
   background:linear-gradient(180deg,#8E0F14,#6B080D);display:flex;align-items:center;gap:10px;padding:0 14px;
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),inset 0 -4px 0 rgba(0,0,0,.18)}
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),inset 0 -4px 0 rgba(0,0,0,.18);transform:translateZ(1px)}
 #boot .calhead .crestmark{--ch:40px;flex:0 0 auto;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))}
 #boot .calhead b{font-family:var(--display);font-size:13px;font-weight:600;letter-spacing:-.02em;line-height:1.1;text-align:left;color:#FBF3EC}
-#boot .rings{position:absolute;left:0;right:0;top:54px;height:14px;z-index:5;display:flex;justify-content:space-evenly;padding:0 30px}
+#boot .rings{position:absolute;left:0;right:0;top:54px;height:14px;display:flex;justify-content:space-evenly;padding:0 30px;
+  transform:translateZ(6px)}
 #boot .rings i{width:9px;height:16px;border-radius:5px;border:2.5px solid #D9CBB0;border-bottom-color:#A8977E;box-sizing:border-box;
   background:transparent;box-shadow:0 1px 2px rgba(0,0,0,.4)}
 #boot .leaves{position:absolute;left:0;right:0;top:60px;height:116px;-webkit-transform-style:preserve-3d;transform-style:preserve-3d}
 #boot .leaf{position:absolute;inset:0;border-radius:0 0 12px 12px;background:#FFFDFA;color:#2A0F0C;
-  box-shadow:inset 0 0 0 1px #EFE2D8,0 6px 14px -8px rgba(20,1,3,.6);transform-origin:top center;
-  -webkit-backface-visibility:hidden;backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0}
+  box-shadow:inset 0 0 0 1px #EFE2D8,0 6px 14px -8px rgba(20,1,3,.6);transform-origin:50% 0;
+  -webkit-backface-visibility:hidden;backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center}
 #boot .leaf small{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#6E4F4A;font-weight:700}
 #boot .leaf b{font-family:var(--display);font-size:54px;font-weight:600;letter-spacing:-.05em;line-height:1;color:#7A0D12;margin:2px 0 0}
 #boot .leaf span{font-size:11.5px;font-weight:700;color:#6E4F4A;margin-top:2px}
 #boot .leaf::before{content:"";position:absolute;left:0;right:0;top:0;height:8px;
   background:repeating-linear-gradient(90deg,transparent 0 10px,rgba(0,0,0,.05) 10px 12px)}
-#boot .leaf.flip{animation:leafTurn .55s cubic-bezier(.55,0,.3,1) both;z-index:3}
-@keyframes leafTurn{0%{transform:rotateX(0)}100%{transform:rotateX(-180deg)}}
-#boot .leaf.flip::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.25));
-  animation:leafShade .55s ease both}
+#boot #calBack{transform:translateZ(0)}
+#boot #calFront{transform:translateZ(2px)}
+/* the turn: the bottom edge comes up towards you and over the top, so the
+   leaf never passes through the pad, and it vanishes as its back turns to
+   you, showing the day beneath */
+#boot .leaf.flip{animation:leafTurn .6s cubic-bezier(.5,0,.35,1) both}
+@keyframes leafTurn{0%{transform:translateZ(2px) rotateX(0)}100%{transform:translateZ(2px) rotateX(180deg)}}
+#boot .leaf .shade{position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;
+  background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.3))}
+#boot .leaf.flip .shade{animation:leafShade .6s ease both}
 @keyframes leafShade{from{opacity:0}to{opacity:1}}
-@media(prefers-reduced-motion:reduce){#boot .leaf.flip{animation:none}#boot .leaf.flip::after{animation:none;opacity:0}}
+@media(prefers-reduced-motion:reduce){#boot .leaf.flip,#boot .leaf.flip .shade{animation:none}}
 #boot .mark{position:relative;width:132px;height:132px;margin:0 auto;display:grid;place-items:center}
 #boot .mark svg{position:absolute;inset:0;width:132px;height:132px;transform:rotate(-90deg)}
 #boot .mark circle{fill:none;stroke-width:2.5}
@@ -2043,14 +2112,14 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--crimson)
 <div id="boot" style="position:fixed;inset:0;z-index:80;display:grid;place-items:center;background:linear-gradient(178deg,#B4141B,#7E0A10);color:#FBF3EC;text-align:center"><div class="in">
   <!-- A desk calendar with the crest on its head, flipping through the
        fortnight while the programme loads. Two leaves only: the one on top
-       turns down over the ring and the one beneath takes its place. -->
+       turns up and over the rings and the one beneath takes its place. -->
   <div class="cal" aria-hidden="true">
     <div class="calbody">
       <div class="calhead"><span class="crestmark"></span><b>Jesus College MCR</b></div>
       <div class="rings"><i></i><i></i></div>
       <div class="leaves">
         <div class="leaf" id="calBack"><small>September</small><b>16</b><span>Wednesday</span></div>
-        <div class="leaf" id="calFront"><small>September</small><b>15</b><span>Tuesday</span></div>
+        <div class="leaf" id="calFront"><small>September</small><b>15</b><span>Tuesday</span><i class="shade"></i></div>
       </div>
     </div>
     <span class="calshadow"></span>
@@ -2060,23 +2129,32 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--crimson)
   <p id="bootNote">Waking the porters</p><span class="pct" id="bootPct"></span>
   <script>
   /* The calendar turns its leaves through the fortnight, 15 to 30 September,
-     and round again. Two leaves: the one on top turns, and once it has gone
-     it becomes the next day and slips back underneath. Reduced motion holds
-     the first day still. */
+     and round again. Two leaves: the top one turns, and the moment its turn
+     is done it becomes the next day and is laid back on top. The swap is
+     timed from the turn's own length rather than waited for as an event, so
+     a browser that reports the end early, late, or twice cannot skip a day.
+     Reduced motion holds the first day still. */
   (function(){
     var front = document.getElementById("calFront"), back = document.getElementById("calBack");
     if (!front || !back) return;
     var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-    var first = 15, last = 30, d = first;
+    var first = 15, last = 30, d = first, turning = false;
     function set(el, n){ el.querySelector("b").textContent = n; el.querySelector("span").textContent = days[new Date(2026, 8, n).getDay()]; }
     function next(n){ return n >= last ? first : n + 1; }
     set(front, d); set(back, next(d));
     if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    front.addEventListener("animationend", function(){
-      d = next(d); set(front, d); set(back, next(d));
-      front.classList.remove("flip");
-    });
-    setInterval(function(){ if (!front.classList.contains("flip")) front.classList.add("flip"); }, 720);
+    setInterval(function(){
+      if (turning) return;
+      turning = true;
+      front.classList.add("flip");
+      setTimeout(function(){
+        d = next(d);
+        set(front, d); set(back, next(d));
+        front.classList.remove("flip");
+        void front.offsetWidth;
+        turning = false;
+      }, 620);
+    }, 760);
   })();
   </script>
   <noscript><p style="margin-top:14px;max-width:270px">This app needs JavaScript. Turn it on for this page, or open it in another browser.</p></noscript>
@@ -2085,7 +2163,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--crimson)
 <header class="top">
   <div class="in">
     <span class="crest crestmark" id="crestTop" role="img" aria-label="Jesus College MCR"></span>
-    <div class="wm"><b>Jesus College MCR</b><i>Freshers' Fortnight 2026</i></div>
+    <div class="wm"><b>Jesus College MCR <span class="beta">Beta</span></b><i>Freshers' Fortnight 2026</i></div>
     <span class="sp"></span>
     <button class="iconbtn" id="bRefresh" title="Pull the latest programme" aria-label="Refresh" hidden><svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.3"/><path d="M20 5v6h-6"/></svg></button>
     <button class="iconbtn avatar" id="bMe" title="Me" aria-label="Me" hidden>?</button>
@@ -2143,9 +2221,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--crimson)
 
   <!-- ================= NEWS ================= -->
   <section id="v-news" hidden>
-    <div class="vh"><h2>What's <i>new</i></h2><span class="note">Changes, cancellations, notices</span>
-      <div class="right"><button class="btn ghost sm" id="bNotifyToggle"></button></div></div>
-    <div class="card gold" id="notifyOffer" hidden></div>
+    <div class="vh"><h2>What's <i>new</i></h2><span class="note">Changes, cancellations, notices</span></div>
     <div class="card" id="announcePanel" data-admin hidden>
       <h3>Post an announcement</h3>
       <p class="lede">This one goes to everybody. For a notice about a single event, use the box on that event's own page.</p>
@@ -2176,8 +2252,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--crimson)
     </div>
     <div class="card">
       <h3>How you hear from the app</h3>
-      <p class="lede">Alerts on your phone come from your personal calendar link, under My fortnight. The app sends no messages at all: everything reaches you here, and through that calendar.</p>
-      <div class="prow2" id="notifyRow"></div>
+      <p class="lede">Alerts on your phone come from your personal calendar link, under My fortnight. The app sends no messages and no notifications at all: everything reaches you here, and through that calendar.</p>
       <label class="f"><span class="l">Calendar alert before each event</span>
         <select id="pRemind"><option value="15">15 minutes before</option><option value="30">30 minutes before</option><option value="60">1 hour before</option><option value="120">2 hours before</option><option value="1440">The day before</option><option value="0">No alert</option></select></label>
       <div class="actions"><button class="btn crimson" id="bSaveMe">Save</button><span class="msg" id="meMsg"></span></div>
@@ -2266,6 +2341,9 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--crimson)
 </div>
 
 <nav id="nav" aria-label="Sections" hidden>
+  <!-- Shown only when the bar becomes a rail down the left of a wide screen:
+       the crest and the name move in here and leave the top bar. -->
+  <div class="railtop"><span class="crestmark" role="img" aria-label="Jesus College MCR"></span><span><b>Jesus MCR</b><i>Freshers' Fortnight</i></span></div>
   <button class="tabbtn" data-view="board" aria-current="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Fortnight</button>
   <button class="tabbtn" data-view="mine"><svg viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.4 5.9.9-4.3 4.1 1 5.9L12 17l-5.2 2.8 1-5.9-4.3-4.1 5.9-.9z"/></svg>Mine<span class="badge" id="badgeMine" hidden>0</span></button>
   <button class="tabbtn" data-view="map"><svg viewBox="0 0 24 24"><path d="M3 6.5l6-2 6 2 6-2v13l-6 2-6-2-6 2z"/><path d="M9 4.5v13M15 6.5v13"/></svg>Map</button>
@@ -2284,7 +2362,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--crimson)
 <!-- ================= GATE ================= -->
 <div id="gate" hidden>
   <div class="gcard">
-    <div class="crest" id="crestGate"><span class="crestmark" role="img" aria-label="Jesus College MCR"></span><span><small>Jesus College MCR</small><b id="gateTitle">Freshers' <i>Fortnight</i></b></span></div>
+    <div class="crest" id="crestGate"><span class="crestmark" role="img" aria-label="Jesus College MCR"></span><span><small>Jesus College MCR <span class="beta">Beta</span></small><b id="gateTitle">Freshers' <i>Fortnight</i></b></span></div>
     <p class="lede" id="gLede">Sixteen days of events at Jesus. Sign in with your University of Cambridge Google account to see the programme and put your name down.</p>
     <div id="gateGsi">
       <div id="gsiBtn"><span class="gsiskel" aria-hidden="true"></span></div>
@@ -2433,16 +2511,6 @@ function winningChoice(ev){
   return best;
 }
 const voteOpen = ev => !ev.choiceBy || todayLondon() <= ev.choiceBy;
-/* The crest, for the corner of a notification. Read off the stylesheet so it is
-   not a second copy of the artwork. */
-const CREST_ICON = (() => {
-  try{
-    const m = /url\("(data:image\/png;base64,[^"]+)"\)/.exec(
-      [...document.styleSheets].flatMap(sh => { try{ return [...sh.cssRules]; }catch(e){ return []; } })
-        .filter(r => r.selectorText === ".crestmark").map(r => r.style.backgroundImage).join(""));
-    return m ? m[1] : "";
-  }catch(e){ return ""; }
-})();
 /* What one slot of an event will take. Where the slots share a limit every one
    returns the same number; the Gown Sale gives thirty five and fifteen. */
 function slotCap(ev, slot){
@@ -2518,70 +2586,10 @@ function sending(on, title, sub){
   el.hidden = false; void el.offsetWidth; el.classList.add("show");
 }
 function sendingDone(title, sub){ $("sending").classList.add("done"); $("sendTitle").textContent = title; $("sendSub").textContent = sub || ""; setTimeout(() => { sending(false); $("sending").classList.remove("done"); }, 900); }
-/* ---------------- notifications ----------------
-   The browser can tell somebody the programme has moved while the app is in
-   another tab or shut. It is off until they ask for it, it is remembered on the
-   device rather than on the server, and it never fires for a change somebody
-   made themselves. */
-const NOTE_KEY = "mcr-ff26-notify";
-const notifyOK = () => {
-  try{ return ("Notification" in window) && Notification.permission === "granted" && localStorage.getItem(NOTE_KEY) === "on"; }
-  catch(e){ return false; }
-};
-/* Safari only hands a page the Notification API once it has been added to the
-   Home Screen, so on an iPhone the answer is not "no", it is "not yet". */
-const isIOS = () => /iP(hone|ad|od)/.test(navigator.userAgent) ||
-  (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-const standalone = () => !!(window.navigator.standalone ||
-  (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches));
-const notifyState = () => {
-  if (!("Notification" in window)) return isIOS() && !standalone() ? "homescreen" : "unsupported";
-  if (Notification.permission === "denied") return "blocked";
-  try{ if (localStorage.getItem(NOTE_KEY) !== "on") return "off"; }catch(e){ return "off"; }
-  return Notification.permission === "granted" ? "on" : "off";
-};
-async function askNotify(){
-  if (!("Notification" in window)){
-    if (isIOS() && !standalone()){
-      showBanner("On an iPhone, add this page to your Home Screen first: press Share, then Add to Home Screen. Notifications work from there.", "Got it", null);
-      return "homescreen";
-    }
-    toast("This browser cannot show notifications");
-    return "unsupported";
-  }
-  let p = Notification.permission;
-  if (p === "default"){ try{ p = await Notification.requestPermission(); }catch(e){ p = Notification.permission; } }
-  if (p !== "granted"){ toast("The browser would not allow it"); return notifyState(); }
-  try{ localStorage.setItem(NOTE_KEY, "on"); }catch(e){}
-  notify("Notifications are on", "You will hear about changes to anything you have put your name down for.", "test");
-  return "on";
-}
-function stopNotify(){ try{ localStorage.setItem(NOTE_KEY, "off"); }catch(e){} }
-function notify(title, body, tag){
-  if (!notifyOK()) return;
-  try{
-    const n = new Notification(title, { body: body, tag: tag || "mcr", icon: CREST_ICON, badge: CREST_ICON, renotify: false });
-    n.onclick = () => { try{ window.focus(); }catch(e){} n.close(); };
-  }catch(e){}
-}
-/* An update is worth waking somebody's phone for if it is about an event they
-   are going to, or if it is an announcement to everybody. */
-function noteWorthy(u){
-  if (!u) return false;
-  if (!u.eventId) return u.kind === "announce" || u.kind === "cancel";
-  return inMine(u.eventId);
-}
-function announceUpdates(list){
-  if (!notifyOK() || !list || !list.length) return;
-  const me = (S && S.me && S.me.email) || "";
-  const mine = list.filter(u => u.by !== me && noteWorthy(u)).slice(0, 3);
-  mine.forEach(u => {
-    const ev = u.eventId ? evById(u.eventId) : null;
-    const head = ev ? ev.title + (ev.status === "cancelled" ? " is cancelled" : " has changed")
-      : "Freshers' Fortnight";
-    notify(head, u.text.length > 160 ? u.text.slice(0, 158) + "…" : u.text, u.eventId || "news");
-  });
-}
+/* Browser notifications have been taken out entirely. The app cannot deliver
+   them reliably (no service worker, no push, and iOS only allows them from
+   the Home Screen), so offering them was a promise that would be broken.
+   Changes reach people here, on What's new, and through the calendar link. */
 function showBanner(text, label, fn){
   const b = $("banner");
   b.hidden = false;
@@ -2969,7 +2977,6 @@ async function pollTick(){
         const cut = (S.updates || []).findIndex(u => u.id === before);
         fresh = cut < 0 ? (S.updates || []).slice(0, 3) : (S.updates || []).slice(0, cut);
       } else if (top) fresh = [top];
-      announceUpdates(fresh);
       if (top && top.id !== before && Date.now() - top.at < 600000) toast(top.text.length > 90 ? top.text.slice(0, 88) + "…" : top.text);
       else toast("Programme updated");
     } else if (r.version !== S.version){
@@ -5074,43 +5081,29 @@ $("bPrint").addEventListener("click", () => { go("mine"); setTimeout(() => windo
 $("bRedoSetup").addEventListener("click", () => openSetup());
 
 /* ---------------- news, me ---------------- */
-function renderNewsOffer(){
-  /* The same switch as under Me, at the top of the page it is about. */
-  const b = $("bNotifyToggle");
-  if (b){
-    const st = notifyState();
-    b.hidden = (st === "unsupported");
-    b.textContent = st === "on" ? "Notifications on" : st === "blocked" ? "Notifications blocked"
-      : st === "homescreen" ? "Notify me, how?" : "Notify me of changes";
-    b.className = "btn sm " + (st === "on" ? "moss" : st === "blocked" ? "ghost" : "cream");
-    b.onclick = async () => {
-      const now = notifyState();
-      if (now === "on"){ stopNotify(); toast("Notifications off"); }
-      else if (now === "blocked"){ showBanner("This page is blocked from showing notifications. Allow it in your browser's settings for this site, then come back.", "Got it", null); }
-      else await askNotify();
-      renderNewsOffer(); renderNotify();
-    };
-  }
-  const el = $("notifyOffer"); if (!el) return;
-  if (["off", "homescreen"].indexOf(notifyState()) < 0){ el.hidden = true; return; }
-  el.hidden = false;
-  el.innerHTML = '<h3 style="margin-bottom:2px">Hear about changes as they happen</h3>' +
-    '<p class="lede" style="margin:0 0 12px">Let the browser tell you when something you are going to moves or is called off, and when the committee posts to everybody. It works with the app shut.</p>' +
-    '<div class="actions" style="margin:0"><button class="btn ink sm" id="bNewsNotify">Turn notifications on</button>' +
-    '<button class="btn ghost sm" id="bNewsNotifyNo">Not now</button></div>';
-  $("bNewsNotify").addEventListener("click", async () => { await askNotify(); renderNewsOffer(); renderNotify(); });
-  $("bNewsNotifyNo").addEventListener("click", () => { el.hidden = true; });
-}
+/* Nothing is offered here any more: see the note above on notifications. */
+function renderNewsOffer(){}
 function renderNews(){
   renderNewsOffer();
   const seenAt = S.me.seenAt || 0, list = S.updates || [];
   const KIND = {change:"Change", cancel:"Cancelled", new:"New event", announce:"Announcement", message:"Message", remove:"Removed"};
-  $("newsList").innerHTML = list.length ? list.map(u => {
+  /* Drawn as notes on a board, the way The Chimney draws its notices: the
+     kind as a small stamp, the event as the title when there is one, the
+     text, and who and when underneath. A cancellation is pinned on pink;
+     anything since you last looked gets the gold pin. */
+  $("newsList").innerHTML = list.length ? '<div class="notes">' + list.map(u => {
     const ev = u.eventId ? evById(u.eventId) : null;
-    return '<div class="nitem ' + esc(u.kind) + (u.at > seenAt ? " fresh" : "") + '"><div class="t"><span class="meta">' + esc(KIND[u.kind] || u.kind) + ' · ' + esc(ago(u.at)) + ' · ' + esc(u.by) + '</span><p>' + esc(u.text) + '</p>' +
-      (ev ? '<div style="margin-top:8px"><button class="btn ghost xs" data-open="' + esc(ev.id) + '">Open ' + esc(ev.title) + '</button></div>' : '') + '</div>' +
-      (isAdmin() ? '<button class="btn ghost xs" data-delupd="' + esc(u.id) + '">Remove</button>' : '') + '</div>';
-  }).join("") : '<div class="empty"><b>Nothing has changed yet</b><span>When the committee moves an event, cancels one or posts a notice, it shows here first.</span></div>';
+    const cls = (u.kind === "cancel" || u.kind === "remove") ? " urgent" : u.kind === "change" ? " waiting" : "";
+    return '<div class="notice' + cls + (u.at > seenAt ? " pinned" : "") + '">' +
+      '<span class="st">' + esc(KIND[u.kind] || u.kind) + '</span>' +
+      (ev ? '<b>' + esc(ev.title) + '</b>' : '') +
+      '<p>' + esc(u.text) + '</p>' +
+      '<small>' + esc(ago(u.at)) + ' · ' + esc(u.by) + '</small>' +
+      ((ev || isAdmin()) ? '<div class="acts">' +
+        (ev ? '<button class="btn ghost xs" data-open="' + esc(ev.id) + '">Open</button>' : '') +
+        (isAdmin() ? '<button class="btn ghost xs" data-delupd="' + esc(u.id) + '">Remove</button>' : '') +
+        '</div>' : '') + '</div>';
+  }).join("") + '</div>' : '<div class="empty"><b>Nothing has changed yet</b><span>When the committee moves an event, cancels one or posts a notice, it shows here first.</span></div>';
 }
 $("bAnnounce").addEventListener("click", async () => {
   const text = $("annText").value.trim(); if (!text){ $("annText").focus(); return; }
@@ -5121,28 +5114,7 @@ $("bAnnounce").addEventListener("click", async () => {
   catch(e){ fail(e); }
   unspin(b);
 });
-function renderNotify(){
-  const el = $("notifyRow"); if (!el) return;
-  const st = notifyState();
-  const say = { on: ["On", "Your browser will tell you when something you are going to changes, and when the committee posts to everybody."],
-    off: ["Off", "Turn this on and the browser will tell you when something you are going to changes, even with the app shut."],
-    blocked: ["Blocked", "This site is blocked from showing notifications. Allow it in your browser's settings for this page, then come back."],
-    homescreen: ["One step first", "On an iPhone, Safari only allows notifications once a page has been added to the Home Screen. Press Share, then Add to Home Screen, and open it from there."],
-    unsupported: ["Not available", "This browser cannot show notifications. Everything still appears under What's new."] }[st];
-  el.innerHTML = '<div class="t"><b>Notifications in this browser <span class="chip ' +
-    (st === "on" ? "moss" : st === "blocked" ? "crimson" : "") + '">' + esc(say[0]) + '</span></b>' +
-    '<span>' + esc(say[1]) + '</span></div>' +
-    (st === "on" ? '<button class="btn ghost sm" id="bNotifyOff">Turn off</button>'
-      : st === "unsupported" ? '' : '<button class="btn crimson sm" id="bNotifyOn">' +
-        (st === "homescreen" ? "How" : st === "blocked" ? "How" : "Turn on") + '</button>');
-  if ($("bNotifyOn")) $("bNotifyOn").addEventListener("click", async () => {
-    const b = $("bNotifyOn"); spin(b, "Asking");
-    if (notifyState() === "blocked") showBanner("This page is blocked from showing notifications. Allow it in your browser's settings for this site, then come back.", "Got it", null);
-    else await askNotify();
-    renderNotify();
-  });
-  if ($("bNotifyOff")) $("bNotifyOff").addEventListener("click", () => { stopNotify(); toast("Notifications off"); renderNotify(); });
-}
+function renderNotify(){}
 function renderMe(){
   const me = S.me;
   $("meEmail").textContent = me.email;
