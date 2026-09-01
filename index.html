@@ -831,25 +831,94 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .ohlist b{color:var(--gold-2);flex:0 0 52px}
 .ohlist em{font-style:normal;color:var(--cream-4);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .iconbtn.busy svg{animation:spin .9s linear infinite}
-/* The boot screen the Fortnight app had: the crest sitting inside two rings
-   that turn at different speeds, the line under it saying what is happening,
-   and a track that fills. The crest never moves, so the handover to the real
-   page is invisible. */
+/* THE CHIMNEY, WALKED.
+   The Chimney is the walled walk that leads to the college gate, and it is
+   what this app is named after, so the wait to get in is the walk in. The
+   scene is built in three dimensions: two brick walls running away to the
+   gate, a flagged path underfoot, the evening light over the top of the
+   walls, and at the end the gate with the crest hung above it. The bricks
+   and the flags slide past as you walk, the gate comes closer, and as you
+   reach it the two doors swing open onto warm light. Once you are there the
+   crest turns gently on its hook until the page is ready. Under reduced
+   motion the doors stand open and nothing moves. */
 #boot{position:fixed;inset:0;display:grid;place-items:center;z-index:70;background:var(--crimson-2);
   overflow:auto;padding:22px}
 #boot::before{content:"";position:absolute;inset:0;
   background:radial-gradient(760px 460px at 78% -10%, rgba(235,183,83,.16), transparent 58%),
     linear-gradient(172deg,#C4181F 0%,#A31319 46%,#7A0D12 100%)}
-.bootin{position:relative;text-align:center;width:min(280px,74vw);display:flex;flex-direction:column;
-  align-items:center;gap:22px}
-/* the rings belong to the crest and nothing else, so they live in a box the
-   crest owns rather than floating over whatever is underneath */
-.crestwrap{position:relative;width:110px;height:110px;display:grid;place-items:center}
-.ring4{position:absolute;inset:0;pointer-events:none}
-.ring4 i{position:absolute;inset:0;border-radius:50%;border:2px solid transparent;display:block}
-.ring4 i:first-child{border-top-color:rgba(252,245,238,.85);animation:spin 1.15s linear infinite}
-.ring4 i:last-child{inset:10px;border-bottom-color:rgba(235,183,83,.7);animation:spin 1.9s linear infinite reverse}
-#boot .crest.big{position:relative;width:62px;height:62px;flex-basis:62px;margin:0;display:block}
+.bootin{position:relative;text-align:center;width:min(300px,80vw);display:flex;flex-direction:column;
+  align-items:center;gap:20px}
+.chimney{position:relative;width:100%;height:180px;perspective:380px;perspective-origin:50% 44%;
+  overflow:hidden;border-radius:16px;
+  background:linear-gradient(180deg,#F1C78B 0%,#D98A5A 26%,#A2262B 52%,#4A060A 100%);
+  box-shadow:0 24px 44px -22px rgba(20,1,3,.85),inset 0 0 0 1px rgba(255,255,255,.08)}
+.chimney .cam{position:absolute;inset:0;transform-style:preserve-3d}
+/* the two walls, laid along the depth of the scene. rotateY(90deg) about the
+   left edge sends the wall's length away from the viewer */
+.chimney .wall{position:absolute;left:50%;top:0;width:820px;height:180px;transform-origin:left center;
+  background:
+    linear-gradient(90deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.35) 45%,rgba(0,0,0,.72) 100%),
+    repeating-linear-gradient(0deg,rgba(40,4,6,.55) 0 2px,transparent 2px 15px),
+    repeating-linear-gradient(90deg,rgba(40,4,6,.45) 0 2px,transparent 2px 34px),
+    linear-gradient(180deg,#A4272D,#7A1216 60%,#5A0B0F);
+  background-size:auto,auto,68px 30px,auto;
+  animation:bricks .95s linear infinite}
+.chimney .wall.l{transform:translateX(-118px) rotateY(90deg)}
+.chimney .wall.r{transform:translateX(118px) rotateY(90deg)}
+.chimney .wall::after{content:"";position:absolute;left:0;right:0;top:0;height:9px;
+  background:linear-gradient(180deg,#E2CDBC,#B8998A);opacity:.9}
+/* the flagged path, laid flat and running away */
+.chimney .floor{position:absolute;left:50%;top:100%;width:236px;height:820px;transform-origin:top center;
+  transform:translateX(-50%) rotateX(-90deg);
+  background:
+    linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.45) 55%,rgba(0,0,0,.8) 100%),
+    repeating-linear-gradient(0deg,rgba(30,10,8,.5) 0 2px,transparent 2px 40px),
+    repeating-linear-gradient(90deg,rgba(30,10,8,.4) 0 2px,transparent 2px 58px),
+    linear-gradient(180deg,#8C7368,#5E4A43);
+  animation:flags .95s linear infinite}
+@keyframes bricks{to{background-position:0 0,0 0,-68px 0,0 0}}
+@keyframes flags{to{background-position:0 0,0 -40px,0 0,0 0}}
+/* the gate, at the far end, drawing nearer */
+.chimney .gate{position:absolute;left:50%;top:14px;width:236px;height:166px;margin-left:-118px;
+  transform-style:preserve-3d;transform:translateZ(-640px);animation:approach 3s cubic-bezier(.3,.6,.2,1) both}
+@keyframes approach{to{transform:translateZ(-300px)}}
+.chimney .arch{position:absolute;inset:0;border-radius:110px 110px 0 0;
+  background:linear-gradient(180deg,#5A0B0F,#3A0507);
+  box-shadow:inset 0 0 0 10px #7A1216,inset 0 0 0 12px rgba(0,0,0,.35)}
+.chimney .light{position:absolute;left:14px;right:14px;top:14px;bottom:0;border-radius:96px 96px 0 0;overflow:hidden;
+  background:radial-gradient(ellipse at 50% 70%,#FFE8B8 0%,#F0B860 38%,#B8542E 72%,#6B1A14 100%);
+  opacity:0;animation:glow 1.4s ease 1.6s both,breathe 3.4s ease-in-out 3s infinite}
+@keyframes glow{to{opacity:1}}
+@keyframes breathe{50%{filter:brightness(1.12)}}
+.chimney .door{position:absolute;top:14px;bottom:0;width:104px;
+  background:
+    repeating-linear-gradient(90deg,rgba(0,0,0,.28) 0 2px,transparent 2px 18px),
+    linear-gradient(180deg,#3B2A22,#20140F);
+  box-shadow:inset 0 0 0 2px rgba(0,0,0,.4);transform-style:preserve-3d;backface-visibility:visible}
+.chimney .door::after{content:"";position:absolute;top:50%;width:6px;height:6px;border-radius:50%;background:#D7B26A;
+  box-shadow:0 0 6px rgba(255,220,150,.8)}
+.chimney .door.l{left:14px;border-radius:96px 0 0 0;transform-origin:left center;animation:openL 1.5s cubic-bezier(.6,0,.2,1) 1.6s both}
+.chimney .door.r{right:14px;border-radius:0 96px 0 0;transform-origin:right center;animation:openR 1.5s cubic-bezier(.6,0,.2,1) 1.6s both}
+.chimney .door.l::after{right:9px}.chimney .door.r::after{left:9px}
+@keyframes openL{to{transform:rotateY(-108deg)}}
+@keyframes openR{to{transform:rotateY(108deg)}}
+/* the crest, hung above the gate, turning on its hook once you have arrived */
+#boot .crest.big{position:absolute;left:50%;top:-22px;width:58px;height:58px;margin:0 0 0 -29px;display:block;
+  filter:drop-shadow(0 6px 10px rgba(20,1,3,.7));transform-style:preserve-3d;
+  animation:hang 5.2s ease-in-out 3s infinite alternate}
+@keyframes hang{from{transform:translateZ(30px) rotateY(-28deg)}to{transform:translateZ(30px) rotateY(28deg)}}
+#boot .crest.big::before{content:none}
+/* evening haze at the far end, so the walls go into distance rather than to a hard edge */
+.chimney .haze{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 46%,rgba(255,224,170,.28) 0%,rgba(255,224,170,0) 30%),
+    linear-gradient(180deg,rgba(0,0,0,0) 60%,rgba(20,1,3,.35) 100%)}
+@media(prefers-reduced-motion:reduce){
+  .chimney .wall,.chimney .floor{animation:none}
+  .chimney .gate{animation:none;transform:translateZ(-300px)}
+  .chimney .light{animation:none;opacity:1}
+  .chimney .door.l{animation:none;transform:rotateY(-108deg)}
+  .chimney .door.r{animation:none;transform:rotateY(108deg)}
+  #boot .crest.big{animation:none;transform:translateZ(30px)}}
 .bootline{font-family:var(--mono);font-size:0.66rem;letter-spacing:.24em;text-transform:uppercase;
   color:var(--gold-2);font-weight:700;min-height:17px}
 .loadtrack{display:block;height:3px;border-radius:3px;background:rgba(0,0,0,.3);overflow:hidden;
@@ -1470,9 +1539,20 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
 
 <div id="boot">
   <div class="bootin">
-    <span class="crestwrap"><span class="ring4"><i></i><i></i></span>
-      <img class="crest big" id="crestBoot" alt="Jesus College MCR"></span>
-    <div class="bootline" id="bootLine">Waking the porters</div>
+    <div class="chimney" aria-hidden="true">
+      <div class="cam">
+        <span class="wall l"></span><span class="wall r"></span>
+        <span class="floor"></span>
+        <div class="gate">
+          <span class="arch"></span>
+          <span class="light"></span>
+          <span class="door l"></span><span class="door r"></span>
+          <img class="crest big" id="crestBoot" alt="">
+        </div>
+      </div>
+      <span class="haze"></span>
+    </div>
+    <div class="bootline" id="bootLine">Walking up the Chimney</div>
     <span class="loadtrack"><i id="bootBar"></i></span>
     <div class="bootslow" id="bootSlow" hidden>The first time you open The Chimney takes around a minute. After that it is quick.</div>
   </div>
@@ -1718,7 +1798,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbx8OVXYgNrlE81uB9Nl0qnl6sgCYxNumwk6Fn1FGH76PG3Y_7M_-7xT0CCGkzqjGEHflw/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbywp68TrjnCvJjKaNAwWf-Y2BErq2Jzf8z_lpuT6RSZgfCdVARSoglIoMZkdIO6VfU/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
