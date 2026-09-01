@@ -1143,10 +1143,11 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--crimson)
    of the window. Only once somebody is in: at the gate there is no bar. */
 #nav .railtop{display:none}
 @media(min-width:1000px){
-  /* the rail keeps the bar's own colours: nothing here is repainted */
+  /* the rail is the same translucent column The Chimney uses, so it sits in
+     the page rather than standing on it */
   #nav{left:0;top:0;bottom:0;transform:none;width:11rem;max-width:none;flex-direction:column;align-items:stretch;
-    border-radius:0;border-width:0 1px 0 0;box-shadow:none;padding:calc(18px + var(--sat)) 12px calc(18px + var(--sab));
-    overflow-y:auto;overflow-x:hidden}
+    border-radius:0;border:0;background:rgba(66,4,9,.42);box-shadow:none;padding:calc(18px + var(--sat)) 12px calc(18px + var(--sab));
+    overflow-y:auto;overflow-x:hidden;backdrop-filter:none}
   #nav .railtop{display:flex;align-items:center;gap:10px;padding:2px 9px 18px;color:var(--cream)}
   #nav .railtop .crestmark{--ch:34px;flex:0 0 auto}
   #nav .railtop b{display:block;font-family:var(--display);font-size:14px;font-weight:600;letter-spacing:-.03em;line-height:1.1}
