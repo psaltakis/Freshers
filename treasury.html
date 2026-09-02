@@ -623,10 +623,14 @@ a.btn{display:inline-flex;line-height:1.15;text-decoration:none}
   background:var(--cream);border-radius:12px;padding:14px 16px;color:var(--ink-2);
   font-size:15px;line-height:1.45;cursor:pointer}
 #setup .agree input{width:22px;height:22px;flex:none;margin:1px 0 0;accent-color:var(--red)}
-#setup .nav{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
-#setup .nav .btn{flex:1 1 0;min-width:0;justify-content:center}
-#setup .nav .btn.ghost{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.3)}
-#setup .nav .btn.ghost:hover{background:rgba(255,255,255,.2)}
+/* Called sunav, not nav. The app's own navigation is .nav, and it is fixed to
+   the bottom of the screen with a dark ground behind it; a second element by
+   that name on the first-run screen inherited both, and landed on top of the
+   form somebody was trying to fill in. */
+#setup .sunav{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;position:static;background:none}
+#setup .sunav .btn{flex:1 1 0;min-width:0;justify-content:center}
+#setup .sunav .btn.ghost{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.3)}
+#setup .sunav .btn.ghost:hover{background:rgba(255,255,255,.2)}
 #setup .skip{flex:1 1 100%;order:3;text-align:center;background:none;border:0;cursor:pointer;
   color:rgba(255,255,255,.7);font-family:var(--body);font-size:14.5px;text-decoration:underline;padding:6px}
 #setup .msg{color:#FFD9A8;display:block;margin-top:12px}
@@ -1597,25 +1601,6 @@ ul.notes li:last-child{margin-bottom:0}
         </div>
       </div>
 
-      <div data-admin>
-        <div class="shead"><h2>Email allowance</h2><span class="note">Resets at 8am</span></div>
-        <div class="panel">
-          <p class="lede">Google caps how many people the account may write to in a day, counting
-            recipients rather than messages. When there is not enough left for one more claim the
-            form closes itself.</p>
-          <div class="quota">
-            <div class="qhead"><b id="qLeft">&mdash;</b><span id="qOf"></span></div>
-            <div class="qbar"><i class="used" id="qUsed"></i><i class="res" id="qRes"></i></div>
-            <div class="qkey">
-              <span><i class="sw" style="background:var(--ink)"></i> Used today</span>
-              <span><i class="sw" style="background:var(--gold)"></i> Held for claims in progress</span>
-              <span><i class="sw" style="background:var(--cream-2)"></i> Free</span>
-            </div>
-            <div class="qclaims" id="qClaims"></div>
-          </div>
-        </div>
-      </div>
-
       <div data-president>
         <div class="shead"><h2>Pause claims</h2><span class="note">For when the MCR cannot pay</span></div>
         <div class="panel">
@@ -1785,7 +1770,7 @@ ul.notes li:last-child{margin-bottom:0}
    ============================================================ */
 
 /* PASTE YOUR TREASURY WEB APP URL HERE. Deploy, Manage deployments, ends in /exec. */
-const API_URL = "https://script.google.com/macros/s/AKfycby-fZUGowQof9F729fW1wXinkYnR_x2vg1KDgp5i1507rFOl3i2F8lKROMXSTVylUrl/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzreVL-b1exGPDpkncbiIOZEJ5apzfIeZnN2qjbazVox2uR25EEWC8WaMwwsmWVS-jW/exec";
 
 /* The crest, once. It used to appear three times in this file, which made the
    page a third of a megabyte before a single figure had loaded. */
@@ -1810,17 +1795,22 @@ const LAST_YEAR={"source":"MCR Reimbursement Form 2025-26, 191 claims, Oct 2025 
    All of this is now worked out only when the Trends screen is open.
    It used to run on every refresh, on every screen.
    ============================================================ */
-const MCR_MONTHS=["Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug"];
+/* The treasury year runs July to June, not September to August. The MCR's own
+   ledger opens 2026/27 on 15 July 2026 with the Nat Geo subscription, and the
+   whole of Freshers' Fortnight is bought in August: a year starting in September
+   simply dropped both months on the floor, and the Trends screen showed an empty
+   summer that had in fact spent two and a half thousand pounds. */
+const MCR_MONTHS=["Jul","Aug","Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun"];
 const MCR_START_YEAR=2026;
-const monthKey=i=>(i===0?MCR_START_YEAR:MCR_START_YEAR+1)+"-"+
-  String([9,10,11,12,1,2,3,4,5,6,7,8][i]).padStart(2,"0");
+const monthKey=i=>(i<=5?MCR_START_YEAR:MCR_START_YEAR+1)+"-"+
+  String([7,8,9,10,11,12,1,2,3,4,5,6][i]).padStart(2,"0");
 const KEYS=MCR_MONTHS.map((m,i)=>monthKey(i));
 const keyOfDate=d=>KEYS.indexOf(String(d||"").slice(0,7));
 function nowIndex(){
   const d=new Date();
   const i=KEYS.indexOf(d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0"));
   if(i>=0)return i;
-  return d<new Date(MCR_START_YEAR+"-09-01T00:00:00")?0:11;
+  return d<new Date(MCR_START_YEAR+"-07-01T00:00:00")?0:11;
 }
 const RESERVE=["Contingency"];
 const spread=(from,to)=>{const o={};const n=to-from+1;
@@ -1829,7 +1819,9 @@ const spread=(from,to)=>{const o={};const n=to-from+1;
 /* When each budget line actually falls. Anything not listed uses last year's
    rhythm for its category. Edit freely, the totals look after themselves. */
 const LINE_TIMING=[
-  [/freshers-fortnight/,            {Sep:.85,Oct:.15}],
+  /* Caps, mugs, punting and the theatre trip were all bought in August 2026.
+     The plan follows what actually happens rather than the other way round. */
+  [/freshers-fortnight/,            {Aug:.45,Sep:.45,Oct:.10}],
   [/refreshers-week/,               {Jan:1}],
   [/halloween-hall/,                {Oct:1}],
   [/christmas-hall/,                {Dec:1}],
@@ -1843,13 +1835,13 @@ const LINE_TIMING=[
   [/committee-stash/,               {Oct:.5,Nov:.5}],
   [/punting/,                       {May:.3,Jun:.4,Jul:.3}],
   [/mcr-cricket|mcr-tennis|lawn-sports/, {Apr:.2,May:.35,Jun:.35,Jul:.1}],
-  [/mcr-football|mcr-squash/,       spread(1,7)],
-  [/mcr-padel|chicken-run|mcr-yoga/,spread(1,9)],
+  [/mcr-football|mcr-squash/,       spread(3,9)],
+  [/mcr-padel|chicken-run|mcr-yoga/,spread(3,11)],
   [/grad-conference/,               {Feb:.2,Mar:.5,Apr:.3}],
-  [/chalk-talks|themed-evenings|pre-dinner-drinks|formal-swap/, spread(1,9)],
-  [/newspapers|gym-management|communal-sport|bike-repair|new-society/, spread(1,10)],
+  [/chalk-talks|themed-evenings|pre-dinner-drinks|formal-swap/, spread(3,11)],
+  [/newspapers|gym-management|communal-sport|bike-repair|new-society/, spread(3,11)],
   [/welfare-brunch|families-and-partners/, {Nov:.34,Feb:.33,May:.33}],
-  [/environment-sustainability/,    spread(1,9)]
+  [/environment-sustainability/,    spread(3,11)]
 ];
 function timingFor(line,fallback){
   for(let i=0;i<LINE_TIMING.length;i++)
@@ -1863,16 +1855,16 @@ const RHYTHM_={};
 function rhythm(cat){
   if(RHYTHM_[cat])return RHYTHM_[cat];
   const m=LAST_YEAR.monthly[cat];
-  if(!m)return RHYTHM_[cat]=spread(1,10);
+  if(!m)return RHYTHM_[cat]=spread(3,11);
   const clean={};let tot=0;
   MCR_MONTHS.forEach(x=>{clean[x]=m[x]||0});
   (LAST_YEAR.outliers||[]).forEach(o=>{
     if(o.cat!==cat)return;
-    const mo=MCR_MONTHS[[8,9,10,11,0,1,2,3,4,5,6,7][Number(o.date.slice(5,7))-1]];
+    const mo=MCR_MONTHS[[6,7,8,9,10,11,0,1,2,3,4,5][Number(o.date.slice(5,7))-1]];
     clean[mo]=Math.max(0,clean[mo]-o.amount);
   });
   MCR_MONTHS.forEach(x=>tot+=clean[x]);
-  if(tot<=0)return RHYTHM_[cat]=spread(1,10);
+  if(tot<=0)return RHYTHM_[cat]=spread(3,11);
   const out={};MCR_MONTHS.forEach(x=>out[x]=clean[x]/tot);
   return RHYTHM_[cat]=out;
 }
@@ -2737,7 +2729,7 @@ function paintSetup(){
           '<input type="text" id="suPos" list="posList" placeholder="MCR member is fine" value="'+
             esc(suDraft.position)+'"></label>'+
       '</div></div>'+
-      '<div class="nav"><button class="btn" id="suNext">Continue</button></div>'+
+      '<div class="sunav"><button class="btn" id="suNext">Continue</button></div>'+
       '<span class="msg" id="suMsg"></span></div>';
   }else if(suIdx===1){
     el.innerHTML='<div class="step"><h2>Where should the money <i>go</i>?</h2>'+
@@ -2755,7 +2747,7 @@ function paintSetup(){
         '<label class="f full"><span class="l">Bank or building society</span>'+
           '<input type="text" id="suBank" value="'+esc(suDraft.bank)+'"></label>'+
       '</div></div>'+
-      '<div class="nav"><button class="btn" id="suNext">Continue</button>'+
+      '<div class="sunav"><button class="btn" id="suNext">Continue</button>'+
       '<button class="btn ghost" id="suBack">Back</button>'+
       '<button class="skip" id="suSkip">I will add these later</button></div>'+
       '<span class="msg" id="suMsg"></span></div>';
@@ -2785,7 +2777,7 @@ function paintSetup(){
       '<label class="agree"><input type="checkbox" id="suConsent"'+(suDraft.consent?" checked":"")+'>'+
         '<span>I have read this and I agree to the MCR committee holding and using my information '+
         'in the way described.</span></label>'+
-      '<div class="nav"><button class="btn" id="suNext">Agree and finish</button>'+
+      '<div class="sunav"><button class="btn" id="suNext">Agree and finish</button>'+
       '<button class="btn ghost" id="suBack">Back</button></div>'+
       '<span class="msg" id="suMsg"></span></div>';
   }
@@ -2844,6 +2836,9 @@ const isPresident=()=>!!(S&&S.can&&S.can.admin);
 /* Email is the one resource here with a hard daily ceiling. When it runs out the
    app cannot tell the committee a claim has arrived, so it stops taking them
    rather than swallowing them silently. */
+/* Claims are only ever closed deliberately now: paused by the President for
+   everybody, or a single person stopped from claiming. The day's email allowance
+   used to close them too, and no longer does. */
 const MAIL_OUT="Claims are paused at the moment. Nothing already submitted is affected.";
 const mailOk=()=>!(S&&S.mail&&S.mail.ok===false);
 /* Budget lines by id, built once per state rather than scanned per lookup. */
@@ -3302,7 +3297,7 @@ function paintMail(){
   if(b){
     b.hidden=!out;
     if(out){
-      $("mailOutTitle").textContent=q.frozen?"Claims are paused by the committee.":"Claims are paused until tomorrow.";
+      $("mailOutTitle").textContent=q.frozen?"Claims are paused by the committee.":"You cannot submit a claim at the moment.";
       $("mailOutWhy").textContent=why;
     }
   }
@@ -4195,36 +4190,10 @@ function renderRoles(){
 /* The day's email, as a bar rather than a number nobody would read.
    Black is what has gone, gold is what is being held back so that claims already
    in the system can still be approved and paid, and the rest is free. */
-function renderQuota(){
-  if(!$("qLeft"))return;
-  const q=S.mail||{};
-  if(q.left===undefined||q.left<0){
-    $("qLeft").textContent="Unknown";
-    $("qOf").textContent="the allowance could not be read";
-    $("qUsed").style.width="0%";$("qRes").style.width="0%";
-    $("qClaims").className="qclaims";
-    $("qClaims").textContent="Nothing is being blocked, because a reading that cannot be taken is not evidence of a problem.";
-    return;
-  }
-  const cap=q.cap||100, left=q.left, used=Math.max(0,cap-left);
-  const held=Math.min(left,q.perClaim||6);
-  const pc=x=>Math.max(0,Math.min(100,x/cap*100));
-  $("qLeft").textContent=left.toLocaleString("en-GB");
-  $("qOf").textContent="of "+cap.toLocaleString("en-GB")+" recipients left today";
-  $("qUsed").style.width=pc(used)+"%";
-  $("qRes").style.width=pc(held)+"%";
-  const n=q.claims;
-  const low=n<=2;
-  $("qClaims").className="qclaims"+(low?" low":"");
-  $("qClaims").innerHTML=q.frozen
-    ? "<b>Claims are paused by hand,</b> so the allowance is not what is stopping them."
-    : n<=0
-      ? "<b>No more claims can be taken today.</b> The form is closed until the allowance resets at 8am Cambridge time."
-      : "Room for about <b>"+n+" more claim"+(n===1?"":"s")+"</b> today, at roughly "+
-        (q.perClaim||6)+" recipients each: telling the committee it arrived, sending the "+
-        "Treasurer the payment report, and telling the claimant it was approved and then paid."+
-        (low?" The form closes when there is not enough left for one more.":"");
-}
+/* The email allowance used to be drawn here, with a bar showing how much of the
+   day's quota was being held back for claims in flight. Nothing is held back any
+   more: a claim reaches the desk whatever Google's quota is doing, and the only
+   thing a spent allowance delays is the claimant's own notification. */
 function renderCommittee(){
   if(!$("cPres")||!isPresident())return;
   const c=S.committee||{};
@@ -4341,7 +4310,7 @@ function fillSettings(){
     ?"Plus "+gbp0.format(t.received)+" received since, giving "+gbp0.format(t.funds)+" in total."
     :"Record each disbursement under Planned costs and it is added to this.";
   if($("sDriveShow"))$("sDriveShow").textContent=s.drive||"";
-  renderQuota();renderCommittee();renderFreeze();
+  renderCommittee();renderFreeze();
   if($("linkWarn"))$("linkWarn").textContent=s.publicLinks
     ?"Reports and receipts open from a Drive link, so anyone holding the link can view them. The link is the secret."
     :"Reports and receipts open only for people the Drive folder is shared with.";
