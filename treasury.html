@@ -1770,7 +1770,7 @@ ul.notes li:last-child{margin-bottom:0}
    ============================================================ */
 
 /* PASTE YOUR TREASURY WEB APP URL HERE. Deploy, Manage deployments, ends in /exec. */
-const API_URL = "https://script.google.com/macros/s/AKfycbzreVL-b1exGPDpkncbiIOZEJ5apzfIeZnN2qjbazVox2uR25EEWC8WaMwwsmWVS-jW/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbz1xt9nYxs5OUhzFuTmgwCPwGL03X1NdULd-mRa_oWlosfzjRlv-D-sQAd6DpSguqg1/exec";
 
 /* The crest, once. It used to appear three times in this file, which made the
    page a third of a megabyte before a single figure had loaded. */
@@ -1819,9 +1819,19 @@ const spread=(from,to)=>{const o={};const n=to-from+1;
 /* When each budget line actually falls. Anything not listed uses last year's
    rhythm for its category. Edit freely, the totals look after themselves. */
 const LINE_TIMING=[
-  /* Caps, mugs, punting and the theatre trip were all bought in August 2026.
-     The plan follows what actually happens rather than the other way round. */
-  [/freshers-fortnight/,            {Aug:.45,Sep:.45,Oct:.10}],
+  /* SEPTEMBER IS THE EXPENSIVE MONTH.
+     Freshers' Fortnight is most of a term's spending compressed into a fortnight,
+     and the committee's own estimate is six to seven thousand pounds going out
+     across it. That is more than the Welcome Events lines hold on their own, and
+     it should be: the fortnight also drinks the first grad hall, the punts, the
+     gowns, the welfare welcome and a good bite of the open budget. So those lines
+     are weighted into September rather than smeared across the year, and the
+     month reads as what it actually is.
+
+     What was bought in August 2026 is already in the books as spent, so the plan
+     starts August at a fifth: caps, mugs, the punting deposits and the theatre
+     trip went out then. */
+  [/freshers-fortnight/,            {Aug:.20,Sep:.76,Oct:.04}],
   [/refreshers-week/,               {Jan:1}],
   [/halloween-hall/,                {Oct:1}],
   [/christmas-hall/,                {Dec:1}],
@@ -1831,14 +1841,24 @@ const LINE_TIMING=[
   [/end-of-year-garden-party/,      {Apr:.15,May:.25,Jun:.60}],
   [/three-minute-thesis/,           {Feb:1}],
   [/green-week/,                    {Mar:1}],
-  [/gown-purchases/,                {Sep:.5,Oct:.5}],
-  [/committee-stash/,               {Oct:.5,Nov:.5}],
-  [/punting/,                       {May:.3,Jun:.4,Jul:.3}],
+  /* Gowns are bought and bought back at the start, punts are hired for the
+     fortnight and again in the summer, and the stash is ordered as everybody
+     arrives. */
+  [/gown-purchases/,                {Sep:.6,Oct:.2,Jan:.1,Apr:.1}],
+  [/committee-stash/,               {Aug:.55,Sep:.35,Nov:.10}],
+  [/punting/,                       {Aug:.10,Sep:.45,Oct:.05,May:.15,Jun:.15,Jul:.10}],
+  /* Welfare opens the year hard: the welcome brunches, the first socials and
+     the freshers' welfare budget all land in the fortnight. */
+  [/welfare-general/,               {Sep:.28,Oct:.12,Nov:.10,Jan:.12,Feb:.10,Mar:.08,Apr:.07,May:.07,Jun:.06}],
+  [/events-other/,                  {Sep:.25,Oct:.10,Nov:.10,Jan:.10,Feb:.10,Mar:.10,Apr:.10,May:.075,Jun:.075}],
+  [/open-budget/,                   {Sep:.26,Oct:.10,Nov:.08,Dec:.06,Jan:.10,Feb:.08,Mar:.08,Apr:.08,May:.08,Jun:.08}],
   [/mcr-cricket|mcr-tennis|lawn-sports/, {Apr:.2,May:.35,Jun:.35,Jul:.1}],
   [/mcr-football|mcr-squash/,       spread(3,9)],
   [/mcr-padel|chicken-run|mcr-yoga/,spread(3,11)],
   [/grad-conference/,               {Feb:.2,Mar:.5,Apr:.3}],
-  [/chalk-talks|themed-evenings|pre-dinner-drinks|formal-swap/, spread(3,11)],
+  /* The first grad hall of the year is in the fortnight, and it is the busiest. */
+  [/pre-dinner-drinks/,             {Sep:.22,Oct:.12,Nov:.10,Dec:.07,Jan:.12,Feb:.09,Mar:.09,Apr:.07,May:.07,Jun:.05}],
+  [/chalk-talks|themed-evenings|formal-swap/, spread(3,11)],
   [/newspapers|gym-management|communal-sport|bike-repair|new-society/, spread(3,11)],
   [/welfare-brunch|families-and-partners/, {Nov:.34,Feb:.33,May:.33}],
   [/environment-sustainability/,    spread(3,11)]
@@ -2259,8 +2279,40 @@ function setToken(t){
   try{ sessionStorage.setItem(TK,t); }catch(e){}
   cookieSet(TK,t,60);
 }
+/* THE LAST FIGURES YOU SAW.
+
+   Reaching Apps Script and reading five sheets takes a second or two on a good
+   connection and rather longer on college wifi, and until now the app showed a
+   loading bar for every bit of it, every time. The figures from the last visit
+   are kept instead, and drawn at once: the app is on screen before the request
+   has left, and the fresh figures land on top of it a moment later.
+
+   In sessionStorage rather than localStorage, and cleared on sign out, because
+   an approver's copy carries bank details and a tab that is closed should not
+   leave them behind. Tied to the token, so a different sign in never sees them,
+   and thrown away after a day so nothing very stale is ever shown. */
+const CACHE_KEY="mcr-treasury-state";
+const CACHE_HOURS=24;
+function cacheState(st){
+  try{
+    sessionStorage.setItem(CACHE_KEY,JSON.stringify(
+      {at:Date.now(),tk:(getToken()||"").slice(-12),data:st}));
+  }catch(e){}
+}
+function cachedState(){
+  try{
+    const raw=sessionStorage.getItem(CACHE_KEY); if(!raw)return null;
+    const box=JSON.parse(raw);
+    if(!box||!box.data)return null;
+    if(box.tk!==(getToken()||"").slice(-12))return null;
+    if(Date.now()-box.at>CACHE_HOURS*3600000)return null;
+    return box.data;
+  }catch(e){ return null; }
+}
+function dropCachedState(){ try{ sessionStorage.removeItem(CACHE_KEY); }catch(e){} }
 function clearToken(){
   memToken=null;
+  dropCachedState();
   try{ localStorage.removeItem(TK); }catch(e){}
   try{ sessionStorage.removeItem(TK); }catch(e){}
   cookieSet(TK,"",-1);
@@ -2860,13 +2912,24 @@ async function refresh(loud){
   try{
     S=await api("state");
     LINEMAP_=null;TRENDS_=null;
+    cacheState(S);
     note("Updated "+new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"}));
     render();
     /* Redrawing a list changes its height for a frame, which used to jump the
        page. Put the scroll back where it was. */
     if(Math.abs(window.scrollY-y)>2)window.scrollTo(0,y);
     if(loud)toast("Latest figures pulled in");
-  }catch(e){note("Could not reach the server");fail(e)}
+  }catch(e){
+    /* A refresh that fails leaves the figures already on screen exactly where
+       they are, which is the point of keeping them. The one exception is a
+       session the server has actually rejected: showing somebody a page they can
+       no longer act on is worse than sending them back to the gate. */
+    const m=String(e.message||"");
+    if(/sign in|session has expired|no longer has access|NOTMEMBER|BOOKDOWN/i.test(m)){
+      signedOut();gateSay("",m.replace(/^(NOTMEMBER|BOOKDOWN)\s*/,""));return;
+    }
+    note("Could not reach the server");fail(e);
+  }
 }
 async function boot(fromWelcome){
   token=getToken();
@@ -2884,8 +2947,20 @@ async function boot(fromWelcome){
     catch(e){ dropBoot(); $("gate").hidden=false; gateSay("",e.message); }
     return;
   }
+  /* If the last visit's figures are still to hand, the app goes up on them now
+     and the request runs underneath. Nothing is decided on them: every button
+     posts to the server, which reads the books itself. */
+  const kept=fromWelcome?null:cachedState();
+  if(kept){
+    S=kept; LINEMAP_=null; TRENDS_=null;
+    dropBoot();
+    paintApp();
+    note("Bringing the figures up to date\u2026");
+    refresh().then(()=>{ if(setupNeeded())openSetup(); else offerInstall(); });
+    return;
+  }
   if(BOOT)BOOT.to(55,"Reading the books");
-  try{ S=await api("state"); LINEMAP_=null; TRENDS_=null; }
+  try{ S=await api("state"); LINEMAP_=null; TRENDS_=null; cacheState(S); }
   catch(e){
     // only a genuine rejection of the session ends it. A slow or missed request
     // must never sign somebody out, or a refresh on poor wifi loses their place.
@@ -2924,6 +2999,14 @@ async function boot(fromWelcome){
     hideWelcome();
   }
   $("stalled").hidden=true;
+  paintApp();
+  if(setupNeeded())openSetup(); else offerInstall();
+}
+/* Everything that depends on who is signed in and what they may see. Run once
+   from the kept figures and once again from the fresh ones, which is cheap: it
+   is a handful of class toggles and the current screen. */
+function paintApp(){
+  $("stalled").hidden=true;
   $("gate").hidden=true;$("app").hidden=false;$("chipUser").hidden=false;
   $("whoName").textContent=S.me.name||roleLabel(S.me.role);
   $("whoRole").textContent=S.me.name?roleLabel(S.me.role):S.me.email;
@@ -2940,7 +3023,6 @@ async function boot(fromWelcome){
     :(S.canSeeBudget?["overview","mine"]:["mine"]);
   if(allowed.indexOf(view)<0)view=allowed[0];
   fillLineSelects();fillProfile();fillSettings();resetForm();setView(view,true);
-  if(setupNeeded())openSetup(); else offerInstall();
 }
 function welcomeNote(){
   if(isAdmin()){
