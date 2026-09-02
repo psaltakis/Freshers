@@ -1770,7 +1770,7 @@ ul.notes li:last-child{margin-bottom:0}
    ============================================================ */
 
 /* PASTE YOUR TREASURY WEB APP URL HERE. Deploy, Manage deployments, ends in /exec. */
-const API_URL = "https://script.google.com/macros/s/AKfycbyXT2IrjZDMkcfQ6cCWj5ZEeP-VyBWqdabf-geVQGD6t0et-lin3zC_Kb4ba9SCf2hW/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyyf1S6RV4GGfs8aAPHVWvSH9WtTMkAjpH7bPpFTsqXPo5v8559r6GiP1zyqXbgTVMo/exec";
 
 /* The crest, once. It used to appear three times in this file, which made the
    page a third of a megabyte before a single figure had loaded. */
@@ -2198,9 +2198,14 @@ const ESC_RE=/[&<>"']/g;
    Control characters go. So do the invisible ones, the zero width spaces and the
    direction overrides, which are the only characters in a claim that can make a
    line of text read as something other than what it says. */
-const CLEAN_RE=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F\u200B-\u200F\u202A-\u202E\u2060-\u2064\u2066-\u206F\uFEFF]/g;
+const CLEAN_RE=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F-\u009F\u00AD\u061C\u180E\u200B-\u200F\u202A-\u202E\u2060-\u2064\u2066-\u206F\uFE00-\uFE0F\uFEFF\uFFF9-\uFFFB\uFFFE\uFFFF]/g;
+/* The tags block, which needs a surrogate pair to write and can carry a whole
+   hidden sentence inside what looks like a single letter. */
+const CLEAN_TAGS=/[\uDB40][\uDC00-\uDC7F]/g;
 const clean=(v,max)=>{
-  let t=String(v==null?"":v).replace(CLEAN_RE,"").replace(/[\r\n\t]+/g," ").replace(/\s{3,}/g,"  ").trim();
+  let t=String(v==null?"":v);
+  try{ t=t.normalize("NFKC"); }catch(e){}
+  t=t.replace(CLEAN_TAGS,"").replace(CLEAN_RE,"").replace(/[\r\n\t]+/g," ").replace(/\s{3,}/g,"  ").trim();
   if(max&&t.length>max)t=t.slice(0,max);
   return t;
 };
@@ -4463,8 +4468,16 @@ $("bSaveSettings").addEventListener("click",async()=>{
 /* Excel runs a formula in a CSV cell exactly as a spreadsheet does, so anything
    beginning = + - or @ is marked as text on the way out too. */
 const cell=v=>{
-  let s=String(v==null?"":v).replace(/[\r\n]+/g," ");
-  if(/^[=+\-@]/.test(s))s="'"+s;
+  /* The same rules as the server, because an export is read by Excel and Excel
+     runs a formula in a cell exactly as a spreadsheet does. Cleaned of anything
+     invisible, folded to one spelling per character, stripped of the control
+     characters that would break the row, and marked as text if what is left
+     could start a formula. Checked after the trim, so a leading space does not
+     smuggle one past. */
+  let s=String(v==null?"":v);
+  try{ s=s.normalize("NFKC"); }catch(e){}
+  s=s.replace(CLEAN_RE,"").replace(/[\r\n\t]+/g," ").trim();
+  if(/^[=+\-@|]/.test(s))s="'"+s;
   return /[",]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;
 };
 function download(name,rows){
