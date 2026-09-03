@@ -239,8 +239,13 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 @media(min-width:1020px){.cols.three{grid-template-columns:repeat(3,1fr)}}
 
 /* ---------- buttons ---------- */
+/* A .btn that happens to be an anchor is still a button, and an underline
+   running through a pill reads as a mistake. The bare a rule sets a colour and
+   an underline offset but never turns the decoration off, so every link
+   wearing this class was drawn underlined inside its own shape. */
 .btn{background:var(--t2);color:var(--cream);border-radius:999px;padding:9px 16px;font-size:.86rem;
-  font-weight:700;display:inline-flex;align-items:center;gap:7px;transition:.16s var(--ease)}
+  font-weight:700;display:inline-flex;align-items:center;gap:7px;text-decoration:none;
+  transition:.16s var(--ease)}
 .btn:hover{background:rgba(255,255,255,.14)}
 .btn:active{transform:scale(.975)}
 .btn.sm{padding:7px 13px;font-size:.8rem;position:relative}
@@ -1442,7 +1447,11 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .menucard .lede{color:var(--ink-soft)}
 .menucard .ref{color:var(--ink-soft);text-transform:none;letter-spacing:.02em}
 .menucard a{color:var(--crimson);font-weight:700}
-.menubar{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:0 0 10px}
+/* One line, always. Wrapping put the sitting on a row of its own and cost
+   fifty pixels off the top of the card on every phone; the days scroll
+   sideways in whatever is left instead, which is what the overflow on
+   .menunav is for. */
+.menubar{display:flex;flex-wrap:nowrap;align-items:center;gap:7px;margin:0 0 9px}
 .menunav{display:flex;gap:4px;flex:1 1 auto;min-width:0;overflow-x:auto;
   scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .menunav::-webkit-scrollbar{display:none}
@@ -1461,29 +1470,54 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .mealseg button[aria-pressed="true"]{background:var(--crimson);color:var(--cream);
   box-shadow:0 1px 3px rgba(74,5,10,.3)}
 .mealseg button[disabled]{opacity:.38;cursor:default}
-.course{margin-bottom:7px}
-.course:last-child{margin-bottom:0}
-.course .cn{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;
-  font-weight:700;color:var(--ink-soft);margin-bottom:2px}
-.course ul{list-style:none;margin:0;padding:0}
-.course li{display:flex;flex-wrap:wrap;align-items:baseline;gap:3px 7px;padding:4px 0;border-top:1px solid rgba(0,0,0,.06);font-size:.86rem;line-height:1.35}
-.course li:first-child{border-top:0}
-.course .dn{flex:1 1 55%;font-weight:600;color:var(--ink)}
+/* THE COURSES, PACKED.
+   Columns rather than a grid, because courses are of wildly different lengths
+   and multi-column fills the short ones in behind the long ones instead of
+   leaving a hole the height of the tallest. Each course is a small tinted
+   block, so the shape of the meal is visible before a word is read. */
+.meals{columns:1;column-gap:6px}
+@media(min-width:520px){.meals{columns:2}}
+@media(min-width:960px){.meals{columns:3}}
+.mcourse{break-inside:avoid;-webkit-column-break-inside:avoid;page-break-inside:avoid;
+  display:inline-block;width:100%;margin:0 0 6px;border-radius:9px;padding:5px 8px 6px;
+  background:var(--ct,rgba(0,0,0,.04))}
+.mcourse .cn{display:block;font-family:var(--mono);font-size:.54rem;letter-spacing:.14em;
+  text-transform:uppercase;font-weight:700;color:var(--ci,var(--ink-soft));margin:0 0 2px}
+.mcourse ul{list-style:none;margin:0;padding:0}
+/* Name, marks, price, touching and in that order. No flex-grow anywhere, so
+   nothing is pushed to the far margin away from what it belongs to. */
+.mcourse li{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 5px;padding:0;
+  font-size:.72rem;line-height:1.42}
+.mcourse li b{font-weight:600;color:var(--ink)}
 /* Four marks that mean four different things had one colour between them, so
    the eye could not pick out the one it was looking for. Plants green, halal
    blue, gluten free amber, and anything the college invents falls back to
    grey rather than claiming a meaning it does not have. */
-.course .dm{flex:0 0 auto;display:inline-flex;gap:3px}
-.course .dm i{font-style:normal;font-family:var(--mono);font-size:.58rem;font-weight:700;
-  padding:1px 5px;border-radius:999px;letter-spacing:.04em;
-  background:rgba(0,0,0,.07);color:var(--ink-soft)}
-.course .dm i.v,.course .dm i.ve{background:rgba(79,200,148,.26);color:#146046}
-.course .dm i.h{background:rgba(99,173,238,.26);color:#1B4C78}
-.course .dm i.gf{background:rgba(226,169,60,.32);color:#6A4405}
-.course .dp{font-family:var(--mono);font-size:.74rem;font-weight:700;color:var(--ink-soft)}
-.course .da{flex-basis:100%;font-size:.7rem;color:var(--ink-soft);line-height:1.4}
-.mlegend{margin:9px 0 0;font-size:.7rem;line-height:1.45;color:var(--ink-soft);font-weight:500}
-.mlegend b{font-family:var(--mono);font-weight:700;color:var(--ink)}
+.mcourse .mk{display:inline-flex;gap:2px;flex:0 0 auto}
+.mcourse .mk i{font-style:normal;font-family:var(--mono);font-size:.5rem;font-weight:700;
+  padding:0 4px;border-radius:999px;letter-spacing:.04em;
+  background:rgba(0,0,0,.08);color:var(--ink-soft)}
+.mcourse .mk i.v,.mcourse .mk i.ve{background:rgba(79,200,148,.32);color:#0F5A40}
+.mcourse .mk i.h{background:rgba(99,173,238,.32);color:#17456E}
+.mcourse .mk i.gf{background:rgba(226,169,60,.4);color:#653F04}
+.mcourse .mp{flex:0 0 auto;font-family:var(--mono);font-size:.64rem;font-weight:700;color:var(--ink-soft)}
+/* The allergens ride on the same line when they fit and drop to their own only
+   when they do not. As a forced full width row they were adding a line under
+   half the dishes on the card, which is what made it long. */
+.mcourse .mg{font-size:.56rem;color:var(--ink-soft);line-height:1.4;opacity:.8;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+/* Five tints, taken from the colours the rest of the app already uses for
+   categories, at the strength a paper card can carry. */
+.mcourse.c0{--ct:rgba(226,169,60,.15);--ci:#7A4E06}
+.mcourse.c1{--ct:rgba(79,200,148,.15);--ci:#0F5A40}
+.mcourse.c2{--ct:rgba(99,173,238,.15);--ci:#17456E}
+.mcourse.c3{--ct:rgba(185,143,236,.16);--ci:#4A2A70}
+.mcourse.c4{--ct:rgba(245,138,98,.16);--ci:#7A3316}
+/* Scoped to the card because a bare .mlegend loses to .card p, which is more
+   specific and sets a size three times this one. */
+.menucard .mlegend{margin:6px 0 0;font-size:.6rem;line-height:1.4;color:var(--ink-soft);
+  font-weight:500;white-space:normal}
+.menucard .mlegend b{font-family:var(--mono);font-size:.58rem;font-weight:700;color:var(--ink)}
 /* Formal hall, under the Caff on the Info shelf. Set against the right margin
    because it is an aside to the card above it rather than the next thing to
    read: the eye finds the menu first and this afterwards. */
@@ -2257,7 +2291,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
   </section>
 
   <section id="v-info" hidden>
-    <div class="vh"><h2><i>Info</i></h2><span class="note">Forms, how college works, healthcare and sport</span>
+    <div class="vh"><h2><i>Info</i></h2><span class="note">Forms, the Caff, how college works, healthcare and sport</span>
       <p class="mcrnote">Written by the MCR committee, not by the college. Where this describes college services, the college’s own pages are the current position.</p></div>
     <div class="seg" id="lodgeSeg" style="margin-bottom:var(--g2)"></div>
     <div id="lodgeBody"></div>
@@ -2476,7 +2510,7 @@ function loadGsi(){
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbzMDAs4Or0isbZErhuttpKB6R3NseQvnLGji6cf1_xRbRfdQxiBU4hjQDoq9WHnQH3F/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwJcVpzPhkP1PiOm2X7jhUdP__1dbgUB2iCteDvGqrd7hGGIjGBfR3Ga7iZE59t4MDI/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -3901,22 +3935,41 @@ let menuDay = 0, menuSit = "";
 /* Label and colour class for each mark the college puts against a dish. */
 const MENU_MARK = { vegetarian: ["V","v"], vegan: ["Ve","ve"], halal: ["H","h"], "gluten-free": ["GF","gf"] };
 const CAFF_URL = "https://www.jesus.cam.ac.uk/college/life-jesus/food-and-drink/cafeteria-lunch-menu";
+/* ONE DISH, ON ONE LINE.
+   The name, then what it is, then what it costs, in that order and touching.
+   The old row let the name grow to fill, which pushed the price out to the far
+   margin: a short dish and its price ended up an inch and a half apart with
+   nothing in between, and the eye had to travel to pair them up.
+
+   The allergens are no longer a second line of their own. They were the single
+   biggest thing on the card, a full row under most dishes, for a list the
+   college itself only publishes as a summary. They are on the line if they are
+   short and on the dish's own tooltip either way, and the legend under the card
+   says to ask at the counter, which is the only safe answer anyway. */
 function menuDish(x){
   const marks = (x.marks || []).map(k => {
     const m = MENU_MARK[k];
     return '<i class="' + (m ? m[1] : "") + '" title="' + esc(k) + '">' + esc(m ? m[0] : k) + "</i>";
   }).join("");
-  return '<li><span class="dn">' + esc(x.name) + "</span>" +
-    (marks ? '<span class="dm">' + marks + "</span>" : "") +
-    (x.price ? '<span class="dp">' + esc(x.price) + "</span>" : "") +
-    (x.allergens && x.allergens.length ? '<span class="da">' + esc(x.allergens.join(", ")) + "</span>" : "") +
+  const all = (x.allergens || []).join(", ");
+  /* mk, mp and mg rather than dm, dp and da: .dp is already the sign up pill on
+     an event row, and a two letter class in a file this size will collide with
+     something sooner or later. */
+  return '<li' + (all ? ' title="Allergens: ' + esc(all) + '"' : "") + "><b>" + esc(x.name) + "</b>" +
+    (marks ? '<span class="mk">' + marks + "</span>" : "") +
+    (x.price ? '<span class="mp">' + esc(x.price) + "</span>" : "") +
+    (all && all.length <= 30 ? '<span class="mg">' + esc(all) + "</span>" : "") +
     "</li>";
 }
 const mealHas = m => !!(m && Array.isArray(m.courses) && m.courses.length);
+/* Courses as small tinted blocks that pack into columns, so a menu of five
+   courses is a block of colour to scan rather than a list to scroll. The tint
+   rotates through five so two courses side by side are never the same. */
 function mealBody(m){
   if (!mealHas(m)) return '<p class="lede" style="margin:0">Not published for this sitting.</p>';
-  return m.courses.map(c => '<div class="course"><span class="cn">' + esc(c.course) + "</span><ul>" +
-    c.dishes.map(menuDish).join("") + "</ul></div>").join("");
+  return '<div class="meals">' + m.courses.map((c, i) =>
+    '<div class="mcourse c' + (i % 5) + '"><span class="cn">' + esc(c.course) + "</span><ul>" +
+    c.dishes.map(menuDish).join("") + "</ul></div>").join("") + "</div>";
 }
 /* Which sitting you are shown before you touch anything: the one you would
    have asked about. Lunch until the middle of the afternoon, dinner after. */
@@ -4266,10 +4319,15 @@ function noticeHtml(n){
    Nothing is longer than a screen. */
 let lodgeTab = "now", jcsuQ = "", jcsuOpen = false;
 /* Info is what is left of the old Lodge once the board and the room have rooms
-   of their own: the forms, how college works, what to do when somebody is ill,
-   and the sport. */
+   of their own: the forms, the food, how college works, what to do when
+   somebody is ill, and the sport.
+
+   The Caff has a shelf of its own rather than sitting at the top of the forms.
+   A menu is not a form, it is the one thing on Info that is different every
+   day, and it was pushing the three links everybody actually comes here for
+   off the bottom of the screen. */
 const LODGE_TABS = [
-  ["forms","Forms and links"], ["guides","How college works"],
+  ["forms","Forms and links"], ["food","The Caff"], ["guides","How college works"],
   ["health","First aid and health"], ["sport","Sport"]
 ];
 function renderLodge(){
@@ -4293,15 +4351,24 @@ function renderLodgeShelf(){
   if (!S) return;
   const counts = { forms: (S.links || []).length, guides: (S.resources || []).length,
     sport: (S.clubs || []).length };
-  if (["forms","guides","health","sport"].indexOf(lodgeTab) < 0) lodgeTab = "forms";
+  if (["forms","food","guides","health","sport"].indexOf(lodgeTab) < 0) lodgeTab = "forms";
   put("lodgeSeg", LODGE_TABS.map(t =>
     '<button data-lodge="' + t[0] + '" aria-pressed="' + (lodgeTab === t[0]) + '">' + esc(t[1]) +
     "</button>").join(""));
-  put("lodgeBody", { forms: lodgeForms, guides: lodgeGuides,
+  put("lodgeBody", { forms: lodgeForms, food: lodgeFood, guides: lodgeGuides,
     health: lodgeHealth, sport: lodgeSport }[lodgeTab]());
-  /* The Forms shelf leaves an empty slot for the Caff; this fills it, and does
-     nothing at all on the other three. */
-  if (lodgeTab === "forms") renderTodayMenu();
+  /* The Caff shelf leaves an empty slot for the menu card; this fills it, and
+     does nothing at all on the other four. */
+  if (lodgeTab === "food") renderTodayMenu();
+}
+/* THE CAFF, ON ITS OWN SHELF.
+   The card itself is built by renderTodayMenu, which paints this slot and the
+   one on Today from the same string so the two can never disagree. */
+function lodgeFood(){
+  return '<div id="infoMenu"></div>' +
+    '<div class="formalline"><p>Formal hall is on JNet, behind Raven, so it cannot be read here.</p>' +
+      '<a class="btn pill sm" href="' + esc(formalUrl()) + '" target="_blank" rel="noopener">' +
+      "The formal hall menu</a></div>";
 }
 /* THE BOARD.
    A cork board, not a filing cabinet: small squares of paper, the newest first,
@@ -4338,15 +4405,7 @@ function lodgeForms(){
   const card = l => '<a class="linkcard" href="' + esc(safeUrl(l.url)) + '" target="_blank" rel="noopener">' +
     '<div class="t"><b>' + esc(l.name) + "</b><p>" + esc(l.note) + "</p>" +
     '<span class="who">' + esc(l.who) + "</span></div><span class=\"arw\">&#8599;</span></a>";
-  return '<div class="grp"><b>Eating in</b></div>' +
-    /* The Caff lives here permanently as well as on Today, because Today is
-       about tonight and this is where somebody looks when it is not tonight.
-       renderTodayMenu fills it; the same builder paints both. */
-    '<div id="infoMenu"></div>' +
-    '<div class="formalline"><p>Formal hall is on JNet, behind Raven, so it cannot be read here.</p>' +
-      '<a class="btn pill sm" href="' + esc(formalUrl()) + '" target="_blank" rel="noopener">' +
-      "The formal hall menu</a></div>" +
-    '<div class="grp"><b>The three everybody needs</b></div>' +
+  return '<div class="grp"><b>The three everybody needs</b></div>' +
     L.filter(l => first.indexOf(l.key) >= 0).map(card).join("") +
     '<div class="grp"><b>Jesus College, in its own words</b></div><div class="linkgrid">' +
     L.filter(l => first.indexOf(l.key) < 0).map(card).join("") + "</div>";
@@ -4461,18 +4520,25 @@ const FA_ICON = {
   globe: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17"/>' +
     '<path d="M12 3.5a13 13 0 0 1 0 17 13 13 0 0 1 0-17Z"/>',
   mind: '<path d="M15.5 20.5v-2.2a5.6 5.6 0 0 0 3.2-8.6A6.2 6.2 0 0 0 7 5.6 4.4 4.4 0 0 0 7.6 14h1.9v6.5"/>' +
-    '<path d="M9.5 14v-2.2"/>'
+    '<path d="M9.5 14v-2.2"/>',
+  tooth: '<path d="M12 6.2c-1.5-1.1-3.1-1.6-4.5-1.2C5.7 5.6 4.8 7.1 4.8 9.2c0 1.5.3 2.8.7 4.1.4 1.5.6 2.7.8 4.1.2 1.5.5 2.9 1.5 2.9s1.2-1.2 1.5-2.7c.3-1.6.5-2.8 1.4-2.8h1.3c.9 0 1.1 1.2 1.4 2.8.3 1.5.5 2.7 1.5 2.7s1.3-1.4 1.5-2.9c.2-1.4.4-2.6.8-4.1.4-1.3.7-2.6.7-4.1 0-2.1-.9-3.6-2.7-4.2-1.4-.4-3 .1-4.5 1.2Z"/>',
+  heart: '<path d="M12 20.2S3.8 15 3.8 9.4a4.4 4.4 0 0 1 8.2-2.3 4.4 4.4 0 0 1 8.2 2.3c0 5.6-8.2 10.8-8.2 10.8Z"/>' +
+    '<path d="M6.4 12h2.4l1.4-2.4L12 14l1.4-2h4"/>'
 };
 const faSvg = k => '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">' + FA_ICON[k] + "</svg>";
 function lodgeHealth(){
   /* Opening hours and direct numbers are the part of this that goes wrong
      without anybody noticing, so the college and the NHS are linked rather
-     than copied out. A wrong opening time is worse than none at all. */
+     than copied out. A wrong opening time is worse than none at all. What is
+     written out here instead is the part that does not change from year to
+     year: how the NHS is arranged, what each door can actually do for you, and
+     what it costs. */
   const w = (S.links || []).filter(l => l.key === "welfare")[0];
   /* A place to go, as one line you can scan and a body you open only if you
      want it. The row and the detail used to be two separate things: a table of
-     six doors, and then six sections underneath saying the same six things
-     again at length. Now the row is the section. */
+     doors, and then a section underneath for each saying the same thing again
+     at length. Now the row is the section, which is also why the detail can be
+     fuller than it was: none of it costs anything until it is opened. */
   const door = (cls, icon, name, when, tag, body) =>
     '<details class="fadoor ' + cls + '"><summary><span class="ic">' + faSvg(icon) + "</span>" +
     '<span class="nm"><b>' + name + '</b><span class="when">' + when + "</span></span>" +
@@ -4488,76 +4554,154 @@ function lodgeHealth(){
     '<div class="fa999"><div class="fahead">' + faSvg("siren") +
       "<h4>If this is an emergency, ring 999</h4></div>" +
     "<p>Chest pain, trouble breathing, bleeding that will not stop, somebody who will not wake up, " +
-    "a serious blow to the head, or thoughts of ending your own life.</p>" +
-    "<p>Ring the Porters as well. A Porter will reach you before an ambulance can find the right " +
-    "staircase, and they will meet it at the gate and bring it in.</p>" +
+    "a serious blow to the head, weakness on one side of the face or body, or thoughts of ending your " +
+    "own life.</p>" +
+    "<p>Ring the Porters as well, on the number below. A Porter will reach you before an ambulance can " +
+    "find the right staircase, they will meet it at the gate and bring it in, and they are trained in " +
+    "first aid. Give the operator the college address and the staircase and room, and stay on the line.</p>" +
     '<div class="fanums">' +
       '<a href="tel:999"><b>999</b><span>Ambulance, police, fire</span></a>' +
       '<a href="tel:+441223339339"><b>01223 339339</b><span>Porters\u2019 Lodge, any hour</span></a>' +
       '<a href="tel:111"><b>111</b><span>NHS advice, any hour</span></a>' +
     "</div></div>" +
 
-    /* 2. SIX DOORS, IN THE ORDER SOMEBODY SHOULD CONSIDER THEM. */
+    /* 2. THE DOORS, IN THE ORDER SOMEBODY SHOULD CONSIDER THEM. */
     '<div class="grp"><b>Where to go</b><span class="ref" style="margin-left:auto">tap for more</span></div>' +
     '<div class="fadoors">' +
       door("now", "siren", "999 or A and E", "Life threatening, or an injury that cannot wait.", "Now",
-        "<p>Addenbrooke\u2019s Emergency Department, Hills Road CB2 0QQ, is open at every hour. You do " +
-        "not need to be registered with a GP and you do not pay at the door. Bring identification and " +
-        "your visa share code if you have one; nobody is turned away without them.</p>" +
-        "<p>Patients are seen by how ill they are, not in the order they arrived, so the wait can run " +
-        "to hours. Anything that is not an emergency will be seen sooner by 111, a pharmacy or your GP.</p>" +
-        "<p>It is two and a half miles south of Jesus. The Universal and the Citi 1 and 2 run there; a " +
-        "taxi takes about fifteen minutes.</p>" +
+        "<p>Addenbrooke\u2019s Emergency Department, Hills Road CB2 0QQ, is open at every hour of every " +
+        "day. You do not need to be registered with a GP and you do not pay at the door. Bring " +
+        "identification and your visa share code if you have one; nobody is turned away without them.</p>" +
+        "<p>Patients are seen by how ill they are, not in the order they arrived, so the wait can run to " +
+        "hours. If somebody can be moved safely and it is not life threatening, making your own way there " +
+        "is usually quicker than waiting for an ambulance. Anything that is not an emergency at all will " +
+        "be seen sooner somewhere else: 111, a pharmacy, an urgent treatment centre, or your own GP.</p>" +
+        "<p>It is two and a half miles south of Jesus, on the Biomedical Campus. The Universal and the " +
+        "Citi 1 and 2 run there; a taxi takes about fifteen minutes in normal traffic. Parking is paid " +
+        "and slow, so do not drive if there is any alternative.</p>" +
+        "<p>Somebody going in alone should tell a friend, and it is worth taking a phone charger: the " +
+        "wait is long and being reachable matters more than it sounds.</p>" +
         links(out("https://www.cuh.nhs.uk/", "Addenbrooke\u2019s", "CUH"))) +
       door("now", "phone", "NHS 111", "You are not sure how serious it is.", "Now",
-        "<p>Free, answered at every hour of the year. They will tell you what to do, and they can book " +
-        "you a slot and say where to go, which is quicker than turning up at A and E and finding out.</p>" +
-        links('<a class="btn pill sm" href="tel:111">Ring 111</a>')) +
+        "<p>Free, answered at every hour of the year, and the right first call whenever you cannot tell " +
+        "how bad something is. They will tell you what to do, and they can do more than advise: book you " +
+        "a slot at an urgent treatment centre, arrange an out of hours GP appointment, send a " +
+        "prescription to a pharmacy that is open, or have a nurse or doctor ring you back.</p>" +
+        "<p>111 online answers the same questions for anything that is not urgent, which is easier than " +
+        "a call if speaking is difficult or English is not your first language. Interpreters are " +
+        "available on the phone line if you ask.</p>" +
+        "<p>If you are deaf or hard of hearing, 18001 111 reaches the same service through Relay UK.</p>" +
+        links('<a class="btn pill sm" href="tel:111">Ring 111</a>' +
+          out("https://111.nhs.uk/", "111 online", "NHS"))) +
       door("soon", "cross", "The Health and Wellbeing Centre", "In college, Library Court.", "This week",
         "<p>Staffed by a Community Health Practitioner and a Mental Health Nurse, and the college " +
         "physiotherapist is arranged through the Practitioner. Register there when you arrive, as well " +
         "as with a GP rather than instead of one. It is the sensible first stop for an ordinary problem, " +
         "and they know which door in college opens next when it turns out not to be ordinary.</p>" +
+        "<p>It is not a GP surgery and cannot be your registered practice, so a prescription, a referral " +
+        "or a sick note still comes from your GP. What it is good for is being seen quickly by somebody " +
+        "who knows the college, without crossing town for it.</p>" +
+        "<p>What you say there is confidential and is not passed to your department or your supervisor " +
+        "without your agreement, except in the rare circumstances where anybody in the NHS would have to " +
+        "act. If you want something taken up with your department, say so and they will help you do it.</p>" +
         '<p class="fnote">Opening hours change from year to year, so they are not printed here where ' +
         "they would quietly go stale. The college\u2019s welfare page carries them, and the Lodge will " +
         "tell you if you would rather ask a person.</p>" +
         (w ? links(out(esc(safeUrl(w.url)), "College welfare", "Jesus College")) : "")) +
       door("soon", "pill", "A pharmacy", "A cough, a rash, hay fever, emergency contraception.", "Today",
-        "<p>No appointment. A pharmacist can treat a good deal outright and will say plainly when " +
-        "something needs a doctor. 111 will name the nearest one open.</p>") +
+        "<p>No appointment, and the most under-used door on this page. A pharmacist can treat a good deal " +
+        "outright, will say plainly when something needs a doctor, and can often see you in the minutes " +
+        "it would take to fail to get a GP appointment.</p>" +
+        "<p>They also handle emergency contraception, which works better the sooner it is taken, and they " +
+        "have a private room if you ask for one rather than saying it at the counter.</p>" +
+        "<p>NHS prescriptions in England carry a fixed charge per item, whatever the medicine costs. If " +
+        "you are on a low income, the NHS Low Income Scheme can cover it, and a prepayment certificate is " +
+        "cheaper than paying per item once you need more than a few in a year. Contraception is free.</p>" +
+        "<p>111 will name the nearest pharmacy that is open, which matters on a Sunday.</p>" +
+        links(out("https://www.nhs.uk/nhs-services/help-with-health-costs/", "Help with health costs", "NHS") +
+          out("https://www.icash.nhs.uk/", "Sexual health, iCaSH", "NHS Cambridgeshire"))) +
       door("plan", "stetho", "Your GP", "Anything ongoing, prescriptions, referrals, vaccinations.", "First fortnight",
         "<p>Do this when you arrive, not on the morning you wake up ill. Being registered at home does " +
         "not cover you in Cambridge and you cannot be registered in two places. It is free, and you need " +
-        "neither proof of address nor an NHS number.</p>" +
+        "neither proof of address nor an NHS number, nor to be a British citizen.</p>" +
         "<p>Put your address into NHS Find a GP, which lists the practices whose catchment covers it, " +
         "then register through that practice. It takes a few working days. If you are here only for a " +
         "short period, ask to be seen as a temporary resident instead and leave your registration at " +
         "home in place.</p>" +
+        "<p>Once you are registered, the NHS App is worth ten minutes: it holds your NHS number, orders " +
+        "repeat prescriptions, shows test results and gives you your vaccination record.</p>" +
+        "<p>Two things to ask about in your first term. The meningitis MenACWY vaccination is recommended " +
+        "for students and is free if you have not had it. So is the flu jab for anybody in an at-risk " +
+        "group, from around October.</p>" +
         links(out("https://www.nhs.uk/service-search/find-a-gp", "Find a GP", "NHS") +
+          out("https://www.nhs.uk/nhs-app/", "The NHS App", "NHS") +
           out("https://www.lensfieldpractice.org/", "Lensfield Practice", "NHS practice") +
           out("https://www.newnhamwalksurgery.nhs.uk/", "Newnham Walk Surgery", "NHS practice"))) +
+      door("plan", "tooth", "A dentist", "Toothache, check-ups, anything that has cracked.", "Register early",
+        "<p>Separate from your GP, and the one people forget until it is three in the morning. NHS " +
+        "dentists taking new patients are genuinely scarce in Cambridge, so look while you have no " +
+        "toothache rather than when you do. You can register with any practice regardless of where you " +
+        "live, and there is no catchment.</p>" +
+        "<p>NHS dental treatment is charged in bands rather than free: one price for an examination, a " +
+        "higher one for fillings, higher again for crowns and dentures. The Low Income Scheme covers " +
+        "this too.</p>" +
+        "<p>For sudden pain out of hours, ring 111 and ask for the emergency dental service rather than " +
+        "going to A and E, which cannot treat teeth.</p>" +
+        links(out("https://www.nhs.uk/service-search/find-a-dentist", "Find a dentist", "NHS") +
+          out("https://www.nhs.uk/nhs-services/dentists/", "What NHS dentistry costs", "NHS"))) +
       door("plan", "mind", "Welfare and counselling", "How you are doing, rather than a symptom.", "Any time",
-        "<p>Four routes, and none of them is more legitimate than the others. The MCR welfare officers " +
-        "read the welfare thread on the Ask page, and it can be sent without your name. College keeps a " +
-        "Welfare Tutor on duty at every hour of the year, and the Lodge will say who is on tonight. The " +
-        "University Counselling Service is free and you refer yourself. And Samaritans answer at any " +
-        "hour, whether or not you are in crisis.</p>" +
+        "<p>Several routes, and none of them is more legitimate than the others. You do not have to be " +
+        "in crisis to use any of them, and using one does not close the others.</p>" +
+        "<p><b>The MCR welfare officers</b> read the welfare thread on the Ask page, and it can be sent " +
+        "without your name. They are graduate students, not clinicians, and the useful thing they do is " +
+        "know how college works and who to point you at.</p>" +
+        "<p><b>College</b> keeps a Welfare Tutor on duty at every hour of the year: ring the Lodge and " +
+        "ask who is on. This is also the route for anything academic that has become a health problem, " +
+        "and for asking about an intermission or an extension on medical grounds.</p>" +
+        "<p><b>The University Counselling Service</b> is free to matriculated students, you refer " +
+        "yourself, and it runs groups and workshops as well as one to one appointments. There is usually " +
+        "a wait, which is a reason to put your name in early rather than a reason not to.</p>" +
+        "<p><b>The NHS</b> runs talking therapies you can refer yourself to without going through a GP, " +
+        "and your GP is the door to anything beyond that.</p>" +
+        "<p><b>Tonight</b>, Samaritans answer at any hour, and Cambridge Nightline is answered by trained " +
+        "students through the night in term.</p>" +
         '<div class="acts"><button class="btn pill gold sm" data-ask="welfare">Write to a welfare officer</button>' +
         '<a class="btn pill sm" href="tel:116123">Samaritans, 116 123</a>' +
         '<a class="btn pill sm" href="tel:+441223339339">Ring the Lodge</a></div>' +
         links(out("https://www.counselling.cam.ac.uk/", "Counselling Service", "The University") +
+          out("https://cambridge.nightline.ac.uk/", "Cambridge Nightline", "Students") +
+          out("https://www.nhs.uk/service-search/mental-health/find-an-nhs-talking-therapies-service",
+              "NHS talking therapies", "NHS") +
           out("https://www.samaritans.org/", "Samaritans", "Samaritans"))) +
+      door("plan", "heart", "A long-term condition or a disability", "Anything that needs arranging in advance.", "Early",
+        "<p>If you have a condition that will need managing while you are here, two things are worth " +
+        "doing before term rather than during it. Register with a GP early and ask them to request your " +
+        "records, so a repeat prescription does not lapse in the gap. And tell the University\u2019s " +
+        "Accessibility and Disability Resource Centre, which arranges adjustments for teaching, " +
+        "examinations and fieldwork.</p>" +
+        "<p>College can help with accommodation and with anything about your room, and the Tutorial " +
+        "office is the place to raise it. None of this goes to your examiners as anything other than an " +
+        "adjustment.</p>" +
+        links(out("https://www.disability.admin.cam.ac.uk/", "Disability Resource Centre", "The University"))) +
     "</div>" +
 
-    /* 3. THE ONE THING THAT IS NOT A DOOR. */
+    /* 3. THE ONE THAT IS NOT A DOOR. */
     '<div class="grp"><b>If you came here on a visa</b></div>' +
     '<div class="fadoors one">' +
       door("plan", "globe", "The health surcharge covers you", "Nothing further to buy.", "Good to know",
         "<p>The Immigration Health Surcharge paid with your visa application gives you the NHS on the " +
-        "same terms as somebody who has lived here all their life. It is not insurance. If you are in " +
-        "the country for six months or more, register with a GP as everybody else does, and do it early.</p>" +
-        '<p class="fnote">What it covers follows the immigration rules rather than the term, so the two ' +
-        "pages below are the ones to believe.</p>" +
+        "same terms as somebody who has lived here all their life. It is not insurance, there is nothing " +
+        "further to buy, and being asked for payment at a GP surgery or a hospital is a mistake worth " +
+        "querying rather than paying.</p>" +
+        "<p>If you are in the country for six months or more, register with a GP as everybody else does, " +
+        "and do it early. Prescription charges, dental bands and eye tests are the same for you as for " +
+        "anybody else: those are charges within the NHS, not charges for being a visitor.</p>" +
+        "<p>Bring what repeat medication you can and a letter from your doctor at home naming it, since " +
+        "brand names differ and the first UK prescription is easier to arrange with the old one in " +
+        "front of somebody. Check before you travel that anything you take is legal to bring in.</p>" +
+        '<p class="fnote">What the surcharge covers follows the immigration rules rather than the term, ' +
+        "so the two pages below are the ones to believe, and the International Student Office is the " +
+        "place to ask when a form does not fit your circumstances.</p>" +
         links(out("https://www.gov.uk/healthcare-immigration-application", "The health surcharge", "GOV.UK") +
           out("https://www.internationalstudents.cam.ac.uk/", "International students", "The University"))) +
     "</div>");
