@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Freshers' Fortnight 2026 &middot; Jesus College MCR</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#8E0F14">
+<meta name="description" content="The Jesus College MCR Freshers' Fortnight app opens here shortly. Sign in with your University of Cambridge Google account.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..800;1,9..144,300..700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* The same crest, the same crimson, the same three faces as the app itself,
+   so the page people are sent to now and the app they open later are plainly
+   the same thing. Everything is in this one file: no scripts to load, no
+   images to fetch, nothing to go wrong on a phone on a train. */
+:root{
+  --crimson:#B4141B; --crimson-2:#8E0F14; --crimson-3:#6B080D;
+  --cream:#FBF3EC; --cream-2:#F2E4D8; --cream-3:#E2CDBC; --paper:#FFFDFA;
+  --ink:#2A1012; --ink-soft:#8C6062;
+  --gold:#E2A93C; --gold-2:#F7DDA6; --gold-ink:#4A2E00;
+  --display:'Fraunces',Georgia,'Times New Roman',serif;
+  --ui:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  --sat:env(safe-area-inset-top,0px); --sab:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;min-height:100%}
+body{
+  background:#8E0F14;
+  background-image:
+    radial-gradient(1000px 560px at 70% -10%,rgba(255,255,255,.12),transparent 62%),
+    linear-gradient(178deg,#B4141B,#7E0A10);
+  background-attachment:fixed;
+  color:var(--cream);font-family:var(--ui);font-size:16px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  display:grid;place-items:center;
+  padding:calc(20px + var(--sat)) 20px calc(20px + var(--sab));
+}
+::selection{background:var(--gold);color:var(--gold-ink)}
+h1,h2{font-family:var(--display);font-weight:600;letter-spacing:-.015em;margin:0}
+
+.card{
+  width:100%;max-width:440px;background:var(--cream);color:var(--ink);
+  border-radius:24px;padding:26px 26px 20px;
+  box-shadow:0 40px 80px -30px rgba(0,0,0,.75);
+  animation:riseIn .42s cubic-bezier(.2,.8,.3,1) both;
+}
+@keyframes riseIn{from{opacity:.28;transform:translateY(9px)}to{opacity:1;transform:none}}
+
+.crest{display:flex;align-items:center;gap:14px;margin-bottom:18px;
+  user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.crestmark{display:block;--ch:60px;flex:0 0 auto;
+  background:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAAFvCAMAAAA46HROAAAAflBMVEUjEQ5ZExSiGCHTJC8AAAAAAADRpVJnUShdXl7X2tqSdDman54BAACwi0XzwV/+M0B7goK8wsI6QkJNPkA7NEHVutOhf0C+v8C6wL/Bvr4AAAAAAADlKDTpuFv9/f33w2EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADOmoiCAAAAIHRSTlP0/v7+XqD+/v///v8t/v///////////////wH+/v7//iF92YgAABq4SURBVHja1Z3pgqOqEoALEE2M6Zk559ytTdr3f8vLvgkK7vHPTHc6iZ+1AkUB32uuquq+L3LBGgzo+776fJCKYcBlSGANB2CC+r77WJCukxyIvF4EevqJIF1VUaZOQKnkeL3wRZSrCKRit28uyfF6oWuIBEoxEMKYYHYpDi6SzwLhGMjcvr3INcw9F6TjloFfkYuZe/VBIIwjivFpIFWS48NUC3qU4GDGDh9k7GmBfJb7ZZpFUiDwQQGRpyOvtIl8DEhlw3jMRC4RD7NAaFoeXLM+JmnsJiydmfolfFYOCBsHApng6D4DhA8Dp1xvf5VBO8xmWK6hE4zcn9B1huwzIBD4K8QH6cj6q+twTIPQUKsI4TByZMjT4ctMBs2AROMgkSrGxEG/vz8DZJyYYASIX2KseymOGZDA77JE9/G4mVE7VB8C0oUS6W/3x/3n5sxA0M+wkWAUgvt//c1Y/uWAXMfeS7wWgju78/u9vyLJXByxVkJe6J8f6G8/j96/PmHKtPMcMOrv98fPHQKQa8gEsoZUhLldzMZQ/9x/7rc+vD5izM7MBFTcwDwp4dNCoUgu4btglsNeTCZiqhSPZFJdHKSjvgrZYXp/OYOHubGILxI9vL2emcBkzpgAGUvkfOWCTPsQF0lK5PypFJiKIQmBkBgIvSxIKBAnxvexq/sQEOTNyV1PJLk2gv25k+uJZHI8UskLgiEv9BcUSU4AGA1L+guKJAMknPpFKRB6bZDKpCYzAjlXJDkg6EXmLeRskRRKhEwJ5NTwDkW2ThLBcOuMSzjLbmuQzpkAJjAJskUS3JmKF6DVpiAinUd4xtA3EomiAHaVsWQ9QzHAAj1VuqNIKvlFsuJFTjDnzmdmfnPXZ15rRCJqJMGt2yFyfoB2m4F8QyYIXYeBRotjUizzKLkgNFckS4MijWLIhTHIeEKbgyzTLb7Gh5JLlULDZmxlc5BFulVNrbjq5crpj84F6fsddatKFbUFtjI1OZtfr7Wfbk2WiHjZ6gQJbKxZC0LJVMmOTwIT8oZtve8C3aK5HCJBgpUgBRyF5l7AMVn3nQfSlYDAbhzCTugakKoEpMTcqzKOiQp22NrWi3SrmCNdxwOb23qBuS/gSFZWweYmki+SRRwp1wXbm0ju2H0ZhwyMC0GgFKTakSPhumAHzcrSreUccRLY3GflhZKun6iUTBOQpBOGjcN6pm51sIjDCHHshGEHU88QCUzUqE+qFEm5LtjB1OfrOujMOCpdvk5SZgK7CEQYfDX1kUs4uBxwKsLDPgKZrLDrljosRyKjRBj2EsgECl1kIDI7kQN4IpWrKwGBftUVmZBaqlj81rHkwWORwJ4CiXrixYqF9RuR/NcXCewrkIhQFkUQL4qo//gigb0FEgilg4Wel7xeJAgn3pYP2F0gXu4lViheZImdk1Fc9BIVOEAghkTMUy/N3a1CIr0Y6OoWHCEQER4pNcUgZBnJKCy6WyDhEIHEq4wW2zrYJLjLAoF9QHqxUQCLveSkxEyw632DbcJwvEACKJzNolQKIxLZlQqbDqj2ZXFTrRfG+SDQH3YhXDawUuJxrB1O1iybX86gIOSYiQXpM0Bof+w1uUai1AqcAlHs7aW/EMikXxYgxFEuCQI5IHA4SGpvmmPoRrmkC7P+t6Rc9gwSrG5cgxAV4NXPKAOk6q9AovMRk19h/TN6XRrEsxNiHj12CvPBGyxeFsSJedweiMwWiQ00QiRgBovXBUEOCArDoNhiAHzfGrk8SI/DzF1KxiibExWvDeLMJpoBlO4cxQVBPKFd1P16yoWtp0La53LZOMPeHJAzAqKvXHZQqLRJ+GJiYksuCD0NRFmynelV2kQko6NbFwcxE3CiyZ3WJuLMA5FRm5zLpPFje0dimkLql7QSHT2MbuVlv2eCYOOrlKGIqKgdGnHmITLGI92JIKAmFw2I0CYzVQFwyTF7TlTE3nQYGk81nj6LkgmitYm4oxKUOdN4pm6hIOHS4xDw/EDu3C89H0Tn68zQndguxYSylxXOdsCOx/VBkPjHW684ahJ7oZGYlXVjKhqkR/5S+0HLCgtBSJh3maG6uAoWQ+FcI3HTRuRFFb5MUbLOfp5InIVob4yOEp0IM3o+nD52d1bYFc8CkO5ka/dXpi1PMch5yoX80lLiCARH6j/na1HomUYSFUi0FeFeZU5bgpBex3PjlBfVNJ4+UwdmgILSNcy5+xBPBEHqBx3l45X+WeWy9EzVQuoH4qQt1TG18RtcldkgzDiopEL2N4fs6NmEw3QD4Bx+iwMSLyvO3exRHcvxLf2UrMEMu3z13QoQ2Q30kIsng6rKTpbBeyV3CYGUdPI/SL2o/C4gYvMhL7ul/qJJvDq6ZB8R3ef5V6E4FAjf5EZVzd383qSyQyJgD3NwPtbUClf2Vd9Ekjv4CncN0h04+H1TAOpVPIsd4dWoKjV9SEjp9seObm4PCekbLsdESL9y+95ejjhrM5Y3yZV8y4LeBtsJpcp8cHhWsRYeNtRtY/U01yzJ3G7K7+WnJlX0IA7rs/CkLi5vm7Faw7pcgeCcFtyrThajuxuI3YuFZt6yrpFJRxcbS37azbNHguY2Ca1ukrPU7rtcX4/UlvwZk9qg2w/dT7EkB8lpib5F2yK6l8f65gYi2qLM993ZpAlptZOBdAXc23RTLR11VUVPKKd10PdWbWHpHhyyw2LeX27W35ZubiBl13aNeuFUjg1BulM5NgTJ9F17tUDcsgc0PZFjU5BuS391Jsiccu16zMe27cXpKVq1A8iETOjOHVu3bvieyOr3b9e6fef6ilJwaZq2OeJEjJ1a8POucnUjLPw9vJsDWv3v9QW0b79qKZHhXcP+yrUXSMUAnmIJrW/fQ9vvfmjBXiBdj4YamGkwkuf7AOXaD4QZR8PEwOdz3gco124gADXTKPotRTJww/9IEGbtNTMSECGyHd7Pva1kR5CG+1/RG6F+v9/wuSA6IDJbZxf6SJDOduhuhoFzfHG/RSmtqq77CJCuqrz5YHirq3Z+C7S0mfqxILY/hb3awZA0QT5Jq+qCIF1ijaF+m2uon80oK95MMttMmY5XF1RzdvR2r+GrjYwbaXUNkFAUwBtsENkxuXEE8v56160ovmKMsDnLSpBgpQeZPhSIUTzrwRXHE5xCWIJ9GFirY7CZMMBtpoH65j0MikP8y3Nhrm+AiNmv6sOsE8sKEHdUG3QEwSyaD9xPiaDeNsL9RttTELzRNMtikCpRo6sWYJtBDBChfn89uRNmCSROtW3ZBGUhiNWpBgkQEp7ig/TwkGdZLLw3kOxKwdJjxzFXB4IYaTC3NKA+bHBAtLaBHh0yHgTJhmws2gyDjZfLpAIrbAP+/Zbj8QAEa9eE+MAdAPFEBVAaROQxw7tdgwLlDld/GxsucSMOdxYozRLHvvbAbg4T/sgRSraG7kG6NzZqgcXTebDQOBSG1Jyg7SJGyFZd8HVZpmIDTIA0Ot64KLuCaK3SGG85hoXXhP5jcbPJLqzgZZYOSqF+wQJxQPs23yxAULr3aK96FaX+SjotLwMwtkJ3AtHiaNzMI+K0gseNTX07SYHUX35uWStnXDLRCqU+F7zHJ6JEunkRVt0lRRFG9M9wkOsHeVm1PYhSq+btc0yDsAyE2INQ8JT3DUjeTaF6lRVTQB1gyDCS066MYJxyWujrHUFRQslVr6KzFUbiUGFkWW/SsfeNC2XDc6xo1DrEYGk/ECsUuhWI5ED1EPuulSBBGAk+vc4nyd71lpD/cyIe5nUsDMJIcDWblTmpCqbEU9sEpJ4AkSlQxpoEZHFA6qGJ71kBEg8jEUOZdV6Q43Yh+cwECFoHAu/JSxnKHAlkcKCJb2l2B1FBd64uFVZxrAYR8XCYJUHzJPPtRJphZ5BmHkQ5r24ZSAaHBMH7gwzNnJ3AjL+a+ZYBrQdpM0A0yRKQHI7VIJALMksCkxxo9uM3AHlmgSjfRUtBaBbHWpDZDCWfBCY44H0ISJ3JoVbvirbvVTKeXwxkqCfGJ5B2vDkiH2A1CGSDqEFDwVlv0Gd7xQ1A3vmXzIUhF4T2mWGKjRCPBVFOOHNjvjAQlOdKjgZRriur50PXlyju4SB1wkwgbiBFvv1QkJSZwAoDOQVEmclsE6SuL/vs40GUmXQzIGWKdQqIjCYwDVKVKdY5EokqF6xSrHNAlHJNgdBCxVoLgpeBSM81cfpesWKdBCJz1YnT96AoGT0RRIZFSIEsEMhZIGN7h0AgsMDsTgAZiwQCgbTDZ4BIe483ZV0ikC1AhkUk4pujh9YtEsgGIH3LS9NMldpSkcBCgXyxb/56v9t+PQivrGva57MWH7pUJFAuEP5tdd22DVJ7qVYuITrFhIynfstHVCoSKBKIYHg2fl3lijnsgMTg1O8c2YAb3sHNsiYFEmNYzREjcWm+ZmNJ2MmfTgZ19nwYBMz1Tl2WOGKMEYp9NkiY6VhCA5CJoM4+6tnGVICfBEheG12ERHmmYKRIfJAqUqSj9akNRcERyGYEYxwYwTyjLHKEVXkgEJsB4qIIIAAhvA+Cr22jonNe1j1EJ6OoCxIx9a8xBcL4ddwVFp33qA1ZpAfuHJCRqQ9fwXYPOEISszDo6Zf11Fa3wGiWNXUmDM+4z4FwYDwdc8UiKyotSOeOcN1aYv5nh+pTDktjxSLNvTMg1EZ1ZhkoWbt/FRZodSmGWPupDIjRLKcamsviKhRjFq1hQreoBpGaVfsYCL+udxHH9gWK9FsapFK1RhbjasLwyrw9H2b8FigTaezOoWsKwxWLg2J0C7SJoA/BkNZiH7p2wBA0mEFksy+Th0unf7FOwyDozAfeJqPtMBCg2+Nxu4ESsPMLs1VsXebp+uNKgNCVSkX4FT6v2/1HXPeHqCl3fnHTh3o7UGtRqADR2xwWHpvOHvXfCJB/ysbjx1w3cSKx84uH+CaC2H8tyDKl0yggQBZKQx2NBQ/+qO+/vc7uD/HoEXvofwQImF/w//xHHHfGQO4GhEnsBmi5VDhIt2RGh6s8f7AItMa4nd1vXBA8v2HiurE/w8AFwYcB7Ib5a4jfgfsmzH79Z9moGUtrl00Z+uIpA6byN0QI52AWfHvYh/uSv1S7RbhJv9CDc6jTGtkt39mL/NYfHoj9iZQM34i0dpAZY3a2o75A3Br6Jb6/57MHjt1icauOjAUZqJNYxQ83/Mu/df55N/vT7XHLH4vKYaIEQZm+G93UDUpVIJh/P7zIr5fjt/xbVHZ9N/t55D3HQLD701246hzTRQoEskGkGJSN8XsT9/xzCwZe+BGAjM2BCRP99kDuDghBxnffMnyp2ADIQGZtHSNxERdEagsRViy+z4kI+PckCFIgj/DWjcyI8A3CGzpimrb2b5hzWsw/MVO+M6UnUvndR0iEgxKuFQIbcT+C35h5tCAIQhDPF/MP6MX3mreRdBagQKrpaWiiQ/KD+6gf89zUfZiXf36DNSX+Z+ZMMPYffu8P0PmepPJAYsonZh7kxyidSBiMcFudAIk7LTFYF37/z4Nd7HvAarJWcSYw+C1YrDbz+76LWxCBRMlNyIzg/i6huEjNncVd2C8i9poRHnTZ9bhBFEX63xQIv0EVyu430RkAe07SfDURN+vaqhSJeBcwJv5sRWSXv7grZgGiYk0IwlmRdlkEbk52gxL+t4KY9xX39jAmiX4pBUU3320hITYiX3CSFGk59z/CXvkbcP+H/+KuDBhJ8773OgH2DUZmC1wCglh92F2kQn9F8kyUAOHCkAkUSEcFSGV0jhlL82Rfyn2veGiOf7GWw79anqVlskaWchF5t/fb7W8Qqj8yGC0B5IpXfKh4Cv4UlQgkIxDupf4oR4RkoGChSaa3jrULnUP8wTJO8RVeLFeuzjpmDFbR9YMQ33L/L8tmhPfVwUjomXBZWiek62BDXKUR3AngGIiXggvBasvCYMcVSDld9Es5AaH9+tHfIBZ8nFCpf6PsAligUO9FAkQEcv730o9wl8XDoXAw5k23u0im74zUhi4J4izLEv4xMlMVCiMOtfzLKAnIx3PnWaxMYpX9B3EkN//mHuR2+838oRKPkpfUs18iswtiEJeFusUf68REaLcgRKbcMmAx+1b762Vc+pEmoxT2JoYVIsFlKsN+XDjWk4s7vDnE74d+XkrPhC6ZPE1GA6JighOFEdar9RaEZ+ZCAWWezS1e3qroysLvnL0LfltD1Ic3bDClgKV0GA2L7yAft8zgiA6VTAl0Tifi602O54BEQNRAQQgTxEMXnkTEMVCRvP8dDL23Xd3hTgV0wsgVRHg3kB5eeQpBiuQd3iMg4gNu8q0/0g756Fq5Og4iHRfwyRAEaJe5SMJ9OdLKLBTkIY1dGqMekjFtEzpzU0c3uyBSYsio4J3HIy4gED7cDCm4WuM9p1SFaISeiVgqh2lMJ5CSgBxviugk8o0RiKdbxiew8HSXKfVf6HXYRbT3lenNnZuHfNByeM2igR5yjkE83ZIpFR9xq0hxvx3IoYf7JrAxqwaZsorBhNR7rd4hiNUtOSCXcyCEa6wJyKfMv6vc624163/CYB5KR0Yg6OZak8y4eBLuBORzSHqduulc4taDzGDiIGqCQ/0r/K+b0566viNTN+a+RJIHcuwAOA5iBuUq71CD/yus+RA7cXDTOQUClEoasaNbKgO43MqVmP2TM7wkmcZb3XJzsmut8cjk3Lu5yHjE6NYlhaHyX5llPWxPuwiI1i2Cr7v+JixfJzDOUNebfBCC21CjyPjaZgkRVALjTD74syj+HOyyexcVcXzCBKJlcSCSt5VFa2q9IpwOsidALgeRYyQoOj4JZLtQsgwF+xN03pSpmD4rBSGpmsR8ILSmnk1NmX57of3hLgDkMUDGg4eEngU4y7QNq9l4Z1nByXvzMu3UfaOmaXlttbpkIY+6ns+nU/y8AQ2KLPSwcXvWdEgUQtw+rwxXte6JGmTzUv1smyb6MMpqDl0QMO43YwiLERrJQNeCFxW3yz+vOdC4sjTfaECtIfpui8z7vT5ez/5efEn5jGny5gXMYmj+8vSo2TASRaxrGHzx1LzG2K/GnJeLWZ7+zgQJCz4lxHvT60sW4BexIFP5kLMaSrxqHNgDYqL6ezJpQqYWZX6h3S9Yna683wzm6de6TpoItWVOJE8YiFO8D7kCllR1IrZlTpPWTtBUTfexLFEnhlR1pi4FRAlpJEqgD2SpnarwxLobOMWZUd1ySgfb9wkUtjTcoOCEidhyWZzGOEkYcZTA7LFbLvsd22JkjAOa+lQK3W7HGIunX8gtYI45YOwUPCfTpPj2xMgLIgfhabD34uBdc1v2nAJrtzbMLSkf65bRqgTGkyW6TeQ1/cLIXmXmwfN7u8uobtwrw69bBQMcapaz7QKNxYESSqXbWSbaLflbarztDzItGJxWLc4L860Nhhr5Ro/8bRdyN6Wvd1MfrEDGu7JgfHrKMzLgECcujECY/Gd3hH6ZzxNnTRC7gQ++Q90ikGzuG4IEG/4GNDoGZmji58R8RUFyugIM79aqFw63Jjm6pTggo1NqsMHM3nQ9w5EEydosbPQLW59ltu+pmEg0RzNpeRbEadnh/LIecfAhJB+sKx/qgIAcyDd9X9DKRP017sPte0a3COQ8GOeeTdsn1Y3MBTF/xhvN66G6iAcuiPJsbZ/dZs23vGq8xRW02537NAfEPEP3nKr67bklX7w8HtRDAKJ6p2V3BhjM10Fs0zGaN48RiDZQGJ35pBVrZMFD7Xgt8NUwvwkI8vuxg99PPYvDxBFroL5V165Akr3TVoIEjVphdIxFRmalQJpG67UWkcq4a1cg9TsPBJWCvPvYxnxz4kBOhqhBBh0An733i9pRtvSdeSA6KchvXOTvyw+aV/RNQQcMfqCQCjqg78kBmb0zBSK9WQ0l7td4F7qunYgBcX2u8MQWRL0Ec23xoG35VHBBQIw33VnU4MWAeP7rOXggyiHMdDooTlE8gcDKljsWxHFX4p0jEFQC0uQr1qgLEizpSuWAmADi/rAMBEpGonXYKmxRWyoPRLV1d/P4emLMMgFS0O8ncFlho7Dczm0eiDyVoB6BZBv7s21KTV1+OE12POv6vO5KHoj4SdMvdL86cyprxtzNNNNrhzIQJmfzloUBsTCMzDbTU0lwXQjizGlDJEXJybWGZ4n/rSMdJxc1nAxBwkG7lzRGjxIapyhzmdloSF1NtwDNUq48EH1vKBhtshSzHY9H6vxRextrXgxLuv3mgRj/ygLElz891AypND5DJHXfR44WhyX9lzNBbP7SmCXfujXN++voUcjzIoGsNrlZypUJ4g63gJcQNI2bBgQgGrvOCYU0t5X05Lk52SBmuiOaHNahL8gRiXJv+c294b0JSGJiK6ZaViRf5Yo10W4dDVuA8Gntca1HGxnq2ndPGigqaLc+f2JHAch71N3KdGQagZiR/1BqIMmzFeZSuJoP69rn+IWneGG0rPDk1TOiaMjt9yX+tnX/tE19rksKpYdETKVwqaWZIbXQIzv9+K+N/3iYrMuZOlohdWxHNe+6Tlh964uP7dAHkNRXApk8fiR9tM3lSOplR9tkH25z2DXNMXWOFVyKZIZj8mSxK5HA3GGC8P0JJPUsx8zpe1A837SP353nmDsP8QokWRyzJ1RC4WT/DhzPrMM2Zw/jhMJZ8s052rzjT+dPFaXFK0mbXrnHuGYcR0ujcyEHmQfa7DjayYOOdzcPyD60OevIZrW+2H4dzFFy+HTRIdroSD+s1SrzOPDcY82heAljtbcqOEF7yUHzxwjFVABtfdC8sxB/QOGsqcnKPJu9DOS7o6YT6jHOKl8cZSC2Weiu+mVLMKvvvUCMUPZDsRi0+94PxApln7JmW6YMVeGNlYI4ZUSbozjV1rT4tspBrH5tWjPvdnkv1KqlIEy/INLDfaXDtZPdtFpyT4tAXBRYvzuG15zDOozFIAyF2mWbNSz+TpelGCtAPBS592ooh3i7FItsYwMQx+ztcSf5hWPhaTmwBmMlSCAWvuKZs901dvbScp3aCISJpQoPb2nbug52udiLH4HVBCe00KpbfRvrQQQLTewJ96/otu8tKLYCkTq2oFsCrNao7UGkYKCAYTuIrUEUTUXpLMI26rQriOVhQBTsxX5iANsTqOv/rwJwr9ZMnngAAAAASUVORK5CYII=") center/contain no-repeat;
+  width:calc(var(--ch) * 0.545);height:var(--ch)}
+.crest small{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--ink-soft)}
+.crest b{display:block;font-family:var(--display);font-weight:700;font-size:25px;
+  line-height:1.04;letter-spacing:-.025em;color:var(--crimson-3)}
+.crest b i{font-weight:300;font-style:italic;color:var(--crimson)}
+.soon{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;
+  font-weight:700;background:var(--gold-2);color:var(--gold-ink);
+  border-radius:999px;padding:2px 7px;margin-left:6px;white-space:nowrap}
+
+h1{font-size:clamp(28px,8vw,38px);line-height:1.04;letter-spacing:-.03em;
+  color:var(--crimson-3);margin:0 0 10px}
+h1 i{font-weight:300;font-style:italic;color:var(--crimson)}
+p.lede{margin:0 0 18px;color:var(--ink-soft);font-size:14.5px}
+p.lede b{color:var(--ink);font-weight:700}
+
+.steps{background:var(--cream-2);border-radius:16px;padding:16px 16px 4px}
+.steps div{display:grid;grid-template-columns:26px 1fr;gap:12px;margin-bottom:14px}
+.steps .n{width:26px;height:26px;border-radius:50%;background:var(--gold);color:var(--gold-ink);
+  display:grid;place-items:center;font-family:var(--mono);font-size:12px;font-weight:600}
+.steps b{display:block;font-family:var(--display);font-weight:700;font-size:15.5px;
+  color:var(--ink);line-height:1.25}
+.steps small{display:block;font-size:13px;line-height:1.5;color:var(--ink-soft);margin-top:2px}
+.steps small b{font-weight:700;color:var(--ink);white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:999px;
+  padding:9px 16px;margin-top:10px;font-family:var(--ui);font-weight:700;font-size:13.5px;
+  line-height:1.15;text-decoration:none;white-space:nowrap;cursor:pointer;
+  background:var(--crimson);color:#fff;transition:.14s}
+.btn:hover{background:var(--crimson-3)}
+.btn svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round}
+
+.count{margin:16px 0 0;padding:13px 15px;border-radius:16px;background:var(--paper);
+  border:1px solid var(--cream-3);display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.count .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.17em;text-transform:uppercase;
+  color:var(--ink-soft)}
+.count b{font-family:var(--display);font-weight:700;font-size:17px;color:var(--crimson-3);
+  letter-spacing:-.02em}
+.count small{display:block;width:100%;font-size:12.5px;color:var(--ink-soft);margin-top:1px}
+
+.foot{margin-top:16px;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--ink-soft);display:flex;justify-content:space-between;
+  gap:10px;flex-wrap:wrap}
+
+@media (max-width:420px){
+  .card{padding:22px 20px 18px}
+  .crest .crestmark{--ch:52px}
+  .crest b{font-size:22px}
+}
+@media (prefers-reduced-motion:reduce){
+  .card{animation:none}
+}
+</style>
+</head>
+<body>
+  <main class="card">
+    <div class="crest">
+      <span class="crestmark" role="img" aria-label="Jesus College MCR"></span>
+      <span>
+        <small>Jesus College MCR <span class="soon">Soon</span></small>
+        <b>Freshers' <i>Fortnight</i></b>
+      </span>
+    </div>
+
+    <h1>Coming up <i>shortly</i></h1>
+    <p class="lede">The Freshers' Fortnight app opens at this address in the next few days:
+      the whole programme, your own list, the college map, and a place to put your name down
+      for everything you would like to come to.</p>
+
+    <div class="steps">
+      <div>
+        <span class="n">1</span>
+        <span><b>Keep this page</b>
+          <small>Bookmark it, or add it to your Home Screen. The app appears here, at the same address.</small></span>
+      </div>
+      <div>
+        <span class="n">2</span>
+        <span><b>Sign in with your University account</b>
+          <small>You sign in with the Google account the University gave you, the one ending
+            <b>cam.ac.uk.</b> Check your phone is signed in to that rather than a personal address and
+            you will go straight in. There is nothing to set up and no password to make.</small></span>
+      </div>
+      <div>
+        <span class="n">3</span>
+        <span><b>Check you are on the MCR register</b>
+          <small>The app admits members of the Jesus MCR, and the register is also what tells it
+            whether you are arriving this October or returning. If you are not on it yet, or it has you
+            down as a returning member when you are a fresher, put it right now and the whole
+            fortnight opens to you.</small>
+          <a class="btn" href="https://jcollegemcr.co.uk/register" target="_blank" rel="noopener">
+            Open the MCR register
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+          </a></span>
+      </div>
+      <div>
+        <span class="n">4</span>
+        <span><b>Come back when it opens</b>
+          <small>You will be able to see every event, read about it, and book a place. Some events
+            have limited places, so it is worth coming early.</small></span>
+      </div>
+    </div>
+
+    <p class="count">
+      <span class="k">The fortnight begins</span>
+      <b id="when">Tuesday 15 September</b>
+      <small id="until">Welcome Drinks in the Brewery, at 7pm.</small>
+    </p>
+
+    <div class="foot"><span>15 to 30 September</span><span>Jesus College, Cambridge</span></div>
+  </main>
+
+<script>
+/* How far off the first evening is, in plain words. It is worked out from the
+   phone's own clock against the Welcome Drinks, 7pm on 15 September 2026,
+   which is 18:00 UTC because Britain is on summer time in September. If
+   anything at all goes wrong the line already on the page is left alone. */
+(function(){
+  try{
+    var start = Date.UTC(2026, 8, 15, 18, 0);
+    var days = Math.ceil((start - Date.now()) / 86400000);
+    var el = document.getElementById("until");
+    var line = "Welcome Drinks in the Brewery, at 7pm.";
+    if (days > 1) line = "In " + days + " days. " + line;
+    else if (days === 1) line = "Tomorrow. " + line;
+    else if (days === 0) line = "Today. " + line;
+    else line = "The fortnight is under way. Open the app to see what is on.";
+    el.textContent = line;
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
