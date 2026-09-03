@@ -210,7 +210,7 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .wm i{display:block;font-style:normal;font-size:0.64rem;color:var(--gold-2);letter-spacing:.2em;
   text-transform:uppercase;margin-top:4px;font-weight:600}
 .sp{flex:1}
-.iconbtn{width:2.1rem;height:2.1rem;border-radius:13px;background:var(--t1);display:grid;place-items:center;
+.iconbtn{width:2.1rem;height:2.1rem;min-width:44px;min-height:44px;border-radius:13px;background:var(--t1);display:grid;place-items:center;
   color:var(--cream-2);transition:.18s}
 .iconbtn:hover{background:var(--t3);color:var(--cream)}
 .iconbtn svg{width:1.05rem;height:1.05rem;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
@@ -243,7 +243,8 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
   font-weight:700;display:inline-flex;align-items:center;gap:7px;transition:.16s var(--ease)}
 .btn:hover{background:rgba(255,255,255,.14)}
 .btn:active{transform:scale(.975)}
-.btn.sm{padding:7px 13px;font-size:.8rem}
+.btn.sm{padding:7px 13px;font-size:.8rem;position:relative}
+.btn.sm::before{content:"";position:absolute;inset:-3px 0}
 .btn.crimson,.btn.cream,.btn.gold{background:var(--gold);color:var(--gold-ink)}
 .btn.crimson:hover,.btn.cream:hover,.btn.gold:hover{background:var(--gold-2)}
 .btn.ghost{background:transparent;color:var(--cream-3)}
@@ -279,7 +280,7 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
   background:linear-gradient(180deg,rgba(24,2,6,.3),rgba(24,2,6,.14) 26%,rgba(30,3,7,.38) 46%,
     rgba(46,4,8,.55) 66%,rgba(38,3,7,.72))}
 .wall .sky i{position:absolute;width:26px;height:26px;border-radius:50%;transform:translate(-50%,-50%);
-  transition:left 1.1s ease,top 1.1s ease,opacity 1.1s ease,background 1.1s ease}
+  transition:opacity 1.1s ease,background 1.1s ease}
 @media(max-width:520px){.wall .sky i{width:20px;height:20px}}
 .wall .when{font-family:var(--mono);font-size:0.66rem;letter-spacing:.18em;text-transform:uppercase;
   color:var(--cream-4);font-weight:700;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
@@ -364,11 +365,16 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .seg::-webkit-scrollbar{display:none}
 /* it has to stay one line and one row: wrapping turned each option into a
    three line blob and the active one into a great oval */
-.seg button{color:var(--cream-3);font-size:.78rem;font-weight:700;padding:7px 14px;border-radius:999px;
+.seg button::before{content:"";position:absolute;inset:-3px 0}
+.seg button{color:var(--cream-3);font-size:.78rem;font-weight:700;padding:7px 14px;border-radius:999px;min-height:38px;position:relative;
   transition:.18s;white-space:nowrap;flex:0 0 auto;scroll-snap-align:start;line-height:1.2}
 .seg button:hover:not([aria-pressed="true"]){background:var(--t2);color:var(--cream)}
 .seg button[aria-pressed="true"]{background:var(--gold);color:var(--gold-ink)}
-@media(max-width:520px){.seg{padding:2px}.seg button{padding:7px 12px;font-size:.74rem}}
+@media(max-width:520px){.seg button{padding:7px 12px;font-size:.74rem}}
+/* The Health and Sport shelves are long. The shelf switcher stays under the
+   masthead on a phone; the top matches the bar exactly: safe area, 10px,
+   the 2.45rem crest, 14px. */
+@media(max-width:999px){#lodgeSeg{position:sticky;top:calc(var(--sat) + 2.45rem + 24px);z-index:30;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}}
 /* Seven columns at every width. What changes is how much fits in one: on a
    phone a day is its date and a row of coloured dots, on a desk it is the
    events written out. The list underneath always has the detail, so nothing
@@ -407,7 +413,8 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
   .wev.mine b{color:var(--gold-2)}
   .wcol .none{display:block;font-size:0.66rem;color:var(--cream-4);font-weight:500}}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
-.chips button{background:var(--t1);color:var(--cream-3);font-size:.78rem;padding:6px 12px;border-radius:999px;
+.chips button::before{content:"";position:absolute;inset:-5px -2px}
+.chips button{position:relative;background:var(--t1);color:var(--cream-3);font-size:.78rem;padding:6px 12px;border-radius:999px;
   display:flex;align-items:center;gap:7px;transition:.18s;font-weight:600}
 .chips button:hover{background:var(--t3);color:var(--cream)}
 .chips button[aria-pressed="true"]{background:var(--cream);color:var(--ink);font-weight:700}
@@ -437,7 +444,7 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .notice p{margin:8px 0 0;font-size:.92rem;color:var(--cream-2);white-space:pre-wrap;line-height:1.6;font-weight:500}
 
 /* ---------- tiles and links ---------- */
-.tilegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:var(--g);margin-bottom:14px}
+.tilegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:var(--g);margin-bottom:var(--g2)}
 .tilegrid button,.tilegrid a{background:rgba(255,255,255,.88);border-radius:var(--r2);color:var(--crimson-3);
   padding:15px 16px;
   box-shadow:0 6px 16px -12px rgba(20,1,3,.55);
@@ -455,22 +462,22 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .fresh:hover{transform:translateY(-2px);background:linear-gradient(100deg,#F5CE76,var(--gold-2))}
 .fresh .t{flex:1;min-width:0}
 .fresh b{display:block;font-family:var(--display);font-size:0.947rem;font-weight:600;letter-spacing:-.032em}
-.fresh small{display:block;font-size:0.658rem;color:rgba(58,39,0,.76);font-weight:600;margin-top:2px;line-height:1.42}
+.fresh small{display:block;font-size:.78rem;color:rgba(58,39,0,.76);font-weight:600;margin-top:2px;line-height:1.5}
 .fresh .arw{flex:0 0 auto;font-size:0.895rem;font-weight:700}
 .fresh .ic{flex:0 0 auto;display:grid;place-items:center;width:2.6rem;height:2.6rem;border-radius:50%;
   background:rgba(58,39,0,.16);color:var(--gold-ink)}
-.gymcard{background:linear-gradient(100deg,var(--sport),#7FD9B0);margin-bottom:var(--g2)}
+.gymcard{background:linear-gradient(100deg,var(--sport),#7FD9B0);margin-top:0;margin-bottom:var(--g2)}
 .gymcard:hover{background:linear-gradient(100deg,#7FD9B0,#A8E8CB)}
 .gymcard b,.gymcard .arw{color:#06301C}
 .gymcard small{color:rgba(6,48,28,.78)}
 .gymcard .ic{background:rgba(6,48,28,.14);color:#06301C}
-.tilegrid small{display:block;font-weight:500;font-size:0.66rem;color:rgba(107,8,13,.6);margin-top:4px;line-height:1.42}
+.tilegrid small{display:block;font-weight:500;font-size:.74rem;color:rgba(107,8,13,.6);margin-top:4px;line-height:1.42}
 .linkcard{display:flex;gap:var(--g2);align-items:center;background:var(--t1);border-radius:var(--r2);
   padding:var(--pad);margin-bottom:var(--g);text-decoration:none;color:var(--cream);transition:background .16s,transform .16s var(--ease)}
 .linkcard:hover{background:var(--t2);transform:translateY(-2px)}
 .linkcard .t{flex:1;min-width:0}
 .linkcard b{display:block;font-family:var(--display);font-size:0.921rem;font-weight:600;letter-spacing:-.03em}
-.linkcard p{margin:4px 0 0;font-size:0.711rem;color:var(--cream-3);line-height:1.5;font-weight:500}
+.linkcard p{margin:4px 0 0;font-size:.78rem;color:var(--cream-3);line-height:1.5;font-weight:500}
 .linkcard .who{font-family:var(--mono);font-size:0.64rem;letter-spacing:.16em;text-transform:uppercase;
   color:var(--gold-2);margin-top:6px;display:block;font-weight:700}
 .linkcard .arw{flex:0 0 auto;color:var(--cream-4);font-size:0.789rem;transition:.2s var(--ease)}
@@ -519,18 +526,19 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .whoc button{font-size:0.66rem;font-weight:700;color:var(--gold-2);align-self:flex-start;margin-top:auto}
 .whoc .edithim{font-size:0.66rem;color:var(--cream-4);margin-top:6px;font-weight:700}
 .whoc .edithim:hover{color:var(--gold-2);text-decoration:underline}
-.whoc .mail{display:block;font-size:0.66rem;font-weight:600;color:var(--cream-4);margin-top:3px;text-decoration:none}
+.whoc .mail{display:block;font-size:.72rem;font-weight:600;color:var(--cream-4);padding:12px 0;margin:-9px 0 -12px;text-decoration:none}
 .whoc .mail:hover{color:var(--gold-2);text-decoration:underline}
 .whoc button:hover{text-decoration:underline}
 .whoc.vacant .ph{background:rgba(0,0,0,.44);font-size:0.66rem;letter-spacing:.06em;font-weight:700}
 .whoc.vacant b{color:var(--cream-4)}
-.guide{background:var(--t1);border-radius:var(--r2);margin-bottom:6px;overflow:hidden}
+.guide{background:var(--t1);border-radius:var(--r2);margin-bottom:var(--g);overflow:hidden}
 .guide summary{list-style:none;cursor:pointer;padding:14px 16px;font-family:var(--display);font-size:0.895rem;
   font-weight:600;letter-spacing:-.028em;display:flex;align-items:baseline;gap:10px;transition:background .16s}
 .guide summary::-webkit-details-marker{display:none}
 .guide summary::after{content:"+";margin-left:auto;font-family:var(--ui);font-size:1rem;color:var(--gold-2);
   font-weight:700;line-height:1}
 .guide[open] summary::after{content:"\2212"}
+.guide[open]>p,.guide[open]>.acts{animation:rise .24s var(--ease) both}
 .guide summary:hover{background:var(--t2)}
 .guide summary .who{font-family:var(--mono);font-size:0.66rem;letter-spacing:.14em;text-transform:uppercase;
   color:var(--gold-2);font-weight:700}
@@ -541,7 +549,8 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 /* on a narrow screen the buttons drop to their own line rather than
    crushing the heading into two words */
 @media(max-width:560px){.grp .weeknav{margin-left:0;width:100%}}
-.weeknav button{background:var(--t1);color:var(--cream-2);border-radius:999px;padding:6px 13px;font-size:.72rem;
+.weeknav button::before{content:"";position:absolute;inset:-6px -2px}
+.weeknav button{position:relative;background:var(--t1);color:var(--cream-2);border-radius:999px;padding:6px 13px;font-size:.72rem;
   font-family:var(--ui);letter-spacing:0;text-transform:none;font-weight:700;transition:.16s}
 .weeknav button:hover{background:var(--t3);color:var(--cream)}
 .weeknav button[aria-pressed="true"],.weeknav button.gold{background:var(--gold);color:var(--gold-ink)}
@@ -657,7 +666,7 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .dp.in b{color:#06301C}
 .dp.in::before{content:"\2713";font-weight:800}
 .pager{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:16px}
-.pager button{background:var(--t1);color:var(--cream-2);border-radius:999px;padding:8px 15px;
+.pager button{background:var(--t1);color:var(--cream-2);border-radius:999px;padding:8px 15px;min-height:44px;
   font-size:.78rem;font-weight:700;transition:background .16s}
 .pager button:hover:not([disabled]){background:var(--t3);color:var(--cream)}
 .pager button[disabled]{opacity:.3;pointer-events:none}
@@ -835,7 +844,7 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
   color:var(--cream);transition:background .16s,transform .16s var(--ease)}
 .jc:hover{background:var(--t2);transform:translateY(-2px)}
 .jc b{display:block;font-size:.86rem;font-weight:700;letter-spacing:-.018em;line-height:1.24}
-.jc span{display:block;font-size:.72rem;color:var(--cream-4);font-weight:600;margin-top:3px}
+.jc span{display:block;font-size:.76rem;color:var(--cream-4);font-weight:600;margin-top:3px}
 .jc i{display:block;font-style:normal;font-family:var(--mono);font-size:0.64rem;letter-spacing:.14em;
   text-transform:uppercase;color:var(--gold-2);font-weight:700;margin-top:7px}
 .pend{display:flex;gap:var(--g2);align-items:flex-start;background:var(--t1);border-radius:var(--r);
@@ -934,34 +943,34 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
    reading order either way. */
 .fatri{display:grid;gap:var(--g);margin-bottom:var(--g2)}
 .fatri .row{display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:start;
-  background:var(--t1);border-radius:var(--r2);padding:13px 14px;
+  background:var(--paper);color:var(--ink);border-radius:var(--r2);padding:13px 14px;
   border-left:3px solid var(--edge-2);min-height:44px}
 .fatri .row .ic{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
-  background:rgba(255,255,255,.09)}
+  background:rgba(0,0,0,.06)}
 .fatri .row .ic svg{width:20px;height:20px;fill:none;stroke:currentColor;
   stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 .fatri .row b{display:block;font-family:var(--display);font-size:1.02rem;font-weight:600;
-  line-height:1.2;color:var(--cream)}
-.fatri .row .when{display:block;font-size:.82rem;line-height:1.55;color:var(--cream-3);
+  line-height:1.2;color:var(--crimson-3)}
+.fatri .row .when{display:block;font-size:.86rem;line-height:1.55;color:var(--ink-soft);
   font-weight:500;margin-top:3px}
 .fatri .row .tag{display:inline-block;margin-top:7px;font-family:var(--mono);font-size:.6rem;
   letter-spacing:.14em;text-transform:uppercase;font-weight:700;padding:3px 8px;
-  border-radius:999px;background:rgba(255,255,255,.1);color:var(--cream-2)}
+  border-radius:999px;background:rgba(0,0,0,.07);color:var(--ink-soft)}
 .fatri .row.now{border-left-color:var(--crimson-lite)}.fatri .row.now .ic{color:var(--crimson-lite)}
-.fatri .row.now .tag{background:rgba(232,83,92,.26);color:var(--cream-2)}
-.fatri .row.soon{border-left-color:var(--gold)}.fatri .row.soon .ic{color:var(--gold-2)}
-.fatri .row.soon .tag{background:rgba(226,169,60,.24);color:var(--gold-2)}
-.fatri .row.plan{border-left-color:var(--sport)}.fatri .row.plan .ic{color:var(--sport)}
-.fatri .row.plan .tag{background:rgba(79,200,148,.2);color:var(--cream-2)}
+.fatri .row.now .tag{background:rgba(232,83,92,.16);color:var(--crimson-3)}
+.fatri .row.soon{border-left-color:var(--gold)}.fatri .row.soon .ic{color:var(--gold-ink)}
+.fatri .row.soon .tag{background:rgba(226,169,60,.28);color:var(--gold-ink)}
+.fatri .row.plan{border-left-color:var(--sport)}.fatri .row.plan .ic{color:#1E6B47}
+.fatri .row.plan .tag{background:rgba(79,200,148,.22);color:#1E6B47}
 @media(min-width:720px){.fatri{grid-template-columns:1fr 1fr}}
 /* A titled block in the body of the shelf. */
-.fasec{background:var(--t1);border-radius:var(--r);padding:var(--pad);margin-bottom:var(--g2)}
-.fasec .fahead{color:var(--gold-2)}
+.fasec{background:var(--paper);color:var(--ink);border-radius:var(--r);padding:var(--pad);margin-bottom:var(--g2)}
+.fasec .fahead{color:var(--crimson)}
 .fasec h4{margin:0;font-family:var(--display);font-size:1.1rem;font-weight:600;
-  line-height:1.2;color:var(--cream);letter-spacing:-.01em}
-.fasec p{margin:0 0 10px;font-size:.88rem;line-height:1.62;color:var(--cream-2);font-weight:500}
+  line-height:1.2;color:var(--crimson-3);letter-spacing:-.01em}
+.fasec p{margin:0 0 10px;font-size:.92rem;line-height:1.62;color:var(--ink);font-weight:500}
 .fasec p:last-child{margin-bottom:0}
-.fasec .fnote{font-size:.8rem;color:var(--cream-3);line-height:1.55}
+.fasec .fnote{font-size:.84rem;color:var(--ink-soft);line-height:1.55}
 /* The numbers, set as numbers so they can be read across a room. */
 .fanums{display:flex;flex-wrap:wrap;gap:var(--g);margin:0 0 var(--g2)}
 .fanums a{flex:1 1 128px;min-height:44px;display:flex;flex-direction:column;justify-content:center;
@@ -1088,7 +1097,7 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
    drops the perspective for everything beneath it. */
 .chimney .cam{inset:0;-webkit-transform-style:preserve-3d;transform-style:preserve-3d;transform-origin:50% 40%;
   -webkit-transform:translateZ(0);transform:translateZ(0)}
-.chimney.open .cam{animation:flyin 1.55s cubic-bezier(.4,0,.16,1) .34s both}
+.chimney.open .cam{animation:flyin 1.25s cubic-bezier(.4,0,.16,1) .3s both}
 @keyframes flyin{to{transform:translateZ(0) scale(3.8)}}
 .chimney .gravel{left:50%;top:100%;width:1600px;height:2000px;margin-left:-800px;transform-origin:top center;
   transform:rotateX(-90deg);
@@ -1167,7 +1176,7 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .chimney .bike:nth-child(9){left:1880px;opacity:0.32}
 /* the gatehouse, to scale, bottom on the ground, drawing nearer at a walking pace */
 .chimney .gate{left:50%;bottom:0;width:2100px;height:1400px;margin-left:-1050px;-webkit-transform-style:preserve-3d;transform-style:preserve-3d;
-  transform:translateZ(-2840px);animation:approach 5.2s cubic-bezier(.32,.06,.2,1) both}
+  transform:translateZ(-2840px);animation:approach 9s cubic-bezier(.32,.06,.2,1) both}
 @keyframes approach{to{transform:translateZ(-1250px)}}
 .chimney .range{bottom:0;width:790px;height:600px;background:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='24' viewBox='0 0 44 24'%3E%0A%3Crect width='44' height='24' fill='%23CBB08F'/%3E%0A%3Crect x='1' y='1' width='20' height='10' fill='%23C27452'/%3E%3Crect x='23' y='1' width='20' height='10' fill='%23B5674A'/%3E%0A%3Crect x='-10' y='13' width='20' height='10' fill='%23CB7E5B'/%3E%3Crect x='12' y='13' width='20' height='10' fill='%23C27452'/%3E%3Crect x='34' y='13' width='20' height='10' fill='%23B5674A'/%3E%0A%3C/svg%3E") 0 0/44px 24px repeat}
 .chimney .range.l{left:0}.chimney .range.r{right:0}
@@ -1234,18 +1243,25 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
    real arch in the surround: it springs level with the stone and meets its
    twin on the centre line. */
 .chimney .door{bottom:0;width:118px;height:306px;transform-style:preserve-3d;transform:translateZ(6px);
+  /* A leaf that turns past ninety degrees shows its back. With the back left
+     visible, WebKit painted a rounded, rotated leaf as a flat pale slab for
+     the rest of the swing, which was the white flash in the photograph. The
+     back is hidden and a dark reverse is drawn on it instead. */
+  -webkit-backface-visibility:hidden;backface-visibility:hidden;
   background:
     repeating-linear-gradient(90deg,rgba(0,0,0,.35) 0 2px,transparent 2px 16px),
     repeating-linear-gradient(0deg,rgba(0,0,0,.2) 0 2px,transparent 2px 70px),
     linear-gradient(180deg,#4A3629,#2A1D16)}
+.chimney .door::before{content:"";position:absolute;inset:0;border-radius:inherit;background:#2A1D16;
+  transform:rotateY(180deg) translateZ(-1px);-webkit-backface-visibility:hidden;backface-visibility:hidden}
 .chimney .door::after{content:"";position:absolute;top:50%;width:12px;height:12px;border-radius:50%;background:#C9A662;
   box-shadow:0 0 8px rgba(255,220,150,.9)}
 .chimney .door.l{left:50%;margin-left:-118px;transform-origin:left center;
   border-top-left-radius:118px 86px}
 .chimney .door.r{left:50%;transform-origin:right center;
   border-top-right-radius:118px 86px}
-.chimney.open .door.l{animation:openL 1.15s cubic-bezier(.55,0,.2,1) .1s both}
-.chimney.open .door.r{animation:openR 1.15s cubic-bezier(.55,0,.2,1) .1s both}
+.chimney.open .door.l{animation:openL .95s cubic-bezier(.55,0,.2,1) both}
+.chimney.open .door.r{animation:openR .95s cubic-bezier(.55,0,.2,1) both}
 .chimney .door.l::after{right:14px}.chimney .door.r::after{left:14px}
 @keyframes openL{to{transform:translateZ(6px) rotateY(-118deg)}}
 @keyframes openR{to{transform:translateZ(6px) rotateY(118deg)}}
@@ -1292,13 +1308,36 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 #privacy p{margin:0 0 9px;font-size:12px;line-height:1.6;color:var(--cream-2);font-weight:500}
 #privacy p:last-child{margin-bottom:0}
 #privacy b{color:var(--gold-2);font-weight:600}
+.menucard{background:var(--paper);color:var(--ink)}
+.menucard .grp{color:var(--crimson)}
+.menucard .lede{color:var(--ink-soft)}
+.menucard a{color:var(--crimson);font-weight:700}
+.menunav{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px}
+.menunav button{border:0;border-radius:999px;padding:6px 12px;font-size:.78rem;font-weight:700;
+  background:rgba(0,0,0,.06);color:var(--ink-soft);cursor:pointer;min-height:32px}
+.menunav button[aria-pressed="true"]{background:var(--crimson);color:var(--cream)}
+.meals{display:grid;gap:var(--g2)}
+@media(min-width:760px){.meals{grid-template-columns:1fr 1fr}}
+.meal>b{display:block;font-family:var(--display);font-size:1.1rem;font-weight:600;color:var(--crimson-3);margin-bottom:6px}
+.course{margin-bottom:8px}
+.course .cn{display:block;font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;
+  font-weight:700;color:var(--ink-soft);margin-bottom:3px}
+.course ul{list-style:none;margin:0;padding:0}
+.course li{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;padding:5px 0;border-top:1px solid rgba(0,0,0,.06);font-size:.92rem}
+.course li:first-child{border-top:0}
+.course .dn{flex:1 1 60%;font-weight:600;color:var(--ink)}
+.course .dm i{font-style:normal;font-family:var(--mono);font-size:.6rem;font-weight:700;margin-right:3px;
+  padding:1px 5px;border-radius:999px;background:rgba(79,200,148,.22);color:#1E6B47}
+.course .dp{font-family:var(--mono);font-size:.78rem;font-weight:700;color:var(--ink-soft)}
+.course .da{flex-basis:100%;font-size:.74rem;color:var(--ink-soft)}
+.mcrnote{flex-basis:100%;margin:6px 0 0;font-size:.78rem;line-height:1.5;color:var(--cream-3);font-weight:500;max-width:62ch}
 .bootline{font-family:var(--mono);font-size:0.72rem;letter-spacing:.2em;text-transform:uppercase;
   text-shadow:0 1px 10px rgba(12,0,2,.85),0 0 2px rgba(12,0,2,.6);
   color:var(--gold-2);font-weight:700;min-height:17px}
 .loadtrack{display:block;height:4px;border-radius:4px;background:rgba(255,255,255,.22);overflow:hidden;
   box-shadow:0 1px 6px rgba(12,0,2,.5);
   width:100%;margin:0}
-.loadtrack i{display:block;height:100%;width:8%;border-radius:3px;background:var(--gold);transition:width .6s var(--ease)}
+.loadtrack i{display:block;height:100%;width:100%;transform:scaleX(.08);transform-origin:0 50%;border-radius:3px;background:var(--gold);transition:transform .6s var(--ease)}
 .bootslow{margin:0;font-size:0.72rem;color:var(--cream-2);line-height:1.55;font-weight:500;
   text-shadow:0 1px 8px rgba(12,0,2,.8);max-width:34ch}
 /* the empty gate. When a board has nothing on it, the Chimney itself is
@@ -1392,7 +1431,7 @@ nav .railtop{display:none}
 @media(min-width:1000px){
   nav{left:0;top:0;bottom:0;transform:none;width:var(--rail);max-width:none;flex-direction:column;
     align-items:stretch;border-radius:0;background:rgba(66,4,9,.42);box-shadow:none;
-    padding:18px 12px calc(18px + var(--sab));overflow-y:auto}
+    padding:18px 12px calc(18px + var(--sab));overflow-y:auto;-webkit-mask-image:none;mask-image:none}
   nav .railtop{display:flex;align-items:center;gap:10px;padding:2px 9px 18px}
   nav .railtop .crest{width:42px;height:42px;flex-basis:42px}
   /* the rail carries the crest, so the bar above the page does not repeat it */
@@ -1404,7 +1443,7 @@ nav .railtop{display:none}
   nav .railtop b{font-family:var(--display);font-size:0.789rem;font-weight:600;letter-spacing:-.03em;line-height:1.1}
   nav .railtop i{display:block;font-style:normal;font-size:0.635rem;color:var(--gold-2);letter-spacing:.16em;
     text-transform:uppercase;margin-top:3px;font-weight:700}
-  .tabbtn{flex-direction:row;justify-content:flex-start;gap:11px;padding:9px 10px;border-radius:var(--r3);
+  .tabbtn{flex-direction:row;justify-content:flex-start;gap:11px;padding:9px 10px;min-height:44px;border-radius:var(--r3);
     font-size:0.711rem;font-weight:700;min-width:0;letter-spacing:-.015em}
   .tabbtn svg{width:18px;height:18px}
   .tabbtn .badge{position:static;margin-left:auto}
@@ -1539,7 +1578,7 @@ nav .railtop{display:none}
 .notes .notice b{display:block;font-family:var(--display);font-size:1rem;font-weight:600;letter-spacing:-.03em;
   line-height:1.2;color:var(--ink);margin-bottom:6px}
 .notes .notice p{font-size:.82rem;line-height:1.55;color:var(--ink-soft);white-space:pre-wrap;margin:0}
-.notes .notice small{display:block;margin-top:9px;font-family:var(--mono);font-size:.58rem;letter-spacing:.11em;
+.notes .notice small{display:block;margin-top:9px;font-family:var(--mono);font-size:.64rem;letter-spacing:.11em;
   text-transform:uppercase;color:var(--ink-soft);font-weight:700}
 .notes .notice.urgent{background:#FFF4F2;box-shadow:0 8px 18px -10px rgba(140,10,16,.8)}
 .notes .notice.urgent::before{background:var(--crimson)}
@@ -1551,6 +1590,7 @@ nav .railtop{display:none}
 .notes .notice .acts .btn{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.4px var(--cream-3)}
 .notes .notice .acts .btn.gold{background:var(--gold);color:var(--gold-ink);box-shadow:none}
 @media(max-width:520px){ .notes{grid-template-columns:1fr 1fr;gap:9px} .notes .notice{padding:12px 12px 10px} }
+@media(max-width:400px){ .notes{grid-template-columns:1fr} }
 
 /* The three week strip of your own room requests. It slides rather than wraps,
    because a fortnight of empty days stacked into a column is a lot of nothing
@@ -1664,7 +1704,7 @@ button.busy{cursor:progress}
 .mood{background:var(--cream);color:var(--ink);border-radius:var(--r2);padding:12px 13px 11px;
   box-shadow:0 8px 20px -14px rgba(20,1,3,.7);display:flex;flex-direction:column;gap:7px}
 .mood .mh b{font-size:.95rem}
-.mood .note{font-size:.71rem}
+.mood .note{font-size:.78rem}
 .mood .run{height:2.6rem}
 .mood .mfoot{font-size:.66rem}
 .mood.said{box-shadow:0 8px 20px -14px rgba(20,1,3,.7),inset 0 0 0 1.6px var(--gold)}
@@ -1676,7 +1716,7 @@ button.busy{cursor:progress}
 .n1{background:#B4141B}.n2{background:#D06A2A}.n3{background:#C9A227}.n4{background:#5C8C4A}.n5{background:#2C6B4F}
 .faces{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
 .faces button{flex:1 1 3.1rem;min-width:3.1rem;background:var(--cream-2);border-radius:10px;padding:7px 4px 6px;
-  display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--ink-soft);font-size:.6rem;
+  display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--ink-soft);font-size:.66rem;
   font-weight:700;transition:.15s;cursor:pointer;border:0;font-family:var(--ui)}
 .faces button:hover{background:#F6EEE6;transform:translateY(-1px)}
 .faces button i{display:block;width:14px;height:14px;border-radius:50%;opacity:.42;transition:.15s}
@@ -1699,9 +1739,12 @@ button.busy{cursor:progress}
 .run{display:flex;align-items:flex-end;gap:4px;height:4rem;padding-top:4px}
 .run span{flex:1;border-radius:3px 3px 1px 1px;background:var(--cream-3);min-height:4px;transition:height .3s var(--ease)}
 .run span.empty{background:var(--cream-2)}
+.mhide{margin-left:auto;width:28px;height:28px;border-radius:50%;border:0;background:rgba(0,0,0,.08);
+  color:var(--ink-soft);font-size:1.1rem;line-height:1;cursor:pointer;display:grid;place-items:center}
+.mhide:hover{background:rgba(0,0,0,.14);color:var(--ink)}
 .mfoot{display:flex;align-items:center;gap:10px;font-size:.7rem;color:var(--ink-soft);font-weight:600}
 .mfoot span{flex:1}
-.lnk{background:none;border:0;padding:0;color:var(--crimson);font:inherit;font-size:.7rem;font-weight:700;
+.lnk{background:none;border:0;padding:12px 0;margin:-12px 0;color:var(--crimson);font:inherit;font-size:.78rem;font-weight:700;
   text-decoration:underline;cursor:pointer}
 .lnk:disabled{opacity:.5;cursor:default;text-decoration:none}
 .mnotes{margin-top:2px}
@@ -1752,13 +1795,16 @@ button.busy{cursor:progress}
 /* This inherited .msg, which has a dark padded background meant for a message
    inside a thread. Empty, it drew a filled bar under the sign in button that
    looked like a fault, because it was one. */
-.gcard .msg{color:var(--gold-2);font-size:0.658rem;margin:11px 0 0;font-weight:600;
+.gcard .msg{color:var(--gold-2);font-size:.76rem;margin:11px 0 0;font-weight:600;
   background:none;padding:0;min-height:0}
 .gcard .msg:empty{display:none}
 /* The Google button is drawn in its own frame, so it is centred and held to
    the width of the card rather than being left to sit in a white strip. */
 #gsiBtn{display:flex;justify-content:center;margin-top:15px;min-height:44px}
-#gsiBtn>div{margin:0 auto}
+/* Google draws its button on a white card of its own. On the crimson gate that
+   read as a white outline round the pill, so the dark theme is asked for and
+   the wrapper it draws is clipped to the pill and given the card's own ground. */
+#gsiBtn>div{margin:0 auto;border-radius:999px;overflow:hidden;background:var(--t3)}
 #gsiBtn iframe{margin:0 auto!important}
 .gcard .fix{margin-top:15px;padding:14px 15px;background:rgba(235,183,83,.16);border-radius:var(--r2)}
 .gcard .fix b{display:block;font-family:var(--display);font-size:0.842rem;font-weight:600;margin-bottom:6px;
@@ -1801,11 +1847,13 @@ button.busy{cursor:progress}
   max-width:31rem;max-height:100%;max-height:100dvh;display:flex;flex-direction:column;
   box-shadow:0 -18px 50px rgba(20,1,3,.5);animation:slideup .28s var(--ease) both;overflow:hidden}
 /* the body scrolls. The title and the buttons do not */
+.sheet.out{animation:fade .18s ease reverse both;pointer-events:none}
+.sheet.out .inner{animation:slideup .18s ease reverse both}
 .sheet .scroll{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
   padding:18px 22px 10px;flex:1;min-height:0}
 /* One obvious way back, at the top where a thumb starts, labelled in words. */
 .sheet .sback{display:inline-flex;align-items:center;gap:7px;background:var(--sh2);color:var(--ink);
-  border:0;border-radius:9px;padding:8px 14px 8px 10px;font-size:.78rem;font-weight:800;
+  border:0;border-radius:9px;padding:8px 14px 8px 10px;min-height:44px;font-size:.78rem;font-weight:800;
   letter-spacing:-.01em;margin:0 0 14px;cursor:pointer}
 .sheet .sback svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.6;
   stroke-linecap:round;stroke-linejoin:round}
@@ -1836,7 +1884,7 @@ button.busy{cursor:progress}
 /* fields, with real room around them because these are short forms and they
    were being crushed */
 .sheet .f{margin:0 0 16px;color:var(--ink)}
-.sheet .f span{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.15em;
+.sheet .f span{display:block;font-family:var(--mono);font-size:.66rem;letter-spacing:.15em;
   text-transform:uppercase;font-weight:700;margin-bottom:7px;color:var(--ink-soft)}
 .sheet .f span i{color:var(--ink-soft)}
 .sheet .f input,.sheet .f textarea,.sheet .f select{background:var(--sh1);color:var(--ink);
@@ -1927,6 +1975,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
 .bumps text{font-family:var(--mono);font-size:0.635rem;fill:rgba(251,243,236,.66)}
 .bumps text.crew{font-family:var(--ui);font-size:0.635rem;font-weight:700;fill:var(--cream)}
 .up{color:#8FD19E} .down{color:#E88E8E}
+@media(hover:none){.linkcard:hover,.tilegrid button:hover,.tilegrid a:hover,.fresh:hover,.whoc:hover,.jc:hover,.faces button:hover,.slot:hover,.dp:hover,.fanums a:hover{transform:none}}
 </style>
 
 <div id="boot">
@@ -1995,6 +2044,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
     <div id="crow"></div>
     <div id="todayUrgent"></div>
     <div id="bumpsCard"></div>
+    <div id="todayMenu"></div>
     <div class="twocol">
       <div class="colA"><div id="todayWeek"></div><div id="todayOn"></div></div>
       <div class="colB"><div id="todayQuick"></div><div id="todayNews"></div></div>
@@ -2018,7 +2068,8 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
   </section>
 
   <section id="v-room" hidden>
-    <div class="vh"><h2>MCR <i>room</i></h2><span class="note">Book the room, see when it is taken, and track your requests</span></div>
+    <div class="vh"><h2>MCR <i>room</i></h2><span class="note">Book the MCR room, see when it is taken, and track your requests</span>
+      <div class="right"><button class="btn ghost sm" data-ask="roomidea">Suggest something for the room</button></div></div>
     <div class="seg" id="roomSeg" style="margin-bottom:14px"></div>
     <div id="roomBody"></div>
   </section>
@@ -2032,8 +2083,9 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
   </section>
 
   <section id="v-info" hidden>
-    <div class="vh"><h2><i>Info</i></h2><span class="note">Forms, how college works, healthcare and sport</span></div>
-    <div class="seg" id="lodgeSeg" style="margin-bottom:14px;overflow-x:auto"></div>
+    <div class="vh"><h2><i>Info</i></h2><span class="note">Forms, how college works, healthcare and sport</span>
+      <p class="mcrnote">Written and maintained by the MCR committee. This is not an official Jesus College publication: where it describes college services, the college’s own pages are the current position.</p></div>
+    <div class="seg" id="lodgeSeg" style="margin-bottom:var(--g2)"></div>
     <div id="lodgeBody"></div>
   </section>
 
@@ -2044,16 +2096,6 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
     <div id="askBody"></div>
   </section>
 
-  <!-- ===================== BUSINESS ===================== -->
-  <section id="v-biz" hidden>
-    <div class="vh"><h2>MCR <i>business</i></h2><span class="note">Meetings, motions and voting</span>
-      <div class="right"><button class="btn gold sm" id="bSuggest">Suggest something</button></div></div>
-    <div class="twocol">
-      <!-- Polls have gone: a question in Soundings does the same job better. -->
-      <div class="colA"><div id="bizMoney"></div><div id="bizIdeas"></div></div>
-      <div class="colB"><div id="bizMeetings"></div><div id="bizMotions"></div></div>
-    </div>
-  </section>
 
   <!-- ===================== SETTINGS ===================== -->
   <section id="v-me" hidden>
@@ -2115,7 +2157,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
     <div class="vh"><h2>The <i>committee</i></h2><span class="note">Who can edit, and who serves what</span></div>
     <div class="card" id="ownerCard" data-owner hidden>
       <h3>Administrators</h3>
-      <p class="lede">An address on this list is an administrator from the moment they sign in, whether or not they are on the roster below. They see every event, every thread that is not welfare, and can edit any of it. The president's address is on the list permanently.</p>
+      <p class="lede">An address on this list is an administrator from the moment they sign in, whether or not they are on the roster below. They see every event, every thread that is not welfare, and can edit any of it. The President's address is on the list permanently.</p>
       <div id="ownerList"></div>
       <div class="acts">
         <label class="f" style="flex:1;min-width:220px;margin:0"><span>Add an address</span><input type="email" id="ownerEmail" placeholder="vice-president@mcr.jesus.cam.ac.uk"></label>
@@ -2192,9 +2234,8 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
   <button class="tabbtn" data-view="board"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="15" rx="1.8"/><path d="M7 9h10M7 13h6"/><path d="M12 2v2"/></svg>Board<span class="badge" id="bdgLodge" hidden>0</span></button>
   <button class="tabbtn" data-view="say"><svg viewBox="0 0 24 24"><path d="M4 5h16v10H9l-5 4z"/><path d="M8 8.5h8M8 11.5h5"/></svg>Soundings<span class="badge" id="bdgSay" hidden>0</span></button>
   <button class="tabbtn" data-view="room"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M9.5 20v-5h5v5"/></svg>MCR room</button>
-  <button class="tabbtn" data-view="swaps" data-feature="formals" hidden><svg viewBox="0 0 24 24"><path d="M6 4v7a6 6 0 0 0 12 0V4"/><path d="M12 17v3M8 20h8"/></svg>Formals<span class="badge" id="bdgSwaps" hidden>0</span></button>
+  <button class="tabbtn" data-view="swaps" data-feature="formals" hidden><svg viewBox="0 0 24 24"><path d="M3 9h18"/><path d="M5 9l1.5 10M19 9l-1.5 10"/><path d="M8 5h8l1 4H7z"/><path d="M12 14v3"/></svg>Formals<span class="badge" id="bdgSwaps" hidden>0</span></button>
   <button class="tabbtn" data-view="ask"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/><path d="M12 12.4v-.5c0-1 .7-1.5 1.3-1.9.6-.4 1-.9 1-1.6a2.3 2.3 0 0 0-4.6 0"/><path d="M12 14.4h.01"/></svg>Ask<span class="badge" id="bdgAsk" hidden>0</span></button>
-  <button class="tabbtn" data-view="biz" data-feature="business" hidden><svg viewBox="0 0 24 24"><path d="M4 20h16M12 4v3M6 20V9l6-4 6 4v11"/><path d="M9 13h6"/></svg>MCR business<span class="badge" id="bdgBiz" hidden>0</span></button>
   <button class="tabbtn" data-view="info"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5"/><path d="M12 7.6h.01"/></svg>Info</button>
   <span class="sep" data-committee hidden></span>
   <button class="tabbtn committee" data-view="desk" data-committee hidden><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="7" rx="1.6"/><rect x="3" y="13" width="18" height="7" rx="1.6"/><path d="M7 7.5h.01M7 16.5h.01"/></svg>Desk<span class="badge" id="bdgDesk" hidden>0</span></button>
@@ -2209,7 +2250,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
   <div class="gcard">
     <div class="head"><img class="crest" id="crestGate" alt="">
       <span><small>JESUS COLLEGE</small><b>The <i>MCR</i></b></span></div>
-    <p class="lede" id="gLede">The postgraduate community at Jesus College. The term calendar, the MCR room, the board, and who to contact.</p>
+    <p class="lede" id="gLede">Run by the MCR committee for the postgraduate community at Jesus College. The term calendar, the MCR room, the board, and who to contact. This is not an official Jesus College publication.</p>
     <!-- One line, above the button and not below it, because consent given
          after the fact is not consent. The detail is one tap away rather than
          four screens of it nobody reads. -->
@@ -2223,7 +2264,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
       <p><b>Your rights.</b> You may ask to see what is held about you, to have it corrected, or to have it deleted, and you may withdraw from anything you have said yes to. Write to <b>president@mcr.jesus.cam.ac.uk</b> and it will be dealt with within a month. If you are not satisfied you may complain to the Information Commissioner at <b>ico.org.uk</b>.</p>
     </div>
     <div id="gsiBtn"><span class="gsiskel" aria-hidden="true"></span></div>
-    <p class="lede" style="margin:10px 0 0;font-size:12.5px">Use your <b>@cam.ac.uk</b> address. No new password needed.</p>
+    <p class="lede" style="margin:10px 0 0;font-size:.74rem">Use your <b>@cam.ac.uk</b> address. No new password needed.</p>
     <p class="msg" id="gateMsg"></p>
     <div id="gateCheck"></div>
     <div id="gateFix"></div>
@@ -2261,7 +2302,7 @@ function loadGsi(){
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbytaLkrupKMezabvtvcROsutdpUISpiOeXxhxZm_1e2Cu2Ad0UBJ3VPlbPbpEimt5y5/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwVrWapF7r_Cj_i8zi8EqlhfSiRNQUw_kEiJkz4_Gi7BhXxkJi7XdDXKeM6IuvNuf3X/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -2279,7 +2320,10 @@ const EXPECT_BUILD = "chimney-22";
    nobody has merged is a section nobody is finishing. One word turns either
    back on, and the committee can see both meanwhile so that the work can
    actually be done. */
-const FEATURES = { formals: false, business: false };
+const FEATURES = { formals: false };
+/* MCR business has been taken out of the app. Its code is left in the file so
+   that it can be brought back as a considered feature; nothing routes to it,
+   nothing draws it, and no tab offers it to anybody, committee included. */
 
 /* JavaScript is alive, so the ring painted before the page was parsed can go.
    It is a pseudo element on <html>, so nothing else can remove it. */
@@ -2347,9 +2391,17 @@ const GATE = '<div class="roost" aria-hidden="true"><svg viewBox="0 0 64 64">' +
   '<path d="M22 54V31c0-5.5 4.5-10 10-10s10 4.5 10 10v23"/>' +
   '<path d="M9 54h46"/><path d="M32 4v4"/></svg></div>';
 
-/* The crest, drawn rather than fetched. A cockerel on a shield, which is what
-   the college has had since 1496 and what the run club is named after. */
-const CREST = "data:image/png;base64,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";
+/* The crest, carried in the file rather than fetched. A cockerel on a shield,
+   which the college has had since 1496 and which the run club is named after.
+
+   It is a palette image rather than a full colour one. Base64 defeats gzip, so
+   this one line was the most expensive thing in the file after the walk: as a
+   32 bit image it cost about seventeen kilobytes compressed, more than the
+   whole of First Court. Quantised it costs three, and the difference is
+   confined to the anti-aliasing on the outline: measured over the crimson it
+   is a mean of two parts in 255 at the sizes it is actually drawn, with ten
+   pixels of the twelve thousand changing anywhere but on an edge. */
+const CREST = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFIAAACWCAMAAAB6iy8LAAABSlBMVEUAAABVAAADAQEBAAADAgAvBgmuGiQBAAAGAwICAADWIS3nIzGKFBxPCxDNGyd/AABlDBMCAQAuAAaZGCH/AACSAwlxERemVFqTJi1SPkhscnSxpqetEh2cmaFvJy6YhonMCxmqAAD///9tACQlBAeZADMYFAkwJxIjGw2XdzpYRiKuiUPFm0yhfj5ISCQ6LRbVqFPquVtIOBuZZjMYEgnGjThjTSb5xWG5k0hvVyoqKiozMwCjgT48MReHajT/0mjesFd8YTAUFAbywF5QQB8VEgnoGinIEB2TVlqtiYyVPEKylZemeXyqJS6VNDq2tbXb8/HKysq2x8XV6OaSR0y52daYlpeSaGvr+/qyCBKYc3WoMzukREuofYDK4N6sZmvL19bDurqnO0O/wL+RXGB0PEDDpKabqql3HSShXmPkDh7s7u5FLhdMMxnTXAoiAAAAbnRSTlMBA1Cvb/3+/S/P/v7+/v4C/o0L/gH//v////////////8DAQfZBf7+/v3+/v7+B9r+/v4FvAn+/v7+BgX9/v7//v4U/v8p/v////////////////////////////////////////////////8LCqviSIcAAApZSURBVHgBrNeFcuU6DAZgrUGy9Vs+SdPNZYb3f8MLJ8WQ50z8De62/ceCEO37Qs476itElkS9OJ9jjoriqY+UjSsUgAr1cEvCWPSKpDBAsWDfp2ypWCjKSB08+QmvNKZnuszlAYBOFUCNia5zsQJA/foVOmdHHXiGAuBvvjURRz2MMxSo333/g/wndyj8ednJH7///ie569JMmYb448+//CyLHtei/K/+CpM7T1fJogImi3B1OnI3QWHSp/Tkvc9SAai8CnTVb5kBYJI3dNHvzvC/KN2OeSNfAAzyLtOxFLwfXXtGcYjykTt+nsTCPJmMic5l+cwfzTJOuKsl+vNQWUv711nBu3La8iRrYTeR8VG1kQ4FWcv7N9YVC61LaF15KxGIrjmd4wE5qdiqkpqtfNdKXLCkRt1Hq5mEsVULUPIf7RXaZn55yowdNR6NaJR9OXx4Pu3hiKoq9Exrcsinl2FjV2TMM+axfcjVyt+CVCg2mAFMhro9ppwaQxZR7KhWAZsBc5tDtkWzYSh1kwmY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";
 
 /* ---------- time, all of it Cambridge wall clock ---------- */
 const fmtLondon = new Intl.DateTimeFormat("en-GB", {timeZone:TZ, year:"numeric", month:"2-digit",
@@ -2430,6 +2482,14 @@ async function syncPhotos(rev){
   }catch(e){}
 }
 const faceOf = p => (p && (p.photo || PHOTOS[p.pk] || PHOTOS["role:" + p.role])) || "";
+/* A PICTURE THAT IS REFUSED IS NOT A PICTURE.
+   Each of these sites used to ask "is there a photograph?" and only then put
+   the answer through safeImg, so a value the gate rejected still produced an
+   img tag with an empty source and the browser drew its own broken picture
+   icon in the middle of the committee page. Asking safeImg first means a
+   refused photograph falls back to the initials, which is exactly what
+   somebody who has never uploaded one already sees. */
+const faceSrc = p => safeImg(faceOf(p));
 function getToken(){
   if (memToken) return memToken;
   try{ const v = localStorage.getItem(TK); if (v) return (memToken = v); }catch(e){}
@@ -2587,7 +2647,7 @@ function gateBusy(on){
   put("gsiBtn", "");
   if (window.google && google.accounts && google.accounts.id && gsiUp){
     try{
-      google.accounts.id.renderButton($("gsiBtn"), { theme:"outline", size:"large", shape:"pill",
+      google.accounts.id.renderButton($("gsiBtn"), { theme:"filled_black", size:"large", shape:"pill",
         text:"continue_with", width: 320 });
     }catch(e){}
   }
@@ -2713,12 +2773,19 @@ function startGsi(cfg){
           /* hd narrows the account chooser, but jesus.cam.ac.uk is a subdomain
              and Google treats it as a different hd, so the real check is done
              on the server where it belongs. */
+          /* hd "*" is Google's own switch for "Workspace accounts only": it
+             keeps every consumer Gmail account out of the chooser, which is
+             what was being offered before. It covers cam.ac.uk and every
+             college subdomain alike. It is a hint to the chooser and nothing
+             more: the server still refuses anything that is not a Cambridge
+             address on the MCR register. */
+          hd: "*",
           callback: onCredential, ux_mode: "popup", auto_select: false, itp_support: true
         });
         warmUp();
         const el = $("gsiBtn");
         el.innerHTML = "";
-        google.accounts.id.renderButton(el, { theme:"outline", size:"large", shape:"pill",
+        google.accounts.id.renderButton(el, { theme:"filled_black", size:"large", shape:"pill",
           text:"continue_with", width: Math.min(360, Math.max(240, el.offsetWidth || 320)),
           logo_alignment:"left" });
         /* If Google refuses the origin it renders nothing at all and throws
@@ -2903,7 +2970,7 @@ function bookUnreachable(d){
     'Your Google sign in was accepted, but the Jesus College MCR register could not be ' +
     'reached, so your membership could not be confirmed. Access is not granted without ' +
     'that confirmation.<br><br>This is usually temporary. Please try again in a moment. ' +
-    'If it continues, open the register directly and let the MCR Committee know.',
+    'If it continues, open the register directly and let the MCR committee know.',
     '<button class="btn cream sm" data-book-again>Try again</button>' +
     '<a class="btn ghost sm" href="' + BOOK_REGISTER + '" target="_blank" rel="noopener">Open the register</a>');
 }
@@ -3010,13 +3077,12 @@ let bootPct = 8, slowTimer = null, bootRaf = 0, bootFrom = 0;
 function bootEase(t){ return 1 - Math.pow(1 - t, 2.6); }
 function bootPaint(){
   const bar = $("bootBar");
-  if (bar) bar.style.width = bootPct.toFixed(1) + "%";
+  if (bar) bar.style.transform = "scaleX(" + (bootPct / 100).toFixed(3) + ")";
   /* The doors are the moment the app is nearly here, not a timer of their own.
      Opening them once is enough: the class stays on until the walk is reset. */
-  if (bootPct >= 42){
-    const sc = $("chimneyScene");
-    if (sc && !sc.classList.contains("open")) sc.classList.add("open");
-  }
+  /* The doors no longer open on the bar. They open when the page has actually
+     arrived, in bootDone, so the walk lasts exactly as long as the wait and
+     the arrival is the moment you go through. */
 }
 function bootTalk(on){
   clearInterval(bootTimer); clearTimeout(slowTimer);
@@ -3106,7 +3172,10 @@ function bootStuck(msg){
    drifts forward. Only once the fade is over is anything torn down. */
 function bootDone(){
   const be = $("boot"), bar = $("bootBar"), sc = $("chimneyScene");
-  if (bar) bar.style.width = "100%";
+  if (bar) bar.style.transform = "scaleX(1)";
+  /* The walk has been going for as long as the server took. Now the doors
+     open and you go through: that is the whole of the arrival, and it is the
+     only part that waits on a clock. */
   if (sc) sc.classList.add("open");
   /* Stop the clock but leave the scene standing, which is why stopWalk is not
      called here. */
@@ -3114,7 +3183,6 @@ function bootDone(){
   if (bootRaf) cancelAnimationFrame(bootRaf);
   bootRaf = 0; bootPct = 8;
   if (!be){ return; }
-  be.classList.add("done");
   const end = () => {
     be.hidden = true;
     be.classList.remove("done");
@@ -3124,8 +3192,14 @@ function bootDone(){
      loading screen over the app for ever, so the timer is the backstop. */
   let over = false;
   const once = () => { if (over) return; over = true; end(); };
-  be.addEventListener("transitionend", once, { once: true });
-  setTimeout(once, 620);
+  /* The fade starts after the doors have swung and the camera has gone
+     through, and never before: the fade was starting on top of a shut gate. */
+  const THROUGH = 1500;
+  setTimeout(() => {
+    be.classList.add("done");
+    be.addEventListener("transitionend", once, { once: true });
+    setTimeout(once, 620);
+  }, THROUGH);
 }
 /* What a section looks like while it is waiting. Better than an empty page,
    and it stops the layout jumping when the real thing lands. */
@@ -3212,7 +3286,7 @@ function startWalk(){
   sc.classList.remove("open");
   walkStart = Date.now();
   bootPct = 8;
-  const bar = $("bootBar"); if (bar) bar.style.width = "8%";
+  const bar = $("bootBar"); if (bar) bar.style.transform = "scaleX(.08)";
   requestAnimationFrame(() => {
     try{ sc.getAnimations({ subtree: true }).forEach(a => { a.cancel(); a.play(); }); }catch(e){}
   });
@@ -3367,8 +3441,14 @@ function sheet(title, inner, onOpen, sticky){
   if (onOpen) onOpen(el);
 }
 function closeSheet(){
-  const el = $("sheet");
-  if (el) el.remove();
+  /* The same slide, played backwards. The node goes when the animation
+     ends, or after 300ms if it never starts. */
+  const el = document.querySelector(".sheet:not(.out)");
+  if (el){
+    el.classList.add("out");
+    el.addEventListener("animationend", () => el.remove(), { once:true });
+    setTimeout(() => { if (el.parentNode) el.remove(); }, 300);
+  }
   document.body.classList.remove("locked");
   sheetOpen = false;
 }
@@ -3381,7 +3461,7 @@ const isAdmin = () => !!(S && S.me.admin);
    its way in while the room never sees the tab. One reader over FEATURES
    rather than a test at each site, so there is a single rule to change on the
    day a section is ready. */
-const canSee = k => !!FEATURES[k] || isCommittee();
+const canSee = k => k === "business" ? false : (!!FEATURES[k] || isCommittee());
 const evById = id => (S.events || []).filter(e => e.id === id)[0] || null;
 const myStatus = id => (S.mine && S.mine[id] && S.mine[id].status) || "";
 const catOf = ev => {
@@ -3611,6 +3691,55 @@ function renderTodayUrgent(){
 let homeWeek = null;
 /* The week, on the front page, and you can walk through it without leaving.
    Arrows, swipe, and a way back to this week when you have wandered off. */
+/* WHAT THE CAFF IS SERVING.
+   Read from the college's own menu board once a day by the server and shown
+   here as it was read, with the day it was read on. Lunch and dinner for
+   today, and the days ahead behind a small control, because the person
+   deciding whether to eat in wants today and nobody else wants a week of
+   soup. The formal hall menu is behind Raven, so that is a link and a line. */
+let menuDay = 0;
+const MENU_MARK = { vegetarian: "V", vegan: "Ve", halal: "H", "gluten-free": "GF" };
+function menuDish(x){
+  return '<li><span class="dn">' + esc(x.name) + "</span>" +
+    (x.marks && x.marks.length ? '<span class="dm">' + x.marks.map(k =>
+      '<i title="' + esc(k) + '">' + esc(MENU_MARK[k] || k) + "</i>").join("") + "</span>" : "") +
+    (x.price ? '<span class="dp">' + esc(x.price) + "</span>" : "") +
+    (x.allergens && x.allergens.length ? '<span class="da">' + esc(x.allergens.join(", ")) + "</span>" : "") +
+    "</li>";
+}
+function menuMeal(m, label){
+  if (!m) return '<div class="meal"><b>' + esc(label) + '</b><p class="lede">Not published for this day.</p></div>';
+  return '<div class="meal"><b>' + esc(label) + "</b>" +
+    m.courses.map(c => '<div class="course"><span class="cn">' + esc(c.course) + "</span><ul>" +
+      c.dishes.map(menuDish).join("") + "</ul></div>").join("") + "</div>";
+}
+function renderTodayMenu(){
+  const M = S.menu || {};
+  const days = Array.isArray(M.days) ? M.days : [];
+  if (!days.length){
+    put("todayMenu", '<div class="card menucard"><div class="grp" style="margin:0 0 6px">The Caff</div>' +
+      '<p class="lede">The college’s menu board has not been read yet, or has nothing published. ' +
+      'The college publishes it at <a href="https://www.jesus.cam.ac.uk/college/life-jesus/food-and-drink/cafeteria-lunch-menu" target="_blank" rel="noopener">its own page</a>.</p>' +
+      formalLine(M) + "</div>");
+    return;
+  }
+  if (menuDay >= days.length) menuDay = 0;
+  const d = days[menuDay];
+  const stamp = M.at ? " &middot; read " + esc(ago(M.at)) : "";
+  put("todayMenu", '<div class="card menucard">' +
+    '<div class="grp" style="margin:0 0 6px">The Caff<span class="ref" style="margin-left:auto">from the college’s menu board' + stamp + "</span></div>" +
+    '<div class="menunav">' + days.map((x, i) =>
+      '<button data-menuday="' + i + '" aria-pressed="' + (i === menuDay) + '">' +
+      esc(i === 0 ? "Today" : DOW[new Date(x.date + "T12:00:00").getDay()]) + "</button>").join("") + "</div>" +
+    '<div class="meals">' + menuMeal(d.meals.lunch, "Lunch") + menuMeal(d.meals.dinner, "Dinner") + "</div>" +
+    '<p class="lede" style="margin-top:8px">V vegetarian, Ve vegan, H halal, GF gluten free. Allergens as the college lists them; ask at the counter if it matters.</p>' +
+    formalLine(M) + "</div>");
+}
+function formalLine(M){
+  const u = safeUrl(M.formal || "https://jnet.jesus.cam.ac.uk/jnet/catering-and-events/formal-hall-menu");
+  return '<p class="lede">The formal hall menu is on JNet behind Raven, so it cannot be read here: ' +
+    '<a href="' + esc(u) + '" target="_blank" rel="noopener">check it yourself</a>.</p>';
+}
 function renderTodayWeek(){
   const t = todayLondon();
   if (!homeWeek) homeWeek = weekStart(t);
@@ -3759,7 +3888,7 @@ function openWhoEditor(key){
   if (!own && !isAdmin()) return toast("Only an administrator can edit somebody else.");
   let photo = faceOf(p) || "";
   sheet(p.name || p.role,
-    '<div id="whoPrev">' + (photo ? '<img class="uplshot" src="' + esc(safeImg(photo)) + '">' : "") + "</div>" +
+    '<div id="whoPrev">' + (safeImg(photo) ? '<img class="uplshot" src="' + esc(safeImg(photo)) + '">' : "") + "</div>" +
     '<label class="f"><span>A photograph</span><input type="file" id="whoPhoto" accept="image/*"></label>' +
     '<div class="f2"><label class="f"><span>Name</span><input id="whoName" value="' + esc(p.name) + '"></label>' +
     '<label class="f"><span>Email</span><input id="whoMail" value="' + esc(p.email || "") + '"' +
@@ -3849,7 +3978,7 @@ function openEvent(id){
     '<div class="rowline"><div class="t"><b>' + esc(f[1]) + "</b><span>" + esc(f[0]) + "</span></div></div>").join("") + "</div>");
   if ((ev.leads || []).length) lines.push('<div class="grp">Who is running it</div><div class="whogrid">' +
     ev.leads.map(l => '<div class="whoc">' +
-      (faceOf(l) ? '<img class="ph" src="' + esc(safeImg(faceOf(l))) + '" alt="">' : '<span class="ph">' + esc(initials(l.name)) + "</span>") +
+      (faceSrc(l) ? '<img class="ph" src="' + esc(faceSrc(l)) + '" alt="">' : '<span class="ph">' + esc(initials(l.name)) + "</span>") +
       "<b>" + esc(l.name) + "</b><span>" + esc(l.role) + "</span></div>").join("") + "</div>");
   const pos = m.position ? " You are " + m.position + ordinal(m.position) + " on the waiting list." : "";
   if (ev.terms) lines.push('<div class="grp"><b>Terms</b></div><div class="card"><p>' + esc(ev.terms) + "</p></div>");
@@ -3925,12 +4054,19 @@ function renderLodge(){
     '<button data-roomtab="mine" aria-pressed="' + (roomTab === "mine") + '">Your requests' +
       (nR ? " &middot; " + nR : "") + '</button>');
   put("roomBody", roomTab === "mine" ? roomMine(S.rooms || []) : lodgeRoom());
+  drawn.board = drawn.room = drawn.info = S.now;
+  renderLodgeShelf();
+}
+/* Only the Info shelf. A shelf tap or a keystroke in the JCSU search
+   should not rebuild the board and the room grid as well. */
+function renderLodgeShelf(){
+  if (!S) return;
   const counts = { forms: (S.links || []).length, guides: (S.resources || []).length,
     sport: (S.clubs || []).length };
   if (["forms","guides","health","sport"].indexOf(lodgeTab) < 0) lodgeTab = "forms";
   put("lodgeSeg", LODGE_TABS.map(t =>
     '<button data-lodge="' + t[0] + '" aria-pressed="' + (lodgeTab === t[0]) + '">' + esc(t[1]) +
-    (counts[t[0]] ? " &middot; " + counts[t[0]] : "") + "</button>").join(""));
+    "</button>").join(""));
   put("lodgeBody", { forms: lodgeForms, guides: lodgeGuides,
     health: lodgeHealth, sport: lodgeSport }[lodgeTab]());
 }
@@ -3965,13 +4101,13 @@ function lodgeNow(){
 }
 function lodgeForms(){
   const L = S.links || [];
-  const first = ["permit","maintenance"];
+  const first = ["permit","maintenance","guest"];
   const card = l => '<a class="linkcard" href="' + esc(safeUrl(l.url)) + '" target="_blank" rel="noopener">' +
     '<div class="t"><b>' + esc(l.name) + "</b><p>" + esc(l.note) + "</p>" +
     '<span class="who">' + esc(l.who) + "</span></div><span class=\"arw\">&#8599;</span></a>";
-  return '<div class="grp">The two everybody needs</div>' +
+  return '<div class="grp"><b>The three everybody needs</b></div>' +
     L.filter(l => first.indexOf(l.key) >= 0).map(card).join("") +
-    '<div class="grp">Jesus, in its own words</div><div class="linkgrid">' +
+    '<div class="grp"><b>Jesus College, in its own words</b></div><div class="linkgrid">' +
     L.filter(l => first.indexOf(l.key) < 0).map(card).join("") + "</div>";
 }
 function lodgeGuides(){
@@ -4113,7 +4249,7 @@ function lodgeHealth(){
     "999 is also the number for the police and the fire brigade.</p>" +
     "<p>Ring the Porters on 01223 339339 as well. The Lodge is staffed at every hour of the year, a " +
     "Porter will reach you before an ambulance can find the right staircase, and they will meet the " +
-    "ambulance at the gate and bring it in. Every Porter is a trained first aider.</p>" +
+    "ambulance at the gate and bring it in.</p>" +
     '<div class="fanums">' +
       '<a href="tel:999"><b>999</b><span>Ambulance, police, fire</span></a>' +
       '<a href="tel:+441223339339"><b>01223 339339</b><span>Porters’ Lodge, any hour</span></a>' +
@@ -4121,7 +4257,7 @@ function lodgeHealth(){
     "</div></div>" +
 
     /* 2. THE TABLE. Six doors, in the order somebody should consider them. */
-    '<div class="grp">Where to go</div>' +
+    '<div class="grp"><b>Where to go</b></div>' +
     '<div class="fatri">' +
       tri("now", "siren", "999 or A and E",
         "Anything life threatening, or an injury that cannot wait: heavy bleeding, breathing trouble, " +
@@ -4129,9 +4265,9 @@ function lodgeHealth(){
       tri("now", "phone", "NHS 111",
         "You are not sure how serious it is. Free, answered at any hour, and they can book you a slot " +
         "and tell you where to go.", "Now") +
-      tri("soon", "cross", "The College Nurse",
-        "An ordinary problem you would like looked at without leaving college, or a first opinion on " +
-        "something you are unsure about.", "This week") +
+      tri("soon", "cross", "The Health and Wellbeing Centre",
+        "The college’s Community Health Practitioner and Mental Health Nurse, in Library Court. An " +
+        "ordinary problem looked at without leaving college, or a first opinion.", "This week") +
       tri("soon", "pill", "A pharmacy",
         "A cough, a rash, hay fever, emergency contraception, or advice on something you can treat " +
         "yourself. No appointment needed.", "Today") +
@@ -4139,7 +4275,7 @@ function lodgeHealth(){
         "Anything that has been going on a while, repeat prescriptions, referrals, vaccinations and " +
         "mental health support.", "Register now") +
       tri("plan", "mind", "Welfare and counselling",
-        "How you are doing, rather than a symptom. The MCR welfare officers, the College Welfare " +
+        "How you are doing, rather than a symptom. The MCR welfare officers, the college’s Welfare " +
         "Tutor, or the University Counselling Service.", "Any time") +
     "</div>" +
 
@@ -4168,20 +4304,23 @@ function lodgeHealth(){
 
     /* 4. IN COLLEGE. */
     '<div class="grp">In college</div>' +
-    sec("cross", "The College Nurse, Staircase 1, Library Court",
-      "<p>The Nurse’s room is on the ground floor of Staircase 1 in Library Court, below Chapel " +
-      "Court by the Quincentenary Library. Register with the Nurse when you arrive, as well as with a " +
-      "GP rather than instead of one. The Nurse is the sensible first stop for ordinary problems and " +
-      "knows which door in college opens next when something turns out not to be ordinary.</p>" +
-      '<p class="fnote">Surgery hours and the best way to make contact change from year to year, so ' +
-      "they are not printed here where they would quietly go out of date. The college welfare page " +
+    '<p class="lede">What follows is the MCR committee’s summary of Jesus College’s own welfare page. It is not an official college publication; check that page for the current position.</p>' +
+    sec("cross", "The Health and Wellbeing Centre, Library Court",
+      "<p>According to the college’s own welfare page, the Health and Wellbeing Centre in Library Court " +
+      "is staffed by a Community Health Practitioner and a Mental Health Nurse, and the college " +
+      "physiotherapist is arranged through the Community Health Practitioner. Register there when you " +
+      "arrive, as well as with a GP rather than instead of one. It is the sensible first stop for " +
+      "ordinary problems, and the people there know which door in college opens next when something " +
+      "turns out not to be ordinary.</p>" +
+      '<p class="fnote">Opening hours and the best way to make contact change from year to year, so ' +
+      "they are not printed here where they would quietly go out of date. Jesus College’s welfare page " +
       "carries the current details, and the Lodge will tell you if you would rather ask a person. " +
       "There is also a Welfare Tutor on duty at every hour of the year: ring the Lodge and ask who is " +
       "on.</p>") +
     (w ? '<div class="linkgrid">' +
       out(esc(safeUrl(w.url)), "College welfare",
-        "Surgery hours, the Nurse, the Welfare Tutors, and what the college itself provides. Believe " +
-        "this page over anything anybody remembers, including this one.", "The college") +
+        "Opening hours, the Health and Wellbeing Centre, the Welfare Tutors, and what Jesus College itself " +
+        "provides. Treat that page as the authority over anything anybody remembers, including this shelf.", "Jesus College") +
       "</div>" : "") +
 
     /* 5. THE HOSPITAL. */
@@ -4194,7 +4333,7 @@ function lodgeHealth(){
       "<p>Patients are seen in order of how ill they are rather than the order they arrived in, which " +
       "is why the wait can run to several hours. If what you have is not an emergency, something else " +
       "will see you sooner: 111 for advice and a booked slot, a pharmacy, an urgent treatment centre, " +
-      "your own GP, or the College Nurse.</p>" +
+      "your own GP, or the Health and Wellbeing Centre in college.</p>" +
       "<p>It is on the Biomedical Campus about two and a half miles south of Jesus. The Universal bus " +
       "and the Citi 1 and Citi 2 run there, and a taxi takes about fifteen minutes in normal traffic. " +
       "Everything that changes is on the hospital’s own page.</p>") +
@@ -4226,7 +4365,7 @@ function lodgeHealth(){
     '<div class="grp">How you are doing</div>' +
     sec("mind", "Four routes, and you may use all of them",
       "<p>None of these is more legitimate than the others. The MCR welfare officers read the welfare " +
-      "thread on the Ask page, and it can be sent without your name. The college keeps a Welfare Tutor " +
+      "thread on the Ask page, and it can be sent without your name. Jesus College keeps a Welfare Tutor " +
       "on duty at every hour of the year, and the Lodge will tell you who is on tonight. The " +
       "University Counselling Service is free and you refer yourself. And if the problem is tonight, " +
       "Samaritans answer at any hour, and you do not have to be in crisis to ring them.</p>" +
@@ -4254,6 +4393,7 @@ function lodgeRoom(){
     '<p class="lede">Pick a time nobody else has taken, send it, and a member of the committee will put ' +
     "it on the calendar. Bigger than a few friends and it needs a permit from the Dean as well.</p>" +
     '<div class="acts"><button class="btn gold sm" data-room>Ask for the room</button>' +
+    '<button class="btn ghost sm" data-ask="roomidea">Suggest something for the room</button>' +
     '<a class="btn ghost sm" href="' +
       esc(safeUrl(((S.links || []).filter(l => l.key === "permit")[0] || {}).url) || "#") +
       '" target="_blank" rel="noopener">The permit form</a></div></div>' +
@@ -4363,22 +4503,25 @@ function renderAsk(){
 function askNew(){
   return '<div class="card"><p>Pick what it is about and it goes to one person, not to everybody. ' +
     "Most of these open an email to that officer, so their reply comes back to your own inbox. " +
-    "The two welfare ones stay here instead, where they can be sent without your name.</p>" +
+    "The two welfare ones stay here instead, where they can be sent without your name, and so does a " +
+    "suggestion for the room, which stays between you and the committee.</p>" +
     '<p class="lede">If it cannot wait, ring the Porters on 01223 339339. They are there every hour of ' +
     "the year and they will find whoever is on duty.</p></div>" +
     '<div class="tilegrid">' + (S.ask || []).map(a =>
       '<button data-ask="' + esc(a.key) + '">' + esc(a.name) +
       (a.ticket
-        ? "<small>Kept here, and you may send it without your name. Only the officer and the President see it</small>"
+        ? (a.welfare
+            ? "<small>Kept here, and you may send it without your name. Only the officer and the President see it</small>"
+            : "<small>Kept here, with your name on it. Only the committee sees it</small>")
         : "<small>Goes to " + esc(a.role || "the committee") + " as an email</small>") +
       "</button>").join("") + "</div>" +
     /* Somebody who can be spoken to in person is worth more than a list of
        other people's forms, so the hour comes first. */
     hoursHtml() +
-    notOursHtml() +
-    /* Last, and deliberately so. Nobody arrives at this page to claim
-       expenses, but the person who has just paid for the drinks is on it. */
-    '<div class="grp">Money you have laid out</div>' + claimCard("0");
+    /* Directly under the hour, because the person who has just paid for the
+       drinks is the person who comes to speak to us. */
+    '<div class="grp">Money you have laid out</div>' + claimCard("0") +
+    notOursHtml();
 }
 function askThreads(){
   const th = S.tickets || [];
@@ -4413,7 +4556,8 @@ function roomMine(rooms){
       '<div class="acts"><button class="btn gold sm" data-room>Ask for the room</button></div></div>';
   const one = r => {
     const st = r.status === "yes" ? "answered" : r.status === "no" ? "closed" : "open";
-    const lab = r.status === "yes" ? "Yours" : r.status === "no" ? "Not this time" : "With the committee";
+    const lab = (r.status === "yes" ? "Yours" : r.status === "no" ? "Not this time" : "With the committee") +
+      (r.public ? " &middot; public" : "");
     return '<div class="thread"><div class="top"><b>' + esc(r.title) + '</b>' +
       '<span class="st ' + st + '">' + lab + "</span></div>" +
       '<div class="ref">' + esc(longDate(r.date)) + " &middot; " + esc(clock(r.start)) + " to " +
@@ -4477,7 +4621,7 @@ function askByEmail(cat, subject){
   const body = [
     "",
     "",
-    "\u2014",
+    "-- ",
     who ? who + (S.me && S.me.email ? " (" + S.me.email + ")" : "") : "",
     "Sent from the Jesus MCR site, " + cat.name + "."
   ].join("\n");
@@ -4506,7 +4650,7 @@ function openAsk(key, subject){
   if (!cat.ticket) return askByEmail(cat, subject);
   sheet(cat.name,
     (cat.first ? '<div class="card"><p>' + esc(cat.first) + "</p></div>" : "") +
-    (key === "room" ? (function(){ const l = (S.links||[]).filter(x => x.key === "maintenance")[0];
+    (key === "roomidea" ? (function(){ const l = (S.links||[]).filter(x => x.key === "maintenance")[0];
       return l ? '<a class="linkcard" href="' + esc(safeUrl(l.url)) + '" target="_blank" rel="noopener">' +
         '<div class="t"><b>' + esc(l.name) + '</b><p>' + esc(l.note) + '</p></div>' +
         '<span class="arw">&#8599;</span></a>' : ""; })() : "") +
@@ -4578,19 +4722,18 @@ function openRunEvent(){
     }));
 }
 function openRoom(){
-  const ok = ["mcr","prioress-room","upper-hall","bawden-room","radegund-hall","frankopan-hall","orchard","webb-library"];
-  const vs = (S.venues || []).filter(v => ok.indexOf(v.key) >= 0);
+  /* This asks for the MCR room and nothing else. A college room is the Dean’s form, not ours. */
   sheet("Put something on in the MCR",
     '<div class="card"><p>The MCR is a common room and cannot be booked so that others are shut out. What this does is put your event on the calendar, so nobody arrives to a room that is already full, and so people can see what is on.</p></div>' +
-    '<div class="warnbox"><b>More than five people needs a party permit</b> -> <b>Anything over five people needs a party permit</b>' +
+    '<div class="warnbox"><b>Anything over five people needs a party permit</b>' +
       "<span>Anything above five is a party as far as the Dean is concerned, and the permit has to be in " +
       "two weeks ahead. Put the request in here as well so it reaches the calendar, but do the permit first.</span>" +
       '<a class="btn gold sm" href="' +
         esc(safeUrl(((S.links || []).filter(l => l.key === "permit")[0] || {}).url) || "#") +
         '" target="_blank" rel="noopener">The permit form</a></div>' +
     '<label class="f"><span>What is it</span><input id="rmTitle" maxlength="90" placeholder="Pre-formal drinks for my birthday"></label>' +
-    '<label class="f"><span>Where</span><select id="rmVenue">' + vs.map(v =>
-      '<option value="' + esc(v.key) + '">' + esc(v.name) + "</option>").join("") + "</select></label>" +
+    /* Only the MCR. Requests for college rooms go to the college, not to us. */
+    '<label class="check"><input type="checkbox" id="rmPublic"> Show it in the public calendar with its name, so more people can come. Leave this off and it appears only as “MCR booking”.</label>' +
     '<label class="f"><span>Date</span><input type="date" id="rmDate" value="' + esc(todayLondon()) + '"></label>' +
     '<div class="f2"><label class="f"><span>From</span><input type="time" id="rmStart" value="18:00"></label>' +
     '<label class="f"><span>To</span><input type="time" id="rmEnd" value="20:00"></label></div>' +
@@ -4601,13 +4744,14 @@ function openRoom(){
       const b = e.currentTarget;
       spin(b, "Checking the calendar");
       try{
-        const d = await api("roomRequest", { title: $("rmTitle").value, venue: $("rmVenue").value,
+        const d = await api("roomRequest", { title: $("rmTitle").value, venue: "mcr",
+          public: !!($("rmPublic") && $("rmPublic").checked),
           date: $("rmDate").value, start: $("rmStart").value, end: $("rmEnd").value,
           people: $("rmPeople").value, note: $("rmNote").value });
         S.rooms = d.rooms;
         if (d.tickets) S.tickets = d.tickets;
         closeSheet();
-        askTab = "rooms"; renderAsk();
+        askTab = "threads"; renderAsk();
         go("ask");
         toast(d.clashes && d.clashes.length
           ? "Sent, but " + d.clashes[0].title + " is already on then. The committee will come back to you."
@@ -4652,9 +4796,9 @@ function whoHtml(){
       (to && !vacant
         ? '<a class="phl" href="mailto:' + esc(to) + "?subject=" +
           encodeURIComponent("Jesus MCR: " + p.role) + '" title="Write to ' + esc(p.name) + '">' +
-          (faceOf(p) ? '<img class="ph" src="' + esc(safeImg(faceOf(p))) + '" alt="' + esc(p.name) + '">'
+          (faceSrc(p) ? '<img class="ph" src="' + esc(faceSrc(p)) + '" alt="' + esc(p.name) + '">'
                      : '<span class="ph">' + esc(initials(p.name)) + "</span>") + "</a>"
-        : (faceOf(p) ? '<img class="ph" src="' + esc(safeImg(faceOf(p))) + '" alt="' + esc(p.name) + '">'
+        : (faceSrc(p) ? '<img class="ph" src="' + esc(faceSrc(p)) + '" alt="' + esc(p.name) + '">'
                      : '<span class="ph">' + esc(vacant ? "vacant" : initials(p.name)) + "</span>")) +
       "<b>" + esc(p.name || "This seat is open") + "</b><span>" + esc(p.role) + "</span>" +
       /* Two ways to reach anybody: a thread here, which keeps a record and
@@ -5236,7 +5380,7 @@ function inboxRow(t){
   return '<div class="tk' + (opened ? " open" : "") + (t.welfare ? " welfare" : "") + '">' +
     '<button class="tkhead" data-inboxopen="' + esc(t.id) + '">' +
       '<span class="tkwho">' + esc(initials(t.who || t.catName)) + "</span>" +
-      '<span class="tkt"><b>' + esc(t.subject) + "</b><span>" + esc(t.catName) +
+      '<span class="tkt"><b>' + esc(t.subject) + (room && room.public ? ' <span class="chip">public</span>' : "") + "</b><span>" + esc(t.catName) +
         " &middot; " + esc(t.who || "Anonymous") + " &middot; " + esc(ago(t.lastAt)) + "</span></span>" +
       '<span class="st ' + esc(t.status) + '">' + esc(lab[t.status] || t.status) + "</span>" +
     "</button>" +
@@ -5846,6 +5990,10 @@ function moodCard(t){
   const best = Math.max(1, ...t.run.map(r => r.said));
   return '<div class="mood' + (t.mine ? " said" : "") + '">' +
     '<div class="mh"><b>' + esc(t.name) + '</b>' +
+      /* The committee can put a subject away from the card itself. It is a
+         setting, not a deletion, and the Committee page lists everything that
+         is put away so it can be brought back. */
+      (isCommittee() ? '<button class="mhide" data-moodhide="' + esc(t.key) + '" title="Put this subject away for now" aria-label="Put this subject away for now">&minus;</button>' : "") +
       (t.move ? '<span class="move ' + (t.move > 0 ? "up" : "down") + '" title="' +
         (t.move > 0 ? "better" : "worse") + ' than last month">' + (t.move > 0 ? "\u2191" : "\u2193") +
         Math.abs(t.move).toFixed(1) + '</span>' : "") +
@@ -5985,7 +6133,7 @@ function swapCard(w, hold){
       '<span class="sfl">waiting</span>' + fld("price", w.price, "25") +
       '<span class="sfl">each</span></div></div>' +
     '<div class="swlogo-row"><div id="swLogoPrev">' +
-      (w.logo ? '<img class="swlogo big" src="' + esc(safeImg(w.logo)) + '" alt="">'
+      (safeImg(w.logo) ? '<img class="swlogo big" src="' + esc(safeImg(w.logo)) + '" alt="">'
               : '<span class="swlogo big empty">no crest</span>') + "</div>" +
       '<label class="btn ghost sm">Add their crest<input type="file" id="swLogo" accept="image/*" hidden></label>' +
       '<input type="hidden" data-f="logo" value="' + esc(w.logo || "") + '"></div>' +
@@ -6003,7 +6151,7 @@ function swapCard(w, hold){
   return '<div class="swap' + (m ? " mine" : "") + (w.status !== "open" ? " shut" : "") +
       (w.past ? " past" : "") + '">' +
     '<div class="swtop"><div class="swmain">' +
-      (w.logo ? '<img class="swlogo" src="' + esc(safeImg(w.logo)) + '" alt="">' : "") +
+      (safeImg(w.logo) ? '<img class="swlogo" src="' + esc(safeImg(w.logo)) + '" alt="">' : "") +
       '<b class="swcol">' + esc(w.college || "Somewhere") + "</b>" +
       '<span class="swwhen">' + esc(longDate(w.date)) + " &middot; " + esc(clock(w.start)) + "</span>" +
       (w.venue ? '<span class="swwhere">' + esc(w.venue) + "</span>" : "") +
@@ -6209,7 +6357,7 @@ function voiceCard(){
    ============================================================ */
 /* Second life is gone. The Lodge has become three: the board on its own, the
    MCR room on its own, and Info for the links, the guides and the sport. */
-const VIEWS = ["today","board","say","room","swaps","ask","biz","info","me","desk","inbox","swapdesk","members","admin"];
+const VIEWS = ["today","board","say","room","swaps","ask","info","me","desk","inbox","swapdesk","members","admin"];
 /* Stagger the first children of whatever has just been shown. Sixty
    milliseconds apart is enough to read as unfolding and not as waiting. */
 function stagger(id){
@@ -6294,11 +6442,10 @@ const typingIn = id => {
    the others as needing it, and they are drawn the moment they are opened.
    Nothing renders twice and nothing renders unseen. */
 const DRAW = {
-  today: () => { renderCrow(); renderBumps(); renderTodayUrgent(); renderTodayWeek();
+  today: () => { renderCrow(); renderBumps(); renderTodayUrgent(); renderTodayMenu(); renderTodayWeek();
                  renderTodayOn(); renderTodayQuick(); renderTodayNews(); },
   board: renderLodge, room: renderLodge, info: renderLodge,
   swaps: renderSwaps, ask: renderAsk, say: renderSay,
-  biz: () => { renderTreasury(); renderIdeas(); renderBiz(); },
   me: () => { if (!typingIn("v-me")) renderMe(); },
   desk: renderDesk, swapdesk: renderSwapDesk, inbox: renderQueue,
   members: renderDesk,
@@ -6352,7 +6499,7 @@ document.addEventListener("click", async e => {
     "[data-skip],[data-editser],[data-second],[data-vote],[data-mset],[data-code],[data-checkin]," +
     "[data-delupdate],[data-rosteredit],[data-rosterdel],[data-newidea],[data-back]," +
     "[data-setidea],[data-dropidea]," +
-    "[data-roomnote],[data-runevent],[data-sayreport],[data-saypdf],[data-boardall],[data-mood],[data-moodline],[data-moodreply],[data-moodsay],[data-sound],[data-soundsay],[data-soundclose],[data-roomdrop],[data-roomtab],[data-formal],[data-copy],[data-copyboth],[data-bumpedit],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-motiondrop],[data-desktab],[data-tick2],[data-desk],[data-asktab],[data-thread],[data-mythreads],[data-swaptake],[data-swapdrop],[data-swappaid],[data-swapedit],[data-swapsave],[data-swapcancel],[data-swapdel],[data-swappast],[data-bank],[data-swapkick],[data-swappromote],[data-copyaddrs],[data-swapdeskedit],[data-jcsu],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-newseries],[data-csv],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
+    "[data-roomnote],[data-runevent],[data-sayreport],[data-saypdf],[data-boardall],[data-menuday],[data-mood],[data-moodline],[data-moodreply],[data-moodsay],[data-sound],[data-soundsay],[data-soundclose],[data-moodhide],[data-roomdrop],[data-roomtab],[data-formal],[data-copy],[data-copyboth],[data-bumpedit],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-motiondrop],[data-desktab],[data-tick2],[data-desk],[data-asktab],[data-thread],[data-mythreads],[data-swaptake],[data-swapdrop],[data-swappaid],[data-swapedit],[data-swapsave],[data-swapcancel],[data-swapdel],[data-swappast],[data-bank],[data-swapkick],[data-swappromote],[data-copyaddrs],[data-swapdeskedit],[data-jcsu],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-newseries],[data-csv],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
   if (!t) return;
   const d = t.dataset;
   try{
@@ -6362,6 +6509,7 @@ document.addEventListener("click", async e => {
        because somebody who changes their mind should not be stuck with a
        reading they no longer stand behind. */
     if (t.hasAttribute("data-boardall")){ boardAll = d.boardall === "1"; renderLodge(); return; }
+    if (t.hasAttribute("data-menuday")){ menuDay = Number(d.menuday) || 0; renderTodayMenu(); return; }
     if (t.hasAttribute("data-mood")){
       const now = ((S.say || {}).topics || []).filter(x => x.key === d.mood)[0];
       const n = Number(d.n), same = now && now.mine === n;
@@ -6477,6 +6625,18 @@ document.addEventListener("click", async e => {
           }catch(err){ unspin(b); fail(err); }
         }));
     }
+    if (t.hasAttribute("data-moodhide")){
+      const off = sayHidden().slice();
+      if (off.indexOf(d.moodhide) < 0) off.push(d.moodhide);
+      sending(t, "Putting away");
+      try{
+        const r = await api("saveSettings", { sayHidden: off.join(",") });
+        S.sayHidden = r.sayHidden || off;
+        renderSay(); renderBadges();
+        toast("Put away. Bring it back from the Committee page.");
+      }catch(e){ sent(t); fail(e); }
+      return;
+    }
     if (t.hasAttribute("data-soundclose")){
       if (!confirm("Close this one? Nobody will be able to answer after that.")) return;
       try{ const r = await api("soundingSet", { id: d.soundclose, status: "closed" });
@@ -6506,7 +6666,7 @@ document.addEventListener("click", async e => {
       }catch(e){ fail(e); }
       return;
     }
-    if (d.lodge){ lodgeTab = d.lodge; renderLodge(); window.scrollTo(0, 0); return; }
+    if (d.lodge){ lodgeTab = d.lodge; renderLodgeShelf(); window.scrollTo(0, 0); return; }
     if (t.hasAttribute("data-newnotice")) return openNoticeEditor();
     if (d.hw !== undefined){
       homeWeek = d.hw === "0" ? weekStart(todayLondon())
@@ -6562,13 +6722,16 @@ document.addEventListener("click", async e => {
       await refresh(false);
       return toast(d.on === "1" ? "Marked as arrived." : "Arrival mark removed.");
     }
-    if (d.asktab){ askTab = d.asktab; renderAsk(); window.scrollTo(0, 0); return; }
+    /* The Today tile and the Ask page's own segmented control both arrive
+       here. The section has to be shown, not only redrawn: redrawing a hidden
+       panel is what made the tile look as if it did nothing at all. */
+    if (d.asktab){ closeSheet(); askTab = d.asktab; go("ask"); renderAsk(); window.scrollTo(0, 0); return; }
     if (t.hasAttribute("data-thread")){ openThread = d.thread || ""; renderAsk(); return; }
     if (d.mythreads !== undefined){ showShut = d.mythreads === "1"; renderAsk(); return; }
     if (d.swaptake) return openSwapTake(d.swaptake);
     if (t.hasAttribute("data-swapedit")){ swapEdit = d.swapedit || "new"; renderSwaps(); return; }
     if (t.hasAttribute("data-swapcancel")){ swapEdit = ""; renderSwaps(); return; }
-    if (d.jcsu !== undefined){ jcsuOpen = d.jcsu === "1"; renderLodge(); return; }
+    if (d.jcsu !== undefined){ jcsuOpen = d.jcsu === "1"; renderLodgeShelf(); return; }
     if (d.swappast !== undefined){ swapPast = d.swappast === "1"; renderSwaps(); window.scrollTo(0, 0); return; }
     if (t.hasAttribute("data-swapsave")){
       const card = t.closest(".swap");
@@ -6660,10 +6823,6 @@ document.addEventListener("click", async e => {
       return;
     }
     if (d.goto){ closeSheet(); return go(d.goto); }
-    /* Straight to the half of Ask that was asked for, not to its front page. */
-    if (d.asktab){
-      closeSheet(); askTab = d.asktab; go("ask"); renderAsk(); window.scrollTo(0, 0); return;
-    }
     if (t.hasAttribute("data-runevent")) return openRunEvent();
     if (t.hasAttribute("data-room")) return openRoom();
     if (d.ask) return openAsk(d.ask, d.subject || "");
@@ -6934,7 +7093,7 @@ function afterTyping(draw, id){
 document.addEventListener("input", e => {
   if (e.target.closest("#jcsuQ") && S){
     jcsuQ = e.target.value;
-    afterTyping(renderLodge, "jcsuQ");
+    afterTyping(renderLodgeShelf, "jcsuQ");
     return;
   }
   if (!e.target.closest("#deskQ") || !S) return;
