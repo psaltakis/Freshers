@@ -329,12 +329,16 @@ pre{background:rgba(0,0,0,.36);border-radius:12px;padding:13px 14px;font-family:
 <script>
 /* Put the deployed Apps Script Web App URL here when this page is hosted
    anywhere other than inside Apps Script itself. */
-const API_URL = "https://script.google.com/macros/s/AKfycbybvMOjnZB3ej2o_m9uIUBmPK-BOjbhJ7eHTGy1URfSxC2OLjcF1fnoew7lVCkTRULaig/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxqWNNrxgEj_L-J1AX7gOSbFOUGcQwiatqQRD3S5Wcz9CqPHLSCfwX-pW61vTX-tfVgcg/exec";
 
 
 const $ = id => document.getElementById(id);
+/* Everything written into the page goes through this. The apostrophe is
+   escaped as well as the quotation mark: an attribute written with single
+   quotes is as easy to climb out of as one written with double, and a
+   name typed by an applicant is read by the President's browser. */
 const esc = s => String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
-  .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  .replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
 const TOKEN_KEY = "pb_token";
 const getToken = () => { try{ return localStorage.getItem(TOKEN_KEY) || ""; }catch(e){ return ""; } };
 const setToken = t => { try{ t ? localStorage.setItem(TOKEN_KEY, t) : localStorage.removeItem(TOKEN_KEY); }catch(e){} };
@@ -380,6 +384,14 @@ let deskTab = "waiting";
 const proofs = {};                 /* id:which -> loaded paper, fetched once */
 const proofShow = {};              /* id -> which paper is on show */
 const atDesk = () => location.hash === "#desk";
+/* A link the page did not write itself is only followed if it is plainly
+   an ordinary web address, so a stored javascript: or data: URL cannot be
+   put in front of the President. */
+const safeUrl = u => /^https?:\/\//i.test(String(u || "")) ? String(u) : "";
+/* The spreadsheet link comes out of a cell in the spreadsheet itself, which
+   is hand-edited and shared, so it is only followed if it points where a
+   spreadsheet actually lives. */
+const safeSheetUrl = u => /^https:\/\/(docs|drive)\.google\.com\//i.test(String(u || "")) ? String(u) : "";
 
 /* ---------- the moment after signing in ----------
    Real work, shown honestly: each line lights while the thing it names is
@@ -413,14 +425,17 @@ function loadShut(){
   setTimeout(() => { el.hidden = true; }, 460);
 }
 
-async function load(full){
+async function load(full, pre){
   if (full) loadOpen(["Checking your sign in",
     "Looking for your name in the register", "Setting your page out"]);
   try{
-    if (full) await sleep(420);
+    if (full) await sleep(160);
     if (full) loadMark(0, "done", "Signed in");
     if (full) loadMark(1, "on");
-    const both = await Promise.all([api("state"), full ? sleep(700) : null]);
+    /* The register hands the whole page over with the token now, so there
+       is nothing left to fetch and the steps are only as slow as they
+       need to be to be read. */
+    const both = await Promise.all([pre ? Promise.resolve(pre) : api("state"), full ? sleep(pre ? 220 : 400) : null]);
     S = both[0];
     $("gate").hidden = true; $("app").hidden = false; $("bOut").hidden = false;
     if (full){
@@ -433,11 +448,11 @@ async function load(full){
       $("loadSub").textContent = S.member
         ? (S.admin ? "The desk is yours." : "Everything the MCR runs is open to you.")
         : "Three short steps and the book is open.";
-      await sleep(520);
+      await sleep(260);
       loadMark(2, "done", "Ready");
     }
     render();
-    if (full){ loadDone = true; await sleep(420); loadShut(); }
+    if (full){ loadDone = true; await sleep(220); loadShut(); }
   }catch(e){
     setToken("");
     S = null;
@@ -450,12 +465,31 @@ async function load(full){
 window.addEventListener("hashchange", () => { if (S) render(); });
 
 /* ---------- the gate ---------- */
+const GATE_KEY = "pb_gate";
+function gateKept(){ try{ const o = JSON.parse(localStorage.getItem(GATE_KEY) || "null");
+  return (o && o.ready && o.clientId) ? o : null; }catch(e){ return null; } }
+function gateKeep(cfg){ try{ if (cfg && cfg.ready && cfg.clientId)
+  localStorage.setItem(GATE_KEY, JSON.stringify(cfg)); }catch(e){} }
+let gateDrawn = "";
 async function openGate(){
   $("gate").hidden = false;
+  /* On any visit after the first the button is drawn from what the register
+     said last time, while this visit's answer is still on its way. */
+  const kept = gateKept();
+  if (kept) drawGsi(kept);
   let cfg;
   try{ cfg = (await api("ping")).signIn; }
-  catch(e){ $("gateMsg").textContent = "The register cannot be reached: " + (e.message || e); return; }
+  catch(e){
+    if (!kept) $("gateMsg").textContent = "The register cannot be reached: " + (e.message || e);
+    return;
+  }
   if (!cfg || !cfg.ready){ $("gateMsg").textContent = "Sign in is not configured yet."; return; }
+  gateKeep(cfg);
+  drawGsi(cfg);
+}
+function drawGsi(cfg){
+  if (gateDrawn === String(cfg.clientId)) return;
+  gateDrawn = String(cfg.clientId);
   const start = () => {
     if (!(window.google && google.accounts && google.accounts.id)) return setTimeout(start, 300);
     google.accounts.id.initialize({ client_id: cfg.clientId, callback: onCredential,
@@ -470,7 +504,7 @@ async function onCredential(resp){
   try{
     const r = await api("googleToken", { cred: resp.credential });
     setToken(r.token);
-    await load(true);
+    await load(true, r.state && r.state.email ? r.state : null);
   }catch(e){ $("gateMsg").textContent = e.message || String(e); }
 }
 $("bOut").onclick = async () => {
@@ -715,7 +749,7 @@ function deskWaiting(A){
       (x.fresher ? ' <span class="stamp fr tiny">fresher</span>' : '') +
       '</b><span>' + esc(x.programme) + ' &middot; ' + esc(x.year) + ' &middot; ' + esc(x.decidedAt || "") +
       (x.reply ? ' &middot; \u201c' + esc(x.reply) + '\u201d' : '') + '</span></div>' +
-      (x.proofUrl ? '<a class="btn ghost sm" href="' + esc(x.proofUrl) + '" target="_blank" rel="noopener">Proof</a>' : '') +
+      (x.proofUrl ? '<a class="btn ghost sm" href="' + esc(safeUrl(x.proofUrl)) + '" target="_blank" rel="noopener">Proof</a>' : '') +
       '<span class="stamp ' + (x.status === "approved" ? "in" : "no") + '">' + esc(x.status) +
       '</span></div>').join("") + '</div>' : '');
 }
@@ -729,10 +763,24 @@ function proofPane(x){
       '<button data-pshow="' + esc(x.id) + '" data-w="2"' +
       (which === "2" ? ' class="on"' : '') + '>First year</button></div>'
     : '';
+  /* WHAT THE DESK IS ALLOWED TO BE SHOWN.
+     This used to take the applicant's own word for what their file was and
+     hand it to the browser: a file uploaded as text/html was put in a frame
+     and run, in the President's own browser, on their own page. The server
+     now names the type from the first bytes of the file, and only these
+     three are ever put on the screen. Anything else is a link to Drive. */
+  const SAFE = { "image/png": 1, "image/jpeg": 1, "application/pdf": 1 };
+  const mime = p && SAFE[String(p.mime)] ? String(p.mime) : "";
+  const data = p ? String(p.data || "").replace(/[^A-Za-z0-9+/=]/g, "") : "";
   const box = p
-    ? (/^image\//.test(p.mime)
-        ? '<img alt="proof" src="data:' + esc(p.mime) + ';base64,' + p.data + '">'
-        : '<iframe title="proof" src="data:' + esc(p.mime || "application/pdf") + ';base64,' + p.data + '"></iframe>')
+    ? (mime && data
+        ? (mime === "application/pdf"
+            ? '<iframe title="proof" sandbox src="data:application/pdf;base64,' + data + '"></iframe>'
+            : '<img alt="proof" src="data:' + mime + ';base64,' + data + '">')
+        : '<div class="lede" style="padding:14px">' +
+          esc(p.why || "That file is not a PDF, PNG or JPG, so it is not shown here.") +
+          (safeSheetUrl(p.url) ? ' <a href="' + esc(safeSheetUrl(p.url)) + '" target="_blank" rel="noopener">Open it in Drive</a>' : '') +
+          '</div>')
     : '<button class="btn sm" data-proof="' + esc(x.id) + '" data-w="' + which + '"' +
       (id ? '' : ' disabled') + '>' + (id ? 'Show the paper' : 'No paper attached') + '</button>';
   return tabs + '<div class="proofbox">' + box + '</div>';
@@ -767,7 +815,7 @@ function appCard(x){
           '<button class="btn sm" data-yes="' + esc(x.id) + '" data-fr="0">Write them in only</button>'
         : '<button class="btn gold sm" data-yes="' + esc(x.id) + '" data-fr="0">Write them in</button>') +
     '<button class="btn ghost sm" data-no="' + esc(x.id) + '">Say no</button>' +
-    (x.proofUrl ? '<a class="btn ghost sm" href="' + esc(x.proofUrl) + '" target="_blank" rel="noopener">Open in Drive</a>' : '') +
+    (x.proofUrl ? '<a class="btn ghost sm" href="' + esc(safeUrl(x.proofUrl)) + '" target="_blank" rel="noopener">Open in Drive</a>' : '') +
     '</div>' +
     '<label class="f" id="why-' + esc(x.id) + '" hidden style="margin-top:12px"><span>Why not, in a line they will read</span>' +
     '<input id="whyIn-' + esc(x.id) + '" placeholder="' +
@@ -782,7 +830,7 @@ function deskBook(A){
     '<label class="f" style="margin-top:12px"><span>Find somebody</span>' +
     '<input id="findQ" placeholder="Name, CRSid or address"></label>' +
     '<div id="findOut"></div>' +
-    '<div class="acts"><a class="btn gold sm" href="' + esc(A.sheetUrl || "#") + '" target="_blank" rel="noopener">Open the spreadsheet</a>' +
+    '<div class="acts"><a class="btn gold sm" href="' + esc(safeSheetUrl(A.sheetUrl) || "#") + '" target="_blank" rel="noopener">Open the spreadsheet</a>' +
     '<span class="lede">The sheet is the register. Edit it by hand whenever you like; every site reads it live.</span></div></div>' +
     '<div class="dk"><h3>Write somebody in</h3>' +
     '<label class="f"><span>Address</span><input id="addEmail" placeholder="abc123@cam.ac.uk"></label>' +
@@ -878,7 +926,7 @@ function deskApps(A){
     'match on the <span class="mono">key</span> column, skip status <span class="mono">gone</span>. ' +
     'Tab <span class="mono">Freshers</span> is the Fortnight list.</p>' +
     '<pre>' + esc('SpreadsheetApp.openById("' + (A.sheetId || "SHEET_ID") + '")') + '</pre>' +
-    '<div class="acts"><a class="btn gold sm" href="' + esc(A.sheetUrl || "#") + '" target="_blank" rel="noopener">Open the spreadsheet</a></div></div>' +
+    '<div class="acts"><a class="btn gold sm" href="' + esc(safeSheetUrl(A.sheetUrl) || "#") + '" target="_blank" rel="noopener">Open the spreadsheet</a></div></div>' +
     deskHandover(A) + '</div>';
 }
 
