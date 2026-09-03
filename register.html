@@ -92,6 +92,28 @@ a{color:var(--gold-2)}
 .check{display:flex;align-items:center;gap:9px;font-size:.8rem;color:var(--cream-2);margin:4px 0 12px;cursor:pointer}
 .check input{width:18px;height:18px;accent-color:var(--gold)}
 .msg{font-size:.755rem;color:var(--gold-2);min-height:1.2em;margin-top:9px;font-weight:700}
+/* THE GATE SAYS WHAT IS HAPPENING.
+   Signing in used to be silent: the button was pressed, a second went by
+   with nothing on the screen, and a refusal arrived as small print nobody
+   read. Now one line under the button reports each step as it happens and
+   holds the answer, in a box that cannot be mistaken for a caption. */
+#gateCheck{display:none;margin-top:13px;padding:11px 13px;border-radius:14px;
+  background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.16);
+  font-size:.76rem;line-height:1.45;font-weight:600;text-align:left;
+  align-items:flex-start;gap:10px}
+#gateCheck.on{display:flex}
+#gateCheck .dot{flex:0 0 15px;width:15px;height:15px;margin-top:1px;border-radius:50%;
+  position:relative;box-shadow:inset 0 0 0 1.6px rgba(255,255,255,.5)}
+#gateCheck.busy .dot::after{content:"";position:absolute;inset:2.2px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.35);border-top-color:#fff;animation:sp .7s linear infinite}
+#gateCheck.done{background:rgba(63,122,87,.28);border-color:rgba(120,200,150,.4)}
+#gateCheck.done .dot{background:#8FD6A8;box-shadow:none}
+#gateCheck.no{background:rgba(0,0,0,.34);border-color:rgba(255,190,190,.45)}
+#gateCheck.no .dot{background:#FFB4B4;box-shadow:none}
+#gateCheck b{display:block;font-weight:800}
+#gateCheck .again{margin-top:10px;display:block;width:fit-content;background:var(--cream);
+  color:var(--crimson-3);border:0;border-radius:999px;padding:7px 13px;
+  font:800 .72rem var(--ui);cursor:pointer}
 .steps{display:flex;gap:8px;margin:2px 0 16px}
 .steps i{flex:1;height:4px;border-radius:4px;background:var(--t2);font-style:normal}
 .steps i.on{background:var(--gold)}
@@ -313,8 +335,9 @@ pre{background:rgba(0,0,0,.36);border-radius:12px;padding:13px 14px;font-family:
         written in it, this and every other MCR site opens for you. Sign in with your University of
         Cambridge Google account and the book is checked on the spot.</p>
       <div id="gsiBtn"><span class="gsiskel" aria-hidden="true"></span></div>
-      <p class="lede" style="margin:11px 0 0;font-size:.68rem">Use your <b>@cam.ac.uk</b> account.
-        Nothing to make and nothing to remember.</p>
+      <p class="lede" style="margin:11px 0 0;font-size:.68rem">University of Cambridge accounts only:
+        the address ending <b>@cam.ac.uk</b>. Nothing to make and nothing to remember.</p>
+      <div id="gateCheck" role="status" aria-live="polite"></div>
       <p class="msg" id="gateMsg"></p>
       <p class="lede" style="margin:14px 0 0;font-size:.62rem;display:flex;align-items:center;gap:8px">
         <span class="beta" style="margin:0">Beta</span>Still being finished. Tell the President if something is wrong.</p>
@@ -329,7 +352,7 @@ pre{background:rgba(0,0,0,.36);border-radius:12px;padding:13px 14px;font-family:
 <script>
 /* Put the deployed Apps Script Web App URL here when this page is hosted
    anywhere other than inside Apps Script itself. */
-const API_URL = "https://script.google.com/macros/s/AKfycbxqWNNrxgEj_L-J1AX7gOSbFOUGcQwiatqQRD3S5Wcz9CqPHLSCfwX-pW61vTX-tfVgcg/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbybvMOjnZB3ej2o_m9uIUBmPK-BOjbhJ7eHTGy1URfSxC2OLjcF1fnoew7lVCkTRULaig/exec";
 
 
 const $ = id => document.getElementById(id);
@@ -453,18 +476,57 @@ async function load(full, pre){
     }
     render();
     if (full){ loadDone = true; await sleep(220); loadShut(); }
+    return true;
   }catch(e){
-    setToken("");
-    S = null;
+    const why = (e && e.message) ? e.message : String(e);
+    /* WHY THIS USED TO LOOK LIKE NOTHING HAPPENING.
+       Any failure here threw the sign in away and went back to the gate,
+       so a slow answer or a bad minute on the network logged somebody out
+       and left them looking at the same screen they started on, with the
+       reason in small print. The session is now only given up when the
+       register actually says the sign in is no good; anything else keeps
+       it and says what went wrong, with a way to try again. */
+    const authGone = /sign in|session has expired|sign in again/i.test(why);
+    if (authGone){ setToken(""); S = null; }
     $("app").hidden = true; $("bOut").hidden = true; $("bDesk").hidden = true;
     loadDone = true; loadShut();
     openGate();
-    if (full) $("gateMsg").textContent = e.message || String(e);
+    gateSay("no", authGone
+      ? why
+      : "The register did not answer just then: " + why +
+        " Your sign in is still good \u2014 press the button below to try again.", false);
+    if (!authGone){
+      const box = $("gateCheck");
+      if (box){
+        const b = document.createElement("button");
+        b.type = "button"; b.className = "again"; b.textContent = "Try again";
+        b.addEventListener("click", () => { gateSay("busy", "Asking the register again\u2026"); load(true); });
+        box.lastChild.appendChild(b);
+      }
+    }
+    return false;
   }
 }
 window.addEventListener("hashchange", () => { if (S) render(); });
 
 /* ---------- the gate ---------- */
+/* One line under the button, which is the whole of the feedback: it says
+   what is being done, then what came back, and offers the way on. */
+function gateSay(state, text, again){
+  const box = $("gateCheck");
+  if (!box) return;
+  if (!state && !text){ box.className = ""; box.innerHTML = ""; return; }
+  box.className = "on " + (state || "");
+  box.innerHTML = '<span class="dot"></span><span>' + esc(text) +
+    (again ? '<button type="button" class="again" id="gateAgain">Try another account</button>' : '') +
+    '</span>';
+  const a = $("gateAgain");
+  if (a) a.addEventListener("click", () => {
+    try{ google.accounts.id.disableAutoSelect(); }catch(e){}
+    gateSay("", "");
+    gateDrawn = ""; openGate();
+  });
+}
 const GATE_KEY = "pb_gate";
 function gateKept(){ try{ const o = JSON.parse(localStorage.getItem(GATE_KEY) || "null");
   return (o && o.ready && o.clientId) ? o : null; }catch(e){ return null; } }
@@ -473,6 +535,7 @@ function gateKeep(cfg){ try{ if (cfg && cfg.ready && cfg.clientId)
 let gateDrawn = "";
 async function openGate(){
   $("gate").hidden = false;
+  $("gateMsg").textContent = "";
   /* On any visit after the first the button is drawn from what the register
      said last time, while this visit's answer is still on its way. */
   const kept = gateKept();
@@ -493,7 +556,17 @@ function drawGsi(cfg){
   const start = () => {
     if (!(window.google && google.accounts && google.accounts.id)) return setTimeout(start, 300);
     google.accounts.id.initialize({ client_id: cfg.clientId, callback: onCredential,
-      ux_mode: "popup", auto_select: false, itp_support: true });
+      /* Google is told the domain, so the chooser offers University
+         accounts and nothing else: a personal address is never even put
+         in front of somebody, rather than being refused after the fact. */
+      hd: cfg.hd || undefined,
+      ux_mode: "popup", auto_select: false, itp_support: true,
+      /* When Google's own window is blocked or closed, this is the only
+         way the page ever hears about it. */
+      error_callback: err => gateSay("no",
+        "Google's sign in window did not open, or was closed before it finished. " +
+        "Allow pop-ups for this page and try once more." +
+        ((err && err.type) ? " (" + err.type + ")" : ""), true) });
     const el = $("gsiBtn"); el.innerHTML = "";
     google.accounts.id.renderButton(el, { theme:"outline", size:"large", shape:"pill",
       text:"continue_with", width: Math.min(360, Math.max(240, el.offsetWidth || 320)) });
@@ -501,11 +574,24 @@ function drawGsi(cfg){
   start();
 }
 async function onCredential(resp){
+  gateSay("busy", "Checking that sign in with Google\u2026");
   try{
     const r = await api("googleToken", { cred: resp.credential });
+    gateSay("busy", "Looking for your name in the register\u2026");
     setToken(r.token);
-    await load(true, r.state && r.state.email ? r.state : null);
-  }catch(e){ $("gateMsg").textContent = e.message || String(e); }
+    gateSay("done", r.member ? "Found you in the book. Opening it now\u2026"
+                             : "Signed in as " + (r.email || "you") + ". Opening the next step\u2026");
+    /* Only a load that actually worked clears the line: otherwise this
+       wiped the very message load() had just put there, which left the
+       gate looking as though nothing at all had happened. */
+    if (await load(true, r.state && r.state.email ? r.state : null)) gateSay("", "");
+  }catch(e){
+    const why = (e && e.message) ? e.message : String(e);
+    /* A refusal is the commonest answer here and the one most worth
+       reading, so it is said in full and with the way on. */
+    gateSay("no", why, /account/i.test(why));
+    $("gateMsg").textContent = "";
+  }
 }
 $("bOut").onclick = async () => {
   try{ await api("signOut"); }catch(e){}
