@@ -1051,8 +1051,17 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 #boot::before{content:"";position:absolute;inset:0;
   background:radial-gradient(760px 460px at 78% -10%, rgba(235,183,83,.16), transparent 58%),
     linear-gradient(172deg,#C4181F 0%,#A31319 46%,#7A0D12 100%)}
-.bootin{position:relative;text-align:center;width:min(320px,86vw);display:flex;flex-direction:column;
-  align-items:center;gap:18px}
+/* THE WRAPPER IS THE SCREEN, IN BOTH BOOT SCREENS.
+   The scrim and the words are positioned against this box, and it used to be a
+   three hundred and twenty pixel column only as tall as the crest inside it.
+   On the walk that did not show, because .walk stretches it to fill the frame.
+   On the quiet screen -- which is what a member already signed in gets when
+   they reload -- it did: the scrim came out as a dark bar across the middle of
+   the page and the loading line and its bar were laid over the crest rather
+   than under it. It fills the frame in both states now, and the width the copy
+   used to get from here it gets for itself. */
+.bootin{position:relative;text-align:center;width:100%;height:100%;
+  display:grid;place-items:center}
 /* On a sign in the panel stops being a panel: the scene takes the whole
    viewport and the wrapper is only there to hold the type above it. */
 #boot.walk .bootin{width:100%;height:100%;gap:0;display:block}
@@ -1078,9 +1087,8 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
    it. A scrim carries the bottom of the picture down into the words. */
 .bootscrim{position:absolute;left:0;right:0;bottom:0;height:min(46%,340px);z-index:2;pointer-events:none;
   background:linear-gradient(180deg,rgba(24,2,4,0) 0%,rgba(24,2,4,.45) 42%,rgba(20,1,3,.88) 100%)}
-.bootcopy{position:absolute;left:0;right:0;bottom:0;z-index:3;
+.bootcopy{position:absolute;left:0;right:0;bottom:0;z-index:3;max-width:520px;margin:0 auto;
   padding:0 24px calc(30px + var(--sab));display:flex;flex-direction:column;align-items:center;gap:14px}
-#boot.walk .bootcopy{max-width:520px;margin:0 auto}
 @media(min-width:820px){.bootcopy{padding-bottom:calc(48px + var(--sab))}}
 .chimney *{position:absolute;box-sizing:border-box}
 /* THE SCENE IS DRAWN AT A FIXED SIZE AND THEN SCALED TO FIT.
@@ -1105,37 +1113,88 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
    on it, which every engine honours. */
 .chimney .stage{inset:0;-webkit-perspective:300px;perspective:300px;-webkit-perspective-origin:50% 62%;perspective-origin:50% 62%;
   -webkit-transform:translateZ(0);transform:translateZ(0)}
-.chimney .clouds{inset:0;height:62%;overflow:hidden;
+/* THE SKY IS NOT PART OF THE STAGE.
+   The clouds and the sun used to live inside .fit, which is the three hundred
+   and twenty pixel box the walk is authored in and which is then scaled to the
+   window. So the sky was a scaled rectangle sitting in the middle of a much
+   larger crimson-to-blue wash, and you could see all four of its edges: a pale
+   panel hanging in the air above the gatehouse. They are the sky, not scenery,
+   so they are siblings of the stage now and cover the whole frame however far
+   the stage is scaled.
+
+   The clip is gone with it. It was there to stop the drifting blobs showing
+   past the edge of a box that no longer exists, and the blobs are soft-edged
+   radials that have nothing to show. */
+.chimney .clouds{inset:0;height:64%;
   background:
-    radial-gradient(ellipse 90px 22px at 20% 30%,rgba(255,255,255,.55),transparent 70%),
-    radial-gradient(ellipse 70px 16px at 68% 22%,rgba(255,255,255,.5),transparent 70%),
-    radial-gradient(ellipse 120px 26px at 95% 46%,rgba(255,255,255,.45),transparent 70%);
+    radial-gradient(ellipse 22% 5% at 18% 28%,rgba(255,255,255,.5),transparent 72%),
+    radial-gradient(ellipse 16% 4% at 66% 20%,rgba(255,255,255,.44),transparent 72%),
+    radial-gradient(ellipse 28% 6% at 92% 44%,rgba(255,255,255,.4),transparent 72%),
+    radial-gradient(ellipse 20% 5% at 40% 52%,rgba(255,255,255,.3),transparent 74%);
   animation:clouds 90s linear infinite;will-change:transform}
 /* Ninety seconds to cross three hundred pixels is three pixels a second, which
    nobody sees in the second and a half this is on screen, and it was repainting
    two thirds of the viewport to do it. Now it is a transform, so it costs
    nothing whether anybody notices it or not. */
 @keyframes clouds{to{transform:translate3d(300px,0,0)}}
-.chimney .sun{inset:0;background:radial-gradient(circle at 88% 6%,rgba(255,240,200,.5),rgba(255,240,200,0) 42%)}
+.chimney .sun{inset:0;background:radial-gradient(circle at 86% 4%,rgba(255,242,206,.52),rgba(255,238,196,.16) 26%,rgba(255,236,190,0) 52%)}
 /* trees, flat behind the walk so nothing cuts through them, painted in layers */
 .chimney .trees{inset:0}
+/* THE TREES BEHIND THE WALLS.
+   Three things were making these read as cut paper rather than as trees. The
+   border radius gave every mass the same hard, definite outline. The speckle
+   was a two pixel dot on a nine pixel grid, which at this size is a halftone
+   and reads as polka dots rather than as leaves. And the highlights were
+   tight circles that stopped dead at twenty two per cent.
+
+   So: the outline is a union of soft lobes rather than one hard shape, the
+   speckle is gone entirely because at this size a dot grid is a halftone that
+   moires against the lobes, and the highlights are wider and softer. */
 .chimney .tree{border-radius:52% 48% 46% 54%/58% 62% 38% 42%;
   background:
-    radial-gradient(circle,rgba(255,255,255,.12) 0 1.2px,transparent 2px) 0 0/9px 9px,
-    radial-gradient(circle,rgba(0,0,0,.14) 0 1.2px,transparent 2px) 4px 5px/9px 9px,
-    radial-gradient(circle at 26% 30%,rgba(196,218,120,.95) 0%,rgba(196,218,120,0) 22%),
-    radial-gradient(circle at 60% 24%,rgba(154,192,96,.9) 0%,rgba(154,192,96,0) 22%),
-    radial-gradient(circle at 44% 58%,rgba(96,146,62,.9) 0%,rgba(96,146,62,0) 28%),
-    radial-gradient(circle at 76% 62%,rgba(58,98,38,.95) 0%,rgba(58,98,38,0) 26%),
-    radial-gradient(circle at 20% 72%,rgba(70,112,44,.9) 0%,rgba(70,112,44,0) 24%),
-    radial-gradient(ellipse at 50% 50%,#6E9C46 0%,#4E7A34 55%,#2E5222 100%);
-  box-shadow:inset -16px -20px 34px rgba(15,35,10,.55),0 12px 22px -10px rgba(0,0,0,.6)}
+    radial-gradient(circle at 26% 30%,rgba(196,218,120,.8) 0%,rgba(196,218,120,0) 38%),
+    radial-gradient(circle at 60% 24%,rgba(154,192,96,.75) 0%,rgba(154,192,96,0) 36%),
+    radial-gradient(circle at 44% 58%,rgba(96,146,62,.8) 0%,rgba(96,146,62,0) 44%),
+    radial-gradient(circle at 76% 62%,rgba(58,98,38,.85) 0%,rgba(58,98,38,0) 42%),
+    radial-gradient(circle at 20% 72%,rgba(70,112,44,.8) 0%,rgba(70,112,44,0) 40%),
+    radial-gradient(ellipse at 46% 40%,#679444 0%,#457029 58%,#27491D 100%);
+  /* A CANOPY IS LUMPY, NOT ROUND.
+     One soft ellipse for a mask trades a cut-paper edge for a ball of green
+     fog, which is no better. Six overlapping lobes unioned together give the
+     silhouette the bumps a crown of leaves has. Mask layers union by default,
+     so this reads as one shape.
+
+     Each lobe is a full-box gradient placed by its own centre, and each fades
+     to nothing inside its own radius. Sizing the layers instead, with
+     mask-size and mask-position, put a rectangle round every lobe and the
+     gradient was cut off by it before it had faded: that is where the straight
+     notches through the crowns came from. */
+  --lump:#000 68%,rgba(0,0,0,.5) 88%,transparent 100%;
+  -webkit-mask-image:
+    radial-gradient(ellipse 27% 30% at 21% 34%,var(--lump)),
+    radial-gradient(ellipse 24% 27% at 49% 17%,var(--lump)),
+    radial-gradient(ellipse 25% 28% at 78% 33%,var(--lump)),
+    radial-gradient(ellipse 26% 28% at 31% 67%,var(--lump)),
+    radial-gradient(ellipse 24% 26% at 69% 69%,var(--lump)),
+    radial-gradient(ellipse 40% 38% at 50% 48%,#000 78%,transparent 100%);
+  mask-image:
+    radial-gradient(ellipse 27% 30% at 21% 34%,var(--lump)),
+    radial-gradient(ellipse 24% 27% at 49% 17%,var(--lump)),
+    radial-gradient(ellipse 25% 28% at 78% 33%,var(--lump)),
+    radial-gradient(ellipse 26% 28% at 31% 67%,var(--lump)),
+    radial-gradient(ellipse 24% 26% at 69% 69%,var(--lump)),
+    radial-gradient(ellipse 40% 38% at 50% 48%,#000 78%,transparent 100%);
+  box-shadow:inset -16px -20px 34px rgba(15,35,10,.4)}
 .chimney .tree::before{content:"";position:absolute;left:-12%;top:36%;width:48%;height:56%;
   border-radius:60% 40% 55% 45%/50% 60% 40% 50%;
-  background:radial-gradient(circle at 40% 35%,#88B356,#476E30 70%,#2E5222 100%);opacity:.95}
+  -webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 58%,transparent 97%);
+  mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 58%,transparent 97%);
+  background:radial-gradient(circle at 40% 35%,#88B356,#476E30 72%,#2E5222 100%);opacity:.9}
 .chimney .tree::after{content:"";position:absolute;right:-8%;top:24%;width:46%;height:52%;
   border-radius:45% 55% 50% 50%/55% 45% 60% 40%;
-  background:radial-gradient(circle at 40% 35%,#A4C66A,#5C8A3C 70%,#365A22 100%);opacity:.9}
+  -webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 58%,transparent 97%);
+  mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 58%,transparent 97%);
+  background:radial-gradient(circle at 40% 35%,#A4C66A,#5C8A3C 72%,#365A22 100%);opacity:.85}
 .chimney .tree.gold{filter:hue-rotate(-24deg) saturate(1.1) brightness(1.08)}
 .chimney .t1{left:-26%;top:0%;width:66%;height:54%;transform:rotate(-5deg)}
 .chimney .t2{left:64%;top:-6%;width:58%;height:56%;transform:rotate(4deg)}
@@ -1388,16 +1447,32 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
    with everything else left them as green humps on the skyline. These two
    masses sit in front of the whole scene and drift very slightly, which is
    what gives the walk its depth. */
-.chimney .canopy{top:-6%;width:46%;height:44%;pointer-events:none;
-  background:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='260' viewBox='0 0 300 260'%3E%3Cg%3E%3Ccircle cx='87' cy='39' r='15.2' fill='%23356326' opacity='0.99'/%3E%3Ccircle cx='260' cy='19' r='10.3' fill='%23498234' opacity='0.96'/%3E%3Ccircle cx='119' cy='171' r='28.3' fill='%23457C31' opacity='0.96'/%3E%3Ccircle cx='42' cy='163' r='24.1' fill='%232F5A22' opacity='0.99'/%3E%3Ccircle cx='163' cy='48' r='11.8' fill='%23274D1C' opacity='0.89'/%3E%3Ccircle cx='34' cy='183' r='12.6' fill='%235C9C42' opacity='0.90'/%3E%3Ccircle cx='88' cy='44' r='16.2' fill='%232F5A22' opacity='0.83'/%3E%3Ccircle cx='23' cy='33' r='27.7' fill='%233A6B29' opacity='0.86'/%3E%3Ccircle cx='129' cy='246' r='27.6' fill='%235C9C42' opacity='0.99'/%3E%3Ccircle cx='63' cy='51' r='25.0' fill='%23457C31' opacity='1.00'/%3E%3Ccircle cx='262' cy='58' r='27.1' fill='%233A6B29' opacity='0.91'/%3E%3Ccircle cx='114' cy='84' r='18.9' fill='%23356326' opacity='0.99'/%3E%3Ccircle cx='28' cy='174' r='18.3' fill='%232F5A22' opacity='0.98'/%3E%3Ccircle cx='28' cy='114' r='24.6' fill='%232F5A22' opacity='0.87'/%3E%3Ccircle cx='262' cy='153' r='23.7' fill='%23356326' opacity='0.86'/%3E%3Ccircle cx='45' cy='75' r='18.9' fill='%233A6B29' opacity='0.95'/%3E%3Ccircle cx='93' cy='105' r='24.8' fill='%233A6B29' opacity='0.94'/%3E%3Ccircle cx='66' cy='116' r='21.7' fill='%23274D1C' opacity='0.84'/%3E%3Ccircle cx='57' cy='17' r='20.4' fill='%23274D1C' opacity='0.88'/%3E%3Ccircle cx='31' cy='104' r='23.8' fill='%23508C39' opacity='0.85'/%3E%3Ccircle cx='56' cy='158' r='25.1' fill='%23274D1C' opacity='0.93'/%3E%3Ccircle cx='173' cy='258' r='14.8' fill='%233A6B29' opacity='0.87'/%3E%3Ccircle cx='290' cy='110' r='11.9' fill='%23498234' opacity='0.97'/%3E%3Ccircle cx='179' cy='87' r='25.5' fill='%235C9C42' opacity='0.82'/%3E%3Ccircle cx='160' cy='16' r='26.4' fill='%23274D1C' opacity='0.88'/%3E%3Ccircle cx='295' cy='73' r='29.3' fill='%232F5A22' opacity='0.83'/%3E%3Ccircle cx='10' cy='45' r='17.7' fill='%232F5A22' opacity='0.86'/%3E%3Ccircle cx='53' cy='43' r='24.3' fill='%233A6B29' opacity='0.96'/%3E%3Ccircle cx='56' cy='27' r='20.6' fill='%23498234' opacity='0.86'/%3E%3Ccircle cx='22' cy='155' r='22.2' fill='%23356326' opacity='0.91'/%3E%3Ccircle cx='189' cy='154' r='10.2' fill='%232F5A22' opacity='0.94'/%3E%3Ccircle cx='20' cy='164' r='10.5' fill='%23274D1C' opacity='0.92'/%3E%3Ccircle cx='144' cy='96' r='21.9' fill='%23274D1C' opacity='0.83'/%3E%3Ccircle cx='87' cy='160' r='17.7' fill='%232F5A22' opacity='0.96'/%3E%3Ccircle cx='165' cy='53' r='13.8' fill='%23457C31' opacity='0.94'/%3E%3Ccircle cx='10' cy='76' r='20.5' fill='%23356326' opacity='0.99'/%3E%3Ccircle cx='144' cy='196' r='29.1' fill='%23356326' opacity='0.96'/%3E%3Ccircle cx='133' cy='20' r='20.4' fill='%23508C39' opacity='0.89'/%3E%3Ccircle cx='147' cy='173' r='25.3' fill='%23274D1C' opacity='0.92'/%3E%3Ccircle cx='292' cy='160' r='18.7' fill='%23356326' opacity='0.99'/%3E%3Ccircle cx='221' cy='72' r='16.0' fill='%235C9C42' opacity='0.87'/%3E%3Ccircle cx='42' cy='19' r='17.3' fill='%232F5A22' opacity='0.96'/%3E%3Ccircle cx='142' cy='59' r='11.1' fill='%23508C39' opacity='0.89'/%3E%3Ccircle cx='33' cy='30' r='25.4' fill='%23457C31' opacity='0.96'/%3E%3Ccircle cx='72' cy='176' r='19.9' fill='%232F5A22' opacity='0.92'/%3E%3Ccircle cx='293' cy='136' r='23.6' fill='%233A6B29' opacity='1.00'/%3E%3Ccircle cx='24' cy='53' r='20.7' fill='%23356326' opacity='0.99'/%3E%3Ccircle cx='108' cy='1' r='19.7' fill='%23356326' opacity='0.97'/%3E%3Ccircle cx='90' cy='204' r='19.9' fill='%23498234' opacity='0.88'/%3E%3Ccircle cx='184' cy='58' r='10.5' fill='%23508C39' opacity='0.99'/%3E%3Ccircle cx='238' cy='103' r='13.7' fill='%232F5A22' opacity='0.89'/%3E%3Ccircle cx='32' cy='82' r='11.8' fill='%23508C39' opacity='0.88'/%3E%3Ccircle cx='27' cy='126' r='10.3' fill='%235C9C42' opacity='0.84'/%3E%3Ccircle cx='43' cy='204' r='29.0' fill='%235C9C42' opacity='0.88'/%3E%3Ccircle cx='283' cy='112' r='14.2' fill='%23498234' opacity='0.93'/%3E%3Ccircle cx='0' cy='100' r='21.9' fill='%23457C31' opacity='0.84'/%3E%3Ccircle cx='39' cy='33' r='17.8' fill='%23274D1C' opacity='1.00'/%3E%3Ccircle cx='111' cy='61' r='14.4' fill='%23498234' opacity='0.95'/%3E%3Ccircle cx='194' cy='77' r='16.4' fill='%23356326' opacity='0.85'/%3E%3Ccircle cx='10' cy='11' r='27.3' fill='%23356326' opacity='0.87'/%3E%3Ccircle cx='65' cy='222' r='12.7' fill='%232F5A22' opacity='0.95'/%3E%3Ccircle cx='34' cy='233' r='20.9' fill='%23274D1C' opacity='0.92'/%3E%3Ccircle cx='121' cy='163' r='29.9' fill='%23457C31' opacity='0.87'/%3E%3Ccircle cx='5' cy='216' r='23.5' fill='%23274D1C' opacity='0.99'/%3E%3Ccircle cx='53' cy='46' r='22.9' fill='%23498234' opacity='0.95'/%3E%3Ccircle cx='65' cy='80' r='20.4' fill='%23457C31' opacity='1.00'/%3E%3Ccircle cx='84' cy='173' r='18.7' fill='%23356326' opacity='0.91'/%3E%3Ccircle cx='205' cy='33' r='17.2' fill='%235C9C42' opacity='0.83'/%3E%3Ccircle cx='100' cy='114' r='25.0' fill='%235C9C42' opacity='0.96'/%3E%3Ccircle cx='25' cy='239' r='23.9' fill='%23508C39' opacity='0.99'/%3E%3Ccircle cx='2' cy='22' r='25.7' fill='%235C9C42' opacity='0.83'/%3E%3Ccircle cx='196' cy='97' r='19.6' fill='%23457C31' opacity='0.87'/%3E%3Ccircle cx='76' cy='259' r='19.0' fill='%23274D1C' opacity='0.90'/%3E%3Ccircle cx='20' cy='69' r='24.2' fill='%233A6B29' opacity='0.98'/%3E%3Ccircle cx='87' cy='79' r='27.7' fill='%23457C31' opacity='0.90'/%3E%3Ccircle cx='299' cy='137' r='16.8' fill='%23356326' opacity='0.90'/%3E%3Ccircle cx='10' cy='134' r='17.4' fill='%232F5A22' opacity='0.87'/%3E%3Ccircle cx='5' cy='89' r='26.8' fill='%235C9C42' opacity='0.90'/%3E%3Ccircle cx='142' cy='88' r='14.4' fill='%232F5A22' opacity='0.89'/%3E%3Ccircle cx='16' cy='246' r='19.3' fill='%23356326' opacity='0.96'/%3E%3Ccircle cx='49' cy='105' r='15.3' fill='%23457C31' opacity='0.83'/%3E%3Ccircle cx='177' cy='1' r='10.2' fill='%233A6B29' opacity='0.96'/%3E%3Ccircle cx='186' cy='31' r='27.1' fill='%23457C31' opacity='0.87'/%3E%3Ccircle cx='79' cy='231' r='22.6' fill='%23508C39' opacity='0.95'/%3E%3Ccircle cx='159' cy='122' r='24.2' fill='%23457C31' opacity='0.98'/%3E%3Ccircle cx='77' cy='140' r='22.9' fill='%23498234' opacity='0.98'/%3E%3Ccircle cx='43' cy='52' r='24.4' fill='%23498234' opacity='0.87'/%3E%3Ccircle cx='298' cy='136' r='13.0' fill='%23457C31' opacity='0.98'/%3E%3Ccircle cx='31' cy='122' r='19.3' fill='%23457C31' opacity='0.89'/%3E%3Ccircle cx='157' cy='126' r='24.0' fill='%23356326' opacity='0.96'/%3E%3Ccircle cx='175' cy='12' r='22.9' fill='%23508C39' opacity='0.87'/%3E%3Ccircle cx='77' cy='78' r='18.1' fill='%23457C31' opacity='0.83'/%3E%3Ccircle cx='108' cy='113' r='28.9' fill='%23274D1C' opacity='0.97'/%3E%3Ccircle cx='102' cy='103' r='18.2' fill='%23498234' opacity='0.92'/%3E%3Ccircle cx='272' cy='157' r='18.6' fill='%23508C39' opacity='0.91'/%3E%3Ccircle cx='152' cy='169' r='12.9' fill='%233A6B29' opacity='0.92'/%3E%3Ccircle cx='86' cy='48' r='25.9' fill='%235C9C42' opacity='0.96'/%3E%3Ccircle cx='73' cy='185' r='24.4' fill='%23498234' opacity='0.95'/%3E%3Ccircle cx='49' cy='4' r='18.5' fill='%23457C31' opacity='0.96'/%3E%3Ccircle cx='186' cy='68' r='16.2' fill='%23508C39' opacity='0.86'/%3E%3Ccircle cx='137' cy='37' r='25.1' fill='%23508C39' opacity='0.85'/%3E%3Ccircle cx='9' cy='39' r='16.2' fill='%233A6B29' opacity='0.99'/%3E%3Ccircle cx='171' cy='62' r='15.8' fill='%233A6B29' opacity='0.86'/%3E%3Ccircle cx='84' cy='10' r='18.6' fill='%232F5A22' opacity='0.97'/%3E%3Ccircle cx='289' cy='33' r='28.1' fill='%23274D1C' opacity='0.97'/%3E%3Ccircle cx='141' cy='13' r='19.3' fill='%235C9C42' opacity='0.86'/%3E%3Ccircle cx='283' cy='10' r='25.8' fill='%23498234' opacity='0.98'/%3E%3Ccircle cx='84' cy='99' r='15.7' fill='%23498234' opacity='0.96'/%3E%3Ccircle cx='14' cy='225' r='25.5' fill='%232F5A22' opacity='0.83'/%3E%3Ccircle cx='169' cy='50' r='21.4' fill='%232F5A22' opacity='0.93'/%3E%3Ccircle cx='16' cy='18' r='24.9' fill='%232F5A22' opacity='0.89'/%3E%3Ccircle cx='26' cy='23' r='28.9' fill='%23457C31' opacity='0.97'/%3E%3Ccircle cx='47' cy='112' r='19.8' fill='%233A6B29' opacity='0.85'/%3E%3Ccircle cx='65' cy='23' r='19.7' fill='%23457C31' opacity='0.87'/%3E%3Ccircle cx='106' cy='199' r='23.4' fill='%233A6B29' opacity='0.98'/%3E%3Ccircle cx='287' cy='12' r='12.7' fill='%23498234' opacity='0.90'/%3E%3Ccircle cx='297' cy='184' r='20.8' fill='%233A6B29' opacity='0.95'/%3E%3Ccircle cx='59' cy='20' r='21.1' fill='%23457C31' opacity='0.86'/%3E%3Ccircle cx='7' cy='208' r='10.8' fill='%23457C31' opacity='0.92'/%3E%3Ccircle cx='67' cy='138' r='11.8' fill='%23508C39' opacity='0.94'/%3E%3C/g%3E%3C/svg%3E") 0 0/100% 100% no-repeat;
+/* FOREGROUND FOLIAGE, DRAWN ONCE.
+   The leaf mass is a single three hundred by two hundred and sixty pixel
+   drawing, and it was set as a background with neither a size nor a repeat
+   rule. A background with no size is drawn at its natural size and repeated,
+   so what was on screen was a quarter of one copy with the edges of three
+   more butting into it: those are the straight vertical cuts through the
+   trees at the top of the frame. It is one copy, stretched to the box, and
+   the mask feathers the outer edge so the mass ends in leaves rather than in
+   a rectangle. */
+.chimney .canopy{top:-14%;width:48%;height:54%;pointer-events:none;
+  background:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='260' viewBox='0 0 300 260'%3E%3Cg%3E%3Ccircle cx='87' cy='39' r='15.2' fill='%23356326' opacity='0.99'/%3E%3Ccircle cx='260' cy='19' r='10.3' fill='%23498234' opacity='0.96'/%3E%3Ccircle cx='119' cy='171' r='28.3' fill='%23457C31' opacity='0.96'/%3E%3Ccircle cx='42' cy='163' r='24.1' fill='%232F5A22' opacity='0.99'/%3E%3Ccircle cx='163' cy='48' r='11.8' fill='%23274D1C' opacity='0.89'/%3E%3Ccircle cx='34' cy='183' r='12.6' fill='%235C9C42' opacity='0.90'/%3E%3Ccircle cx='88' cy='44' r='16.2' fill='%232F5A22' opacity='0.83'/%3E%3Ccircle cx='23' cy='33' r='27.7' fill='%233A6B29' opacity='0.86'/%3E%3Ccircle cx='129' cy='246' r='27.6' fill='%235C9C42' opacity='0.99'/%3E%3Ccircle cx='63' cy='51' r='25.0' fill='%23457C31' opacity='1.00'/%3E%3Ccircle cx='262' cy='58' r='27.1' fill='%233A6B29' opacity='0.91'/%3E%3Ccircle cx='114' cy='84' r='18.9' fill='%23356326' opacity='0.99'/%3E%3Ccircle cx='28' cy='174' r='18.3' fill='%232F5A22' opacity='0.98'/%3E%3Ccircle cx='28' cy='114' r='24.6' fill='%232F5A22' opacity='0.87'/%3E%3Ccircle cx='262' cy='153' r='23.7' fill='%23356326' opacity='0.86'/%3E%3Ccircle cx='45' cy='75' r='18.9' fill='%233A6B29' opacity='0.95'/%3E%3Ccircle cx='93' cy='105' r='24.8' fill='%233A6B29' opacity='0.94'/%3E%3Ccircle cx='66' cy='116' r='21.7' fill='%23274D1C' opacity='0.84'/%3E%3Ccircle cx='57' cy='17' r='20.4' fill='%23274D1C' opacity='0.88'/%3E%3Ccircle cx='31' cy='104' r='23.8' fill='%23508C39' opacity='0.85'/%3E%3Ccircle cx='56' cy='158' r='25.1' fill='%23274D1C' opacity='0.93'/%3E%3Ccircle cx='173' cy='258' r='14.8' fill='%233A6B29' opacity='0.87'/%3E%3Ccircle cx='290' cy='110' r='11.9' fill='%23498234' opacity='0.97'/%3E%3Ccircle cx='179' cy='87' r='25.5' fill='%235C9C42' opacity='0.82'/%3E%3Ccircle cx='160' cy='16' r='26.4' fill='%23274D1C' opacity='0.88'/%3E%3Ccircle cx='295' cy='73' r='29.3' fill='%232F5A22' opacity='0.83'/%3E%3Ccircle cx='10' cy='45' r='17.7' fill='%232F5A22' opacity='0.86'/%3E%3Ccircle cx='53' cy='43' r='24.3' fill='%233A6B29' opacity='0.96'/%3E%3Ccircle cx='56' cy='27' r='20.6' fill='%23498234' opacity='0.86'/%3E%3Ccircle cx='22' cy='155' r='22.2' fill='%23356326' opacity='0.91'/%3E%3Ccircle cx='189' cy='154' r='10.2' fill='%232F5A22' opacity='0.94'/%3E%3Ccircle cx='20' cy='164' r='10.5' fill='%23274D1C' opacity='0.92'/%3E%3Ccircle cx='144' cy='96' r='21.9' fill='%23274D1C' opacity='0.83'/%3E%3Ccircle cx='87' cy='160' r='17.7' fill='%232F5A22' opacity='0.96'/%3E%3Ccircle cx='165' cy='53' r='13.8' fill='%23457C31' opacity='0.94'/%3E%3Ccircle cx='10' cy='76' r='20.5' fill='%23356326' opacity='0.99'/%3E%3Ccircle cx='144' cy='196' r='29.1' fill='%23356326' opacity='0.96'/%3E%3Ccircle cx='133' cy='20' r='20.4' fill='%23508C39' opacity='0.89'/%3E%3Ccircle cx='147' cy='173' r='25.3' fill='%23274D1C' opacity='0.92'/%3E%3Ccircle cx='292' cy='160' r='18.7' fill='%23356326' opacity='0.99'/%3E%3Ccircle cx='221' cy='72' r='16.0' fill='%235C9C42' opacity='0.87'/%3E%3Ccircle cx='42' cy='19' r='17.3' fill='%232F5A22' opacity='0.96'/%3E%3Ccircle cx='142' cy='59' r='11.1' fill='%23508C39' opacity='0.89'/%3E%3Ccircle cx='33' cy='30' r='25.4' fill='%23457C31' opacity='0.96'/%3E%3Ccircle cx='72' cy='176' r='19.9' fill='%232F5A22' opacity='0.92'/%3E%3Ccircle cx='293' cy='136' r='23.6' fill='%233A6B29' opacity='1.00'/%3E%3Ccircle cx='24' cy='53' r='20.7' fill='%23356326' opacity='0.99'/%3E%3Ccircle cx='108' cy='1' r='19.7' fill='%23356326' opacity='0.97'/%3E%3Ccircle cx='90' cy='204' r='19.9' fill='%23498234' opacity='0.88'/%3E%3Ccircle cx='184' cy='58' r='10.5' fill='%23508C39' opacity='0.99'/%3E%3Ccircle cx='238' cy='103' r='13.7' fill='%232F5A22' opacity='0.89'/%3E%3Ccircle cx='32' cy='82' r='11.8' fill='%23508C39' opacity='0.88'/%3E%3Ccircle cx='27' cy='126' r='10.3' fill='%235C9C42' opacity='0.84'/%3E%3Ccircle cx='43' cy='204' r='29.0' fill='%235C9C42' opacity='0.88'/%3E%3Ccircle cx='283' cy='112' r='14.2' fill='%23498234' opacity='0.93'/%3E%3Ccircle cx='0' cy='100' r='21.9' fill='%23457C31' opacity='0.84'/%3E%3Ccircle cx='39' cy='33' r='17.8' fill='%23274D1C' opacity='1.00'/%3E%3Ccircle cx='111' cy='61' r='14.4' fill='%23498234' opacity='0.95'/%3E%3Ccircle cx='194' cy='77' r='16.4' fill='%23356326' opacity='0.85'/%3E%3Ccircle cx='10' cy='11' r='27.3' fill='%23356326' opacity='0.87'/%3E%3Ccircle cx='65' cy='222' r='12.7' fill='%232F5A22' opacity='0.95'/%3E%3Ccircle cx='34' cy='233' r='20.9' fill='%23274D1C' opacity='0.92'/%3E%3Ccircle cx='121' cy='163' r='29.9' fill='%23457C31' opacity='0.87'/%3E%3Ccircle cx='5' cy='216' r='23.5' fill='%23274D1C' opacity='0.99'/%3E%3Ccircle cx='53' cy='46' r='22.9' fill='%23498234' opacity='0.95'/%3E%3Ccircle cx='65' cy='80' r='20.4' fill='%23457C31' opacity='1.00'/%3E%3Ccircle cx='84' cy='173' r='18.7' fill='%23356326' opacity='0.91'/%3E%3Ccircle cx='205' cy='33' r='17.2' fill='%235C9C42' opacity='0.83'/%3E%3Ccircle cx='100' cy='114' r='25.0' fill='%235C9C42' opacity='0.96'/%3E%3Ccircle cx='25' cy='239' r='23.9' fill='%23508C39' opacity='0.99'/%3E%3Ccircle cx='2' cy='22' r='25.7' fill='%235C9C42' opacity='0.83'/%3E%3Ccircle cx='196' cy='97' r='19.6' fill='%23457C31' opacity='0.87'/%3E%3Ccircle cx='76' cy='259' r='19.0' fill='%23274D1C' opacity='0.90'/%3E%3Ccircle cx='20' cy='69' r='24.2' fill='%233A6B29' opacity='0.98'/%3E%3Ccircle cx='87' cy='79' r='27.7' fill='%23457C31' opacity='0.90'/%3E%3Ccircle cx='299' cy='137' r='16.8' fill='%23356326' opacity='0.90'/%3E%3Ccircle cx='10' cy='134' r='17.4' fill='%232F5A22' opacity='0.87'/%3E%3Ccircle cx='5' cy='89' r='26.8' fill='%235C9C42' opacity='0.90'/%3E%3Ccircle cx='142' cy='88' r='14.4' fill='%232F5A22' opacity='0.89'/%3E%3Ccircle cx='16' cy='246' r='19.3' fill='%23356326' opacity='0.96'/%3E%3Ccircle cx='49' cy='105' r='15.3' fill='%23457C31' opacity='0.83'/%3E%3Ccircle cx='177' cy='1' r='10.2' fill='%233A6B29' opacity='0.96'/%3E%3Ccircle cx='186' cy='31' r='27.1' fill='%23457C31' opacity='0.87'/%3E%3Ccircle cx='79' cy='231' r='22.6' fill='%23508C39' opacity='0.95'/%3E%3Ccircle cx='159' cy='122' r='24.2' fill='%23457C31' opacity='0.98'/%3E%3Ccircle cx='77' cy='140' r='22.9' fill='%23498234' opacity='0.98'/%3E%3Ccircle cx='43' cy='52' r='24.4' fill='%23498234' opacity='0.87'/%3E%3Ccircle cx='298' cy='136' r='13.0' fill='%23457C31' opacity='0.98'/%3E%3Ccircle cx='31' cy='122' r='19.3' fill='%23457C31' opacity='0.89'/%3E%3Ccircle cx='157' cy='126' r='24.0' fill='%23356326' opacity='0.96'/%3E%3Ccircle cx='175' cy='12' r='22.9' fill='%23508C39' opacity='0.87'/%3E%3Ccircle cx='77' cy='78' r='18.1' fill='%23457C31' opacity='0.83'/%3E%3Ccircle cx='108' cy='113' r='28.9' fill='%23274D1C' opacity='0.97'/%3E%3Ccircle cx='102' cy='103' r='18.2' fill='%23498234' opacity='0.92'/%3E%3Ccircle cx='272' cy='157' r='18.6' fill='%23508C39' opacity='0.91'/%3E%3Ccircle cx='152' cy='169' r='12.9' fill='%233A6B29' opacity='0.92'/%3E%3Ccircle cx='86' cy='48' r='25.9' fill='%235C9C42' opacity='0.96'/%3E%3Ccircle cx='73' cy='185' r='24.4' fill='%23498234' opacity='0.95'/%3E%3Ccircle cx='49' cy='4' r='18.5' fill='%23457C31' opacity='0.96'/%3E%3Ccircle cx='186' cy='68' r='16.2' fill='%23508C39' opacity='0.86'/%3E%3Ccircle cx='137' cy='37' r='25.1' fill='%23508C39' opacity='0.85'/%3E%3Ccircle cx='9' cy='39' r='16.2' fill='%233A6B29' opacity='0.99'/%3E%3Ccircle cx='171' cy='62' r='15.8' fill='%233A6B29' opacity='0.86'/%3E%3Ccircle cx='84' cy='10' r='18.6' fill='%232F5A22' opacity='0.97'/%3E%3Ccircle cx='289' cy='33' r='28.1' fill='%23274D1C' opacity='0.97'/%3E%3Ccircle cx='141' cy='13' r='19.3' fill='%235C9C42' opacity='0.86'/%3E%3Ccircle cx='283' cy='10' r='25.8' fill='%23498234' opacity='0.98'/%3E%3Ccircle cx='84' cy='99' r='15.7' fill='%23498234' opacity='0.96'/%3E%3Ccircle cx='14' cy='225' r='25.5' fill='%232F5A22' opacity='0.83'/%3E%3Ccircle cx='169' cy='50' r='21.4' fill='%232F5A22' opacity='0.93'/%3E%3Ccircle cx='16' cy='18' r='24.9' fill='%232F5A22' opacity='0.89'/%3E%3Ccircle cx='26' cy='23' r='28.9' fill='%23457C31' opacity='0.97'/%3E%3Ccircle cx='47' cy='112' r='19.8' fill='%233A6B29' opacity='0.85'/%3E%3Ccircle cx='65' cy='23' r='19.7' fill='%23457C31' opacity='0.87'/%3E%3Ccircle cx='106' cy='199' r='23.4' fill='%233A6B29' opacity='0.98'/%3E%3Ccircle cx='287' cy='12' r='12.7' fill='%23498234' opacity='0.90'/%3E%3Ccircle cx='297' cy='184' r='20.8' fill='%233A6B29' opacity='0.95'/%3E%3Ccircle cx='59' cy='20' r='21.1' fill='%23457C31' opacity='0.86'/%3E%3Ccircle cx='7' cy='208' r='10.8' fill='%23457C31' opacity='0.92'/%3E%3Ccircle cx='67' cy='138' r='11.8' fill='%23508C39' opacity='0.94'/%3E%3C/g%3E%3C/svg%3E") 50% 0/100% 100% no-repeat;
+  /* The mask is centred up into the corner the mass hangs from, so the fade
+     falls on the two sides that face open sky and the other two run off the
+     frame. A mask centred in the middle turns the whole thing into a soft
+     green cloud; this keeps leaves against the roofline and loses only the
+     edge that would otherwise be a straight cut through them. */
+  -webkit-mask-image:radial-gradient(ellipse 92% 88% at 26% 20%,#000 44%,rgba(0,0,0,.7) 68%,transparent 93%);
+  mask-image:radial-gradient(ellipse 92% 88% at 26% 20%,#000 44%,rgba(0,0,0,.7) 68%,transparent 93%);
   /* No drop-shadow. These two are the only things in the scene that move the
      whole time, and a shadow filter on a moving element is recomputed from the
      alpha of the image on every frame of the movement. The mass reads as near
      because of its size and its drift, not because of a shadow nobody was
      looking at. */
   will-change:transform}
-.chimney .canopy.l{left:-11%;transform:rotate(-3deg)}
-.chimney .canopy.r{right:-13%;transform:rotate(6deg) scaleX(-1);width:38%;height:36%;top:-9%}
+.chimney .canopy.l{left:-13%;transform:rotate(-3deg)}
+.chimney .canopy.r{right:-15%;transform:rotate(6deg) scaleX(-1);width:42%;height:46%;top:-17%}
 .chimney.open .canopy.l{animation:leaf 9s ease-in-out infinite alternate}
 .chimney.open .canopy.r{animation:leaf 11s ease-in-out .6s infinite alternate reverse}
 @keyframes leaf{to{transform:rotate(-1.4deg) translate(6px,4px)}}
@@ -1405,9 +1480,17 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
   background:radial-gradient(circle at 50% 44%,rgba(255,244,214,.7) 0%,rgba(255,244,214,0) 40%)}
 .chimney.open .bloom{animation:bloom 1.9s ease .75s both}
 @keyframes bloom{60%{opacity:.45}to{opacity:.12}}
+/* ATMOSPHERE, NOT A STRIPE.
+   This layer paints over everything, the trees and the gatehouse included, and
+   its first line used to be a half opaque band of pale blue across four per
+   cent of the height. It was meant to be haze on the horizon. What it actually
+   did was lay a grey stripe over the middle of the college and the bottom of
+   the trees, at a fixed fraction of the window that stopped agreeing with
+   where the horizon was as soon as the stage was scaled. It is now a wide,
+   weak wash that fades in over a fifth of the frame and has no edge anywhere. */
 .chimney .haze{inset:0;pointer-events:none;
-  background:linear-gradient(180deg,transparent 58%,rgba(214,226,238,.5) 61.6%,transparent 66%),
-    radial-gradient(ellipse at 50% 58%,rgba(255,236,200,.18) 0%,rgba(255,236,200,0) 34%),
+  background:linear-gradient(180deg,transparent 44%,rgba(216,228,240,.16) 58%,rgba(216,228,240,.05) 68%,transparent 74%),
+    radial-gradient(ellipse 60% 24% at 50% 60%,rgba(255,238,206,.16) 0%,rgba(255,238,206,0) 100%),
     linear-gradient(180deg,rgba(0,0,0,0) 74%,rgba(20,10,5,.32) 100%),
     radial-gradient(ellipse at 50% 50%,transparent 62%,rgba(20,6,4,.35) 100%)}
 @media(prefers-reduced-motion:reduce){
@@ -1518,11 +1601,6 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .menucard .mlegend{margin:6px 0 0;font-size:.6rem;line-height:1.4;color:var(--ink-soft);
   font-weight:500;white-space:normal}
 .menucard .mlegend b{font-family:var(--mono);font-size:.58rem;font-weight:700;color:var(--ink)}
-/* Formal hall, under the Caff on the Info shelf. Set against the right margin
-   because it is an aside to the card above it rather than the next thing to
-   read: the eye finds the menu first and this afterwards. */
-.formalline{text-align:right;margin:0 0 var(--g)}
-.formalline p{margin:0 0 8px;font-size:.8rem;line-height:1.5;color:var(--cream-3);font-weight:500}
 .mcrnote{flex-basis:100%;margin:6px 0 0;font-size:.78rem;line-height:1.5;color:var(--cream-3);font-weight:500;max-width:62ch}
 .bootline{font-family:var(--mono);font-size:0.72rem;letter-spacing:.2em;text-transform:uppercase;
   text-shadow:0 1px 10px rgba(12,0,2,.85),0 0 2px rgba(12,0,2,.6);
@@ -2006,14 +2084,23 @@ button.busy{cursor:progress}
 .gcard .msg{color:var(--gold-2);font-size:.76rem;margin:11px 0 0;font-weight:600;
   background:none;padding:0;min-height:0}
 .gcard .msg:empty{display:none}
-/* The Google button is drawn in its own frame, so it is centred and held to
-   the width of the card rather than being left to sit in a white strip. */
-#gsiBtn{display:flex;justify-content:center;margin-top:15px;min-height:44px}
-/* Google draws its button on a white card of its own. On the crimson gate that
-   read as a white outline round the pill, so the dark theme is asked for and
-   the wrapper it draws is clipped to the pill and given the card's own ground. */
-#gsiBtn>div{margin:0 auto;border-radius:999px;overflow:hidden;background:var(--t3)}
-#gsiBtn iframe{margin:0 auto!important}
+/* THE SLOT THE GOOGLE BUTTON SITS IN.
+   Everything inside it belongs to Google and is drawn in a frame nothing here
+   can reach, so the job is to give it a slot that looks deliberate whatever it
+   decides to draw. The slot is the full width of the card, the height of a
+   comfortable target, and it has no ground of its own.
+
+   It used to be painted with the card's own dark tile. When Google honoured
+   the dark theme that was invisible; when it did not, and drew the white
+   personalised button it draws for somebody with a live session, the tile
+   showed round it as a dark halo with square shoulders. Transparent is right
+   in both cases: a black pill or a white one, centred on the crimson, and
+   nothing behind either. */
+#gsiBtn{display:flex;justify-content:center;align-items:center;margin-top:15px;
+  min-height:44px;width:100%}
+#gsiBtn>div{margin:0 auto;border-radius:999px;overflow:hidden;background:transparent;
+  max-width:100%}
+#gsiBtn iframe{margin:0 auto!important;color-scheme:light dark}
 .gcard .fix{margin-top:15px;padding:14px 15px;background:rgba(235,183,83,.16);border-radius:var(--r2)}
 .gcard .fix b{display:block;font-family:var(--display);font-size:0.842rem;font-weight:600;margin-bottom:6px;
   letter-spacing:-.03em;color:var(--gold-2)}
@@ -2028,6 +2115,23 @@ button.busy{cursor:progress}
 #diag span.no{color:var(--crimson-lite)}
 #diag b{color:var(--cream-4);font-weight:700;flex:0 0 44px}
 .gsiskel{display:block;width:100%;height:44px;border-radius:999px;background:var(--t3);animation:glow 1.5s ease-in-out infinite}
+/* AN ADDRESSED ENVELOPE.
+   .kv had two colour rules and no layout whatever, so the label and the value
+   were simply two inline elements touching: "To" ran into the address and
+   "Subject" into the subject line, on one wrapped paragraph. It is a two
+   column grid now, label above value on anything narrow, and the address is
+   allowed to break anywhere because an email address has no spaces in it to
+   break at. */
+.kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 14px;align-items:baseline;
+  background:var(--t3);border-radius:var(--r2);padding:11px 13px}
+.kv b{font-family:var(--mono);font-size:.56rem;letter-spacing:.15em;text-transform:uppercase;
+  font-weight:700;color:var(--cream-4);white-space:nowrap}
+.kv span{min-width:0;font-size:.84rem;line-height:1.45;font-weight:600;overflow-wrap:anywhere}
+.kv .mono{font-family:var(--mono);font-size:.76rem;letter-spacing:0}
+.sheet .kv{background:var(--sh1)}
+.sheet .kv b{color:var(--ink-soft)}
+@media(max-width:430px){.kv{grid-template-columns:minmax(0,1fr);gap:2px}
+  .kv b{margin-top:5px}.kv b:first-child{margin-top:0}}
 
 /* ---------- sheet, toast, forms ---------- */
 .sheet{position:fixed;inset:0;z-index:80;background:rgba(28,2,5,.68);display:flex;align-items:flex-end;
@@ -2191,8 +2295,8 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
     <span class="crestwrap"><span class="ring4"><i></i><i></i></span>
       <img class="crest big" id="crestBoot" alt="Jesus College MCR"></span>
     <div class="chimney" id="chimneyScene" aria-hidden="true">
-      <div class="fit">
       <span class="clouds"></span><span class="sun"></span>
+      <div class="fit">
       <div class="trees">
         <span class="tree t6"></span><span class="tree t5 gold"></span><span class="tree t4"></span>
         <span class="tree t3 gold"></span><span class="tree t2"></span><span class="tree t1"></span>
@@ -2220,8 +2324,8 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
         </div>
       </div>
       </div>
-      <span class="canopy l"></span><span class="canopy r"></span>
       </div>
+      <span class="canopy l"></span><span class="canopy r"></span>
       <span class="bloom"></span>
       <span class="haze"></span>
     </div>
@@ -2291,7 +2395,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
   </section>
 
   <section id="v-info" hidden>
-    <div class="vh"><h2><i>Info</i></h2><span class="note">Forms, the Caff, how college works, healthcare and sport</span>
+    <div class="vh"><h2><i>Info</i></h2><span class="note">Forms, how college works, healthcare and sport</span>
       <p class="mcrnote">Written by the MCR committee, not by the college. Where this describes college services, the college’s own pages are the current position.</p></div>
     <div class="seg" id="lodgeSeg" style="margin-bottom:var(--g2)"></div>
     <div id="lodgeBody"></div>
@@ -2316,14 +2420,20 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
       <div class="acts"><button class="btn gold" id="bSaveMe">Save</button><span class="lede" id="meMsg"></span></div>
     </div>
     <div class="card">
-      <h3>Your calendar</h3>
-      <p class="lede">Subscribe once and everything you sign up for appears in your calendar, with alerts, and keeps itself up to date. The app sends no email: your calendar does the reminding.</p>
+      <h3>Everything the MCR does</h3>
+      <p class="lede">One calendar, the same for everybody, with every event we run. Subscribe once and it keeps itself up to date. You do not have to put your name down for anything to see it.</p>
+      <div class="acts" id="wholeBox"></div>
+      <p class="lede" id="wholeShare"></p>
+    </div>
+    <div class="card">
+      <h3>Only what you are down for</h3>
+      <p class="lede">A second calendar, yours alone, carrying just the events you have signed up for, with an alert before each. Useful alongside the one above if you want reminders. The app sends no email: your calendar does the reminding.</p>
       <div class="acts" id="feedBox"></div>
       <label class="f"><span>Alert before each event</span>
         <select id="pRemind"><option value="15">15 minutes before</option><option value="30">30 minutes before</option><option value="60">An hour before</option><option value="120">Two hours before</option><option value="1440">The day before</option><option value="0">No alert</option></select></label>
       <div class="acts"><button class="btn crimson sm" id="bSaveFeed">Save</button>
-        <button class="btn ghost sm" id="bResetFeed">Reset the link</button>
-        <a class="btn ghost sm" id="bWholeFeed" href="#" target="_blank" rel="noopener">Full programme</a></div>
+        <button class="btn ghost sm" id="bResetFeed">Reset the link</button></div>
+      <p class="lede">Resetting makes a new link and stops the old one working, which is what to do if you have shared yours by mistake.</p>
     </div>
   </section>
 
@@ -2510,7 +2620,7 @@ function loadGsi(){
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbwJcVpzPhkP1PiOm2X7jhUdP__1dbgUB2iCteDvGqrd7hGGIjGBfR3Ga7iZE59t4MDI/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzrQMEWeCzB9H45yhEzR0jLNph6Tw8lXV43NPxJSkGiycXgN30xnaRt0QsmViY0kLwn/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -2850,15 +2960,43 @@ const withTimeout = (p, ms, what) => Promise.race([p,
 /* While something is happening the button is replaced by the waiting bar, and
    when it is over the real button is drawn again. Emptying it and leaving it
    empty was what left the card with nothing to press after a failed attempt. */
+/* ONE PLACE THAT DRAWS THE GOOGLE BUTTON.
+   It was drawn in two, with different options: the first measured the card and
+   asked for the logo on the left, the second hardcoded three hundred and
+   twenty pixels and asked for neither. So the button you got after any failed
+   attempt, or after coming back from the waiting bar, was a different width
+   and a different shape from the one you started with, and on a card that is
+   not exactly three hundred and twenty wide it either overflowed or sat in a
+   gap. Both call sites come here now.
+
+   Google will not draw narrower than 240 or wider than 400, so the measured
+   width is clamped rather than trusted. */
+function drawGsi(){
+  const el = $("gsiBtn");
+  if (!el || !(window.google && google.accounts && google.accounts.id && gsiUp)) return false;
+  const w = Math.round(el.getBoundingClientRect().width) || 320;
+  try{
+    el.innerHTML = "";
+    google.accounts.id.renderButton(el, { theme:"filled_black", size:"large", shape:"pill",
+      text:"continue_with", logo_alignment:"left",
+      width: Math.min(400, Math.max(240, w)) });
+    return true;
+  }catch(e){ return false; }
+}
+/* The card is a percentage of the window, so the button has to be redrawn when
+   the window changes or it keeps a width the card no longer has. Rebuilding an
+   iframe on every pixel of a drag is wasteful, so it settles first. */
+let gsiFit = 0;
+function gsiRefit(){
+  clearTimeout(gsiFit);
+  gsiFit = setTimeout(() => { const g = $("gate"); if (g && !g.hidden) drawGsi(); }, 180);
+}
+window.addEventListener("resize", gsiRefit, { passive: true });
+window.addEventListener("orientationchange", gsiRefit, { passive: true });
 function gateBusy(on){
   if (on) return put("gsiBtn", '<span class="gsiskel" aria-hidden="true"></span>');
   put("gsiBtn", "");
-  if (window.google && google.accounts && google.accounts.id && gsiUp){
-    try{
-      google.accounts.id.renderButton($("gsiBtn"), { theme:"filled_black", size:"large", shape:"pill",
-        text:"continue_with", width: 320 });
-    }catch(e){}
-  }
+  drawGsi();
 }
 function gateFix(title, body, actions){
   gateBusy(false);
@@ -2992,10 +3130,7 @@ function startGsi(cfg){
         });
         warmUp();
         const el = $("gsiBtn");
-        el.innerHTML = "";
-        google.accounts.id.renderButton(el, { theme:"filled_black", size:"large", shape:"pill",
-          text:"continue_with", width: Math.min(360, Math.max(240, el.offsetWidth || 320)),
-          logo_alignment:"left" });
+        drawGsi();
         /* If Google refuses the origin it renders nothing at all and throws
            nothing either, so the only way to know is to look a second later. */
         /* A drawn button contains an iframe or something focusable. A refused
@@ -3402,11 +3537,20 @@ function bootDone(){
      coalesce a class change and a property change made in the same frame into
      one style pass, in which case there is no before-and-after for a
      transition to run between and the gate would jump the last of the way. */
-  if (sc){
+  if (!be) return;
+  /* THERE IS ONLY AN ARRIVAL IF THERE WAS A WALK.
+     A member already signed in, reloading on a device that has their page
+     cached, never sees the Chimney: the page is drawn from the cache before
+     the request is even sent, and the loading screen over it is a formality.
+     It was nevertheless running the full arrival -- a second and a half of
+     doors and camera, then a fade -- over a page that was already finished, so
+     a reload felt broken in the one case where it should have felt instant.
+     The walk gets its arrival; everything else goes straight out. */
+  const walked = be.classList.contains("walk");
+  if (walked && sc){
     sc.classList.add("open");
     requestAnimationFrame(() => { if (sc) sc.style.setProperty("--walk", "1"); });
   }
-  if (!be){ return; }
   const end = () => {
     be.hidden = true;
     be.classList.remove("done");
@@ -3420,8 +3564,9 @@ function bootDone(){
      through, and never before: the fade was starting on top of a shut gate.
      The three motions of the arrival are the doors at 0.95s, the last of the
      walk at 1.25s and the camera through the arch, which ends at 0.35 plus
-     1.15. This is the last of them, so nothing is cut off mid-swing. */
-  const THROUGH = 1520;
+     1.15. This is the last of them, so nothing is cut off mid-swing. With no
+     walk there is nothing to wait for and it is zero. */
+  const THROUGH = walked ? 1520 : 0;
   setTimeout(() => {
     be.classList.add("done");
     be.addEventListener("transitionend", once, { once: true });
@@ -4010,15 +4155,11 @@ function renderTodayMenu(){
       '<p class="mlegend"><b>V</b> vegetarian &middot; <b>Ve</b> vegan &middot; <b>H</b> halal &middot; ' +
       "<b>GF</b> gluten free. Ask at the counter if an allergen matters.</p></div>";
   }
-  /* The same card in two places: on Today, where it answers tonight, and on
-     the Info shelf, where it is always to be found. One builder, so the two
-     can never disagree, and put() ignores whichever slot is not on screen. */
   put("todayMenu", html);
-  put("infoMenu", html);
 }
-/* Formal hall is on JNet behind Raven, so it can only ever be a link. It was
-   taking two lines off the bottom of the Caff card to say so; it is now one
-   button on the Info shelf, next to the Caff itself. */
+/* Formal hall is on JNet behind Raven, so it can only ever be a link, and a
+   link belongs with the other links rather than taking two lines off the
+   bottom of the Caff card to explain itself. It is a card on Forms and links. */
 function formalUrl(){
   return safeUrl((S.menu || {}).formal ||
     "https://jnet.jesus.cam.ac.uk/jnet/catering-and-events/formal-hall-menu");
@@ -4084,6 +4225,10 @@ function renderTodayQuick(){
       return q ? '<button data-goto="say" class="urgentquick">A question to answer' +
         '<small>' + esc(q.title) + '</small></button>' : "";
     })() +
+    /* The one calendar, where somebody will actually come across it. Buried in
+       Settings it was found by the people who least needed telling. */
+    (S.programmeUrl ? '<a href="' + esc(safeUrl(S.programmeUrl).replace(/^https?:/, "webcal:")) +
+      '">Put the MCR in your calendar<small>Everything we run, one link, no sign up</small></a>' : "") +
     '<button data-asktab="new">Ask something</button>' +
     (canSee("business") ? '<button data-runevent>Suggest running an event with the MCR</button>' : "") +
     (fix ? '<a href="' + esc(safeUrl(fix.url)) + '" target="_blank" rel="noopener">Report something broken</a>' : "") +
@@ -4322,12 +4467,11 @@ let lodgeTab = "now", jcsuQ = "", jcsuOpen = false;
    of their own: the forms, the food, how college works, what to do when
    somebody is ill, and the sport.
 
-   The Caff has a shelf of its own rather than sitting at the top of the forms.
-   A menu is not a form, it is the one thing on Info that is different every
-   day, and it was pushing the three links everybody actually comes here for
-   off the bottom of the screen. */
+   The Caff is not here at all. It is on Today, which is where somebody asking
+   what is for lunch already is, and a second copy on Info was one more place
+   for it to be looked for and one more thing to keep in step. */
 const LODGE_TABS = [
-  ["forms","Forms and links"], ["food","The Caff"], ["guides","How college works"],
+  ["forms","Forms and links"], ["guides","How college works"],
   ["health","First aid and health"], ["sport","Sport"]
 ];
 function renderLodge(){
@@ -4351,24 +4495,12 @@ function renderLodgeShelf(){
   if (!S) return;
   const counts = { forms: (S.links || []).length, guides: (S.resources || []).length,
     sport: (S.clubs || []).length };
-  if (["forms","food","guides","health","sport"].indexOf(lodgeTab) < 0) lodgeTab = "forms";
+  if (["forms","guides","health","sport"].indexOf(lodgeTab) < 0) lodgeTab = "forms";
   put("lodgeSeg", LODGE_TABS.map(t =>
     '<button data-lodge="' + t[0] + '" aria-pressed="' + (lodgeTab === t[0]) + '">' + esc(t[1]) +
     "</button>").join(""));
-  put("lodgeBody", { forms: lodgeForms, food: lodgeFood, guides: lodgeGuides,
+  put("lodgeBody", { forms: lodgeForms, guides: lodgeGuides,
     health: lodgeHealth, sport: lodgeSport }[lodgeTab]());
-  /* The Caff shelf leaves an empty slot for the menu card; this fills it, and
-     does nothing at all on the other four. */
-  if (lodgeTab === "food") renderTodayMenu();
-}
-/* THE CAFF, ON ITS OWN SHELF.
-   The card itself is built by renderTodayMenu, which paints this slot and the
-   one on Today from the same string so the two can never disagree. */
-function lodgeFood(){
-  return '<div id="infoMenu"></div>' +
-    '<div class="formalline"><p>Formal hall is on JNet, behind Raven, so it cannot be read here.</p>' +
-      '<a class="btn pill sm" href="' + esc(formalUrl()) + '" target="_blank" rel="noopener">' +
-      "The formal hall menu</a></div>";
 }
 /* THE BOARD.
    A cork board, not a filing cabinet: small squares of paper, the newest first,
@@ -4405,10 +4537,18 @@ function lodgeForms(){
   const card = l => '<a class="linkcard" href="' + esc(safeUrl(l.url)) + '" target="_blank" rel="noopener">' +
     '<div class="t"><b>' + esc(l.name) + "</b><p>" + esc(l.note) + "</p>" +
     '<span class="who">' + esc(l.who) + "</span></div><span class=\"arw\">&#8599;</span></a>";
+  /* Formal hall is not in the links sheet the committee maintains, because it
+     is not theirs to maintain: it is a JNet page behind Raven with a fixed
+     address. It is written in here so that it cannot go missing, and so the
+     Caff card on Today does not have to carry a paragraph explaining why it
+     cannot show you the menu itself. */
+  const formal = { url: formalUrl(), name: "The formal hall menu",
+    note: "On JNet, behind Raven, so it cannot be read here. What is on at each hall this term.",
+    who: "JNet" };
   return '<div class="grp"><b>The three everybody needs</b></div>' +
     L.filter(l => first.indexOf(l.key) >= 0).map(card).join("") +
     '<div class="grp"><b>Jesus College, in its own words</b></div><div class="linkgrid">' +
-    L.filter(l => first.indexOf(l.key) < 0).map(card).join("") + "</div>";
+    L.filter(l => first.indexOf(l.key) < 0).map(card).join("") + card(formal) + "</div>";
 }
 function lodgeGuides(){
   const res = S.resources || [];
@@ -5371,16 +5511,33 @@ function renderMe(){
   $("meEmail").textContent = me.email;
   $("pName").value = me.name || "";
   $("pRemind").value = String(me.remind === undefined ? 60 : me.remind);
+  /* THE WHOLE PROGRAMME IS THE ONE PEOPLE WANT.
+     The headline button used to be the personal feed, which carries only the
+     events you have already put your name down for. That is the wrong way
+     round: somebody adding the MCR to their calendar wants to know what is on
+     so that they can decide what to go to, and being asked to sign up for
+     everything first in order to see any of it is a circle. The whole
+     programme is one address, identical for every member, so it can be handed
+     round, put in a Freshers' email or pinned in a group chat, and it needs no
+     sign in of its own. The personal feed is still there underneath for
+     alerts. */
+  const whole = safeUrl(S.programmeUrl) || "";
+  put("wholeBox", whole
+    ? '<a class="btn pill gold" href="' + esc(whole.replace(/^https?:/, "webcal:")) +
+        '">Add the MCR calendar</a>' +
+      '<button class="btn pill sm" data-copy="' + esc(whole) + '">Copy the link</button>' +
+      '<a class="btn pill sm" href="' + esc(whole) + '" download="jesus-mcr.ics">Download the file</a>'
+    : '<span class="lede">Deploy the app to get a calendar.</span>');
+  put("wholeShare", whole
+    ? "Anybody can use this link. It is the same one for the whole MCR, so pass it on."
+    : "");
   /* Two buttons rather than a link to copy: one subscribes, which keeps
      itself up to date for ever, and one downloads what you have now. */
   put("feedBox", me.feedUrl
-    ? '<a class="btn gold" href="' + esc(safeUrl(me.feedUrl).replace(/^https?:/, "webcal:")) +
-        '">Add to my calendar</a>' +
-      '<a class="btn ghost" href="' + esc(safeUrl(me.feedUrl)) + '" download="jesus-mcr.ics">Download the file</a>'
+    ? '<a class="btn pill" href="' + esc(safeUrl(me.feedUrl).replace(/^https?:/, "webcal:")) +
+        '">Add your own</a>' +
+      '<a class="btn pill sm" href="' + esc(safeUrl(me.feedUrl)) + '" download="jesus-mcr.ics">Download the file</a>'
     : '<span class="lede">Deploy the app to get a calendar.</span>');
-  /* Set as a property rather than built into markup, which is exactly how a
-     link slips past the escaping the rest of the file does. */
-  $("bWholeFeed").href = safeUrl(S.programmeUrl) || "#";
 }
 
 /* ============================================================
