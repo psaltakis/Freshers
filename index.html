@@ -39,7 +39,7 @@
      The Google entries are what Identity Services needs to draw its button and
      verify a sign in. Loosen those and sign in fails, so they are wildcarded on
      Google's own domains rather than pinned to a host that may change. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' https://accounts.google.com https://apis.google.com https://*.gstatic.com; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data:; connect-src https://script.google.com https://script.googleusercontent.com https://accounts.google.com https://*.googleapis.com; frame-src https://accounts.google.com https://*.google.com; media-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' https://accounts.google.com https://apis.google.com https://*.gstatic.com; style-src 'unsafe-inline' https://fonts.googleapis.com https://accounts.google.com; font-src https://fonts.gstatic.com data:; img-src 'self' data:; connect-src https://script.google.com https://script.googleusercontent.com https://accounts.google.com https://*.googleapis.com; frame-src https://accounts.google.com https://*.google.com; media-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <!-- Painted before anything else is parsed, so the first frame is already the
      college crimson rather than a white flash. -->
 <style>
@@ -1825,8 +1825,29 @@ button.busy{cursor:progress}
   align-items:safe center;justify-content:center;padding:22px;
   overflow:auto;overscroll-behavior:contain}
 @media(max-width:430px){#gate{padding:14px 10px}}
+/* THE CARD FADES. IT DOES NOT MOVE. READ THIS BEFORE ADDING A TRANSFORM.
+   It used to rise eight pixels as it appeared, with fill-mode "both". That
+   holds the last keyframe for ever after, and the last keyframe says
+   transform:none -- which is not the same as having no transform: it computes
+   to an identity matrix that then sits on the card permanently.
+
+   That matters here and nowhere else in this file. Google's sign in button is
+   an iframe from accounts.google.com, and before it will act on a press it
+   checks with Intersection Observer v2 that it is genuinely visible. That
+   check walks the ancestors looking for anything that modifies them, and a
+   transform on this card is exactly such a thing. The card is the button's
+   grandparent, so the leftover of its own entrance animation was sitting
+   between Google and the only way into this app, and every press on a desktop
+   was quietly ignored.
+
+   Switching the fill mode to "backwards" is not the fix either: the card then
+   sits on the FIRST frame, at opacity 0 and eight pixels down, whenever the
+   animation has not run -- which is the case here, because the gate starts
+   hidden. So the movement is gone altogether. It is a fade, opacity only, and
+   the computed transform on this card is now none at every moment of its life. */
+@keyframes gatecard{from{opacity:0}to{opacity:1}}
 .gcard{max-width:396px;width:100%;background:var(--t1);border-radius:18px;padding:26px 24px;
-  animation:rise .28s var(--ease) both}
+  animation:gatecard .28s var(--ease) both}
 /* Google will not draw its button narrower than 240px. On a 320px phone the
    card's content box was 228, so the first thing a new member ever saw was a
    sign in button with its right hand end cut off. The padding comes in far
@@ -1861,67 +1882,33 @@ button.busy{cursor:progress}
    showed round it as a dark halo with square shoulders. Transparent is right
    in both cases: a black pill or a white one, centred on the crimson, and
    nothing behind either. */
-/* THE SLOT.
-   Full width of the card, no ground of its own, and its height is written by
-   script once the scale is known. .gsifit is taken out of the flow so that
-   whatever Google draws at its own size cannot push on anything, and is then
-   scaled about its top centre to fit the slot. Nothing here can widen the
-   card, which is the whole point. */
-/* THE SLOT IS A FIXED PILL. See the note on drawGsi: what we draw is ours and
-   never changes shape, and Google's own button lies invisibly over the top of
-   it to take the press. The slot is therefore sized by us, once, and nothing
-   Google decides to render can push it about. */
-#gsiBtn{position:relative;margin-top:15px;width:100%;max-width:320px;height:48px;
-  margin-left:auto;margin-right:auto;overflow:hidden;border-radius:999px}
-/* What everybody actually sees. Drawn from the same tokens as the rest of the
-   app so it belongs to this card rather than to Google's design system.
+/* THE BUTTON IS GOOGLE'S OWN, VISIBLE AND UNMODIFIED. READ THIS FIRST.
 
-   IT IS A REAL BUTTON, AND IT IS NOT DECORATION.
-   The first version of this was a span with pointer-events:none, on the
-   assumption that Google's own button was always underneath to take the press.
-   It is not. renderButton draws nothing at all if its script is still on its
-   way, if the origin is not registered, if an extension has blocked
-   accounts.google.com, or simply if it is slow -- and in every one of those
-   cases this pill was still painted, perfect and inviting, over an empty box.
-   That is a button that does nothing when you press it, some of the time and
-   not others, which is exactly what it felt like.
+   It was briefly drawn our way: our own pill, with Google's real button laid
+   over it at opacity 0 to take the press. That does not work and cannot be
+   made to work. Google's button is an iframe from accounts.google.com, and it
+   checks with Intersection Observer v2 whether it is genuinely visible before
+   it will act on a click. That check is exactly what stops a hostile page
+   hiding the button under something harmless and stealing an identity with it,
+   and the specification is explicit that isVisible is false unless the element
+   is completely visible and unmodified. opacity:0 fails it. So does a
+   transform. So the button did nothing when pressed -- reliably on a desktop,
+   where Google always draws it, and intermittently elsewhere, which is why it
+   read as "about half the time".
 
-   So the face is a button now and it sits UNDER Google's frame. Where Google
-   has drawn, Google's frame is on top and takes the press, which is the path
-   that produces a credential. Everywhere else -- the edges its frame does not
-   reach, and every moment before or instead of it existing -- this one takes it
-   and opens the chooser itself. A press always does something. */
-.gface{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:10px;
-  background:var(--cream);color:#1F1B18;border-radius:999px;font-size:.92rem;font-weight:700;
-  letter-spacing:-.01em;border:0;width:100%;cursor:pointer;font-family:var(--ui);
-  box-shadow:0 2px 10px -4px rgba(20,1,3,.55),inset 0 0 0 1px rgba(31,27,24,.14)}
-.gface svg{flex:0 0 18px}
-.gface b{font-weight:700}
-/* Until Google's button is really there, this says so rather than pretending. */
-#gsiBtn.waiting .gface{opacity:.62}
-#gsiBtn.waiting .gface b::after{content:"\2026"}
-/* Google's real button: present, focusable, announced, and invisible. It is
-   the press that counts. opacity rather than display or visibility, because a
-   hidden button is not a button and would neither take a click nor reach the
-   keyboard. It is scaled up once it has drawn, so that whatever size Google
-   chose it covers the whole pill and no corner of the face is left over a gap
-   -- it is invisible, so overfilling costs nothing and the slot clips it. */
-/* THE LAYER ITSELF TAKES NOTHING. ONLY WHAT GOOGLE PUT IN IT DOES.
-   This box is inset:0 and sits above the face, so while it was taking presses
-   it swallowed every one of them -- including, and this was the bug, when it
-   was completely empty because Google had not drawn. A press then reached an
-   invisible nothing and the popup never opened. It is transparent to the
-   pointer now and only its contents are pressable, so any point Google's own
-   frame does not cover falls through to the face underneath, which opens the
-   chooser itself. */
-.gsifit{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  opacity:0;z-index:1;pointer-events:none;
-  transform:scale(var(--gsicover,1));transform-origin:50% 50%}
-.gsifit>*{max-width:none;pointer-events:auto}
-#gsiBtn iframe{margin:0!important;display:block;max-width:none!important}
-/* The focus ring belongs on the pill, since the thing being focused is
-   invisible and would otherwise draw its ring nowhere anybody could see. */
-#gsiBtn:focus-within{outline:2px solid var(--gold);outline-offset:2px}
+   The button is therefore Google's, drawn by Google, plainly visible, with
+   nothing over it, no opacity and no transform. Do not put anything on top of
+   it, and do not scale it.
+
+   The personalised "Continue as somebody" variant is what used to change width
+   from person to person and bring its own square frame. It is turned off the
+   way Google documents rather than by covering it up: it is not drawn when the
+   requested width is under two hundred. See GSI_W in drawGsi. */
+#gsiBtn{position:relative;margin-top:15px;width:100%;min-width:0;
+  display:flex;justify-content:center;align-items:center;min-height:44px}
+#gsiBtn iframe{margin:0!important;display:block}
+/* The ring belongs on the slot: the thing being focused is Google's frame. */
+#gsiBtn:focus-within{outline:2px solid var(--gold);outline-offset:3px;border-radius:999px}
 .gsiskel{display:block;width:100%;height:44px;border-radius:999px;background:var(--t3);animation:glow 1.5s ease-in-out infinite}
 /* AN ADDRESSED ENVELOPE.
    .kv had two colour rules and no layout whatever, so the label and the value
@@ -3000,12 +2987,31 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
    the gate: startGsi is reachable only from probe, and probe runs only when
    somebody is signed out. A member who was already signed in paid for all of
    it and used none of it. It is now fetched at the moment the gate appears. */
-function loadGsi(){
-  if (loadGsi.started) return;
+/* A SCRIPT THAT FAILED TO LOAD ONCE MUST BE ALLOWED TO LOAD AGAIN.
+   This set its own "started" flag and then never looked at what happened. A
+   single failure -- a phone that changed cell on the way into college, a
+   captive portal at the station, a hiccup at Google -- left the flag set for
+   ever, so nothing ever asked for the script a second time, the poll in
+   startGsi ran out its nine seconds, and the person was told the sign in
+   script did not load and given nothing to do about it but reload the page.
+
+   The failure is now caught. The flag is released so a retry can genuinely
+   retry, and two further attempts are made on a lengthening delay before
+   anybody is told anything at all, which covers the overwhelmingly common case
+   of a network that was briefly not there. */
+function loadGsi(again){
+  if (loadGsi.started && !again) return;
   loadGsi.started = true;
   const s = document.createElement("script");
   s.src = "https://accounts.google.com/gsi/client";
   s.async = true; s.defer = true;
+  s.onload = () => { loadGsi.ok = true; loadGsi.failed = false; };
+  s.onerror = () => {
+    loadGsi.failed = true;
+    loadGsi.started = false;              /* so a retry is a real retry */
+    loadGsi.tries = (loadGsi.tries || 0) + 1;
+    if (loadGsi.tries < 3) setTimeout(() => loadGsi(true), 800 * loadGsi.tries);
+  };
   document.head.appendChild(s);
 }
 </script>
@@ -3018,7 +3024,7 @@ function loadGsi(){
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbz86nT3a38N5AIxnMoNz2Z6TOBaDp6oJyV1ej50T-lk7WwYpfQzjshhz_B4zhd-gJTG/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzxVFT2G14whxvgCyOOLckayapJLo-TuJpkOfm9MFANWs-2Bbg8XzgQDKxu_eloUDKc/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -3027,7 +3033,7 @@ const BOOK_REGISTER = "https://jcollegemcr.co.uk/register";
 /* The build this page was written against. If the server reports a different
    one, the deployment answering is not this code, and the membership check it
    is running is whatever was deployed last. Shown under 'What is wrong?'. */
-const EXPECT_BUILD = "chimney-26";
+const EXPECT_BUILD = "chimney-27";
 
 /* WHAT IS BUILT AND WHAT IS OPEN.
    Two sections are finished enough to keep and not finished enough to show the
@@ -3409,80 +3415,30 @@ const withTimeout = (p, ms, what) => Promise.race([p,
 
    No measuring, no scaling, no resize listener, and the same card for
    everybody. */
-const GSI_W = 320;
-const GBRAND = '<svg viewBox="0 0 18 18" width="18" height="18" aria-hidden="true">' +
-  '<path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.62z"/>' +
-  '<path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.8.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.33A9 9 0 0 0 9 18z"/>' +
-  '<path fill="#FBBC05" d="M3.97 10.72a5.4 5.4 0 0 1 0-3.44V4.95H.96a9 9 0 0 0 0 8.1l3.01-2.33z"/>' +
-  '<path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.9 11.43 0 9 0A9 9 0 0 0 .96 4.95l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58z"/>' +
-  "</svg>";
-function gsiDrawn(){
-  const fit = $("gsiBtn") && $("gsiBtn").querySelector(".gsifit");
-  return !!(fit && fit.querySelector('iframe, [role="button"], [tabindex]'));
-}
-/* Once Google has drawn, stretch its frame until it covers the whole pill.
-   Google honours the width it is given only loosely and picks its own height,
-   so its frame is routinely narrower or shorter than the pill -- a forty pixel
-   frame in a forty eight pixel pill leaves a dead strip along the top and the
-   bottom, and the icon-only variant leaves almost all of it dead. Hit testing
-   follows a transform, so scaling the invisible layer is enough. */
-function gsiCover(){
-  const slot = $("gsiBtn");
-  if (!slot) return;
-  const fit = slot.querySelector(".gsifit");
-  if (!fit) return;
-  fit.style.setProperty("--gsicover", "1");
-  const box = slot.getBoundingClientRect();
-  let w = 0, h = 0;
-  fit.querySelectorAll('iframe, [role="button"], [tabindex]').forEach(el => {
-    const r = el.getBoundingClientRect();
-    if (r.width > w) w = r.width;
-    if (r.height > h) h = r.height;
-  });
-  if (!w || !h || !box.width) return;
-  const k = Math.max(box.width / w, box.height / h) * 1.04;
-  fit.style.setProperty("--gsicover", Math.max(1, Math.min(12, k)).toFixed(3));
-}
+/* UNDER TWO HUNDRED, ON PURPOSE.
+   Google documents that it will not draw the personalised "Continue as
+   somebody" button when the requested width is under two hundred pixels. That
+   is the whole of the fix for a button that used to change width per person
+   and bring its own square frame with it: ask for 199 and Google draws the
+   plain one, every time, for everybody, at a size that cannot overflow a card
+   this wide. width is a minimum rather than an instruction, so the drawn
+   button is a little wider than this; it is nowhere near the 400 maximum and
+   nowhere near the edge of the card.
+
+   The shorter of the two labels goes with it, so the text is comfortable at
+   this width instead of being ellipsized. */
+const GSI_W = 199;
 function drawGsi(){
   const slot = $("gsiBtn");
   if (!slot) return false;
   if (!(window.google && google.accounts && google.accounts.id && gsiUp)) return false;
-  slot.className = "waiting";
-  slot.innerHTML =
-    '<button class="gface" data-gsipress>' + GBRAND + "<b>Continue with Google</b></button>" +
-    '<span class="gsifit"></span>';
-  const fit = slot.querySelector(".gsifit");
+  slot.innerHTML = "";
   try{
-    google.accounts.id.renderButton(fit, { theme:"outline", size:"large", shape:"pill",
-      text:"continue_with", logo_alignment:"left", width: GSI_W });
-  }catch(e){ return false; }
-  /* Google paints asynchronously, so this is asked a few times rather than
-     once. The waiting class comes off the moment there is really something
-     there, which is also the moment the face stops being the only thing that
-     can be pressed. */
-  const settle = () => {
-    if (!gsiDrawn()) return;
-    slot.className = "";
-    gsiCover();
-  };
-  requestAnimationFrame(settle);
-  setTimeout(settle, 200);
-  setTimeout(settle, 700);
-  setTimeout(settle, 1600);
+    google.accounts.id.renderButton(slot, { theme:"outline", size:"large", shape:"pill",
+      text:"signin_with", logo_alignment:"left", width: GSI_W });
+  }catch(e){ slot.innerHTML = ""; return false; }
   return true;
 }
-/* The card is a percentage of the window, so the covering factor has to be
-   taken again when the window changes. Nothing is re-rendered. */
-let gsiFit = 0;
-function gsiRefit(){
-  clearTimeout(gsiFit);
-  gsiFit = setTimeout(() => {
-    const g = $("gate");
-    if (g && !g.hidden && gsiDrawn()) gsiCover();
-  }, 120);
-}
-window.addEventListener("resize", gsiRefit, { passive: true });
-window.addEventListener("orientationchange", gsiRefit, { passive: true });
 function gateBusy(on){
   const slot = $("gsiBtn");
   if (slot) slot.style.height = "";
@@ -3637,9 +3593,9 @@ function startGsi(cfg){
         /* A drawn button contains an iframe or something focusable. A refused
            one contains an empty div. Checked twice, because a slow network can
            make a good button look like a bad one for a moment. */
-        /* el is gone; the slot is looked up each time because drawGsi replaces
-           its contents. .gsifit alone is not proof: it is ours, and it is there
-           whether or not Google put anything in it. */
+        /* The slot is looked up each time, because drawGsi replaces what is
+           in it. Google now renders straight into the slot, so anything
+           focusable in there was put there by Google and is proof. */
         const drawn = () => { const q = $("gsiBtn");
           return !!(q && q.querySelector('iframe, [role="button"], [tabindex]')); };
         const verdict = () => {
@@ -3650,7 +3606,12 @@ function startGsi(cfg){
       }catch(err){ gsiUp = false; gsiFallback(cfg, err && err.message); }
       return;
     }
-    if (++tries > 45) return gsiFallback(cfg, "Google’s sign in script did not load.");
+    /* One more attempt at the script itself before giving up on it: by now we
+       know whether it errored, which the first call could not. */
+    if (tries === 20 && loadGsi.failed) loadGsi(true);
+    if (++tries > 45) return gsiFallback(cfg,
+      loadGsi.failed ? "Google’s sign in script could not be reached."
+                     : "Google’s sign in script did not load.");
     setTimeout(go, 200);
   })();
 }
@@ -8502,9 +8463,17 @@ on("gate", "click", e => {
   }
   const bk = e.target.closest("[data-book-again]");
   if (bk){ e.preventDefault(); return bookAgain(bk); }
-  const t = e.target.closest("[data-retry],[data-diag],[data-prompt],[data-tryanyway],[data-copyorigin],[data-gsipress]");
+  const t = e.target.closest("[data-retry],[data-diag],[data-prompt],[data-tryanyway],[data-copyorigin]");
   if (!t) return;
-  if (t.hasAttribute("data-retry")){ gsiUp = false; gsiComplaint = ""; return probe(); }
+  if (t.hasAttribute("data-retry")){
+    gsiUp = false; gsiComplaint = "";
+    /* If the script itself never arrived, re-probing alone would poll for
+       something that is not coming. Ask for it again first. */
+    if (!(window.google && google.accounts && google.accounts.id)){
+      loadGsi.tries = 0; loadGsi(true);
+    }
+    return probe();
+  }
   if (t.hasAttribute("data-copy")){
     copyText(t.getAttribute("data-copy"), "Copied.");
     return;
@@ -8523,33 +8492,6 @@ on("gate", "click", e => {
   }
   if (t.hasAttribute("data-diag")){ renderDiag(); $("diag").hidden = !$("diag").hidden; return; }
   if (t.hasAttribute("data-tryanyway")){ gateClear(); return api("ping").then(d => startGsi(d.signIn)).catch(fail); }
-  /* THE FACE WAS PRESSED, WHICH MEANS GOOGLE'S FRAME DID NOT TAKE IT.
-     Either it has not drawn yet, or it never will, or the press landed on a
-     corner its frame does not reach. Open the chooser directly rather than let
-     the press do nothing -- that silence is the whole complaint. If Google
-     refuses to show the chooser it says why, and that goes to the same
-     explanation the button-would-not-draw path already uses. */
-  if (t.hasAttribute("data-gsipress")){
-    if (!(window.google && google.accounts && google.accounts.id)){
-      /* The script is not there at all. Ask the server again and start over;
-         that is the path that ends in a real diagnosis rather than a shrug. */
-      return api("ping").then(d => startGsi(d.signIn)).catch(fail);
-    }
-    if (!gsiUp){ return api("ping").then(d => startGsi(d.signIn)).catch(fail); }
-    try{
-      google.accounts.id.prompt(n => {
-        if (n && (n.isNotDisplayed && n.isNotDisplayed() || n.isSkippedMoment && n.isSkippedMoment()))
-          gateFix("Google would not show the chooser",
-            "Its own reason was <code>" + esc((n.getNotDisplayedReason && n.getNotDisplayedReason()) ||
-            (n.getSkippedReason && n.getSkippedReason()) || "unknown") + "</code>. " +
-            "This usually means an extension is blocking <code>accounts.google.com</code>, or " +
-            "third party cookies are switched off for it.",
-            '<button class="btn cream sm" data-retry>Try again</button>' +
-            '<button class="btn ghost sm" data-diag>Show me the details</button>');
-      });
-    }catch(err){ fail(err); }
-    return;
-  }
   if (t.hasAttribute("data-prompt")){
     try{ google.accounts.id.prompt(n => {
       if (n && (n.isNotDisplayed && n.isNotDisplayed() || n.isSkippedMoment && n.isSkippedMoment()))
