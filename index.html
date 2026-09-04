@@ -432,7 +432,8 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .ev.going{background:rgba(235,183,83,.20)}
 .ev.going .tick{color:var(--gold)}
 .ev.waitlist .tick{opacity:.5}
-/* In the hat is neither down nor waiting, so it is neither green nor faded. */
+/* An entry is neither a place nor a waiting list position, so it is neither
+   green nor faded. */
 .ev.ballot .tick{opacity:.75}
 .chip.ballot{background:rgba(185,143,236,.22);color:#D9C4F5}
 .ev.cancelled .body b{text-decoration:line-through;color:var(--cream-4)}
@@ -1873,20 +1874,50 @@ button.busy{cursor:progress}
 #gsiBtn{position:relative;margin-top:15px;width:100%;max-width:320px;height:48px;
   margin-left:auto;margin-right:auto;overflow:hidden;border-radius:999px}
 /* What everybody actually sees. Drawn from the same tokens as the rest of the
-   app so it belongs to this card rather than to Google's design system. */
+   app so it belongs to this card rather than to Google's design system.
+
+   IT IS A REAL BUTTON, AND IT IS NOT DECORATION.
+   The first version of this was a span with pointer-events:none, on the
+   assumption that Google's own button was always underneath to take the press.
+   It is not. renderButton draws nothing at all if its script is still on its
+   way, if the origin is not registered, if an extension has blocked
+   accounts.google.com, or simply if it is slow -- and in every one of those
+   cases this pill was still painted, perfect and inviting, over an empty box.
+   That is a button that does nothing when you press it, some of the time and
+   not others, which is exactly what it felt like.
+
+   So the face is a button now and it sits UNDER Google's frame. Where Google
+   has drawn, Google's frame is on top and takes the press, which is the path
+   that produces a credential. Everywhere else -- the edges its frame does not
+   reach, and every moment before or instead of it existing -- this one takes it
+   and opens the chooser itself. A press always does something. */
 .gface{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:10px;
   background:var(--cream);color:#1F1B18;border-radius:999px;font-size:.92rem;font-weight:700;
-  letter-spacing:-.01em;pointer-events:none;
+  letter-spacing:-.01em;border:0;width:100%;cursor:pointer;font-family:var(--ui);
   box-shadow:0 2px 10px -4px rgba(20,1,3,.55),inset 0 0 0 1px rgba(31,27,24,.14)}
 .gface svg{flex:0 0 18px}
 .gface b{font-weight:700}
+/* Until Google's button is really there, this says so rather than pretending. */
+#gsiBtn.waiting .gface{opacity:.62}
+#gsiBtn.waiting .gface b::after{content:"\2026"}
 /* Google's real button: present, focusable, announced, and invisible. It is
-   what is actually pressed. opacity rather than display or visibility, because
-   a hidden button is not a button and would neither take a click nor reach the
-   keyboard. */
+   the press that counts. opacity rather than display or visibility, because a
+   hidden button is not a button and would neither take a click nor reach the
+   keyboard. It is scaled up once it has drawn, so that whatever size Google
+   chose it covers the whole pill and no corner of the face is left over a gap
+   -- it is invisible, so overfilling costs nothing and the slot clips it. */
+/* THE LAYER ITSELF TAKES NOTHING. ONLY WHAT GOOGLE PUT IN IT DOES.
+   This box is inset:0 and sits above the face, so while it was taking presses
+   it swallowed every one of them -- including, and this was the bug, when it
+   was completely empty because Google had not drawn. A press then reached an
+   invisible nothing and the popup never opened. It is transparent to the
+   pointer now and only its contents are pressable, so any point Google's own
+   frame does not cover falls through to the face underneath, which opens the
+   chooser itself. */
 .gsifit{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  opacity:0;z-index:1}
-.gsifit>*{max-width:none}
+  opacity:0;z-index:1;pointer-events:none;
+  transform:scale(var(--gsicover,1));transform-origin:50% 50%}
+.gsifit>*{max-width:none;pointer-events:auto}
 #gsiBtn iframe{margin:0!important;display:block;max-width:none!important}
 /* The focus ring belongs on the pill, since the thing being focused is
    invisible and would otherwise draw its ring nowhere anybody could see. */
@@ -2347,7 +2378,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
       <h3>Feedback on show</h3>
       <p class="lede">Untick a subject and it disappears from Feedback, along with any question asked about it. Nothing is deleted. Tick it again to put it back.</p>
       <div id="sayTopicList"></div>
-      <div class="acts"><button class="btn crimson sm" id="bSayTopics">Save what is on show</button></div>
+      <div class="acts"><button class="btn crimson sm" id="bSayTopics">Save these settings</button></div>
     </div>
     <div class="card">
       <h3>House style</h3>
@@ -2987,7 +3018,7 @@ function loadGsi(){
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbyrrR-60QlnqUMuOm6Wqix2RqhO51JT0rngLpotB37raAEmHCufSzUsgtZr_KxxItJS/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbz86nT3a38N5AIxnMoNz2Z6TOBaDp6oJyV1ej50T-lk7WwYpfQzjshhz_B4zhd-gJTG/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -2996,7 +3027,7 @@ const BOOK_REGISTER = "https://jcollegemcr.co.uk/register";
 /* The build this page was written against. If the server reports a different
    one, the deployment answering is not this code, and the membership check it
    is running is whatever was deployed last. Shown under 'What is wrong?'. */
-const EXPECT_BUILD = "chimney-25";
+const EXPECT_BUILD = "chimney-26";
 
 /* WHAT IS BUILT AND WHAT IS OPEN.
    Two sections are finished enough to keep and not finished enough to show the
@@ -3385,20 +3416,73 @@ const GBRAND = '<svg viewBox="0 0 18 18" width="18" height="18" aria-hidden="tru
   '<path fill="#FBBC05" d="M3.97 10.72a5.4 5.4 0 0 1 0-3.44V4.95H.96a9 9 0 0 0 0 8.1l3.01-2.33z"/>' +
   '<path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.9 11.43 0 9 0A9 9 0 0 0 .96 4.95l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58z"/>' +
   "</svg>";
+function gsiDrawn(){
+  const fit = $("gsiBtn") && $("gsiBtn").querySelector(".gsifit");
+  return !!(fit && fit.querySelector('iframe, [role="button"], [tabindex]'));
+}
+/* Once Google has drawn, stretch its frame until it covers the whole pill.
+   Google honours the width it is given only loosely and picks its own height,
+   so its frame is routinely narrower or shorter than the pill -- a forty pixel
+   frame in a forty eight pixel pill leaves a dead strip along the top and the
+   bottom, and the icon-only variant leaves almost all of it dead. Hit testing
+   follows a transform, so scaling the invisible layer is enough. */
+function gsiCover(){
+  const slot = $("gsiBtn");
+  if (!slot) return;
+  const fit = slot.querySelector(".gsifit");
+  if (!fit) return;
+  fit.style.setProperty("--gsicover", "1");
+  const box = slot.getBoundingClientRect();
+  let w = 0, h = 0;
+  fit.querySelectorAll('iframe, [role="button"], [tabindex]').forEach(el => {
+    const r = el.getBoundingClientRect();
+    if (r.width > w) w = r.width;
+    if (r.height > h) h = r.height;
+  });
+  if (!w || !h || !box.width) return;
+  const k = Math.max(box.width / w, box.height / h) * 1.04;
+  fit.style.setProperty("--gsicover", Math.max(1, Math.min(12, k)).toFixed(3));
+}
 function drawGsi(){
   const slot = $("gsiBtn");
   if (!slot) return false;
   if (!(window.google && google.accounts && google.accounts.id && gsiUp)) return false;
+  slot.className = "waiting";
   slot.innerHTML =
-    '<span class="gface" aria-hidden="true">' + GBRAND + "<b>Continue with Google</b></span>" +
+    '<button class="gface" data-gsipress>' + GBRAND + "<b>Continue with Google</b></button>" +
     '<span class="gsifit"></span>';
   const fit = slot.querySelector(".gsifit");
   try{
     google.accounts.id.renderButton(fit, { theme:"outline", size:"large", shape:"pill",
       text:"continue_with", logo_alignment:"left", width: GSI_W });
-  }catch(e){ slot.innerHTML = ""; return false; }
+  }catch(e){ return false; }
+  /* Google paints asynchronously, so this is asked a few times rather than
+     once. The waiting class comes off the moment there is really something
+     there, which is also the moment the face stops being the only thing that
+     can be pressed. */
+  const settle = () => {
+    if (!gsiDrawn()) return;
+    slot.className = "";
+    gsiCover();
+  };
+  requestAnimationFrame(settle);
+  setTimeout(settle, 200);
+  setTimeout(settle, 700);
+  setTimeout(settle, 1600);
   return true;
 }
+/* The card is a percentage of the window, so the covering factor has to be
+   taken again when the window changes. Nothing is re-rendered. */
+let gsiFit = 0;
+function gsiRefit(){
+  clearTimeout(gsiFit);
+  gsiFit = setTimeout(() => {
+    const g = $("gate");
+    if (g && !g.hidden && gsiDrawn()) gsiCover();
+  }, 120);
+}
+window.addEventListener("resize", gsiRefit, { passive: true });
+window.addEventListener("orientationchange", gsiRefit, { passive: true });
 function gateBusy(on){
   const slot = $("gsiBtn");
   if (slot) slot.style.height = "";
@@ -4527,7 +4611,7 @@ const myStatus = id => (S.mine && S.mine[id] && S.mine[id].status) || "";
 const isBallot = ev => !!ev && ev.allocation === "ballot";
 /* A swap ballot works the same way and is read the same way. The one
    difference is that a swap need not say how many places there are: spots 0
-   means the number is not settled yet, and everybody in the hat is in. */
+   means the number is not settled yet, and all entrants are allocated a place. */
 const swapHatOpen = w => !!w && w.allocation === "ballot" && !w.drawnAt &&
   (!w.closeAt || w.closeAt >= todayLondon());
 const swapDrawn = w => !!w && w.allocation === "ballot" && !!w.drawnAt;
@@ -4537,9 +4621,9 @@ const isBallotDrawn = ev => isBallot(ev) && !!ev.drawnAt;
 /* One sentence for what the server says it did with your name, so the three
    places that report it cannot drift apart. */
 function placedWord(placed){
-  return placed === "ballot" ? "Your name is in the hat. The places are drawn when it closes."
-       : placed === "waitlist" ? "This is full, so you are on the waiting list."
-       : "You are down for this.";
+  return placed === "ballot" ? "You are entered in the ballot. Places are drawn when entries close."
+       : placed === "waitlist" ? "This is full, so you have been added to the waiting list."
+       : "You are signed up.";
 }
 const catOf = ev => {
   const order = (S.tags || []).map(t => t.key);
@@ -4569,7 +4653,7 @@ function evRow(ev){
   const cls = ["ev", st, state === "cancelled" ? "cancelled" : "",
     state === "past" ? "past" : "", state === "live" ? "live" : ""].filter(Boolean).join(" ");
   const chips = [];
-  /* While the hat is open there is no queue and nothing is full, so neither
+  /* While entries are open there is no queue and nothing is full, so neither
      chip would mean anything: what matters is that this one is drawn. */
   const inHat = isBallotOpen(ev);
   if (inHat) chips.push('<span class="chip ballot">ballot</span>');
@@ -4584,7 +4668,7 @@ function evRow(ev){
     esc(ev.every === 2 ? "every other week" : ev.every > 2 ? "every " + ev.every + " weeks" : "weekly") +
     "</span>");
   const meta = state === "cancelled" ? "Cancelled"
-    : esc(ev.venueName) + (inHat ? (c.ballot ? " &middot; " + c.ballot + " in the hat" : "")
+    : esc(ev.venueName) + (inHat ? (c.ballot ? " &middot; " + c.ballot + " entered" : "")
                                  : (c.going ? " &middot; " + c.going + " going" : "")) +
       (ev.dress ? " &middot; " + esc(ev.dress) : "") + chips.join("");
   const pressed = st === "going" || st === "waitlist" || st === "ballot";
@@ -4594,7 +4678,7 @@ function evRow(ev){
       (ev.cost ? ' <span style="color:var(--gold-2)">(£)</span>' : "") + "</b><small>" + meta + "</small></button>" +
     (state === "cancelled" ? "" :
       '<button class="tick" data-tick="' + esc(ev.id) + '" aria-pressed="' + pressed +
-      '" aria-label="' + (pressed ? "You are going. Open it to change that" : "Put me down") + '">' + TICK + "</button>") +
+      '" aria-label="' + (pressed ? "You are signed up. Open to change" : "Add my name") + '">' + TICK + "</button>") +
     "</div>";
 }
 
@@ -5101,7 +5185,7 @@ function openTerms(id){
     '<div class="grp"><b>Before you put your name down</b></div>' +
     '<div class="card"><p>' + esc(ev.terms) + "</p></div>" +
     '<label class="check"><input type="checkbox" id="tmOk"> I have read this and I accept it.</label>' +
-    '<div class="acts"><button class="btn gold" id="tmGo">Accept and put me down</button></div>',
+    '<div class="acts"><button class="btn gold" id="tmGo">Accept and sign up</button></div>',
     el => el.querySelector("#tmGo").addEventListener("click", async e => {
       if (!$("tmOk").checked) return toast("Tick the box first.");
       const b = e.currentTarget; spin(b, "One moment");
@@ -5142,7 +5226,7 @@ function openEvent(id){
   const hatOpen = isBallotOpen(ev), drawn = isBallotDrawn(ev);
   if (ev.capacity && hatOpen) facts.push(["Places", ev.capacity + " to be drawn"]);
   else if (ev.capacity) facts.push(["Places", c.going + " of " + ev.capacity + (c.waitlist ? ", " + c.waitlist + " waiting" : "")]);
-  if (hatOpen && c.ballot) facts.push(["In the hat", c.ballot + (c.ballot === 1 ? " name" : " names")]);
+  if (hatOpen && c.ballot) facts.push(["Entries", c.ballot + (c.ballot === 1 ? " so far" : " so far")]);
   if (ev.signupBy) facts.push([hatOpen ? "Ballot closes" : "Names close", shortDate(ev.signupBy)]);
   if (isBallot(ev)) facts.push(["How places are given", drawn ? "Ballot, drawn" : "Ballot, drawn when it closes"]);
   if (facts.length) lines.push('<div class="card">' + facts.map(f =>
@@ -5153,31 +5237,32 @@ function openEvent(id){
       "<b>" + esc(l.name) + "</b><span>" + esc(l.role) + "</span></div>").join("") + "</div>");
   const pos = m.position ? " You are " + m.position + ordinal(m.position) + " on the waiting list." : "";
   if (ev.terms) lines.push('<div class="grp"><b>Terms</b></div><div class="card"><p>' + esc(ev.terms) + "</p></div>");
-  if (hatOpen) lines.push('<div class="notice"><b>This one is a ballot</b><p>' +
-    "Put your name in and it goes in the hat" +
+  if (hatOpen) lines.push('<div class="notice"><b>Places are allocated by ballot</b><p>' +
+    "Entries are accepted" +
     (ev.signupBy ? " until " + esc(shortDate(ev.signupBy)) : "") +
-    ". The places are then drawn at random" + (ev.capacity ? ", " + ev.capacity + " of them" : "") +
-    ", so there is nothing to be gained by being quick. You will be told either way, and " +
-    "anyone not drawn goes on the waiting list in the order they came out of the hat.</p></div>");
-  else if (drawn && st === "going") lines.push('<div class="notice"><b>You were drawn</b>' +
-    "<p>The ballot has been drawn and you have a place.</p></div>");
-  else if (drawn && st === "waitlist") lines.push('<div class="notice"><b>Not drawn this time</b><p>' +
-    "The ballot has been drawn and you did not get a place." + pos +
-    " If somebody gives one back it goes to the next name out of the hat.</p></div>");
+    ", after which the places are allocated at random" +
+    (ev.capacity ? ", " + ev.capacity + " of them" : "") +
+    ". Entering early confers no advantage. You will be notified of the outcome either way, and " +
+    "anyone not allocated a place joins the waiting list in the order in which entries were drawn.</p></div>");
+  else if (drawn && st === "going") lines.push('<div class="notice"><b>You have been allocated a place</b>' +
+    "<p>The ballot has been drawn and a place is reserved for you.</p></div>");
+  else if (drawn && st === "waitlist") lines.push('<div class="notice"><b>Not allocated a place</b><p>' +
+    "The ballot has been drawn and you were not allocated a place." + pos +
+    " If a place is released it passes to the next entrant in the drawn order.</p></div>");
   lines.push('<div class="acts">' +
     (ev.status === "cancelled" ? "" :
       closed && !st && !drawn ? '<span class="lede">Names closed on ' + esc(shortDate(ev.signupBy)) + ".</span>" :
       st === "ballot"
-        ? '<button class="btn ghost" data-rsvp="no" data-ev="' + esc(id) + '">Take my name out</button>' +
-          '<span class="lede">Your name is in the hat.</span>'
+        ? '<button class="btn ghost" data-rsvp="no" data-ev="' + esc(id) + '">Withdraw</button>' +
+          '<span class="lede">You are entered in the ballot.</span>'
         : st === "going" || st === "waitlist"
-        ? '<button class="btn ghost" data-rsvp="no" data-ev="' + esc(id) + '">Take my name off</button>' +
+        ? '<button class="btn ghost" data-rsvp="no" data-ev="' + esc(id) + '">Withdraw</button>' +
           /* After a draw the notice above has already said where you came, so
              saying it again underneath the button reads as a stutter. */
           '<span class="lede">' + (st === "waitlist" ? "You are on the waiting list." + (drawn ? "" : pos)
-                                                     : "You are down for this.") + "</span>"
+                                                     : "You are signed up.") + "</span>"
         : '<button class="btn cream" data-rsvp="going" data-ev="' + esc(id) + '">' +
-            (hatOpen ? "Put my name in the hat" : "Put me down") + "</button>" +
+            (hatOpen ? "Enter the ballot" : "Add my name") + "</button>" +
           (hatOpen ? "" : '<button class="btn ghost" data-rsvp="maybe" data-ev="' + esc(id) + '">Maybe</button>')) +
     "</div>");
   if (isCommittee()){
@@ -5826,7 +5911,7 @@ function threadHtml(t, officer){
     (officer && t.who ? " &middot; " + esc(t.who) : "") + " &middot; " + esc(ago(t.at)) + "</div>" +
     t.messages.map(m => '<div class="msg' + (m.mine ? " mine" : "") + '"><span class="m">' +
       esc(m.byName) + " &middot; " + esc(ago(m.at)) + "</span>" + esc(m.body) + "</div>").join("") +
-    (!officer && openThread === t.id ? '<div class="acts"><button class="btn ghost sm" data-thread="">Fold it away</button></div>' : "") +
+    (!officer && openThread === t.id ? '<div class="acts"><button class="btn ghost sm" data-thread="">Collapse</button></div>' : "") +
     (t.status !== "closed" && t.status !== "archived" ? '<div class="acts"><button class="btn cream sm" data-reply="' + esc(t.id) +
       '">Reply</button>' +
       (officer ? ["open","college","answered","closed"].map(s =>
@@ -6029,7 +6114,7 @@ function whoHtml(){
          what you would rather. Neither is hidden behind the other. */
       (vacant
         ? '<button data-ask="mcr" data-subject="' + esc("Standing for " + p.role) + '">Stand for it</button>'
-        : '<button data-ask="mcr" data-subject="' + esc("For " + p.name) + '">Write here</button>' +
+        : '<button data-ask="mcr" data-subject="' + esc("For " + p.name) + '">Write your message</button>' +
           (to ? '<a class="mail" href="mailto:' + esc(to) + '?subject=' +
             encodeURIComponent("Jesus MCR") + '">or email them</a>' : "")) +
       (isCommittee() ? '<button class="edithim" data-editwho="' + esc(p.email || p.role) + '">Edit</button>' : "") +
@@ -6159,7 +6244,7 @@ function renderIdeas(){
          sees CRSids, which is what the minutes need. */
       backersHtml(i) +
       '<div class="acts">' +
-        (i.own && i.status === "open" ? '<button class="btn ghost sm" data-dropidea="' + esc(i.id) + '">Take it down</button>' : "") +
+        (i.own && i.status === "open" ? '<button class="btn ghost sm" data-dropidea="' + esc(i.id) + '">Remove it</button>' : "") +
         (isCommittee() && i.status === "pending"
           ? '<button class="btn gold sm" data-setidea="' + esc(i.id) + '" data-s="open">Put it up</button>' : "") +
         (isCommittee() ? ["doing","done","no"].map(k =>
@@ -6280,7 +6365,7 @@ function openMotion(){
     '<p class="lede" id="moNote"></p>' +
     '<label class="f"><span>Title</span><input id="moTitle" maxlength="140" placeholder="That the MCR buys a second coffee machine"></label>' +
     '<label class="f"><span>The motion</span><textarea id="moBody" maxlength="4000" placeholder="What is being resolved, why, and what it costs if anything."></textarea></label>' +
-    '<div class="acts"><button class="btn gold" id="moGo">Put it down</button><button class="btn ghost" data-close>Cancel</button></div>',
+    '<div class="acts"><button class="btn gold" id="moGo">Submit it</button><button class="btn ghost" data-close>Cancel</button></div>',
     el => {
       const note = () => {
         const k = (S.motionKinds || []).filter(x => x.key === $("moKind").value)[0];
@@ -6360,7 +6445,7 @@ function pendingHtml(){
         notice: '<button class="btn gold sm" data-noticeok="' + esc(x.id) + '">Put it up</button>' +
                 '<button class="btn ghost sm" data-noticeoff="' + esc(x.id) + '">No</button>',
         idea:   '<button class="btn gold sm" data-setidea="' + esc(x.id) + '" data-s="open">Put it up</button>' +
-                '<button class="btn ghost sm" data-setidea="' + esc(x.id) + '" data-s="no">Say no</button>',
+                '<button class="btn ghost sm" data-setidea="' + esc(x.id) + '" data-s="no">Decline</button>',
         room:   '<button class="btn gold sm" data-roomyes="' + esc(x.id) + '">Approve and email</button>' +
                 '<button class="btn ghost sm" data-roomno="' + esc(x.id) + '">Not this time</button>',
         swap:   '<button class="btn gold sm" data-swappaid="' + esc(x.id) + '" data-p="1">Paid</button>' +
@@ -6803,9 +6888,9 @@ function openEventEditor(id){
       '<option value="ballot"' + (ev && ev.allocation === "ballot" ? " selected" : "") + ">Ballot, drawn when names close</option>" +
       "</select></label>" +
     '<div class="hint" id="eAllocHint"' + (ev && ev.allocation === "ballot" ? "" : " hidden") + '>' +
-      "Names go in the hat until the closing date above. On that date the places are " +
-      "drawn at random, everybody is told, and anyone not drawn goes on the waiting " +
-      "list in the order they came out. A ballot needs a closing date." + "</div>" +
+      "Entries are accepted until the closing date above. On that date the places are " +
+      "allocated at random, all entrants are notified, and anyone not allocated a place " +
+      "joins the waiting list in the order drawn. A ballot requires a closing date." + "</div>" +
     '<label class="f"><span>Terms people must accept, if any</span><textarea id="eTerms" maxlength="900" ' +
       'placeholder="Left blank, nobody is asked to agree to anything. Filled in, this appears before the tick and has to be accepted.">' +
       esc(ev ? (ev.terms || "") : "") + "</textarea></label>" +
@@ -7153,7 +7238,7 @@ function showReport(rep){
     'and none of them carries a name.</p>' +
     rep.topics.map(t =>
       '<div class="repblock"><div class="rh"><b>' + esc(t.name) + '</b>' +
-      (t.score ? '<span class="avg n' + Math.round(t.score) + '">' + t.score.toFixed(1) + '</span>' : '<span class="avg none">&mdash;</span>') +
+      (t.score ? '<span class="avg n' + Math.round(t.score) + '">' + t.score.toFixed(1) + '</span>' : '<span class="avg none">&middot;</span>') +
       (t.move ? '<span class="move ' + (t.move > 0 ? "up" : "down") + '">' +
         (t.move > 0 ? "\u2191" : "\u2193") + Math.abs(t.move).toFixed(1) + '</span>' : "") +
       '</div>' +
@@ -7321,7 +7406,7 @@ function moodCard(t){
       (t.move ? '<span class="move ' + (t.move > 0 ? "up" : "down") + '" title="' +
         (t.move > 0 ? "better" : "worse") + ' than last month">' + (t.move > 0 ? "\u2191" : "\u2193") +
         Math.abs(t.move).toFixed(1) + '</span>' : "") +
-      (t.score ? '<span class="avg n' + Math.round(t.score) + '">' + t.score.toFixed(1) + '</span>' : '<span class="avg none">&mdash;</span>') +
+      (t.score ? '<span class="avg n' + Math.round(t.score) + '">' + t.score.toFixed(1) + '</span>' : '<span class="avg none">&middot;</span>') +
     '</div>' +
     '<p class="note">' + esc(t.note) + '</p>' +
     '<div class="faces">' + faces.map(f =>
@@ -7470,14 +7555,14 @@ function swapCard(w, hold){
        then draws. A ballot does not have to name a number of places: the swap
        is a negotiation with another college and the number is often not
        settled when names are wanted, so blank means "not decided yet" and the
-       draw admits everybody in the hat. */
+       draw allocates a place to every entrant. */
     '<div class="swrow">' +
       '<select class="sf" data-f="allocation">' +
         '<option value="first"' + (w.allocation !== "ballot" ? " selected" : "") + ">First come, first served</option>" +
         '<option value="ballot"' + (w.allocation === "ballot" ? " selected" : "") + ">Ballot, drawn when it closes</option>" +
       "</select>" +
       fld("closeAt", w.closeAt, "", "date") + "</div>" +
-    '<span class="sfl">A ballot needs a closing date. Places may be left blank until the other college says how many.</span>' +
+    '<span class="sfl">A ballot requires a closing date. Places may be left blank until the other college confirms the number.</span>' +
     '<div class="swlogo-row"><div id="swLogoPrev">' +
       (safeImg(w.logo) ? '<img class="swlogo big" src="' + esc(safeImg(w.logo)) + '" alt="">'
               : '<span class="swlogo big empty">no crest</span>') + "</div>" +
@@ -7510,7 +7595,7 @@ function swapCard(w, hold){
        may not even have a number yet, so it says what it actually knows. */
     (hat
       ? '<div class="swline"><span class="chip ballot">ballot</span>' +
-        "<span><b>" + (w.inHat || 0) + "</b> " + ((w.inHat === 1) ? "name in the hat" : "names in the hat") + "</span>" +
+        "<span><b>" + (w.inHat || 0) + "</b> " + ((w.inHat === 1) ? "entry" : "entries") + "</span>" +
         (w.spots ? "<span><b>" + w.spots + "</b> to be drawn</span>" : "<span>places not settled yet</span>") +
         (w.closeAt ? "<span>drawn " + esc(shortDate(w.closeAt)) + "</span>" : "") +
         (w.payTo ? "<span>pay " + esc(w.payTo) + "</span>" : "") + "</div>"
@@ -7530,15 +7615,15 @@ function swapCard(w, hold){
        "where do I send the money" is asked at every one of them. */
     (m && m.status !== "ballot" ? bankHtml(w) : "") +
     (m && m.status === "ballot"
-      ? '<div class="swyou ballot"><span class="yt"><b>Your name is in the hat</b><span>' +
+      ? '<div class="swyou ballot"><span class="yt"><b>You are entered in the ballot</b><span>' +
         (w.closeAt ? "Drawn on " + esc(shortDate(w.closeAt)) + ". " : "") +
-        "There is nothing to be gained by being quick, and nothing to pay unless you are drawn." +
+        "Entering early confers no advantage, and nothing is payable unless you are allocated a place." +
         "</span></span>" +
-        '<button class="btn ghost sm" data-swapdrop="' + esc(w.id) + '">Take my name out</button></div>'
+        '<button class="btn ghost sm" data-swapdrop="' + esc(w.id) + '">Withdraw</button></div>'
     : m
       ? '<div class="swyou ' + esc(m.status) + (urgent ? " urgent" : "") + '">' +
         (m.status === "paid"
-          ? '<span class="yt"><b>Paid, and yours</b><span>Nothing more to do.</span></span>'
+          ? '<span class="yt"><b>Paid and confirmed</b><span>No further action required.</span></span>'
           : m.status === "held"
             ? '<span class="yt owed"><b>Held for you</b><span>' +
               (days ? days + (days === 1 ? " day" : " days") + " to pay" + (w.payTo ? ", " + esc(w.payTo) : "")
@@ -7547,12 +7632,12 @@ function swapCard(w, hold){
               '<span class="clock"><i style="width:' + Math.round(days / (hold || 5) * 100) + '%"></i></span>'
             : '<span class="yt"><b>' + m.place + ordinal(m.place) + " on the list</b>" +
               "<span>Places pass down this list in order as they free up.</span></span>") +
-        '<button class="btn ghost sm" data-swapdrop="' + esc(w.id) + '">Give it up</button></div>'
+        '<button class="btn ghost sm" data-swapdrop="' + esc(w.id) + '">Release this place</button></div>'
       : w.past ? ""
       : w.status !== "open" ? '<div class="swyou"><span class="yt"><b>Closed</b>' +
-          "<span>This one is no longer taking names.</span></span></div>"
+          "<span>This swap is no longer accepting entries.</span></span></div>"
       : '<div class="acts"><button class="btn gold" data-swaptake="' + esc(w.id) + '">' +
-        (hat ? "Put my name in the hat" : full ? "Join the waiting list" : "Take a place") + "</button></div>") +
+        (hat ? "Enter the ballot" : full ? "Join the waiting list" : "Take a place") + "</button></div>") +
     (isCommittee() && w.list.length
       /* names and addresses, because chasing four people for money needs
          their addresses and not a list of first names */
@@ -7583,10 +7668,10 @@ function openSwapTake(id){
   sheet(w.college,
     '<div class="card"><p>' + esc(longDate(w.date)) + ", " + esc(clock(w.start)) +
       (w.venue ? ", " + esc(w.venue) : "") + ". " +
-      (hat ? "This one is a ballot." +
-             (w.closeAt ? " Names go in the hat until " + esc(shortDate(w.closeAt)) + ", and the places are drawn that day." : "") +
-             (w.spots ? " There " + (w.spots === 1 ? "is one place" : "are " + w.spots + " places") + " to be drawn."
-                      : " How many places there are is not settled yet, so everybody in the hat may be in.")
+      (hat ? "Places on this swap are allocated by ballot." +
+             (w.closeAt ? " Entries are accepted until " + esc(shortDate(w.closeAt)) + ", and the places are drawn that day." : "") +
+             (w.spots ? " There " + (w.spots === 1 ? "is one place" : "are " + w.spots + " places") + " to be allocated."
+                      : " The number of places has not yet been confirmed, so all entrants may be offered one.")
        : full ? "Every place is taken, so this puts you on the waiting list and you move up as people drop."
             : "There " + (w.left === 1 ? "is one place" : "are " + w.left + " places") + " left.") + "</p>" +
     (w.note ? "<p>" + esc(w.note) + "</p>" : "") + "</div>" +
@@ -7594,12 +7679,12 @@ function openSwapTake(id){
        until it is drawn, so the sentence says when the money starts. */
     '<label class="check"><input type="checkbox" id="swOk"> I understand a place costs <b>' +
       esc(w.price || "nothing") + "</b>, that " +
-      (hat ? "if I am drawn I am paying for it"
-           : "taking one means I am paying for it") +
+      (hat ? "if I am allocated a place I am liable for the cost"
+           : "taking one means I am liable for the cost") +
       ", and that if I have not paid within " + (S.swapHold || 5) + " days it goes to the next person on the list." +
       (w.payTo ? " Pay " + esc(w.payTo) + "." : "") + "</label>" +
     '<div class="acts"><button class="btn gold" id="swGo">' +
-      (hat ? "Put my name in the hat" : full ? "Put me on the list" : "Take a place") + "</button></div>",
+      (hat ? "Enter the ballot" : full ? "Join the waiting list" : "Take a place") + "</button></div>",
     el => el.querySelector("#swGo").addEventListener("click", async e => {
       if (!$("swOk").checked) return toast("Tick the box first.");
       const b = e.currentTarget; spin(b, "One moment");
@@ -7607,7 +7692,7 @@ function openSwapTake(id){
         const d = await api("swapTake", { id: id, agree: true });
         S.swaps = d.swaps; closeSheet(); renderSwaps(); renderBadges();
         toast(d.placed === "ballot"
-                ? "Your name is in the hat. The places are drawn when it closes."
+                ? "You are entered in the ballot. Places are drawn when entries close."
                 : d.held ? "Held for you. Pay within " + (S.swapHold || 5) + " days."
                 : "You are on the waiting list.");
       }catch(err){ unspin(b); fail(err); }
@@ -7882,11 +7967,11 @@ function renderToHome(){
 function homeSheet(){
   const p = homePlatform();
   const steps = p === "ios-safari"
-    ? ["Tap the <b>Share</b> button in the bar at the bottom &mdash; the square with an arrow coming out of the top.",
+    ? ["Tap the <b>Share</b> button in the bar at the bottom. It is the square with an arrow coming out of the top.",
        "Scroll down the list and tap <b>Add to Home Screen</b>.",
        "Tap <b>Add</b>, at the top right."]
     : p === "ios-other"
-    ? ["Tap the <b>Share</b> button &mdash; the square with an arrow, up in the address bar.",
+    ? ["Tap the <b>Share</b> button, the square with an arrow, in the address bar.",
        "Scroll down and tap <b>Add to Home Screen</b>.",
        "Tap <b>Add</b>.",
        "If you cannot see it, open this page in <b>Safari</b> instead and try again. Safari always has it."]
@@ -8417,7 +8502,7 @@ on("gate", "click", e => {
   }
   const bk = e.target.closest("[data-book-again]");
   if (bk){ e.preventDefault(); return bookAgain(bk); }
-  const t = e.target.closest("[data-retry],[data-diag],[data-prompt],[data-tryanyway],[data-copyorigin]");
+  const t = e.target.closest("[data-retry],[data-diag],[data-prompt],[data-tryanyway],[data-copyorigin],[data-gsipress]");
   if (!t) return;
   if (t.hasAttribute("data-retry")){ gsiUp = false; gsiComplaint = ""; return probe(); }
   if (t.hasAttribute("data-copy")){
@@ -8438,6 +8523,33 @@ on("gate", "click", e => {
   }
   if (t.hasAttribute("data-diag")){ renderDiag(); $("diag").hidden = !$("diag").hidden; return; }
   if (t.hasAttribute("data-tryanyway")){ gateClear(); return api("ping").then(d => startGsi(d.signIn)).catch(fail); }
+  /* THE FACE WAS PRESSED, WHICH MEANS GOOGLE'S FRAME DID NOT TAKE IT.
+     Either it has not drawn yet, or it never will, or the press landed on a
+     corner its frame does not reach. Open the chooser directly rather than let
+     the press do nothing -- that silence is the whole complaint. If Google
+     refuses to show the chooser it says why, and that goes to the same
+     explanation the button-would-not-draw path already uses. */
+  if (t.hasAttribute("data-gsipress")){
+    if (!(window.google && google.accounts && google.accounts.id)){
+      /* The script is not there at all. Ask the server again and start over;
+         that is the path that ends in a real diagnosis rather than a shrug. */
+      return api("ping").then(d => startGsi(d.signIn)).catch(fail);
+    }
+    if (!gsiUp){ return api("ping").then(d => startGsi(d.signIn)).catch(fail); }
+    try{
+      google.accounts.id.prompt(n => {
+        if (n && (n.isNotDisplayed && n.isNotDisplayed() || n.isSkippedMoment && n.isSkippedMoment()))
+          gateFix("Google would not show the chooser",
+            "Its own reason was <code>" + esc((n.getNotDisplayedReason && n.getNotDisplayedReason()) ||
+            (n.getSkippedReason && n.getSkippedReason()) || "unknown") + "</code>. " +
+            "This usually means an extension is blocking <code>accounts.google.com</code>, or " +
+            "third party cookies are switched off for it.",
+            '<button class="btn cream sm" data-retry>Try again</button>' +
+            '<button class="btn ghost sm" data-diag>Show me the details</button>');
+      });
+    }catch(err){ fail(err); }
+    return;
+  }
   if (t.hasAttribute("data-prompt")){
     try{ google.accounts.id.prompt(n => {
       if (n && (n.isNotDisplayed && n.isNotDisplayed() || n.isSkippedMoment && n.isSkippedMoment()))
