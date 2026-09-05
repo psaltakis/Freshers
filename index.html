@@ -2250,6 +2250,15 @@ html[data-words="on"] .wordgone{display:inline-block;min-width:26px;height:1em;
 .pubchip::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.75}
 .pubchip:hover{border-color:var(--edge-2);color:var(--cream-2)}
 .pubchip.on{background:rgba(79,200,148,.22);color:#9CE8C6;border-color:rgba(79,200,148,.45)}
+/* The names switch is a different question from the publish switch, so it
+   reads as a different colour rather than a second green pill beside it. */
+.pubchip.anon.on{background:rgba(99,173,238,.22);color:#BBDCFA;border-color:rgba(99,173,238,.45)}
+.pubchip.anon[disabled]{opacity:.65;cursor:default}
+.mood .pubchip{margin-right:6px}
+/* What a member is told about a subject that keeps no names. */
+.hushline{margin:0 0 9px;font-family:var(--mono);font-size:.58rem;letter-spacing:.12em;
+  text-transform:uppercase;font-weight:700;color:#1B4F7A;background:rgba(99,173,238,.18);
+  border-radius:999px;padding:4px 9px;display:inline-block}
 .heldback{margin:8px 0 0;padding:8px 11px;border-radius:var(--r3);background:var(--t3);
   font-size:.76rem;color:var(--cream-3)}
 /* The links shelf, as the committee sees it */
@@ -2521,7 +2530,7 @@ html[data-words="on"] .wordgone{display:inline-block;min-width:26px;height:1em;
       <h3>Announcements and housekeeping</h3>
       <label class="f"><span>Post to everybody</span><textarea id="annText" placeholder="The Brewery is closed for repairs until Friday."></textarea></label>
       <div class="acts"><button class="btn crimson sm" id="bAnnounce">Post</button>
-        <button class="btn ghost sm" id="bReseed">Restore any missing Info cards</button>
+        <button class="btn ghost sm" id="bReseed">Restore anything missing from Info</button>
         <button class="btn ghost sm" id="bPhotos">Add the committee photographs</button>
         <button class="btn ghost sm" id="bNewMeeting">Add a general meeting</button></div>
       <div id="adminNote"></div>
@@ -3224,7 +3233,7 @@ function loadGsi(again){
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbzgU_VItCGxe_xzbCMvdR2n3y-JKQT72HYuyz50xF-gN0RGfpx-eEUO2IiBM5pPNE2h/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxmRXyuYxJagJvbcSKYVuLYnbTK7RwcpLTcGgKk_3dqKi-EX5DttnbTlhChdUvkD2wT/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -7487,7 +7496,7 @@ function sayLine(t, score){
       (low ? "The kitchens have been shut by seven every night this term."
            : "The new chairs have made the room usable for working in.") + '">' +
       esc(t.myComment || "") + '</textarea></label>' +
-    SAY_NAMED +
+    sayNote(t) +
     '<div class="acts"><button class="btn gold" id="slGo">Add it</button>' +
     '<button class="btn ghost" data-close>Not now</button></div>',
     el => el.querySelector("#slGo").addEventListener("click", async e => {
@@ -7621,9 +7630,13 @@ function moodCard(t){
       (t.score ? '<span class="avg n' + Math.round(t.score) + '">' + t.score.toFixed(1) + '</span>' : '<span class="avg none">&middot;</span>') +
     '</div>' +
     '<p class="note">' + esc(t.note) + '</p>' +
-    /* Publishing is done on the card, not on a settings page, because the
+    /* Both switches are on the card, not on a settings page, because each
        decision is about this subject and is taken while looking at it. */
-    (isCommittee() ? '<div class="acts" style="margin:0 0 8px">' + pubChip("topic", t.key) + '</div>' : "") +
+    (isCommittee()
+      ? '<div class="acts" style="margin:0 0 8px">' + pubChip("topic", t.key) +
+        anonChip("topic", t.key, !!t.nameless, false) + "</div>"
+      /* Everybody else is simply told, before they answer, which it is. */
+      : t.nameless ? '<p class="hushline">Asked without names</p>' : "") +
     '<div class="faces">' + faces.map(f =>
       '<button data-mood="' + esc(t.key) + '" data-n="' + f.n + '" title="' + esc(f.note) + '"' +
       (t.mine === f.n ? ' aria-pressed="true"' : "") + '><i class="n' + f.n + '"></i>' +
@@ -7676,7 +7689,10 @@ function soundCard(raw){
       '<span class="st ' + (q.closed ? "closed" : "open") + '">' +
       (q.closed ? "Closed" : q.closes ? "Until " + soundingDateLabel(q) : "Open") + '</span></div>' +
     (q.body ? '<p class="note">' + esc(q.body) + '</p>' : "") +
-    (isCommittee() ? '<div class="acts" style="margin:0 0 8px">' + pubChip("question", q.id) + '</div>' : "") +
+    (isCommittee()
+      ? '<div class="acts" style="margin:0 0 8px">' + pubChip("question", q.id) +
+        anonChip("question", q.id, !!q.nameless, !!(q.nameless && !q.canName)) + "</div>"
+      : "") +
     (q.kind === "choice"
       ? '<div class="opts">' + q.options.map(o =>
           '<button data-sound="' + esc(q.id) + '" data-choice="' + esc(o) + '"' +
@@ -8384,7 +8400,7 @@ document.addEventListener("click", async e => {
       if (!tp) return;
       return sheet("A line about " + tp.name,
         '<p class="lede">Written down as it is. It is what makes a number arguable at a meeting.</p>' +
-        SAY_NAMED +
+        sayNote(tp) +
         '<label class="f"><span>What would you say</span><textarea id="moodC" maxlength="600">' +
         esc(tp.myComment || "") + '</textarea></label>' +
         '<div class="acts"><button class="btn gold" id="moodGo">Save it</button>' +
@@ -9115,8 +9131,21 @@ on("bPhotos", "click", async e => {
 on("bReseed", "click", async e => {
   const b = e.currentTarget;
   spin(b, "Checking");
-  try{ const d = await api("reseed"); unspin(b); await refresh(false);
-    toast("Added " + d.resources + " cards, " + d.clubs + " clubs, " + d.series + " weeklies."); }
+  try{
+    const d = await api("reseed");
+    unspin(b);
+    await refresh(false);
+    /* Say what actually happened rather than a fixed sentence: most of the
+       time the answer is "nothing was missing", and a button that always
+       claims to have added things teaches people to ignore it. */
+    const bits = [];
+    if (d.resources) bits.push(d.resources + (d.resources === 1 ? " card" : " cards"));
+    if (d.refreshed) bits.push(d.refreshed + (d.refreshed === 1 ? " card brought up to date" : " cards brought up to date"));
+    if (d.links) bits.push(d.links + (d.links === 1 ? " link" : " links"));
+    if (d.clubs) bits.push(d.clubs + (d.clubs === 1 ? " club" : " clubs"));
+    if (d.series) bits.push(d.series + (d.series === 1 ? " weekly" : " weeklies"));
+    toast(bits.length ? "Added " + bits.join(", ") + "." : "Nothing was missing.");
+  }
   catch(err){ unspin(b); fail(err); }
 });
 on("bNewMeeting", "click", () => {
@@ -9635,20 +9664,40 @@ function pubChip(kind, key){
           "Only the committee can see these results. Tap to publish them.") + '">' +
     (on ? "Published" : "Committee only") + "</button>";
 }
+/* THE OTHER SWITCH ON EVERY CARD.
+   Publishing decides whether the room sees the result. This decides whether
+   the answer carries a name at all. They are separate questions and the
+   committee sets them separately, on the subject or the question itself.
+
+   Turning names off is not a display setting: it takes the addresses off
+   everything already said and cannot be undone, so it asks first. */
+function anonChip(kind, key, on, locked){
+  return '<button class="pubchip anon' + (on ? " on" : "") + '" data-sayanon="' + esc(key) +
+    '" data-anonkind="' + esc(kind) + '" data-anonon="' + (on ? "0" : "1") + '"' +
+    (locked ? " disabled" : "") + ' title="' +
+    (on ? (locked
+            ? "Asked without names, and answers are in. This cannot be undone."
+            : "No name is kept against an answer. Tap to go back to keeping names from now on.")
+        : "An answer carries a name, which the President and Vice-President can see. " +
+          "Tap to stop keeping names and take off the ones already there.") + '">' +
+    (on ? "No names" : "Names kept") + "</button>";
+}
 function renderPubList(){
   const say = S.say || {};
-  const topics = sayShown(Array.isArray(say.list) ? say.list : []);
+  const topics = sayShown(Array.isArray(say.topics) ? say.topics : []);
   const qs = sayShown(Array.isArray(say.soundings) ? say.soundings : []);
   put("pubList",
-    '<div class="grp"><b>The five subjects</b></div>' +
+    '<div class="grp"><b>How it is going, the five subjects</b></div>' +
     (topics.length ? topics.map(t =>
       '<div class="rowline"><div class="t"><b>' + esc(t.name) + "</b><span>" + esc(t.note) + "</span></div>" +
-      pubChip("topic", t.key) + "</div>").join("")
+      anonChip("topic", t.key, !!t.nameless, false) + pubChip("topic", t.key) + "</div>").join("")
       : '<p class="lede">Nothing on show.</p>') +
     '<div class="grp"><b>Questions</b></div>' +
     (qs.length ? qs.map(q =>
       '<div class="rowline"><div class="t"><b>' + esc(q.title) + "</b><span>" +
-      (q.closed ? "Closed" : "Open") + "</span></div>" + pubChip("question", q.id) + "</div>").join("")
+      (q.closed ? "Closed" : "Open") + (q.nameless ? " &middot; asked without names" : "") + "</span></div>" +
+      anonChip("question", q.id, !!q.nameless, !!(q.nameless && !q.canName)) +
+      pubChip("question", q.id) + "</div>").join("")
       : '<p class="lede">No questions have been put.</p>'));
 }
 
@@ -9808,7 +9857,8 @@ function renderFbLocks(){
   const armed = revealLeft() > 0;
   const say = S.say || {};
   const items = []
-    .concat((say.list || []).map(t => ({ kind: "topic", id: t.key, name: "Subject: " + t.name })))
+    .concat((say.topics || []).filter(t => !t.nameless)
+      .map(t => ({ kind: "topic", id: t.key, name: "Subject: " + t.name })))
     /* A question asked without names is not on this list, because there is
        nothing behind it to open. Offering it and then refusing would teach the
        President that the lock is a formality. */
@@ -9875,7 +9925,7 @@ function showRoll(r){
    in one place. */
 document.addEventListener("click", async e => {
   if (!S) return;
-  const t = e.target.closest("[data-saypub],[data-linkedit],[data-linkdel],[data-purge]," +
+  const t = e.target.closest("[data-saypub],[data-sayanon],[data-linkedit],[data-linkdel],[data-purge]," +
     "[data-fbdel],[data-wordsoff],[data-quietdel]");
   if (!t) return;
   const d = t.dataset;
@@ -9895,6 +9945,36 @@ document.addEventListener("click", async e => {
         renderSay(); renderPubList(); renderBadges();
         toast(on ? "Published. The room can see the results now."
                  : "Taken back. Only the committee sees the results.");
+      }catch(err){ sent(t); fail(err); }
+      return;
+    }
+    /* NAMES ON OR OFF, ON ONE SUBJECT OR ONE QUESTION.
+       Turning them off is not a display setting. It takes the addresses off
+       every answer already given and there is no way back, so it is confirmed
+       in those words rather than done on a tap. */
+    if (t.hasAttribute("data-sayanon")){
+      const on = d.anonon === "1";
+      const isQ = d.anonkind === "question";
+      if (on && !confirm("Stop keeping names against this " + (isQ ? "question" : "subject") + "?" +
+        "\n\nThe addresses already held against it are replaced by one way codes. Nobody, the " +
+        "President included, will be able to tell who said what. There is no undo."))
+        return;
+      if (!on && !confirm("Start keeping names against this " + (isQ ? "question" : "subject") +
+        " again?\n\nOnly answers given from now on carry a name. What was said namelessly stays " +
+        "nameless, because there is nothing to put back."))
+        return;
+      sending(t, on ? "Taking the names off" : "Saving");
+      try{
+        const r = await api(isQ ? "soundingAnon" : "sayAnon",
+          isQ ? { id: d.sayanon, on: on } : { key: d.sayanon, on: on });
+        S.say = r.say || S.say;
+        sent(t);
+        renderSay(); renderPubList(); renderBadges();
+        toast(r.scrubbed
+          ? "Done. The names came off " + r.scrubbed +
+            (r.scrubbed === 1 ? " answer already given." : " answers already given.")
+          : on ? "No names are kept against it from now on."
+               : "Names are kept against answers from now on.");
       }catch(err){ sent(t); fail(err); }
       return;
     }
