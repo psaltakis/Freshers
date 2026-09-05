@@ -1795,6 +1795,10 @@ button.busy{cursor:progress}
 .sound .st{font-family:var(--mono);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;
   border-radius:999px;padding:4px 9px;background:var(--cream-2);color:var(--ink-soft)}
 .sound .st.open{background:rgba(44,107,79,.15);color:#1E6B47}
+/* A question the committee is asking without names. Marked on the card
+   itself, because it changes what somebody is willing to write and they
+   should know it before they start rather than after. */
+.sound .st.hush{background:rgba(99,173,238,.18);color:#1B4F7A}
 .sound .note{font-size:.85rem;color:var(--ink-soft);margin:0 0 11px;line-height:1.55}
 .opts{display:flex;flex-direction:column;gap:6px}
 .opts button{display:flex;align-items:center;gap:10px;background:var(--cream-2);border:0;border-radius:11px;
@@ -2137,6 +2141,119 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
   .sheet .f input[type="date"],.sheet .f input[type="time"]{
     -webkit-appearance:none;appearance:none;min-width:0;width:100%}
 }
+
+/* ============================================================
+   THE DEER
+   A fallow deer crosses the bottom of Today, once in a while,
+   for about a second and a half, and is gone. Jesus College keeps
+   twenty seven acres and the deer is on the arms of half of
+   Cambridge; this one is a joke between the app and whoever
+   happens to be looking at the right moment.
+
+   It is drawn on the compositor -- transform and opacity only --
+   sits behind everything, cannot be tapped, is invisible to a
+   screen reader, and never appears at all for somebody who has
+   asked for less motion.
+   ============================================================ */
+#deer{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);left:0;
+  width:64px;height:52px;pointer-events:none;z-index:3;opacity:0;
+  color:var(--cream-3);filter:drop-shadow(0 3px 6px rgba(0,0,0,.35))}
+#deer svg{width:100%;height:100%;display:block}
+#deer.run{animation:deerBy 1.5s cubic-bezier(.32,.06,.28,1) both}
+#deer.run.back{animation-name:deerByBack}
+#deer .legf,#deer .legb{transform-origin:50% 30%;animation:deerTrot .19s linear infinite}
+#deer .legb{animation-delay:.095s}
+#deer .tail{transform-origin:88% 40%;animation:deerFlick .38s ease-in-out infinite}
+@keyframes deerBy{
+  0%{opacity:0;transform:translateX(-14vw) translateY(0) scaleX(1)}
+  12%{opacity:1}
+  25%{transform:translateX(14vw) translateY(-13px) scaleX(1)}
+  50%{transform:translateX(46vw) translateY(0) scaleX(1)}
+  75%{transform:translateX(78vw) translateY(-13px) scaleX(1)}
+  88%{opacity:1}
+  100%{opacity:0;transform:translateX(112vw) translateY(0) scaleX(1)}
+}
+@keyframes deerByBack{
+  0%{opacity:0;transform:translateX(112vw) translateY(0) scaleX(-1)}
+  12%{opacity:1}
+  25%{transform:translateX(78vw) translateY(-13px) scaleX(-1)}
+  50%{transform:translateX(46vw) translateY(0) scaleX(-1)}
+  75%{transform:translateX(14vw) translateY(-13px) scaleX(-1)}
+  88%{opacity:1}
+  100%{opacity:0;transform:translateX(-14vw) translateY(0) scaleX(-1)}
+}
+@keyframes deerTrot{0%,100%{transform:rotate(-24deg)}50%{transform:rotate(24deg)}}
+@keyframes deerFlick{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(14deg)}}
+@media(prefers-reduced-motion:reduce){#deer{display:none}}
+
+/* ============================================================
+   REWRITING THE PAGE FROM THE PAGE
+   The committee turns this on and every word in the app becomes a
+   thing you can tap and change. Nothing about the layout moves:
+   the marks are outlines and a cursor, so what you are editing is
+   the page as everybody else will read it.
+   ============================================================ */
+#bWords{display:none}
+html[data-words] #bWords{display:inline-flex}
+html[data-words="on"] #bWords{background:var(--gold);color:var(--gold-ink);border-color:transparent}
+html[data-words="on"] #app,html[data-words="on"] #nav,html[data-words="on"] header{cursor:crosshair}
+html[data-words="on"] .wordable{outline:1px dashed rgba(226,169,60,.55);outline-offset:2px;
+  border-radius:3px;transition:background .12s,outline-color .12s}
+html[data-words="on"] .wordable:hover{background:rgba(226,169,60,.20);outline-color:var(--gold);
+  outline-style:solid}
+html[data-words="on"] .wordable.edited{outline-color:var(--sport);
+  background:rgba(79,200,148,.13)}
+/* Something the committee has taken away entirely. It stays tappable while
+   the mode is on, so it can be put back, and is nowhere at all when it is off. */
+.wordgone{display:none}
+html[data-words="on"] .wordgone{display:inline-block;min-width:26px;height:1em;
+  background:repeating-linear-gradient(135deg,rgba(255,255,255,.10) 0 5px,transparent 5px 10px);
+  outline:1px dashed var(--cream-4);border-radius:3px;vertical-align:middle;cursor:pointer}
+.wordbar{position:fixed;left:50%;transform:translateX(-50%);
+  bottom:calc(env(safe-area-inset-bottom,0px) + 14px);z-index:60;
+  display:flex;align-items:center;gap:10px;padding:9px 14px;border-radius:999px;
+  background:var(--ink);color:var(--cream);box-shadow:0 10px 30px rgba(0,0,0,.42);
+  font-size:.78rem;max-width:calc(100vw - 24px)}
+.wordbar b{font-weight:700}
+.wordbar .btn{padding:5px 11px;font-size:.72rem}
+@media(max-width:520px){.wordbar{bottom:calc(env(safe-area-inset-bottom,0px) + 76px)}}
+
+/* ============================================================
+   THE FEEDBACK DESK
+   Every answer with the name on it, for two people in the college.
+   ============================================================ */
+.fbrow{display:flex;gap:12px;padding:11px 13px;border-radius:var(--r2);background:var(--t1);
+  margin-bottom:7px;align-items:flex-start}
+.fbrow .fbwho{min-width:132px;flex:0 0 auto}
+.fbrow .fbwho b{display:block;font-size:.86rem}
+.fbrow .fbwho span{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.06em;
+  color:var(--cream-4);overflow-wrap:anywhere}
+.fbrow .fbwhat{flex:1;min-width:0}
+.fbrow .fbwhat p{margin:4px 0 0;overflow-wrap:anywhere}
+.fbrow .fbmeta{font-size:.68rem;color:var(--cream-4);display:flex;gap:8px;flex-wrap:wrap}
+.fbrow .x{background:none;border:0;color:var(--cream-4);cursor:pointer;font-size:1rem;padding:0 4px}
+.fbrow .x:hover{color:var(--crimson-lite)}
+/* An answer with no address behind it. Quieter, and the code where a name
+   would be, so it never reads as somebody the President forgot the name of. */
+.fbrow.hush{background:var(--t3)}
+.fbrow.hush .fbwho b{color:var(--cream-4);font-style:italic;font-weight:600}
+.lockbox{border-radius:var(--r2);background:var(--t3);padding:14px 16px;margin-top:var(--g2);
+  border:1px solid rgba(226,169,60,.35)}
+.lockbox h4{margin:0 0 6px;font-family:var(--display);font-size:1rem}
+.lockstep{display:flex;gap:9px;align-items:center;padding:6px 0;font-size:.8rem;color:var(--cream-3)}
+.lockstep i{width:20px;height:20px;border-radius:50%;flex:0 0 auto;display:grid;place-items:center;
+  background:var(--t2);font-style:normal;font-size:.65rem;font-weight:700}
+.lockstep.done i{background:var(--sport);color:#08301f}
+.pubchip{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:999px;
+  font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;font-weight:700;cursor:pointer;
+  background:var(--t2);color:var(--cream-4);border:1px solid var(--edge)}
+.pubchip::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.75}
+.pubchip:hover{border-color:var(--edge-2);color:var(--cream-2)}
+.pubchip.on{background:rgba(79,200,148,.22);color:#9CE8C6;border-color:rgba(79,200,148,.45)}
+.heldback{margin:8px 0 0;padding:8px 11px;border-radius:var(--r3);background:var(--t3);
+  font-size:.76rem;color:var(--cream-3)}
+/* The links shelf, as the committee sees it */
+.linkedit{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
 </style>
 
 <div id="boot">
@@ -2195,6 +2312,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
     <div class="wm"><b><span class="lg">Jesus College MCR</span><span class="sm">Jesus MCR</span></b><i id="wmYear"></i></div>
     <span class="beta" title="In development. Please report any problems to the committee.">Beta</span>
     <span class="sp"></span>
+    <button class="iconbtn" id="bWords" title="Rewrite the words on this page" aria-label="Rewrite the words on this page"><svg viewBox="0 0 24 24"><path d="M4 20h4l10-10-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></button>
     <button class="iconbtn" id="bRefresh" title="Refresh" aria-label="Refresh"><svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.3"/><path d="M20 5v6h-6"/></svg></button>
     <button class="iconbtn avatar" id="bMe" title="Settings" aria-label="Settings">?</button>
   </div>
@@ -2321,6 +2439,25 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
     </div>
   </section>
 
+  <!-- ============ THE FEEDBACK DESK (President and Vice-President) ============
+       Every answer anybody has given, with the name of the person who gave it.
+       Two seats in college can open this page and the server checks which seat
+       on every single call, so hiding the tab is the courtesy and not the
+       control. Who gave which score is a further three locks down. -->
+  <section id="v-fbdesk" hidden>
+    <div class="vh"><h2>Feedback <i>desk</i></h2><span class="note" id="fbNote"></span>
+      <div class="right"><button class="btn ghost sm" id="bFbLog">Who has opened this</button></div></div>
+    <div class="card">
+      <p class="lede" id="fbWho"></p>
+      <input type="text" id="fbQ" class="bigin" placeholder="Search a name, a CRSid, a subject, or anything anybody wrote" style="margin-bottom:12px">
+      <div class="acts"><button class="btn crimson sm" id="bFbGo">Search</button>
+        <button class="btn ghost sm" id="bFbAll">Everything</button>
+        <button class="btn ghost sm" id="bFbCsv">Save it as a spreadsheet</button></div>
+    </div>
+    <div id="fbBody"></div>
+    <div id="fbLocks"></div>
+  </section>
+
   <!-- ===================== ADMIN ===================== -->
   <section id="v-admin" hidden>
     <div class="vh"><h2>The <i>committee</i></h2><span class="note">Who can edit, and who serves what</span></div>
@@ -2391,6 +2528,37 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
       <p class="lede" id="adminLinks" style="margin-top:14px"></p>
     </div>
     <div class="card">
+      <h3>Forms and links</h3>
+      <p class="lede">The shelf on Info. Add one, change one, or take one away, and it is on everybody's page within the minute. Nothing here is in the code any more, so a broken address is a thirty second job rather than a release.</p>
+      <div id="linkList"></div>
+      <div class="acts"><button class="btn crimson sm" data-linkedit="">Add a link</button>
+        <button class="btn ghost sm" id="bLinkReset" data-admin hidden>Put the original list back</button></div>
+    </div>
+    <div class="card">
+      <h3>The words on every page</h3>
+      <p class="lede">Turn this on and every sentence in the app becomes something you can tap and rewrite, wherever it is: a heading, a button, a note under a card, the small print on the sign in screen. Rewriting one to nothing takes it off the page. Nobody has to touch the code and nothing is lost: the original is always one tap away.</p>
+      <div class="acts"><button class="btn crimson sm" id="bWordsOn">Start rewriting</button>
+        <button class="btn ghost sm" id="bWordsList">Everything you have changed</button></div>
+      <div id="wordsNote"></div>
+    </div>
+    <div class="card">
+      <h3>What Feedback shows the room</h3>
+      <p class="lede">Nothing in Feedback is public until you publish it. Until then a member sees their own answer and no average, no count, no tally, no run of months and none of the words anybody else wrote. Publish a subject or a question one at a time, and take it back the same way.</p>
+      <div id="pubList"></div>
+    </div>
+    <div class="card">
+      <h3>The Vice-President's address</h3>
+      <p class="lede">Anyone on the roster whose role reads Vice-President is recognised without anything being typed here. This is for a second address, or for the weeks between one Vice-President and the next. These two seats, and no others, see a name against an answer in Feedback.</p>
+      <div id="vpList"></div>
+      <textarea id="vpText" class="bigin" style="min-height:70px" placeholder="vice-president@mcr.jesus.cam.ac.uk"></textarea>
+      <div class="acts"><button class="btn crimson sm" id="bVp">Save</button><span class="lede">One per line.</span></div>
+    </div>
+    <div class="card" data-admin hidden>
+      <h3>Taking something away for good</h3>
+      <p class="lede">Deleting a formal or an event from its own page announces it: it goes on the board, because a cancellation is news. This does the same job silently. Nothing is written to the board, nobody is told, and there is no undo of any kind. It is for rows that were a mistake, and for clearing out a year that is over.</p>
+      <div id="purgeList"></div>
+    </div>
+    <div class="card">
       <h3>Wiring for the other MCR apps</h3>
       <div id="wireBox"></div>
     </div>
@@ -2411,6 +2579,7 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
   <button class="tabbtn committee" data-view="inbox" data-committee hidden><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Messages<span class="badge" id="bdgQueue" hidden>0</span></button>
   <button class="tabbtn committee" data-view="swapdesk" data-committee hidden><svg viewBox="0 0 24 24"><path d="M4 8h13l-3-3M20 16H7l3 3"/><circle cx="18.5" cy="6.5" r="2.2"/></svg>Swap desk<span class="badge" id="bdgSwapDesk" hidden>0</span></button>
   <button class="tabbtn committee" data-view="members" data-committee hidden><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>Members</button>
+  <button class="tabbtn committee" data-view="fbdesk" data-names hidden><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><path d="M12 14v2"/></svg>Feedback desk</button>
   <button class="tabbtn committee" data-view="admin" data-admin hidden><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3 8.5-7 10-4-1.5-7-5-7-10V6z"/><path d="M9.5 12l1.8 1.8 3.4-3.6"/></svg>Committee</button>
   <div class="railfoot" aria-hidden="true"><span class="orb" id="railOrb"></span><span class="rc"><b id="railClock"></b><i id="railTerm"></i></span></div>
 </nav>
@@ -2427,8 +2596,8 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
     <div id="privacy" hidden>
       <p><b>Who holds it.</b> The Jesus College MCR committee, as the data controller. The app runs on the MCR's own Google account and nothing is sold, shared with advertisers, or sent outside it.</p>
       <p><b>What we hold.</b> Your name and your University email address, taken from your Cambridge Google account when you sign in. After that: what you sign up for, what you put on the board, the room bookings you ask for, the threads you open, and how you answer a question in Feedback. Nothing else. We never see or store a password.</p>
-      <p><b>Why we may hold it.</b> Because you are a member of the MCR and running the MCR needs it: a list at a door, a room that is not double booked, and an answer that reaches the person who asked. Feedback is answered anonymously; the register keeps your address only so that one person cannot answer twice, and only counts and comments are ever read.</p>
-      <p><b>Who sees it.</b> Other members see your name next to something you put up. The committee sees the running of it. A welfare thread is read by that one officer and the President, and by nobody else, and you may send it without your name at all.</p>
+      <p><b>Why we may hold it.</b> Because you are a member of the MCR and running the MCR needs it: a list at a door, a room that is not double booked, and an answer that reaches the person who asked. An answer in Feedback is saved with your name against it, and that name is seen by the MCR President and the Vice-President and by nobody else, including the rest of the committee. Where the committee has marked a question as asked without names, no address is saved against your answer at all, only a one way code that cannot be turned back into you.</p>
+      <p><b>Who sees it.</b> Other members see your name next to something you put up. The committee sees the running of it. A welfare thread is read by that one officer and the President, and by nobody else, and you may send it without your name at all. In Feedback, the President and the Vice-President see the name against an answer; the rest of the committee reads the same words with no name on them; who gave which score can be opened by the President alone, and every time it is opened it is written down. A question marked as asked without names is outside all of that: it keeps no address, so there is nothing for anybody to open.</p>
       <p><b>How long.</b> While you are a member, and for the academic year afterwards, after which it is cleared out. A welfare thread is cleared sooner.</p>
       <p><b>Your rights.</b> You may ask to see what is held about you, to have it corrected, or to have it deleted, and you may withdraw from anything you have said yes to. Write to <b>president@mcr.jesus.cam.ac.uk</b> and it will be dealt with within a month. If you are not satisfied you may complain to the Information Commissioner at <b>ico.org.uk</b>.</p>
     </div>
@@ -2443,6 +2612,37 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
   </div>
 </div>
 
+<!-- The deer. Twenty seven acres, and once in a while one of them wanders
+     across the bottom of Today. Hidden from anything that reads the page
+     aloud, because it is a joke and not information. -->
+<div id="deer" aria-hidden="true" hidden>
+  <svg viewBox="0 0 64 52" fill="none" stroke="currentColor" stroke-width="2.4"
+       stroke-linecap="round" stroke-linejoin="round">
+    <!-- antlers, three points, because two reads as a rabbit -->
+    <path d="M48.6 8.2c-.4-3.6.5-6 2.6-7.2"/>
+    <path d="M48.9 5.2c-1.7-.9-2.7-2.2-3.1-3.9"/>
+    <path d="M50.2 2.9c1.4-.7 2.9-.8 4.4-.3"/>
+    <!-- ear -->
+    <path d="M45.6 9.6c-1.4-2-3.3-2.7-5.1-2"/>
+    <!-- head and muzzle -->
+    <path d="M44.6 14.2c-.6-3.6 1.9-6.1 5-5.8 3 .3 4.6 3 3.6 5.6-.5 1.4-1.7 2.4-3.4 3l-2.6 1"/>
+    <path d="M50.5 16.6c1.9-.2 3 .4 3.3 1.7"/>
+    <!-- neck into the shoulder -->
+    <path d="M45.2 16.4 39.6 23"/>
+    <path d="M47.6 18.6 42.6 25.4"/>
+    <!-- the body, one closed line -->
+    <path d="M39.6 23c3.6.5 5.6 2.9 5.4 6.2-.2 3.4-3 5.6-7.4 5.6H21.4c-5.2 0-8.4-2.2-8.4-5.8 0-3.7 3-6 8.6-6z"/>
+    <!-- tail -->
+    <path class="tail" d="M13.6 26.6c-2.2-.8-3.6-2.2-3.9-4.2"/>
+    <!-- legs, trotting -->
+    <g class="legb"><path d="M18.4 34.8 17.6 46.4"/><path d="M24.4 34.8 25.8 46.4"/></g>
+    <g class="legf"><path d="M32.6 34.8 31.4 46.4"/><path d="M38.4 34.6 39.8 46.4"/></g>
+    <!-- eye and two fawn spots -->
+    <circle cx="48.4" cy="12" r="1.05" fill="currentColor" stroke="none"/>
+    <circle cx="26" cy="27" r="1.1" fill="currentColor" stroke="none" opacity=".55"/>
+    <circle cx="32" cy="29.4" r="1.1" fill="currentColor" stroke="none" opacity=".55"/>
+  </svg>
+</div>
 <div id="toast" role="status" aria-live="polite"></div>
 <template id="walkCss">
 /* THE WALK IS NOT PARSED UNTIL SOMEBODY IS WALKING.
@@ -3024,7 +3224,7 @@ function loadGsi(again){
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbzxVFT2G14whxvgCyOOLckayapJLo-TuJpkOfm9MFANWs-2Bbg8XzgQDKxu_eloUDKc/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzgU_VItCGxe_xzbCMvdR2n3y-JKQT72HYuyz50xF-gN0RGfpx-eEUO2IiBM5pPNE2h/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -3172,6 +3372,17 @@ function ago(t){
   if (s < 86400) return Math.round(s / 3600) + " h ago";
   const d = Math.round(s / 86400);
   return d + (d === 1 ? " day ago" : " days ago");
+}
+/* A date and a time, spelled out. ago() is right for a feed, where "two
+   minutes ago" is the useful fact; a record of who said what needs the date
+   it was said on, because that is what goes in the minutes. */
+function when(t){
+  const n = Number(t) || 0;
+  if (!n) return "";
+  try{
+    return new Date(n).toLocaleString("en-GB",
+      { day:"numeric", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit" });
+  }catch(e){ return new Date(n).toISOString().slice(0, 16).replace("T", " "); }
 }
 const first = n => String(n || "").trim().split(/\s+/)[0] || "";
 const initials = n => String(n || "?").trim().split(/\s+/).slice(0, 2).map(w => w[0]).join("").toUpperCase();
@@ -4944,10 +5155,6 @@ function renderTodayMenu(){
 /* Formal hall is on JNet behind Raven, so it can only ever be a link, and a
    link belongs with the other links rather than taking two lines off the
    bottom of the Caff card to explain itself. It is a card on Forms and links. */
-function formalUrl(){
-  return safeUrl((S.menu || {}).formal ||
-    "https://jnet.jesus.cam.ac.uk/jnet/catering-and-events/formal-hall-menu");
-}
 function renderTodayWeek(){
   const t = todayLondon();
   if (!homeWeek) homeWeek = weekStart(t);
@@ -5344,18 +5551,26 @@ function lodgeForms(){
   const card = l => '<a class="linkcard" href="' + esc(safeUrl(l.url)) + '" target="_blank" rel="noopener">' +
     '<div class="t"><b>' + esc(l.name) + "</b><p>" + esc(l.note) + "</p>" +
     '<span class="who">' + esc(l.who) + "</span></div><span class=\"arw\">&#8599;</span></a>";
-  /* Formal hall is not in the links sheet the committee maintains, because it
-     is not theirs to maintain: it is a JNet page behind Raven with a fixed
-     address. It is written in here so that it cannot go missing, and so the
-     Caff card on Today does not have to carry a paragraph explaining why it
-     cannot show you the menu itself. */
-  const formal = { url: formalUrl(), name: "The formal hall menu",
-    note: "On JNet, behind Raven, so it cannot be read here. What is on at each hall this term.",
-    who: "JNet" };
+  /* The formal hall menu used to be written in here rather than kept with the
+     others, on the grounds that a JNet address behind Raven is not the
+     committee's to maintain. That reasoning made it the one card on the shelf
+     nobody could rename, repoint or remove, so it is seeded into the list with
+     everything else and is now as ordinary as the rest of them. */
   return '<div class="grp"><b>The three everybody needs</b></div>' +
     L.filter(l => first.indexOf(l.key) >= 0).map(card).join("") +
     '<div class="grp"><b>Jesus College, in its own words</b></div><div class="linkgrid">' +
-    L.filter(l => first.indexOf(l.key) < 0).map(card).join("") + card(formal) + "</div>";
+    L.filter(l => first.indexOf(l.key) < 0).map(card).join("") + "</div>" +
+    /* The shelf, edited from the shelf. Every one of these can be renamed,
+       repointed, reordered or taken away, and a new one added, without
+       anybody touching the code. */
+    (isCommittee()
+      ? '<div class="grp"><b>Change the shelf</b></div>' +
+        '<div class="card"><p class="lede">Only the committee sees this row. Tap a link to change its ' +
+        "name, its address, its note or where it sits, or to take it off the shelf altogether.</p>" +
+        '<div class="linkedit">' + L.map(l =>
+          '<button class="btn ghost sm" data-linkedit="' + esc(l.key) + '">' + esc(l.name) + "</button>").join("") +
+        '<button class="btn gold sm" data-linkedit="">Add a link</button></div></div>'
+      : "");
 }
 function lodgeGuides(){
   const res = S.resources || [];
@@ -6809,6 +7024,11 @@ function renderAdmin(){
     '<p class="lede">' + pc + " of " + S.seatCount + " committee seats have a photograph on them." +
     (pc < S.seatCount ? " Write them on with the button below." : "") + "</p>");
   paintWiring();
+  renderLinkList();
+  renderPubList();
+  renderVpList();
+  renderPurge();
+  renderWordsNote();
   put("adminLinks", (S.sheetUrl ? 'The spreadsheet: <a href="' + esc(safeUrl(S.sheetUrl)) +
     '" target="_blank" rel="noopener">open it</a>. ' : "") +
     (S.appUrl ? "The app lives at <code>" + esc(S.appUrl) + "</code>." : ""));
@@ -6864,7 +7084,13 @@ function openEventEditor(id){
     '<label class="f"><span>Who is running it, addresses comma separated</span><input id="eLeads" value="' +
       esc(ev ? (ev.leads || []).map(l => l.email).filter(Boolean).join(",") : S.me.email) + '"></label>' +
     '<div class="acts"><button class="btn crimson" id="eGo">Save</button>' +
-      (ev && isAdmin() ? '<button class="btn ghost" id="eDel">Delete it</button>' : "") + "</div>",
+      /* Deleting an event normally announces itself on the board, because a
+         cancellation is news. A row that was a mistake, or one from three
+         years ago, is not, so the tick turns the announcement off. */
+      (ev && isAdmin()
+        ? '<label class="check" style="margin:0"><input type="checkbox" id="eQuiet"> Delete it without telling anybody</label>' +
+          '<button class="btn ghost" id="eDel">Delete it</button>'
+        : "") + "</div>",
     el => {
       const costBox = el.querySelector("#eCost");
       if (costBox) costBox.addEventListener("change", () => {
@@ -6896,10 +7122,17 @@ function openEventEditor(id){
       });
       const del = el.querySelector("#eDel");
       if (del) del.addEventListener("click", async e => {
-        if (!confirm("Delete " + ev.title + " and every sign up for it?")) return;
+        const quiet = !!($("eQuiet") && $("eQuiet").checked);
+        if (!confirm("Delete " + ev.title + " and every sign up for it?" +
+          (quiet ? "\n\nNothing goes on the board and nobody is told." : ""))) return;
         spin(e.currentTarget, "Deleting");
-        try{ await api("deleteEvent", { eventId: id }); closeSheet(); await refresh(false); }
-        catch(err){ fail(err); }
+        try{
+          await api("deleteEvent", { eventId: id, quiet: quiet });
+          closeSheet();
+          await refresh(false);
+          toast(quiet ? "Gone. Nobody was told." : "Gone, and it is on the board.");
+        }
+        catch(err){ unspin(e.currentTarget); fail(err); }
       });
     });
 }
@@ -7221,6 +7454,25 @@ function showReport(rep){
     '<div class="acts"><button class="btn gold" data-saypdf="' + esc(rep.month) + '">Save it as a PDF</button>' +
     '<button class="btn ghost" data-close>Close</button></div>');
 }
+/* WHAT PEOPLE ARE TOLD BEFORE THEY WRITE.
+   Every answer in Feedback is saved with the name of the person who gave it.
+   Two seats in college can see that name and no others can, and the honest
+   thing is to say so at the moment somebody is deciding what to write rather
+   than in a privacy notice they will never open. It is one sentence, it is
+   the same sentence in all three places somebody can write, and it is not
+   softened: "anonymous" would be a lie and "confidential" is a word people
+   have learned to distrust. */
+const SAY_NAMED = '<p class="lede" style="font-size:.72rem">Your name is saved with this. ' +
+  "Only the MCR President and Vice-President can see it, and they will not pass it on. " +
+  "Everybody else on the committee reads what you write with no name against it.</p>";
+/* A question the committee chose to ask without names gets the opposite line,
+   and it is worth being exact about what is and is not kept: "anonymous" is a
+   word people have heard too often to believe. */
+const SAY_NAMELESS = '<p class="lede" style="font-size:.72rem">This question is being asked ' +
+  "<b>without names</b>. Your address is not saved against your answer at all. " +
+  "What is saved is a one way code, so that you can come back and change your answer and so that " +
+  "nobody answers twice, and it cannot be turned back into you by anybody, the President included.</p>";
+const sayNote = q => (q && q.nameless) ? SAY_NAMELESS : SAY_NAMED;
 function sayLine(t, score){
   if (!t) return;
   const low = score <= 2, high = score >= 4;
@@ -7235,8 +7487,7 @@ function sayLine(t, score){
       (low ? "The kitchens have been shut by seven every night this term."
            : "The new chairs have made the room usable for working in.") + '">' +
       esc(t.myComment || "") + '</textarea></label>' +
-    '<p class="lede" style="font-size:.72rem">Nobody is told it was you. The committee sees the words ' +
-    'and the number, not the name.</p>' +
+    SAY_NAMED +
     '<div class="acts"><button class="btn gold" id="slGo">Add it</button>' +
     '<button class="btn ghost" data-close>Not now</button></div>',
     el => el.querySelector("#slGo").addEventListener("click", async e => {
@@ -7370,6 +7621,9 @@ function moodCard(t){
       (t.score ? '<span class="avg n' + Math.round(t.score) + '">' + t.score.toFixed(1) + '</span>' : '<span class="avg none">&middot;</span>') +
     '</div>' +
     '<p class="note">' + esc(t.note) + '</p>' +
+    /* Publishing is done on the card, not on a settings page, because the
+       decision is about this subject and is taken while looking at it. */
+    (isCommittee() ? '<div class="acts" style="margin:0 0 8px">' + pubChip("topic", t.key) + '</div>' : "") +
     '<div class="faces">' + faces.map(f =>
       '<button data-mood="' + esc(t.key) + '" data-n="' + f.n + '" title="' + esc(f.note) + '"' +
       (t.mine === f.n ? ' aria-pressed="true"' : "") + '><i class="n' + f.n + '"></i>' +
@@ -7381,8 +7635,12 @@ function moodCard(t){
       (r.said ? ": " + esc(r.score) + " from " + esc(r.said) : ": nothing said") + '"></span>').join("") +
     '</div>' +
     '<div class="mfoot"><span>' +
-      (t.said ? t.said + (t.said === 1 ? " has said" : " have said") + " this month" : "nobody yet this month") +
-      (t.wrote ? " &middot; " + t.wrote + (t.wrote === 1 ? " wrote a line" : " wrote a line") : "") + '</span>' +
+      (t.shown === false
+        /* Nothing is public until the committee publishes it, and saying so
+           is better than a card that looks broken or empty. */
+        ? "the committee has not published the results for this yet"
+        : (t.said ? t.said + (t.said === 1 ? " has said" : " have said") + " this month" : "nobody yet this month") +
+          (t.wrote ? " &middot; " + t.wrote + (t.wrote === 1 ? " wrote a line" : " wrote a line") : "")) + '</span>' +
       (t.mine ? '<button class="lnk" data-moodline="' + esc(t.key) + '">' +
         (t.myComment ? "Change what you wrote" : "Add a line") + '</button>' : "") + '</div>' +
     /* What was done about it. A falling line with nothing beside it teaches
@@ -7396,7 +7654,11 @@ function moodCard(t){
     (isCommittee() && t.notes.length
       ? '<details class="mnotes"><summary>' + t.notes.length +
         (t.notes.length === 1 ? " comment" : " comments") + '</summary>' +
-        t.notes.map(n => '<p><i class="n' + n.score + '"></i>' + esc(n.comment) + '</p>').join("") + '</details>'
+        t.notes.map(n => '<p><i class="n' + n.score + '"></i>' +
+          /* The name only ever reaches the President and the Vice-President.
+             Everybody else on the committee reads the same line without one. */
+          (n.who ? '<b style="margin-right:6px">' + esc(n.who) + '</b>' : "") +
+          esc(n.comment) + '</p>').join("") + '</details>'
       : "") +
     '</div>';
 }
@@ -7407,9 +7669,14 @@ function soundCard(raw){
   const faces = Array.isArray(S.say.faces) ? S.say.faces : [];
   return '<div class="sound' + (q.closed ? " shut" : "") + (q.answered ? " done" : "") + '">' +
     '<div class="top"><b>' + esc(q.title) + '</b>' +
+      /* Whether an answer carries a name changes what people are willing to
+         write, so it is on the card before the buttons rather than in the
+         sheet after them. */
+      (q.nameless ? '<span class="st hush" title="No address is saved against your answer">No names</span>' : "") +
       '<span class="st ' + (q.closed ? "closed" : "open") + '">' +
       (q.closed ? "Closed" : q.closes ? "Until " + soundingDateLabel(q) : "Open") + '</span></div>' +
     (q.body ? '<p class="note">' + esc(q.body) + '</p>' : "") +
+    (isCommittee() ? '<div class="acts" style="margin:0 0 8px">' + pubChip("question", q.id) + '</div>' : "") +
     (q.kind === "choice"
       ? '<div class="opts">' + q.options.map(o =>
           '<button data-sound="' + esc(q.id) + '" data-choice="' + esc(o) + '"' +
@@ -7431,8 +7698,11 @@ function soundCard(raw){
     (q.kind !== "text" ? '<div class="acts" style="margin-top:8px">' +
       '<button class="lnk" data-soundsay="' + esc(q.id) + '"' + (q.closed ? " disabled" : "") + '>' +
       (q.mine && q.mine.comment ? "Change your comment" : "Add a comment") + '</button></div>' : "") +
-    '<div class="mfoot"><span>' + (q.said ? q.said + (q.said === 1 ? " answer" : " answers") : "no answers yet") +
-      (q.answered ? " &middot; yours is in" : q.closed ? "" : " &middot; answers appear once you have answered") + '</span>' +
+    '<div class="mfoot"><span>' +
+      (q.shown === false
+        ? "the answers are with the committee" + (q.answered ? " &middot; yours is in" : "")
+        : (q.said ? q.said + (q.said === 1 ? " answer" : " answers") : "no answers yet") +
+          (q.answered ? " &middot; yours is in" : "")) + '</span>' +
       /* Everything the committee can do to a question, on the question. It used
          to be one link that closed it, so a typo meant asking it again from
          scratch and a question put up by mistake could only ever be closed,
@@ -7445,7 +7715,9 @@ function soundCard(raw){
     (q.notes.length
       ? '<details class="mnotes"><summary>' + q.notes.length +
         (q.notes.length === 1 ? " comment" : " comments") + '</summary>' +
-        q.notes.map(n => '<p>' + (n.score ? '<i class="n' + n.score + '"></i>' : "") + esc(n.comment) + '</p>').join("") + '</details>'
+        q.notes.map(n => '<p>' + (n.score ? '<i class="n' + n.score + '"></i>' : "") +
+          (n.who ? '<b style="margin-right:6px">' + esc(n.who) + '</b>' : "") +
+          esc(n.comment) + '</p>').join("") + '</details>'
       : "") +
     '</div>';
 }
@@ -7798,7 +8070,7 @@ function voiceCard(){
    ============================================================ */
 /* Second life is gone. The Lodge has become three: the board on its own, the
    MCR room on its own, and Info for the links, the guides and the sport. */
-const VIEWS = ["today","board","say","room","swaps","ask","info","me","desk","inbox","swapdesk","members","admin"];
+const VIEWS = ["today","board","say","room","swaps","ask","info","me","desk","inbox","swapdesk","members","fbdesk","admin"];
 /* Stagger the first children of whatever has just been shown. Sixty
    milliseconds apart is enough to read as unfolding and not as waiting. */
 function stagger(id){
@@ -7821,6 +8093,10 @@ function go(v, scroll){
      that finishes by going there. Guarding the one door covers all of them. */
   if (v === "swaps" && !canSee("formals")) v = "today";
   if (v === "biz" && !canSee("business")) v = "today";
+  /* The Feedback desk is the President's and the Vice-President's. The server
+     checks the address on every call it makes, so this is the courtesy and
+     not the control, but a tab nobody else can reach is one fewer way in. */
+  if (v === "fbdesk" && !(S && S.me && S.me.names)) v = "today";
   view = v;
   document.querySelectorAll("#nav .tabbtn").forEach(b =>
     b.setAttribute("aria-current", String(b.dataset.view === v)));
@@ -7957,6 +8233,7 @@ const DRAW = {
   me: () => { if (!typingIn("v-me")) renderMe(); },
   desk: renderDesk, swapdesk: renderSwapDesk, inbox: renderQueue,
   members: renderDesk,
+  fbdesk: renderFbDesk,
   admin: () => { if (!typingIn("v-admin")){ renderAdmin(); renderBumpsAdmin(); } }
 };
 let drawn = {};
@@ -7979,6 +8256,15 @@ function render(){
   document.querySelectorAll("[data-committee]").forEach(el => el.hidden = !isCommittee());
   document.querySelectorAll("[data-admin]").forEach(el => el.hidden = !isAdmin());
   document.querySelectorAll("[data-owner]").forEach(el => el.hidden = !S.me.owner);
+  /* The two seats that see a name against an answer. */
+  document.querySelectorAll("[data-names]").forEach(el => el.hidden = !S.me.names);
+  /* The pencil in the bar, and with it the whole rewriting mode. */
+  if (isCommittee()){
+    if (!document.documentElement.dataset.words) document.documentElement.dataset.words = "off";
+  } else {
+    if (wordsOn) wordsToggle(false);
+    delete document.documentElement.dataset.words;
+  }
   /* The tabs for sections that are written but not switched on. The attribute
      names the flag, so a tab appears by the same rule as everything else the
      room is not meant to see yet. */
@@ -7989,6 +8275,12 @@ function render(){
   drawn = {};
   drawView(view || "today");
   renderBadges();
+  /* The committee's own wording goes over the top of whatever was just drawn,
+     and the watcher keeps it there through every later redraw. */
+  applyCopy();
+  startCopyWatch();
+  if (wordsOn) markWordable();
+  if (!deerTimer) deerStart();
 }
 
 /* ---------- one listener for the whole app ---------- */
@@ -8091,8 +8383,8 @@ document.addEventListener("click", async e => {
       const tp = ((S.say || {}).topics || []).filter(x => x.key === d.moodsay)[0];
       if (!tp) return;
       return sheet("A line about " + tp.name,
-        '<p class="lede">Written down as it is, without your name. It is what makes a number ' +
-        'arguable at a meeting.</p>' +
+        '<p class="lede">Written down as it is. It is what makes a number arguable at a meeting.</p>' +
+        SAY_NAMED +
         '<label class="f"><span>What would you say</span><textarea id="moodC" maxlength="600">' +
         esc(tp.myComment || "") + '</textarea></label>' +
         '<div class="acts"><button class="btn gold" id="moodGo">Save it</button>' +
@@ -8123,6 +8415,7 @@ document.addEventListener("click", async e => {
         (q.body ? '<p class="lede">' + esc(q.body) + '</p>' : "") +
         '<label class="f"><span>' + (q.kind === "text" ? "Your answer" : "Anything you want to add") +
         '</span><textarea id="soundC" maxlength="900">' + esc((q.mine && q.mine.comment) || "") + '</textarea></label>' +
+        sayNote(q) +
         '<div class="acts"><button class="btn gold" id="soundGo">Save it</button>' +
         '<button class="btn ghost" data-close>Cancel</button></div>',
         el => el.querySelector("#soundGo").addEventListener("click", async e => {
@@ -8563,7 +8856,13 @@ function soundingSheet(q){
   const topics = ((S.say || {}).list || []);
   const edit = !!(q && q.id);
   const locked = edit && q.said > 0;
-  const v = q || { title: "", body: "", kind: "choice", options: [], closes: "", topic: "", said: 0 };
+  const v = q || { title: "", body: "", kind: "choice", options: [], closes: "", topic: "",
+    said: 0, nameless: false, canName: true };
+  /* Once somebody has answered a nameless question there is no way back: the
+     addresses were never written, so there is nothing to restore. Going the
+     other way, a named question can be made nameless at any time, and the
+     answers already in are rewritten when it is. */
+  const noWayBack = edit && v.nameless && !v.canName;
   sheet(edit ? "Change this question" : "Put a question to the MCR",
     '<p class="lede">' + (edit
       ? (locked ? v.said + (v.said === 1 ? " answer is" : " answers are") +
@@ -8589,6 +8888,29 @@ function soundingSheet(q){
       topics.map(t => '<option value="' + esc(t.key) + '"' + (v.topic === t.key ? " selected" : "") +
         ">" + esc(t.name) + "</option>").join("") +
     "</select></label>" +
+    /* WHETHER THIS ONE CARRIES NAMES.
+       Every other answer in Feedback is saved with the name of the person who
+       gave it, seen by the President and the Vice-President. Some questions
+       should not work that way: pay, a person, anything somebody would only
+       answer honestly if they were sure it could not come back to them. This
+       is the switch, and it is on the question rather than on the app, so the
+       committee decides it one question at a time. */
+    '<label class="check"><input type="checkbox" id="sqAnon"' +
+      (v.nameless ? " checked" : "") + (noWayBack ? " disabled" : "") +
+      "> Ask this one <b>without names</b></label>" +
+    '<p class="lede" style="font-size:.74rem" id="sqAnonNote">' +
+      (noWayBack
+        ? "This one is being asked without names and has answers in it. That cannot be undone: " +
+          "no address was ever written against them, so there is nothing to put back."
+        : v.nameless
+          ? "No address is saved against an answer. A one way code is saved instead, so that nobody " +
+            "answers twice and everybody can change their own answer, and it cannot be turned back " +
+            "into a person by anybody, the President included."
+          : "Left unticked, an answer carries the name of the person who gave it, which the President " +
+            "and the Vice-President can see and nobody else can. Tick it and no address is saved at all." +
+            (locked ? " Ticking it now also takes the names off the " + v.said +
+              (v.said === 1 ? " answer" : " answers") + " already in, and that cannot be undone." : "")) +
+      "</p>" +
     '<div class="acts"><button class="btn gold" id="sqGo">' + (edit ? "Save it" : "Put it up") + "</button>" +
     '<button class="btn ghost" data-close>Cancel</button></div>',
     el => {
@@ -8599,16 +8921,27 @@ function soundingSheet(q){
       kind.addEventListener("change", look); look();
       el.querySelector("#sqGo").addEventListener("click", async e => {
         const b = e.currentTarget;
+        /* Taking the names off answers already given is not undoable, so it is
+           asked about rather than done on a tick nobody noticed. */
+        if (locked && !v.nameless && $("sqAnon") && $("sqAnon").checked &&
+            !confirm("Take the names off the " + v.said +
+              (v.said === 1 ? " answer" : " answers") + " already given, and ask the rest without names?" +
+              "\n\nThe addresses are replaced by one way codes. There is no undo."))
+          return;
         spin(b, edit ? "Saving" : "Putting it up");
         try{
           const body = { title: $("sqTitle").value, body: $("sqBody").value,
             kind: $("sqKind").value, options: $("sqOpts").value, closes: $("sqCloses").value,
-            topic: $("sqTopic").value };
+            topic: $("sqTopic").value,
+            nameless: !!($("sqAnon") && $("sqAnon").checked) };
           if (edit) body.id = v.id;
           const r = await api(edit ? "soundingEdit" : "soundingNew", body);
           S.say = r.say; closeSheet(); renderSay(); renderBadges();
           if (!edit) go("say");
-          toast(edit ? "Changed." : "Up. It closes on its date.");
+          toast(r.scrubbed
+            ? "Changed. The names came off " + r.scrubbed +
+              (r.scrubbed === 1 ? " answer already in." : " answers already in.")
+            : edit ? "Changed." : "Up. It closes on its date.");
         }catch(err){ unspin(b); fail(err); }
       });
     });
@@ -8855,6 +9188,826 @@ on("bNewMeeting", "click", () => {
     void src;
   }catch(e){}
 })();
+
+
+/* ============================================================
+   THE DEER
+   ============================================================
+   Twenty seven acres of garden, more than any other college, and a
+   deer on half the arms in Cambridge. Once in a while one of them
+   crosses the bottom of Today, for a second and a half, and is gone
+   again. It is behind everything, cannot be tapped, is invisible to
+   a screen reader, and never runs at all for anybody who has asked
+   their device for less movement.
+
+   It is deliberately rare. Something that happens every time you
+   open a page is a feature; something that happens now and then is
+   a thing you tell somebody about. */
+let deerTimer = null, deerSeen = 0;
+function deerCalm(){
+  try{ return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches; }
+  catch(e){ return false; }
+}
+function deerRun(){
+  const el = $("deer");
+  if (!el) return;
+  el.hidden = false;
+  el.classList.remove("run", "back");
+  /* Restart the animation rather than let a second call be swallowed. */
+  void el.offsetWidth;
+  if (Math.random() < .45) el.classList.add("back");
+  el.classList.add("run");
+  deerSeen++;
+  setTimeout(() => { el.classList.remove("run", "back"); el.hidden = true; }, 1700);
+}
+function deerTick(){
+  /* Only on Today, only while the tab is in front, and never over a form
+     somebody is halfway through. */
+  if (view === "today" && !document.hidden && !sheetOpen && !wordsOn && Math.random() < .55) deerRun();
+  deerNext();
+}
+function deerNext(){
+  clearTimeout(deerTimer);
+  if (deerCalm()) return;
+  /* Between a minute and a half and four minutes, so it is never a rhythm
+     anybody can predict. */
+  deerTimer = setTimeout(deerTick, 90000 + Math.random() * 150000);
+}
+function deerStart(){
+  if (deerCalm()) return;
+  clearTimeout(deerTimer);
+  deerTimer = setTimeout(deerTick, 22000 + Math.random() * 40000);
+}
+
+/* ============================================================
+   REWRITING THE PAGE FROM THE PAGE
+   ============================================================
+   WHAT THIS IS.
+   Every visible sentence in this app is written in the source, which
+   means that until now changing one meant changing a file and
+   redeploying, and the committee changes every year. So the committee
+   now owns the words instead: turn the mode on, tap any sentence
+   anywhere in the app, and rewrite it. Empty it and it comes off the
+   page. Every rewrite is stored once, centrally, and everybody sees
+   it within the minute.
+
+   HOW IT IS KEYED, AND WHY IT IS KEYED THAT WAY.
+   By the original wording, not by position and not by an id. Positions
+   move every time a section is rearranged and ids do not exist on
+   ninety percent of the text in this file. The wording is the one
+   thing that is stable and that a committee can recognise in a list a
+   year later. It also means a sentence that appears in two places is
+   changed in both, which is what somebody expects when they correct
+   the name of a room.
+
+   HOW IT SURVIVES A REDRAW.
+   It does not try to. The page redraws itself constantly, from a
+   poll, from a tab change, from a save; each redraw puts the original
+   wording back. A MutationObserver notices and reapplies, so the
+   substitution is a layer over the page rather than an edit to it,
+   and every original is one tap away for ever. */
+let wordsOn = false, copyBusy = false, copyPending = false, copyObs = null, copyLive = false;
+const COPY = () => (S && S.copy && typeof S.copy === "object" && !Array.isArray(S.copy)) ? S.copy : {};
+/* One space between words and nothing at either end, because that is what a
+   person means by "the same sentence" and what innerHTML will not give you. */
+const copyKey = t => String(t == null ? "" : t).replace(/\s+/g, " ").trim();
+const WORD_ROOTS = () => [$("app"), $("nav"), document.querySelector("header"),
+  document.getElementById("sheet"), $("gate")].filter(Boolean);
+const WORD_SKIP = /^(SCRIPT|STYLE|TEXTAREA|SVG|PATH|CIRCLE|RECT|G|LINE|POLYGON|POLYLINE)$/i;
+
+function wordWalker(root){
+  return document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    acceptNode(n){
+      const p = n.parentElement;
+      if (!p || WORD_SKIP.test(p.nodeName)) return NodeFilter.FILTER_REJECT;
+      return copyKey(n.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+    }
+  });
+}
+/* Put the page back exactly as it was drawn, so applying is idempotent and a
+   rewrite that has been undone leaves nothing of itself behind. */
+function unapplyCopy(root){
+  root.querySelectorAll(".wordgone").forEach(m => {
+    const t = document.createTextNode(m.__wordOrig === undefined ? "" : m.__wordOrig);
+    if (m.parentNode) m.parentNode.replaceChild(t, m);
+  });
+  const w = wordWalker(root), list = [];
+  let n;
+  while ((n = w.nextNode())) if (n.__wordOrig !== undefined) list.push(n);
+  list.forEach(n => { n.nodeValue = n.__wordOrig; delete n.__wordOrig; delete n.__wordKey; });
+  root.querySelectorAll("[placeholder]").forEach(el => {
+    if (el.__wordPh !== undefined){ el.setAttribute("placeholder", el.__wordPh); delete el.__wordPh; }
+  });
+  root.querySelectorAll(".wordedited").forEach(el => el.classList.remove("wordedited"));
+}
+function applyCopy(){
+  const map = COPY();
+  const any = Object.keys(map).length > 0;
+  if (!any && !copyLive) return;              /* nothing to do and nothing to undo */
+  copyBusy = true;
+  try{
+    WORD_ROOTS().forEach(root => {
+      unapplyCopy(root);
+      if (!any) return;
+      const w = wordWalker(root), hits = [];
+      let n;
+      while ((n = w.nextNode())){
+        const k = copyKey(n.nodeValue);
+        if (Object.prototype.hasOwnProperty.call(map, k)) hits.push([n, k]);
+      }
+      hits.forEach(pair => {
+        const node = pair[0], k = pair[1], to = map[k];
+        node.__wordOrig = node.nodeValue;
+        node.__wordKey = k;
+        if (to === ""){
+          /* Taken off the page. A marker stands in its place so the committee
+             can find it again and put it back; nobody else ever sees it. */
+          const m = document.createElement("span");
+          m.className = "wordgone";
+          m.setAttribute("data-word", k);
+          m.__wordOrig = node.nodeValue;
+          if (node.parentNode) node.parentNode.replaceChild(m, node);
+        } else {
+          /* The spaces either side are the layout, not the sentence. */
+          const lead = (node.nodeValue.match(/^\s*/) || [""])[0];
+          const tail = (node.nodeValue.match(/\s*$/) || [""])[0];
+          node.nodeValue = lead + to + tail;
+          if (node.parentElement) node.parentElement.classList.add("wordedited");
+        }
+      });
+      root.querySelectorAll("[placeholder]").forEach(el => {
+        const k = copyKey(el.getAttribute("placeholder"));
+        if (k && Object.prototype.hasOwnProperty.call(map, k)){
+          el.__wordPh = el.getAttribute("placeholder");
+          el.setAttribute("placeholder", map[k]);
+        }
+      });
+    });
+    copyLive = any;
+  } finally { copyBusy = false; }
+}
+/* The page redraws itself from a dozen places and none of them know about
+   this. Watching is what makes "every single thing" true rather than "every
+   thing somebody remembered to hook". */
+function startCopyWatch(){
+  if (copyObs || typeof MutationObserver === "undefined") return;
+  copyObs = new MutationObserver(() => {
+    if (copyBusy || copyPending) return;
+    copyPending = true;
+    /* A timer rather than an animation frame, because a frame never comes in a
+       tab that is not being painted, and the flag would sit raised until it
+       was. */
+    setTimeout(() => {
+      applyCopy();
+      if (wordsOn) markWordable();
+      /* WHY THE QUEUE IS DRAINED HERE.
+         Putting the committee's wording back is itself a mutation, so without
+         this the observer watches its own work, schedules itself again, and
+         does that sixty times a second for as long as the app is open. Taking
+         the records empties the queue before the callback would be invoked,
+         which is the documented way out of exactly this loop. Anything else
+         that changed in the same tick has already been handled by the
+         applyCopy above, so nothing is lost by dropping it. */
+      if (copyObs) copyObs.takeRecords();
+      copyPending = false;
+    }, 16);
+  });
+  copyObs.observe(document.body, { childList: true, subtree: true, characterData: true });
+}
+/* While the mode is on, everything that can be rewritten says so. */
+function markWordable(){
+  document.querySelectorAll(".wordable").forEach(el => el.classList.remove("wordable", "edited"));
+  if (!wordsOn) return;
+  const map = COPY();
+  WORD_ROOTS().forEach(root => {
+    if (root.hasAttribute && root.hasAttribute("data-nowords")) return;
+    const w = wordWalker(root);
+    let n;
+    while ((n = w.nextNode())){
+      const p = n.parentElement;
+      if (!p || p.closest("[data-nowords]")) continue;
+      p.classList.add("wordable");
+      if (n.__wordKey !== undefined) p.classList.add("edited");
+    }
+    root.querySelectorAll("input[placeholder],textarea[placeholder]").forEach(el => {
+      if (!el.closest("[data-nowords]")) el.classList.add("wordable");
+    });
+  });
+}
+function wordsToggle(on){
+  wordsOn = on === undefined ? !wordsOn : !!on;
+  document.documentElement.dataset.words = wordsOn ? "on" : "off";
+  markWordable();
+  const bar = $("wordbar");
+  if (bar) bar.remove();
+  if (wordsOn){
+    const el = document.createElement("div");
+    el.className = "wordbar";
+    el.id = "wordbar";
+    el.setAttribute("data-nowords", "");
+    el.innerHTML = "<b>Rewriting</b><span>Tap any words in the app to change them.</span>" +
+      '<button class="btn gold sm" data-wordsoff>Done</button>';
+    document.body.appendChild(el);
+    toast("Tap any words in the app to rewrite them.");
+  }
+  if ($("bWords")) $("bWords").setAttribute("aria-pressed", String(wordsOn));
+}
+/* Which words were actually tapped. The caret position under the pointer is
+   exact where walking the element is a guess, so it is tried first. */
+function wordNodeAt(e){
+  let node = null;
+  try{
+    if (document.caretRangeFromPoint){
+      const r = document.caretRangeFromPoint(e.clientX, e.clientY);
+      if (r) node = r.startContainer;
+    } else if (document.caretPositionFromPoint){
+      const p = document.caretPositionFromPoint(e.clientX, e.clientY);
+      if (p) node = p.offsetNode;
+    }
+  }catch(err){}
+  if (node && node.nodeType === 3 && copyKey(node.nodeValue)) return node;
+  const el = e.target;
+  if (!el || !el.nodeType || el.nodeType !== 1) return null;
+  const w = wordWalker(el);
+  return w.nextNode();
+}
+function wordEditor(key, original, kind){
+  if (!key) return;
+  const now = COPY();
+  const has = Object.prototype.hasOwnProperty.call(now, key);
+  sheet("Rewrite " + (kind === "placeholder" ? "this prompt" : "these words"),
+    '<div class="card"><p class="lede" style="margin:0 0 6px">As it stands in the app</p>' +
+      '<p style="margin:0">' + esc(original || key) + "</p></div>" +
+    '<label class="f"><span>What it should say</span>' +
+      '<textarea id="wdT" maxlength="4000" style="min-height:110px">' +
+      esc(has ? now[key] : key) + "</textarea></label>" +
+    '<p class="lede">Everywhere this exact wording appears in the app, it changes. Empty it and it comes ' +
+      "off the page altogether: it stays on your list of changes, so you can always put it back.</p>" +
+    '<div class="acts"><button class="btn crimson" id="wdGo">Save</button>' +
+      '<button class="btn ghost" id="wdDel">Take it off the page</button>' +
+      (has ? '<button class="btn ghost" id="wdBack">Put the original back</button>' : "") +
+      '<button class="btn ghost" data-close>Cancel</button></div>',
+    el => {
+      el.setAttribute("data-nowords", "");
+      const send = async (b, to, reset, said) => {
+        spin(b, "Saving");
+        try{
+          const r = await api("copySave", { from: key, to: to, reset: !!reset });
+          S.copy = r.copy || {};
+          closeSheet();
+          applyCopy();
+          markWordable();
+          renderWordsNote();
+          toast(said);
+        }catch(err){ unspin(b); fail(err); }
+      };
+      el.querySelector("#wdGo").addEventListener("click", ev =>
+        send(ev.currentTarget, $("wdT").value, false, "Changed. Everybody sees it within the minute."));
+      el.querySelector("#wdDel").addEventListener("click", ev =>
+        send(ev.currentTarget, "", false, "Taken off the page."));
+      const back = el.querySelector("#wdBack");
+      if (back) back.addEventListener("click", ev =>
+        send(ev.currentTarget, "", true, "Back to how it was written."));
+      const t = el.querySelector("#wdT");
+      if (t) setTimeout(() => { try{ t.focus(); t.select(); }catch(e){} }, 60);
+    });
+}
+/* The mode's own click, ahead of every other handler in the app, so that
+   tapping a button while rewriting changes its label rather than pressing it. */
+document.addEventListener("click", e => {
+  if (!wordsOn || !S) return;
+  const t = e.target;
+  if (!t || !t.closest) return;
+  if (t.closest("[data-nowords]") || t.closest("#bWords") || t.closest(".wordbar")) return;
+  if (!t.closest("#app, #nav, header, .sheet")) return;
+  const stop = () => { e.preventDefault(); e.stopPropagation(); };
+  const gone = t.closest(".wordgone");
+  if (gone){ stop(); return wordEditor(gone.getAttribute("data-word"), gone.__wordOrig || "", "text"); }
+  if (t.matches && t.matches("input[placeholder],textarea[placeholder]")){
+    stop();
+    const ph = t.__wordPh === undefined ? t.getAttribute("placeholder") : t.__wordPh;
+    return wordEditor(copyKey(ph), ph, "placeholder");
+  }
+  const node = wordNodeAt(e);
+  if (!node) return;
+  stop();
+  wordEditor(node.__wordKey || copyKey(node.nodeValue),
+    node.__wordOrig === undefined ? node.nodeValue : node.__wordOrig, "text");
+}, true);
+/* Everything the committee has changed, in one list, so a year of small edits
+   is something you can read rather than something you have to hunt for. */
+function renderWordsNote(){
+  const map = COPY();
+  const keys = Object.keys(map);
+  put("wordsNote", !keys.length
+    ? '<p class="lede" style="margin-top:10px">Nothing has been rewritten yet. Everything reads as it was written.</p>'
+    : '<p class="lede" style="margin-top:10px">' + keys.length +
+      (keys.length === 1 ? " piece of writing has been changed." : " pieces of writing have been changed.") +
+      " " + keys.filter(k => map[k] === "").length + " of them taken off the page.</p>");
+}
+function wordsList(){
+  const map = COPY();
+  const keys = Object.keys(map).sort();
+  sheet("Everything you have changed",
+    (keys.length
+      ? keys.map(k =>
+          '<div class="rowline"><div class="t"><b>' + (map[k] === ""
+            ? "<i>Taken off the page</i>" : esc(map[k])) + "</b><span>was: " + esc(k) + "</span></div>" +
+          '<button class="btn ghost sm" data-wordopen="' + esc(k) + '">Change</button>' +
+          '<button class="btn ghost sm" data-wordback="' + esc(k) + '">Put back</button></div>').join("")
+      : '<div class="card"><p>Nothing has been rewritten. Every word in the app reads as it was written.</p></div>') +
+    '<div class="acts">' +
+      (keys.length && isAdmin()
+        ? '<button class="btn ghost" id="wdAll">Put every one of them back</button>' : "") +
+      '<button class="btn ghost" data-close>Close this</button></div>',
+    el => {
+      el.setAttribute("data-nowords", "");
+      el.addEventListener("click", async ev => {
+        const b = ev.target.closest("[data-wordopen],[data-wordback]");
+        if (!b) return;
+        if (b.hasAttribute("data-wordopen")){
+          const k = b.getAttribute("data-wordopen");
+          closeSheet();
+          return setTimeout(() => wordEditor(k, k, "text"), 60);
+        }
+        sending(b, "Putting back");
+        try{
+          const r = await api("copySave", { from: b.getAttribute("data-wordback"), reset: true });
+          S.copy = r.copy || {};
+          closeSheet();
+          applyCopy(); markWordable(); renderWordsNote();
+          toast("Back to how it was written.");
+        }catch(err){ sent(b); fail(err); }
+      });
+      const all = el.querySelector("#wdAll");
+      if (all) all.addEventListener("click", async ev => {
+        if (!confirm("Put every rewrite back? The app reads as it was written and your changes are gone.")) return;
+        spin(ev.currentTarget, "Putting back");
+        try{
+          const r = await api("copyClear");
+          S.copy = r.copy || {};
+          closeSheet();
+          applyCopy(); markWordable(); renderWordsNote();
+          toast("Everything is back to how it was written.");
+        }catch(err){ unspin(ev.currentTarget); fail(err); }
+      });
+    });
+}
+
+
+/* ============================================================
+   THE LINKS SHELF, AS THE COMMITTEE'S OWN
+   ============================================================
+   Forms and links used to be a list in the server file, which made a
+   dead address a code change and a redeployment. It is a list in the
+   spreadsheet now and everything about it is done from here. */
+function renderLinkList(){
+  const L = S.links || [];
+  put("linkList", (L.length
+    ? L.map(l =>
+        '<div class="rowline"><div class="t"><b>' + esc(l.name) + "</b><span>" +
+        esc(l.who || "") + (l.who ? " &middot; " : "") + esc(l.url) + "</span></div>" +
+        '<button class="btn ghost sm" data-linkedit="' + esc(l.key) + '">Edit</button>' +
+        '<button class="btn ghost sm" data-linkdel="' + esc(l.key) + '">Delete</button></div>').join("")
+    : '<p class="lede">There is nothing on the shelf. Add the first one below.</p>'));
+}
+function openLinkEditor(key){
+  const l = (S.links || []).filter(x => x.key === key)[0];
+  sheet(l ? "Edit " + l.name : "Add a link",
+    '<label class="f"><span>Name</span><input id="lkName" maxlength="90" value="' +
+      esc(l ? l.name : "") + '" placeholder="Apply for an event permit"></label>' +
+    '<label class="f"><span>Address</span><input id="lkUrl" maxlength="600" value="' +
+      esc(l ? l.url : "") + '" placeholder="https://"></label>' +
+    '<label class="f"><span>What it is for</span><textarea id="lkNote" maxlength="400">' +
+      esc(l ? l.note : "") + "</textarea></label>" +
+    '<div class="f2"><label class="f"><span>Whose it is</span><input id="lkWho" maxlength="60" value="' +
+      esc(l ? l.who : "") + '" placeholder="The Dean"></label>' +
+    '<label class="f"><span>Order on the shelf</span><input type="number" id="lkSort" value="' +
+      (l ? l.sort : 999) + '"></label></div>' +
+    '<div class="acts"><button class="btn crimson" id="lkGo">Save</button>' +
+      (l ? '<button class="btn ghost" id="lkDel">Delete it</button>' : "") +
+      '<button class="btn ghost" data-close>Cancel</button></div>',
+    el => {
+      el.setAttribute("data-nowords", "");
+      el.querySelector("#lkGo").addEventListener("click", async e => {
+        const b = e.currentTarget;
+        spin(b, "Saving");
+        try{
+          const r = await api("saveLink", { link: { key: key || "", name: $("lkName").value,
+            url: $("lkUrl").value, note: $("lkNote").value, who: $("lkWho").value, sort: $("lkSort").value } });
+          S.links = r.links || [];
+          closeSheet();
+          renderLinkList(); renderLodgeShelf();
+          toast("Saved. It is on the shelf.");
+        }catch(err){ unspin(b); fail(err); }
+      });
+      const del = el.querySelector("#lkDel");
+      if (del) del.addEventListener("click", async e => {
+        if (!confirm("Delete " + l.name + " from the shelf? There is no undo.")) return;
+        spin(e.currentTarget, "Deleting");
+        try{
+          const r = await api("deleteLink", { key: key });
+          S.links = r.links || [];
+          closeSheet();
+          renderLinkList(); renderLodgeShelf();
+          toast("Off the shelf.");
+        }catch(err){ unspin(e.currentTarget); fail(err); }
+      });
+    });
+}
+
+/* ============================================================
+   WHAT FEEDBACK SHOWS THE ROOM
+   ============================================================
+   Nothing, until the committee says so, one subject and one question
+   at a time. A live score on a wall changes the next answer given,
+   and a committee should be able to read a falling line before the
+   room argues about it. */
+function pubOn(kind, key){
+  const p = (S && S.sayPublish) || {};
+  return !!p[kind + ":" + key];
+}
+function pubChip(kind, key){
+  const on = pubOn(kind, key);
+  return '<button class="pubchip' + (on ? " on" : "") + '" data-saypub="' + esc(key) +
+    '" data-pubkind="' + esc(kind) + '" data-pubon="' + (on ? "0" : "1") + '" title="' +
+    (on ? "Everybody can see these results. Tap to take them back." :
+          "Only the committee can see these results. Tap to publish them.") + '">' +
+    (on ? "Published" : "Committee only") + "</button>";
+}
+function renderPubList(){
+  const say = S.say || {};
+  const topics = sayShown(Array.isArray(say.list) ? say.list : []);
+  const qs = sayShown(Array.isArray(say.soundings) ? say.soundings : []);
+  put("pubList",
+    '<div class="grp"><b>The five subjects</b></div>' +
+    (topics.length ? topics.map(t =>
+      '<div class="rowline"><div class="t"><b>' + esc(t.name) + "</b><span>" + esc(t.note) + "</span></div>" +
+      pubChip("topic", t.key) + "</div>").join("")
+      : '<p class="lede">Nothing on show.</p>') +
+    '<div class="grp"><b>Questions</b></div>' +
+    (qs.length ? qs.map(q =>
+      '<div class="rowline"><div class="t"><b>' + esc(q.title) + "</b><span>" +
+      (q.closed ? "Closed" : "Open") + "</span></div>" + pubChip("question", q.id) + "</div>").join("")
+      : '<p class="lede">No questions have been put.</p>'));
+}
+
+/* ============================================================
+   THE VICE-PRESIDENT
+   ============================================================ */
+function renderVpList(){
+  const v = S.vps || [];
+  put("vpList", v.length
+    ? '<p class="lede">Recognised now: <b>' + v.map(esc).join("</b>, <b>") + "</b></p>"
+    : '<p class="lede">Nobody is recognised as Vice-President at the moment, so the President is the only ' +
+      "person who can see a name against an answer.</p>");
+  const box = $("vpText");
+  if (box && !typingIn("v-admin")) box.value = (S.vpExtra || []).join("\n");
+}
+
+/* ============================================================
+   TAKING SOMETHING AWAY FOR GOOD, WITHOUT TELLING ANYBODY
+   ============================================================ */
+function renderPurge(){
+  const p = S.purge || {};
+  const keys = Object.keys(p);
+  put("purgeList", keys.length
+    ? keys.map(k => {
+        const r = p[k];
+        return '<div class="rowline"><div class="t"><b>' + esc(r.name.charAt(0).toUpperCase() + r.name.slice(1)) +
+          "</b><span>" + r.all + " held" + (r.dated ? ", " + r.past + " of them in the past" : "") + "</span></div>" +
+          (r.dated ? '<button class="btn ghost sm" data-purge="' + esc(k) +
+            '" data-scope="past">Delete the past ones</button>' : "") +
+          '<button class="btn ghost sm warn" data-purge="' + esc(k) +
+            '" data-scope="all">Delete every one</button></div>';
+      }).join("")
+    : '<p class="lede">Nothing to count. Refresh the page.</p>');
+}
+async function purgeGo(kind, scope, btn){
+  const p = (S.purge || {})[kind] || { name: kind, all: 0, past: 0 };
+  const n = scope === "past" ? p.past : p.all;
+  if (!n) return toast("There is nothing there to remove.");
+  const what = n + " " + p.name + (scope === "past" ? " from the past" : "");
+  if (!confirm("Delete " + what + " permanently?\n\nNothing goes on the board, nobody is told, and there is " +
+    "no undo of any kind.")) return;
+  if (!confirm("Last check. " + what + ", gone for good. Continue?")) return;
+  sending(btn, "Deleting");
+  try{
+    const r = await api("purge", { kind: kind, scope: scope });
+    S.purge = r.counts || S.purge;
+    sent(btn);
+    await refresh(false);
+    toast(r.done + (r.done === 1 ? " removed. Nobody was told." : " removed. Nobody was told."));
+  }catch(e){ sent(btn); fail(e); }
+}
+
+/* ============================================================
+   THE FEEDBACK DESK
+   ============================================================
+   WHO SEES WHAT, AND WHY IT IS SPLIT IN TWO.
+
+   Every answer given in Feedback now carries the name of the person
+   who gave it, and the person is told so at the moment they write.
+   That name reaches the President and the Vice-President and reaches
+   nobody else: the rest of the committee, administrators included,
+   read the same words with no name attached, exactly as before.
+
+   Who gave which score, and which way somebody voted, is a different
+   question and has a different answer: the President alone, behind
+   three locks, and written down every time.
+
+     one    the address has to be the President's, exactly. Being an
+            owner, an administrator or on the roster is not enough,
+            and the server checks it on every call rather than
+            trusting a hidden tab.
+     two    the President arms it by typing their own CRSid. That
+            mints a one-shot token that lives two minutes on the
+            server and is tied to this sign in.
+     three  the call itself has to carry that token and an explicit
+            confirmation, and every reveal is written to a log that
+            the app gives no way to clear.
+
+   Three locks rather than one because this is the piece of the app
+   that could most easily be misused. Knowing the room is unhappy is
+   what the committee is for. Knowing which person is unhappy is not. */
+let fbRows = null, fbQ = "", revealNonce = "", revealUntil = 0, revealTimer = null;
+
+function renderFbDesk(){
+  if (!S || !S.me.names) return;
+  put("fbNote", "Every answer, with the name on it");
+  put("fbWho",
+    "This page is the President's and the Vice-President's. Everybody else on the committee sees the same " +
+    "words with no name on them, and members are told that before they write. Nothing here goes further " +
+    "than the two of you.");
+  if (!fbRows) put("fbBody",
+    '<div class="card"><p>Search for somebody, or press <b>Everything</b> to read the lot.</p>' +
+    '<p class="lede">Every time this page is opened it is written to a log, which the President can read ' +
+    "at the top of this page and which the app gives nobody a way to clear.</p></div>");
+  renderFbLocks();
+}
+function fbCard(r, faces){
+  const face = (faces || []).filter(f => f.n === r.score)[0];
+  return '<div class="fbrow' + (r.nameless ? " hush" : "") + '"><div class="fbwho"><b>' +
+    esc(r.name) + "</b><span>" +
+    /* A nameless answer shows its code, which is as far as this goes and is
+       meant to look like what it is: not a person. */
+    esc(r.nameless ? "code " + (r.crsid || "\u2014") : r.email) +
+    "</span></div><div class=\"fbwhat\"><div class=\"fbmeta\"><span>" + esc(r.where) + "</span>" +
+    (r.month ? "<span>" + esc(monthName(r.month)) + "</span>" : "") +
+    (face ? "<span>" + esc(face.name) + " (" + r.score + " of 5)</span>" : "") +
+    (r.choice ? "<span>Chose: " + esc(r.choice) + "</span>" : "") +
+    (r.at ? "<span>" + esc(when(r.at)) + "</span>" : "") + "</div>" +
+    (r.comment ? "<p>" + esc(r.comment) + "</p>" : '<p class="lede">No words, only a reading.</p>') +
+    '</div><button class="x" data-fbdel="' + esc(r.id) +
+    '" title="Take this answer off the record" aria-label="Take this answer off the record">&times;</button></div>';
+}
+async function fbLoad(q, btn){
+  if (btn) sending(btn, "Reading");
+  try{
+    const r = await api("feedbackAll", { q: q || "" });
+    fbRows = r;
+    if (btn) sent(btn);
+    put("fbBody",
+      '<div class="grp">' + (q ? 'Answers matching "' + esc(q) + '"' : "Every answer") +
+        '<span class="ref" style="margin-left:auto">' + r.total +
+        (r.total === 1 ? " answer" : " answers") + ", " + r.people +
+        (r.people === 1 ? " person" : " people") + "</span></div>" +
+      (r.rows.length
+        ? r.rows.map(x => fbCard(x, r.faces)).join("") +
+          (r.total > r.rows.length
+            ? '<p class="lede">Showing the ' + r.rows.length + " most recent of " + r.total +
+              ". Search to narrow it down.</p>" : "")
+        : '<div class="card"><p>Nothing matches.</p></div>'));
+  }catch(e){ if (btn) sent(btn); fail(e); }
+}
+function fbCsv(){
+  if (!fbRows || !fbRows.rows.length) return toast("Read something first.");
+  const q = v => '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
+  const head = ["When","Name","Email","CRSid","Subject or question","Month","Score","Chose","What they wrote"];
+  const body = fbRows.rows.map(r => [r.at ? new Date(r.at).toISOString() : "", r.name, r.email, r.crsid,
+    r.where, r.month, r.score || "", r.choice, r.comment].map(q).join(","));
+  const csv = head.map(q).join(",") + "\n" + body.join("\n");
+  const url = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+  const a = document.createElement("a");
+  a.href = url; a.download = "MCR feedback, named.csv"; a.rel = "noopener";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 60000);
+  toast("Downloading. It has names in it: keep it off shared drives.");
+}
+/* The three locks, drawn as three steps so it is obvious what is being
+   opened and how far through you are. */
+function revealLeft(){ return Math.max(0, Math.round((revealUntil - Date.now()) / 1000)); }
+function renderFbLocks(){
+  if (!S.me.president){
+    return put("fbLocks",
+      '<div class="lockbox"><h4>Who gave which score</h4>' +
+      '<p class="lede" style="margin:0">That one is the President’s alone. Not the Vice-President, not an ' +
+      "administrator, and not anybody the President adds to a list: the address itself. It is a separate " +
+      "door from this page, behind three locks, and every time it is opened it is written down.</p></div>");
+  }
+  const armed = revealLeft() > 0;
+  const say = S.say || {};
+  const items = []
+    .concat((say.list || []).map(t => ({ kind: "topic", id: t.key, name: "Subject: " + t.name })))
+    /* A question asked without names is not on this list, because there is
+       nothing behind it to open. Offering it and then refusing would teach the
+       President that the lock is a formality. */
+    .concat((say.soundings || []).filter(q => !q.nameless)
+      .map(q => ({ kind: "question", id: q.id, name: "Question: " + q.title })))
+    .concat((S.motions || []).map(m => ({ kind: "motion", id: m.id, name: "Motion: " + m.title })));
+  put("fbLocks",
+    '<div class="lockbox"><h4>Who gave which score</h4>' +
+    '<p class="lede">This opens the names against individual answers and votes. It is the one thing in this ' +
+    "app that can identify a person by what they think, so it asks three times and writes every opening " +
+    "down. Open it for a reason you could state at a meeting, and for no other. " +
+    "Questions the committee asked <b>without names</b> are not on this list and cannot be put on it: " +
+    "no address was written against those answers in the first place.</p>" +
+    '<div class="lockstep done"><i>1</i><span>Signed in as the President, <b>' + esc(S.me.email) +
+      "</b>. Checked again by the server on every call.</span></div>" +
+    '<div class="lockstep' + (armed ? " done" : "") + '"><i>2</i><span>' +
+      (armed ? "Unlocked. It closes itself in <b id=\"rvLeft\">" + revealLeft() + "</b> seconds."
+             : "Type your CRSid to unlock. The unlock lasts two minutes and can be spent once.") +
+      "</span></div>" +
+    (armed ? "" :
+      '<div class="acts" style="margin:6px 0 0"><input id="rvPhrase" class="bigin" style="max-width:200px" ' +
+      'placeholder="your CRSid" autocomplete="off" autocapitalize="none" spellcheck="false">' +
+      '<button class="btn crimson sm" id="bRvArm">Unlock</button></div>') +
+    '<div class="lockstep"><i>3</i><span>Choose what to open and confirm. Once opened, the unlock is spent ' +
+      "and has to be done again.</span></div>" +
+    (armed
+      ? '<label class="f"><span>What to open</span><select id="rvWhat">' +
+          items.map(i => '<option value="' + esc(i.kind + "|" + i.id) + '">' + esc(i.name) + "</option>").join("") +
+          "</select></label>" +
+        '<label class="check"><input type="checkbox" id="rvOk"> I am opening this for a reason I could state ' +
+          "at a meeting, and I will not pass any name on.</label>" +
+        '<div class="acts"><button class="btn crimson sm" id="bRvGo">Open it</button></div>'
+      : "") +
+    "</div>");
+  clearInterval(revealTimer);
+  if (armed) revealTimer = setInterval(() => {
+    const el = $("rvLeft");
+    if (!el) return clearInterval(revealTimer);
+    const n = revealLeft();
+    el.textContent = n;
+    if (!n){ clearInterval(revealTimer); revealNonce = ""; renderFbLocks(); }
+  }, 1000);
+}
+function showRoll(r){
+  sheet("Who said what: " + r.heading,
+    '<div class="card"><p class="lede" style="margin:0">Opened at ' + esc(when(r.at)) +
+      ". This has been written to the log. The unlock is now spent.</p></div>" +
+    (r.rows.length
+      ? r.rows.map(x =>
+          '<div class="fbrow"><div class="fbwho"><b>' + esc(x.name) + "</b><span>" + esc(x.crsid) +
+          '</span></div><div class="fbwhat"><div class="fbmeta"><span>' +
+          esc(x.answer || "no answer recorded") + "</span>" +
+          (x.at ? "<span>" + esc(when(x.at)) + "</span>" : "") + "</div>" +
+          (x.comment ? "<p>" + esc(x.comment) + "</p>" : "") + "</div></div>").join("")
+      : '<div class="card"><p>Nobody has answered that one.</p></div>') +
+    '<div class="acts"><button class="btn ghost" data-close>Close this</button></div>',
+    el => el.setAttribute("data-nowords", ""));
+}
+
+
+/* ---------- the committee's own controls, on one listener ----------
+   A second listener rather than fourteen more attributes on the one above,
+   because everything here belongs to the committee and can be reasoned about
+   in one place. */
+document.addEventListener("click", async e => {
+  if (!S) return;
+  const t = e.target.closest("[data-saypub],[data-linkedit],[data-linkdel],[data-purge]," +
+    "[data-fbdel],[data-wordsoff],[data-quietdel]");
+  if (!t) return;
+  const d = t.dataset;
+  try{
+    if (t.hasAttribute("data-wordsoff")) return wordsToggle(false);
+
+    /* Publishing a subject or a question. Until this is on, a member sees
+       their own answer and nothing else at all. */
+    if (t.hasAttribute("data-saypub")){
+      const on = d.pubon === "1";
+      sending(t, on ? "Publishing" : "Taking it back");
+      try{
+        const r = await api("sayPublish", { kind: d.pubkind, key: d.saypub, on: on });
+        S.say = r.say || S.say;
+        S.sayPublish = r.sayPublish || {};
+        sent(t);
+        renderSay(); renderPubList(); renderBadges();
+        toast(on ? "Published. The room can see the results now."
+                 : "Taken back. Only the committee sees the results.");
+      }catch(err){ sent(t); fail(err); }
+      return;
+    }
+    if (t.hasAttribute("data-linkedit")) return openLinkEditor(d.linkedit);
+    if (t.hasAttribute("data-linkdel")){
+      const l = (S.links || []).filter(x => x.key === d.linkdel)[0];
+      if (!confirm("Delete " + ((l && l.name) || "this link") + " from the shelf? There is no undo.")) return;
+      sending(t, "Deleting");
+      try{
+        const r = await api("deleteLink", { key: d.linkdel });
+        S.links = r.links || [];
+        sent(t);
+        renderLinkList(); renderLodgeShelf();
+        toast("Off the shelf.");
+      }catch(err){ sent(t); fail(err); }
+      return;
+    }
+    if (t.hasAttribute("data-purge")) return purgeGo(d.purge, d.scope, t);
+    if (t.hasAttribute("data-fbdel")){
+      if (!confirm("Take this answer off the record for good? Nobody is told and there is no undo.")) return;
+      sending(t, "Deleting");
+      try{
+        await api("feedbackDelete", { id: d.fbdel });
+        sent(t);
+        await fbLoad(fbQ);
+        toast("Off the record.");
+      }catch(err){ sent(t); fail(err); }
+      return;
+    }
+  }catch(err){ fail(err); }
+});
+
+/* ---------- rewriting the words ---------- */
+on("bWords", "click", () => wordsToggle());
+on("bWordsOn", "click", () => { wordsToggle(true); go("today"); });
+on("bWordsList", "click", () => wordsList());
+on("bLinkReset", "click", async e => {
+  if (!confirm("Put the original list of links back? Anything you have added is removed and anything " +
+    "you have changed goes back to how it shipped.")) return;
+  const b = e.currentTarget;
+  spin(b, "Restoring");
+  try{
+    const r = await api("resetLinks");
+    S.links = r.links || [];
+    unspin(b);
+    renderLinkList(); renderLodgeShelf();
+    toast("The original shelf is back.");
+  }catch(err){ unspin(b); fail(err); }
+});
+on("bVp", "click", async e => {
+  const b = e.currentTarget;
+  spin(b, "Saving");
+  try{
+    const d = await api("saveSettings", { vpEmails: $("vpText").value });
+    S.vps = d.vps || []; S.vpExtra = d.vpExtra || [];
+    unspin(b);
+    renderVpList();
+    toast("Saved.");
+  }catch(err){ unspin(b); fail(err); }
+});
+
+/* ---------- the feedback desk ---------- */
+on("bFbGo", "click", e => { fbQ = $("fbQ").value.trim(); fbLoad(fbQ, e.currentTarget); });
+on("bFbAll", "click", e => { fbQ = ""; if ($("fbQ")) $("fbQ").value = ""; fbLoad("", e.currentTarget); });
+on("bFbCsv", "click", () => fbCsv());
+on("bFbLog", "click", async e => {
+  const b = e.currentTarget;
+  sending(b, "Reading");
+  try{
+    const r = await api("revealLog");
+    sent(b);
+    sheet("Who has opened this",
+      '<div class="card"><p class="lede" style="margin:0">Every time the named answers or the names ' +
+      "against a vote are opened, it is written here. The app gives nobody a way to clear it.</p></div>" +
+      ((r.log || []).length
+        ? r.log.map(x => '<div class="rowline"><div class="t"><b>' + esc(x.what) + "</b><span>" +
+            esc(x.by) + " &middot; " + esc(when(x.at)) + "</span></div></div>").join("")
+        : '<div class="card"><p>Nothing has been opened yet.</p></div>') +
+      '<div class="acts"><button class="btn ghost" data-close>Close this</button></div>',
+      el => el.setAttribute("data-nowords", ""));
+  }catch(err){ sent(b); fail(err); }
+});
+/* Lock two: arm it. */
+document.addEventListener("click", async e => {
+  const b = e.target.closest("#bRvArm");
+  if (!b || !S) return;
+  const phrase = ($("rvPhrase") || {}).value || "";
+  sending(b, "Unlocking");
+  try{
+    const r = await api("revealArm", { phrase: phrase });
+    revealNonce = r.nonce;
+    revealUntil = Date.now() + (r.seconds || 120) * 1000;
+    sent(b);
+    renderFbLocks();
+    toast("Unlocked for two minutes. It can be spent once.");
+  }catch(err){ sent(b); fail(err); }
+});
+/* Lock three: spend it. */
+document.addEventListener("click", async e => {
+  const b = e.target.closest("#bRvGo");
+  if (!b || !S) return;
+  if (!$("rvOk") || !$("rvOk").checked) return toast("Tick the line above first.");
+  const pick = String(($("rvWhat") || {}).value || "").split("|");
+  if (pick.length < 2) return toast("Choose what to open first.");
+  sending(b, "Opening");
+  try{
+    const r = await api("voteRoll", { kind: pick[0], id: pick[1], nonce: revealNonce, confirm: true });
+    revealNonce = ""; revealUntil = 0;
+    sent(b);
+    renderFbLocks();
+    showRoll(r);
+  }catch(err){ sent(b); fail(err); revealNonce = ""; revealUntil = 0; renderFbLocks(); }
+});
 
 /* ---------- off we go ---------- */
 document.addEventListener("visibilitychange", () => { if (!document.hidden && S) pollTick(); });
