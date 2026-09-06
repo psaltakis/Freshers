@@ -1378,32 +1378,61 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--crimson)
    the side. The second list is dead until the first has been answered, so the
    order the questions come in is never in doubt. */
 .axis{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
-.axis button{flex:1 1 130px;display:flex;gap:10px;align-items:center;background:var(--paper);
-  border:1.5px solid var(--cream-3);border-radius:14px;padding:11px 13px;cursor:pointer;font:inherit;
-  color:var(--ink);transition:transform .16s cubic-bezier(.2,.8,.3,1.4),background .16s,border-color .16s}
+.axis{gap:6px}
+.axis button{flex:1 1 0;min-width:0;display:flex;gap:6px;align-items:center;justify-content:center;background:var(--paper);
+  border:1px solid var(--cream-3);border-radius:9px;padding:7px 9px;cursor:pointer;font:inherit;
+  color:var(--ink);white-space:nowrap;transition:transform .16s cubic-bezier(.2,.8,.3,1.4),background .16s,border-color .16s}
 .axis button:hover{border-color:var(--crimson)}
-.axis button .em{font-size:19px;line-height:1;flex:none}
-.axis button b{font-family:var(--display);font-weight:600;font-size:15.5px}
-.axis button small{display:block;color:var(--ink-soft);font-size:11.5px;margin-top:1px}
+.axis button .em{font-size:14px;line-height:1;flex:none}
+.axis button b{font-family:var(--ui);font-weight:700;font-size:12.5px}
+.axis button i{font-style:normal;font-size:10.5px;color:var(--ink-soft)}
+.axis button[aria-pressed="true"] i{color:rgba(255,255,255,.8)}
 .axis button[aria-pressed="true"]{background:var(--crimson);border-color:var(--crimson);color:#fff}
-.axis button[aria-pressed="true"] small{color:rgba(255,255,255,.82)}
 .axis button:active{transform:scale(.985)}
-.axk{display:block;margin-top:14px}
+.axk{display:block;margin-top:9px}
+/* The conditions are long because they have to be; they can at least be set
+   smaller than the thing being chosen. */
+.rsvpextra .agreebox span{font-size:12px;line-height:1.42}
+.rsvpbox .rsvpextra{margin-top:9px;padding-top:9px}
+.rsvpbox .rsvpextra .hint{margin-top:6px;font-size:11.5px}
 .pick.sizes button{padding:11px 14px;align-items:center}
 .pick.sizes button .em{font-family:var(--mono);font-size:11px;font-weight:700;width:auto;min-width:34px;
   text-align:center;color:var(--crimson-3);background:var(--cream-2);border-radius:999px;padding:3px 7px}
 .pick.sizes button[aria-pressed="true"] .em{background:rgba(255,255,255,.22);color:#fff}
+/* ---------- choosing a gown ----------
+   Eight lengths, two degrees and a waiting list is a lot to put in front of
+   somebody standing in a corridor. Each length is therefore one line: the
+   height, what the gown is, and how many are left. On anything wider than a
+   phone they run in two columns, so the whole cupboard is one glance. */
+.sizes{display:grid;grid-template-columns:1fr 1fr;gap:4px 6px;margin-top:2px}
+@media (max-width:400px){ .sizes{grid-template-columns:1fr} }
+.sizes.locked{opacity:.45;pointer-events:none}
+.sizes .sz{display:flex;align-items:center;gap:7px;width:100%;text-align:left;
+  background:var(--paper);border:1px solid var(--cream-3);border-radius:9px;
+  padding:6px 8px;cursor:pointer;font:inherit;color:var(--ink);
+  transition:transform .14s cubic-bezier(.2,.8,.3,1.4),background .14s,border-color .14s}
+.sizes .sz:hover:not([disabled]){border-color:var(--crimson)}
+.sizes .sz:active:not([disabled]){transform:scale(.99)}
+.sizes .sz .t{flex:1;min-width:0;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sizes .sz .t b{font-family:var(--ui);font-weight:700;font-size:12.5px;letter-spacing:-.01em}
+.sizes .sz .t i{font-style:normal;color:var(--ink-soft);font-size:10.5px;margin-left:4px}
+.sizes .sz .r{flex:none;font-family:var(--mono);font-size:9px;letter-spacing:.04em;
+  text-transform:uppercase;font-weight:700;padding:2px 5px;border-radius:999px;
+  background:var(--cream-2);color:var(--ink-soft);white-space:nowrap}
+.sizes .sz .r.ok{background:rgba(63,122,87,.16);color:var(--moss)}
+.sizes .sz .r.queue{background:var(--gold-2);color:var(--gold-ink)}
+.sizes .sz .r.out{background:var(--cream-2);color:var(--ink-soft)}
+.sizes .sz .r.day{background:var(--ink);color:var(--cream)}
+.sizes .sz.wait{border-color:var(--gold)}
 /* The open list is not a gown, so it does not look like one. */
-.pick.sizes button.onday{border-style:dashed;border-color:var(--ink-soft);background:var(--cream-2)}
-.pick.sizes button.onday .em{background:var(--ink);color:var(--cream)}
-.pick.sizes button.onday[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--cream);border-style:solid}
-.pick.sizes button.onday[aria-pressed="true"] .em{background:rgba(255,255,255,.22)}
+.sizes .sz.onday{border-style:dashed;border-color:var(--ink-soft)}
+@media (min-width:520px){ .sizes .sz.onday{grid-column:1/-1} }
+.sizes .sz[aria-pressed="true"]{background:var(--crimson);border-color:var(--crimson);color:#fff}
+.sizes .sz[aria-pressed="true"] .t i{color:rgba(255,255,255,.78)}
+.sizes .sz[aria-pressed="true"] .r{background:rgba(255,255,255,.22);color:#fff}
+.sizes .sz.onday[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);border-style:solid}
+.sizes .sz[disabled]{opacity:.4;cursor:not-allowed}
 .gowngrid tr.onday td,.gowngrid tr.onday th{border-top:1px dashed var(--cream-3);color:var(--ink-soft)}
-.pick.sizes button.wait{border-color:var(--gold);background:var(--gold-2)}
-.pick.sizes button.wait .em{background:var(--gold);color:var(--gold-ink)}
-.pick.sizes button.wait[aria-pressed="true"]{background:var(--gold-ink);border-color:var(--gold-ink);color:var(--cream)}
-.pick.sizes button[disabled]{opacity:.45;cursor:not-allowed}
-.pick.sizes.locked{opacity:.5;pointer-events:none}
 .gowngrid{width:100%;border-collapse:collapse;margin-top:8px;font-size:12.5px}
 .gowngrid th,.gowngrid td{padding:6px 8px;text-align:center;border-bottom:1px solid var(--cream-2)}
 .gowngrid th{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);font-weight:600}
@@ -3034,38 +3063,56 @@ function axisPicker(ev){
     return st.cap > 0 || st.going > 0 || st.waiting > 0 || held === key;
   });
   const emoji = ev.slotEmoji || "\u{1F393}";
+  /* A size is written '168-173 cm (127 cm gown)'. The height is what somebody
+     is choosing by, so it leads in bold; what the gown actually is follows it,
+     quietly, on the same line. Splitting it here is what lets a row be one line
+     tall instead of three, which is what turns eight of them from a wall into
+     a list you can read down. */
+  const splitBand = v => {
+    const m = String(v).match(/^(.*?)\s*\(([^()]*)\)\s*$/);
+    if (!m) return [String(v), ""];
+    /* Everything in this list is a gown, so the word does not need saying on
+       every line of it; nor does 'and over' when the number already says so. */
+    const note = m[2].replace(/\s*gowns?$/i, "").replace(/,\s*narrower cut/i, " narrow");
+    return [m[1].replace(/\s+and over$/i, "+"), note];
+  };
   const one = '<div class="axis" id="evAx1">' + ones.map(v =>
     '<button type="button" data-ax1="' + esc(v) + '" aria-pressed="' + (evAxis1 === v) + '">' +
-      '<span class="em">' + esc(emoji) + '</span><span><b>' + esc(v) + '</b>' +
-      '<small>' + esc(v === heldParts[0] ? "what you chose" : "degree you hold") + '</small></span></button>').join("") + '</div>';
+      '<span class="em">' + esc(emoji) + '</span><b>' + esc(splitBand(v)[0]) + '</b>' +
+      (splitBand(v)[1] ? '<i>' + esc(splitBand(v)[1]) + '</i>' : '') + '</button>').join("") + '</div>';
   const two = '<span class="k axk">' + esc(ax[1] || "Which one?") + '</span>' +
-    '<div class="pick sizes' + (evAxis1 ? "" : " locked") + '" id="evAx2">' + twos.map(v => {
+    '<div class="sizes' + (evAxis1 ? "" : " locked") + '" id="evAx2">' + twos.map(v => {
       const key = slotJoin(deg, v);
       const st = slotState(ev, key);
       const yours = held === key;
       const onDay = isTryBand(ev, v);
-      const cls = (onDay ? " onday" : "") + (st.canQueue && !yours ? " wait" : "");
+      const cls = ["sz", onDay ? "onday" : "", st.canQueue && !yours ? "wait" : "",
+                   yours ? "yours" : ""].filter(Boolean).join(" ");
       /* The committee buy gowns like everybody else, so a full square is shut
          to them too: the only thing they are ever excused is a headcount. */
       const off = !evAxis1 || (!st.exists) || (st.full && !st.canQueue && !yours);
-      const pill = !st.limited ? "\u2014" : String(st.left);
-      const line = !st.exists ? "not stocked"
-        : onDay ? (st.left > 0
-            ? st.left + " of " + st.cap + " places left on the list \u2014 nothing is put by, you are fitted from what is left"
-            : "The list for the day is full")
-        : !st.limited ? "no limit"
-        : st.cap === 0 ? "none of these in the cupboard" + (st.canQueue ? " \u2014 join the waiting list (" + st.waiting + " of " + st.wait + " waiting)" : "")
-        : st.left > 0 ? st.left + (st.cap > 1 ? " of " + st.cap : "") + " left"
-        : st.canQueue ? "All gone \u2014 join the waiting list (" + st.waiting + " of " + st.wait + " waiting)"
-        : st.queueFull ? "All gone, and the waiting list is full"
-        : "All gone";
-      return '<button type="button" class="' + cls.trim() + '" data-ax2="' + esc(v) + '" aria-pressed="' +
+      const parts = splitBand(v);
+      /* The count on the right is a glance, not a sentence. */
+      const right = !st.exists ? "\u2014"
+        : onDay ? (st.left > 0 ? st.left + " of " + st.cap : "full")
+        : !st.limited ? "\u2014"
+        : st.left > 0 ? st.left + " left"
+        : st.canQueue ? "wait " + st.waiting + "/" + st.wait
+        : "gone";
+      const tone = !st.exists ? "out" : onDay ? "day"
+        : st.left > 0 ? "ok" : st.canQueue ? "queue" : "out";
+      return '<button type="button" class="' + cls + '" data-ax2="' + esc(v) + '" aria-pressed="' +
         (evAxis2 === v) + '"' + (off ? " disabled" : "") + '>' +
-        '<span class="em">' + esc(pill) + '</span><span><b>' + esc(v) + '</b><small>' + esc(line) + '</small></span></button>';
+        '<span class="t"><b>' + esc(parts[0]) + '</b>' +
+        (parts[1] ? '<i>' + esc(parts[1]) + '</i>' : '') + '</span>' +
+        '<span class="r ' + tone + '">' + esc(right) + '</span></button>';
     }).join("") + '</div>';
-  const hint = !evAxis1 ? "Choose the degree you already hold, and the sizes the MCR has in it open below."
-    : !evAxis2 ? "Now the entry nearest your height. The number on the left is how many of that one are left. If none of them is your size, take the last row and come to be fitted on the day."
-    : ev.slotNote || "";
+  /* One short line, and only while it is still telling them something. */
+  const hint = !evAxis1 ? "Pick the degree you hold."
+    : !evAxis2 ? "Now the length nearest your height."
+    : (isTryBand(ev, evAxis2)
+        ? "Nothing is put by \u2014 you are fitted on the day."
+        : "\u00a3" + ((S.gown && S.gown.price) || 45) + " if it fits when you try it on.");
   return '<span class="k">' + esc(ev.slotLabel || "Which one?") + '</span>' + one + two +
     (hint ? '<p class="hint">' + esc(hint) + '</p>' : '');
 }
