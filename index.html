@@ -844,6 +844,24 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 .pips i.yours{background:var(--gold);box-shadow:0 0 0 2px rgba(235,183,83,.34)}
 .pipmore{font-family:var(--mono);font-size:0.64rem;color:var(--cream-4);font-weight:700;margin-left:3px}
 .swline{display:flex;flex-wrap:wrap;gap:var(--g2);font-size:.78rem;color:var(--cream-4);font-weight:600}
+/* WHEN THE TICKETS GO OUT.
+   The line the whole page exists to answer, so it is a band of its own rather
+   than another item in a row of small print. Gold while it is still a promise,
+   quieter once it names a day, so a page of halls shows at a glance which of
+   them have a date and which are still to be announced. */
+.tickline{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin:10px 0 0;
+  padding:8px 12px;border-radius:var(--r3);background:rgba(0,0,0,.055)}
+.tickline .tl{font-family:var(--mono);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;
+  font-weight:700;color:var(--ink-soft)}
+.tickline b{font-size:.92rem;font-weight:700;color:var(--ink)}
+.tickline i{font-style:normal;font-size:.68rem;color:var(--ink-soft);margin-left:auto}
+/* Still a promise rather than a date: a warmer ground, and ink dark enough to
+   read on it. Both of these sit on the paper of the card, not on the crimson
+   of the page, so they are painted for paper -- cream on cream was the first
+   attempt and it could not be read at all. */
+.tickline.soon{background:rgba(226,169,60,.28)}
+.tickline.soon .tl,.tickline.soon i{color:#6B4A05}
+.tickline.soon b{color:var(--gold-ink)}
 .swline b{color:var(--cream);font-family:var(--display);font-size:1rem;font-weight:600;letter-spacing:-.02em}
 .swn{margin:var(--g) 0 0;font-size:.86rem;color:var(--cream-2);line-height:1.58;white-space:pre-wrap}
 /* Your own place, and the clock on it. This block sits inside the swap card,
@@ -2400,7 +2418,7 @@ html[data-words="on"] .wordgone{display:inline-block;min-width:26px;height:1em;
 
   <!-- ===================== SWAPS ===================== -->
   <section id="v-swaps" hidden>
-    <div class="vh"><h2><i>Formals</i></h2><span class="note">Swaps with other colleges, and our own themed halls</span>
+    <div class="vh"><h2><i>Formals</i></h2><span class="note">Swaps with other colleges, and our own halls</span>
       <div class="right"><button class="btn gold sm" id="bNewSwap" data-committee hidden>Add a swap</button></div></div>
     <div class="seg" id="formalSeg" style="margin-bottom:14px"></div>
     <div id="swapList"></div>
@@ -3325,7 +3343,7 @@ function loadGsi(again){
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbzM5zmKsD7UBnfBfSqoeSGnz1rLEWkEDV65928TOjbYJQJpGnRlFnuW_BdwCPeLNBA3/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwV4jhq-_5WXhuBwAUVlzGr7OIng2dMMOD7yPriWZZDsPgesBR75XEuFGcj2Qm9Ozv2/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -7255,6 +7273,13 @@ function openEventEditor(id){
     '<label class="f"><span>Terms people must accept, if any</span><textarea id="eTerms" maxlength="900" ' +
       'placeholder="Left blank, nobody is asked to agree to anything. Filled in, this appears before the tick and has to be accepted.">' +
       esc(ev ? (ev.terms || "") : "") + "</textarea></label>" +
+    /* Halls are booked on uPay rather than here, so the one thing people come
+       to the page for is when the tickets go out. Free text, because "the
+       Monday of second week" is an answer and a date picker cannot hold it.
+       Left empty on a hall, the card says "Announcing soon". */
+    '<label class="f"><span>When the tickets go out, for a formal hall</span>' +
+      '<input id="eTickets" maxlength="120" value="' + v("ticketsAt") +
+      '" placeholder="Announcing soon"></label>' +
     '<label class="f"><span>Bring</span><input id="eBring" maxlength="220" value="' + v("bring") + '"></label>' +
     '<label class="f"><span>Theme or dress</span><input id="eDress" maxlength="120" value="' + v("dress") + '"></label>' +
     '<label class="check"><input type="checkbox" id="eCost"' + (ev && ev.cost ? " checked" : "") + "> Bring money</label>" +
@@ -7293,6 +7318,7 @@ function openEventEditor(id){
             tags: $("eTags").value, capacity: $("eCap").value, signupBy: $("eBy").value,
             rsvpMode: $("eMode").value, allocation: $("eAlloc").value,
             bring: $("eBring").value, dress: $("eDress").value,
+            ticketsAt: $("eTickets") ? $("eTickets").value : "",
             cost: $("eCost").checked, price: $("ePrice") ? $("ePrice").value : "",
             leads: $("eLeads").value, terms: $("eTerms").value } });
           closeSheet();
@@ -7500,7 +7526,7 @@ function applySeason(){
    at 75% tells you nothing about whether you can still get in. */
 let swapEdit = "", swapPast = false;
 /* Formals come in two sorts and they read the same way, so they sit under one
-   heading with a switch: a swap is dinner at another college, a themed hall is
+   heading with a switch: a swap is dinner at another college, one of our halls is
    one of ours. The halls are simply the events the committee has tagged as
    formals, so nothing new has to be kept anywhere. */
 let formalTab = "swaps";
@@ -7518,7 +7544,7 @@ function renderFormalSeg(){
   put("formalSeg",
     '<button data-formal="swaps" aria-pressed="' + (formalTab === "swaps") + '">Swaps' +
       (nS ? " &middot; " + nS : "") + '</button>' +
-    '<button data-formal="halls" aria-pressed="' + (formalTab === "halls") + '">Our themed halls' +
+    '<button data-formal="halls" aria-pressed="' + (formalTab === "halls") + '">Our halls' +
       (nH ? " &middot; " + nH : "") + '</button>');
   const sw = $("swapList"), hl = $("hallList");
   if (sw) sw.hidden = formalTab !== "swaps";
@@ -7532,21 +7558,30 @@ function renderHalls(){
   const list = hallFormals();
   put("hallList", list.length
     ? list.map(hallCard).join("")
-    : '<div class="card"><p>No themed halls in the diary yet. The committee adds them as events ' +
+    : '<div class="card"><p>No halls in the diary yet. The committee adds them as events ' +
       'tagged <span class="mono">formal</span>, and they appear here as well as on the calendar.</p></div>');
 }
-/* Laid out like a swap, because it is the same errand: a dinner, a date, a
-   price, and a way of putting your name down. */
-/* Built from the same pieces as a swap, so the two read as one thing seen
-   twice rather than two designs. */
+/* A HALL IS NOT BOOKED HERE, SO IT DOES NOT ASK YOU TO.
+   A swap is run by the MCR, so the app takes the names. A formal hall is run
+   by the college and the tickets go on uPay, so this card had no business
+   counting who is going or offering a place: the pips, the "0 going" and the
+   "Put your name down" button all described a queue that does not exist here
+   and that nobody in it would ever be admitted from.
+
+   What somebody actually wants to know about a hall is when the tickets go
+   out, so that is the line that replaced them. It is free text per hall,
+   starts as "Announcing soon", and the committee replaces it from the event
+   editor -- reachable from the card itself, since this is where they are
+   looking when they decide.
+
+   Every hall is its own event. Nothing here is a repeating series: they are
+   seven separate rows with seven separate ids, so a theme, a price, a dress
+   code, a time or a ticket date set on one touches none of the others. */
 function hallCard(e){
-  const c = e.counts || {};
-  const going = Number(c.going || 0);
-  const cap = Number(e.capacity || 0);
-  const left = cap ? Math.max(0, cap - going) : null;
-  const mine = (S.mine || {})[e.id];
-  const going_ = mine && mine.status === "going";
-  return '<div class="swap hall' + (going_ ? " mine" : "") + '">' +
+  const tickets = String(e.ticketsAt || "").trim() || "Announcing soon";
+  const soon = /^announcing soon$/i.test(tickets);
+  const off = e.status === "cancelled";
+  return '<div class="swap hall' + (off ? " past" : "") + '">' +
     '<div class="swtop"><div class="swmain">' +
       '<b class="swcol">' + esc(e.title) + "</b>" +
       '<span class="swwhen">' + esc(longDate(e.date)) +
@@ -7555,23 +7590,25 @@ function hallCard(e){
     "</div>" +
     '<div class="swside">' +
       (e.price ? '<b class="swprice">' + esc(e.price) + "</b><span>a place</span>"
-               : '<b class="swprice free">Free</b><span>a place</span>') +
+               : '<b class="swprice">On uPay</b><span>a place</span>') +
     "</div></div>" +
-    (cap ? '<div class="pips" aria-label="' + going + " of " + cap + ' places taken">' +
-      Array.from({ length: Math.min(cap, 40) }, (_, i) =>
-        '<i class="' + (i < going ? (going_ && i === going - 1 ? "yours" : "gone") : "") + '"></i>').join("") +
-      (cap > 40 ? '<span class="pipmore">+' + (cap - 40) + "</span>" : "") + "</div>" : "") +
-    '<div class="swline"><span><b>' + going + "</b> going</span>" +
-      (left !== null ? "<span><b>" + left + "</b> " + (left === 1 ? "place left" : "places left") + "</span>" : "") +
-      (e.dress ? "<span>" + esc(e.dress) + "</span>" : "") + "</div>" +
+    (off ? '<p class="swn"><b>Cancelled.</b>' + (e.note ? " " + esc(e.note) : "") + "</p>" : "") +
+    /* The one thing anybody opens this page to find out. */
+    '<div class="tickline' + (soon ? " soon" : "") + '">' +
+      '<span class="tl">Tickets</span><b>' + esc(tickets) + "</b>" +
+      '<i>on uPay</i></div>' +
+    (e.dress ? '<div class="swline"><span>' + esc(e.dress) + "</span></div>" : "") +
     (e.desc ? '<p class="swn">' + esc(String(e.desc).split("\n")[0]) + "</p>" : "") +
-    /* data-ev is matched by neither delegated listener, so this button did
-       nothing at all. It opens the hall, which is what its label says. */
-    '<div class="acts"><button class="btn ' + (going_ ? "ghost" : "gold") + ' sm" data-open="' + esc(e.id) + '">' +
-      (going_ ? "You are going, open it" : "Put your name down") + "</button></div>" +
+    '<div class="acts"><button class="btn ghost sm" data-open="' + esc(e.id) + '">Open it</button>' +
+      /* Edited from where it is read. Each hall is its own event, so this
+         opens that one and changes nothing else. */
+      (isCommittee()
+        ? '<button class="btn gold sm" data-edit="' + esc(e.id) + '">Edit this hall</button>'
+        : "") +
+    "</div>" +
     "</div>";
 }
-/* A themed hall is an event with the tag on it, so this is the ordinary event
+/* One of our halls is an event with the tag on it, so this is the ordinary event
    editor with the tag and a sensible starting point filled in. Anything the
    committee can do to an event, they can do to a hall. */
 function newHall(){
