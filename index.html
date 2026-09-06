@@ -1815,6 +1815,10 @@ button.busy{cursor:progress}
    itself, because it changes what somebody is willing to write and they
    should know it before they start rather than after. */
 .sound .st.hush{background:rgba(99,173,238,.18);color:#1B4F7A}
+/* The antlers lift a touch as it bounds, which is most of what makes the
+   whole thing read as alive rather than as a sliding picture. */
+#deer .rack{transform-origin:80% 14%;animation:deerRack .38s ease-in-out infinite}
+@keyframes deerRack{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
 .sound .note{font-size:.85rem;color:var(--ink-soft);margin:0 0 11px;line-height:1.55}
 .opts{display:flex;flex-direction:column;gap:6px}
 .opts button{display:flex;align-items:center;gap:10px;background:var(--cream-2);border:0;border-radius:11px;
@@ -2189,14 +2193,14 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
    asked for less motion.
    ============================================================ */
 #deer{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);left:0;
-  width:64px;height:52px;pointer-events:none;z-index:3;opacity:0;
-  color:var(--cream-3);filter:drop-shadow(0 3px 6px rgba(0,0,0,.35))}
+  width:72px;height:56px;pointer-events:none;z-index:3;opacity:0;
+  color:var(--cream-2);filter:drop-shadow(0 3px 7px rgba(0,0,0,.4))}
 #deer svg{width:100%;height:100%;display:block}
 #deer.run{animation:deerBy 1.5s cubic-bezier(.32,.06,.28,1) both}
 #deer.run.back{animation-name:deerByBack}
-#deer .legf,#deer .legb{transform-origin:50% 30%;animation:deerTrot .19s linear infinite}
+#deer .legf,#deer .legb{transform-origin:50% 64%;animation:deerTrot .19s linear infinite}
 #deer .legb{animation-delay:.095s}
-#deer .tail{transform-origin:88% 40%;animation:deerFlick .38s ease-in-out infinite}
+#deer .tail{transform-origin:19% 47%;animation:deerFlick .38s ease-in-out infinite}
 @keyframes deerBy{
   0%{opacity:0;transform:translateX(-14vw) translateY(0) scaleX(1)}
   12%{opacity:1}
@@ -2569,6 +2573,7 @@ html[data-words="on"] .wordgone{display:inline-block;min-width:26px;height:1em;
     <div class="card" data-committee hidden>
       <h3>The programme</h3>
       <p class="lede">One row becomes every week of term, or every second, third or fourth. Cancelling a single week leaves the rest alone.</p>
+      <p class="lede">The MCR&#8217;s own formal halls are ordinary one-off events tagged <b>formal</b>, which is all it takes for them to appear under Formals. Add one here, or edit, cancel or delete any of them from the event itself.</p>
       <div id="progNote"></div>
       <div class="acts">
         <button class="btn crimson sm" data-newseries>Add a repeating event</button>
@@ -2625,7 +2630,7 @@ html[data-words="on"] .wordgone{display:inline-block;min-width:26px;height:1em;
       <p class="lede">Nothing in Feedback is public until you publish it. Until then a member sees their own answer and no average, no count, no tally, no run of months and none of the words anybody else wrote. Publish a subject or a question one at a time, and take it back the same way.</p>
       <div id="pubList"></div>
     </div>
-    <div class="card" data-owner hidden>
+    <div class="card" data-president hidden>
       <h3>The Vice-President's address</h3>
       <p class="lede">This list is the only thing that makes somebody a Vice-President as far as this app is concerned, and only the President can write it. It used to recognise anyone whose role on the roster read Vice-President, which meant an administrator could type the words into their own row and be handed the name against every answer in college. Seeing a name is granted here, by one person, or it is not granted. These two seats, and no others, see a name against an answer in Feedback.</p>
       <div id="vpList"></div>
@@ -2659,7 +2664,7 @@ html[data-words="on"] .wordgone{display:inline-block;min-width:26px;height:1em;
   <button class="tabbtn committee" data-view="swapdesk" data-committee hidden><svg viewBox="0 0 24 24"><path d="M4 8h13l-3-3M20 16H7l3 3"/><circle cx="18.5" cy="6.5" r="2.2"/></svg>Swap desk<span class="badge" id="bdgSwapDesk" hidden>0</span></button>
   <button class="tabbtn committee" data-view="members" data-committee hidden><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>Members</button>
   <button class="tabbtn committee" data-view="fbdesk" data-names hidden><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><path d="M12 14v2"/></svg>Feedback desk</button>
-  <button class="tabbtn committee" data-view="security" data-owner hidden><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3 8.5-7 10-4-1.5-7-5-7-10V6z"/><path d="M12 9.5v3.5"/><path d="M12 15.6h.01"/></svg>Security<span class="badge" id="bdgSec" hidden>0</span></button>
+  <button class="tabbtn committee" data-view="security" data-president hidden><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3 8.5-7 10-4-1.5-7-5-7-10V6z"/><path d="M12 9.5v3.5"/><path d="M12 15.6h.01"/></svg>Security<span class="badge" id="bdgSec" hidden>0</span></button>
   <button class="tabbtn committee" data-view="admin" data-boss hidden><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3 8.5-7 10-4-1.5-7-5-7-10V6z"/><path d="M9.5 12l1.8 1.8 3.4-3.6"/></svg>Committee</button>
   <div class="railfoot" aria-hidden="true"><span class="orb" id="railOrb"></span><span class="rc"><b id="railClock"></b><i id="railTerm"></i></span></div>
 </nav>
@@ -2698,31 +2703,45 @@ html[data-words="on"] .wordgone{display:inline-block;min-width:26px;height:1em;
      across the bottom of Today. Hidden from anything that reads the page
      aloud, because it is a joke and not information. -->
 <div id="deer" aria-hidden="true" hidden>
-  <svg viewBox="0 0 64 52" fill="none" stroke="currentColor" stroke-width="2.4"
+  <!-- Laid out on a 72 by 56 grid: ground at y=49, body centred on (28,29),
+       shoulder at (39,25), head at (57,13), so the neck actually joins the two
+       and the tail actually meets the rump. -->
+  <svg viewBox="0 0 72 56" fill="none" stroke="currentColor" stroke-width="2"
        stroke-linecap="round" stroke-linejoin="round">
-    <!-- antlers, three points, because two reads as a rabbit -->
-    <path d="M48.6 8.2c-.4-3.6.5-6 2.6-7.2"/>
-    <path d="M48.9 5.2c-1.7-.9-2.7-2.2-3.1-3.9"/>
-    <path d="M50.2 2.9c1.4-.7 2.9-.8 4.4-.3"/>
-    <!-- ear -->
-    <path d="M45.6 9.6c-1.4-2-3.3-2.7-5.1-2"/>
-    <!-- head and muzzle -->
-    <path d="M44.6 14.2c-.6-3.6 1.9-6.1 5-5.8 3 .3 4.6 3 3.6 5.6-.5 1.4-1.7 2.4-3.4 3l-2.6 1"/>
-    <path d="M50.5 16.6c1.9-.2 3 .4 3.3 1.7"/>
-    <!-- neck into the shoulder -->
-    <path d="M45.2 16.4 39.6 23"/>
-    <path d="M47.6 18.6 42.6 25.4"/>
-    <!-- the body, one closed line -->
-    <path d="M39.6 23c3.6.5 5.6 2.9 5.4 6.2-.2 3.4-3 5.6-7.4 5.6H21.4c-5.2 0-8.4-2.2-8.4-5.8 0-3.7 3-6 8.6-6z"/>
-    <!-- tail -->
-    <path class="tail" d="M13.6 26.6c-2.2-.8-3.6-2.2-3.9-4.2"/>
-    <!-- legs, trotting -->
-    <g class="legb"><path d="M18.4 34.8 17.6 46.4"/><path d="M24.4 34.8 25.8 46.4"/></g>
-    <g class="legf"><path d="M32.6 34.8 31.4 46.4"/><path d="M38.4 34.6 39.8 46.4"/></g>
-    <!-- eye and two fawn spots -->
-    <circle cx="48.4" cy="12" r="1.05" fill="currentColor" stroke="none"/>
-    <circle cx="26" cy="27" r="1.1" fill="currentColor" stroke="none" opacity=".55"/>
-    <circle cx="32" cy="29.4" r="1.1" fill="currentColor" stroke="none" opacity=".55"/>
+    <!-- Antlers: two beams, each with a branch. -->
+    <g class="rack">
+      <path d="M55.6 7.2C54.6 3.4 55.4 1.2 57.6.4"/>
+      <path d="M55.2 4.6c-1.8-.8-3-2-3.6-3.8"/>
+      <path d="M59.2 7.6c.2-3.4 1.4-5.4 3.6-6.2"/>
+      <path d="M59.6 4.4c1.6-.8 3.2-1 4.8-.6"/>
+    </g>
+    <!-- Ear, swept back -->
+    <path d="M52.4 8.6c-2.4-2-4.8-2.4-6.8-1.2"/>
+    <!-- Tail, on the rump -->
+    <path class="tail" d="M13.8 26.2c-2-.8-3.3-2.2-3.7-4.1 2.1-.2 3.7.9 4.7 2.9z"
+          fill="currentColor" stroke-width="1.4"/>
+    <!-- Legs, the two pairs swinging against each other -->
+    <g class="legb" stroke-width="2.8">
+      <path d="M18 35.8 16.8 48.6"/><path d="M24.2 36.4 25.8 48.6"/>
+    </g>
+    <g class="legf" stroke-width="2.8">
+      <path d="M35.4 36.2 34 48.6"/><path d="M41 35.2 42.6 48.6"/>
+    </g>
+    <!-- Neck, joining shoulder to jaw -->
+    <path d="M38.6 24.6c2.9-4.6 6.9-9.6 11-13L55 15.8c-3.6 3.8-7.6 8.6-10.6 13z"
+          fill="currentColor"/>
+    <!-- Body -->
+    <path d="M14.5 26c2.5-3.5 9.5-5 15.5-4.8 6 .2 10.5 1.6 12.5 4.3 2 2.7 1.5 7-1.5 9.3
+             -3 2.3-9 3.2-15 3-7-.2-12-1.8-13.6-5-1.4-2.8-.4-5.2 2.1-6.8z"
+          fill="currentColor"/>
+    <!-- Head and muzzle, one shape -->
+    <path d="M50.8 14.2c-.8-4.2 2-7.2 6-7 3.8.2 6.2 3 5.8 6.4-.2 1.5.9 1.9 2.1 2.4
+             1.4.6 1.9 1.8 1.4 3-.5 1.2-1.9 1.7-3.7 1.4l-7.4-1.2c-2.8-.5-3.8-2.6-4.2-5z"
+          fill="currentColor"/>
+    <!-- Eye, and two fawn spots on the flank -->
+    <circle cx="57" cy="12.2" r="1.2" fill="var(--crimson-3,#7A0D12)" stroke="none"/>
+    <circle cx="24" cy="28.8" r="1.3" fill="var(--crimson-3,#7A0D12)" stroke="none" opacity=".34"/>
+    <circle cx="31" cy="31.4" r="1.3" fill="var(--crimson-3,#7A0D12)" stroke="none" opacity=".34"/>
   </svg>
 </div>
 <div id="toast" role="status" aria-live="polite"></div>
@@ -3306,7 +3325,7 @@ function loadGsi(again){
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbytYPnU_uSIGHEP_OaeJtLuMCaZhsCN-HJLyux9PQNasbFAhr52FFUJe419QQvn9fqv/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzM5zmKsD7UBnfBfSqoeSGnz1rLEWkEDV65928TOjbYJQJpGnRlFnuW_BdwCPeLNBA3/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -5088,7 +5107,13 @@ function renderCrow(){
     })(),
     box("Notices", fresh, fresh ? "Read what has changed" : "", "nothing new", "board"),
     box("Your requests", rooms.length, rooms.length ? rooms[0].title : "", "none open", "room"),
-    box("The room", roomToday.length, roomToday[0] ? roomToday[0].title : "", "free today", "room"),
+    /* A private booking's title no longer travels to ordinary members, so the
+       recess would have read as occupied with nothing written on the plate.
+       It says what it can: that the room is taken, and by what sort of thing. */
+    box("The room", roomToday.length,
+      roomToday[0] ? (roomToday[0].title ||
+        (roomToday[0].kind === "mcr" ? "An MCR meeting" : "A booking")) : "",
+      "free today", "room"),
     /* The wall is a fixed set of recesses, so a section that is switched off
        leaves its box out rather than leaving a nameplate on a recess that
        opens onto nothing. */
@@ -7183,7 +7208,7 @@ function renderAdmin(){
     renderPurge();
     renderWordsNote();
   }
-  if (S.me.owner) renderVpList();
+  if (S.me.president) renderVpList();
   put("adminLinks", (S.sheetUrl ? 'The spreadsheet: <a href="' + esc(safeUrl(S.sheetUrl)) +
     '" target="_blank" rel="noopener">open it</a>. ' : "") +
     (S.appUrl ? "The app lives at <code>" + esc(S.appUrl) + "</code>." : ""));
@@ -8271,7 +8296,7 @@ function go(v, scroll){
      app, and a section left reachable is a section somebody will reach. */
   if (["desk","inbox","swapdesk","members"].indexOf(v) >= 0 && !isCommittee()) v = "today";
   if (v === "admin" && !(isAdmin() || (S && S.me && S.me.names))) v = "today";
-  if (v === "security" && !(S && S.me && S.me.owner)) v = "today";
+  if (v === "security" && !(S && S.me && S.me.president)) v = "today";
   view = v;
   document.querySelectorAll("#nav .tabbtn").forEach(b =>
     b.setAttribute("aria-current", String(b.dataset.view === v)));
@@ -8414,7 +8439,7 @@ const DRAW = {
   /* Read when the tab is opened rather than shipped with the state: it is a
      list of people's failures and there is no reason for it to travel with
      every page load. */
-  security: () => { if (S.me.owner && !secLoaded) loadSecurity(null); else renderSecurity(); },
+  security: () => { if (S.me.president && !secLoaded) loadSecurity(null); else renderSecurity(); },
   admin: () => { if (!typingIn("v-admin")){ renderAdmin(); renderBumpsAdmin(); } }
 };
 let drawn = {};
@@ -8437,6 +8462,14 @@ function render(){
   document.querySelectorAll("[data-committee]").forEach(el => el.hidden = !isCommittee());
   document.querySelectorAll("[data-admin]").forEach(el => el.hidden = !isAdmin());
   document.querySelectorAll("[data-owner]").forEach(el => el.hidden = !S.me.owner);
+  /* WHY THIS IS NOT data-owner.
+     An owner is anybody on the owners list; the President is one address. The
+     Security page and the Vice-President's list are guarded by president_ on
+     the server, so gating them on owner showed a door to every administrator
+     that the server then slammed -- and, because president_ records its
+     refusals, filling the President's own log with critical entries generated
+     by his own Treasurer trying a tab she could see. */
+  document.querySelectorAll("[data-president]").forEach(el => el.hidden = !S.me.president);
   /* The two seats that see a name against an answer, and that hold the
      settings which change the app for everybody at once. */
   document.querySelectorAll("[data-names]").forEach(el => el.hidden = !S.me.names);
@@ -8940,9 +8973,24 @@ document.addEventListener("click", async e => {
     }
   }catch(err){ unspin(t); fail(err); }
 });
-/* The gate's own buttons. It sits outside the app, so it gets its own
-   listener rather than borrowing the one that needs S to exist. */
-on("gate", "click", e => {
+/* THE LISTENER FOR EVERYTHING THAT MUST WORK BEFORE THE APP DOES.
+   It was bound to #gate, on the reasoning that the sign in screen sits
+   outside the app and needs a listener that does not wait for S. The
+   reasoning was right and the binding was wrong: a listener on #gate only
+   ever sees clicks inside #gate, and two sets of buttons it handles are not
+   in there.
+
+   The boot failure card -- "Try again" and "Sign out", the only way out when
+   the app cannot start -- is drawn into #app by renderBootFail, so neither
+   button has ever done anything at the exact moment somebody most needed
+   them. And every Copy button in the app is in #app too: the officer's
+   address, the calendar link, the wiring for the other MCR apps.
+
+   Bound to the document it does what it was meant to. Every branch below is
+   matched on an attribute rather than a position, and none of them touches S
+   except the wiring copy, which already guards it, so nothing here can run
+   too early. */
+document.addEventListener("click", e => {
   if (e.target.closest("[data-tryboot]")){ e.preventDefault(); $("app").innerHTML = ""; return boot(); }
   if (e.target.closest("[data-signout]")){
     e.preventDefault();
@@ -9335,6 +9383,7 @@ on("bReseed", "click", async e => {
     if (d.resources) bits.push(d.resources + (d.resources === 1 ? " card" : " cards"));
     if (d.refreshed) bits.push(d.refreshed + (d.refreshed === 1 ? " card brought up to date" : " cards brought up to date"));
     if (d.links) bits.push(d.links + (d.links === 1 ? " link" : " links"));
+    if (d.halls) bits.push(d.halls + (d.halls === 1 ? " formal hall" : " formal halls"));
     if (d.clubs) bits.push(d.clubs + (d.clubs === 1 ? " club" : " clubs"));
     if (d.series) bits.push(d.series + (d.series === 1 ? " weekly" : " weeklies"));
     toast(bits.length ? "Added " + bits.join(", ") + "." : "Nothing was missing.");
@@ -9445,15 +9494,16 @@ function deerRun(){
 function deerTick(){
   /* Only on Today, only while the tab is in front, and never over a form
      somebody is halfway through. */
-  if (view === "today" && !document.hidden && !sheetOpen && !wordsOn && Math.random() < .55) deerRun();
+  if (view === "today" && !document.hidden && !sheetOpen && !wordsOn && Math.random() < .8) deerRun();
   deerNext();
 }
 function deerNext(){
   clearTimeout(deerTimer);
   if (deerCalm()) return;
-  /* Between a minute and a half and four minutes, so it is never a rhythm
-     anybody can predict. */
-  deerTimer = setTimeout(deerTick, 90000 + Math.random() * 150000);
+  /* Between twenty five seconds and a minute and a half, so somebody sitting
+     with Today open sees one every minute or so, and the gap between them is
+     never a rhythm anybody can predict. */
+  deerTimer = setTimeout(deerTick, 25000 + Math.random() * 65000);
 }
 /* HOW TALL THE BAR ACTUALLY IS.
    Anything that has to sit below the bar needs its height, and the height is
@@ -9479,7 +9529,7 @@ window.addEventListener("orientationchange", () => setTimeout(measureHeader, 120
 function deerStart(){
   if (deerCalm()) return;
   clearTimeout(deerTimer);
-  deerTimer = setTimeout(deerTick, 22000 + Math.random() * 40000);
+  deerTimer = setTimeout(deerTick, 6000 + Math.random() * 12000);
 }
 
 /* ============================================================
@@ -10131,7 +10181,7 @@ function secEntry(x){
     "<p>" + esc(x.detail) + "</p></div></div>";
 }
 function renderSecurity(){
-  if (!S || !S.me.owner) return;
+  if (!S || !S.me.president) return;
   const r = secData;
   if (!r) return put("secBody",
     '<div class="card"><p>Nothing read yet. Press Refresh.</p></div>');
@@ -10233,7 +10283,13 @@ function renderFbMonths(){
   if (!S || !S.me.names) return put("fbMonths", "");
   const topics = sayShown(((S.say || {}).topics) || []);
   if (!topics.length) return put("fbMonths", "");
-  const months = ((topics[0] || {}).run || []).map(r => r.month);
+  /* Nothing to draw a grid against if no month is known at all. */
+  /* From the subject's own month list, which is always sent, rather than from
+     run, which is emptied for a subject the committee has not published. A
+     grid whose columns depended on that vanished entirely the moment the
+     first subject was unpublished. */
+  const months = (topics.map(t => t.months || (t.run || []).map(r => r.month))
+    .filter(m => m.length)[0]) || [];
   const shortMonth = m => {
     const bits = String(m).split("-");
     return (MONTHNAMES[Number(bits[1]) - 1] || "").slice(0, 3) + " " + String(bits[0]).slice(2);
@@ -10248,15 +10304,17 @@ function renderFbMonths(){
       "month, and that cannot be undone. Turning it back on only affects answers given from then on.</p>" +
     '<div style="overflow-x:auto"><table class="att fbgrid"><thead><tr><th>Subject</th>' +
       months.map(m => "<th>" + esc(shortMonth(m)) + "</th>").join("") + "</tr></thead><tbody>" +
-    topics.map(t => "<tr><td><b>" + esc(t.name) + "</b></td>" +
+    (months.length ? topics.map(t => "<tr><td><b>" + esc(t.name) + "</b></td>" +
       months.map(m => {
         const off = !!((t.namelessRun || {})[m]);
         return "<td>" + '<button class="pubchip anon' + (off ? " on" : "") +
           '" data-sayanon="' + esc(t.key) + '" data-anonkind="topic" data-anonmonth="' + esc(m) +
           '" data-anonon="' + (off ? "0" : "1") + '" title="' + esc(t.name) + ", " + esc(monthName(m)) +
           '">' + (off ? "No names" : "Names kept") + "</button></td>";
-      }).join("") + "</tr>").join("") +
-    "</tbody></table></div></div>");
+      }).join("") + "</tr>").join("") : "") +
+    "</tbody></table>" +
+    (months.length ? "" : '<p class="lede">No month has been read yet, so there is nothing to set.</p>') +
+    "</div></div>");
 }
 function renderFbDesk(){
   if (!S || !S.me.names) return;
@@ -10307,9 +10365,28 @@ async function fbLoad(q, btn){
         : '<div class="card"><p>Nothing matches.</p></div>'));
   }catch(e){ if (btn) sent(btn); fail(e); }
 }
+/* THE APOSTROPHE, AND WHY IT IS NOT OPTIONAL HERE EITHER.
+   The server pins a leading =, +, -, @, tab or return with an apostrophe on
+   the way into the sheet, and exportRows_ pins it again on the way out to a
+   file. This writer is the second file writer in the app and was built
+   without that guard, which made it the softest way into the hardest file:
+   correct CSV quoting is not a defence, because the quotes are delimiters
+   that Excel, Sheets and LibreOffice strip before evaluating what is left.
+
+   The consequence was specific. Anybody in college can type a formula into a
+   Feedback comment. It is stored verbatim, shown escaped in the app so nothing
+   looks wrong, and would then run inside whichever spreadsheet the President
+   or the Vice-President opened this file in -- the one file in the whole app
+   that carries every member's name, address, CRSid, score and words together,
+   and the one the rest of the code guards behind three locks. */
+const CSV_FORMULA = /^[=+\-@\t\r]/;
 function fbCsv(){
   if (!fbRows || !fbRows.rows.length) return toast("Read something first.");
-  const q = v => '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
+  const q = v => {
+    let s = String(v == null ? "" : v);
+    if (CSV_FORMULA.test(s)) s = "'" + s;
+    return '"' + s.replace(/"/g, '""') + '"';
+  };
   const head = ["When","Name","Email","CRSid","Subject or question","Month","Score","Chose","What they wrote"];
   const body = fbRows.rows.map(r => [r.at ? new Date(r.at).toISOString() : "", r.name, r.email, r.crsid,
     r.where, r.month, r.score || "", r.choice, r.comment].map(q).join(","));
