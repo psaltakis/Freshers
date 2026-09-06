@@ -250,8 +250,15 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
   letter-spacing:-.03em;white-space:nowrap}
 .wm .sm{display:none}
 @media(max-width:420px){.wm .lg{display:none}.wm .sm{display:inline}}
+/* The year is one line. It wrapped to two on a phone whose text is scaled up,
+   which made the whole bar taller than anything measuring it expected, and
+   nowrap plus a clipping parent is what keeps the bar one predictable height.
+   min-width:0 lets the title give way to the buttons rather than push them
+   off the end of the row. */
+.wm{min-width:0;overflow:hidden}
 .wm i{display:block;font-style:normal;font-size:0.64rem;color:var(--gold-2);letter-spacing:.2em;
-  text-transform:uppercase;margin-top:4px;font-weight:600}
+  text-transform:uppercase;margin-top:4px;font-weight:600;white-space:nowrap}
+.hbar .iconbtn,.hbar .beta{flex:0 0 auto}
 .sp{flex:1}
 .iconbtn{width:2.1rem;height:2.1rem;min-width:44px;min-height:44px;border-radius:13px;background:var(--t1);display:grid;place-items:center;
   color:var(--cream-2);transition:.18s}
@@ -460,7 +467,16 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 /* The Health and Sport shelves are long. The shelf switcher stays under the
    masthead on a phone; the top matches the bar exactly: safe area, 10px,
    the 2.45rem crest, 14px. */
-@media(max-width:999px){#lodgeSeg{position:sticky;top:calc(var(--sat) + 2.45rem + 24px);z-index:30;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}}
+/* WHERE THIS STICKS, AND WHY IT IS MEASURED RATHER THAN GUESSED.
+   The offset used to be hand computed as 2.45rem plus 24px, which was the
+   height of the bar on the machine it was written on. The bar is not a fixed
+   height: it grows when a phone is set to larger text, and it grew again when
+   a third button was added to it. Whenever the guess came out short the
+   switcher stuck too high and sat half behind the bar, which is exactly what
+   it did. --hdrh is written by measureHeader() from the bar's real height and
+   kept up to date by a ResizeObserver, so this can never drift again. The
+   fallback is only for the instant before the first measurement. */
+@media(max-width:999px){#lodgeSeg{position:sticky;top:calc(var(--hdrh, 5rem) + 6px);z-index:30;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}}
 /* Seven columns at every width. What changes is how much fits in one: on a
    phone a day is its date and a row of coloured dots, on a desk it is the
    events written out. The list underneath always has the detail, so nothing
@@ -2193,8 +2209,15 @@ body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
    the marks are outlines and a cursor, so what you are editing is
    the page as everybody else will read it.
    ============================================================ */
+/* WHY THIS IS display:grid AND NOT inline-flex.
+   .iconbtn centres its icon with display:grid and place-items:center. Setting
+   inline-flex here beat that on specificity, and because the bar is itself a
+   flex container the value was blockified to plain flex -- which takes the
+   align half of place-items and ignores the justify half. The pencil sat hard
+   against the left edge of its own button while every other icon was centred.
+   Anything that shows this button has to keep it a grid. */
 #bWords{display:none}
-html[data-words] #bWords{display:inline-flex}
+html[data-words] #bWords{display:grid}
 html[data-words="on"] #bWords{background:var(--gold);color:var(--gold-ink);border-color:transparent}
 html[data-words="on"] #app,html[data-words="on"] #nav,html[data-words="on"] header{cursor:crosshair}
 html[data-words="on"] .wordable{outline:1px dashed rgba(226,169,60,.55);outline-offset:2px;
@@ -2478,7 +2501,7 @@ html[data-words="on"] .wordgone{display:inline-block;min-width:26px;height:1em;
         <label class="f" style="flex:1;min-width:220px;margin:0"><span>Add an address</span><input type="email" id="ownerEmail" placeholder="vice-president@mcr.jesus.cam.ac.uk"></label>
         <button class="btn crimson sm" id="bOwnerAdd">Make them an administrator</button></div>
     </div>
-    <div class="card">
+    <div class="card" data-admin hidden>
       <h3>The roster</h3>
       <p class="lede">Anyone here is recognised as committee when they sign in. Their team decides where they appear on the People page, and a photograph makes a name into a person you can find.</p>
       <div id="rosterList"></div>
@@ -2491,13 +2514,13 @@ html[data-words="on"] .wordgone{display:inline-block;min-width:26px;height:1em;
       <div class="acts"><label class="check" style="margin:0"><input type="checkbox" id="rAdmin"> Can edit this list</label>
         <button class="btn crimson sm" id="bRosterAdd">Add or update</button></div>
     </div>
-    <div class="card">
+    <div class="card" data-admin hidden>
       <h3>Who may sign in</h3>
       <p class="lede">By default anyone with a cam.ac.uk address can sign in. Paste CRSids or addresses here, one per line, to limit access to those people.</p>
       <textarea id="allowlist" class="bigin" style="min-height:110px"></textarea>
       <div class="acts"><button class="btn crimson sm" id="bAllow">Save the list</button></div>
     </div>
-    <div class="card">
+    <div class="card" data-committee hidden>
       <h3>The programme</h3>
       <p class="lede">One row becomes every week of term, or every second, third or fourth. Cancelling a single week leaves the rest alone.</p>
       <div id="progNote"></div>
@@ -2507,26 +2530,26 @@ html[data-words="on"] .wordgone{display:inline-block;min-width:26px;height:1em;
         <button class="btn ghost sm" id="bClearProg">Clear the programme</button></div>
       <p class="lede">Clearing removes the diary and every repeating entry so the committee can add the real one. Approved room bookings are kept. There is no undo.</p>
     </div>
-    <div class="card">
+    <div class="card" data-names hidden>
       <h3>Feedback on show</h3>
       <p class="lede">Untick a subject and it disappears from Feedback, along with any question asked about it. Nothing is deleted. Tick it again to put it back.</p>
       <div id="sayTopicList"></div>
       <div class="acts"><button class="btn crimson sm" id="bSayTopics">Save these settings</button></div>
     </div>
-    <div class="card">
+    <div class="card" data-committee hidden>
       <h3>House style</h3>
       <p class="lede">These rules appear above every box the committee types into, so the writing stays consistent as the committee changes.</p>
       <textarea id="voiceText" class="bigin" style="min-height:120px"></textarea>
       <div class="acts"><button class="btn crimson sm" id="bVoice">Save the rules</button>
         <span class="lede">One per line.</span></div>
     </div>
-    <div class="card">
+    <div class="card" data-committee hidden>
       <h3>Bumps</h3>
       <p class="lede">One row per crew: where they started, and where they finished each of the four days. The chart draws itself, and it appears on Today for the week of the meet and two days after.</p>
       <div id="bumpsAdmin"></div>
       <div class="acts"><button class="btn cream sm" id="bBumpsAdd">Add a crew</button></div>
     </div>
-    <div class="card">
+    <div class="card" data-committee hidden>
       <h3>Announcements and housekeeping</h3>
       <label class="f"><span>Post to everybody</span><textarea id="annText" placeholder="The Brewery is closed for repairs until Friday."></textarea></label>
       <div class="acts"><button class="btn crimson sm" id="bAnnounce">Post</button>
@@ -2536,38 +2559,39 @@ html[data-words="on"] .wordgone{display:inline-block;min-width:26px;height:1em;
       <div id="adminNote"></div>
       <p class="lede" id="adminLinks" style="margin-top:14px"></p>
     </div>
-    <div class="card">
+    <div class="card" data-names hidden>
       <h3>Forms and links</h3>
       <p class="lede">The shelf on Info. Add one, change one, or take one away, and it is on everybody's page within the minute. Nothing here is in the code any more, so a broken address is a thirty second job rather than a release.</p>
       <div id="linkList"></div>
       <div class="acts"><button class="btn crimson sm" data-linkedit="">Add a link</button>
-        <button class="btn ghost sm" id="bLinkReset" data-admin hidden>Put the original list back</button></div>
+        <button class="btn ghost sm" id="bLinkReset">Put the original list back</button></div>
     </div>
-    <div class="card">
+    <div class="card" data-names hidden>
       <h3>The words on every page</h3>
-      <p class="lede">Turn this on and every sentence in the app becomes something you can tap and rewrite, wherever it is: a heading, a button, a note under a card, the small print on the sign in screen. Rewriting one to nothing takes it off the page. Nobody has to touch the code and nothing is lost: the original is always one tap away.</p>
+      <p class="lede">Turn this on and every sentence the app itself writes becomes something you can tap and rewrite, wherever it is: a heading, a button, a note under a card, the small print on the sign in screen. Rewriting one to nothing takes it off the page. Nobody has to touch the code and nothing is lost: the original is always one tap away.</p>
+      <p class="lede">It will not touch anybody's content. Names, event titles, notices, Info cards, links, and anything a member has written in Feedback or a thread are refused, because rewriting one of those would be the committee editing somebody else's words in everybody's browser. Each of those has its own editor.</p>
       <div class="acts"><button class="btn crimson sm" id="bWordsOn">Start rewriting</button>
         <button class="btn ghost sm" id="bWordsList">Everything you have changed</button></div>
       <div id="wordsNote"></div>
     </div>
-    <div class="card">
+    <div class="card" data-names hidden>
       <h3>What Feedback shows the room</h3>
       <p class="lede">Nothing in Feedback is public until you publish it. Until then a member sees their own answer and no average, no count, no tally, no run of months and none of the words anybody else wrote. Publish a subject or a question one at a time, and take it back the same way.</p>
       <div id="pubList"></div>
     </div>
-    <div class="card">
+    <div class="card" data-owner hidden>
       <h3>The Vice-President's address</h3>
-      <p class="lede">Anyone on the roster whose role reads Vice-President is recognised without anything being typed here. This is for a second address, or for the weeks between one Vice-President and the next. These two seats, and no others, see a name against an answer in Feedback.</p>
+      <p class="lede">This list is the only thing that makes somebody a Vice-President as far as this app is concerned, and only the President can write it. It used to recognise anyone whose role on the roster read Vice-President, which meant an administrator could type the words into their own row and be handed the name against every answer in college. Seeing a name is granted here, by one person, or it is not granted. These two seats, and no others, see a name against an answer in Feedback.</p>
       <div id="vpList"></div>
       <textarea id="vpText" class="bigin" style="min-height:70px" placeholder="vice-president@mcr.jesus.cam.ac.uk"></textarea>
       <div class="acts"><button class="btn crimson sm" id="bVp">Save</button><span class="lede">One per line.</span></div>
     </div>
-    <div class="card" data-admin hidden>
+    <div class="card" data-names hidden>
       <h3>Taking something away for good</h3>
       <p class="lede">Deleting a formal or an event from its own page announces it: it goes on the board, because a cancellation is news. This does the same job silently. Nothing is written to the board, nobody is told, and there is no undo of any kind. It is for rows that were a mistake, and for clearing out a year that is over.</p>
       <div id="purgeList"></div>
     </div>
-    <div class="card">
+    <div class="card" data-admin hidden>
       <h3>Wiring for the other MCR apps</h3>
       <div id="wireBox"></div>
     </div>
@@ -2589,7 +2613,7 @@ html[data-words="on"] .wordgone{display:inline-block;min-width:26px;height:1em;
   <button class="tabbtn committee" data-view="swapdesk" data-committee hidden><svg viewBox="0 0 24 24"><path d="M4 8h13l-3-3M20 16H7l3 3"/><circle cx="18.5" cy="6.5" r="2.2"/></svg>Swap desk<span class="badge" id="bdgSwapDesk" hidden>0</span></button>
   <button class="tabbtn committee" data-view="members" data-committee hidden><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>Members</button>
   <button class="tabbtn committee" data-view="fbdesk" data-names hidden><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><path d="M12 14v2"/></svg>Feedback desk</button>
-  <button class="tabbtn committee" data-view="admin" data-admin hidden><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3 8.5-7 10-4-1.5-7-5-7-10V6z"/><path d="M9.5 12l1.8 1.8 3.4-3.6"/></svg>Committee</button>
+  <button class="tabbtn committee" data-view="admin" data-boss hidden><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3 8.5-7 10-4-1.5-7-5-7-10V6z"/><path d="M9.5 12l1.8 1.8 3.4-3.6"/></svg>Committee</button>
   <div class="railfoot" aria-hidden="true"><span class="orb" id="railOrb"></span><span class="rc"><b id="railClock"></b><i id="railTerm"></i></span></div>
 </nav>
 
@@ -3233,7 +3257,7 @@ function loadGsi(again){
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbxmRXyuYxJagJvbcSKYVuLYnbTK7RwcpLTcGgKk_3dqKi-EX5DttnbTlhChdUvkD2wT/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxYlmJ8_8PDPNpLK4x4yKWZfuVPr0WJYrvf_tTZ-eqvtAGhOGCiGcFFiSjUFWLw0nlC/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -3518,10 +3542,23 @@ function copyText(text, done){
 /* A control that has been pressed and is waiting on the server. It is held
    open, its label swapped for a turning mark, and everything beside it is
    stopped so nobody answers twice while the first answer is in the post. */
+/* WHAT A BUTTON REMEMBERS WHILE IT IS WAITING.
+   sending() and spin() hold a control open by stashing its innerHTML and
+   putting it back afterwards. If a rewrite was applied inside it, the stash
+   captured the rewritten text and, worse, captured the little marker that
+   stands in for wording the committee has taken off the page -- so restoring
+   put back an empty marker and the original wording was gone from that button
+   for good, with no way to put it back. Stripping the rewrites before the
+   snapshot means what is stashed is always the wording as it was written; the
+   observer reapplies the committee's version the moment it is restored. */
+function stashOf(el){
+  try{ if (copyLive) unapplyCopy(el); }catch(e){}
+  return el.innerHTML;
+}
 function sending(el, label){
   if (!el || el.dataset.busy) return;
   el.dataset.busy = "1";
-  el.dataset.was = el.innerHTML;
+  el.dataset.was = stashOf(el);
   el.classList.add("busy");
   el.innerHTML = '<span class="spin"></span>' + (label ? '<span class="lbl">' + esc(label) + '</span>' : "");
   const box = el.parentElement;
@@ -3550,7 +3587,7 @@ function saveBytes(b64, name, type){
 function spin(b, label){
   if (!b) return;
   b.disabled = true;
-  b.dataset.was = b.innerHTML;
+  b.dataset.was = stashOf(b);
   b.innerHTML = '<span class="spin"></span>' + esc(label || "One moment");
 }
 function unspin(b){
@@ -4782,6 +4819,12 @@ const isAdmin = () => !!(S && S.me.admin);
    rather than a test at each site, so there is a single rule to change on the
    day a section is ready. */
 const canSee = k => k === "business" ? false : (!!FEATURES[k] || isCommittee());
+/* The President and the Vice-President. Everything that changes the app for
+   every member at once -- the wording, the links shelf, what Feedback shows
+   the room, whether an answer carries a name, and deleting a year of records
+   without telling anybody -- asks this rather than isCommittee(). The server
+   asks the same question again on every call and is the one that counts. */
+const isBoss = () => !!(S && S.me && S.me.names);
 const evById = id => (S.events || []).filter(e => e.id === id)[0] || null;
 const myStatus = id => (S.mine && S.mine[id] && S.mine[id].status) || "";
 /* THE BALLOT, AS THE PAGE SEES IT.
@@ -5572,14 +5615,20 @@ function lodgeForms(){
     /* The shelf, edited from the shelf. Every one of these can be renamed,
        repointed, reordered or taken away, and a new one added, without
        anybody touching the code. */
-    (isCommittee()
+    (isBoss()
       ? '<div class="grp"><b>Change the shelf</b></div>' +
-        '<div class="card"><p class="lede">Only the committee sees this row. Tap a link to change its ' +
+        '<div class="card"><p class="lede">Only the President and the Vice-President see this row. Tap a link to change its ' +
         "name, its address, its note or where it sits, or to take it off the shelf altogether.</p>" +
         '<div class="linkedit">' + L.map(l =>
           '<button class="btn ghost sm" data-linkedit="' + esc(l.key) + '">' + esc(l.name) + "</button>").join("") +
         '<button class="btn gold sm" data-linkedit="">Add a link</button></div></div>'
       : "");
+}
+/* A link should say where it goes before it is tapped. The host is the honest
+   short answer, and a link the committee typed by hand may not parse at all. */
+function hostOf(u){
+  try{ return new URL(String(u)).host.replace(/^www\./, ""); }
+  catch(e){ return "Open it"; }
 }
 function lodgeGuides(){
   const res = S.resources || [];
@@ -5591,6 +5640,12 @@ function lodgeGuides(){
       '<details class="guide"><summary>' + esc(r.title) +
       (r.contact ? '<span class="who">' + esc(r.contact) + "</span>" : "") + "</summary>" +
       "<p>" + esc(r.body) + "</p>" +
+      /* A card that explains a thing should be able to take you to it. The
+         column has been on the sheet since the start and nothing ever drew
+         it, so a card could describe uPay at length and still leave you to
+         find it yourself. */
+      (r.link ? '<div class="falinks"><a class="btn pill sm" href="' + esc(safeUrl(r.link)) +
+        '" target="_blank" rel="noopener">' + esc(hostOf(r.link)) + " &#8599;</a></div>" : "") +
       (isCommittee() ? '<div class="acts"><button class="btn ghost sm" data-editres="' + esc(r.id) +
         '">Edit this</button></div>' : "") + "</details>").join("")).join("") +
     (isCommittee() ? '<div class="acts"><button class="btn ghost sm" data-editres="">Add a guide</button></div>' : "");
@@ -6997,7 +7052,12 @@ function paintWiring(){
     '<div class="acts"><button class="btn cream sm" data-copyboth>Copy both, ready to paste</button></div>');
 }
 function renderAdmin(){
-  if (!isAdmin()) return;
+  /* An administrator, or the President or Vice-President, whose own cards are
+     on this page. The pieces that are genuinely an administrator's are marked
+     data-admin or data-owner in the markup and stay hidden either way, and the
+     state they read is not sent to anybody else, so they come out empty
+     rather than wrong. */
+  if (!isAdmin() && !(S.me && S.me.names)) return;
   put("ownerList", (S.owners || []).map(o =>
     '<div class="rowline"><div class="t"><b>' + esc(o) + "</b><span>" +
     ((S.hardOwners || []).indexOf(o) >= 0 ? "Permanent" : "Administrator") + "</span></div></div>").join(""));
@@ -7241,6 +7301,8 @@ function openResourceEditor(id){
     '<label class="f"><span>Heading</span><input id="reTitle" maxlength="100" value="' + esc(r ? r.title : "") + '"></label>' +
     '<label class="f"><span>The answer</span><textarea id="reBody" maxlength="3000">' + esc(r ? r.body : "") + "</textarea></label>" +
     '<label class="f"><span>Who to contact</span><input id="reContact" maxlength="140" value="' + esc(r ? r.contact : "") + '"></label>' +
+    '<label class="f"><span>Somewhere to send them, if there is one</span><input id="reLink" maxlength="300" value="' +
+      esc(r ? (r.link || "") : "") + '" placeholder="https://"></label>' +
     '<div class="acts"><button class="btn crimson" id="reGo">Save</button>' +
       (r && isAdmin() ? '<button class="btn ghost" id="reDel">Delete</button>' : "") + "</div>",
     el => {
@@ -7250,7 +7312,7 @@ function openResourceEditor(id){
         try{
           const d = await api("saveResource", { resource: { id: id || "", group: $("reGroup").value,
             title: $("reTitle").value, body: $("reBody").value, contact: $("reContact").value,
-            sort: $("reSort").value } });
+            link: $("reLink").value, sort: $("reSort").value } });
           S.resources = d.resources;
           closeSheet();
           renderLodge();
@@ -7392,7 +7454,9 @@ function hallCard(e){
       (left !== null ? "<span><b>" + left + "</b> " + (left === 1 ? "place left" : "places left") + "</span>" : "") +
       (e.dress ? "<span>" + esc(e.dress) + "</span>" : "") + "</div>" +
     (e.desc ? '<p class="swn">' + esc(String(e.desc).split("\n")[0]) + "</p>" : "") +
-    '<div class="acts"><button class="btn ' + (going_ ? "ghost" : "gold") + ' sm" data-ev="' + esc(e.id) + '">' +
+    /* data-ev is matched by neither delegated listener, so this button did
+       nothing at all. It opens the hall, which is what its label says. */
+    '<div class="acts"><button class="btn ' + (going_ ? "ghost" : "gold") + ' sm" data-open="' + esc(e.id) + '">' +
       (going_ ? "You are going, open it" : "Put your name down") + "</button></div>" +
     "</div>";
 }
@@ -7596,7 +7660,7 @@ function renderSay(){
    Hiding now hides for the committee too, so this is where the committee can
    see that it worked and undo it. Only they see this row. */
 function sayPutAway(){
-  if (!isCommittee()) return "";
+  if (!isBoss()) return "";
   const off = sayHidden();
   if (!off.length) return "";
   const named = ((S.say || {}).list || []);
@@ -7623,7 +7687,10 @@ function moodCard(t){
       /* The committee can put a subject away from the card itself. It is a
          setting, not a deletion, and the Committee page lists everything that
          is put away so it can be brought back. */
-      (isCommittee() ? '<button class="mhide" data-moodhide="' + esc(t.key) + '" title="Put this subject away for now" aria-label="Put this subject away for now">&minus;</button>' : "") +
+      /* This calls saveSettings, which is now one of the Feedback settings and
+         refuses anybody but these two. Showing it to the rest of the committee
+         only earned them an error message. */
+      (isBoss() ? '<button class="mhide" data-moodhide="' + esc(t.key) + '" title="Put this subject away for now" aria-label="Put this subject away for now">&minus;</button>' : "") +
       (t.move ? '<span class="move ' + (t.move > 0 ? "up" : "down") + '" title="' +
         (t.move > 0 ? "better" : "worse") + ' than last month">' + (t.move > 0 ? "\u2191" : "\u2193") +
         Math.abs(t.move).toFixed(1) + '</span>' : "") +
@@ -7632,7 +7699,7 @@ function moodCard(t){
     '<p class="note">' + esc(t.note) + '</p>' +
     /* Both switches are on the card, not on a settings page, because each
        decision is about this subject and is taken while looking at it. */
-    (isCommittee()
+    (isBoss()
       ? '<div class="acts" style="margin:0 0 8px">' + pubChip("topic", t.key) +
         anonChip("topic", t.key, !!t.nameless, false) + "</div>"
       /* Everybody else is simply told, before they answer, which it is. */
@@ -7689,7 +7756,7 @@ function soundCard(raw){
       '<span class="st ' + (q.closed ? "closed" : "open") + '">' +
       (q.closed ? "Closed" : q.closes ? "Until " + soundingDateLabel(q) : "Open") + '</span></div>' +
     (q.body ? '<p class="note">' + esc(q.body) + '</p>' : "") +
-    (isCommittee()
+    (isBoss()
       ? '<div class="acts" style="margin:0 0 8px">' + pubChip("question", q.id) +
         anonChip("question", q.id, !!q.nameless, !!(q.nameless && !q.canName)) + "</div>"
       : "") +
@@ -8113,6 +8180,11 @@ function go(v, scroll){
      checks the address on every call it makes, so this is the courtesy and
      not the control, but a tab nobody else can reach is one fewer way in. */
   if (v === "fbdesk" && !(S && S.me && S.me.names)) v = "today";
+  /* The tabs for these are hidden from anybody who should not have them, but
+     hiding a tab is not a lock: go() is also called by name from inside the
+     app, and a section left reachable is a section somebody will reach. */
+  if (["desk","inbox","swapdesk","members"].indexOf(v) >= 0 && !isCommittee()) v = "today";
+  if (v === "admin" && !(isAdmin() || (S && S.me && S.me.names))) v = "today";
   view = v;
   document.querySelectorAll("#nav .tabbtn").forEach(b =>
     b.setAttribute("aria-current", String(b.dataset.view === v)));
@@ -8248,7 +8320,9 @@ const DRAW = {
   swaps: renderSwaps, ask: renderAsk, say: renderSay,
   me: () => { if (!typingIn("v-me")) renderMe(); },
   desk: renderDesk, swapdesk: renderSwapDesk, inbox: renderQueue,
-  members: renderDesk,
+  /* This said renderDesk, so a refresh or a poll redrew the committee desk and
+     left the Members table showing whatever it showed when it was opened. */
+  members: renderMembers,
   fbdesk: renderFbDesk,
   admin: () => { if (!typingIn("v-admin")){ renderAdmin(); renderBumpsAdmin(); } }
 };
@@ -8272,10 +8346,17 @@ function render(){
   document.querySelectorAll("[data-committee]").forEach(el => el.hidden = !isCommittee());
   document.querySelectorAll("[data-admin]").forEach(el => el.hidden = !isAdmin());
   document.querySelectorAll("[data-owner]").forEach(el => el.hidden = !S.me.owner);
-  /* The two seats that see a name against an answer. */
+  /* The two seats that see a name against an answer, and that hold the
+     settings which change the app for everybody at once. */
   document.querySelectorAll("[data-names]").forEach(el => el.hidden = !S.me.names);
-  /* The pencil in the bar, and with it the whole rewriting mode. */
-  if (isCommittee()){
+  /* The Committee page has to be reachable by an administrator OR by one of
+     those two seats, because the Vice-President is not necessarily an
+     administrator and their cards live on it. Two separate attributes would
+     fight over the same element, with whichever ran last winning. */
+  document.querySelectorAll("[data-boss]").forEach(el => el.hidden = !(isAdmin() || S.me.names));
+  /* The pencil in the bar, and with it the whole rewriting mode. It rewrites
+     what every member of the MCR reads, so it is not a committee tool. */
+  if (S.me.names){
     if (!document.documentElement.dataset.words) document.documentElement.dataset.words = "off";
   } else {
     if (wordsOn) wordsToggle(false);
@@ -8293,9 +8374,17 @@ function render(){
   renderBadges();
   /* The committee's own wording goes over the top of whatever was just drawn,
      and the watcher keeps it there through every later redraw. */
+  /* The index is rebuilt from the state before anything is drawn over it, so
+     a name that arrived in this payload is protected in this paint. */
+  indexDynamic();
+  dynMemo.clear();
   applyCopy();
   startCopyWatch();
   if (wordsOn) markWordable();
+  /* The bar has just been drawn and may have changed height: a committee
+     member gets a button an ordinary member does not, and that is enough to
+     move everything that sits under it. */
+  watchHeader();
   if (!deerTimer) deerStart();
 }
 
@@ -8315,7 +8404,7 @@ document.addEventListener("click", async e => {
     "[data-skip],[data-editser],[data-second],[data-vote],[data-mset],[data-code],[data-checkin]," +
     "[data-delupdate],[data-rosteredit],[data-rosterdel],[data-newidea],[data-back]," +
     "[data-setidea],[data-dropidea]," +
-    "[data-home],[data-homeno],[data-homedone],[data-roomnote],[data-runevent],[data-sayreport],[data-saypdf],[data-boardall],[data-menuday],[data-menusit],[data-mood],[data-moodline],[data-moodreply],[data-moodsay],[data-sound],[data-soundsay],[data-soundclose],[data-soundedit],[data-sounddel],[data-moodhide],[data-moodshow],[data-roomdrop],[data-roomtab],[data-formal],[data-copy],[data-copyboth],[data-bumpedit],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-motiondrop],[data-desktab],[data-tick2],[data-desk],[data-asktab],[data-thread],[data-mythreads],[data-swaptake],[data-swapdrop],[data-swappaid],[data-swapedit],[data-swapsave],[data-swapcancel],[data-swapdel],[data-swappast],[data-bank],[data-swapkick],[data-swappromote],[data-copyaddrs],[data-swapdeskedit],[data-jcsu],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-newseries],[data-csv],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
+    "[data-home],[data-homeno],[data-homedone],[data-roomnote],[data-runevent],[data-sayreport],[data-saypdf],[data-boardall],[data-menuday],[data-menusit],[data-mood],[data-moodline],[data-moodreply],[data-moodsay],[data-sound],[data-soundsay],[data-soundclose],[data-soundedit],[data-sounddel],[data-moodhide],[data-moodshow],[data-roomdrop],[data-roomtab],[data-formal],[data-bumpedit],[data-lodge],[data-newnotice],[data-hour],[data-hourcancel],[data-motiondrop],[data-desktab],[data-tick2],[data-desk],[data-asktab],[data-thread],[data-mythreads],[data-swaptake],[data-swapdrop],[data-swappaid],[data-swapedit],[data-swapsave],[data-swapcancel],[data-swapdel],[data-swappast],[data-bank],[data-swapkick],[data-swappromote],[data-copyaddrs],[data-swapdeskedit],[data-jcsu],[data-editclub],[data-noticeok],[data-editwho],[data-terms],[data-hw],[data-hwk],[data-mineonly],[data-newevent],[data-newseries],[data-csv],[data-inbox],[data-inboxopen],[data-reply2],[data-note]");
   if (!t) return;
   const d = t.dataset;
   try{
@@ -8772,7 +8861,13 @@ on("gate", "click", e => {
   }
   const bk = e.target.closest("[data-book-again]");
   if (bk){ e.preventDefault(); return bookAgain(bk); }
-  const t = e.target.closest("[data-retry],[data-diag],[data-prompt],[data-tryanyway],[data-copyorigin]");
+  /* data-copy and data-copyboth are handled further down this listener, so
+     they have to be matched by it. They were listed only in the selector of
+     the listener above, which has no branch for them, so every Copy button in
+     the app -- the officer's address, the calendar link, the wiring for the
+     other apps -- looked pressable and did nothing. */
+  const t = e.target.closest("[data-retry],[data-diag],[data-prompt],[data-tryanyway]," +
+    "[data-copyorigin],[data-copy],[data-copyboth]");
   if (!t) return;
   if (t.hasAttribute("data-retry")){
     gsiUp = false; gsiComplaint = "";
@@ -9262,6 +9357,27 @@ function deerNext(){
      anybody can predict. */
   deerTimer = setTimeout(deerTick, 90000 + Math.random() * 150000);
 }
+/* HOW TALL THE BAR ACTUALLY IS.
+   Anything that has to sit below the bar needs its height, and the height is
+   not a constant: it changes with the phone's text size, with the safe area
+   at the top of the screen, and with what is in the bar. It is measured here
+   and published as --hdrh, so the CSS can position against the real thing
+   rather than against a number somebody typed once. */
+function measureHeader(){
+  const h = $("hdr");
+  const px = (h && !h.hidden) ? Math.round(h.getBoundingClientRect().height) : 0;
+  if (px) document.documentElement.style.setProperty("--hdrh", px + "px");
+}
+let hdrObs = null;
+function watchHeader(){
+  measureHeader();
+  const h = $("hdr");
+  if (!h || hdrObs || typeof ResizeObserver === "undefined") return;
+  hdrObs = new ResizeObserver(measureHeader);
+  hdrObs.observe(h);
+}
+window.addEventListener("resize", measureHeader);
+window.addEventListener("orientationchange", () => setTimeout(measureHeader, 120));
 function deerStart(){
   if (deerCalm()) return;
   clearTimeout(deerTimer);
@@ -9296,6 +9412,111 @@ function deerStart(){
    substitution is a layer over the page rather than an edit to it,
    and every original is one tap away for ever. */
 let wordsOn = false, copyBusy = false, copyPending = false, copyObs = null, copyLive = false;
+
+/* ============================================================
+   THE LINE BETWEEN THE APP'S WORDING AND SOMEBODY'S WORDS
+   ============================================================
+   The rewriting mode matches on the wording itself, which is what makes it
+   work across a redraw -- and, left alone, would make it match a person's
+   name, a notice somebody posted, an event title, or a line somebody wrote in
+   Feedback. Rewriting one of those would be the committee editing another
+   member's words, in everybody's browser, from a tool meant for tidying up a
+   label. Worse, it would do it by coincidence: an override keyed to a common
+   phrase would silently change that phrase wherever it turned up.
+
+   So the mode is restricted to the app's own wording -- the headings, labels,
+   notes, prompts and button text written into this file, which read the same
+   for every member of the MCR.
+
+   The test is provenance rather than a list of places. Everything the server
+   sends in the state payload is data: names, titles, bodies, comments, links,
+   Info cards, clubs, the lot. Anything matching it is somebody's content and
+   is refused. Anything not in it came from this file, is the same for
+   everybody, and can be rewritten.
+
+   It errs towards refusing. A piece of static wording that happens to read
+   exactly like a value on the sheet -- a venue called The MCR, say -- is
+   treated as content and left alone. That is the safe direction to be wrong
+   in: the cost is a label somebody cannot retitle, not a member's words being
+   rewritten under them. Anything with a proper editor of its own -- Info
+   cards, links, notices, events -- is edited there. */
+let DYN_SET = new Set(), DYN_NAMES = new Set(), DYN_LIST = [];
+/* ONLY WHAT IS ACTUALLY A PERSON'S NAME GETS BROKEN INTO WORDS.
+   Titles were in this list to begin with, which meant every ordinary word in
+   every event title and notice heading -- "the", "for", "and" -- landed in
+   the word set and made any label containing one of them unrewritable. "The
+   board" was refused because some question on the sheet had the word "the" in
+   it. Titles are still protected, by exact match and by the containment scan
+   below, which is the right tool for a whole phrase. This one is for the case
+   a phrase cannot catch: a first name sitting inside a sentence the app
+   wrote. The stop list is there so that a surname the app also uses as an
+   ordinary word cannot take a whole vocabulary out with it. */
+const NAMEISH = /^(name|by|who|byName|crsid)$/;
+const NAME_STOP = new Set(["the","and","for","are","was","this","that","with","from","you","your",
+  "our","all","new","one","two","not","but","who","how","why","its","has","had","can","out","off",
+  "mcr","college","jesus","cambridge","hall","room","committee","president","officer","secretary"]);
+function indexDynamic(){
+  DYN_SET = new Set(); DYN_NAMES = new Set(); DYN_LIST = [];
+  if (!S) return;
+  const seen = new Set();
+  const add = (raw, nameish) => {
+    const k = copyKey(raw);
+    if (!k || k.length < 2) return;
+    if (!DYN_SET.has(k)){
+      DYN_SET.add(k);
+      if (k.length >= 4 && DYN_LIST.length < 6000) DYN_LIST.push(k);
+    }
+    /* A person's name is the one thing that turns up inside a sentence the
+       app wrote -- "Good evening, George" -- so its parts are held separately
+       and matched word by word. Only names: doing this for free text would
+       make every ordinary word in a notice poison every label containing it. */
+    if (nameish) String(k).split(/\s+/).forEach(w => {
+      const t = w.toLowerCase().replace(/[^a-z0-9'\u2019-]/g, "");
+      if (t.length >= 3 && !NAME_STOP.has(t)) DYN_NAMES.add(t);
+    });
+  };
+  const walk = (v, key, depth) => {
+    if (v == null || depth > 8) return;
+    if (typeof v === "string") return add(v, NAMEISH.test(String(key)));
+    if (typeof v !== "object") return;
+    if (seen.has(v)) return;
+    seen.add(v);
+    if (Array.isArray(v)) { v.forEach(x => walk(x, key, depth + 1)); return; }
+    Object.keys(v).forEach(k => {
+      /* The committee's own rewrites are not content to be protected from. */
+      if (k === "copy") return;
+      walk(v[k], k, depth + 1);
+    });
+  };
+  walk(S, "", 0);
+}
+/* The cheap test, used while painting the outlines over several hundred nodes. */
+function looksDynamic(key){
+  if (!key) return false;
+  if (DYN_SET.has(key)) return true;
+  const words = key.toLowerCase().split(/\s+/);
+  for (let i = 0; i < words.length; i++){
+    const w = words[i].replace(/[^a-z0-9'\u2019-]/g, "");
+    if (w.length >= 3 && DYN_NAMES.has(w)) return true;
+  }
+  return false;
+}
+/* The thorough one, used on a single piece of wording when somebody actually
+   tries to change it, and once per override when they are applied. */
+const dynMemo = new Map();
+function isUserContent(key){
+  if (!key) return false;
+  if (dynMemo.has(key)) return dynMemo.get(key);
+  let hit = looksDynamic(key);
+  if (!hit && key.length >= 4){
+    for (let i = 0; i < DYN_LIST.length; i++){
+      const d = DYN_LIST[i];
+      if (d.length >= 4 && d.length <= key.length && key.indexOf(d) >= 0){ hit = true; break; }
+    }
+  }
+  dynMemo.set(key, hit);
+  return hit;
+}
 const COPY = () => (S && S.copy && typeof S.copy === "object" && !Array.isArray(S.copy)) ? S.copy : {};
 /* One space between words and nothing at either end, because that is what a
    person means by "the same sentence" and what innerHTML will not give you. */
@@ -9309,6 +9530,12 @@ function wordWalker(root){
     acceptNode(n){
       const p = n.parentElement;
       if (!p || WORD_SKIP.test(p.nodeName)) return NodeFilter.FILTER_REJECT;
+      /* Anything marked data-nowords is the machinery of rewriting itself --
+         the editor, its "as it stands in the app" panel, the list of changes.
+         Substituting inside it meant the editor showed you your own rewrite
+         where it promised the original, which is the one place in the app
+         that has to be literal. */
+      if (p.closest("[data-nowords]")) return NodeFilter.FILTER_REJECT;
       return copyKey(n.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
     }
   });
@@ -9346,6 +9573,10 @@ function applyCopy(){
       }
       hits.forEach(pair => {
         const node = pair[0], k = pair[1], to = map[k];
+        /* An override stored before this restriction existed, or one whose
+           wording has since become somebody's name or title, is left on the
+           list but never applied. */
+        if (isUserContent(k)) return;
         node.__wordOrig = node.nodeValue;
         node.__wordKey = k;
         if (to === ""){
@@ -9415,6 +9646,7 @@ function markWordable(){
     while ((n = w.nextNode())){
       const p = n.parentElement;
       if (!p || p.closest("[data-nowords]")) continue;
+      if (looksDynamic(n.__wordKey === undefined ? copyKey(n.nodeValue) : n.__wordKey)) continue;
       p.classList.add("wordable");
       if (n.__wordKey !== undefined) p.classList.add("edited");
     }
@@ -9434,7 +9666,8 @@ function wordsToggle(on){
     el.className = "wordbar";
     el.id = "wordbar";
     el.setAttribute("data-nowords", "");
-    el.innerHTML = "<b>Rewriting</b><span>Tap any words in the app to change them.</span>" +
+    el.innerHTML = "<b>Rewriting</b><span>Tap any of the app's own words to change them. " +
+      "Names and anything anybody wrote are left alone.</span>" +
       '<button class="btn gold sm" data-wordsoff>Done</button>';
     document.body.appendChild(el);
     toast("Tap any words in the app to rewrite them.");
@@ -9462,6 +9695,11 @@ function wordNodeAt(e){
 }
 function wordEditor(key, original, kind){
   if (!key) return;
+  /* The one refusal in this mode, and it is worth being clear about why
+     rather than just doing nothing. */
+  if (isUserContent(key))
+    return toast("That is content, not wording: somebody's name, or something written into the app. " +
+      "Edit it where it was written.");
   const now = COPY();
   const has = Object.prototype.hasOwnProperty.call(now, key);
   sheet("Rewrite " + (kind === "placeholder" ? "this prompt" : "these words"),
@@ -9518,7 +9756,17 @@ document.addEventListener("click", e => {
     return wordEditor(copyKey(ph), ph, "placeholder");
   }
   const node = wordNodeAt(e);
-  if (!node) return;
+  if (!node){
+    /* A control with nothing but an icon in it has no words to rewrite, and
+       letting the click through meant that pressing one while rewriting did
+       the thing instead: a tap meant to change a label cancelled a booking or
+       deleted a row. Nothing in this mode does anything but rewrite. */
+    if (t.closest('button,a,[role="button"],input,select,textarea')){
+      stop();
+      toast("There are no words here to rewrite. Press Done to use the app again.");
+    }
+    return;
+  }
   stop();
   wordEditor(node.__wordKey || copyKey(node.nodeValue),
     node.__wordOrig === undefined ? node.nodeValue : node.__wordOrig, "text");
