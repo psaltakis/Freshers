@@ -1247,10 +1247,10 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
 @media(min-width:820px){.bootcopy{padding-bottom:calc(48px + var(--sab))}}
 /* The consent line sits above the button, so it has to be readable without
    being loud enough to compete with it. */
-.gdpr{margin:0 0 12px;font-size:12px;line-height:1.55;color:var(--cream-3);font-weight:500}
+.gdpr{margin:0;font-size:12px;line-height:1.55;color:var(--cream-3);font-weight:500}
 .gdpr .lnk{font-size:12px;font-weight:600;color:var(--gold-2)}
 #privacy{text-align:left;background:var(--t3);border-radius:var(--r2);padding:12px 14px;
-  margin:0 0 12px;max-height:min(46vh,340px);overflow:auto;-webkit-overflow-scrolling:touch}
+  margin:14px 0 0;max-height:min(46vh,340px);overflow:auto;-webkit-overflow-scrolling:touch}
 #privacy p{margin:0 0 9px;font-size:12px;line-height:1.6;color:var(--cream-2);font-weight:500}
 #privacy p:last-child{margin-bottom:0}
 #privacy b{color:var(--gold-2);font-weight:600}
@@ -1866,15 +1866,15 @@ button.busy{cursor:progress}
    hidden. So the movement is gone altogether. It is a fade, opacity only, and
    the computed transform on this card is now none at every moment of its life. */
 @keyframes gatecard{from{opacity:0}to{opacity:1}}
-.gcard{max-width:396px;width:100%;background:var(--t1);border-radius:18px;padding:26px 24px;
+.gcard{max-width:396px;width:100%;background:var(--t1);border-radius:18px;padding:28px 26px;
   animation:gatecard .28s var(--ease) both}
 /* Google will not draw its button narrower than 240px. On a 320px phone the
    card's content box was 228, so the first thing a new member ever saw was a
    sign in button with its right hand end cut off. The padding comes in far
    enough to hold it. */
-@media(max-width:430px){.gcard{padding:20px 16px}}
-@media(max-width:360px){.gcard{padding:18px 12px}}
-.gcard .head{display:flex;align-items:center;gap:13px;margin-bottom:18px}
+@media(max-width:430px){.gcard{padding:22px 16px}}
+@media(max-width:360px){.gcard{padding:20px 12px}}
+.gcard .head{display:flex;align-items:center;gap:13px;margin-bottom:20px}
 .gcard .head .crest{width:3.1rem;height:3.1rem;flex-basis:3.1rem;padding:5px;
   border-radius:50%;background:radial-gradient(circle at 50% 38%,#FFFDFA,#F0E2D4 70%,#DCC7B3);
   box-shadow:0 3px 12px -4px rgba(20,1,3,.6),inset 0 0 0 1.5px rgba(122,13,18,.16);
@@ -1883,7 +1883,7 @@ button.busy{cursor:progress}
 .gcard .head b i{font-style:italic;color:var(--gold-2)}
 .gcard .head small{display:block;font-family:var(--mono);font-size:0.635rem;color:var(--cream-4);letter-spacing:.22em;
   margin-bottom:6px;font-weight:700}
-.gcard .lede{color:var(--cream-2);font-size:0.737rem;line-height:1.6;margin-bottom:18px}
+.gcard .lede{color:var(--cream-2);font-size:0.737rem;line-height:1.6;margin-bottom:16px}
 /* This inherited .msg, which has a dark padded background meant for a message
    inside a thread. Empty, it drew a filled bar under the sign in button that
    looked like a fault, because it was one. */
@@ -1924,8 +1924,21 @@ button.busy{cursor:progress}
    from person to person and bring its own square frame. It is turned off the
    way Google documents rather than by covering it up: it is not drawn when the
    requested width is under two hundred. See GSI_W in drawGsi. */
-#gsiBtn{position:relative;margin-top:15px;width:100%;min-width:0;
+/* THE SPACING OF THIS CARD.
+   One button is the whole point of the screen, so it gets room on both sides
+   of it and nothing else competes: the note under it is small and quiet, and
+   the foot is a rule with the year on it rather than a row of links. The
+   button sits in the largest gap on the card, which is what makes it read as
+   the thing to press. */
+#gsiBtn{position:relative;margin:22px 0 0;width:100%;min-width:0;
   display:flex;justify-content:center;align-items:center;min-height:44px}
+.gsihint{margin:14px 0 0;text-align:center;font-size:.7rem;line-height:1.5;
+  color:var(--cream-4);font-weight:500}
+.gsihint b{color:var(--cream-3);font-weight:700}
+.gfoot{display:flex;align-items:center;justify-content:center;gap:10px;
+  margin:20px 0 0;padding-top:14px;border-top:1px solid var(--edge);
+  font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--cream-4);font-weight:700}
 #gsiBtn iframe{margin:0!important;display:block}
 /* The ring belongs on the slot: the thing being focused is Google's frame. */
 #gsiBtn:focus-within{outline:2px solid var(--gold);outline-offset:3px;border-radius:999px}
@@ -2260,6 +2273,16 @@ html[data-words="on"] .wordgone{display:inline-block;min-width:26px;height:1em;
    would be, so it never reads as somebody the President forgot the name of. */
 .fbrow.hush{background:var(--t3)}
 .fbrow.hush .fbwho b{color:var(--cream-4);font-style:italic;font-weight:600}
+/* The month by month grid. One cell per subject per month. */
+.fbgrid td,.fbgrid th{white-space:nowrap;padding:6px 8px}
+.fbgrid .pubchip{font-size:.56rem;padding:2px 7px}
+/* How loudly an entry in the security log speaks. */
+.pubchip.sev-low{background:var(--t2);color:var(--cream-4)}
+.pubchip.sev-note{background:var(--t2);color:var(--cream-3)}
+.pubchip.sev-high{background:rgba(226,169,60,.20);color:var(--gold-2);border-color:rgba(226,169,60,.45)}
+.pubchip.sev-critical{background:rgba(232,83,92,.22);color:#FFC9CC;border-color:rgba(232,83,92,.5)}
+.pubchip.sev-low::before,.pubchip.sev-note::before,
+.pubchip.sev-high::before,.pubchip.sev-critical::before{display:none}
 .lockbox{border-radius:var(--r2);background:var(--t3);padding:14px 16px;margin-top:var(--g2);
   border:1px solid rgba(226,169,60,.35)}
 .lockbox h4{margin:0 0 6px;font-family:var(--display);font-size:1rem}
@@ -2286,6 +2309,9 @@ html[data-words="on"] .wordgone{display:inline-block;min-width:26px;height:1em;
   font-size:.76rem;color:var(--cream-3)}
 /* The links shelf, as the committee sees it */
 .linkedit{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+/* The two little arrows that move a link up and down the shelf. */
+.btn.ord{padding:5px 9px;min-width:34px;font-size:.7rem;line-height:1}
+.btn.ord[disabled]{opacity:.3;cursor:default}
 </style>
 
 <div id="boot">
@@ -2486,6 +2512,7 @@ html[data-words="on"] .wordgone{display:inline-block;min-width:26px;height:1em;
         <button class="btn ghost sm" id="bFbAll">Everything</button>
         <button class="btn ghost sm" id="bFbCsv">Save it as a spreadsheet</button></div>
     </div>
+    <div id="fbMonths"></div>
     <div id="fbBody"></div>
     <div id="fbLocks"></div>
   </section>
@@ -2580,6 +2607,14 @@ html[data-words="on"] .wordgone{display:inline-block;min-width:26px;height:1em;
       <div id="pubList"></div>
     </div>
     <div class="card" data-owner hidden>
+      <h3>Anything out of the ordinary</h3>
+      <p class="lede">Every time the app refuses to do something, it is written down here with the address the person was signed in as: a member reaching for a committee action, an administrator reaching for something only you can do, a session token that was never issued, a sign in Google would not vouch for, somebody hammering one endpoint. A few things that <i>are</i> allowed are here too, because they are worth being able to account for afterwards: emptying a year of records, exporting the sign up lists, changing who is an administrator.</p>
+      <p class="lede">The address comes from the Google sign in and cannot be typed in by hand, so it is the strongest identifier this app has. It holds no telephone number for anybody, and Apps Script gives a web app no client IP address, so neither can be shown here. Nothing in the app can clear this list.</p>
+      <div class="acts"><button class="btn crimson sm" id="bSecurity">Read the log</button>
+        <span class="lede" id="secNote"></span></div>
+      <div id="secBody"></div>
+    </div>
+    <div class="card" data-owner hidden>
       <h3>The Vice-President's address</h3>
       <p class="lede">This list is the only thing that makes somebody a Vice-President as far as this app is concerned, and only the President can write it. It used to recognise anyone whose role on the roster read Vice-President, which meant an administrator could type the words into their own row and be handed the name against every answer in college. Seeing a name is granted here, by one person, or it is not granted. These two seats, and no others, see a name against an answer in Feedback.</p>
       <div id="vpList"></div>
@@ -2635,12 +2670,14 @@ html[data-words="on"] .wordgone{display:inline-block;min-width:26px;height:1em;
       <p><b>Your rights.</b> You may ask to see what is held about you, to have it corrected, or to have it deleted, and you may withdraw from anything you have said yes to. Write to <b>president@mcr.jesus.cam.ac.uk</b> and it will be dealt with within a month. If you are not satisfied you may complain to the Information Commissioner at <b>ico.org.uk</b>.</p>
     </div>
     <div id="gsiBtn"><span class="gsiskel" aria-hidden="true"></span></div>
-    <p class="lede" style="margin:10px 0 0;font-size:.74rem">Use your <b>@cam.ac.uk</b> address. No new password needed.</p>
+    <p class="gsihint">Use your <b>@cam.ac.uk</b> address. No new password needed.</p>
     <p class="msg" id="gateMsg"></p>
     <div id="gateCheck"></div>
+    <!-- Where a real failure explains itself. Empty unless something has
+         actually gone wrong, and the panels it draws carry their own "show me
+         the details" button, which is the only thing that opens #diag now. -->
     <div id="gateFix"></div>
-    <div class="gfoot"><span id="gFootYear"></span><span class="beta">Beta</span>
-      <button id="bDiag" style="background:none;border:0;color:var(--cream-3);font-size:11.5px;padding:0;text-decoration:underline">Trouble signing in?</button></div>
+    <div class="gfoot"><span id="gFootYear"></span><span class="beta">Beta</span></div>
     <div id="diag" hidden></div>
   </div>
 </div>
@@ -3257,7 +3294,7 @@ function loadGsi(again){
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbxYlmJ8_8PDPNpLK4x4yKWZfuVPr0WJYrvf_tTZ-eqvtAGhOGCiGcFFiSjUFWLw0nlC/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzShpzgtAwp6RsJcDe9SsRahjE4FAYhYhF5JN7lNjJRGtm7GLNfS48rR729tLC_Yj-h/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -5599,7 +5636,12 @@ function lodgeNow(){
 }
 function lodgeForms(){
   const L = S.links || [];
-  const first = ["permit","maintenance","guest"];
+  /* Which links sit at the top is now a property of the link, set by the
+     committee. A shelf saved before that existed has the flag on none of
+     them, so the original three stand in rather than the top of the page
+     going empty. */
+  const anyTop = L.some(l => l.top);
+  const first = anyTop ? L.filter(l => l.top).map(l => l.key) : ["permit","maintenance","guest"];
   const card = l => '<a class="linkcard" href="' + esc(safeUrl(l.url)) + '" target="_blank" rel="noopener">' +
     '<div class="t"><b>' + esc(l.name) + "</b><p>" + esc(l.note) + "</p>" +
     '<span class="who">' + esc(l.who) + "</span></div><span class=\"arw\">&#8599;</span></a>";
@@ -7093,11 +7135,17 @@ function renderAdmin(){
     '<p class="lede">' + pc + " of " + S.seatCount + " committee seats have a photograph on them." +
     (pc < S.seatCount ? " Write them on with the button below." : "") + "</p>");
   paintWiring();
-  renderLinkList();
-  renderPubList();
-  renderVpList();
-  renderPurge();
-  renderWordsNote();
+  /* These five draw into cards that only the two seats, or only the President,
+     can see. Drawing them for anybody else filled a hidden card with a list of
+     controls that would be refused if they were ever reached: harmless, but
+     the page should not be building things nobody is allowed to use. */
+  if (isBoss()){
+    renderLinkList();
+    renderPubList();
+    renderPurge();
+    renderWordsNote();
+  }
+  if (S.me.owner) renderVpList();
   put("adminLinks", (S.sheetUrl ? 'The spreadsheet: <a href="' + esc(safeUrl(S.sheetUrl)) +
     '" target="_blank" rel="noopener">open it</a>. ' : "") +
     (S.appUrl ? "The app lives at <code>" + esc(S.appUrl) + "</code>." : ""));
@@ -8780,7 +8828,10 @@ document.addEventListener("click", async e => {
       return;
     }
     if (d.noticeoff){ await api("deleteNotice", { id: d.noticeoff }); await refresh(false); return; }
-    if (d.editres) return openResourceEditor(d.editres);
+    /* hasAttribute, not truthiness: "Add a guide" carries data-editres="" to
+       mean "a new one", and an empty string is falsy, so that button has
+       never done anything while Edit beside it worked. */
+    if (t.hasAttribute("data-editres")) return openResourceEditor(d.editres);
     if (d.roomyes || d.roomno){
       spin(t, "One moment");
       const r = await api("roomDecide", { id: d.roomyes || d.roomno, status: d.roomyes ? "yes" : "no" });
@@ -8907,7 +8958,11 @@ on("gate", "click", e => {
     return;
   }
 });
-on("bDiag", "click", () => { renderDiag(); $("diag").hidden = !$("diag").hidden; });
+/* The permanent "Trouble signing in?" link is gone: it invited everybody to
+   read a diagnostic panel written for one broken deployment, on a screen whose
+   whole job is one button. renderDiag and #diag are still here and still
+   reachable -- every gateFix panel that appears when something has genuinely
+   failed carries its own data-diag button, handled below. */
 on("bPrivacy", "click", e => {
   const box = $("privacy");
   if (!box) return;
@@ -9841,9 +9896,16 @@ function wordsList(){
 function renderLinkList(){
   const L = S.links || [];
   put("linkList", (L.length
-    ? L.map(l =>
-        '<div class="rowline"><div class="t"><b>' + esc(l.name) + "</b><span>" +
-        esc(l.who || "") + (l.who ? " &middot; " : "") + esc(l.url) + "</span></div>" +
+    ? L.map((l, i) =>
+        '<div class="rowline"><div class="t"><b>' + esc(l.name) +
+        (l.top ? ' <span class="pubchip on" style="text-transform:none">At the top</span>' : "") +
+        "</b><span>" + esc(l.who || "") + (l.who ? " &middot; " : "") + esc(l.url) + "</span></div>" +
+        '<button class="btn ghost sm ord" data-linkup="' + esc(l.key) + '"' +
+          (i === 0 ? " disabled" : "") + ' title="Move it up" aria-label="Move ' +
+          esc(l.name) + ' up">&#9650;</button>' +
+        '<button class="btn ghost sm ord" data-linkdown="' + esc(l.key) + '"' +
+          (i === L.length - 1 ? " disabled" : "") + ' title="Move it down" aria-label="Move ' +
+          esc(l.name) + ' down">&#9660;</button>' +
         '<button class="btn ghost sm" data-linkedit="' + esc(l.key) + '">Edit</button>' +
         '<button class="btn ghost sm" data-linkdel="' + esc(l.key) + '">Delete</button></div>').join("")
     : '<p class="lede">There is nothing on the shelf. Add the first one below.</p>'));
@@ -9861,6 +9923,8 @@ function openLinkEditor(key){
       esc(l ? l.who : "") + '" placeholder="The Dean"></label>' +
     '<label class="f"><span>Order on the shelf</span><input type="number" id="lkSort" value="' +
       (l ? l.sort : 999) + '"></label></div>' +
+    '<label class="check"><input type="checkbox" id="lkTop"' + (l && l.top ? " checked" : "") +
+      "> Put this one at the top of Info, above the rest</label>" +
     '<div class="acts"><button class="btn crimson" id="lkGo">Save</button>' +
       (l ? '<button class="btn ghost" id="lkDel">Delete it</button>' : "") +
       '<button class="btn ghost" data-close>Cancel</button></div>',
@@ -9871,7 +9935,8 @@ function openLinkEditor(key){
         spin(b, "Saving");
         try{
           const r = await api("saveLink", { link: { key: key || "", name: $("lkName").value,
-            url: $("lkUrl").value, note: $("lkNote").value, who: $("lkWho").value, sort: $("lkSort").value } });
+            url: $("lkUrl").value, note: $("lkNote").value, who: $("lkWho").value,
+            sort: $("lkSort").value, top: !!($("lkTop") && $("lkTop").checked) } });
           S.links = r.links || [];
           closeSheet();
           renderLinkList(); renderLodgeShelf();
@@ -9998,6 +10063,43 @@ async function purgeGo(kind, scope, btn){
   }catch(e){ sent(btn); fail(e); }
 }
 
+/* ANYTHING OUT OF THE ORDINARY, FOR THE PRESIDENT.
+   Two readings of the same rows: who, so that a hundred refusals from one
+   address reads differently from a hundred from a hundred addresses, and then
+   the rows themselves in order. It is not fetched with the rest of the state
+   -- it is a list of people's failures and it loads when it is asked for. */
+const SEV = { critical: "critical", high: "high", note: "note", low: "low" };
+async function loadSecurity(btn){
+  if (btn) sending(btn, "Reading");
+  try{
+    const r = await api("security");
+    if (btn) sent(btn);
+    put("secNote", esc(r.total + (r.total === 1 ? " entry" : " entries") + " held"));
+    put("secBody",
+      (r.people.length
+        ? '<div class="grp">By address, the last 30 days</div>' +
+          r.people.map(p =>
+            '<div class="rowline"><div class="t"><b>' + esc(p.email) +
+            '</b><span>' + esc(p.kinds) + " &middot; last " + esc(when(p.last)) + "</span></div>" +
+            '<span class="pubchip sev-' + esc(SEV[p.worst] || "note") + '">' + esc(p.worst) + "</span>" +
+            '<span class="ref">' + p.n + "</span></div>").join("")
+        : '<div class="card"><p>Nothing has been refused in the last thirty days.</p></div>') +
+      (r.rows.length
+        ? '<div class="grp">Every entry, newest first</div>' +
+          r.rows.map(x =>
+            '<div class="fbrow"><div class="fbwho"><b>' + esc(x.email) + "</b><span>" +
+            esc(x.crsid || "\u2014") + '</span></div><div class="fbwhat"><div class="fbmeta">' +
+            '<span class="pubchip sev-' + esc(SEV[x.severity] || "note") + '">' + esc(x.severity) + "</span>" +
+            "<span>" + esc(x.kind) + "</span>" +
+            (x.action ? "<span>action: " + esc(x.action) + "</span>" : "") +
+            "<span>" + esc(when(x.at)) + "</span></div>" +
+            "<p>" + esc(x.detail) + "</p></div></div>").join("")
+        : "") +
+      '<p class="lede" style="margin-top:12px">' + esc(r.note) + "</p>");
+  }catch(e){ if (btn) sent(btn); fail(e); }
+}
+on("bSecurity", "click", e => loadSecurity(e.currentTarget));
+
 /* ============================================================
    THE FEEDBACK DESK
    ============================================================
@@ -10029,8 +10131,49 @@ async function purgeGo(kind, scope, btn){
    what the committee is for. Knowing which person is unhappy is not. */
 let fbRows = null, fbQ = "", revealNonce = "", revealUntil = 0, revealTimer = null;
 
+/* NAMES, MONTH BY MONTH, FOR THE FIVE STANDING SUBJECTS.
+   The five subjects are asked again every month, so this is a grid rather
+   than a switch: one row per subject, one cell per month, and each cell says
+   whether an answer given in that month carried a name. Setting a month to no
+   names takes the names off what has already been said in that month and
+   nothing else, and the card the room sees relabels itself to match.
+
+   Past months can be set too, which is deliberate: it is the way to make a
+   term's answers safe after the fact when something turns out to be more
+   sensitive than it looked. It cannot be undone for the answers already
+   given -- the addresses are replaced, not hidden -- and it says so. */
+function renderFbMonths(){
+  if (!S || !S.me.names) return put("fbMonths", "");
+  const topics = sayShown(((S.say || {}).topics) || []);
+  if (!topics.length) return put("fbMonths", "");
+  const months = ((topics[0] || {}).run || []).map(r => r.month);
+  const shortMonth = m => {
+    const bits = String(m).split("-");
+    return (MONTHNAMES[Number(bits[1]) - 1] || "").slice(0, 3) + " " + String(bits[0]).slice(2);
+  };
+  put("fbMonths",
+    '<div class="grp">How it is going, names month by month' +
+      '<span class="ref" style="margin-left:auto">' + esc(monthName(S.sayPeriod || "")) + " is now</span></div>" +
+    '<div class="card"><p class="lede">Each cell is one subject in one month. <b>Names kept</b> means an ' +
+      "answer given that month carries the name of the person who gave it, which you and the President " +
+      "can see and nobody else can. <b>No names</b> means no address is saved against it at all.</p>" +
+    '<p class="lede">Turning a month to no names also takes the names off what has already been said that ' +
+      "month, and that cannot be undone. Turning it back on only affects answers given from then on.</p>" +
+    '<div style="overflow-x:auto"><table class="att fbgrid"><thead><tr><th>Subject</th>' +
+      months.map(m => "<th>" + esc(shortMonth(m)) + "</th>").join("") + "</tr></thead><tbody>" +
+    topics.map(t => "<tr><td><b>" + esc(t.name) + "</b></td>" +
+      months.map(m => {
+        const off = !!((t.namelessRun || {})[m]);
+        return "<td>" + '<button class="pubchip anon' + (off ? " on" : "") +
+          '" data-sayanon="' + esc(t.key) + '" data-anonkind="topic" data-anonmonth="' + esc(m) +
+          '" data-anonon="' + (off ? "0" : "1") + '" title="' + esc(t.name) + ", " + esc(monthName(m)) +
+          '">' + (off ? "No names" : "Names kept") + "</button></td>";
+      }).join("") + "</tr>").join("") +
+    "</tbody></table></div></div>");
+}
 function renderFbDesk(){
   if (!S || !S.me.names) return;
+  renderFbMonths();
   put("fbNote", "Every answer, with the name on it");
   put("fbWho",
     "This page is the President's and the Vice-President's. Everybody else on the committee sees the same " +
@@ -10173,8 +10316,8 @@ function showRoll(r){
    in one place. */
 document.addEventListener("click", async e => {
   if (!S) return;
-  const t = e.target.closest("[data-saypub],[data-sayanon],[data-linkedit],[data-linkdel],[data-purge]," +
-    "[data-fbdel],[data-wordsoff],[data-quietdel]");
+  const t = e.target.closest("[data-saypub],[data-sayanon],[data-linkedit],[data-linkdel]," +
+    "[data-linkup],[data-linkdown],[data-purge],[data-fbdel],[data-wordsoff],[data-quietdel]");
   if (!t) return;
   const d = t.dataset;
   try{
@@ -10203,26 +10346,39 @@ document.addEventListener("click", async e => {
     if (t.hasAttribute("data-sayanon")){
       const on = d.anonon === "1";
       const isQ = d.anonkind === "question";
-      if (on && !confirm("Stop keeping names against this " + (isQ ? "question" : "subject") + "?" +
+      const month = d.anonmonth || "";
+      const what = isQ ? "question" : month ? "subject in " + monthName(month) : "subject";
+      if (on && !confirm("Stop keeping names against this " + what + "?" +
         "\n\nThe addresses already held against it are replaced by one way codes. Nobody, the " +
         "President included, will be able to tell who said what. There is no undo."))
         return;
-      if (!on && !confirm("Start keeping names against this " + (isQ ? "question" : "subject") +
+      if (!on && !confirm("Start keeping names against this " + what +
         " again?\n\nOnly answers given from now on carry a name. What was said namelessly stays " +
         "nameless, because there is nothing to put back."))
         return;
       sending(t, on ? "Taking the names off" : "Saving");
       try{
         const r = await api(isQ ? "soundingAnon" : "sayAnon",
-          isQ ? { id: d.sayanon, on: on } : { key: d.sayanon, on: on });
+          isQ ? { id: d.sayanon, on: on } : { key: d.sayanon, on: on, month: month });
         S.say = r.say || S.say;
         sent(t);
-        renderSay(); renderPubList(); renderBadges();
+        renderSay(); renderPubList(); renderFbMonths(); renderBadges();
         toast(r.scrubbed
           ? "Done. The names came off " + r.scrubbed +
             (r.scrubbed === 1 ? " answer already given." : " answers already given.")
           : on ? "No names are kept against it from now on."
                : "Names are kept against answers from now on.");
+      }catch(err){ sent(t); fail(err); }
+      return;
+    }
+    if (t.hasAttribute("data-linkup") || t.hasAttribute("data-linkdown")){
+      const up = t.hasAttribute("data-linkup");
+      sending(t, "Moving");
+      try{
+        const r = await api("moveLink", { key: up ? d.linkup : d.linkdown, dir: up ? "up" : "down" });
+        S.links = r.links || [];
+        sent(t);
+        renderLinkList(); renderLodgeShelf();
       }catch(err){ sent(t); fail(err); }
       return;
     }
