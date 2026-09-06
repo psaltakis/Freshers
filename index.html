@@ -1932,6 +1932,10 @@ button.busy{cursor:progress}
    the thing to press. */
 #gsiBtn{position:relative;margin:22px 0 0;width:100%;min-width:0;
   display:flex;justify-content:center;align-items:center;min-height:44px}
+/* Google's frame is drawn at the width gsiWidth() measured, so it already
+   fills the column; this keeps it there if Google ever returns something
+   narrower than it was asked for. */
+#gsiBtn > div,#gsiBtn iframe{width:100%!important;max-width:100%}
 .gsihint{margin:14px 0 0;text-align:center;font-size:.7rem;line-height:1.5;
   color:var(--cream-4);font-weight:500}
 .gsihint b{color:var(--cream-3);font-weight:700}
@@ -2517,6 +2521,21 @@ html[data-words="on"] .wordgone{display:inline-block;min-width:26px;height:1em;
     <div id="fbLocks"></div>
   </section>
 
+  <!-- ============ SECURITY (the President alone) ============
+       Its own tab rather than a card on the Committee page: it is not a
+       setting anybody adjusts, it is a record somebody reads, and it is read
+       by one person in the college. -->
+  <section id="v-security" hidden>
+    <div class="vh"><h2>Out of the <i>ordinary</i></h2><span class="note" id="secNote"></span>
+      <div class="right"><button class="btn ghost sm" id="bSecurity">Refresh</button></div></div>
+    <div class="card">
+      <p class="lede">Every time the app refuses to do something it is written down here, with the address the person was signed in as: a member reaching for a committee action, an administrator reaching for something only you can do, a session token that was never issued, a sign in Google would not vouch for, somebody hammering one part of the app. A few things that <i>are</i> allowed are here too, because they are worth being able to account for afterwards: emptying a year of records, exporting the sign up lists, changing who is an administrator.</p>
+      <p class="lede">The address and the CRSid come from the Google sign in and cannot be typed in by hand, so they are the strongest identifier this app has. Nothing in the app can clear this list.</p>
+    </div>
+    <div class="seg" id="secSeg" style="margin-bottom:var(--g2);overflow-x:auto"></div>
+    <div id="secBody"></div>
+  </section>
+
   <!-- ===================== ADMIN ===================== -->
   <section id="v-admin" hidden>
     <div class="vh"><h2>The <i>committee</i></h2><span class="note">Who can edit, and who serves what</span></div>
@@ -2607,14 +2626,6 @@ html[data-words="on"] .wordgone{display:inline-block;min-width:26px;height:1em;
       <div id="pubList"></div>
     </div>
     <div class="card" data-owner hidden>
-      <h3>Anything out of the ordinary</h3>
-      <p class="lede">Every time the app refuses to do something, it is written down here with the address the person was signed in as: a member reaching for a committee action, an administrator reaching for something only you can do, a session token that was never issued, a sign in Google would not vouch for, somebody hammering one endpoint. A few things that <i>are</i> allowed are here too, because they are worth being able to account for afterwards: emptying a year of records, exporting the sign up lists, changing who is an administrator.</p>
-      <p class="lede">The address comes from the Google sign in and cannot be typed in by hand, so it is the strongest identifier this app has. It holds no telephone number for anybody, and Apps Script gives a web app no client IP address, so neither can be shown here. Nothing in the app can clear this list.</p>
-      <div class="acts"><button class="btn crimson sm" id="bSecurity">Read the log</button>
-        <span class="lede" id="secNote"></span></div>
-      <div id="secBody"></div>
-    </div>
-    <div class="card" data-owner hidden>
       <h3>The Vice-President's address</h3>
       <p class="lede">This list is the only thing that makes somebody a Vice-President as far as this app is concerned, and only the President can write it. It used to recognise anyone whose role on the roster read Vice-President, which meant an administrator could type the words into their own row and be handed the name against every answer in college. Seeing a name is granted here, by one person, or it is not granted. These two seats, and no others, see a name against an answer in Feedback.</p>
       <div id="vpList"></div>
@@ -2648,6 +2659,7 @@ html[data-words="on"] .wordgone{display:inline-block;min-width:26px;height:1em;
   <button class="tabbtn committee" data-view="swapdesk" data-committee hidden><svg viewBox="0 0 24 24"><path d="M4 8h13l-3-3M20 16H7l3 3"/><circle cx="18.5" cy="6.5" r="2.2"/></svg>Swap desk<span class="badge" id="bdgSwapDesk" hidden>0</span></button>
   <button class="tabbtn committee" data-view="members" data-committee hidden><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>Members</button>
   <button class="tabbtn committee" data-view="fbdesk" data-names hidden><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><path d="M12 14v2"/></svg>Feedback desk</button>
+  <button class="tabbtn committee" data-view="security" data-owner hidden><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3 8.5-7 10-4-1.5-7-5-7-10V6z"/><path d="M12 9.5v3.5"/><path d="M12 15.6h.01"/></svg>Security<span class="badge" id="bdgSec" hidden>0</span></button>
   <button class="tabbtn committee" data-view="admin" data-boss hidden><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3 8.5-7 10-4-1.5-7-5-7-10V6z"/><path d="M9.5 12l1.8 1.8 3.4-3.6"/></svg>Committee</button>
   <div class="railfoot" aria-hidden="true"><span class="orb" id="railOrb"></span><span class="rc"><b id="railClock"></b><i id="railTerm"></i></span></div>
 </nav>
@@ -3294,7 +3306,7 @@ function loadGsi(again){
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbzShpzgtAwp6RsJcDe9SsRahjE4FAYhYhF5JN7lNjJRGtm7GLNfS48rR729tLC_Yj-h/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbytYPnU_uSIGHEP_OaeJtLuMCaZhsCN-HJLyux9PQNasbFAhr52FFUJe419QQvn9fqv/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -3721,7 +3733,24 @@ const withTimeout = (p, ms, what) => Promise.race([p,
 
    The shorter of the two labels goes with it, so the text is comfortable at
    this width instead of being ellipsized. */
-const GSI_W = 199;
+/* HOW WIDE GOOGLE'S BUTTON IS DRAWN.
+   It was a fixed 199 pixels. Everything else on the sign in card is the full
+   width of the card's text column, so the one thing somebody has to press sat
+   narrow and centred in the middle of it, visibly not lining up with anything
+   above or below. Google draws the button inside an iframe at whatever pixel
+   width it is told and cannot be styled from here, so the width has to be
+   measured and handed over.
+
+   Google's own limits are 200 to 400: under two hundred it declines to draw
+   at all, which is what the old 199 was flirting with, and over four hundred
+   it clamps. The slot is the card's text column, so on the 396px card this
+   comes out around 344 and the button lines up with the paragraph above it. */
+const GSI_MIN = 200, GSI_MAX = 400;
+function gsiWidth(){
+  const slot = $("gsiBtn");
+  const w = slot ? Math.round(slot.getBoundingClientRect().width) : 0;
+  return Math.max(GSI_MIN, Math.min(GSI_MAX, w || GSI_MIN));
+}
 function drawGsi(){
   const slot = $("gsiBtn");
   if (!slot) return false;
@@ -3729,10 +3758,19 @@ function drawGsi(){
   slot.innerHTML = "";
   try{
     google.accounts.id.renderButton(slot, { theme:"outline", size:"large", shape:"pill",
-      text:"signin_with", logo_alignment:"left", width: GSI_W });
+      text:"signin_with", logo_alignment:"left", width: gsiWidth() });
   }catch(e){ slot.innerHTML = ""; return false; }
   return true;
 }
+/* The iframe keeps the width it was drawn at, so a rotated phone or a dragged
+   window would leave it the old size. Redrawn, quietly, once things settle. */
+let gsiFit = null;
+window.addEventListener("resize", () => {
+  const gate = $("gate");
+  if (!gate || gate.hidden) return;
+  clearTimeout(gsiFit);
+  gsiFit = setTimeout(() => { if (!$("gate").hidden) drawGsi(); }, 220);
+});
 function gateBusy(on){
   const slot = $("gsiBtn");
   if (slot) slot.style.height = "";
@@ -8201,7 +8239,7 @@ function voiceCard(){
    ============================================================ */
 /* Second life is gone. The Lodge has become three: the board on its own, the
    MCR room on its own, and Info for the links, the guides and the sport. */
-const VIEWS = ["today","board","say","room","swaps","ask","info","me","desk","inbox","swapdesk","members","fbdesk","admin"];
+const VIEWS = ["today","board","say","room","swaps","ask","info","me","desk","inbox","swapdesk","members","fbdesk","security","admin"];
 /* Stagger the first children of whatever has just been shown. Sixty
    milliseconds apart is enough to read as unfolding and not as waiting. */
 function stagger(id){
@@ -8233,6 +8271,7 @@ function go(v, scroll){
      app, and a section left reachable is a section somebody will reach. */
   if (["desk","inbox","swapdesk","members"].indexOf(v) >= 0 && !isCommittee()) v = "today";
   if (v === "admin" && !(isAdmin() || (S && S.me && S.me.names))) v = "today";
+  if (v === "security" && !(S && S.me && S.me.owner)) v = "today";
   view = v;
   document.querySelectorAll("#nav .tabbtn").forEach(b =>
     b.setAttribute("aria-current", String(b.dataset.view === v)));
@@ -8372,6 +8411,10 @@ const DRAW = {
      left the Members table showing whatever it showed when it was opened. */
   members: renderMembers,
   fbdesk: renderFbDesk,
+  /* Read when the tab is opened rather than shipped with the state: it is a
+     list of people's failures and there is no reason for it to travel with
+     every page load. */
+  security: () => { if (S.me.owner && !secLoaded) loadSecurity(null); else renderSecurity(); },
   admin: () => { if (!typingIn("v-admin")){ renderAdmin(); renderBumpsAdmin(); } }
 };
 let drawn = {};
@@ -10064,41 +10107,85 @@ async function purgeGo(kind, scope, btn){
 }
 
 /* ANYTHING OUT OF THE ORDINARY, FOR THE PRESIDENT.
-   Two readings of the same rows: who, so that a hundred refusals from one
-   address reads differently from a hundred from a hundred addresses, and then
-   the rows themselves in order. It is not fetched with the rest of the state
-   -- it is a list of people's failures and it loads when it is asked for. */
+   Three readings of the same rows. By sort of thing, because "twelve
+   refusals" is a different fact depending on what sort they were. By person,
+   because twelve from one address is a different fact from twelve from
+   twelve. Then the entries themselves, each with the CRSid, the day and the
+   time, what they were reaching for, and what the app told them.
+
+   The day and the time are formatted on the server in the college's own time
+   zone rather than in the browser, so two people reading this in different
+   places are reading the same clock. */
 const SEV = { critical: "critical", high: "high", note: "note", low: "low" };
+let secData = null, secLoaded = false, secTab = "all";
+function secWhen(x){
+  return esc(x.day) + " at " + esc(x.time);
+}
+function secEntry(x){
+  return '<div class="fbrow"><div class="fbwho"><b>' + esc(x.crsid || "\u2014") +
+    "</b><span>" + esc(x.email) + '</span></div><div class="fbwhat"><div class="fbmeta">' +
+    '<span class="pubchip sev-' + esc(SEV[x.severity] || "note") + '">' + esc(x.severity) + "</span>" +
+    "<span>" + esc(x.kind) + "</span>" +
+    (x.action ? "<span>reaching for: <b>" + esc(x.action) + "</b></span>" : "") +
+    "<span>" + secWhen(x) + "</span></div>" +
+    "<p>" + esc(x.detail) + "</p></div></div>";
+}
+function renderSecurity(){
+  if (!S || !S.me.owner) return;
+  const r = secData;
+  if (!r) return put("secBody",
+    '<div class="card"><p>Nothing read yet. Press Refresh.</p></div>');
+  put("secNote", r.total + (r.total === 1 ? " entry held" : " entries held"));
+  /* One tab per sort of thing that has actually happened, so the row of tabs
+     is short in a quiet term and grows only when there is something in it. */
+  put("secSeg",
+    '<button data-sectab="all" aria-pressed="' + (secTab === "all") + '">Everything' +
+      (r.total ? " &middot; " + r.total : "") + "</button>" +
+    r.cats.map(c => '<button data-sectab="' + esc(c.key) + '" aria-pressed="' +
+      (secTab === c.key) + '">' + esc(c.name) + " &middot; " + c.n + "</button>").join("") +
+    '<button data-sectab="who" aria-pressed="' + (secTab === "who") + '">By person</button>');
+  if (secTab === "who"){
+    return put("secBody", r.people.length
+      ? r.people.map(p =>
+          '<div class="rowline"><div class="t"><b>' + esc(p.email) + "</b><span>" +
+          esc(p.kinds) + "</span></div>" +
+          '<span class="pubchip sev-' + esc(SEV[p.worst] || "note") + '">' + esc(p.worst) + "</span>" +
+          '<span class="ref">' + p.n + "</span></div>").join("") +
+        '<p class="lede" style="margin-top:12px">The last thirty days, busiest first. ' + esc(r.note) + "</p>"
+      : '<div class="card"><p>Nothing has been refused in the last thirty days.</p></div>');
+  }
+  const cat = r.cats.filter(c => c.key === secTab)[0];
+  const rows = secTab === "all" ? r.rows : (cat ? cat.rows : []);
+  put("secBody",
+    (secTab === "all" && r.cats.length
+      ? '<div class="stats">' + r.cats.map(c =>
+          '<div class="stat"><b>' + c.n + "</b><span>" + esc(c.name) + "</span><i>" +
+          c.people + (c.people === 1 ? " person" : " people") + "</i></div>").join("") + "</div>"
+      : "") +
+    (cat ? '<div class="grp">' + esc(cat.name) + "</div>" : "") +
+    (rows.length
+      ? rows.map(secEntry).join("") +
+        (secTab === "all" && r.total > rows.length
+          ? '<p class="lede">Showing the ' + rows.length + " most recent of " + r.total + ".</p>" : "")
+      : '<div class="card"><p>Nothing of that sort has happened.</p></div>') +
+    '<p class="lede" style="margin-top:12px">' + esc(r.note) + "</p>");
+}
 async function loadSecurity(btn){
   if (btn) sending(btn, "Reading");
   try{
-    const r = await api("security");
+    secData = await api("security");
+    secLoaded = true;
     if (btn) sent(btn);
-    put("secNote", esc(r.total + (r.total === 1 ? " entry" : " entries") + " held"));
-    put("secBody",
-      (r.people.length
-        ? '<div class="grp">By address, the last 30 days</div>' +
-          r.people.map(p =>
-            '<div class="rowline"><div class="t"><b>' + esc(p.email) +
-            '</b><span>' + esc(p.kinds) + " &middot; last " + esc(when(p.last)) + "</span></div>" +
-            '<span class="pubchip sev-' + esc(SEV[p.worst] || "note") + '">' + esc(p.worst) + "</span>" +
-            '<span class="ref">' + p.n + "</span></div>").join("")
-        : '<div class="card"><p>Nothing has been refused in the last thirty days.</p></div>') +
-      (r.rows.length
-        ? '<div class="grp">Every entry, newest first</div>' +
-          r.rows.map(x =>
-            '<div class="fbrow"><div class="fbwho"><b>' + esc(x.email) + "</b><span>" +
-            esc(x.crsid || "\u2014") + '</span></div><div class="fbwhat"><div class="fbmeta">' +
-            '<span class="pubchip sev-' + esc(SEV[x.severity] || "note") + '">' + esc(x.severity) + "</span>" +
-            "<span>" + esc(x.kind) + "</span>" +
-            (x.action ? "<span>action: " + esc(x.action) + "</span>" : "") +
-            "<span>" + esc(when(x.at)) + "</span></div>" +
-            "<p>" + esc(x.detail) + "</p></div></div>").join("")
-        : "") +
-      '<p class="lede" style="margin-top:12px">' + esc(r.note) + "</p>");
+    renderSecurity();
   }catch(e){ if (btn) sent(btn); fail(e); }
 }
 on("bSecurity", "click", e => loadSecurity(e.currentTarget));
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-sectab]");
+  if (!b) return;
+  secTab = b.dataset.sectab;
+  renderSecurity();
+});
 
 /* ============================================================
    THE FEEDBACK DESK
