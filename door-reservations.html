@@ -162,6 +162,29 @@ body{background:
   .detailControls .detailSearch{scroll-margin-top:0;}
 }
 </style>
+
+<style>
+/* Final mobile interaction pass: keep filtering local and the event header coherent. */
+.detailFloat{display:none!important;}
+.detailHeaderIn{position:relative!important;padding-top:calc(14px + env(safe-area-inset-top))!important;padding-bottom:18px!important;}
+.detailBrand{align-items:flex-start!important;margin-top:0!important;}
+.detailHeading{min-width:0;flex:1;}
+.detailTitleRow{display:flex!important;align-items:center!important;gap:8px!important;min-width:0;}
+.detailTitleRow .detailTitle{min-width:0;flex:1;}
+.detailTitleRow .back{position:static!important;left:auto!important;top:auto!important;flex:none!important;display:inline-flex!important;align-items:center!important;gap:4px!important;width:auto!important;height:auto!important;padding:5px 8px!important;border:1px solid rgba(255,255,255,.2)!important;border-radius:9px!important;background:rgba(0,0,0,.12)!important;color:#fff!important;font-family:var(--ui)!important;font-size:9px!important;font-weight:700!important;box-shadow:none!important;}
+.detailTitleRow .back svg{width:13px!important;height:13px!important;}
+.person[hidden]{display:none!important;}
+@media(max-width:720px){
+  .detailHeaderIn{padding-top:calc(12px + env(safe-area-inset-top))!important;padding-bottom:15px!important;}
+  .detailTitleRow{gap:6px!important;}
+  .detailTitleRow .back{padding:5px 7px!important;font-size:9px!important;}
+  .detailWhen{margin-top:5px!important;}
+  .mainControls{z-index:40!important;}
+  .eventSlider{min-height:50px!important;}
+  .eventSlide .slideTitle{font-size:17px!important;color:#5B3235!important;}
+  .eventSlider:not(.all) .eventSlide[data-scope="mine"],.eventSlider.all .eventSlide[data-scope="all"]{color:#6B080D!important;}
+}
+</style>
 </head>
 <body>
 <div id="gate">
@@ -471,7 +494,8 @@ function personHtml(ev, r){
   const control = going
     ? '<span class="checkArea"><input aria-label="Check in '+esc(name)+'" type="checkbox" data-check data-event="'+esc(ev.id)+'" data-email="'+esc(r.email||"")+'" '+(checked?'checked':'')+'><span class="checkUI"><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 7"/></svg></span></span>'
     : '<span class="waitState">Waiting</span>';
-  return '<label class="person '+(checked?'checked is-checked':'')+'">' +
+  const searchHay = [name, r.email, r.programme, r.research, r.dietary, r.drinks, r.slot, r.choice].filter(Boolean).join(" ").toLowerCase();
+  return '<label class="person '+(checked?'checked is-checked':'')+'" data-person-search="'+esc(searchHay)+'">' +
     '<span class="personLabel"><span class="avatar">'+esc(initials(name))+'</span><span>' +
     '<span class="name '+(checked?'liveChecked':'')+'">'+esc(name)+'</span>' +
     '<span class="sub">'+esc([r.email, r.programme].filter(Boolean).join(' · '))+'</span>' +
@@ -496,8 +520,7 @@ function detailHtml(ev){
   const pool = (tab === "going" ? go : wl).filter(r => !q || [r.name,r.email,r.programme,r.research,r.dietary,r.drinks,r.slot,r.choice].join(" ").toLowerCase().includes(q));
   const pct = go.length ? Math.round(checked / go.length * 100) : 0;
   return '<div class="detailHeader"><div class="detailHeaderIn">' +
-    '<div class="detailFloat"><button class="back" data-close-detail><svg viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>Back to events</button></div>' +
-    '<div class="detailBrand"><span class="crestmark detailCrest" role="img" aria-label="Jesus College MCR"></span><div><div class="detailWhen">'+esc(formatDate(ev.date).long)+' · '+esc(ev.start||"")+'</div><div class="detailTitle">'+esc(ev.title)+'</div><div class="detailMeta">'+esc(venue(ev))+' · '+go.length+' reserved'+(wl.length?' · '+wl.length+' waiting':'')+'</div></div></div>' +
+    '<div class="detailBrand"><span class="crestmark detailCrest" role="img" aria-label="Jesus College MCR"></span><div class="detailHeading"><div class="detailTitleRow"><div class="detailTitle">'+esc(ev.title)+'</div><button class="back" data-close-detail aria-label="Back to events"><svg viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg><span>Back</span></button></div><div class="detailWhen">'+esc(formatDate(ev.date).long)+' · '+esc(ev.start||"")+'</div><div class="detailMeta">'+esc(venue(ev))+' · '+go.length+' reserved'+(wl.length?' · '+wl.length+' waiting':'')+'</div></div></div>' +
     '</div></div>' +
     '<div class="detailBody fade">' +
     '<div class="dietTop"><div class="dietMini alc"><b>'+a.drinkPct+'%</b><span>drink</span></div><div class="dietMini alc"><b>'+a.noDrinkPct+'%</b><span>do not drink</span></div>'+dietBits+'</div>' +
@@ -520,32 +543,37 @@ function openDetail(id){
 function repaintDetail(){
   if(!activeEvent) return;
   const ev = eventById(activeEvent); if(!ev) return;
-  const d = $("detail");
-  const input = $("personSearch");
-  const keepScroll = d ? d.scrollTop : 0;
-  const keepFocus = document.activeElement === input;
-  const keepStart = input && typeof input.selectionStart === "number" ? input.selectionStart : null;
-  const keepEnd = input && typeof input.selectionEnd === "number" ? input.selectionEnd : null;
-  const box = document.querySelector(".people");
-  const head = document.querySelector(".listHead span");
   const q = searchPeople.trim().toLowerCase();
-  const rows = (activeTab === "going" ? reservedRows(ev) : waitingRows(ev)).filter(r => !q || [r.name,r.email,r.programme,r.research,r.dietary,r.drinks,r.slot,r.choice].join(" ").toLowerCase().includes(q));
-  if(box) box.innerHTML = rows.length ? rows.map(r => personHtml(ev,r)).join("") : '<div class="notice">No people match this search.</div>';
-  if(head) head.textContent = rows.length + " shown";
-  document.querySelectorAll(".tab").forEach(b => b.classList.toggle("active", b.dataset.tab === activeTab));
-  requestAnimationFrame(() => {
-    if(!d) return;
-    d.scrollTop = keepScroll;
-    const ni = $("personSearch");
-    if(keepFocus && ni){
-      try{ ni.focus({preventScroll:true}); }catch(e){ ni.focus(); }
-      if(keepStart !== null && document.activeElement === ni){
-        try{ ni.setSelectionRange(keepStart, keepEnd); }catch(e){}
-      }
-      d.scrollTop = keepScroll;
-    }
+  const activeRows = activeTab === "going" ? reservedRows(ev) : waitingRows(ev);
+  const allowed = new Set(activeRows.map(r => String(r.email || "")));
+  const cards = document.querySelectorAll(".people .person");
+  let shown = 0;
+  cards.forEach(card => {
+    const input = card.querySelector("[data-check]");
+    const email = String(input?.dataset.email || "");
+    const hay = String(card.dataset.personSearch || "");
+    const visible = allowed.has(email) && (!q || hay.includes(q));
+    card.hidden = !visible;
+    if(visible) shown++;
   });
+  const head = document.querySelector(".listHead span");
+  if(head) head.textContent = shown + " shown";
+  document.querySelectorAll(".tab").forEach(b => b.classList.toggle("active", b.dataset.tab === activeTab));
+  const people = document.querySelector(".people");
+  let notice = people?.querySelector(".notice");
+  if(!shown){
+    if(!notice){
+      notice = document.createElement("div");
+      notice.className = "notice";
+      people?.appendChild(notice);
+    }
+    notice.textContent = "No people match this search.";
+    notice.hidden = false;
+  }else if(notice){
+    notice.hidden = true;
+  }
 }
+
 function closeDetail(){
   activeEvent = null; searchPeople = "";
   $("detail").classList.add("hidden");
