@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://accounts.google.com">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..800;1,9..144,300..700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -43,7 +44,7 @@ button,input{font:inherit}button{cursor:pointer}.hidden{display:none!important}
 .gateCard:before{content:"";position:absolute;inset:0 0 auto;height:4px;background:linear-gradient(90deg,var(--crimson),var(--gold),var(--crimson))}
 .gateBrand{display:flex;align-items:center;gap:14px;margin:3px 0 22px}.gateCrest{--ch:60px;flex:none}.gateBrand img{display:block;width:62px;height:74px;object-fit:contain;object-position:center;flex:none;filter:drop-shadow(0 4px 8px rgba(42,16,18,.18))}.gateBrand small{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.17em;text-transform:uppercase;color:var(--soft)}.gateBrand b{display:block;font-family:var(--display);font-size:30px;line-height:1.02;color:var(--crimson3);letter-spacing:-.03em}.gateBrand b i{font-style:italic;font-weight:300;color:var(--crimson)}
 .gateCopy h1{margin:0 0 7px;font-family:var(--display);font-size:25px;line-height:1.05;color:var(--crimson3)}.gateCopy p{margin:0;color:var(--soft);font-size:14px;line-height:1.55}.gateMeta{display:flex;gap:7px;flex-wrap:wrap;margin:16px 0 18px}.pill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:5px 8px;background:var(--cream2);font-family:var(--mono);font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2)}
-#gateButton{min-height:48px;display:flex;align-items:center;justify-content:center;width:100%}.gateHint{font-size:12px;color:var(--soft);margin:12px 0 0;text-align:center}.gateMsg{min-height:20px;margin:11px 0 0;color:var(--crimson);font-size:13px;font-weight:700;text-align:center}.gateFoot{display:flex;justify-content:space-between;gap:10px;margin-top:18px;padding-top:12px;border-top:1px solid var(--cream3);font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--soft)}
+#gsiBtn{min-height:48px;display:flex;align-items:center;justify-content:center;width:100%}.gsiLoading{display:block;text-align:center;font-size:13px;font-weight:700;color:var(--crimson3);padding:12px 0}.gateHint{font-size:12px;color:var(--soft);margin:12px 0 0;text-align:center}.gateMsg{min-height:20px;margin:11px 0 0;color:var(--crimson);font-size:13px;font-weight:700;text-align:center}.gateFoot{display:flex;justify-content:space-between;gap:10px;margin-top:18px;padding-top:12px;border-top:1px solid var(--cream3);font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--soft)}
 
 /* ---------- main ---------- */
 #app{min-height:100dvh}.top{position:sticky;top:0;z-index:30;background:rgba(107,8,13,.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.topIn{width:min(1120px,100%);margin:auto;padding:calc(9px + env(safe-area-inset-top)) 18px 9px;display:flex;align-items:center;gap:12px}.topCrest{--ch:40px;flex:none;filter:drop-shadow(0 2px 5px rgba(0,0,0,.4))}.wordmark{min-width:0;line-height:1.04}.wordmark b{display:block;font-family:var(--display);font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.wordmark i{display:block;font-family:var(--display);font-size:12px;font-style:italic;font-weight:400;color:rgba(251,243,236,.68)}.topSpace{flex:1}.live{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:8.5px;letter-spacing:.13em;text-transform:uppercase;color:rgba(251,243,236,.63)}.live:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--moss);box-shadow:0 0 0 4px rgba(63,122,87,.13);animation:pulse 1.7s ease-in-out infinite}.refresh{width:39px;height:39px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:var(--cream);display:grid;place-items:center}.refresh svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.refresh.busy svg{animation:spin .7s linear infinite}
@@ -126,7 +127,7 @@ body{background:
     <div class="gateBrand"><span class="crestmark gateCrest" role="img" aria-label="Jesus College MCR"></span><span><small>Jesus College MCR</small><b>Door <i>Check</i></b></span></div>
     <div class="gateCopy"><h1>Reservations at the door</h1><p>Committee-only access to the live reservation lists for Freshers' Fortnight.</p></div>
     <div class="gateMeta"><span class="pill">Committee only</span><span class="pill">Live reservations</span><span class="pill">Fast check-in</span></div>
-    <div id="gateButton"></div>
+    <div id="gsiBtn"><span class="gsiLoading">Loading Google sign-in…</span></div>
     <div class="gateHint">Use your University of Cambridge Google account.</div>
     <div class="gateMsg" id="gateMsg"></div>
     <div class="gateFoot"><span>Jesus College MCR</span><span>Freshers' Fortnight 2026</span></div>
@@ -154,419 +155,461 @@ body{background:
 <div class="toast" id="toast"></div>
 
 <script>
-/* Same server used by the main Freshers' Fortnight app. */
-const API_URL="https://script.google.com/macros/s/AKfycbxktOxbd030YrWSwY1M91dn2z96YoK9_wLR58pByZTphKTzH4obU7b75pZ6N-IQd6id/exec";
-const CACHE_KEY="mcr-door-state-v4";
-let memToken=null,token=null,gsiScript=null,gsiUp=false,gateOpening=false,lastCred="",activeEvent=null,activeTab="going",searchEvent="",searchPeople="",eventScope="mine",toastTimer=null;
+/* Door Check is a standalone client. It talks to the same Apps Script API as
+   the Freshers' Fortnight app, but does not contain the main app itself. */
+const API_URL = "https://script.google.com/macros/s/AKfycbxktOxbd030YrWSwY1M91dn2z96YoK9_wLR58pByZTphKTzH4obU7b75pZ6N-IQd6id/exec";
+const TOKEN_KEY = "mcr-ff26";
+const CACHE_KEY = "mcr-door-state-v4";
+const GSI_KEY = "mcr-ff26-gsi";
+const READ_ONLY = { state:1, ping:1 };
 
-const $=id=>document.getElementById(id);
-const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));
-const first=v=>String(v||"").trim().split(/\s+/)[0]||"";
-const initials=v=>String(v||"?").trim().split(/\s+/).slice(0,2).map(x=>x[0]).join("").toUpperCase()||"?";
-const eventById=id=>(S?.events||[]).find(e=>e.id===id)||null;
-const rowsFor=ev=>((S?.rsvps||{})[ev.id]||[]);
-const reservedRows=ev=>rowsFor(ev).filter(r=>r.status==="going");
-const waitingRows=ev=>rowsFor(ev).filter(r=>r.status==="waitlist");
-const alcoholStats=rows=>{const drinking=rows.filter(r=>r.drinks==="both").length;const noDrink=rows.filter(r=>r.drinks==="soft").length;const known=drinking+noDrink;return {drinking,noDrink,known,total:rows.length,drinkPct:known?Math.round(drinking/known*100):0,noDrinkPct:known?Math.round(noDrink/known*100):0};};
-const dietaryLabel=r=>String(r.dietary||"").trim()||"No dietary requirement";
-const needsDiet=r=>{const d=dietaryLabel(r).toLowerCase();return d!=="anything"&&d!=="no dietary requirement";};
-const formatDate=d=>{const x=new Date(d+"T12:00:00Z");return {day:String(x.getUTCDate()),dow:x.toLocaleDateString("en-GB",{weekday:"short",timeZone:"UTC"}),long:x.toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",timeZone:"UTC"})};};
-const venue=e=>e.venue||e.place||"Venue to be confirmed";
+let token = null;
+let S = null;
+let gsiScript = null;
+let gsiDrawn = false;
+let gateOpening = false;
+let activeEvent = null;
+let activeTab = "going";
+let searchEvent = "";
+let searchPeople = "";
+let eventScope = "mine";
+let sliderTouchX = null;
+let toastTimer = null;
+const pendingChecks = new Map();
 
-const TK = "mcr-ff26";
-const cookieGet = n => { const m = document.cookie.match(new RegExp("(?:^|; )" + n + "=([^;]*)")); return m ? decodeURIComponent(m[1]) : null; };
-function cookieSet(n, v, days){ try{ const b = [n + "=" + encodeURIComponent(v), "path=/", "max-age=" + (days * 86400), "SameSite=None"]; if (location.protocol === "https:") b.push("Secure"); document.cookie = b.join(";"); }catch(e){} }
-function getToken(){
-  try{ const v = localStorage.getItem(TK); if (v) return v; }catch(e){}
-  try{ const v = sessionStorage.getItem(TK); if (v) return v; }catch(e){}
-  const c = cookieGet(TK); if (c) return c;
-  /* window.name used to be read here as a last resort. It is not storage: it
-     belongs to the tab, not to this site, and whoever framed the page or last
-     controlled the tab chooses what is in it. Reading a session token out of it
-     let anybody put this app in an iframe named after their own token and have
-     a fresher fill in their name, their allergies and every booking under
-     somebody else's account. It is neither read nor written now. */
-  return memToken;
-}
-function setToken(t){ memToken = t; try{ localStorage.setItem(TK, t); }catch(e){} try{ sessionStorage.setItem(TK, t); }catch(e){} cookieSet(TK, t, 60); }
-function clearToken(){ memToken = null; try{ localStorage.removeItem(TK); }catch(e){} try{ sessionStorage.removeItem(TK); }catch(e){} cookieSet(TK, "", -1); sweepWindowName(); }
-/* An older build of this page kept the token in window.name. Nothing reads it
-   now, but it must not be left lying in the tab for the next site to find. */
-function sweepWindowName(){ try{ if (String(window.name).indexOf(TK + ":") === 0) window.name = ""; }catch(e){} }
-sweepWindowName();
-token = getToken();
-function bridge(){ try{ return (typeof google !== "undefined" && google.script && google.script.run) ? google.script.run : null; }catch(e){ return null; } }
-/* Asking for the programme again costs nothing, and most of these are a phone
-   changing masts rather than anything being wrong. Anything that writes is
-   never repeated: the college may well have written it already and only the
-   answer went missing. */
-const READ_ONLY = { state: 1, poll: 1, ping: 1 };
-/* Writes that land the same whether they arrive once or twice: putting a name
-   down for an event a second time changes nothing, and nor does saving the
-   same profile again. These are safe to send again when the network drops the
-   answer, and a booking is also sent again when the college says it is busy
-   writing somebody else's, which with a hundred people booking at once is a
-   queue rather than a fault. */
-const REPEATABLE = { rsvp: 1, saveProfile: 1, markSeen: 1, checkIn: 1 };
-async function api(action, payload){
-  const body = Object.assign({action, token: getToken() || ""}, payload || {});
-  if (bridge()) return viaBridge(body);
-  const tries = READ_ONLY[action] ? 2 : REPEATABLE[action] ? 3 : 1;
-  let wait = 900;
-  for (let i = 1; ; i++){
-    try{ return await viaFetch(body); }
-    catch(e){
-      const again = !!e && ((e.network && (READ_ONLY[action] || REPEATABLE[action])) || (e.busy && action === "rsvp"));
-      if (!again || i >= tries) throw e;
+const $ = id => document.getElementById(id);
+const esc = v => String(v ?? "").replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));
+const initials = v => String(v || "?").trim().split(/\s+/).slice(0,2).map(x => x[0]).join("").toUpperCase() || "?";
+const venue = e => e?.venue || e?.place || "Venue to be confirmed";
+const eventById = id => (S?.events || []).find(e => String(e.id) === String(id)) || null;
+const rowsFor = ev => (S?.rsvps?.[ev.id] || []);
+const reservedRows = ev => rowsFor(ev).filter(r => r.status === "going");
+const waitingRows = ev => rowsFor(ev).filter(r => r.status === "waitlist");
+const dietaryLabel = r => String(r?.dietary || "").trim() || "No dietary requirement";
+const needsDiet = r => { const d = dietaryLabel(r).toLowerCase(); return d !== "anything" && d !== "no dietary requirement"; };
+const organizerFor = ev => {
+  const me = String(S?.me?.email || "").trim().toLowerCase();
+  return !!me && Array.isArray(ev?.leads) && ev.leads.some(l => String(l?.email || "").trim().toLowerCase() === me);
+};
+const formatDate = d => {
+  const x = new Date(String(d || "") + "T12:00:00Z");
+  return {
+    day: String(x.getUTCDate()),
+    dow: x.toLocaleDateString("en-GB", {weekday:"short", timeZone:"UTC"}),
+    long: x.toLocaleDateString("en-GB", {weekday:"long", day:"numeric", month:"long", timeZone:"UTC"})
+  };
+};
+
+function getToken(){ try { return localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY) || ""; } catch(e) { return token || ""; } }
+function setToken(t){ token = String(t || ""); try { localStorage.setItem(TOKEN_KEY, token); sessionStorage.setItem(TOKEN_KEY, token); } catch(e) {} }
+function clearToken(){ token = null; try { localStorage.removeItem(TOKEN_KEY); sessionStorage.removeItem(TOKEN_KEY); } catch(e) {} }
+function cacheWrite(){ try { if(S) sessionStorage.setItem(CACHE_KEY, JSON.stringify(S)); } catch(e) {} }
+function cacheRead(){ try { const x = JSON.parse(sessionStorage.getItem(CACHE_KEY) || "null"); return x && Array.isArray(x.events) ? x : null; } catch(e) { return null; } }
+function checkAccess(st){ if(!st?.me || st.me.role !== "committee") throw new Error("Door Check is restricted to committee access."); }
+function showGateError(text){ const m = $("gateMsg"); if(m) m.textContent = String(text || ""); }
+function showToast(text){ const t = $("toast"); if(!t) return; t.textContent = String(text || ""); t.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 1900); }
+
+async function api(action, payload = {}){
+  const body = Object.assign({ action, token: getToken() || "" }, payload || {});
+  let attempts = READ_ONLY[action] ? 2 : 1;
+  let wait = 700;
+  for(let i=1; i<=attempts; i++){
+    try{
+      const res = await fetch(API_URL, {
+        method:"POST",
+        headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify(body),
+        redirect:"follow"
+      });
+      const text = await res.text();
+      let out;
+      try { out = JSON.parse(text); }
+      catch(e){ throw new Error("The MCR server returned an unexpected response."); }
+      if(!out.ok) throw new Error(out.error || "Something went wrong.");
+      return out.data;
+    }catch(e){
+      if(i === attempts) throw e;
       await new Promise(r => setTimeout(r, wait));
-      wait = Math.min(wait * 2, 4000);
+      wait *= 2;
     }
   }
-}
-function viaBridge(body){
-  return new Promise((resolve, reject) => {
-    bridge().withSuccessHandler(txt => { try{ resolve(unpack(txt)); }catch(e){ reject(e); } })
-      .withFailureHandler(err => reject(new Error(err && err.message ? err.message : "The script could not run. Check the Executions log in the Apps Script editor.")))
-      .apiCall(JSON.stringify(body));
-  });
-}
-async function viaFetch(body){
-  if (API_URL.indexOf("PASTE_YOUR") === 0) throw new Error("This page is not connected to a server yet. Paste your Web App URL into index.html.");
-  /* Only complain about /dev when this really is an Apps Script address. Behind a
-     proxy the endpoint is a path on our own site and there is nothing to check. */
-  if (/script\.google\.com/.test(API_URL) && API_URL.indexOf("/exec") < 0)
-    throw new Error("That Web App URL ends in /dev. Use the /exec URL from Deploy, Manage deployments.");
-  let txt;
-  try{
-    const ctl = ("AbortController" in window) ? new AbortController() : null;
-    const timer = ctl ? setTimeout(() => ctl.abort(), 90000) : null;
-    try{
-      const res = await fetch(API_URL, {method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(body), redirect:"follow", signal: ctl ? ctl.signal : undefined});
-      txt = await res.text();
-    } finally { if (timer) clearTimeout(timer); }
-  }catch(e){
-    /* This used to say "Cannot reach the server. Check the Web App URL", which
-       is a message for whoever deployed the app, shown to a fresher on a train
-       going through a tunnel. Say what has actually happened, calmly, and mark
-       it as a network fault so a plain read can be quietly tried again. */
-    let why;
-    if (typeof navigator !== "undefined" && navigator.onLine === false)
-      why = "You are offline. The programme will catch up by itself when you are back.";
-    else if (e && e.name === "AbortError")
-      why = "The college did not answer in time. That is usually the server waking up. Try again in a moment.";
-    else
-      why = "Could not reach the college just then. Try again in a moment.";
-    const err = new Error(why);
-    err.network = true;
-    throw err;
-  }
-  return unpack(txt);
-}
-function unpack(txt){
-  let out;
-  try{ out = JSON.parse(txt); }
-  catch(e){
-    const t = String(txt || "");
-    if (/accounts\.google\.com|ServiceLogin|Sign in to continue/i.test(t)) throw new Error("Google is asking whoever opens this to sign in, so the deployment is not open. Set Who has access to Anyone, then deploy a new version.");
-    if (/need permission|Authorization is required|requires authorization|authorize/i.test(t)) throw new Error("The script has not been authorised yet. Open the Apps Script editor, run setup once and approve the permissions.");
-    if (/Script function not found/i.test(t)) throw new Error("The deployment cannot find the code. Deploy a new version of the current script.");
-    /* Apps Script answers with a page of its own when it is over capacity or
-       has a bad moment, and until now that read as a broken deployment. It is a
-       passing fault: the read is tried again by itself, and the words say so. */
-    const busy = new Error(t.charAt(0) === "<"
-      ? "The college answered with a page instead of the programme, which usually means it is busy for a moment. Give it a few seconds and try again."
-      : "The college sent something unexpected. Give it a few seconds and try again.");
-    busy.network = true;
-    throw busy;
-  }
-  if (!out.ok){
-    if (/please sign in|session has expired|sign in again/i.test(out.error || "")){ clearToken(); showGateError("Your sign in has expired. Please sign in again."); }
-    const err = new Error(out.error || "Something went wrong");
-    /* The college is writing somebody else's booking at this moment. */
-    if (/another booking is being written/i.test(out.error || "")) err.busy = true;
-    throw err;
-  }
-  return out.data;
-}
-let toastT;
-function toast(m){ const e = $("toast"); e.textContent = m; e.classList.add("show"); clearTimeout(toastT); toastT = setTimeout(() => e.classList.remove("show"), 3600); }
-function fail(e){ toast(e && e.message ? e.message : String(e)); }
-function spin(b, label){ if (!b) return; b.disabled = true; b.dataset.was = b.innerHTML; b.innerHTML = '<span class="spin"></span>' + esc(label || "One moment"); }
-function unspin(b){ if (!b) return; b.disabled = false; if (b.dataset.was) b.innerHTML = b.dataset.was; }
-function sending(on, title, sub){
-  const el = $("sending");
-  if (!on){ el.classList.remove("show"); setTimeout(() => { el.hidden = true; }, 260); return; }
-  $("sendTitle").textContent = title || "Sending"; $("sendSub").textContent = sub || "Hold on a moment";
-  el.hidden = false; void el.offsetWidth; el.classList.add("show");
-}
-function sendingDone(title, sub){ $("sending").classList.add("done"); $("sendTitle").textContent = title; $("sendSub").textContent = sub || ""; setTimeout(() => { sending(false); $("sending").classList.remove("done"); }, 900); }
-/* Browser notifications have been taken out entirely. The app cannot deliver
-   them reliably (no service worker, no push, and iOS only allows them from
-   the Home Screen), so offering them was a promise that would be broken.
-   Changes reach people here, on What's new, and through the calendar link. */
-function showBanner(text, label, fn){
-  const b = $("banner");
-  b.hidden = false;
-  b.innerHTML = '<span>' + esc(text) + '</span><button>' + esc(label || "Got it") + '</button>';
-  b.querySelector("button").onclick = () => { b.hidden = true; if (fn) fn(); };
-  if (!fn) setTimeout(() => { b.hidden = true; }, 9000);
+  throw new Error("The MCR server could not be reached.");
 }
 
-/* ---------------- the gate ---------------- */
-/* Google's own button, drawn by Google's own script, so the sign in sheet is the
-   one everybody already knows. The token it hands back is checked on the server
-   before any session exists. There is nothing else on the card: no code, no
-   password, no hidden door. The committee is recognised by their address. */
-/* Where somebody goes to be written into the MCR register, or to have a wrong
-   classification put right. The credential is held so that anybody who does
-   either can come straight back without going round Google again. */
 function preloadGsi(){
-  if(gsiScript)return gsiScript;
-  gsiScript=document.createElement("script");
-  gsiScript.src="https://accounts.google.com/gsi/client";
-  gsiScript.async=true;
-  gsiScript.defer=true;
+  if(window.google?.accounts?.id) return null;
+  if(gsiScript) return gsiScript;
+  const existing = document.querySelector('script[src="https://accounts.google.com/gsi/client"]');
+  if(existing){ gsiScript = existing; return gsiScript; }
+  gsiScript = document.createElement("script");
+  gsiScript.src = "https://accounts.google.com/gsi/client";
+  gsiScript.async = true;
+  gsiScript.defer = true;
   document.head.appendChild(gsiScript);
   return gsiScript;
 }
-const GSI_KEY="mcr-ff26-gsi";
 function gsiKept(){
   try{
-    const x=JSON.parse(localStorage.getItem(GSI_KEY)||"null");
-    return x&&x.ready&&x.clientId?x:null;
-  }catch(e){return null}
+    const x = JSON.parse(localStorage.getItem(GSI_KEY) || "null");
+    return x && x.ready && x.clientId ? x : null;
+  }catch(e){ return null; }
 }
 function gsiKeep(x){
   try{
-    if(x&&x.ready&&x.clientId)localStorage.setItem(GSI_KEY,JSON.stringify(x));
-    else localStorage.removeItem(GSI_KEY);
+    if(x && x.ready && x.clientId) localStorage.setItem(GSI_KEY, JSON.stringify(x));
   }catch(e){}
 }
-function gateWipe(){const m=$("gateMsg");if(m)m.textContent=""}
-function showGateError(text){const m=$("gateMsg");if(m)m.textContent=String(text||"")}
+
+function renderGoogleButton(cfg){
+  if(!cfg || !cfg.ready || !cfg.clientId) return false;
+  const host = $("gsiBtn");
+  if(!host) return false;
+  const googleReady = window.google && window.google.accounts && window.google.accounts.id;
+  if(!googleReady) return false;
+  window.google.accounts.id.initialize({
+    client_id: cfg.clientId,
+    callback: window.handleDoorGsi,
+    hd: cfg.hd || undefined,
+    ux_mode: "popup",
+    auto_select: false
+  });
+  host.replaceChildren();
+  window.google.accounts.id.renderButton(host, {
+    theme: "filled_blue",
+    size: "large",
+    shape: "pill",
+    width: 280,
+    text: "signin_with",
+    logo_alignment: "center"
+  });
+  gsiDrawn = true;
+  return true;
+}
+
 function startGsi(cfg){
-  if(!cfg||!cfg.ready||!cfg.clientId)return false;
-  window.handleDoorGsi=async res=>{
-    const m=$("gateMsg");
-    if(!res||!res.credential){showGateError("Google sign-in did not return a credential.");return}
-    if(m)m.textContent="Checking committee access…";
+  if(!cfg || !cfg.ready || !cfg.clientId) return;
+  window.handleGsi = async res => {
+    if(!res || !res.credential){ showGateError("Google sign-in did not return a credential."); return; }
+    const m = $("gateMsg");
+    if(m) m.textContent = "Checking committee access…";
     try{
-      const r=await api("googleToken",{credential:res.credential});
-      if(r&&r.bookDown){clearToken();showGateError("The MCR register is temporarily unavailable.");return}
-      if(r&&r.needsBook){clearToken();showGateError("Your Google account is not authorised for this application.");return}
-      if(!r||!r.token)throw new Error("The server did not return an access token.");
+      const r = await api("googleToken", {credential: res.credential});
+      if(r?.bookDown) throw new Error("The MCR register is temporarily unavailable.");
+      if(r?.needsBook) throw new Error("Your Google account is not authorised for this application.");
+      if(!r?.token) throw new Error("The server did not return an access token.");
       setToken(r.token);
-      const st=r.state&&r.state.me?r.state:await api("state");
+      const st = r.state?.me ? r.state : await api("state");
       checkAccess(st);
-      S=st;cacheWrite();gateWipe();
+      S = st;
+      cacheWrite();
       $("gate").classList.add("hidden");
       $("app").classList.remove("hidden");
       renderMain();
       startPolling();
     }catch(e){
       clearToken();
-      showGateError(e&&e.message?e.message:"Sign in could not be completed.");
+      showGateError(e?.message || "Sign in could not be completed.");
     }
   };
-  const draw=()=>{
-    const host=$("gateButton");
-    if(!host||!window.google||!window.google.accounts||!window.google.accounts.id)return false;
+  let tries = 0;
+  const draw = () => {
+    if(!window.google?.accounts?.id){
+      if(++tries >= 120){ showGateError("Google sign-in could not load. Check the connection and reload the page."); }
+      return false;
+    }
+    const host = $("gsiBtn");
+    if(!host) return false;
     try{
       window.google.accounts.id.initialize({
-        client_id:cfg.clientId,
-        callback:window.handleDoorGsi,
-        hd:cfg.hd||undefined,
-        ux_mode:"popup",
-        auto_select:false
+        client_id: cfg.clientId,
+        callback: window.handleGsi,
+        hd: cfg.hd || undefined,
+        ux_mode: "popup",
+        auto_select: false
       });
       host.replaceChildren();
-      window.google.accounts.id.renderButton(host,{
-        theme:"filled_blue",
-        size:"large",
-        shape:"pill",
-        width:280,
-        text:"signin_with",
-        logo_alignment:"center"
+      window.google.accounts.id.renderButton(host, {
+        theme: "filled_blue",
+        size: "large",
+        shape: "pill",
+        width: 280,
+        text: "signin_with",
+        logo_alignment: "center"
       });
-      gsiUp=true;
+      gsiDrawn = true;
       return true;
     }catch(e){
-      gsiUp=false;
+      gsiDrawn = false;
       showGateError("Google sign-in could not be loaded. Please reload the page.");
       return false;
     }
   };
-  if(draw())return true;
-  const sc=preloadGsi();
-  const retry=()=>draw();
-  sc.addEventListener("load",retry,{once:true});
-  sc.addEventListener("error",()=>showGateError("Google sign-in could not load. Check the connection and reload the page."),{once:true});
-  let tries=0;
-  const timer=setInterval(()=>{tries++;if(draw()||tries>=120)clearInterval(timer)},250);
-  return true;
-}
-async function openGate(){
-  if(gateOpening)return;
-  gateOpening=true;
-  gateWipe();
-  preloadGsi();
-  try{
-    const kept=gsiKept();
-    if(kept)startGsi(kept);
-    try{
-      const p=await api("ping");
-      if(p&&p.signIn){
-        gsiKeep(p.signIn);
-        startGsi(p.signIn);
-      }else if(!kept){
-        showGateError("Google sign-in is not available right now.");
-      }
-    }catch(e){
-      if(!kept)showGateError(e&&e.message?e.message:"Could not contact the MCR server.");
-    }
-  }finally{gateOpening=false}
-}
-function organizerFor(ev){
-  const me=String(S?.me?.email||"").trim().toLowerCase();
-  return !!me && Array.isArray(ev?.leads) && ev.leads.some(l=>String(l?.email||"").trim().toLowerCase()===me);
-}
-function renderMain(){
-  const q=searchEvent.trim().toLowerCase();
-  const all=(S?.events||[]).slice().sort((a,b)=>String(a.date+a.start).localeCompare(String(b.date+b.start)));
-  const mine=all.filter(organizerFor);
-  const base=eventScope==="mine"?mine:all;
-  const pool=base.filter(ev=>{
-    if(!q)return true;
-    const hay=[ev.title,venue(ev),ev.date,ev.start,ev.end,(ev.leads||[]).map(l=>l?.name||l?.email||"").join(" "),...(Array.isArray(ev.tags)?ev.tags:[])].join(" ").toLowerCase();
-    return hay.includes(q);
-  });
-  let last="",count=0,html="";
-  for(const ev of pool){
-    count++;
-    if(ev.date!==last){const d=formatDate(ev.date);last=ev.date;html+='<div class="day">'+esc(d.long)+'</div>';}
-    const rows=reservedRows(ev),wl=waitingRows(ev),d=formatDate(ev.date),organizer=organizerFor(ev);
-    html+='<article class="event fade"><button class="eventButton" data-open-event="'+esc(ev.id)+'">'+
-      '<span class="eventDate"><b>'+esc(d.day)+'</b><small>'+esc(d.dow)+'</small></span>'+ 
-      '<span class="eventTitle"><b>'+esc(ev.title)+(organizer?' <em class="organiserMark">you</em>':'')+'</b><small>'+esc(venue(ev))+' · '+rows.length+' reserved'+(wl.length?' · '+wl.length+' waiting':'')+'</small></span>'+ 
-      '<span class="eventCounts">'+rows.length+' reserved'+(wl.length?' · '+wl.length+' waiting':'')+'</span><span class="chev">›</span></button></article>';
+  if(draw()) return;
+  const sc = preloadGsi();
+  if(sc){
+    sc.addEventListener("load", draw, {once:true});
+    sc.addEventListener("error", () => showGateError("Google sign-in could not load. Check the connection and reload the page."), {once:true});
   }
-  const total=eventScope==="mine"?mine.length:all.length;
-  $("events").innerHTML=html||'<div class="empty"><b>'+esc(q?'No matching events':'No events here')+'</b><span>'+esc(eventScope==="mine"?'You are not currently listed as an organiser for any events.':'Try another search.')+'</span></div>';
-  $("searchCount").textContent=q?(count+" result"+(count===1?"":"s")):total+" event"+(total===1?"":"s");
-  const clear=$("clearSearch");if(clear)clear.classList.toggle("hidden",!q);
-  const slider=$("eventSlider");if(slider)slider.classList.toggle("all",eventScope==="all");
-  document.querySelectorAll(".eventSlide").forEach(btn=>{const on=btn.dataset.scope===eventScope;btn.classList.toggle("active",on);btn.setAttribute("aria-selected",on?"true":"false");});
+  const timer = setInterval(() => { if(draw() || tries >= 120) clearInterval(timer); }, 250);
 }
 
-function personHtml(ev,r){
-  const isGoing=r.status==='going',checked=!!r.checkedIn;
-  const name=r.name||String(r.email||'').split('@')[0]||'Unknown';
-  const diet=dietaryLabel(r),need=needsDiet(r);
-  const tags=[];
-  tags.push('<span class="tag '+(need?'need':'')+'">'+esc(diet)+'</span>');
-  if(r.drinks==='soft')tags.push('<span class="tag">Does not drink</span>');
-  else if(r.drinks==='both')tags.push('<span class="tag">Drinks</span>');
-  if(r.guests)tags.push('<span class="tag">+'+esc(r.guests)+' guest'+(Number(r.guests)===1?'':'s')+'</span>');
-  if(r.slot)tags.push('<span class="tag">'+esc(r.slot)+'</span>');
-  if(r.choice)tags.push('<span class="tag">'+esc(r.choice)+'</span>');
-  const control=isGoing
-    ? '<span class="checkArea"><input aria-label="Check in '+esc(name)+'" type="checkbox" data-check data-event="'+esc(ev.id)+'" data-email="'+esc(r.email||'')+'" '+(checked?'checked':'')+'><span class="checkUI"><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 7"/></svg></span></span>'
+async function openGate(){
+  if(gateOpening) return;
+  gateOpening = true;
+  showGateError("");
+  const kept = gsiKept();
+  if(kept) startGsi(kept);
+  preloadGsi();
+  try{
+    const p = await api("ping");
+    if(p?.signIn){
+      gsiKeep(p.signIn);
+      startGsi(p.signIn);
+    }else if(!kept){
+      showGateError("Google sign-in is not available right now.");
+    }
+  }catch(e){
+    if(!kept) showGateError(e?.message || "Could not contact the MCR server.");
+  }finally{
+    gateOpening = false;
+  }
+}
+
+function setScope(scope){
+  eventScope = scope === "all" ? "all" : "mine";
+  document.querySelectorAll("[data-scope]").forEach(b => {
+    const active = b.dataset.scope === eventScope;
+    b.classList.toggle("active", active);
+    b.setAttribute("aria-selected", active ? "true" : "false");
+  });
+  renderMain();
+}
+
+function renderMain(){
+  const q = searchEvent.trim().toLowerCase();
+  const all = (S?.events || []).slice().sort((a,b) => String(a.date+a.start).localeCompare(String(b.date+b.start)));
+  const mine = all.filter(organizerFor);
+  const base = eventScope === "mine" ? mine : all;
+  const pool = base.filter(ev => {
+    if(!q) return true;
+    const hay = [ev.title, venue(ev), ev.date, ev.start, ev.end, ...(ev.leads || []).map(l => l?.name || l?.email || ""), ...(Array.isArray(ev.tags) ? ev.tags : [])].join(" ").toLowerCase();
+    return hay.includes(q);
+  });
+  let last = "", count = 0, html = "";
+  for(const ev of pool){
+    count++;
+    if(ev.date !== last){ const d = formatDate(ev.date); last = ev.date; html += '<div class="day">'+esc(d.long)+'</div>'; }
+    const rows = reservedRows(ev), wl = waitingRows(ev), d = formatDate(ev.date);
+    html += '<article class="event fade">' +
+      '<button class="eventButton" data-open-event="'+esc(ev.id)+'">' +
+      '<span class="eventDate"><b>'+esc(d.day)+'</b><small>'+esc(d.dow)+'</small></span>' +
+      '<span class="eventTitle"><b>'+esc(ev.title)+'</b><small>'+esc(venue(ev))+' · '+rows.length+' reserved'+(wl.length?' · '+wl.length+' waiting':'')+'</small></span>' +
+      '<span class="eventCounts">'+rows.length+' reserved'+(wl.length?' · '+wl.length+' waiting':'')+'</span>' +
+      '<span class="chev">›</span></button></article>';
+  }
+  $("events").innerHTML = html || '<div class="empty"><b>No events found</b>Try a different event name.</div>';
+  $("searchCount").textContent = q ? count+" result"+(count===1?"":"s") : "";
+  $("clearSearch")?.classList.toggle("hidden", !searchEvent);
+}
+
+function personHtml(ev, r){
+  const going = r.status === "going";
+  const checked = !!r.checkedIn;
+  const name = r.name || String(r.email || "").split("@")[0] || "Unknown";
+  const tags = [];
+  const diet = dietaryLabel(r);
+  tags.push('<span class="tag '+(needsDiet(r)?'need':'')+'">'+esc(diet)+'</span>');
+  if(r.drinks === "soft") tags.push('<span class="tag">Does not drink</span>');
+  else if(r.drinks === "both") tags.push('<span class="tag">Drinks</span>');
+  if(r.guests) tags.push('<span class="tag">+'+esc(r.guests)+' guest'+(Number(r.guests)===1?'':'s')+'</span>');
+  if(r.slot) tags.push('<span class="tag">'+esc(r.slot)+'</span>');
+  if(r.choice) tags.push('<span class="tag">'+esc(r.choice)+'</span>');
+  const control = going
+    ? '<span class="checkArea"><input aria-label="Check in '+esc(name)+'" type="checkbox" data-check data-event="'+esc(ev.id)+'" data-email="'+esc(r.email||"")+'" '+(checked?'checked':'')+'><span class="checkUI"><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 7"/></svg></span></span>'
     : '<span class="waitState">Waiting</span>';
-  return '<label class="person '+(checked?'checked':'')+'"><span class="personLabel"><span class="avatar">'+esc(initials(name))+'</span><span><span class="name">'+esc(name)+'</span><span class="sub">'+esc([r.email,r.programme].filter(Boolean).join(' · '))+'</span><span class="detailLine">'+tags.join('')+'</span></span></span>'+control+'</label>';
+  return '<label class="person '+(checked?'checked is-checked':'')+'">' +
+    '<span class="personLabel"><span class="avatar">'+esc(initials(name))+'</span><span>' +
+    '<span class="name '+(checked?'liveChecked':'')+'">'+esc(name)+'</span>' +
+    '<span class="sub">'+esc([r.email, r.programme].filter(Boolean).join(' · '))+'</span>' +
+    '<span class="detailLine">'+tags.join('')+'</span></span></span>' + control + '</label>';
+}
+
+function alcoholStats(rows){
+  const drink = rows.filter(r => r.drinks === "both").length;
+  const soft = rows.filter(r => r.drinks === "soft").length;
+  const known = drink + soft;
+  return { drinkPct: known ? Math.round(drink / known * 100) : 0, noDrinkPct: known ? Math.round(soft / known * 100) : 0 };
 }
 
 function detailHtml(ev){
-  const go=reservedRows(ev),wl=waitingRows(ev),a=alcoholStats(go),diet=go.filter(needsDiet).length,checked=go.filter(r=>r.checkedIn).length;
-  const tab=activeTab, q=searchPeople.trim().toLowerCase();
-  const pool=(tab==="going"?go:wl).filter(r=>{if(!q)return true;const hay=[r.name,r.email,r.programme,r.research,r.dietary,r.drinks,r.slot,r.choice].join(" ").toLowerCase();return hay.includes(q)});
-  const dietCounts={};go.forEach(r=>{const d=dietaryLabel(r);if(d.toLowerCase()!=="anything"&&d.toLowerCase()!=="no dietary requirement")dietCounts[d]=(dietCounts[d]||0)+1});
-  const dietBits=Object.entries(dietCounts).sort((a,b)=>b[1]-a[1]).map(([name,n])=>'<div class="dietMini"><b>'+n+'</b><span>'+esc(name)+'</span></div>').join("");
-  const pct=go.length?Math.round(checked/go.length*100):0;
-  return '<div class="detailHeader"><div class="detailHeaderIn"><button class="back" data-close-detail><svg viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>Back to events</button><div class="detailBrand"><span class="crestmark detailCrest" role="img" aria-label="Jesus College MCR"></span><div><div class="detailWhen">'+esc(formatDate(ev.date).long)+' · '+esc(ev.start||"")+'</div><div class="detailTitle">'+esc(ev.title)+'</div><div class="detailMeta">'+esc(venue(ev))+' · '+go.length+' reserved'+(wl.length?' · '+wl.length+' waiting':'')+'</div></div></div></div></div>'+
-  '<div class="detailBody fade"><div class="attendanceFloat"><div class="attendanceWidget" data-attendance-event="'+esc(ev.id)+'"><div class="attendanceRing" style="--pct:'+pct+'"><span class="attendanceNum" data-attendance-pct>'+pct+'%</span></div><div class="attendanceCopy"><strong><span data-attendance-checked>'+checked+'</span> / '+go.length+'</strong><span>Live attendance</span></div><span class="attendancePulse"></span></div></div>'+
-  '<div class="stats"><div class="stat"><b data-stat-checked>'+checked+'</b><span>checked in</span></div><div class="stat accent"><b>'+diet+'</b><span>dietary requirements</span></div></div>'+
-  '<div class="dietTop"><div class="dietMini alc"><b>'+a.drinkPct+'%</b><span>drink</span></div><div class="dietMini alc"><b>'+a.noDrinkPct+'%</b><span>do not drink</span></div>'+dietBits+'</div>'+
-  '<div class="detailControls"><div class="detailSearch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input id="personSearch" type="search" inputmode="search" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Search this event…" value="'+esc(searchPeople)+'"></div>'+
-  '<div class="tabs"><button class="tab '+(tab==='going'?'active':'')+'" data-tab="going"><span class="tabNum">'+go.length+'</span>Reserved</button><button class="tab '+(tab==='wait'?'active':'')+'" data-tab="wait"><span class="tabNum">'+wl.length+'</span>Waiting list</button></div></div>'+
-  '<div class="listHead"><h3>'+(tab==='going'?'Reservation list':'Waiting list')+'</h3><span>'+pool.length+' shown</span></div>'+
-  '<div class="people">'+(pool.length?pool.map(r=>personHtml(ev,r)).join(""):'<div class="notice">No people match this search.</div>')+'</div></div>';
+  const go = reservedRows(ev), wl = waitingRows(ev), a = alcoholStats(go);
+  const checked = go.filter(r => !!r.checkedIn).length;
+  const dietCounts = {};
+  go.forEach(r => { if(needsDiet(r)){ const d = dietaryLabel(r); dietCounts[d] = (dietCounts[d] || 0) + 1; } });
+  const dietBits = Object.entries(dietCounts).sort((a,b) => b[1]-a[1]).map(([name,n]) => '<div class="dietMini"><b>'+n+'</b><span>'+esc(name)+'</span></div>').join("");
+  const tab = activeTab;
+  const q = searchPeople.trim().toLowerCase();
+  const pool = (tab === "going" ? go : wl).filter(r => !q || [r.name,r.email,r.programme,r.research,r.dietary,r.drinks,r.slot,r.choice].join(" ").toLowerCase().includes(q));
+  const pct = go.length ? Math.round(checked / go.length * 100) : 0;
+  return '<div class="detailHeader"><div class="detailHeaderIn">' +
+    '<div class="detailFloat"><button class="back" data-close-detail><svg viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>Back to events</button><div class="attendanceWidget" data-attendance-event="'+esc(ev.id)+'"><div class="attendanceRing" style="--pct:'+pct+'"><span data-attendance-pct>'+pct+'%</span></div><div class="attendanceCopy"><strong><span data-attendance-checked>'+checked+'</span> / '+go.length+'</strong><span>Live attendance</span></div></div></div>' +
+    '<div class="detailBrand"><span class="crestmark detailCrest" role="img" aria-label="Jesus College MCR"></span><div><div class="detailWhen">'+esc(formatDate(ev.date).long)+' · '+esc(ev.start||"")+'</div><div class="detailTitle">'+esc(ev.title)+'</div><div class="detailMeta">'+esc(venue(ev))+' · '+go.length+' reserved'+(wl.length?' · '+wl.length+' waiting':'')+'</div></div></div>' +
+    '</div></div>' +
+    '<div class="detailBody fade">' +
+    '<div class="stats"><div class="stat"><b data-stat-checked>'+checked+'</b><span>checked in</span></div><div class="stat accent"><b>'+go.filter(needsDiet).length+'</b><span>dietary requirements</span></div></div>' +
+    '<div class="dietTop"><div class="dietMini alc"><b>'+a.drinkPct+'%</b><span>drink</span></div><div class="dietMini alc"><b>'+a.noDrinkPct+'%</b><span>do not drink</span></div>'+dietBits+'</div>' +
+    '<div class="detailControls"><div class="detailSearch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input id="personSearch" type="search" inputmode="search" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Search this event…" value="'+esc(searchPeople)+'"></div>' +
+    '<div class="tabs"><button class="tab '+(tab==='going'?'active':'')+'" data-tab="going"><span class="tabNum">'+go.length+'</span>Reserved</button><button class="tab '+(tab==='wait'?'active':'')+'" data-tab="wait"><span class="tabNum">'+wl.length+'</span>Waiting list</button></div></div>' +
+    '<div class="listHead"><h3>'+(tab==='going'?'Reservation list':'Waiting list')+'</h3><span>'+pool.length+' shown</span></div>' +
+    '<div class="people">'+(pool.length?pool.map(r=>personHtml(ev,r)).join(""):'<div class="notice">No people match this search.</div>')+'</div>' +
+    '</div>';
 }
-function openDetail(id){const ev=eventById(id);if(!ev)return;activeEvent=id;activeTab="going";searchPeople="";$('detail').innerHTML=detailHtml(ev);$('detail').classList.remove('hidden');document.body.style.overflow='hidden';}
-function repaintDetail(){
-  if(!activeEvent)return;
-  const ev=eventById(activeEvent);if(!ev)return;
-  const q=searchPeople.trim().toLowerCase();
-  const rows=(activeTab==='going'?reservedRows(ev):waitingRows(ev)).filter(r=>{
-    if(!q)return true;
-    return [r.name,r.email,r.programme,r.research,r.dietary,r.drinks,r.slot,r.choice].join(' ').toLowerCase().includes(q);
-  });
-  const box=document.querySelector('.people');
-  if(box)box.innerHTML=rows.length?rows.map(r=>personHtml(ev,r)).join(''):'<div class="notice">No people match this search.</div>';
-  const head=document.querySelector('.listHead span');if(head)head.textContent=rows.length+' shown';
-}
-function closeDetail(){activeEvent=null;$('detail').classList.add('hidden');$('detail').innerHTML="";document.body.style.overflow="";renderMain()}
 
-const pendingChecks=new Map();
+function openDetail(id){
+  const ev = eventById(id); if(!ev) return;
+  activeEvent = id; activeTab = "going"; searchPeople = "";
+  $("detail").innerHTML = detailHtml(ev);
+  $("detail").classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+}
+function repaintDetail(){
+  if(!activeEvent) return;
+  const ev = eventById(activeEvent); if(!ev) return;
+  const box = document.querySelector(".people");
+  const head = document.querySelector(".listHead span");
+  const q = searchPeople.trim().toLowerCase();
+  const rows = (activeTab === "going" ? reservedRows(ev) : waitingRows(ev)).filter(r => !q || [r.name,r.email,r.programme,r.research,r.dietary,r.drinks,r.slot,r.choice].join(" ").toLowerCase().includes(q));
+  if(box) box.innerHTML = rows.length ? rows.map(r => personHtml(ev,r)).join("") : '<div class="notice">No people match this search.</div>';
+  if(head) head.textContent = rows.length + " shown";
+  document.querySelectorAll(".tab").forEach(b => b.classList.toggle("active", b.dataset.tab === activeTab));
+}
+function closeDetail(){
+  activeEvent = null; searchPeople = "";
+  $("detail").classList.add("hidden");
+  $("detail").innerHTML = "";
+  document.body.style.overflow = "";
+  renderMain();
+}
+
 function updateAttendanceDirect(evId){
-  const ev=eventById(evId);if(!ev)return;
-  const go=reservedRows(ev), checked=go.filter(r=>!!r.checkedIn).length, pct=go.length?Math.round(checked/go.length*100):0;
-  const widget=document.querySelector('[data-attendance-event="'+CSS.escape(String(evId))+'"]');
+  const ev = eventById(evId); if(!ev) return;
+  const go = reservedRows(ev), checked = go.filter(r => !!r.checkedIn).length, pct = go.length ? Math.round(checked/go.length*100) : 0;
+  const widget = document.querySelector('[data-attendance-event="'+CSS.escape(String(evId))+'"]');
   if(widget){
-    const ring=widget.querySelector('.attendanceRing'), num=widget.querySelector('[data-attendance-pct]'), count=widget.querySelector('[data-attendance-checked]');
-    if(ring)ring.style.setProperty('--pct',pct);
-    if(num)num.textContent=pct+'%';
-    if(count)count.textContent=checked;
+    const ring = widget.querySelector(".attendanceRing");
+    const num = widget.querySelector("[data-attendance-pct]");
+    const count = widget.querySelector("[data-attendance-checked]");
+    if(ring) ring.style.setProperty("--pct", pct);
+    if(num) num.textContent = pct + "%";
+    if(count) count.textContent = checked;
   }
-  const stat=document.querySelector('[data-stat-checked]');
-  if(stat&&activeEvent===evId)stat.textContent=checked;
+  const stat = document.querySelector("[data-stat-checked]");
+  if(stat && activeEvent === evId) stat.textContent = checked;
 }
 function updateCheckUI(evId,email,on){
-  const ev=eventById(evId);if(!ev)return;
-  const row=rowsFor(ev).find(r=>String(r.email||"")===String(email||""));
-  if(row)row.checkedIn=on;
-  const selector='[data-check][data-event="'+CSS.escape(String(evId))+'"][data-email="'+CSS.escape(String(email||''))+'"]';
-  const input=document.querySelector(selector);
+  const ev = eventById(evId); if(!ev) return;
+  const row = rowsFor(ev).find(r => String(r.email||"") === String(email||""));
+  if(row) row.checkedIn = !!on;
+  const selector = '[data-check][data-event="'+CSS.escape(String(evId))+'"][data-email="'+CSS.escape(String(email||""))+'"]';
+  const input = document.querySelector(selector);
   if(input){
-    input.checked=!!on;
-    const card=input.closest('.person');
+    input.checked = !!on;
+    const card = input.closest(".person");
     if(card){
-      card.classList.toggle('checked',!!on);
-      card.classList.toggle('is-checked',!!on);
-      const name=card.querySelector('.name'), avatar=card.querySelector('.avatar');
-      if(name)name.classList.toggle('liveChecked',!!on);
-      if(avatar)avatar.classList.toggle('liveChecked',!!on);
+      card.classList.toggle("checked", !!on);
+      card.classList.toggle("is-checked", !!on);
+      card.querySelector(".name")?.classList.toggle("liveChecked", !!on);
+      card.querySelector(".avatar")?.classList.toggle("liveChecked", !!on);
     }
   }
-  /* Everything visible is changed in-place. No renderMain(), no repaintDetail(), no scroll jump. */
   updateAttendanceDirect(evId);
 }
 async function saveCheck(evId,email,on){
-  const key=evId+'|'+email;pendingChecks.set(key,on);
+  const key = evId+"|"+email;
+  pendingChecks.set(key,on);
   try{
-    await api('checkIn',{eventId:evId,email,on});
-    if(pendingChecks.get(key)===on)pendingChecks.delete(key);
+    await api("checkIn",{eventId:evId,email,on});
+    if(pendingChecks.get(key) === on) pendingChecks.delete(key);
   }catch(e){
-    if(pendingChecks.get(key)===on)pendingChecks.delete(key);
-    showToast("Check-in updated here, but server sync failed");
+    if(pendingChecks.get(key) === on){ pendingChecks.delete(key); showToast("Check-in saved here, but server sync failed"); }
   }
 }
-function startPolling(){clearInterval(startPolling.id);startPolling.id=setInterval(()=>refresh(false),30000)}
-async function refresh(manual=false){const b=$("refresh");if(manual)b.classList.add("busy");try{const st=await api('state');checkAccess(st);const keep=activeEvent;S=st;cacheWrite();if(keep){updateAttendanceDirect(keep);}else renderMain();if(manual)showToast("Updated")}catch(e){if(manual)showToast(e.message)}finally{if(manual)b.classList.remove("busy")}}
 
-const sliderEl=$("eventSlider");
-let sliderTouchX=null;
-sliderEl?.addEventListener("touchstart",e=>{if(e.touches.length===1)sliderTouchX=e.touches[0].clientX},{passive:true});
-sliderEl?.addEventListener("touchend",e=>{if(sliderTouchX===null)return;const dx=e.changedTouches[0].clientX-sliderTouchX;sliderTouchX=null;if(Math.abs(dx)>42){eventScope=dx<0?"all":"mine";renderMain();}},{passive:true});
-sliderEl?.addEventListener("keydown",e=>{if(e.key==="ArrowLeft"){eventScope="mine";renderMain()}else if(e.key==="ArrowRight"){eventScope="all";renderMain()}});
+function startPolling(){
+  clearInterval(startPolling.id);
+  startPolling.id = setInterval(() => refresh(false), 30000);
+}
+async function refresh(manual=false){
+  const b = $("refresh");
+  if(manual) b?.classList.add("busy");
+  try{
+    const st = await api("state");
+    checkAccess(st);
+    S = st;
+    cacheWrite();
+    if(activeEvent) updateAttendanceDirect(activeEvent); else renderMain();
+    if(manual) showToast("Updated");
+  }catch(e){ if(manual) showToast(e?.message || "Could not update"); }
+  finally{ if(manual) b?.classList.remove("busy"); }
+}
 
-$("eventSearch").addEventListener('input',e=>{searchEvent=e.target.value;renderMain()});
-$("clearSearch")?.addEventListener('click',()=>{$("eventSearch").value="";searchEvent="";renderMain();requestAnimationFrame(()=>$('eventSearch').focus())});
-$("refresh").addEventListener('click',()=>refresh(true));
-document.addEventListener('click',e=>{const scope=e.target.closest('[data-scope]');if(scope){eventScope=scope.dataset.scope||"mine";renderMain();return}const open=e.target.closest('[data-open-event]');if(open){openDetail(open.dataset.openEvent);return}const back=e.target.closest('[data-close-detail]');if(back){closeDetail();return}const tab=e.target.closest('[data-tab]');if(tab&&activeEvent){activeTab=tab.dataset.tab;repaintDetail();return}});
-document.addEventListener('input',e=>{if(e.target.id==='personSearch'&&activeEvent){searchPeople=e.target.value;repaintDetail()}});
-document.addEventListener('change',e=>{const c=e.target.closest('[data-check]');if(!c)return;updateCheckUI(c.dataset.event,c.dataset.email,c.checked);saveCheck(c.dataset.event,c.dataset.email,c.checked)});
+const sliderEl = $("eventSlider");
+sliderEl?.addEventListener("touchstart", e => { if(e.touches.length === 1) sliderTouchX = e.touches[0].clientX; }, {passive:true});
+sliderEl?.addEventListener("touchend", e => {
+  if(sliderTouchX === null) return;
+  const dx = e.changedTouches[0].clientX - sliderTouchX;
+  sliderTouchX = null;
+  if(Math.abs(dx) > 42) setScope(dx < 0 ? "all" : "mine");
+}, {passive:true});
 
-(function boot(){token=getToken();const cached=cacheRead();if(token&&cached){try{checkAccess(cached);S=cached;$("gate").classList.add('hidden');$("app").classList.remove('hidden');renderMain();startPolling();refresh(false);return}catch(e){clearToken()}}openGate()})();
+document.addEventListener("click", e => {
+  const scope = e.target.closest("[data-scope]");
+  if(scope){ setScope(scope.dataset.scope); return; }
+  const open = e.target.closest("[data-open-event]");
+  if(open){ openDetail(open.dataset.openEvent); return; }
+  const back = e.target.closest("[data-close-detail]");
+  if(back){ closeDetail(); return; }
+  const tab = e.target.closest("[data-tab]");
+  if(tab && activeEvent){ activeTab = tab.dataset.tab; repaintDetail(); return; }
+});
+
+document.addEventListener("input", e => {
+  if(e.target.id === "eventSearch"){
+    searchEvent = e.target.value;
+    renderMain();
+  }else if(e.target.id === "personSearch" && activeEvent){
+    searchPeople = e.target.value;
+    repaintDetail();
+  }
+});
+
+document.addEventListener("change", e => {
+  const c = e.target.closest("[data-check]");
+  if(!c) return;
+  updateCheckUI(c.dataset.event,c.dataset.email,c.checked);
+  saveCheck(c.dataset.event,c.dataset.email,c.checked);
+});
+
+$("clearSearch")?.addEventListener("click", () => { $("eventSearch").value = ""; searchEvent = ""; renderMain(); requestAnimationFrame(() => $("eventSearch")?.focus()); });
+$("refresh")?.addEventListener("click", () => refresh(true));
+
+(function boot(){
+  token = getToken();
+  const cached = cacheRead();
+  if(token && cached){
+    try{
+      checkAccess(cached);
+      S = cached;
+      $("gate").classList.add("hidden");
+      $("app").classList.remove("hidden");
+      renderMain();
+      startPolling();
+      refresh(false);
+      return;
+    }catch(e){ clearToken(); }
+  }
+  openGate();
+})();
 </script>
 </body>
 </html>
