@@ -49,7 +49,7 @@ button,input{font:inherit}button{cursor:pointer}.hidden{display:none!important}
 /* ---------- main ---------- */
 #app{min-height:100dvh}.top{position:sticky;top:0;z-index:30;background:rgba(107,8,13,.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.topIn{width:min(1120px,100%);margin:auto;padding:calc(9px + env(safe-area-inset-top)) 18px 9px;display:flex;align-items:center;gap:12px}.topCrest{--ch:40px;flex:none;filter:drop-shadow(0 2px 5px rgba(0,0,0,.4))}.wordmark{min-width:0;line-height:1.04}.wordmark b{display:block;font-family:var(--display);font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.wordmark i{display:block;font-family:var(--display);font-size:12px;font-style:italic;font-weight:400;color:rgba(251,243,236,.68)}.topSpace{flex:1}.live{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:8.5px;letter-spacing:.13em;text-transform:uppercase;color:rgba(251,243,236,.63)}.live:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--moss);box-shadow:0 0 0 4px rgba(63,122,87,.13);animation:pulse 1.7s ease-in-out infinite}.refresh{width:39px;height:39px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:var(--cream);display:grid;place-items:center}.refresh svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.refresh.busy svg{animation:spin .7s linear infinite}.signout{width:40px;height:40px;border-radius:13px;border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.065);color:var(--cream);display:grid;place-items:center}.signout svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.signout:active{transform:scale(.96)}
 .hero{padding:31px 0 16px}.heroRow{display:flex;align-items:end;gap:14px}.hero h1{margin:0;font-family:var(--display);font-size:clamp(36px,6vw,50px);line-height:.94;letter-spacing:-.045em}.hero h1 i{font-style:italic;font-weight:300;color:var(--gold2)}.hero .sub{font-size:11px;color:rgba(251,243,236,.64);padding-bottom:5px;font-family:var(--mono);letter-spacing:.12em;text-transform:uppercase}.rule{height:1px;background:linear-gradient(90deg,rgba(255,255,255,.30),transparent)}
-.searchBar{position:relative;margin:14px 0}.searchBar input{width:100%;height:50px;border-radius:15px;border:1px solid var(--line);background:rgba(0,0,0,.18);color:var(--cream);padding:0 15px 0 44px;outline:none;transition:border-color .15s,background .15s}.searchBar input::placeholder{color:rgba(251,243,236,.48)}.searchBar input:focus{border-color:rgba(226,169,60,.6);background:rgba(0,0,0,.24)}.searchIcon{position:absolute;left:15px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--gold2);pointer-events:none}.searchCount{position:absolute;right:11px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:8px;letter-spacing:.08em;color:rgba(251,243,236,.5)}.mainControls{position:relative;z-index:20;margin:0 0 10px}.mainControls .searchBar{margin:0 0 8px}.clearSearch{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:28px;height:28px;border:0;border-radius:50%;background:rgba(255,255,255,.09);color:var(--cream);font-size:20px;line-height:1;display:grid;place-items:center}.clearSearch.hidden{display:none}.eventSlider{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border:1px solid var(--cream3);border-radius:17px;background:var(--cream2);box-shadow:0 8px 22px -18px rgba(42,16,18,.34),inset 0 1px 0 rgba(255,255,255,.85);isolation:isolate;touch-action:pan-x;user-select:none;-webkit-user-select:none;overflow:hidden}.eventSlide{position:relative;z-index:2;border:0;background:transparent;color:var(--ink2);border-radius:12px;min-height:50px;padding:7px 12px;text-align:center;cursor:pointer;touch-action:manipulation;transition:color .22s ease,transform .14s ease}.eventSlide:active{transform:scale(.985)}.eventSlide.active{color:var(--crimson3)}.eventSlide .slideTitle{display:block;font-family:var(--display);font-size:18px;line-height:1.02;font-weight:650;letter-spacing:-.02em}.eventSlide .slideSub{display:block;margin-top:4px;font-family:var(--mono);font-size:8px;letter-spacing:.13em;text-transform:uppercase;opacity:.68}.slidePill{position:absolute;z-index:1;left:4px;top:4px;bottom:4px;width:calc(50% - 6px);border-radius:12px;background:var(--paper);box-shadow:0 4px 12px -8px rgba(42,16,18,.34),inset 0 1px 0 rgba(255,255,255,.95);transition:transform .32s cubic-bezier(.2,.8,.3,1)}.eventSlider.all .slidePill{transform:translateX(calc(100% + 4px))}.eventSlider.all .eventSlide[data-scope="all"],.eventSlider:not(.all) .eventSlide[data-scope="mine"]{color:var(--crimson3);font-weight:700}.eventSlide[data-scope="mine"],.eventSlide[data-scope="all"]{text-shadow:none}
+.searchBar{position:relative;margin:14px 0}.searchBar input{width:100%;height:50px;border-radius:15px;border:1px solid var(--line);background:rgba(0,0,0,.18);color:var(--cream);padding:0 15px 0 44px;outline:none;transition:border-color .15s,background .15s}.searchBar input::placeholder{color:rgba(251,243,236,.48)}.searchBar input:focus{border-color:rgba(226,169,60,.6);background:rgba(0,0,0,.24)}.searchIcon{position:absolute;left:15px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--gold2);pointer-events:none}.searchCount{position:absolute;right:11px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:8px;letter-spacing:.08em;color:rgba(251,243,236,.5)}.mainControls{position:relative;z-index:20;margin:0 0 10px}.mainControls .searchBar{margin:0 0 8px}.clearSearch{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:28px;height:28px;border:0;border-radius:50%;background:rgba(255,255,255,.09);color:var(--cream);font-size:20px;line-height:1;display:grid;place-items:center}.clearSearch.hidden{display:none}.eventSlider{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border:1px solid var(--cream3);border-radius:17px;background:var(--cream2);box-shadow:0 8px 22px -18px rgba(42,16,18,.34),inset 0 1px 0 rgba(255,255,255,.85);isolation:isolate;touch-action:pan-x;user-select:none;-webkit-user-select:none;overflow:hidden}.eventSlide{position:relative;z-index:2;border:0;background:transparent;color:var(--ink2);border-radius:12px;min-height:50px;padding:7px 12px;text-align:center;cursor:pointer;touch-action:manipulation;transition:color .22s ease,transform .14s ease}.eventSlide:active{transform:scale(.985)}.eventSlide.active{color:var(--crimson-3)}.eventSlide .slideTitle{display:block;font-family:var(--display);font-size:18px;line-height:1.02;font-weight:650;letter-spacing:-.02em}.eventSlide .slideSub{display:block;margin-top:4px;font-family:var(--mono);font-size:8px;letter-spacing:.13em;text-transform:uppercase;opacity:.68}.slidePill{position:absolute;z-index:1;left:4px;top:4px;bottom:4px;width:calc(50% - 6px);border-radius:12px;background:var(--paper);box-shadow:0 4px 12px -8px rgba(42,16,18,.34),inset 0 1px 0 rgba(255,255,255,.95);transition:transform .32s cubic-bezier(.2,.8,.3,1)}.eventSlider.all .slidePill{transform:translateX(calc(100% + 4px))}.eventSlider.all .eventSlide[data-scope="all"],.eventSlider:not(.all) .eventSlide[data-scope="mine"]{color:var(--crimson-3);font-weight:700}.eventSlide[data-scope="mine"],.eventSlide[data-scope="all"]{text-shadow:none}
 
 
 .day{padding:14px 4px 7px;font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:rgba(251,243,236,.58)}
@@ -126,7 +126,7 @@ body{background:
 /* ---------- final consistency pass ---------- */
 .eventSlider{background:var(--cream2);border-color:var(--cream3);box-shadow:0 7px 18px -14px rgba(42,16,18,.35),inset 0 1px 0 rgba(255,255,255,.92)}
 .eventSlide{color:var(--ink2)}
-.eventSlide.active,.eventSlider:not(.all) .eventSlide[data-scope="mine"],.eventSlider.all .eventSlide[data-scope="all"]{color:var(--crimson3);font-weight:800}
+.eventSlide.active,.eventSlider:not(.all) .eventSlide[data-scope="mine"],.eventSlider.all .eventSlide[data-scope="all"]{color:var(--crimson-3);font-weight:800}
 .slidePill{background:var(--paper);box-shadow:0 4px 12px -8px rgba(42,16,18,.30),inset 0 1px 0 rgba(255,255,255,.96)}
 /* Fixed red navigation strip: the back control is attached to the header, not a floating pill. */
 #detail{overscroll-behavior:contain}
@@ -152,141 +152,199 @@ body{background:
   .detailControls{top:54px}
 }
 </style>
+<style>
+/* Mobile search should remain anchored while the results list filters. */
+#detail{scroll-behavior:auto;overscroll-behavior:contain;}
+@media (max-width:720px){
+  #detail{overflow:auto;-webkit-overflow-scrolling:touch;}
+  .detailControls{position:sticky;top:0;z-index:30;isolation:isolate;padding-top:8px;padding-bottom:10px;}
+  .detailControls .detailSearch input{scroll-margin-top:0;min-height:48px;}
+  .detailControls .detailSearch{scroll-margin-top:0;}
+}
+</style>
 
 <style>
-/* Clean final detail layout and interaction pass */
-.detailHeaderIn{
-  width:min(880px,100%);
-  margin:0 auto;
-  position:relative!important;
-  padding:14px 18px 20px!important;
-}
-.detailBrand{margin-top:0!important;gap:14px!important;align-items:center!important;}
+/* Final mobile interaction pass: keep filtering local and the event header coherent. */
+.detailFloat{display:none!important;}
+.detailHeaderIn{position:relative!important;padding-top:calc(14px + env(safe-area-inset-top))!important;padding-bottom:18px!important;}
+.detailBrand{align-items:flex-start!important;margin-top:0!important;}
 .detailHeading{min-width:0;flex:1;}
-.detailTitleRow{
-  display:flex!important;
-  align-items:center!important;
-  gap:14px!important;
-  min-width:0!important;
+.detailTitleRow{display:flex!important;align-items:center!important;gap:8px!important;min-width:0;}
+.detailTitleRow .detailTitle{min-width:0;flex:1;}
+.detailTitleRow .back{position:static!important;left:auto!important;top:auto!important;flex:none!important;display:inline-flex!important;align-items:center!important;gap:4px!important;width:auto!important;height:auto!important;padding:5px 8px!important;border:1px solid rgba(255,255,255,.2)!important;border-radius:9px!important;background:rgba(0,0,0,.12)!important;color:#fff!important;font-family:var(--ui)!important;font-size:9px!important;font-weight:700!important;box-shadow:none!important;}
+.detailTitleRow .back svg{width:13px!important;height:13px!important;}
+.person[hidden]{display:none!important;}
+@media(max-width:720px){
+  .detailHeaderIn{padding-top:calc(12px + env(safe-area-inset-top))!important;padding-bottom:15px!important;}
+  .detailTitleRow{gap:6px!important;}
+  .detailTitleRow .back{padding:5px 7px!important;font-size:9px!important;}
+  .detailWhen{margin-top:5px!important;}
+  .mainControls{z-index:40!important;}
+  .eventSlider{min-height:50px!important;}
+  .eventSlide .slideTitle{font-size:17px!important;color:#5B3235!important;}
+  .eventSlider:not(.all) .eventSlide[data-scope="mine"],.eventSlider.all .eventSlide[data-scope="all"]{color:#6B080D!important;}
 }
-.detailTitleRow .detailTitle{
-  flex:1 1 auto!important;
-  min-width:0!important;
-  margin:0!important;
-}
-.detailTitleRow .back{
-  position:static!important;
-  flex:0 0 auto!important;
-  display:inline-flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  gap:7px!important;
-  min-height:42px!important;
-  height:42px!important;
-  padding:0 16px 0 12px!important;
-  border:1px solid rgba(255,255,255,.28)!important;
-  border-radius:999px!important;
-  background:rgba(255,255,255,.10)!important;
-  color:#fff!important;
-  font-family:var(--ui)!important;
-  font-size:11px!important;
-  font-weight:800!important;
-  line-height:1!important;
-  white-space:nowrap!important;
-  box-shadow:0 5px 16px -11px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.11)!important;
-  transition:background .15s ease,border-color .15s ease,transform .12s ease,box-shadow .15s ease!important;
-}
-.detailTitleRow .back svg{width:17px!important;height:17px!important;stroke-width:2.3!important;}
-.detailTitleRow .back:hover{background:rgba(255,255,255,.16)!important;border-color:rgba(255,255,255,.42)!important;box-shadow:0 7px 18px -12px rgba(0,0,0,.65),inset 0 1px 0 rgba(255,255,255,.14)!important;}
-.detailTitleRow .back:active{transform:translateY(1px) scale(.985)!important;}
+</style>
 
-/* Search, tabs and attendance use precisely the same content width as the name cards. */
-.detailControls{
-  width:min(880px,100%)!important;
-  margin:0 auto!important;
-  padding:9px 18px 10px!important;
-  box-sizing:border-box!important;
-  position:sticky!important;
-  top:0!important;
-  z-index:50!important;
-  background:linear-gradient(180deg,rgba(251,243,236,.995) 0%,rgba(251,243,236,.97) 86%,rgba(251,243,236,0) 100%)!important;
-  backdrop-filter:blur(13px)!important;
-  -webkit-backdrop-filter:blur(13px)!important;
-}
-.detailControls .detailSearch,
-.detailControls .tabs,
-.detailControls .attendanceMeter{width:100%!important;max-width:none!important;}
-.detailControls .detailSearch{margin:0 0 7px!important;}
-.detailControls .tabs{margin:0 0 7px!important;}
-.detailSearch input{height:48px!important;min-height:48px!important;border-radius:14px!important;font-size:15px!important;}
+<style id="final-fixes">
+/* Restore the stable baseline and apply only the requested interaction/layout fixes. */
+.detailHeaderIn{position:relative;}
+.detailTitleRow{display:flex;align-items:center;gap:12px;min-width:0;}
+.detailTitleRow .detailTitle{min-width:0;flex:1;}
+.detailTitleRow .back{position:static!important;left:auto!important;top:auto!important;flex:none!important;
+  display:inline-flex!important;align-items:center;justify-content:center;gap:7px;
+  min-height:40px;padding:9px 15px 9px 12px;
+  border:1px solid rgba(255,255,255,.30);border-radius:999px;
+  background:rgba(255,255,255,.11);color:#fff;
+  font-family:var(--ui);font-size:13px;font-weight:700;
+  box-shadow:0 5px 16px -10px rgba(0,0,0,.35);
+  white-space:nowrap;transition:background .16s,transform .12s,border-color .16s;}
+.detailTitleRow .back:hover{background:rgba(255,255,255,.17);border-color:rgba(255,255,255,.44);}
+.detailTitleRow .back:active{transform:scale(.97);}
+.detailTitleRow .back svg{width:17px;height:17px;flex:none;}
 
-/* Keep cards slim, calm and green when checked. Only the checkbox turns red. */
-.people{gap:7px!important;overflow:visible!important;}
-.person{
-  min-height:70px!important;
-  padding:10px 10px 10px 11px!important;
-  border-radius:15px!important;
-  grid-template-columns:minmax(0,1fr) 42px!important;
-  align-items:center!important;
-  background:var(--paper)!important;
-  border:1px solid var(--cream2)!important;
-  box-shadow:0 2px 6px rgba(43,10,12,.025)!important;
-  overflow:hidden!important;
-  transition:transform .15s ease,background .16s ease,border-color .16s ease,box-shadow .16s ease!important;
-}
-.personLabel{grid-column:1!important;grid-row:1!important;grid-template-columns:42px minmax(0,1fr)!important;gap:10px!important;min-width:0!important;}
-.avatar{width:42px!important;height:42px!important;font-size:13px!important;}
-.name{font-size:16px!important;line-height:1.12!important;}
-.sub{font-size:10px!important;}
-.detailLine{margin-top:4px!important;gap:4px!important;}
-.tag{padding:3px 7px!important;font-size:7.5px!important;}
-.checkArea{grid-column:2!important;grid-row:1!important;align-self:center!important;justify-self:end!important;width:42px!important;height:42px!important;display:grid!important;place-items:center!important;}
-.checkUI{width:36px!important;height:36px!important;border-radius:11px!important;border:1px solid var(--crimson)!important;background:var(--cream)!important;color:transparent!important;display:grid!important;place-items:center!important;box-shadow:none!important;}
-.checkUI svg{display:block!important;width:17px!important;height:17px!important;opacity:0!important;}
-.checkArea input:checked + .checkUI{background:var(--crimson)!important;border-color:var(--crimson)!important;color:#fff!important;box-shadow:0 5px 14px -8px rgba(180,20,27,.65)!important;}
-.checkArea input:checked + .checkUI svg{opacity:1!important;}
-.person:has(input:checked){background:#EFF6F0!important;border-color:rgba(63,122,87,.30)!important;box-shadow:0 4px 12px rgba(63,122,87,.08)!important;}
+/* Keep all detail controls exactly inside the same content column as the list. */
+.detailBody{width:min(880px,100%);margin-left:auto;margin-right:auto;}
+.detailControls{width:100%;margin-left:0!important;margin-right:0!important;box-sizing:border-box;}
+.detailControls .detailSearch,.detailControls .tabs,.detailControls .attendanceMeter{width:100%;box-sizing:border-box;}
+
+/* A checked reservation stays visibly green; only its check control is red. */
+.person:has(input:checked){background:#EFF6F0!important;border-color:rgba(63,122,87,.30)!important;box-shadow:inset 0 0 0 1px rgba(63,122,87,.16),0 3px 10px rgba(63,122,87,.07)!important;}
 .person:has(input:checked) .name{color:var(--moss)!important;}
 .person:has(input:checked) .avatar{background:var(--moss)!important;}
-.person:hover{transform:translateY(-1px)!important;}
-.person:active{transform:scale(.994)!important;}
-.person[hidden]{display:none!important;}
+.checkArea input:checked + .checkUI{background:var(--crimson)!important;border-color:var(--crimson)!important;color:#fff!important;}
 
-/* Desktop slider: explicit button hit targets and unambiguous selected colour. */
-.eventSlider{pointer-events:auto!important;position:relative!important;isolation:isolate!important;}
-.eventSlider .eventSlide{pointer-events:auto!important;position:relative!important;z-index:3!important;color:var(--ink2)!important;cursor:pointer!important;}
-.eventSlider .eventSlide .slideTitle{color:inherit!important;}
-.eventSlider .eventSlide .slideSub{color:inherit!important;}
+/* Desktop and mobile use the same readable slider colours and direct click area. */
+.eventSlider{pointer-events:auto;}
+.eventSlider .eventSlide{pointer-events:auto;z-index:4;}
+.eventSlider .slidePill{pointer-events:none;z-index:1;}
+.eventSlider .eventSlide{color:var(--ink2)!important;}
 .eventSlider:not(.all) .eventSlide[data-scope="mine"],
-.eventSlider.all .eventSlide[data-scope="all"]{color:var(--crimson3)!important;}
+.eventSlider.all .eventSlide[data-scope="all"]{color:var(--crimson3)!important;font-weight:800;}
 .eventSlider:not(.all) .eventSlide[data-scope="all"],
 .eventSlider.all .eventSlide[data-scope="mine"]{color:var(--ink2)!important;}
-.eventSlider .slidePill{pointer-events:none!important;z-index:1!important;}
-
+.eventSlider .slideSub{color:inherit!important;}
 @media(max-width:720px){
-  .detailHeaderIn{padding:12px 14px 16px!important;}
-  .detailBrand{gap:10px!important;}
-  .detailTitleRow{gap:8px!important;}
-  .detailTitleRow .back{min-height:38px!important;height:38px!important;padding:0 13px 0 10px!important;font-size:10px!important;gap:6px!important;}
-  .detailTitleRow .back svg{width:15px!important;height:15px!important;}
-  .detailControls{width:100%!important;padding:7px 14px 9px!important;}
-  .detailSearch input{height:42px!important;min-height:42px!important;border-radius:12px!important;font-size:14px!important;}
-  .person{min-height:58px!important;padding:7px 8px 7px 9px!important;grid-template-columns:minmax(0,1fr) 36px!important;border-radius:14px!important;}
-  .personLabel{grid-template-columns:36px minmax(0,1fr)!important;gap:8px!important;}
-  .avatar{width:36px!important;height:36px!important;font-size:11.5px!important;}
-  .name{font-size:14.5px!important;}
-  .sub{font-size:9px!important;}
-  .detailLine{margin-top:3px!important;gap:3px!important;}
-  .tag{padding:2px 6px!important;font-size:7px!important;}
-  .checkArea{width:36px!important;height:36px!important;}
-  .checkUI{width:31px!important;height:31px!important;border-radius:9px!important;}
-  .checkUI svg{width:16px!important;height:16px!important;}
-  .eventSlider .eventSlide .slideTitle{font-size:16px!important;}
-  .eventSlider .eventSlide .slideSub{font-size:7.5px!important;}
+  .detailTitleRow{gap:7px;}
+  .detailTitleRow .back{min-height:38px;padding:8px 12px 8px 10px;font-size:12px;}
+  .detailTitleRow .back svg{width:16px;height:16px;}
+  .detailBody{width:100%;}
+  .detailControls{width:100%;}
+  .eventSlider .eventSlide .slideTitle,.eventSlider .eventSlide .slideSub{color:inherit!important;}
 }
-@media(max-width:430px){
-  .detailTitleRow .back{min-height:36px!important;height:36px!important;padding:0 11px 0 9px!important;font-size:9.5px!important;}
-  .detailTitleRow .back span{display:none;}
+</style>
+</head>
+<body>
+<div id="gate">
+  <div class="gateCard">
+    <div class="gateBrand"><span class="crestmark gateCrest" role="img" aria-label="Jesus College MCR"></span><span><small>Jesus College MCR</small><b>Door <i>Check</i></b></span></div>
+    <div class="gateCopy"><h1>Reservations at the door</h1><p>Committee-only access to the live reservation lists for Freshers' Fortnight.</p></div>
+    <div class="gateMeta"><span class="pill">Committee only</span><span class="pill">Live reservations</span><span class="pill">Fast check-in</span></div>
+    <div id="gsiBtn"><span class="gsiLoading">Loading Google sign-in…</span></div>
+    <div class="gateHint">Use your University of Cambridge Google account.</div>
+    <div class="gateMsg" id="gateMsg"></div>
+    <div class="gateFoot"><span>Jesus College MCR</span><span>Freshers' Fortnight 2026</span></div>
+  </div>
+</div>
+
+<div id="app" class="hidden">
+  <header class="top"><div class="topIn"><span class="crestmark topCrest" role="img" aria-label="Jesus College MCR"></span><div class="wordmark"><b>Jesus College MCR</b><i>Door check</i></div><div class="topSpace"></div><div class="live">Live</div><button class="refresh" id="refresh" aria-label="Refresh"><svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0 1 4"/><path d="M20 4v7h-7"/></svg></button><button class="signout" id="signout" aria-label="Sign out" title="Sign out"><svg viewBox="0 0 24 24"><path d="M10 5H6.8A1.8 1.8 0 0 0 5 6.8v10.4A1.8 1.8 0 0 0 6.8 19H10"/><path d="M14 8l4 4-4 4"/><path d="M18 12H9"/></svg></button></div></header>
+  <main class="wrap">
+    <section class="hero"><div class="heroRow"><h1>Freshers' <i>Fortnight</i></h1><span class="sub">Reservations</span></div></section>
+    <div class="rule"></div>
+    <div class="mainControls">
+      <div class="searchBar"><svg class="searchIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input id="eventSearch" type="search" inputmode="search" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Search events…"><button class="clearSearch hidden" id="clearSearch" type="button" aria-label="Clear search">×</button><span class="searchCount" id="searchCount"></span></div>
+      <div class="eventSlider" id="eventSlider" role="tablist" aria-label="Event view">
+        <button type="button" class="eventSlide active" data-scope="mine" role="tab" aria-selected="true"><span class="slideTitle">My Events</span><span class="slideSub">organising</span></button>
+        <button type="button" class="eventSlide" data-scope="all" role="tab" aria-selected="false"><span class="slideTitle">All Events</span><span class="slideSub">fortnight</span></button>
+        <span class="slidePill" aria-hidden="true"></span>
+      </div>
+    </div>
+    <section id="events"></section>
+  </main>
+</div>
+
+<div id="detail" class="hidden"></div>
+<div class="toast" id="toast"></div>
+
+<style>
+/* Slim, lively people controls */
+#detail,.detailControls,.people{overflow-anchor:none;}
+.detailSearch input{height:42px!important;min-height:42px!important;border-radius:12px!important;padding-left:40px!important;font-size:15px!important;box-shadow:0 2px 8px rgba(43,10,12,.035)!important;transition:border-color .16s ease,box-shadow .16s ease,transform .12s ease!important;}
+.detailSearch input:focus{box-shadow:0 0 0 3px rgba(180,20,27,.09),0 5px 13px -10px rgba(43,10,12,.22)!important;transform:translateY(-1px);}
+.detailSearch svg{left:13px!important;width:16px!important;height:16px!important;}
+.people{gap:6px!important;}
+.person{min-height:0!important;border-radius:13px!important;padding:8px 9px 8px 10px!important;grid-template-columns:minmax(0,1fr) 38px!important;gap:9px!important;box-shadow:0 2px 7px rgba(43,10,12,.028)!important;transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease,background .15s ease!important;}
+.personLabel{grid-template-columns:36px minmax(0,1fr)!important;gap:9px!important;}
+.avatar{width:36px!important;height:36px!important;font-size:12px!important;transition:transform .16s ease,background .16s ease!important;}
+.name{font-size:15px!important;line-height:1.1!important;}
+.sub{margin-top:2px!important;font-size:9px!important;}
+.detailLine{margin-top:4px!important;gap:4px!important;}
+.tag{padding:2px 6px!important;font-size:7px!important;}
+.checkUI{width:33px!important;height:33px!important;border-radius:10px!important;border-width:1.25px!important;transition:transform .15s ease,background .15s ease,border-color .15s ease,box-shadow .15s ease!important;}
+.checkUI svg{width:16px!important;height:16px!important;}
+.person:hover{transform:translateY(-1px);box-shadow:0 7px 16px -13px rgba(43,10,12,.3)!important;}
+.person:active{transform:scale(.992)!important;}
+.person:has(input:checked) .checkUI{box-shadow:0 5px 12px -8px rgba(63,122,87,.65);}
+.person:has(input:checked) .avatar{transform:scale(1.035);background:var(--crimson);}
+@media(max-width:720px){
+  .detailSearch input{height:40px!important;min-height:40px!important;border-radius:11px!important;}
+  .person{padding:7px 8px 7px 9px!important;grid-template-columns:minmax(0,1fr) 36px!important;}
+  .personLabel{grid-template-columns:34px minmax(0,1fr)!important;gap:8px!important;}
+  .avatar{width:34px!important;height:34px!important;font-size:11px!important;}
+  .checkUI{width:31px!important;height:31px!important;border-radius:9px!important;}
+}
+</style>
+<style>
+/* Final mobile-first people list pass. Keep the cards light, tactile and compact. */
+.detailSearch input{
+  height:40px!important;min-height:40px!important;border:1px solid rgba(180,20,27,.18)!important;
+  border-radius:12px!important;background:rgba(255,253,250,.94)!important;
+  box-shadow:0 1px 5px rgba(43,10,12,.035)!important;
+  font-size:14px!important;transition:border-color .16s ease,box-shadow .16s ease,background .16s ease!important;
+}
+.detailSearch input:focus{background:#fff!important;border-color:rgba(180,20,27,.38)!important;box-shadow:0 0 0 3px rgba(180,20,27,.07)!important;transform:none!important;}
+.people{gap:5px!important;}
+.person{
+  display:grid!important;grid-template-columns:minmax(0,1fr) 36px!important;
+  align-items:center!important;gap:7px!important;min-height:58px!important;
+  padding:7px 7px 7px 9px!important;border-radius:15px!important;
+  border:1px solid rgba(226,205,188,.78)!important;background:rgba(255,253,250,.98)!important;
+  box-shadow:0 1px 4px rgba(43,10,12,.025)!important;
+  transition:transform .14s ease,background .16s ease,border-color .16s ease,box-shadow .16s ease!important;
+}
+.personLabel{grid-column:1!important;grid-row:1!important;display:grid!important;grid-template-columns:32px minmax(0,1fr)!important;align-items:center!important;gap:8px!important;width:auto!important;}
+.avatar{width:32px!important;height:32px!important;font-size:10.5px!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)!important;}
+.name{font-size:14.5px!important;line-height:1.08!important;letter-spacing:-.01em!important;}
+.sub{font-size:8.5px!important;line-height:1.1!important;margin-top:2px!important;}
+.detailLine{margin-top:3px!important;gap:3px!important;min-height:14px;}
+.tag{padding:2px 5px!important;border-radius:999px!important;font-size:6.7px!important;line-height:1.05!important;}
+.checkArea{grid-column:2!important;grid-row:1!important;align-self:center!important;justify-self:end!important;display:grid!important;place-items:center!important;width:36px!important;height:36px!important;}
+.checkUI{width:31px!important;height:31px!important;border-radius:11px!important;border:1px solid rgba(180,20,27,.55)!important;background:#FBF3EC!important;box-shadow:none!important;}
+.checkArea input:focus + .checkUI{box-shadow:0 0 0 3px rgba(180,20,27,.10)!important;}
+.person:has(input:checked){background:#FFF7F5!important;border-color:rgba(180,20,27,.22)!important;box-shadow:0 3px 10px rgba(180,20,27,.06)!important;}
+.person:has(input:checked) .checkUI{background:var(--crimson)!important;border-color:var(--crimson)!important;color:#fff!important;box-shadow:0 5px 14px -8px rgba(180,20,27,.7)!important;}
+.person:hover{transform:translateY(-1px)!important;}
+.person:active{transform:scale(.993)!important;}
+@media(max-width:720px){
+  .detailSearch input{height:38px!important;min-height:38px!important;border-radius:11px!important;font-size:14px!important;}
+  .detailControls{padding-top:7px!important;padding-bottom:8px!important;}
+  .person{min-height:55px!important;border-radius:14px!important;grid-template-columns:minmax(0,1fr) 35px!important;padding:6px 6px 6px 8px!important;}
+  .personLabel{grid-template-columns:31px minmax(0,1fr)!important;gap:7px!important;}
+  .avatar{width:31px!important;height:31px!important;}
+  .checkArea{width:35px!important;height:35px!important;}
+  .checkUI{width:30px!important;height:30px!important;border-radius:10px!important;}
+  .name{font-size:14.5px!important;}
+  .sub{font-size:8.2px!important;}
+  .detailLine{margin-top:2px!important;}
+}
+@media(max-width:390px){
+  .person{grid-template-columns:minmax(0,1fr) 33px!important;padding-left:7px!important;}
+  .personLabel{grid-template-columns:29px minmax(0,1fr)!important;gap:7px!important;}
+  .avatar{width:29px!important;height:29px!important;}
+  .checkArea{width:33px!important;height:33px!important;}
+  .checkUI{width:28px!important;height:28px!important;}
+  .name{font-size:14px!important;}
 }
 </style>
 <script>
@@ -440,7 +498,7 @@ function startGsi(cfg){
       $("gate").classList.add("hidden");
       $("app").classList.remove("hidden");
       $("eventSlider")?.classList.toggle("all", eventScope === "all");
-      setScope(eventScope);
+      renderMain();
       startPolling();
     }catch(e){
       clearToken();
@@ -513,14 +571,13 @@ async function openGate(){
 
 function setScope(scope){
   eventScope = scope === "all" ? "all" : "mine";
-  const slider = $("eventSlider");
   document.querySelectorAll("[data-scope]").forEach(b => {
     const active = b.dataset.scope === eventScope;
     b.classList.toggle("active", active);
     b.setAttribute("aria-selected", active ? "true" : "false");
-    b.setAttribute("tabindex", active ? "0" : "-1");
   });
-  slider?.classList.toggle("all", eventScope === "all");
+  $("eventSlider")?.classList.toggle("all", eventScope === "all");
+  bindEventSlider();
   renderMain();
 }
 
@@ -567,7 +624,7 @@ function personHtml(ev, r){
     ? '<span class="checkArea"><input aria-label="Check in '+esc(name)+'" type="checkbox" data-check data-event="'+esc(ev.id)+'" data-email="'+esc(r.email||"")+'" '+(checked?'checked':'')+'><span class="checkUI"><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 7"/></svg></span></span>'
     : '<span class="waitState">Waiting</span>';
   const searchHay = [name, r.email, r.programme, r.research, r.dietary, r.drinks, r.slot, r.choice].filter(Boolean).join(" ").toLowerCase();
-  return '<label class="person '+(checked?'checked is-checked':'')+'" data-person-email="'+esc(r.email||"")+'" data-person-search="'+esc(searchHay)+'">' +
+  return '<label class="person '+(checked?'checked is-checked':'')+'" data-person-search="'+esc(searchHay)+'">' +
     '<span class="personLabel"><span class="avatar">'+esc(initials(name))+'</span><span>' +
     '<span class="name '+(checked?'liveChecked':'')+'">'+esc(name)+'</span>' +
     '<span class="sub">'+esc([r.email, r.programme].filter(Boolean).join(' · '))+'</span>' +
@@ -592,13 +649,13 @@ function detailHtml(ev){
   const pool = (tab === "going" ? go : wl).filter(r => !q || [r.name,r.email,r.programme,r.research,r.dietary,r.drinks,r.slot,r.choice].join(" ").toLowerCase().includes(q));
   const pct = go.length ? Math.round(checked / go.length * 100) : 0;
   return '<div class="detailHeader"><div class="detailHeaderIn">' +
-    '<div class="detailBrand"><span class="crestmark detailCrest" role="img" aria-label="Jesus College MCR"></span><div class="detailHeading"><div class="detailTitleRow"><div class="detailTitle">'+esc(ev.title)+'</div><button class="back" data-close-detail aria-label="Back to events"><svg viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg><span>Back to events</span></button></div><div class="detailWhen">'+esc(formatDate(ev.date).long)+' · '+esc(ev.start||"")+'</div><div class="detailMeta">'+esc(venue(ev))+' · '+go.length+' reserved'+(wl.length?' · '+wl.length+' waiting':'')+'</div></div></div>' +
+    '<div class="detailBrand"><span class="crestmark detailCrest" role="img" aria-label="Jesus College MCR"></span><div class="detailHeading"><div class="detailTitleRow"><div class="detailTitle">'+esc(ev.title)+'</div><button class="back" data-close-detail aria-label="Back to events"><svg viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg><span>Back</span></button></div><div class="detailWhen">'+esc(formatDate(ev.date).long)+' · '+esc(ev.start||"")+'</div><div class="detailMeta">'+esc(venue(ev))+' · '+go.length+' reserved'+(wl.length?' · '+wl.length+' waiting':'')+'</div></div></div>' +
     '</div></div>' +
-    '<div class="detailControls fade"><div class="detailSearch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input id="personSearch" type="search" inputmode="search" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Search this event…" value="'+esc(searchPeople)+'"></div>' +
+    '<div class="detailBody fade">' +
+    '<div class="dietTop"><div class="dietMini alc"><b>'+a.drinkPct+'%</b><span>drink</span></div><div class="dietMini alc"><b>'+a.noDrinkPct+'%</b><span>do not drink</span></div>'+dietBits+'</div>' +
+    '<div class="detailControls"><div class="detailSearch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input id="personSearch" type="search" inputmode="search" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Search this event…" value="'+esc(searchPeople)+'"></div>' +
     '<div class="tabs"><button class="tab '+(tab==='going'?'active':'')+'" data-tab="going"><span class="tabNum">'+go.length+'</span>Reserved</button><button class="tab '+(tab==='wait'?'active':'')+'" data-tab="wait"><span class="tabNum">'+wl.length+'</span>Waiting list</button></div>' +
     '<div class="attendanceMeter" data-attendance-event="'+esc(ev.id)+'" aria-label="Live attendance"><div class="meterCopy"><strong><span data-attendance-checked>'+checked+'</span> / '+go.length+'</strong><small>checked in</small></div><div class="attendanceTrack"><span class="attendanceFill" data-attendance-fill style="width:'+pct+'%"></span></div><span class="meterPct" data-attendance-pct>'+pct+'%</span></div></div>' +
-    '<div class="detailBody">' +
-    '<div class="dietTop"><div class="dietMini alc"><b>'+a.drinkPct+'%</b><span>drink</span></div><div class="dietMini alc"><b>'+a.noDrinkPct+'%</b><span>do not drink</span></div>'+dietBits+'</div>' +
     '<div class="listHead"><h3>'+(tab==='going'?'Reservation list':'Waiting list')+'</h3><span>'+pool.length+' shown</span></div>' +
     '<div class="people">'+(pool.length?pool.map(r=>personHtml(ev,r)).join(""):'<div class="notice">No people match this search.</div>')+'</div>' +
     '</div>';
@@ -612,23 +669,19 @@ function openDetail(id){
   document.body.style.overflow = "hidden";
   requestAnimationFrame(() => { const d = $("detail"); if(d) d.scrollTop = 0; });
 }
-function repaintDetail(rebuild=false){
+function repaintDetail(){
   if(!activeEvent) return;
   const ev = eventById(activeEvent); if(!ev) return;
   const q = searchPeople.trim().toLowerCase();
   const d = $("detail");
-  const beforeScroll = d ? d.scrollTop : 0;
+  const anchor = d ? d.scrollTop : 0;
   const activeRows = activeTab === "going" ? reservedRows(ev) : waitingRows(ev);
-  const people = document.querySelector(".people");
-  if(rebuild && people){
-    const pool = activeRows.filter(r => !q || [r.name,r.email,r.programme,r.research,r.dietary,r.drinks,r.slot,r.choice].filter(Boolean).join(" ").toLowerCase().includes(q));
-    people.innerHTML = pool.length ? pool.map(r => personHtml(ev,r)).join("") : '<div class="notice">No people match this search.</div>';
-  }
-  const allowed = new Set(activeRows.map(r => String(r.email || "").trim().toLowerCase()));
+  const allowed = new Set(activeRows.map(r => String(r.email || "")));
   const cards = document.querySelectorAll(".people .person");
   let shown = 0;
   cards.forEach(card => {
-    const email = String(card.dataset.personEmail || "").trim().toLowerCase();
+    const input = card.querySelector("[data-check]");
+    const email = String(input?.dataset.email || "");
     const hay = String(card.dataset.personSearch || "");
     const visible = allowed.has(email) && (!q || hay.includes(q));
     card.hidden = !visible;
@@ -636,12 +689,15 @@ function repaintDetail(rebuild=false){
   });
   const head = document.querySelector(".listHead span");
   if(head) head.textContent = shown + " shown";
-  document.querySelectorAll(".tab").forEach(b => {
-    const active = b.dataset.tab === activeTab;
-    b.classList.toggle("active", active);
-    b.setAttribute("aria-selected", active ? "true" : "false");
-  });
-
+  document.querySelectorAll(".tab").forEach(b => b.classList.toggle("active", b.dataset.tab === activeTab));
+  const people = document.querySelector(".people");
+  if(people){
+    // Keep the original result area height while filtering. On mobile, when the
+    // last visible card disappears, the browser otherwise clamps scrollTop to
+    // the newly shorter document and appears to jump upwards.
+    if(!people.dataset.filterHeight) people.dataset.filterHeight = String(people.scrollHeight);
+    people.style.minHeight = people.dataset.filterHeight + "px";
+  }
   let notice = people?.querySelector(".notice");
   if(!shown){
     if(!notice){
@@ -654,12 +710,13 @@ function repaintDetail(rebuild=false){
   }else if(notice){
     notice.hidden = true;
   }
-
-  updateAttendanceDirect(activeEvent);
   if(d){
     d.style.overflowAnchor = "none";
-    if(rebuild) d.scrollTop = beforeScroll;
-    requestAnimationFrame(() => { if(rebuild) d.scrollTop = beforeScroll; });
+    d.scrollTop = anchor;
+    requestAnimationFrame(() => {
+      d.scrollTop = anchor;
+      requestAnimationFrame(() => { d.scrollTop = anchor; });
+    });
   }
 }
 
@@ -752,52 +809,37 @@ async function refresh(manual=false){
   finally{ if(manual) b?.classList.remove("busy"); }
 }
 
-const sliderEl = $("eventSlider");
 let sliderPointerX = null;
-let sliderPointerY = null;
-
-sliderEl?.addEventListener("click", e => {
-  const btn = e.target.closest(".eventSlide");
-  if(!btn || !sliderEl.contains(btn)) return;
-  e.preventDefault();
-  e.stopPropagation();
-  setScope(btn.dataset.scope === "all" ? "all" : "mine");
-});
-
-sliderEl?.addEventListener("keydown", e => {
-  const btn = e.target.closest(".eventSlide");
-  if(!btn) return;
-  if(e.key === "ArrowLeft" || e.key === "ArrowRight"){
-    e.preventDefault();
-    const next = e.key === "ArrowLeft" ? "mine" : "all";
-    setScope(next);
-    sliderEl.querySelector('[data-scope="'+next+'"]')?.focus();
-  }
-});
-
-sliderEl?.addEventListener("pointerdown", e => {
-  if(e.pointerType === "mouse" && e.button !== 0) return;
-  sliderPointerX = e.clientX;
-  sliderPointerY = e.clientY;
-});
-sliderEl?.addEventListener("pointerup", e => {
-  if(sliderPointerX === null) return;
-  const dx = e.clientX - sliderPointerX;
-  const dy = e.clientY - sliderPointerY;
-  sliderPointerX = null;
-  sliderPointerY = null;
-  if(Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.15){
-    setScope(dx < 0 ? "all" : "mine");
-  }
-});
+function bindEventSlider(){
+  const sliderEl = $("eventSlider");
+  if(!sliderEl || sliderEl.dataset.bound === "1") return;
+  sliderEl.dataset.bound = "1";
+  sliderEl.querySelectorAll(".eventSlide").forEach(btn => {
+    btn.addEventListener("click", e => { e.preventDefault(); e.stopPropagation(); setScope(btn.dataset.scope); });
+  });
+  sliderEl.addEventListener("pointerdown", e => {
+    sliderPointerX = e.clientX;
+    try{ sliderEl.setPointerCapture(e.pointerId); }catch(err){}
+  });
+  sliderEl.addEventListener("pointerup", e => {
+    if(sliderPointerX === null) return;
+    const dx = e.clientX - sliderPointerX;
+    sliderPointerX = null;
+    if(Math.abs(dx) > 42) setScope(dx < 0 ? "all" : "mine");
+  });
+  sliderEl.addEventListener("pointercancel", () => { sliderPointerX = null; });
+}
+bindEventSlider();
 
 document.addEventListener("click", e => {
+  const scope = e.target.closest("[data-scope]");
+  if(scope){ setScope(scope.dataset.scope); return; }
   const open = e.target.closest("[data-open-event]");
   if(open){ openDetail(open.dataset.openEvent); return; }
   const back = e.target.closest("[data-close-detail]");
   if(back){ closeDetail(); return; }
   const tab = e.target.closest("[data-tab]");
-  if(tab && activeEvent){ activeTab = tab.dataset.tab; repaintDetail(true); return; }
+  if(tab && activeEvent){ activeTab = tab.dataset.tab; repaintDetail(); return; }
 });
 
 document.addEventListener("input", e => {
@@ -831,13 +873,14 @@ $("signout")?.addEventListener("click", signOut);
       $("gate").classList.add("hidden");
       $("app").classList.remove("hidden");
       $("eventSlider")?.classList.toggle("all", eventScope === "all");
-      setScope(eventScope);
+      renderMain();
       startPolling();
       refresh(false);
       return;
     }catch(e){ clearToken(); }
   }
   $("eventSlider")?.classList.toggle("all", eventScope === "all");
+  bindEventSlider();
   openGate();
 })();
 </script>
