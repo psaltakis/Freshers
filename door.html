@@ -419,6 +419,74 @@ body{background:
   .checkArea{width:34px!important;height:34px!important;}
   .checkUI{width:29px!important;height:29px!important;border-radius:9px!important;}
 }
+
+<style>
+/* Desktop alignment + final interaction polish */
+.detailControls{
+  width:min(880px,100%)!important;
+  margin:0 auto!important;
+  padding:8px 18px 9px!important;
+  box-sizing:border-box!important;
+}
+.detailControls .detailSearch,
+.detailControls .tabs,
+.detailControls .attendanceMeter{width:100%!important;}
+.detailTitleRow .back{
+  position:static!important;
+  flex:0 0 auto!important;
+  min-height:40px!important;
+  height:40px!important;
+  padding:0 15px 0 11px!important;
+  gap:7px!important;
+  border:1px solid rgba(255,255,255,.28)!important;
+  border-radius:999px!important;
+  background:rgba(255,255,255,.11)!important;
+  color:#fff!important;
+  font-family:var(--ui)!important;
+  font-size:11px!important;
+  font-weight:750!important;
+  box-shadow:0 5px 16px -12px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.12)!important;
+  white-space:nowrap!important;
+  transition:background .15s ease,border-color .15s ease,transform .12s ease,box-shadow .15s ease!important;
+}
+.detailTitleRow .back svg{width:16px!important;height:16px!important;stroke-width:2.3!important;}
+.detailTitleRow .back:hover{background:rgba(255,255,255,.17)!important;border-color:rgba(255,255,255,.42)!important;box-shadow:0 7px 18px -12px rgba(0,0,0,.65),inset 0 1px 0 rgba(255,255,255,.14)!important;}
+.detailTitleRow .back:active{transform:translateY(1px) scale(.98)!important;}
+
+/* Checked reservations stay visibly green; only the check control is red. */
+.person:has(input:checked){
+  background:#EFF6F0!important;
+  border-color:rgba(63,122,87,.28)!important;
+  box-shadow:0 4px 12px rgba(63,122,87,.08)!important;
+}
+.person:has(input:checked) .name{color:var(--moss)!important;}
+.person:has(input:checked) .avatar{background:var(--moss)!important;}
+.person:has(input:checked) .checkUI{
+  background:var(--crimson)!important;
+  border-color:var(--crimson)!important;
+  color:#fff!important;
+}
+
+/* Make the two-way slider reliably clickable on desktop and touch. */
+.eventSlider{position:relative!important;pointer-events:auto!important;}
+.eventSlider .eventSlide{position:relative!important;z-index:5!important;pointer-events:auto!important;cursor:pointer!important;}
+.eventSlider .slidePill{z-index:1!important;pointer-events:none!important;}
+
+@media(max-width:720px){
+  .detailControls{width:100%!important;padding:7px 14px 8px!important;}
+  .detailTitleRow{gap:8px!important;}
+  .detailTitleRow .back{
+    min-height:36px!important;height:36px!important;
+    padding:0 12px 0 9px!important;gap:6px!important;
+    font-size:10px!important;border-radius:999px!important;
+  }
+  .detailTitleRow .back svg{width:14px!important;height:14px!important;}
+}
+@media(max-width:390px){
+  .detailTitleRow .back{min-height:34px!important;height:34px!important;padding:0 10px 0 8px!important;font-size:9px!important;}
+  .detailTitleRow .back span{display:none;}
+}
+</style>
 </style>
 <script>
 /* Door Check is a standalone client. It talks to the same Apps Script API as
@@ -723,7 +791,7 @@ function detailHtml(ev){
   const pool = (tab === "going" ? go : wl).filter(r => !q || [r.name,r.email,r.programme,r.research,r.dietary,r.drinks,r.slot,r.choice].join(" ").toLowerCase().includes(q));
   const pct = go.length ? Math.round(checked / go.length * 100) : 0;
   return '<div class="detailHeader"><div class="detailHeaderIn">' +
-    '<div class="detailBrand"><span class="crestmark detailCrest" role="img" aria-label="Jesus College MCR"></span><div class="detailHeading"><div class="detailTitleRow"><div class="detailTitle">'+esc(ev.title)+'</div><button class="back" data-close-detail aria-label="Back to events"><svg viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg><span>Back</span></button></div><div class="detailWhen">'+esc(formatDate(ev.date).long)+' · '+esc(ev.start||"")+'</div><div class="detailMeta">'+esc(venue(ev))+' · '+go.length+' reserved'+(wl.length?' · '+wl.length+' waiting':'')+'</div></div></div>' +
+    '<div class="detailBrand"><span class="crestmark detailCrest" role="img" aria-label="Jesus College MCR"></span><div class="detailHeading"><div class="detailTitleRow"><div class="detailTitle">'+esc(ev.title)+'</div><button class="back" data-close-detail aria-label="Back to events"><svg viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg><span>Back to events</span></button></div><div class="detailWhen">'+esc(formatDate(ev.date).long)+' · '+esc(ev.start||"")+'</div><div class="detailMeta">'+esc(venue(ev))+' · '+go.length+' reserved'+(wl.length?' · '+wl.length+' waiting':'')+'</div></div></div>' +
     '</div></div>' +
     '<div class="detailControls fade"><div class="detailSearch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input id="personSearch" type="search" inputmode="search" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Search this event…" value="'+esc(searchPeople)+'"></div>' +
     '<div class="tabs"><button class="tab '+(tab==='going'?'active':'')+'" data-tab="going"><span class="tabNum">'+go.length+'</span>Reserved</button><button class="tab '+(tab==='wait'?'active':'')+'" data-tab="wait"><span class="tabNum">'+wl.length+'</span>Waiting list</button></div>' +
@@ -886,40 +954,61 @@ async function refresh(manual=false){
 const sliderEl = $("eventSlider");
 let sliderPointerX = null;
 let sliderPointerY = null;
-sliderEl?.addEventListener("click", e => {
-  const btn = e.target.closest(".eventSlide");
-  if(!btn || !sliderEl.contains(btn)) return;
-  e.preventDefault();
-  setScope(btn.dataset.scope);
-});
-sliderEl?.addEventListener("pointerdown", e => {
-  if(e.pointerType === "mouse" && e.button !== 0) return;
-  sliderPointerX = e.clientX;
-  sliderPointerY = e.clientY;
-  try{ sliderEl.setPointerCapture(e.pointerId); }catch(err){}
-});
-sliderEl?.addEventListener("pointerup", e => {
-  if(sliderPointerX === null) return;
-  const dx = e.clientX - sliderPointerX;
-  const dy = e.clientY - sliderPointerY;
-  const startX = sliderPointerX;
-  sliderPointerX = null;
-  sliderPointerY = null;
-  if(Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.15){
-    e.preventDefault();
-    setScope(dx < 0 ? "all" : "mine");
-  }
-});
-sliderEl?.addEventListener("pointercancel", () => { sliderPointerX = null; sliderPointerY = null; });
+
+function handleScopeButton(btn, e){
+  if(!btn) return;
+  e?.preventDefault?.();
+  e?.stopPropagation?.();
+  const next = btn.dataset.scope === "all" ? "all" : "mine";
+  if(next !== eventScope) setScope(next);
+  else setScope(eventScope); // also re-sync the visual pill on repeat clicks
+}
+
 sliderEl?.querySelectorAll(".eventSlide").forEach(btn => {
+  btn.addEventListener("click", e => handleScopeButton(btn,e), true);
+  btn.addEventListener("pointerup", e => {
+    if(e.pointerType === "mouse" && e.button !== 0) return;
+    if(sliderPointerX !== null){
+      const dx = e.clientX - sliderPointerX;
+      const dy = e.clientY - sliderPointerY;
+      if(Math.abs(dx) < 8 && Math.abs(dy) < 8) handleScopeButton(btn,e);
+    }
+    sliderPointerX = null;
+    sliderPointerY = null;
+  }, true);
+  btn.addEventListener("pointerdown", e => {
+    if(e.pointerType === "mouse" && e.button !== 0) return;
+    sliderPointerX = e.clientX;
+    sliderPointerY = e.clientY;
+  }, true);
   btn.addEventListener("keydown", e => {
     if(e.key === "ArrowLeft" || e.key === "ArrowRight"){
       e.preventDefault();
       const next = e.key === "ArrowLeft" ? "mine" : "all";
       setScope(next);
       sliderEl.querySelector('[data-scope="'+next+'"]')?.focus();
+    }else if(e.key === "Enter" || e.key === " "){
+      handleScopeButton(btn,e);
     }
   });
+});
+
+sliderEl?.addEventListener("pointerdown", e => {
+  if(e.target.closest(".eventSlide")) return;
+  if(e.pointerType === "mouse" && e.button !== 0) return;
+  sliderPointerX = e.clientX;
+  sliderPointerY = e.clientY;
+}, {passive:true});
+sliderEl?.addEventListener("pointerup", e => {
+  if(e.target.closest(".eventSlide") || sliderPointerX === null) return;
+  const dx = e.clientX - sliderPointerX;
+  const dy = e.clientY - sliderPointerY;
+  sliderPointerX = null;
+  sliderPointerY = null;
+  if(Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.15){
+    e.preventDefault();
+    setScope(dx < 0 ? "all" : "mine");
+  }
 });
 
 document.addEventListener("click", e => {
