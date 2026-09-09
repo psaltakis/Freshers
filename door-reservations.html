@@ -330,27 +330,16 @@ const GSI_KEY="mcr-ff26-gsi";
 function gsiKept(){try{const o=JSON.parse(localStorage.getItem(GSI_KEY)||"null");return o&&o.ready&&o.clientId?o:null}catch(e){return null}}
 function gsiKeep(cfg){try{if(cfg&&cfg.ready&&cfg.clientId)localStorage.setItem(GSI_KEY,JSON.stringify(cfg));else localStorage.removeItem(GSI_KEY)}catch(e){}}
 function gateWipe(){const m=$("gateMsg");if(m)m.textContent=""}
-async function openGate(){
-  if(gateOpening)return;gateOpening=true;
-  try{
-    preloadGsi();const kept=gsiKept();if(kept)startGsi(kept);
-    try{
-      const p=await api("ping");gsiKeep(p.signIn);
-      if(!kept)startGsi(p.signIn);
-      else if(JSON.stringify(kept)!==JSON.stringify(p.signIn)){gsiUp=false;startGsi(p.signIn)}
-    }catch(e){if(!kept)showGateError(e.message)}
-  }finally{gateOpening=false}
-}
+function showGateError(text){const m=$("gateMsg");if(m)m.textContent=String(text||"");}
 function startGsi(cfg){
-  if(gsiUp)return;
-  if(!cfg||!cfg.ready||!cfg.clientId){showGateError("This app has not finished being set up. The committee needs to add its Google client ID.");return}
-  gsiUp=true;
+  if(!cfg||!cfg.ready||!cfg.clientId){showGateError("Google sign-in is not configured for this app.");return}
   window.handleDoorGsi=async res=>{
-    lastCred=res.credential;gateWipe();showGateError("Checking with Google and the MCR register…");
+    if(!res||!res.credential){showGateError("Google sign-in did not return a credential.");return}
+    gateWipe();showGateError("Checking your Google account…");
     try{
       const r=await api("googleToken",{credential:res.credential});
-      if(r&&r.bookDown){showGateError("The MCR register is temporarily unavailable.");return}
-      if(r&&r.needsBook){showGateError("Your Google account is not authorised for the MCR.");return}
+      if(r&&r.bookDown){clearToken();showGateError("The MCR register is temporarily unavailable.");return}
+      if(r&&r.needsBook){clearToken();showGateError("Your Google account is not authorised for the MCR.");return}
       if(!r||!r.token)throw new Error("The server did not return an access token.");
       setToken(r.token);
       const st=r.state&&r.state.me?r.state:await api("state");
@@ -358,20 +347,39 @@ function startGsi(cfg){
       $("gate").classList.add("hidden");$("app").classList.remove("hidden");renderMain();startPolling();
     }catch(e){clearToken();showGateError(e.message||"Sign in could not be completed.")}
   };
-  let drawn=false;
   const draw=()=>{
-    if(!cfg||!cfg.clientId)return;
-    if(!window.google||!window.google.accounts||!window.google.accounts.id){setTimeout(draw,250);return}
-    window.google.accounts.id.initialize({client_id:cfg.clientId,callback:window.handleDoorGsi,hd:cfg.hd||undefined,ux_mode:"popup",auto_select:false});
     const host=$("gateButton");
-    host.innerHTML="";
-    window.google.accounts.id.renderButton(host,{theme:"filled_blue",size:"large",shape:"pill",width:280,text:"signin_with",logo_alignment:"center"});
-    drawn=true;
+    if(!host)return;
+    if(!window.google?.accounts?.id){return false;}
+    try{
+      window.google.accounts.id.initialize({client_id:cfg.clientId,callback:window.handleDoorGsi,hd:cfg.hd||undefined,ux_mode:"popup",auto_select:false});
+      host.innerHTML="";
+      window.google.accounts.id.renderButton(host,{theme:"filled_blue",size:"large",shape:"pill",width:280,text:"signin_with",logo_alignment:"center"});
+      gsiUp=true;
+      return true;
+    }catch(e){gsiUp=false;showGateError("Google sign-in could not be loaded. Please reload the page.");return false;}
   };
   const sc=preloadGsi();
-  if(window.google&&window.google.accounts&&window.google.accounts.id)draw();
-  else {sc.addEventListener("load",draw);sc.addEventListener("error",()=>showGateError("Google sign-in could not load. Check the connection and reload the page."));}
-  setTimeout(()=>{if(!drawn){draw();if(!drawn)showGateError("Google sign-in could not load. Check the connection and reload the page.")}},8000);
+  if(draw())return;
+  const onReady=()=>{if(draw())sc.removeEventListener("load",onReady)};
+  sc.addEventListener("load",onReady,{once:true});
+  sc.addEventListener("error",()=>showGateError("Google sign-in could not load. Check the connection and reload the page."),{once:true});
+  let tries=0;
+  const poll=setInterval(()=>{tries++;if(draw()||tries>=80)clearInterval(poll)},250);
+}
+async function openGate(){
+  if(gateOpening)return;gateOpening=true;gateWipe();
+  try{
+    const kept=gsiKept();
+    if(kept)startGsi(kept);
+    try{
+      const p=await api("ping");
+      if(p&&p.signIn){gsiKeep(p.signIn);startGsi(p.signIn);}
+      else if(!kept)showGateError("Google sign-in is not available right now.");
+    }catch(e){
+      if(!kept)showGateError(e.message);
+    }
+  }finally{gateOpening=false}
 }
 function organizerFor(ev){
   const me=String(S?.me?.email||"").trim().toLowerCase();
