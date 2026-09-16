@@ -4100,7 +4100,7 @@ function evRow(ev){
   }
   if (ev.choiceBy && ev.choiceBy >= today) chips.push('<span class="deadline vote">vote by ' + esc(shortDate(ev.choiceBy).slice(0, 6)) + '</span>');
   const meta = state === "cancelled" ? "Cancelled"
-    : esc(vname(ev.venue)) + (c.going ? " · " + c.going + " going" : "") + (ev.dress ? " · " + esc(ev.dress) : "") + chips.join("");
+    : esc(vname(ev.venue)) + ((isCommittee() || lim) && c.going ? " · " + c.going + " going" : "") + (ev.dress ? " · " + esc(ev.dress) : "") + chips.join("");
   const pressed = st === "going" || st === "waitlist";
   return '<div class="' + cls + '">' +
     '<span class="tab">' + esc(clock(ev.start)) + '</span>' +
@@ -6079,7 +6079,8 @@ function placesFact(ev, c){
      before because a capacity of nothing returned above this point. */
   if (isPunt(ev)) return puntBlock(ev);
   if (!ev.capacity){
-    return '<div class="fact"><span class="k">Who is coming</span><b id="evPlaces">' + c.going + ' so far</b>' +
+    return '<div class="fact"><span class="k">Who is coming</span>' +
+      ((isCommittee() || isLimited(ev)) ? '<b id="evPlaces">' + c.going + ' so far</b>' : '') +
       '<small id="evPlacesSub">no limit on places</small></div>';
   }
   return placesBar(ev, c);
