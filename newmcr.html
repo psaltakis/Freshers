@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en-GB">
 <meta charset="utf-8">
-<title>Jesus College MCR</title>
+<title>The MCRNet — Jesus College MCR</title>
 <!-- Without this a phone lays the page out at 980px and scales the result down,
      which is why it looked like a shrunken desktop site however large the type
      was set. Everything below assumes the real width of the device. -->
@@ -236,9 +236,30 @@ a{color:var(--gold-2);text-underline-offset:3px}
    pale round plate to sit on wherever it is shown against the crimson, which
    is what separates the shield from the page and what a badge on a blazer has
    anyway. The gatehouse keeps its stone panel and is left alone. */
-.crest{display:block;width:2.45rem;height:2.45rem;flex:0 0 2.45rem;object-fit:contain;
+/* THE CREST IS A SHIELD, AND IT WAS BEING DRAWN IN A COIN.
+   The artwork is 82 by 150 -- a tall shield with the cockerel above it -- and
+   every rule here used to give it a square box with object-fit:contain. That
+   does not crop anything, but it does mean the box is sized by the short side:
+   in a 2.45rem square the ink came out 1.34rem across with half a centimetre
+   of nothing either side of it, and the empty space was charged to the
+   masthead, which is the tightest row in the app.
+
+   So the box now has the drawing's own shape: a height, and a width that
+   follows from it. The crest is a quarter again as large as it was and takes
+   up LESS of the bar than before, which is the whole reason it could not
+   simply be scaled up in place. flex-basis has to go with it -- a flex item
+   with a fixed basis ignores its own width and the letterboxing comes back. */
+.crest{display:block;width:auto;height:3rem;flex:0 0 auto;object-fit:contain;
   filter:drop-shadow(0 2px 5px rgba(30,2,4,.5))}
-.crest.big{width:78px;height:78px;flex-basis:78px}
+/* The plate the comment above promises, on the two crests that actually sit on
+   the crimson. A rounded card rather than a disc, now that the box has the
+   shield's own shape and a circle would letterbox it again. It is scoped to
+   these two on purpose: the gate card and the way in put their crest on a disc
+   of their own, and a plate under that disc would be a card inside a coin. */
+#crestTop,#crestRail{padding:3px 5px;border-radius:9px;filter:none;
+  background:linear-gradient(180deg,rgba(255,253,250,.94),rgba(240,226,212,.88));
+  box-shadow:0 2px 8px -3px rgba(20,1,3,.6),inset 0 0 0 1px rgba(113,28,34,.14)}
+.crest.big{width:auto;height:96px;flex-basis:auto}
 
 /* ---------- masthead ---------- */
 header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
@@ -1083,8 +1104,8 @@ header{position:sticky;top:0;z-index:40;padding-top:var(--sat);
    still drawn under its natural width, so it stays sharp on a dense screen. */
 #boot .crestwrap{background:radial-gradient(circle at 50% 40%,#FFFDFA,#F1E4D6 66%,#DCC7B3);
   border-radius:50%;box-shadow:0 6px 22px -8px rgba(20,1,3,.7),inset 0 0 0 2px rgba(113,28,34,.14);
-  width:118px;height:118px}
-#boot .crestwrap .crest.big{position:relative;width:auto;height:86px;flex-basis:auto;margin:0;display:block;
+  width:128px;height:128px}
+#boot .crestwrap .crest.big{position:relative;width:auto;height:94px;flex-basis:auto;margin:0;display:block;
   left:auto;top:auto;filter:none;transform:none;animation:none}
 #boot .chimney{display:none}
 #boot.walk .chimney{display:block}
@@ -1214,7 +1235,7 @@ nav .railtop{display:none}
     align-items:stretch;border-radius:0;background:rgba(60,12,17,.42);box-shadow:none;
     padding:18px 12px calc(18px + var(--sab));overflow-y:auto;-webkit-mask-image:none;mask-image:none}
   nav .railtop{display:flex;align-items:center;gap:10px;padding:2px 9px 18px}
-  nav .railtop .crest{width:42px;height:42px;flex-basis:42px}
+  nav .railtop .crest{width:auto;height:54px;flex-basis:auto}
   /* the rail carries the crest, so the bar above the page does not repeat it */
   /* the rail already says who this is, so the bar above the page carries
      nothing but the two buttons */
@@ -1589,7 +1610,7 @@ button.busy{cursor:progress}
 #gate{position:fixed;inset:0;z-index:105;display:flex;
   align-items:safe center;justify-content:center;padding:22px;
   overflow:auto;overscroll-behavior:contain}
-@media(max-width:430px){#gate{padding:14px 10px}}
+@media(max-width:430px){#gate{padding:14px 6px}}
 /* THE CARD FADES. IT DOES NOT MOVE. READ THIS BEFORE ADDING A TRANSFORM.
    It used to rise eight pixels as it appeared, with fill-mode "both". That
    holds the last keyframe for ever after, and the last keyframe says
@@ -1618,9 +1639,14 @@ button.busy{cursor:progress}
    sign in button with its right hand end cut off. The padding comes in far
    enough to hold it. */
 @media(max-width:430px){.gcard{padding:22px 16px}}
-@media(max-width:360px){.gcard{padding:20px 12px}}
+/* Tighter than the 430px rule above, and for one reason: Google's button is
+   a fixed 280 and the card has to have room for it on a 320 pixel phone.
+   6 + 8 either side leaves 292, which clears it with room for a scrollbar. */
+@media(max-width:360px){.gcard{padding:20px 8px}#gsiBtn{width:100%}}
 .gcard .head{display:flex;align-items:center;gap:13px;margin-bottom:20px}
-.gcard .head .crest{width:3.1rem;height:3.1rem;flex-basis:3.1rem;padding:5px;
+/* The one place the square box is right: here the crest sits on a pale disc,
+   and the disc is the design. It is set square on purpose. */
+.gcard .head .crest{width:3.9rem;height:3.9rem;flex-basis:3.9rem;padding:6px;
   border-radius:50%;background:radial-gradient(circle at 50% 38%,#FFFDFA,#F0E2D4 70%,#DCC7B3);
   box-shadow:0 3px 12px -4px rgba(20,1,3,.6),inset 0 0 0 1.5px rgba(113,28,34,.16);
   filter:none}
@@ -1665,34 +1691,21 @@ button.busy{cursor:progress}
    nothing over it, no opacity and no transform. Do not put anything on top of
    it, and do not scale it.
 
-   The personalised "Continue as somebody" variant is allowed. It was once
-   suppressed by asking Google for a button under two hundred pixels wide,
-   which is the width at which Google declines to draw it -- and which is also
-   a button visibly narrower than everything else on the card. The width is
-   now measured from the slot and clamped to Google's own 200 to 400 in
-   gsiWidth, so the button lines up with the paragraph above it, and the
-   variant, if it appears, is drawn at the width we asked for rather than at
-   one of its own. */
+   WHAT IS LEFT HERE IS FRESHERS' FORTNIGHT'S RULE, VERBATIM, AND THAT IS
+   THE POINT. This file kept trying to help: a width on the slot, a cap on
+   Google's own frame, a forced display and margin on its iframe. Each of
+   those is a second opinion about a box whose contents Google lays out, and
+   between them they are every rendering mismatch this button has ever had.
+   The other app sets three properties -- a minimum height and a centring
+   flex -- and its button has never misdrawn. So this is those three
+   properties and nothing else. Do not add a fourth. */
 /* THE SPACING OF THIS CARD.
    One button is the whole point of the screen, so it gets room on both sides
    of it and nothing else competes: the note under it is small and quiet, and
    the foot is a rule with the year on it rather than a row of links. The
    button sits in the largest gap on the card, which is what makes it read as
    the thing to press. */
-#gsiBtn{position:relative;margin:22px 0 0;width:100%;min-width:0;
-  display:flex;justify-content:center;align-items:center;min-height:44px}
-/* WHY THIS NO LONGER FORCES A WIDTH, AND WHY THAT WAS THE GLITCH.
-   Google draws its button inside an iframe at exactly the pixel width it was
-   handed, and lays the wordmark and the label out for that width. This rule
-   then stretched the frame to fill the column. When the two agreed nobody
-   noticed; when they did not -- and they disagreed on the first paint of
-   every load, because the width was measured before the card had finished
-   being laid out and before the web font had arrived -- the frame was one
-   width and its contents were centred for another, so the pill sat
-   off-centre inside its own outline and visibly jumped when the redraw
-   corrected it. Google's frame is left at the size Google drew it and the
-   slot centres it, which it was already doing. */
-#gsiBtn > div,#gsiBtn iframe{max-width:100%}
+#gsiBtn{margin:22px 0 0;min-height:44px;display:flex;justify-content:center;align-items:center}
 .gsihint{margin:14px 0 0;text-align:center;font-size:.7rem;line-height:1.5;
   color:var(--cream-4);font-weight:500}
 .gsihint b{color:var(--cream-3);font-weight:700}
@@ -1700,10 +1713,9 @@ button.busy{cursor:progress}
   margin:20px 0 0;padding-top:14px;border-top:1px solid var(--edge);
   font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;
   color:var(--cream-4);font-weight:700}
-#gsiBtn iframe{margin:0!important;display:block}
 /* The ring belongs on the slot: the thing being focused is Google's frame. */
 #gsiBtn:focus-within{outline:2px solid var(--gold);outline-offset:3px;border-radius:999px}
-.gsiskel{display:block;width:100%;height:44px;border-radius:999px;background:var(--t3);animation:glow 1.5s ease-in-out infinite}
+.gsiskel{display:block;width:280px;max-width:100%;height:44px;border-radius:999px;background:var(--t3);animation:glow 1.5s ease-in-out infinite}
 /* AN ADDRESSED ENVELOPE.
    .kv had two colour rules and no layout whatever, so the label and the value
    were simply two inline elements touching: "To" ran into the address and
@@ -1855,7 +1867,6 @@ body[data-season="lent"]{--gold:#A9C8DD;--gold-2:#E2F0F8;--gold-ink:#0C2331}
 body[data-season="easter"]{--gold:#F2C271;--gold-2:#FDEECB}
 body[data-season="mayweek"]{--gold:#F6D471;--gold-2:#FFF4D4}
 body[data-season="vacation"]{--gold:#E3A863;--gold-2:#F9E3C6}
-body[data-season="fortnight"]{--gold:#EBB753;--gold-2:#FCE7B6}
 .season{font-family:var(--mono);font-size:0.66rem;letter-spacing:.16em;text-transform:uppercase;
   color:var(--gold-2);opacity:.9}
 
@@ -2117,7 +2128,7 @@ html[data-words="on"] .wordgone{display:inline-block;min-width:26px;height:1em;
 <header hidden id="hdr">
   <div class="hbar">
     <img class="crest" id="crestTop" alt="">
-    <div class="wm"><b><span class="lg">Jesus College MCR</span><span class="sm">Jesus MCR</span></b><i id="wmYear"></i></div>
+    <div class="wm"><b><span class="lg">The MCRNet</span><span class="sm">MCRNet</span></b><i id="wmYear"></i></div>
     <span class="beta" title="In development. Please report any problems to the committee.">Beta</span>
     <span class="sp"></span>
     <button class="iconbtn" id="bWords" title="Rewrite the words on this page" aria-label="Rewrite the words on this page"><svg viewBox="0 0 24 24"><path d="M4 20h4l10-10-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></button>
@@ -2182,6 +2193,10 @@ html[data-words="on"] .wordgone{display:inline-block;min-width:26px;height:1em;
   <section id="v-me" hidden>
     <div class="vh"><h2><i>Settings</i></h2><span class="note" id="meEmail"></span>
       <div class="right"><button class="btn ghost sm" id="bSignOut">Sign out</button></div></div>
+    <div class="card">
+      <h3>What this is</h3>
+      <p class="lede"><b>The MCRNet</b> is the Jesus College MCR&#8217;s intranet: the one place, behind your University sign in, for everything the MCR runs. The term calendar and what you have put your name down for; the board; the MCR room and who has booked it; Feedback; general meetings and their minutes; and a way to reach whichever officer a question belongs to. Nothing here is public and nothing here is an official Jesus College publication &#8212; it is written and kept by the MCR committee.</p>
+    </div>
     <div class="card">
       <h3>Your name</h3>
       <p class="lede">This appears on sign-up lists and next to anything you post. Everything else comes from your University account.</p>
@@ -2313,6 +2328,21 @@ html[data-words="on"] .wordgone{display:inline-block;min-width:26px;height:1em;
         <span class="lede" id="notifyLeft"></span></div>
     </div>
     <div class="card" data-admin hidden>
+      <h3>If the emails are not arriving</h3>
+      <p class="lede" id="notifySender"></p>
+      <p class="lede">Mail goes out through the account&#8217;s own mailbox, under its own address, with <b>no name laid over the top</b> and a reply-to pointing at whoever made the request. MailApp is not used: it goes by Google&#8217;s generic relay and Exchange drops it at the door.</p>
+      <p class="lede" id="notifyLast"></p>
+      <p class="lede">If a notification does not arrive, read the line above first. If it says a message went, the app did its part and the message is being refused at the far end &#8212; add the sending address to your safe senders in Outlook, under <b>Settings, Mail, Junk email, Safe senders and domains</b>. If there is no line at all, nothing was sent and the fault is here.</p>
+      <p class="lede">The button below sends one message by every method there is, with the method written into each subject line. Look at the inbox and at junk, see which numbers arrived, and set <b>How to send</b> to one of them.</p>
+      <label class="f"><span>A second address to copy, so you can tell a broken app from a blocked one</span>
+        <input type="email" id="notifyExtra" placeholder="something@gmail.com"></label>
+      <div class="acts"><button class="btn cream sm" id="bNotifyProbe">Send one of every kind</button></div>
+      <div id="notifyProbeOut"></div>
+      <label class="f" style="margin-top:14px"><span>How to send</span><select id="notifyHow"></select></label>
+      <div class="acts"><button class="btn crimson sm" id="bNotifyHow">Save</button></div>
+      <p class="lede">If none of them arrive, nothing here is broken: the sending address is being refused at the door. Add it to your safe senders in Outlook &#8212; <b>Settings, Mail, Junk email, Safe senders and domains</b> &#8212; which is the one thing no amount of code here can do for you.</p>
+    </div>
+    <div class="card" data-admin hidden>
       <h3>Who may sign in</h3>
       <p class="lede">By default anyone with a cam.ac.uk address can sign in. Paste CRSids or addresses here, one per line, to limit access to those people.</p>
       <textarea id="allowlist" class="bigin" style="min-height:110px"></textarea>
@@ -2398,7 +2428,7 @@ html[data-words="on"] .wordgone{display:inline-block;min-width:26px;height:1em;
 </div>
 
 <nav id="nav" aria-label="Sections" hidden>
-  <div class="railtop"><img class="crest" id="crestRail" alt="Jesus College MCR"><span><b>Jesus MCR</b><i id="railYear"></i></span></div>
+  <div class="railtop"><img class="crest" id="crestRail" alt="Jesus College MCR"><span><b>The MCRNet</b><i id="railYear"></i></span></div>
   <button class="tabbtn" data-view="today" aria-current="true"><svg viewBox="0 0 24 24"><path d="M4 15a8 8 0 0 1 16 0"/><path d="M12 3v3M4.2 6.6l2.1 2.1M19.8 6.6l-2.1 2.1M2 15h20"/></svg>Today</button>
   <button class="tabbtn" data-view="board"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="15" rx="1.8"/><path d="M7 9h10M7 13h6"/><path d="M12 2v2"/></svg>Board<span class="badge" id="bdgLodge" hidden>0</span></button>
   <button class="tabbtn" data-view="say"><svg viewBox="0 0 24 24"><path d="M4 5h16v10H9l-5 4z"/><path d="M8 8.5h8M8 11.5h5"/></svg>Feedback<span class="badge" id="bdgSay" hidden>0</span></button>
@@ -2419,8 +2449,8 @@ html[data-words="on"] .wordgone{display:inline-block;min-width:26px;height:1em;
 <div id="gate" hidden>
   <div class="gcard">
     <div class="head"><img class="crest" id="crestGate" alt="">
-      <span><small>JESUS COLLEGE</small><b>The <i>MCR</i></b></span></div>
-    <p class="lede">Run by the MCR committee for the postgraduate community at Jesus College. The term calendar, the MCR room, the board, and who to contact. This is not an official Jesus College publication.</p>
+      <span><small>JESUS COLLEGE</small><b>The <i>MCRNet</i></b></span></div>
+    <p class="lede">The intranet for the postgraduate community at Jesus College: everything the MCR runs, in one place behind your University sign in. The term calendar, the MCR room, the board, Feedback, general meetings and their minutes, and who to ask about what. Run by the MCR committee. This is not an official Jesus College publication.</p>
     <!-- One line, above the button and not below it, because consent given
          after the fact is not consent. The detail is one tap away rather than
          four screens of it nobody reads. -->
@@ -2434,7 +2464,7 @@ html[data-words="on"] .wordgone{display:inline-block;min-width:26px;height:1em;
       <p><b>Your rights.</b> You may ask to see what is held about you, to have it corrected, or to have it deleted, and you may withdraw from anything you have said yes to. Write to <b>president@mcr.jesus.cam.ac.uk</b> and it will be dealt with within a month. If you are not satisfied you may complain to the Information Commissioner at <b>ico.org.uk</b>.</p>
     </div>
     <div id="gsiBtn"><span class="gsiskel" aria-hidden="true"></span></div>
-    <p class="gsihint">Use your <b>@cam.ac.uk</b> address. No new password needed.</p>
+    <p class="gsihint" id="gsiHint">Use your <b>@cam.ac.uk</b> address. No new password needed.</p>
     <p class="msg" id="gateMsg"></p>
     <div id="gateCheck"></div>
     <!-- Where a real failure explains itself. Empty unless something has
@@ -3053,6 +3083,7 @@ function loadGsi(again){
   const s = document.createElement("script");
   s.src = "https://accounts.google.com/gsi/client";
   s.async = true; s.defer = true;
+  loadGsi.el = s;
   s.onload = () => { loadGsi.ok = true; loadGsi.failed = false; };
   s.onerror = () => {
     loadGsi.failed = true;
@@ -3072,7 +3103,7 @@ function loadGsi(again){
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbw6QaofVVjzEHMAQci2c5kz4fbne2i453kxlJtNmdWR1C3YdpMU6bsT3EcpmzWS8oJL/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxjW-RrxktsJRDnh6pGVLWPT976pSVGX6kF9xeR8hUv2cwmUimPmZMIUy0Tdito8Jqm/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -3445,124 +3476,68 @@ let gsiComplaint = "";
   });
 })();
 let gsiUp = false, probing = false, APP_URL = "", CLIENT_ID = "";
+/* WHICH CLIENT ID GOOGLE HAS ALREADY BEEN SET UP WITH.
+   google.accounts.id.initialize is not idempotent and says so: call it twice
+   and it logs "initialize() is called multiple times ... only the last
+   initialized instance will be used". This file called it every time the gate
+   was rebuilt -- signing out, a failed sign in, a retry, the background state
+   fetch coming back with a dead session -- each of which runs signedOut(),
+   which clears gsiUp and probes again. Eight or nine initializes on one visit
+   to the sign in page was ordinary, and a button rendered against an instance
+   that has since been replaced is exactly the kind of thing that draws
+   inconsistently for no visible reason.
+
+   It is the same client id every time, so the second call and every one after
+   it had nothing to change. Now it happens once, and again only if the id
+   itself changes. */
+let gsiInit = "";
 const withTimeout = (p, ms, what) => Promise.race([p,
   new Promise((_, rej) => setTimeout(() => rej(new Error(what || "The server did not answer in time. Please try again.")), ms))]);
 
 /* While something is happening the button is replaced by the waiting bar, and
    when it is over the real button is drawn again. Emptying it and leaving it
    empty was what left the card with nothing to press after a failed attempt. */
-/* THE GOOGLE BUTTON, REBUILT SO IT CANNOT ESCAPE ITS SLOT.
-   Everything inside the button belongs to Google. It is drawn into an iframe
-   in a wrapper Google owns, and the width passed to renderButton is a request,
-   not an instruction: when somebody has a live session Google substitutes the
-   personalised button, which says "Continue as" plus a name plus an address,
-   and that is wider than anything we asked for. Clamping the request did not
-   help, because the request was never what was being honoured. Clipping did
-   not help either, because clipping a sign in button hides half of it.
+/* GOOGLE'S BUTTON, DRAWN THE WAY FRESHERS' FORTNIGHT DRAWS IT.
+   The two apps are opened on the same phone a fortnight apart and the other
+   one has never misdrawn this button, so this is now the same few lines it
+   uses: a fixed width, the logo centred, rendered once.
 
-   So the slot no longer tries to constrain Google. It gives Google all the
-   room it wants, in a box taken out of the flow, then measures what was
-   actually drawn and scales it down to fit. A transform cannot overflow, it
-   costs one composited layer, and it works whatever Google decides to draw
-   next year. The slot's own height follows the scale so there is no gap under
-   a shrunken button.
+   WHAT THE MEASURING WAS FOR, AND WHY IT WAS WRONG.
+   The slot is the card's text column, so measuring it and handing Google the
+   number made the button exactly as wide as the paragraph above it, which
+   looks right on a drawing. It is wrong for one reason: the width passed to
+   renderButton is honoured, but what Google lays out inside that width is not
+   ours to arrange. Ask for 344 with the logo to the left and somebody with a
+   live Google session gets the personalised button -- "Sign in as George",
+   their address underneath -- set in the left half of a box half as wide
+   again, with the wordmark stranded against the right edge. No amount of
+   measuring fixes that, because the measurement was never the problem.
 
-   REN is deliberately generous. Asking for a small button and scaling up would
-   be blurry; asking for a large one and scaling down never is. */
-/* THE BUTTON IS OURS. THE CLICK IS GOOGLE'S.
-   Everything inside Google's button belongs to Google, and the width passed to
-   renderButton is a request rather than an instruction. When somebody has a
-   live session Google swaps in the personalised button -- "Continue as", a
-   name, an address -- which is wider than anything we asked for, changes width
-   depending on how long the name is, and carries its own square frame. The
-   previous version tried to live with that by measuring whatever Google drew
-   and scaling it down to fit. It worked, but it meant the sign in card was a
-   different shape for every person, sometimes with a shrunken button and a
-   square outline round it, and the measuring ran on a resize for ever after.
-
-   So the visible button is ours: fixed size, our type, our pill, drawn from
-   the same tokens as every other button in the app, and it cannot overflow
-   anything because nothing about it depends on who is signed in. Google's real
-   button is still there -- it has to be, it is what produces the credential --
-   rendered at zero opacity in a layer exactly over the top, where it takes the
-   press. Ours is aria-hidden and cannot be pressed; Google's is what the
-   keyboard reaches and what a screen reader announces, so nothing is lost.
-
-   No measuring, no scaling, no resize listener, and the same card for
-   everybody. */
-/* HOW WIDE GOOGLE'S BUTTON IS DRAWN.
-   It was a fixed 199 pixels. Everything else on the sign in card is the full
-   width of the card's text column, so the one thing somebody has to press sat
-   narrow and centred in the middle of it, visibly not lining up with anything
-   above or below. Google draws the button inside an iframe at whatever pixel
-   width it is told and cannot be styled from here, so the width has to be
-   measured and handed over.
-
-   Google's own limits are 200 to 400: under two hundred it declines to draw
-   at all, which is what the old 199 was flirting with, and over four hundred
-   it clamps. The slot is the card's text column, so on the 396px card this
-   comes out around 344 and the button lines up with the paragraph above it. */
-const GSI_MIN = 200, GSI_MAX = 400;
-function gsiWidth(){
-  const slot = $("gsiBtn");
-  const w = slot ? Math.round(slot.getBoundingClientRect().width) : 0;
-  return Math.max(GSI_MIN, Math.min(GSI_MAX, w || GSI_MIN));
-}
-/* The width the button was last drawn at, so a redraw that would change
-   nothing is not done at all. Google's renderButton tears the iframe down and
-   builds a new one, which is a visible blink; doing that for no change is the
-   second half of the glitch. */
-let gsiDrawnAt = 0;
-function drawGsi(force){
+   At 264 with the logo centred there is no spare room to distribute, so the
+   personalised variant and the plain one both come out as one centred pill,
+   the same shape for everybody. It is narrower than the paragraph above it.
+   That is the trade, and a button that is the wrong width is a smaller
+   complaint than a button that is the wrong shape for half the college. */
+/* The same six options Freshers' Fortnight passes, in the same order, at the
+   same width. The card's padding comes in far enough below 360px that 280
+   fits, which is the only thing this app had to change to be able to use the
+   other one's numbers unaltered. */
+const GSI_W = 280;
+function drawGsi(){
   const slot = $("gsiBtn");
   if (!slot) return false;
   if (!(window.google && google.accounts && google.accounts.id && gsiUp)) return false;
-  const w = gsiWidth();
-  if (!force && gsiDrawnAt === w && slot.querySelector("iframe")) return true;
   slot.innerHTML = "";
   try{
-    google.accounts.id.renderButton(slot, { theme:"outline", size:"large", shape:"pill",
-      text:"signin_with", logo_alignment:"left", width: w });
-    gsiDrawnAt = w;
-  }catch(e){ slot.innerHTML = ""; gsiDrawnAt = 0; return false; }
-  /* WHY IT IS DRAWN A SECOND TIME, ONCE.
-     The first draw happens as early as it can, which is the point: an empty
-     slot is what makes a sign in page feel broken. But the card is still
-     settling at that moment -- the web font has not landed, the scrollbar may
-     not have appeared -- so the width measured then is often not the width the
-     slot ends up at, and Google cannot be told about a change afterwards. Two
-     frames later the layout is final; if the number has moved, the button is
-     drawn again at the right size, and if it has not, nothing happens. */
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    const gate = $("gate");
-    if (!gate || gate.hidden) return;
-    if (gsiWidth() !== gsiDrawnAt) drawGsi(true);
-  }));
+    google.accounts.id.renderButton(slot, { theme:"filled_blue", size:"large", shape:"pill",
+      width: GSI_W, text:"signin_with", logo_alignment:"center" });
+  }catch(e){ slot.innerHTML = ""; return false; }
   return true;
 }
-/* The iframe keeps the width it was drawn at, so a rotated phone or a dragged
-   window would leave it the old size. It is redrawn only when the number has
-   actually changed: on a phone the address bar sliding away fires resize on
-   every scroll, and the old code rebuilt Google's iframe each time, which is
-   what made the button flicker while somebody was simply reading the page. */
-let gsiFit = null;
-window.addEventListener("resize", () => {
-  const gate = $("gate");
-  if (!gate || gate.hidden) return;
-  clearTimeout(gsiFit);
-  gsiFit = setTimeout(() => {
-    if (!$("gate").hidden && gsiWidth() !== gsiDrawnAt) drawGsi(true);
-  }, 260);
-}, { passive: true });
 function gateBusy(on){
-  const slot = $("gsiBtn");
-  if (slot) slot.style.height = "";
-  /* Emptying the slot throws Google's iframe away, so the next draw is a real
-     one whatever the remembered width says. */
-  gsiDrawnAt = 0;
   if (on) return put("gsiBtn", '<span class="gsiskel" aria-hidden="true"></span>');
   put("gsiBtn", "");
-  drawGsi(true);
+  drawGsi();
 }
 /* Whether probe() has worked out what is wrong and said so. startGsi's own
    verdict is a guess made three seconds later and must not speak over it --
@@ -3577,7 +3552,12 @@ function gateFix(title, body, actions){
   put("gateFix", '<div class="fix"><b>' + esc(title) + "</b><p>" + body + "</p>" +
     (actions ? '<div class="acts" style="margin-top:0">' + actions + "</div>" : "") + "</div>");
 }
-function gateClear(){ gateDiagnosed = false; put("gateFix", ""); }
+function gateClear(){
+  gateDiagnosed = false;
+  const hint = $("gsiHint");
+  if (hint) hint.hidden = false;
+  put("gateFix", "");
+}
 
 /* Everything the committee would need to tell somebody in order to fix it,
    including the origin Google has to be told about, which is the single
@@ -3695,18 +3675,27 @@ async function probe(){
     }
     /* The other half of the same mistake: the page is on its own address, but not
        the one the committee registered, so Google will refuse it silently. */
-    if (d.origin && location.origin && location.origin !== "null" && d.origin !== location.origin){
-      gateFix("This is not the address Google was told about",
-        "The page is being served from <code>" + esc(originOf()) + "</code> but <code>HOSTED_ORIGIN</code> " +
-        "in Code.gs says <code>" + esc(d.origin) + "</code>. One of the two is wrong, and Google will refuse " +
-        "whichever it has not been given.",
-        '<button class="btn ghost sm" data-diag>Show me the addresses</button>');
+    /* NOT SHOWN TO ANYBODY SIGNING IN.
+       This used to put a red panel on the card explaining that HOSTED_ORIGINS
+       and the address the page is served from disagree. That is a true and
+       useful fact, and it is a fact about a deployment: the member reading it
+       has no OAuth console, cannot act on any of it, and is looking at a
+       paragraph about Code.gs when all they wanted was to sign in. If Google
+       does refuse the origin the button simply does not draw, and the panel
+       that says so is the one below, which is about what they can see rather
+       than about our configuration. It goes to the console, where whoever
+       deployed it will look. */
+    const known = (d.origins && d.origins.length ? d.origins : [d.origin]).filter(Boolean);
+    if (known.length && location.origin && location.origin !== "null" &&
+        known.indexOf(location.origin) < 0){
+      try{ console.warn("MCRNet: served from " + location.origin +
+        ", which is not in HOSTED_ORIGINS (" + known.join(", ") + ")."); }catch(e){}
     }
     gsiKeep(d.signIn);
     /* Already drawn from what was kept, and the server agrees: leave it alone
        rather than tearing Google's iframe down and building an identical one. */
     if (kept && kept.clientId === CLIENT_ID && (kept.hd || "") === ((d.signIn && d.signIn.hd) || "")) return;
-    if (kept){ gsiUp = false; gateBusy(true); }
+    if (kept){ gsiUp = false; gsiInit = ""; gateBusy(true); }
     startGsi(d.signIn);
   } finally { probing = false; }
 }
@@ -3716,10 +3705,12 @@ function startGsi(cfg){
   gateClear();
   gateBusy(true);
   let tries = 0;
-  (function go(){
+  function go(){
     if (window.google && google.accounts && google.accounts.id){
       try{
         gsiUp = true;
+        if (gsiInit !== cfg.clientId){
+        gsiInit = cfg.clientId;
         google.accounts.id.initialize({
           client_id: cfg.clientId,
           /* THE DOMAIN IS NAMED, NOT LEFT OPEN.
@@ -3741,14 +3732,20 @@ function startGsi(cfg){
              Apps Script, verified against Google's own tokeninfo, after which
              the address still has to be on the MCR register. This makes the
              common case honest and quick. That one does the work. */
-          hd: (cfg.hd || "cam.ac.uk"),
-          callback: onCredential, ux_mode: "popup", auto_select: false, itp_support: true
+          /* cfg.hd or nothing, exactly as the other app does it. This used to
+             fall back to a hard-coded "cam.ac.uk" and to pass itp_support,
+             neither of which Freshers' Fortnight sends -- and the instruction
+             was to copy that file, not to improve on it. itp_support in
+             particular changes which component Google draws on a browser with
+             tracking protection, which is most of them. */
+          hd: cfg.hd || undefined,
+          callback: onCredential, ux_mode: "popup", auto_select: false
         });
+        }
         warmUp();
-        /* Forced, because initialize() has just run and this render has to be
-           against it. drawGsi's own short circuit compares widths, and the
-           width does not change when what changed was the client ID. */
-        drawGsi(true);
+        /* Drawn here and nowhere earlier: this render has to be the one that
+           follows the initialize() above it. */
+        drawGsi();
         /* If Google refuses the origin it renders nothing at all and throws
            nothing either, so the only way to know is to look a second later. */
         /* A drawn button contains an iframe or something focusable. A refused
@@ -3783,7 +3780,21 @@ function startGsi(cfg){
       loadGsi.failed ? "Google’s sign in script could not be reached."
                      : "Google’s sign in script did not load.");
     setTimeout(go, 200);
-  })();
+  }
+  go();
+  /* AND THE SAME THING AGAIN, ON THE SCRIPT'S OWN EVENT.
+     The loop above asks every fifth of a second whether Google has arrived,
+     which means the button appears up to 200ms after it could have. The
+     script element knows the moment it lands, so it is asked as well; whichever
+     gets there first wins, and go()'s own gsiUp guard makes the second one a
+     no-op. The poll is kept rather than replaced because a script tag that was
+     already in the document from an earlier attempt fires no load event at
+     all, and that is exactly the case a returning member hits. */
+  const sc = loadGsi.el;
+  if (sc && !sc.dataset.wired){
+    sc.dataset.wired = "1";
+    sc.addEventListener("load", () => { if (!gsiUp) go(); }, { once: true });
+  }
 }
 
 /* When the button will not draw, the account chooser usually still will, so
@@ -3791,6 +3802,10 @@ function startGsi(cfg){
 function gsiFallback(cfg, why){
   gsiUp = false;
   gateBusy(false);
+  /* The line under the button explains how to use a button that is not there.
+     It goes with it, and comes back if a retry succeeds. */
+  const hint = $("gsiHint");
+  if (hint) hint.hidden = true;
   const canPrompt = !!(window.google && google.accounts && google.accounts.id);
   /* An empty box is what Google leaves when it refuses an address, and that
      is far and away the commonest reason, so it gets the useful message. */
@@ -3848,15 +3863,14 @@ function warmUp(){
 }
 /* The page and the script are versioned together. When they disagree, the
    deployment is the thing to fix, and this says exactly which end is behind. */
+/* ALSO NOT SHOWN TO ANYBODY SIGNING IN.
+   A build number on the sign in card is a message from the app to whoever
+   deployed it, delivered to everybody else. It is in the console and in the
+   diagnostics panel, which is where it belongs; a member's card stays a card
+   with a button on it. */
 function staleWarn(srv){
-  const box = $("gateFix");
-  if (!box) return;
-  box.innerHTML = '<div class="fix"><b>This page is talking to an older copy of the server</b>' +
-    '<p>The page is <span class="mono">' + esc(EXPECT_BUILD) + '</span> and the server answering it is ' +
-    '<span class="mono">' + esc(srv) + '</span>. Signing in may be slow or fail until they match.</p>' +
-    '<p style="margin-top:6px">In the Apps Script editor: <b>Deploy</b>, <b>Manage deployments</b>, edit the ' +
-    'live one, set <b>Version</b> to <b>New version</b>, then <b>Deploy</b>. The address must end ' +
-    '<span class="mono">/exec</span> and be the same one in API_URL.</p></div>';
+  try{ console.warn("MCRNet: page is " + EXPECT_BUILD + " and the server is " + srv +
+    ". Deploy, Manage deployments, edit the live one, Version: New version."); }catch(e){}
 }
 function gateFail(msg){
   checkSay("no", "Could not reach the server");
@@ -4027,10 +4041,9 @@ function signedOut(msg){
 /* The loading screen says what is actually happening, in order. Membership is
    confirmed before any of this begins, so the first line records that rather
    than promising it. */
-const BOOT_BASE = ["Jesus College MCR membership confirmed",
+const BOOT_BASE = ["MCR membership confirmed",
   "Loading the term calendar", "Loading the Lodge and your messages"];
 const BOOT_SEASON = {
-  fortnight: ["Preparing Freshers\u2019 Fortnight"],
   michaelmas: ["Preparing the Michaelmas programme"],
   vacation: ["Preparing the vacation programme"],
   lent: ["Preparing the Lent programme"],
@@ -5733,6 +5746,9 @@ function meetingsWhen(soon, past, t){
 function minutesList(mins){
   return '<div class="grp">The minutes<span class="ref" style="margin-left:auto">' +
       (mins.length ? mins.length + (mins.length === 1 ? " document" : " documents") : "none yet") + "</span></div>" +
+    '<p class="lede" style="margin:0 0 var(--g)">Every member of the MCR can read these. ' +
+      (isCommittee() ? "Anybody on the committee can put one up." : "The committee puts them up after each meeting.") +
+      "</p>" +
     (isCommittee()
       ? '<div class="acts" style="margin:0 0 var(--g)"><button class="btn gold sm" data-minadd>' +
         "Put up a set of minutes</button></div>"
@@ -5746,7 +5762,8 @@ function minutesList(mins){
               (m.kind === "link" ? " &middot; in Drive" : m.size ? " &middot; " + fileSize(m.size) : "") +
               "</p>" +
               '<div class="acts" style="margin:8px 0 0">' +
-                '<button class="btn cream sm" data-minopen="' + esc(m.id) + '">Open it</button>' +
+                '<button class="btn cream sm" data-minopen="' + esc(m.id) + '">' +
+                (m.kind === "link" ? "Open in Drive" : "Download") + "</button>" +
                 (isCommittee() ? '<button class="btn ghost sm" data-mindel="' + esc(m.id) +
                   '">Take it down</button>' : "") +
               "</div></div></div>").join("")
@@ -5840,7 +5857,7 @@ function askByEmail(cat, subject){
     "",
     "-- ",
     who ? who + (S.me && S.me.email ? " (" + S.me.email + ")" : "") : "",
-    "Sent from the Jesus MCR site, " + cat.name + "."
+    "Sent from the MCRNet, " + cat.name + "."
   ].join("\n");
   const href = "mailto:" + encodeURIComponent(to) +
     "?subject=" + encodeURIComponent(sub) + "&body=" + encodeURIComponent(body);
@@ -6702,6 +6719,28 @@ function renderAdmin(){
   /* A committee that has stopped getting emails should be able to see why
      without opening the Apps Script editor. Below about twenty is worth
      saying out loud; a healthy day is never near it. */
+  /* The same list the probe walks, so a key cannot drift between the two. */
+  const ways = S.notifyWays || [];
+  const how = String(S.notifyHow || "auto");
+  /* The last thing the app actually put in the post, so "it says it sent and
+     nothing came" is a question somebody can answer. */
+  const last = S.notifyLast;
+  put("notifyLast", last && last.at
+    ? "The last notification went at <b>" + esc(ago(last.at)) + "</b> to " + esc(last.to) +
+      ", about " + esc(last.kind) + ", by " + esc(last.road) + "." +
+      (last.subject ? " Subject: " + esc(last.subject) : "")
+    : "Nothing has been sent yet since this was last deployed.");
+  put("notifyHow",
+    ways.map(w => '<option value="' + esc(w.key) + '"' + (w.key === how ? " selected" : "") +
+      ">" + esc(w.name) + (w.key === "gmail-reply" ? " \u2014 the default" : "") +
+      "</option>").join("") +
+    '<option value="auto"' + (how === "auto" ? " selected" : "") +
+    ">Whichever works (Gmail, then MailApp)</option>");
+  /* Named, because "it is being blocked" is not actionable until somebody can
+     see which address is being blocked. */
+  put("notifySender", S.notifySender
+    ? "Mail leaves from <b>" + esc(S.notifySender) + "</b>."
+    : "The sending address could not be read, which usually means the Gmail permission has not been granted yet.");
   $("notifyLeft").textContent = Number(S.notifyLeft) >= 0
     ? (Number(S.notifyLeft) < 20
         ? "Only " + S.notifyLeft + " emails left today. Google resets the allowance at midnight."
@@ -6953,14 +6992,16 @@ function openNoticeEditor(){
    the Cambridge year is the same every year, so it is a lookup.
    ============================================================ */
 const SEASONS = [
-  ["fortnight","Freshers’ Fortnight","09-13","09-30"],
   ["michaelmas","Michaelmas","10-01","12-19"],
   ["vacation","the Christmas vacation","12-20","01-12"],
   ["lent","Lent","01-13","03-20"],
   ["vacation","the Easter vacation","03-21","04-20"],
   ["easter","Easter term","04-21","06-14"],
   ["mayweek","May Week","06-15","06-22"],
-  ["vacation","the Long Vacation","06-23","09-12"]
+  /* To the end of September, where Michaelmas begins. This used to stop on
+     the 12th and hand the rest of the month to Freshers’ Fortnight, which
+     is a different app and is no longer named in this one. */
+  ["vacation","the Long Vacation","06-23","09-30"]
 ];
 function seasonOf(date){
   const md = date.slice(5);
@@ -7991,7 +8032,7 @@ function renderToHome(){
   put("toHome",
     '<div class="tohome"><img src="' + esc(CREST) + '" alt="">' +
     '<button class="tt" data-home style="background:none;border:0;padding:0;text-align:left;color:inherit;font:inherit;cursor:pointer">' +
-      "<b>Keep the MCR a tap away</b>" +
+      "<b>Keep the MCRNet a tap away</b>" +
       "Put it on your home screen, next to everything else you actually open." +
     '</button><span class="arw" aria-hidden="true">&#8250;</span>' +
     '<button class="x" data-homeno aria-label="No thank you">&#215;</button></div>');
@@ -8755,6 +8796,35 @@ on("bNotify", "click", async e => {
     (S.notifyKinds || []).forEach(k => k.on = (d.notifyKinds || []).indexOf(k.key) >= 0);
     unspin(b);
     toast(d.notifyEmail ? "Saved. Notifications go to " + d.notifyEmail + "." : "Saved. The app will send nothing.");
+  }catch(err){ unspin(b); fail(err); }
+});
+on("bNotifyHow", "click", async e => {
+  const b = e.currentTarget; spin(b, "Saving");
+  try{
+    const d = await api("saveSettings", { notifyHow: $("notifyHow").value });
+    S.notifyHow = d.notifyHow;
+    unspin(b);
+    toast(d.notifyHow === "auto" ? "Saved. Whichever works." : "Saved. Sending by " + d.notifyHow + ".");
+  }catch(err){ unspin(b); fail(err); }
+});
+/* One message per method, each naming its method in the subject, so the answer
+   is readable from the message list without opening anything -- and just as
+   readable in the junk folder, which is where half of them will be. */
+on("bNotifyProbe", "click", async e => {
+  const b = e.currentTarget; spin(b, "Sending");
+  try{
+    const d = await api("notifyProbe", { extra: $("notifyExtra").value });
+    unspin(b);
+    put("notifyProbeOut",
+      '<p class="lede">' + esc(d.note) + "</p>" +
+      '<div class="card" style="margin:0">' + (d.ways || []).map(w =>
+        '<div class="rowline"><div class="t"><b>' + w.n + ". " + esc(w.name) + "</b><span>" +
+        (w.sent ? "sent \u00b7 set How to send to " + esc(w.key)
+                : "could not be sent \u00b7 " + esc(w.error)) +
+        "</span></div></div>").join("") + "</div>" +
+      '<p class="lede">' + (d.sender ? "Sent from <b>" + esc(d.sender) + "</b>. " : "") +
+      (Number(d.left) >= 0 ? d.left + " left in today\u2019s allowance." : "") + "</p>");
+    toast("Sent. Check the inbox and the junk folder.");
   }catch(err){ unspin(b); fail(err); }
 });
 on("bRefresh", "click", () => refresh(true));
