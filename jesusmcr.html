@@ -2681,6 +2681,14 @@ function wireSearch(){
    nothing else changes.
    =================================================================== */
 
+/* The same OAuth client the members' app signs people in with, so
+   somebody already signed into the app is not asked twice. It has to be
+   named HERE as well as in mcr-public.gs: the server uses it to check
+   the audience of the token, and this page uses it to draw the button.
+   It was used below and never declared, so the sign in threw a
+   ReferenceError and no button was ever drawn. */
+var GOOGLE_CLIENT_ID = "227091700701-r8omaeri0ul0subkb90b6hk3mthkpg08.apps.googleusercontent.com";
+
 /* SET THIS to the /exec URL of mcr-public.gs once it is deployed.
    Left empty, the site runs exactly as it does now: it ships its own
    words, saves nothing, and #admin explains that it is not set up. */
