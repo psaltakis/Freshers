@@ -80,19 +80,26 @@
    count on purpose — somebody who has set their browser to large text
    because they need it gets a larger page, instead of having their
    setting thrown away. The steps are the members' app's own. */
-html{font-size:122%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html{font-size:112%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 @media(min-width:1000px){html{font-size:132%}}
 @media(min-width:1280px){html{font-size:140%}}
 @media(min-width:1600px){html{font-size:148%}}
 @media(min-width:1920px){html{font-size:152%}}
-@media(max-width:430px){html{font-size:116%}}
+/* A PHONE IS HELD A FOOT FROM THE FACE, A MONITOR THREE.
+   The big step up was right for the desktop and overdone on the phone,
+   where it left four words to a line and turned every card into its own
+   screenful. These come back down far enough to see the shape of a page
+   again and stay above the browser's own 100%, so nobody is squinting. */
+@media(max-width:560px){html{font-size:106%}}
+@media(max-width:360px){html{font-size:100%}}
 
 /* A PHONE IS NOT A POSTER.
    The type went up, so the space around it has to come down or the page
    turns into a column of slabs with a screenful between each one. One
    step off the gap ladder, the pads and the section rhythm. */
 @media(max-width:999px){
-  :root{--g2:.75rem; --g3:1.5rem; --gut:clamp(.85rem,4vw,1.15rem); --r-big:18px}
+  :root{--g2:.62rem; --g3:1.15rem; --gut:clamp(.7rem,3.6vw,1rem);
+        --r-big:16px; --r:14px; --r2:10px; --bar:3.9rem}
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;min-height:100%}
@@ -119,6 +126,16 @@ a:hover{text-decoration-color:currentColor}
 .bar.stuck{box-shadow:0 1px 0 var(--edge)}
 .bar-in{max-width:var(--page);margin:0 auto;height:var(--bar);padding:0 var(--gut);
   display:flex;align-items:center;gap:12px}
+/* A TAP HAS NO HOVER TO ANSWER IT.
+   Every pressable thing on a phone dips a little under the finger, which
+   is the only acknowledgement a touch screen can give before the page
+   changes underneath it. */
+@media(hover:none){
+  .tabbtn:active,.rest:active,.day:active,.tile:active,.btn:active,.chip:active,
+  .sheet nav a:active,.linkcard:active{transform:scale(.975)}
+  .tabbtn,.rest,.day,.tile,.btn,.chip,.sheet nav a,.linkcard{
+    transition:transform .14s var(--ease),background .2s var(--ease),color .2s var(--ease)}
+}
 .mark,.railtop{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--ink);flex:none}
 .mark:hover,.railtop:hover{text-decoration:none}
 .mark img{height:3.4rem;width:auto}
@@ -135,7 +152,21 @@ a:hover{text-decoration-color:currentColor}
 .enter:hover{background:var(--red-deep);color:#fff;text-decoration:none;transform:translateY(-1px)}
 .enter svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:2.1;
   stroke-linecap:round;stroke-linejoin:round;flex:none}
-@media(max-width:430px){.enter span{display:none}.enter{padding:.65rem .75rem}}
+/* ON A PHONE THE BUTTON IS THE ARROW.
+   Three words in a red pill crowd out the badge beside them on a narrow
+   screen, and they are not needed: an arrow going out through a door
+   says the same thing in a tenth of the width, and it is the one red
+   thing on the screen, which this site has spent the whole of its
+   colour scheme teaching people to read as the way in. The words stay
+   in the accessible name, so a screen reader still hears all of it. */
+@media(max-width:999px){
+  .enter span{display:none}
+  .enter{width:2.6rem;height:2.6rem;min-width:2.6rem;padding:0;gap:0;border-radius:50%}
+  .enter svg{width:1.15rem;height:1.15rem;stroke-width:2.2}
+  .enter:active{transform:scale(.93)}
+  .gateway .enter{width:3.1rem;height:3.1rem;min-width:3.1rem;padding:0;justify-self:start}
+  .gateway .enter svg{width:1.35rem;height:1.35rem}
+}
 
 /* ===================== THE NAV =====================
    ONE element. Below 1000px it floats above the bottom of a phone; at
@@ -392,9 +423,13 @@ ul.list{list-style:square}
 .rise-on [data-rise]{opacity:0;transform:translateY(16px);
   transition:opacity .6s var(--ease),transform .6s var(--ease)}
 .rise-on [data-rise].in{opacity:1;transform:none}
+@media(prefers-reduced-motion:no-preference){
+  html{scroll-behavior:smooth}
+}
 @media(prefers-reduced-motion:reduce){
   .rise-on [data-rise]{opacity:1!important;transform:none!important;transition:none!important}
-  *{transition-duration:.01ms!important;animation-duration:.01ms!important}
+  *{transition-duration:.01ms!important;animation-duration:.01ms!important;
+    scroll-behavior:auto!important}
 }
 .card,.grid,.grid>*,.pg,.person,.srch{min-width:0}
 .tbl td,.tbl th,.kv dd,.card p,.list li{overflow-wrap:anywhere}
@@ -472,28 +507,28 @@ ul.list{list-style:square}
    Everything a step tighter, so the larger type does not push the page
    into a chain of slabs. */
 @media(max-width:999px){
-  .pg-head{padding:1.1rem 0 .9rem}
-  .card{margin:0 0 1.4rem}
-  .card.quiet,.card.alert{padding:1rem 1.05rem}
-  .card h2{margin:0 0 .5rem;font-size:1.3rem}
-  .card h3{margin:1rem 0 .35rem}
-  .card p{margin:0 0 .6rem}
-  .lede{margin:.7rem 0 0}
-  .grid{gap:.75rem;margin:0 0 1.4rem}
-  .grid .card{padding:1rem 1.05rem}
-  .tag{margin:1.5rem 0 .6rem}
-  .band{margin:1.5rem 0 .9rem}
-  .bandnote{margin:-.2rem 0 .9rem}
-  .people{gap:1.3rem .8rem}
-  .hero{margin:0 0 1rem}
-  .note{padding:.7rem .85rem;margin:0 0 .9rem}
-  .list{margin:0 0 .7rem}
-  .list li{margin:0 0 .45rem}
-  .tbl td{padding:.55rem .7rem .55rem 0}
-  .linkgrid,.clubs,.jgrid{gap:.5rem}
-  .linkcard{padding:.8rem .85rem}
-  .gymcard{padding:.85rem 1rem;gap:.75rem}
-  .foot{margin-top:1.5rem;padding-top:1.2rem}
+  .pg-head{padding:.85rem 0 .7rem}
+  .card{margin:0 0 1.1rem}
+  .card.quiet,.card.alert{padding:.85rem .9rem}
+  .card h2{margin:0 0 .4rem;font-size:1.22rem}
+  .card h3{margin:.8rem 0 .3rem}
+  .card p{margin:0 0 .5rem}
+  .lede{margin:.55rem 0 0}
+  .grid{gap:.6rem;margin:0 0 1.1rem}
+  .grid .card{padding:.85rem .9rem}
+  .tag{margin:1.2rem 0 .5rem}
+  .band{margin:1.2rem 0 .75rem}
+  .bandnote{margin:-.15rem 0 .75rem}
+  .people{gap:1rem .65rem}
+  .hero{margin:0 0 .8rem}
+  .note{padding:.6rem .75rem;margin:0 0 .75rem}
+  .list{margin:0 0 .6rem}
+  .list li{margin:0 0 .38rem}
+  .tbl td{padding:.48rem .6rem .48rem 0}
+  .linkgrid,.clubs,.jgrid{gap:.42rem}
+  .linkcard{padding:.7rem .75rem}
+  .gymcard{padding:.75rem .9rem;gap:.65rem}
+  .foot{margin-top:1.2rem;padding-top:1rem}
 }
 /* ===================== HOME =====================
    The prose pages are capped at a reading measure; the home page is not
@@ -533,29 +568,36 @@ ul.list{list-style:square}
    it is: the college publishes nothing at a weekend, so the first day in
    the list is often Monday, and calling it "Today" — which is what the
    members' app does — is wrong for two days out of seven. */
-.menu{background:var(--t1);border-radius:var(--r-big);padding:clamp(.9rem,1.8vw,1.4rem);margin:0 0 var(--g3)}
-.menu-top{display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap;margin:0 0 .7rem}
-.menu-top h2{margin:0;font-family:var(--display);font-size:clamp(1.4rem,2.6vw,1.9rem);
+/* IT IS A MENU, NOT AN ESSAY.
+   Three sittings of eight dishes each is forty lines of text, and at the
+   old spacing that was most of a screen before a visitor reached
+   anything else on the page. Everything here is one notch in: the pad,
+   the gaps between courses, the line height on a dish. Nothing is
+   smaller than it can be read at, and the card now ends above the fold
+   on a phone instead of below it. */
+.menu{background:var(--t1);border-radius:var(--r-big);padding:clamp(.75rem,1.3vw,1.1rem);margin:0 0 var(--g3)}
+.menu-top{display:flex;align-items:baseline;gap:.5rem;flex-wrap:wrap;margin:0 0 .55rem}
+.menu-top h2{margin:0;font-family:var(--display);font-size:clamp(1.2rem,2.1vw,1.55rem);
   font-weight:600;letter-spacing:-.026em;line-height:1.1;color:var(--ink)}
 .menu-top .when{font-size:.8rem;font-weight:800;letter-spacing:.06em;color:var(--ink);
   text-transform:uppercase}
 .menu-top .sp{flex:1}
 .menu-top a{font-size:.8rem;font-weight:700}
 
-.days{display:flex;gap:5px;overflow-x:auto;padding:0 0 3px;margin:0 0 .8rem;
+.days{display:flex;gap:4px;overflow-x:auto;padding:0 0 2px;margin:0 0 .6rem;
   scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .days::-webkit-scrollbar{display:none}
-.day{flex:0 0 auto;padding:.4rem .7rem;border-radius:var(--r2);background:var(--t2);
-  font-size:.76rem;font-weight:800;color:var(--ink-3);white-space:nowrap;
+.day{flex:0 0 auto;padding:.34rem .62rem;border-radius:var(--r2);background:var(--t2);
+  font-size:.73rem;font-weight:800;color:var(--ink-3);white-space:nowrap;
   transition:background .18s var(--ease),color .18s var(--ease)}
 .day:hover{background:var(--t3);color:var(--ink)}
 .day[aria-pressed="true"]{background:var(--ink);color:#fff}
 .day small{display:block;font-size:.62rem;font-weight:700;opacity:.62;letter-spacing:.06em;
   text-transform:uppercase}
 
-.sittings{display:grid;gap:.7rem;grid-template-columns:repeat(auto-fit,minmax(min(17rem,100%),1fr))}
-.sitting{background:var(--t2);border-radius:var(--r);padding:.85rem .95rem}
-.sitting > h3{margin:0 0 .6rem;font-size:.68rem;font-weight:800;letter-spacing:.18em;
+.sittings{display:grid;gap:.55rem;grid-template-columns:repeat(auto-fit,minmax(min(14.5rem,100%),1fr))}
+.sitting{background:var(--t2);border-radius:var(--r);padding:.7rem .8rem}
+.sitting > h3{margin:0 0 .45rem;font-size:.65rem;font-weight:800;letter-spacing:.18em;
   text-transform:uppercase;color:var(--ink)}
 /* A COLOUR THAT MEANS SOMETHING.
    Taken from the members' app unchanged, including the reasoning. The
@@ -564,10 +606,10 @@ ul.list{list-style:square}
    card can be read at a glance. The college writes these headings by
    hand and changes the wording, so anything unrecognised gets the
    neutral tint rather than a colour it has not earned. */
-.course{margin:0 0 .6rem;border-radius:var(--r3);overflow:hidden}
+.course{margin:0 0 .42rem;border-radius:var(--r3);overflow:hidden}
 .course:last-child{margin-bottom:0}
-.course h4{margin:0 0 .3rem;padding:.2rem .5rem;border-radius:var(--r3);
-  font-size:.62rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;
+.course h4{margin:0 0 .18rem;padding:.14rem .45rem;border-radius:var(--r3);
+  font-size:.6rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;
   background:var(--ct,rgba(0,0,0,.05));color:var(--ci,var(--ink-3))}
 .course.ct-veg  {--ct:rgba(79,200,148,.20); --ci:#0F5A40}
 .course.ct-soup {--ct:rgba(226,169,60,.22); --ci:#7A4E06}
@@ -579,9 +621,9 @@ ul.list{list-style:square}
 .course.ct-deli {--ct:rgba(245,138,98,.20); --ci:#7A3316}
 .course.ct-other{--ct:rgba(0,0,0,.05);      --ci:var(--ink-3)}
 
-.dish{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 .35rem;padding:.1rem .5rem;line-height:1.34}
-.dish .nm{font-size:.84rem;font-weight:600;color:var(--ink-2)}
-.dish .pr{font-size:.78rem;font-weight:800;color:var(--ink-4);white-space:nowrap}
+.dish{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 .32rem;padding:.04rem .45rem;line-height:1.27}
+.dish .nm{font-size:.8rem;font-weight:600;color:var(--ink-2)}
+.dish .pr{font-size:.74rem;font-weight:800;color:var(--ink-4);white-space:nowrap}
 
 /* FOUR MARKS THAT MEAN FOUR DIFFERENT THINGS.
    Given one colour between them the eye cannot pick out the one it is
@@ -589,30 +631,30 @@ ul.list{list-style:square}
    anything the college invents falls back to grey rather than claiming
    a meaning it has not got. */
 .marks{display:inline-flex;gap:3px;flex:0 0 auto}
-.mk{display:inline-grid;place-items:center;min-width:18px;height:16px;padding:0 5px;
+.mk{display:inline-grid;place-items:center;min-width:17px;height:15px;padding:0 4px;
   border-radius:999px;font-size:.56rem;font-weight:800;letter-spacing:.03em;
   background:rgba(0,0,0,.08);color:var(--ink-3)}
 .mk.v,.mk.ve{background:rgba(79,200,148,.32);color:#0F5A40}
 .mk.h{background:rgba(99,173,238,.32);color:#17456E}
 .mk.gf{background:rgba(226,169,60,.40);color:#653F04}
-.alg{flex:1 1 100%;font-size:.62rem;color:var(--ink-4);line-height:1.3;min-width:0}
+.alg{flex:1 1 100%;font-size:.6rem;color:var(--ink-4);line-height:1.3;min-width:0}
 
 /* The same key under the card, so the colours are told rather than guessed. */
-.mkey{display:flex;flex-wrap:wrap;gap:4px 12px;margin:.7rem 0 0;padding:0 2px}
+.mkey{display:flex;flex-wrap:wrap;gap:3px 10px;margin:.5rem 0 0;padding:0 2px}
 .mkey span{display:inline-flex;align-items:center;gap:6px;font-size:.6rem;
   letter-spacing:.09em;text-transform:uppercase;font-weight:800;color:var(--ink-4)}
 .mkey i{width:10px;height:10px;border-radius:3px;background:var(--k)}
-.mlegend{margin:.4rem 0 0;font-size:.68rem;line-height:1.5;color:var(--ink-4);font-weight:600}
+.mlegend{margin:.3rem 0 0;font-size:.64rem;line-height:1.45;color:var(--ink-4);font-weight:600}
 .mlegend b{font-weight:800;color:var(--ink-3)}
 
-.menu-note{margin:.6rem 0 0;font-size:.72rem;font-weight:600;color:var(--ink-4)}
-.menu-skel .sk{background:var(--t2);border-radius:var(--r);height:190px;position:relative;overflow:hidden}
+.menu-note{margin:.45rem 0 0;font-size:.68rem;font-weight:600;color:var(--ink-4)}
+.menu-skel .sk{background:var(--t2);border-radius:var(--r);height:142px;position:relative;overflow:hidden}
 .menu-skel .sk::after{content:"";position:absolute;inset:0;
   background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent);
   animation:sweep 1.3s infinite}
 @keyframes sweep{to{transform:translateX(100%)}}
 .menu-skel .sk::after{transform:translateX(-100%)}
-.menu-empty{background:var(--t2);border-radius:var(--r);padding:26px;color:var(--ink-3);font-weight:600}
+.menu-empty{background:var(--t2);border-radius:var(--r);padding:20px;color:var(--ink-3);font-weight:600}
 
 /* ===================== HOME TILES =====================
    Photographs, not tinted squares with a line-drawing in them. */
@@ -650,9 +692,20 @@ ul.list{list-style:square}
 .gateway h2{margin:0 0 8px;font-family:var(--display);font-size:clamp(1.4rem,2.6vw,1.95rem);
   font-weight:600;letter-spacing:-.026em;line-height:1.12;color:#fff}
 .gateway p{margin:0;color:rgba(255,255,255,.88);max-width:34rem;font-size:.98rem}
-.gateway .enter{background:#fff;color:var(--red-deep);padding:15px 26px;font-size:.92rem}
+/* The band is red, so the door on it is the inverse: white, with the
+   red arrow. The colour holds at every width. The SHAPE does not — on a
+   phone this is a circle with nothing in it but the arrow, like the one
+   in the top bar, so the rules that make it a pill with words in it are
+   kept to the widths that have room for them. Written as a desktop
+   rule rather than as an override further down, because the phone
+   version is declared in the shell stylesheet and a later, more
+   specific rule there would quietly win. */
+.gateway .enter{background:#fff;color:var(--red-deep)}
 .gateway .enter:hover{background:var(--sand);color:var(--ink);transform:translateY(-1px)}
-.gateway .enter span{display:inline}
+@media(min-width:1000px){
+  .gateway .enter{padding:15px 26px;font-size:.92rem}
+  .gateway .enter span{display:inline}
+}
 
 
 /* ===================== LAYOUT SETTLEMENT =====================
@@ -662,7 +715,7 @@ ul.list{list-style:square}
    of the last thing on the page. The breakpoint matches the one that
    turns the tab bar on, not a different round number. */
 @media(max-width:999px){
-  .wrap{padding-bottom:calc(112px + var(--sab) + var(--g3))}
+  .wrap{padding-bottom:calc(98px + var(--sab) + var(--g3))}
 }
 
 /* ===================== THE HOME TILES ===================== */
@@ -728,9 +781,9 @@ ul.list{list-style:square}
      across the foot of the screen: it sits above the bottom edge with a
      gap all round and a shadow under it, the way the members' app does,
      so the page reads as continuing underneath rather than stopping. */
-  #nav{left:50%;right:auto;bottom:calc(11px + var(--sab));transform:translateX(-50%);
-    width:calc(100vw - 20px);max-width:32rem;
-    border-radius:22px;padding:6px;
+  #nav{left:50%;right:auto;bottom:calc(10px + var(--sab));transform:translateX(-50%);
+    width:calc(100vw - 18px);max-width:30rem;
+    border-radius:20px;padding:5px;
     background:rgba(255,255,255,.94);
     box-shadow:0 12px 30px -8px rgba(20,19,15,.34),0 0 0 1px var(--edge)}
 }
@@ -746,17 +799,19 @@ ul.list{list-style:square}
 @media(min-width:1000px){.sheet{display:none}}
 
 @media(max-width:999px){
-  .opening{gap:1.1rem;padding:.9rem 0 .6rem}
-  .menu{padding:1rem .9rem;margin:0 0 1.4rem;border-radius:18px}
-  .menu-top{margin:0 0 .7rem;gap:.6rem}
-  .days{margin:0 0 .8rem}
-  .sittings{gap:.7rem}
-  .sitting{padding:.85rem .9rem}
-  .gateway{padding:1.2rem 1.1rem;gap:.9rem;margin:0 0 1.4rem}
-  .tiles{gap:.7rem;margin:0 0 1.4rem}
-  .tile .lab{padding:.9rem 1rem}
-  #moreTiles{gap:.4rem;margin:0 0 1.4rem}
-  .rest{padding:.7rem .85rem;gap:.7rem}
+  .opening{gap:.85rem;padding:.7rem 0 .45rem}
+  .menu{padding:.8rem .75rem;margin:0 0 1.1rem;border-radius:16px}
+  .menu-top{margin:0 0 .5rem;gap:.45rem}
+  .days{margin:0 0 .55rem}
+  .sittings{gap:.5rem}
+  .sitting{padding:.65rem .72rem}
+  .gateway{padding:1rem .95rem;gap:.75rem;margin:0 0 1.1rem}
+  .tiles{gap:.55rem;margin:0 0 1.1rem}
+  .tile .lab{padding:.75rem .85rem}
+  #moreTiles{gap:.35rem;margin:0 0 1.1rem}
+  .rest{padding:.6rem .75rem;gap:.6rem}
+  .rest b{font-size:.9rem}
+  .rest span span{font-size:.76rem}
 }
 
 /* ===================== THE ADMIN LAYER =====================
@@ -796,8 +851,36 @@ body.editing a[data-eh]{position:relative}
    you replace a photograph, you do not edit it. */
 .ehandle{position:absolute;z-index:150;transform:translate(-50%,-50%);
   padding:.3rem .7rem;border-radius:999px;background:var(--ink);color:#fff;
-  font-size:.66rem;font-weight:800;white-space:nowrap;box-shadow:0 4px 14px -4px rgba(0,0,0,.5)}
-.ehandle:hover{background:var(--red)}
+  font-size:.66rem;font-weight:800;white-space:nowrap;box-shadow:0 4px 14px -4px rgba(0,0,0,.5);
+  transition:background .16s var(--ease),transform .16s var(--ease)}
+.ehandle:hover{background:var(--red);transform:translate(-50%,-50%) scale(1.06)}
+
+/* ===================== MOVING A PICTURE =====================
+   While one picture is being moved, nothing else on the page is. The
+   dashes come off everything so the eye has one object in it, the
+   picture itself gets a ring and a grabbing cursor, and a small bar
+   under it says where it has got to and how to stop. */
+body.reframing [data-e]{outline:none!important;background:none!important}
+body.reframing{cursor:grab;user-select:none;-webkit-user-select:none}
+body.reframing img.reframe{cursor:grab;outline:3px solid var(--red)!important;outline-offset:2px;
+  box-shadow:0 0 0 100vmax rgba(20,19,15,.5);clip-path:inset(-100vmax -100vmax)}
+body.reframing img.reframe:active{cursor:grabbing}
+.reframehud{position:absolute;z-index:210;transform:translateX(-50%);
+  display:flex;align-items:center;gap:.4rem;padding:.35rem .4rem .35rem .75rem;
+  border-radius:999px;background:var(--ink);color:#fff;white-space:nowrap;
+  box-shadow:0 8px 24px -6px rgba(0,0,0,.6)}
+.reframehud .rfnum{font-size:.68rem;font-weight:800;letter-spacing:.02em;
+  font-variant-numeric:tabular-nums;color:rgba(255,255,255,.72);margin-right:.2rem}
+.rfb{padding:.3rem .65rem;border-radius:999px;background:rgba(255,255,255,.16);
+  color:#fff;font-size:.66rem;font-weight:800}
+.rfb:hover{background:rgba(255,255,255,.3)}
+.rfb.go{background:var(--red)}
+.rfb.go:hover{background:#fff;color:var(--red-deep)}
+@media(max-width:560px){
+  .reframehud{padding:.3rem .32rem .3rem .6rem;gap:.3rem}
+  .reframehud .rfnum{font-size:.62rem}
+  .rfb{padding:.28rem .5rem;font-size:.62rem}
+}
 
 /* The admin page itself. */
 #admin .tbl td:first-child{font-weight:600}
@@ -910,7 +993,7 @@ body.editing a[data-eh]{position:relative}
       <h2 data-e="home/h2/2">Already at Jesus? Everything else is in the app.</h2>
       <p data-e="home/p/4">Events and sign-ups, formal swaps, the notice board, room bookings, minutes and the anonymous feedback desk all live in the members’ app. Sign in with your College Google account.</p>
     </div>
-    <a class="enter" id="enterBand" href="#" hidden data-eh="home/a/4">
+    <a class="enter" id="enterBand" href="#" aria-label="Enter the intranet" hidden data-eh="home/a/4">
       <svg viewBox="0 0 24 24"><path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M15 8.5 18.5 12 15 15.5"/><path d="M18.5 12H10"/></svg>
       <span>Enter the intranet</span>
     </a>
@@ -2688,11 +2771,12 @@ function wireSearch(){
    It was used below and never declared, so the sign in threw a
    ReferenceError and no button was ever drawn. */
 var GOOGLE_CLIENT_ID = "227091700701-r8omaeri0ul0subkb90b6hk3mthkpg08.apps.googleusercontent.com";
+var GOOGLE_HD        = "cam.ac.uk";
 
 /* SET THIS to the /exec URL of mcr-public.gs once it is deployed.
    Left empty, the site runs exactly as it does now: it ships its own
    words, saves nothing, and #admin explains that it is not set up. */
-var ADMIN_URL = "https://script.google.com/macros/s/AKfycbykQqKcH6H4qW7JbYrhsJLahLMFhnrMG5DjFAqk2pfxiumidMg5YggDNE2VFyH5OCzG_A/exec";
+var ADMIN_URL = "https://script.google.com/macros/s/AKfycbw01jemrX5pKNwnfqNcSfBNp8Af93CRu9gils1TvehHL5ifH1p95jcM78Hi4ZtYqmlfPA/exec";
 
 var OV = {rev:0, items:{}};      /* what the server says has been changed */
 var ORIG = {};                   /* what this file shipped with, for comparison */
@@ -2747,22 +2831,54 @@ function snapshot(){
     var k = a.getAttribute('data-eh');
     if (ORIG[k] === undefined) ORIG[k] = a.getAttribute('href');
   });
+  /* And where the stylesheet puts each picture inside its frame, so
+     moving one back to exactly where it started is recognised as
+     undoing the change rather than as another one. */
+  document.querySelectorAll('img[data-e]').forEach(function(im){
+    var k = im.getAttribute('data-e') + '#pos';
+    if (ORIG[k] === undefined) ORIG[k] = fmtPos_(readPos_(im));
+  });
 }
 
+/* AN ADDRESS OUT OF STORAGE IS STILL AN ADDRESS OUT OF STORAGE.
+   Everything in the override document was written by a verified editor,
+   and that is a reason to accept the words in it, not a reason to stop
+   checking the parts of it that are handed to a parser. A scheme that
+   can carry code is refused whoever wrote it, because the account that
+   wrote it is exactly what an attacker would be using. */
+function safeUrl_(v){
+  var s = String(v == null ? '' : v).trim();
+  if (!s) return null;
+  if (/^[a-z0-9.+-]*\s*:/i.test(s) && !/^(https?|mailto|tel):/i.test(s)) return null;
+  return s;
+}
 function applyOverrides(){
   var items = OV.items || {}, missing = 0;
   Object.keys(items).forEach(function(k){
     var v = items[k];
+    /* Where a picture sits inside its frame, kept against the picture's
+       own key with a suffix so the two travel together and a picture
+       that is replaced keeps the framing chosen for its slot. */
+    if (k.slice(-4) === '#pos'){
+      var im = document.querySelector('[data-e="' + CSS.escape(k.slice(0, -4)) + '"]');
+      if (!im || im.tagName !== 'IMG'){ missing++; return }
+      var pos = safePos_(v);
+      if (pos) im.style.objectPosition = pos;
+      return;
+    }
     if (k.indexOf('/a/') >= 0){
       var a = document.querySelector('[data-eh="' + CSS.escape(k) + '"]');
       if (!a){ missing++; return }
-      if (!/^\s*javascript:/i.test(v)) a.setAttribute('href', v);
+      var href = safeUrl_(v);
+      if (href) a.setAttribute('href', href);
       return;
     }
     var el = document.querySelector('[data-e="' + CSS.escape(k) + '"]');
     if (!el){ missing++; return }
     if (el.tagName === 'IMG'){
-      el.setAttribute('src', v);
+      var src = safeUrl_(v);
+      if (!src) return;
+      el.setAttribute('src', src);
       el.removeAttribute('width'); el.removeAttribute('height');
     } else {
       el.innerHTML = clean_(v);
@@ -2779,6 +2895,250 @@ function loadOverrides(){
     .then(function(r){ return r.json() })
     .then(function(j){ OV = {rev:j.rev||0, items:j.items||{}}; applyOverrides(); })
     .catch(function(){ /* the site keeps its own words */ });
+}
+
+/* ===================== MOVING A PICTURE INSIDE ITS FRAME =====================
+
+   Nearly every photograph on this site is shown through a hole of a
+   fixed shape — a square for a portrait, four by three for a tile,
+   sixteen by seven for the band across the top of a page — and the
+   picture behind it is almost never that shape. So it is scaled up until
+   it covers the hole and the rest is cut off, which is what object-fit:
+   cover means, and WHICH PART is cut off is decided by one line of CSS
+   that has, until now, been the same for every picture on the page.
+
+   That is fine for a photograph taken with this in mind and wrong for a
+   snapshot somebody sends in, where the person is off to one side and
+   the frame takes the wall instead. Replacing the picture does not fix
+   it. Moving it does.
+
+   So an editor gets a second handle on any picture that is actually
+   being cropped, and dragging it moves the picture behind the hole, one
+   pixel of drag to one pixel of picture. What is stored is not a crop
+   and not a new file: it is the two percentages of object-position,
+   against the same key as the picture with #pos on the end. The file on
+   disk is untouched, the upload is untouched, and clearing it puts the
+   picture back where the stylesheet had it.
+
+   THE STORED VALUE CAN NEVER BE ANYTHING BUT TWO NUMBERS.
+   It ends up in an inline style, which is the one place on this page
+   where a stored string meets the CSS parser, so it is matched against a
+   pattern that admits two clamped percentages and nothing else — not a
+   keyword, not a calc, not a url. A value that does not match is
+   dropped rather than corrected. */
+
+function safePos_(v){
+  var m = /^(\d{1,3}(?:\.\d+)?)%\s+(\d{1,3}(?:\.\d+)?)%$/.exec(String(v == null ? '' : v).trim());
+  if (!m) return null;
+  return clamp_(parseFloat(m[1])).toFixed(1) + '% ' + clamp_(parseFloat(m[2])).toFixed(1) + '%';
+}
+function clamp_(n){ return Math.max(0, Math.min(100, isFinite(n) ? n : 50)); }
+function fmtPos_(a){ return clamp_(a[0]).toFixed(1) + '% ' + clamp_(a[1]).toFixed(1) + '%'; }
+
+/* What the stylesheet asked for, read back as two numbers. Keywords and
+   pixel offsets are not used anywhere on this page, and a browser hands
+   percentages back as percentages, so anything else means centre. */
+function readPos_(im){
+  var p = (im.style.objectPosition || '').trim() || getComputedStyle(im).objectPosition || '';
+  var m = /^(\d{1,3}(?:\.\d+)?)%\s+(\d{1,3}(?:\.\d+)?)%$/.exec(String(p).trim());
+  return m ? [parseFloat(m[1]), parseFloat(m[2])] : [50, 50];
+}
+
+/* HOW FAR THE PICTURE CAN ACTUALLY MOVE, IN PIXELS.
+   cover scales by whichever of the two ratios is larger, so the overhang
+   is the scaled picture less the frame, on each axis. One of the two is
+   always nought — that is what cover means — and a picture whose other
+   axis is nought as well is not cropped at all, so there is nothing to
+   move and no handle is offered. Returning null rather than zeroes keeps
+   that decision in one place. */
+function reframable_(im){
+  if (!im || im.tagName !== 'IMG' || !im.naturalWidth || !im.naturalHeight) return null;
+  if (getComputedStyle(im).objectFit !== 'cover') return null;
+  var r = im.getBoundingClientRect();
+  if (r.width < 8 || r.height < 8) return null;
+  var k = Math.max(r.width / im.naturalWidth, r.height / im.naturalHeight);
+  var overX = im.naturalWidth * k - r.width, overY = im.naturalHeight * k - r.height;
+  if (overX < 2 && overY < 2) return null;
+  return { x: overX, y: overY };
+}
+
+var RF = null;   /* the picture being moved, or nothing. One at a time. */
+
+function reframe(im){
+  if (!mayEdit_() || RF) return;
+  var over = reframable_(im);
+  if (!over) return toast('That picture is not cropped, so there is nothing to move.');
+
+  var key  = im.getAttribute('data-e') + '#pos';
+  var cur  = readPos_(im);
+  var from = cur.slice();
+
+  document.querySelectorAll('.ehandle').forEach(function(h){ h.remove() });
+  document.body.classList.add('reframing');
+  im.classList.add('reframe');
+
+  var hud = document.createElement('div');
+  hud.className = 'reframehud';
+  hud.innerHTML = '<span class="rfnum"></span>'
+    + '<button type="button" class="rfb" data-rf="centre">Centre</button>'
+    + '<button type="button" class="rfb" data-rf="reset">Reset</button>'
+    + '<button type="button" class="rfb go" data-rf="done">Done</button>';
+  document.body.appendChild(hud);
+  var num = hud.querySelector('.rfnum');
+
+  function paint(){
+    im.style.objectPosition = fmtPos_(cur);
+    /* Said in words rather than as a pair of numbers, because "62% 18%"
+       needs the reader to know which way round they go. */
+    num.textContent = Math.round(cur[0]) + '% across, ' + Math.round(cur[1]) + '% down';
+    var r = im.getBoundingClientRect();
+    hud.style.left = (window.scrollX + r.left + r.width / 2) + 'px';
+    hud.style.top  = (window.scrollY + r.bottom - hud.offsetHeight - 12) + 'px';
+  }
+  /* DRAGGING MOVES THE PICTURE, NOT THE WINDOW ONTO IT.
+     Pull down and the picture comes down with the finger, which means
+     showing more of its top, which means a SMALLER second number. Get
+     that backwards and every adjustment is a fight. The division by the
+     overhang is what makes it one pixel of picture per pixel of drag
+     rather than some rate that has to be learned. */
+  function by(dx, dy){
+    if (over.x >= 2) cur[0] = clamp_(cur[0] - dx / over.x * 100);
+    if (over.y >= 2) cur[1] = clamp_(cur[1] - dy / over.y * 100);
+    paint();
+  }
+
+  var last = null;
+  function down(e){
+    if (e.button !== undefined && e.button !== 0) return;
+    e.preventDefault(); e.stopPropagation();
+    last = [e.clientX, e.clientY];
+    try { im.setPointerCapture(e.pointerId) } catch (err) {}
+  }
+  function move(e){
+    if (!last) return;
+    e.preventDefault();
+    by(e.clientX - last[0], e.clientY - last[1]);
+    last = [e.clientX, e.clientY];
+  }
+  function up(){ last = null }
+
+  /* The arrows are not a courtesy. The last two per cent of a portrait is
+     the difference between a chin and no chin, and that is smaller than
+     most people can hold a mouse still for. */
+  function keys(e){
+    var k = e.key;
+    if (k === 'Escape'){ e.preventDefault(); stop(false); return }
+    if (k === 'Enter'){ e.preventDefault(); stop(true); return }
+    var step = e.shiftKey ? 5 : 1, hit = true;
+    if (k === 'ArrowLeft')      cur[0] = clamp_(cur[0] - step);
+    else if (k === 'ArrowRight')cur[0] = clamp_(cur[0] + step);
+    else if (k === 'ArrowUp')   cur[1] = clamp_(cur[1] - step);
+    else if (k === 'ArrowDown') cur[1] = clamp_(cur[1] + step);
+    else hit = false;
+    if (hit){ e.preventDefault(); paint() }
+  }
+
+  hud.addEventListener('click', function(e){
+    var b = e.target.closest ? e.target.closest('[data-rf]') : null;
+    if (!b) return;
+    e.preventDefault(); e.stopPropagation();
+    var w = b.getAttribute('data-rf');
+    if (w === 'centre'){ cur = [50, 50]; paint() }
+    else if (w === 'reset'){ cur = from.slice(); paint() }
+    else stop(true);
+  });
+
+  function stop(keep){
+    im.removeEventListener('pointerdown', down);
+    window.removeEventListener('pointermove', move);
+    window.removeEventListener('pointerup', up);
+    window.removeEventListener('pointercancel', up);
+    window.removeEventListener('keydown', keys, true);
+    window.removeEventListener('click', swallow, true);
+    window.removeEventListener('scroll', paint);
+    window.removeEventListener('resize', paint);
+    hud.remove();
+    im.classList.remove('reframe');
+    document.body.classList.remove('reframing');
+    RF = null;
+
+    if (!keep){ im.style.objectPosition = fmtPos_(from); placeHandles(); return }
+
+    /* Three values are in play and they are not the same thing: what the
+       stylesheet ships with, what the server currently stores, and what
+       is on screen now. Matching the first means the override should be
+       DELETED rather than set to a value that happens to agree with it,
+       which is what the empty string tells the server to do. Matching
+       the second means nothing has changed at all. */
+    var shipped = ORIG[key];
+    var was = (OV.items[key] !== undefined) ? OV.items[key] : (shipped || '');
+    var now = fmtPos_(cur);
+    if (now === was){
+      if (ADMIN.dirty[key] !== undefined){ delete ADMIN.dirty[key]; markDirty() }
+      im.classList.remove('touched');
+    } else {
+      im.classList.add('touched');
+      markDirty(key, (shipped !== undefined && now === shipped) ? '' : now);
+      toast('Moved. Press Save to publish it.');
+    }
+    placeHandles();
+  }
+
+  /* MOST OF THESE PICTURES ARE INSIDE A LINK.
+     A drag across a tile ends in a click on the anchor under it, and the
+     page would change section halfway through an adjustment. Swallowing
+     the click for as long as the move is open costs nothing, because
+     nothing on the page is meant to be clickable while it is. */
+  function swallow(e){
+    if (hud.contains(e.target)) return;
+    e.preventDefault(); e.stopPropagation();
+  }
+
+  RF = im;
+  window.addEventListener('click', swallow, true);
+  im.addEventListener('pointerdown', down);
+  window.addEventListener('pointermove', move);
+  window.addEventListener('pointerup', up);
+  window.addEventListener('pointercancel', up);
+  window.addEventListener('keydown', keys, true);
+  window.addEventListener('scroll', paint, {passive:true});
+  window.addEventListener('resize', paint);
+  paint();
+  toast('Drag the picture to move it. Arrow keys nudge it.');
+}
+
+
+/* ===================== THE GATE =====================
+
+   WHERE THE SECURITY ACTUALLY IS, AND WHERE IT IS NOT.
+
+   It is on the server, in mcr-public.gs, and nowhere else. The browser
+   never tells that server who it is: it presents the credential Google
+   handed it, and the server asks Google — audience, issuer, verified
+   address, expiry, domain — and then asks its own list. Every call,
+   not once at sign in. Nothing below this comment is what stops
+   somebody editing this site, because anything below this comment is
+   running in their browser, on their machine, and is theirs to change.
+
+   So what is this for. Two things, and neither is a lock:
+
+   · It keeps the page honest. A visitor who finds #admin, or who opens
+     the console and turns editing on, gets a page that says no rather
+     than one that appears to work and then loses everything they typed
+     to an error from a server they never knew was there.
+   · It makes the boundary legible to whoever reads this next. Every
+     privileged thing the page can do goes through one function, so
+     adding a new one and forgetting to check is something you have to
+     do on purpose.
+
+   The honest summary of what somebody without an editor's account can
+   do: read the site, open #admin, see a sign in box, and change what
+   is on their own screen until they reload it. Nothing they do reaches
+   the server, and nothing they do is seen by anybody else. */
+function mayEdit_(){
+  if (ADMIN.cred) return true;
+  toast('You are not signed in as an editor of this site.');
+  return false;
 }
 
 /* ---- the black bar ---- */
@@ -2818,6 +3178,10 @@ function markDirty(k, v){
 }
 
 function setEditing(on){
+  if (on && !mayEdit_()) return;
+  /* A picture left mid-move when editing is switched off would keep the
+     window listeners and the bar would never see the change. */
+  if (!on && RF){ var d = document.querySelector('.reframehud [data-rf="done"]'); if (d) d.click(); }
   ADMIN.editing = on;
   document.body.classList.toggle('editing', on);
   var t = document.getElementById('abToggle');
@@ -2840,29 +3204,48 @@ function setEditing(on){
    its words. Both get a handle rather than becoming editable text. */
 function placeHandles(){
   document.querySelectorAll('.ehandle').forEach(function(h){ h.remove() });
-  if (!ADMIN.editing) return;
+  if (!ADMIN.editing || !ADMIN.cred) return;
   var sec = document.querySelector('.pg:not([hidden])');
   if (!sec) return;
   sec.querySelectorAll('img[data-e]').forEach(function(im){
-    addHandle(im, 'replace', function(){ pickFile(im) });
+    /* Two things can be done to a photograph and they are different
+       jobs: put a different one there, or move the one that is there so
+       the frame stops cutting the wrong part off. The second handle is
+       only offered where it would do something, which is where the
+       picture is actually overflowing its frame. */
+    var can = reframable_(im);
+    addHandle(im, 'replace', function(){ pickFile(im) }, false, can ? -1 : 0);
+    if (can) addHandle(im, 'move', function(){ reframe(im) }, false, 1);
+    /* A picture that has not finished decoding has no size yet, so it
+       cannot be told whether it is cropped. Rather than leave it without
+       a move handle for the rest of the session, ask again once it has. */
+    else if (!im.naturalWidth && !im.__wait){
+      im.__wait = 1;
+      im.addEventListener('load', function(){ if (ADMIN.editing) placeHandles() }, {once:true});
+    }
   });
   sec.querySelectorAll('a[data-eh]').forEach(function(a){
     addHandle(a, 'link', function(){ editHref(a) }, true);
   });
 }
-function addHandle(el, label, fn, atEnd){
+function addHandle(el, label, fn, atEnd, lane){
   var r = el.getBoundingClientRect();
   if (!r.width && !r.height) return;
   var h = document.createElement('button');
   h.type = 'button'; h.className = 'ehandle'; h.textContent = label;
   h.style.position = 'absolute';
-  h.style.left = (window.scrollX + r.left + (atEnd ? r.width : r.width / 2)) + 'px';
+  /* A picture with both handles gets them side by side rather than one
+     under the other: lane -1 sits left of the middle, lane 1 right of
+     it, lane 0 (everything else) dead centre as before. */
+  var shift = (lane ? lane * 2.4 : 0) + 'rem';
+  h.style.left = 'calc(' + (window.scrollX + r.left + (atEnd ? r.width : r.width / 2)) + 'px + ' + shift + ')';
   h.style.top  = (window.scrollY + r.top + (atEnd ? 0 : r.height / 2)) + 'px';
   h.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); fn() });
   document.body.appendChild(h);
 }
 
 function editHref(a){
+  if (!mayEdit_()) return;
   var key = a.getAttribute('data-eh');
   var now = a.getAttribute('href') || '';
   var next = prompt('Where should this link go?\n\nUse a full address, a mailto: address, or #page for another page on this site.', now);
@@ -2875,6 +3258,7 @@ function editHref(a){
 }
 
 function pickFile(im){
+  if (!mayEdit_()) return;
   var key = im.getAttribute('data-e');
   var inp = document.createElement('input');
   inp.type = 'file'; inp.accept = 'image/jpeg,image/png,image/gif,image/webp,application/pdf';
@@ -2902,6 +3286,7 @@ function pickFile(im){
 }
 
 function saveEdits(){
+  if (!mayEdit_()) return;
   /* Whatever is open for typing right now has not fired its blur yet. */
   var f = document.activeElement;
   if (f && f.getAttribute && f.getAttribute('contenteditable') === 'true') f.blur();
@@ -2948,8 +3333,9 @@ document.addEventListener('focusout', function(e){ noteEdit(e.target) }, true);
 function adminStats(){
   var onPage = 0, orphan = 0;
   Object.keys(OV.items || {}).forEach(function(k){
-    var sel = (k.indexOf('/a/') >= 0) ? '[data-eh="' : '[data-e="';
-    if (document.querySelector(sel + CSS.escape(k) + '"]')) onPage++; else orphan++;
+    var base = (k.slice(-4) === '#pos') ? k.slice(0, -4) : k;
+    var sel = (base.indexOf('/a/') >= 0) ? '[data-eh="' : '[data-e="';
+    if (document.querySelector(sel + CSS.escape(base) + '"]')) onPage++; else orphan++;
   });
   var s = function(id, v){ var el = document.getElementById(id); if (el) el.textContent = v };
   s('stRev', OV.rev || 0); s('stCount', onPage); s('stOrphan', orphan);
@@ -3020,35 +3406,128 @@ function googleButton(){
   var slot = document.getElementById('gbtn');
   if (!slot || slot.__done) return;
   var msg = document.getElementById('adminMsg');
+  function say(html){ msg.innerHTML = html; }
+
+  /* A DRAWN BUTTON CONTAINS SOMETHING FOCUSABLE.
+     Google renders straight into the slot, so an iframe, a role=button or
+     anything with a tabindex in there was put there by Google and is
+     proof. A refused origin leaves an empty div behind. This is the
+     members' app's own test, for the same reason. */
+  function drawn(){
+    var q = document.getElementById('gbtn');
+    return !!(q && q.querySelector('iframe, [role="button"], [tabindex]'));
+  }
+
+  /* When the button will not draw, the account chooser usually still
+     will, so offer a plain one rather than a dead end. */
+  function fallback(why){
+    var o = location.origin;
+    var aboutOrigin = !why || /origin|client|drew nothing/i.test(why);
+    var httpProblem = (location.protocol !== 'https:' &&
+                       location.hostname !== 'localhost' && location.hostname !== '127.0.0.1');
+    if (aboutOrigin){
+      say('<b>Google has not been told about this address.</b><br><br>'
+        + (httpProblem ? 'This page is served over <b>' + location.protocol
+            + '</b> and Google Identity only works on <b>https</b>, or on localhost. That has to be fixed first.<br><br>' : '')
+        + 'The sign in itself is fine. Google simply does not recognise <code>' + esc(o)
+        + '</code> as somewhere this client ID is allowed to be used, so it refuses to draw anything and does not say so out loud.'
+        + '<br><br>In the Google Cloud console open <b>APIs and services, Credentials</b>, click the OAuth client that begins <code>'
+        + esc(String(GOOGLE_CLIENT_ID).split('-')[0]) + '</code>, and add this under <b>Authorised JavaScript origins</b>:'
+        + '<br><br><code id="wantOrigin" style="font-weight:800;color:var(--ink);word-break:break-all">' + esc(o) + '</code>'
+        + '<br><br>No path, no trailing slash, exactly that. Changes can take a few minutes to take effect.'
+        + '<br><br><button class="chip" type="button" id="gcopy">Copy the address</button> '
+        + '<a class="chip" href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener">Open Credentials</a> '
+        + '<button class="chip" type="button" id="gprompt">Continue with Google</button> '
+        + '<button class="chip" type="button" id="gretry">Try again</button>');
+    } else {
+      say('<b>The Google button would not draw.</b><br><br>' + esc(why)
+        + ' That usually means an extension or the network is blocking <code>accounts.google.com</code>.'
+        + '<br><br><button class="chip" type="button" id="gprompt">Continue with Google</button> '
+        + '<button class="chip" type="button" id="gretry">Try again</button>');
+    }
+    var c = document.getElementById('gcopy');
+    if (c) c.addEventListener('click', function(){
+      if (navigator.clipboard) navigator.clipboard.writeText(o).then(function(){ toast('Copied: ' + o) }, function(){ toast(o) });
+      else toast(o);
+    });
+    var r = document.getElementById('gretry');
+    if (r) r.addEventListener('click', function(){
+      slot.__done = 0; slot.innerHTML = ''; msg.textContent = ''; googleButton();
+    });
+    /* The chooser is a different surface from the button and is refused
+       less often, so it is worth offering even when the button failed. */
+    var pr = document.getElementById('gprompt');
+    if (pr) pr.addEventListener('click', function(){
+      if (!(window.google && google.accounts && google.accounts.id)) return toast('Google sign in is not loaded.');
+      try {
+        google.accounts.id.prompt(function(n){
+          var bad = n && ((n.isNotDisplayed && n.isNotDisplayed()) || (n.isSkippedMoment && n.isSkippedMoment()));
+          if (bad){
+            var reason = (n.getNotDisplayedReason && n.getNotDisplayedReason())
+                      || (n.getSkippedReason && n.getSkippedReason()) || 'unknown';
+            toast('Google would not show the chooser: ' + reason);
+          }
+        });
+      } catch (err) { toast(String(err && err.message || err)) }
+    });
+  }
+
   function draw(){
     if (!window.google || !google.accounts || !google.accounts.id){
-      msg.textContent = 'Google sign in could not be loaded. Check the connection and reload.';
+      say('Google sign in could not be loaded. Check the connection and reload.');
       return;
     }
-    slot.__done = 1;
-    google.accounts.id.initialize({
-      client_id: GOOGLE_CLIENT_ID,
-      callback: function(res){
-        msg.textContent = 'Checking with Google…';
-        post_({action:'whoami', credential:res.credential})
-          .then(function(i){
-            if (!i.admin){ msg.textContent = i.email + ' is not an editor of this site. Ask one of the current editors to add you.'; return }
-            msg.textContent = '';
-            adminSignedIn(res.credential, i);
-          })
-          .catch(function(e){ msg.textContent = e.message });
-      }
-    });
-    /* Google's button is an iframe and cannot be styled, so it is given
-       a measured pixel width rather than a percentage. */
-    var w = Math.max(200, Math.min(400, Math.round(slot.getBoundingClientRect().width) || 280));
-    google.accounts.id.renderButton(slot, {theme:'outline', size:'large', width:w, text:'signin_with'});
+    try {
+      google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        /* The domain is named rather than left open, so Google's own
+           chooser offers cam.ac.uk accounts and nothing else. It is a
+           hint to the chooser and not a security boundary: the server
+           still verifies the token and still checks the editor list. */
+        hd: GOOGLE_HD,
+        callback: function(res){
+          msg.textContent = 'Checking with Google…';
+          post_({action:'whoami', credential:res.credential})
+            .then(function(i){
+              if (!i.admin){ msg.textContent = i.email + ' is not an editor of this site. Ask one of the current editors to add you.'; return }
+              msg.textContent = '';
+              adminSignedIn(res.credential, i);
+            })
+            .catch(function(e){ msg.textContent = e.message });
+        },
+        ux_mode: 'popup', auto_select: false, itp_support: true
+      });
+      slot.innerHTML = '';
+      /* Google's button is an iframe and cannot be styled, so the slot is
+         measured and a pixel width passed in, clamped to Google's own
+         200 to 400. Under 200 it refuses to draw the personalised
+         variant at all. */
+      var w = Math.max(200, Math.min(400, Math.round(slot.getBoundingClientRect().width) || 280));
+      google.accounts.id.renderButton(slot, {theme:'outline', size:'large', shape:'pill',
+        text:'signin_with', logo_alignment:'left', width:w});
+    } catch (err) {
+      fallback(err && err.message);
+      return;
+    }
+    /* Google refuses an origin by rendering nothing and throwing nothing,
+       so the only way to know is to look afterwards. Looked at twice,
+       because a slow network can make a good button look like a bad one
+       for a moment. */
+    setTimeout(function(){
+      if (drawn()){ slot.__done = 1; return }
+      setTimeout(function(){
+        if (drawn()) slot.__done = 1; else fallback('Google drew nothing.');
+      }, 1800);
+    }, 1500);
   }
+
   if (window.google && google.accounts) return draw();
   var s = document.createElement('script');
   s.src = 'https://accounts.google.com/gsi/client'; s.async = true; s.defer = true;
   s.onload = draw;
-  s.onerror = function(){ msg.textContent = 'Google sign in could not be loaded.' };
+  s.onerror = function(){
+    say('Google sign in could not be loaded. Something on this network or in the browser is blocking <b>accounts.google.com</b>.');
+  };
   document.head.appendChild(s);
 }
 
