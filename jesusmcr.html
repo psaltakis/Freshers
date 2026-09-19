@@ -1,16 +1,69 @@
 <!doctype html>
 <html lang="en-GB">
 <meta charset="utf-8">
+<!--  Jesus College MCR — the public page
+      ===================================
+      The page anybody can open. Its sister is The MCRNet, the intranet
+      behind a University sign in, and the two are one place as far as a
+      member is concerned: they arrive here, and they go through to there.
+
+      TYPOGRAPHICALLY THIS FILE IS TIED TO THAT ONE, AND THE TIE IS THE
+      POINT. Everything below that decides how a letter is shaped or how
+      big it is has been taken from the app rather than chosen here: the
+      three faces and the cuts they are loaded in, the magnification
+      ladder rung for rung, the corner radii, the spacing ladder, the
+      line the page is set on, the tracking curve that tightens as a
+      heading grows, the weights, and the rail down the side. The colours
+      are this page's own and always were -- white paper, the crest's red
+      -- and nothing here changes them.
+
+      WHAT THAT MEANS FOR THE NEXT PERSON. If you change a font size, a
+      weight, a radius or a root percentage here, change it in the app as
+      well or the two drift apart again, and the drift is not obvious
+      from either file on its own: it shows up as somebody moving between
+      them and feeling, without being able to say why, that they have
+      gone somewhere else. The specific things that were wrong before and
+      are worth not reintroducing:
+
+        - Labels in capitals were set in Manrope with the letters pushed
+          apart. They are JetBrains Mono, like the app's, and there is one
+          grouped rule at the foot of the stylesheet that says so once.
+        - Display headings were tracked at about -.025em. The app runs a
+          curve from -.03em up to -.048em on the largest, and Fraunces
+          needs it: untracked at heading size it reads as a book rather
+          than a masthead.
+        - Nearly every label and button was weight 800. The app's palette
+          is 500, 600 and 700, and 800 in Manrope against 700 is the
+          difference between the two sites looking related and not.
+        - The root was 112% here and 116% there, and lower again on a
+          phone, so the public page was the smaller of the two on the
+          device most people read it on.
+  -->
 <title>Jesus College MCR</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="light">
 <meta name="description" content="The postgraduate community of Jesus College, Cambridge. Today's Caff menu, welfare, freshers, the common room, punting and who to contact.">
+<!-- THE SAME ICON AS THE MCRNET, AND THE SAME WAY ROUND.
+     The tab icon stays the crest PNG in mcr-assets, which is the sharper file
+     and is what a browser wants for a favicon. The home screen icon is the
+     app's own, inline: iOS caches a touch icon hard and by its URL, so a
+     member who has both saved would otherwise have two different crests on
+     one home screen, and the app's is the one drawn for that size. A data URI
+     needs no second request and cannot 404 behind a rename. -->
 <link rel="icon" href="mcr-assets/cockerel-512.png">
-<link rel="apple-touch-icon" href="mcr-assets/cockerel-512.png">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<!-- The MCRNet's three faces, in the MCRNet's cuts. Two changes from what
+     this page used to ask for. Fraunces comes down to the single weight the
+     app uses, 600 upright and 600 italic, because nothing on either site is
+     set in 500 or 700 and two unused weights is two unused downloads. And
+     JetBrains Mono arrives, which is the whole reason the two sites did not
+     look related: every small caps label over there is set in it, and over
+     here they were set in Manrope with the letters pushed apart, which is a
+     different thing that looks like an attempt at the same thing. -->
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&family=JetBrains+Mono:wght@500..700&family=Manrope:wght@500..800&display=swap" rel="stylesheet">
 <style>
 /* ===================================================================
    JESUS COLLEGE MCR — the public front door.
@@ -67,11 +120,18 @@
 
   --display:'Fraunces',Georgia,'Times New Roman',serif;
   --ui:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;
+  /* The third face, and the one that was missing. Every small caps label on
+     this page is now set in it, the way the app sets them. */
+  --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
   --ease:cubic-bezier(.22,1,.36,1);
 
-  --r:16px; --r2:11px; --r3:8px; --r-big:24px;
-  --g:8px; --g2:16px; --g3:30px;
-  --gut:clamp(1rem,3vw,2.6rem); --bar:4.4rem; --rail:13rem; --page:1500px;
+  /* The app's corners and the app's spacing ladder. Two or three pixels each,
+     which is exactly the size of difference nobody can name and everybody
+     notices: cards that are a little rounder and gaps that are a little wider
+     read as a different house style even when the colours agree. */
+  --r:14px; --r2:10px; --r3:7px; --r-big:20px;
+  --g:8px; --g2:16px; --g3:28px;
+  --gut:clamp(1rem,3vw,2.6rem); --bar:4.4rem; --rail:11rem; --page:1500px;
   --sat:env(safe-area-inset-top,0px); --sab:env(safe-area-inset-bottom,0px);
 }
 /* THE TEXT GROWS WITH THE SCREEN.
@@ -80,18 +140,23 @@
    count on purpose — somebody who has set their browser to large text
    because they need it gets a larger page, instead of having their
    setting thrown away. The steps are the members' app's own. */
-html{font-size:112%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
-@media(min-width:1000px){html{font-size:132%}}
-@media(min-width:1280px){html{font-size:140%}}
-@media(min-width:1600px){html{font-size:148%}}
-@media(min-width:1920px){html{font-size:152%}}
-/* A PHONE IS HELD A FOOT FROM THE FACE, A MONITOR THREE.
-   The big step up was right for the desktop and overdone on the phone,
-   where it left four words to a line and turned every card into its own
-   screenful. These come back down far enough to see the shape of a page
-   again and stay above the browser's own 100%, so nobody is squinting. */
-@media(max-width:560px){html{font-size:106%}}
-@media(max-width:360px){html{font-size:100%}}
+/* THE MCRNET'S LADDER, RUNG FOR RUNG.
+   These were close to the app's and not the same as it, which is the worst of
+   both: a member moving between the two saw the type change size for no
+   reason they could name. Every number here is now the app's, including the
+   phone end -- where this page used to drop to 106 and then 100 and the app
+   holds 111, so the public page was the smaller of the two on exactly the
+   device most people read it on.
+
+   A 1000px window is a laptop with a browser at half the screen, which is why
+   the first desktop rung is modest and the big sizes are kept for screens
+   that are actually big. */
+html{font-size:116%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+@media(min-width:1000px){html{font-size:120%}}
+@media(min-width:1280px){html{font-size:132%}}
+@media(min-width:1600px){html{font-size:142%}}
+@media(min-width:1920px){html{font-size:150%}}
+@media(max-width:420px){html{font-size:111%}}
 
 /* A PHONE IS NOT A POSTER.
    The type went up, so the space around it has to come down or the page
@@ -99,12 +164,22 @@ html{font-size:112%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
    step off the gap ladder, the pads and the section rhythm. */
 @media(max-width:999px){
   :root{--g2:.62rem; --g3:1.15rem; --gut:clamp(.7rem,3.6vw,1rem);
-        --r-big:16px; --r:14px; --r2:10px; --bar:3.9rem}
+        --r-big:14px; --r:14px; --r2:10px; --r3:7px; --bar:3.9rem}
+}
+/* And one step further on a phone, which is what the app does. It has to come
+   after the block above or that one wins on the same screens and this reads as
+   intent while doing nothing. --gut stays where it is: this page has a 1500px
+   measure and the app is a single column, so the app's flat 14px gutter is not
+   the same idea carried across. */
+@media(max-width:560px){
+  :root{--g2:.56rem; --g3:1rem}
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;min-height:100%}
+/* 1.58, which is the app's. It was 1.62 here: a quarter of a line looser per
+   paragraph, which over a screenful is a visibly airier page. */
 body{background:var(--paper);color:var(--ink-2);font-family:var(--ui);
-  font-size:1rem;line-height:1.62;font-weight:500;-webkit-font-smoothing:antialiased;
+  font-size:1rem;line-height:1.58;font-weight:500;-webkit-font-smoothing:antialiased;
   -webkit-tap-highlight-color:transparent;overflow-x:hidden}
 body.locked{overflow:hidden}
 [hidden]{display:none!important}
@@ -139,15 +214,15 @@ a:hover{text-decoration-color:currentColor}
 .mark,.railtop{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--ink);flex:none}
 .mark:hover,.railtop:hover{text-decoration:none}
 .mark img{height:3.4rem;width:auto}
-.mark b{font-family:var(--display);font-size:1.08rem;font-weight:600;letter-spacing:-.022em;line-height:1.05}
-.mark i{display:block;font-style:normal;font-size:.56rem;font-weight:800;letter-spacing:.2em;
+.mark b{font-family:var(--display);font-size:1.08rem;font-weight:600;letter-spacing:-.03em;line-height:1.05}
+.mark i{display:block;font-style:normal;font-size:.56rem;font-weight:700;letter-spacing:0.16em;
   text-transform:uppercase;color:var(--ink-4);margin-top:3px}
 .bar .sp{flex:1}
 .ctrls{display:flex;align-items:center;gap:10px;flex:none}
 
 .enter{display:inline-flex;align-items:center;justify-content:center;gap:8px;
   padding:.6rem 1rem;border-radius:999px;background:var(--red);color:#fff;
-  font-size:.78rem;font-weight:800;text-decoration:none;white-space:nowrap;
+  font-size:.86rem;font-weight:700;text-decoration:none;white-space:nowrap;
   transition:background .2s var(--ease),transform .2s var(--ease)}
 .enter:hover{background:var(--red-deep);color:#fff;text-decoration:none;transform:translateY(-1px)}
 .enter svg{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:2.1;
@@ -185,11 +260,18 @@ a:hover{text-decoration-color:currentColor}
 .navscroll::-webkit-scrollbar{display:none}
 #nav .railtop,#nav .railfoot,#nav h6{display:none}
 
+/* THE APP'S TAB, TO THE PIXEL.
+   Both sites put the same row of labelled icons at the bottom of a phone, and
+   they were a size apart: this one set the label at .6rem in 800 and the icon
+   at 1.2rem, the app at .66rem in 700 and 1.15rem. Larger icon, smaller and
+   heavier label -- the two ways of getting it wrong at once. The padding is in
+   pixels rather than rem for the same reason it is over there: this bar must
+   not grow with the type, or it takes half a small phone. */
 .tabbtn{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:3px;
-  padding:.5rem .55rem;min-width:3.9rem;border-radius:15px;
-  font-size:.6rem;font-weight:800;color:var(--ink-3);text-align:center;
+  padding:8px 11px;min-width:56px;border-radius:15px;
+  font-size:.66rem;font-weight:700;color:var(--ink-3);text-align:center;
   transition:color .2s var(--ease),background .2s var(--ease)}
-.tabbtn svg{width:1.2rem;height:1.2rem;fill:none;stroke:currentColor;stroke-width:1.9;
+.tabbtn svg{width:1.15rem;height:1.15rem;fill:none;stroke:currentColor;stroke-width:1.9;
   stroke-linecap:round;stroke-linejoin:round}
 .tabbtn:hover{color:var(--ink)}
 .tabbtn[aria-current="true"]{background:var(--ink);color:#fff}
@@ -197,23 +279,31 @@ a:hover{text-decoration-color:currentColor}
 @media(min-width:1000px){
   :root{--navh:0px}
   .bar{display:none}
+  /* THE RAIL, AT THE APP'S MEASUREMENTS.
+     It was 13rem wide with a 4.4rem crest in it; the app is 11rem with a 54px
+     one. Two rem of extra rail is two rem taken off the page beside it, and a
+     crest that large next to a 1rem title made the top of the rail a badge
+     with a caption rather than a masthead. Everything here is now the app's
+     number, and the padding is in pixels for the same reason the tab's is. */
   #nav{left:0;top:0;bottom:0;transform:none;width:var(--rail);max-width:none;
-    flex-direction:column;border-radius:0;padding:1.4rem .7rem calc(1.4rem + var(--sab));
+    flex-direction:column;border-radius:0;padding:18px 12px calc(18px + var(--sab));
     background:var(--t1);box-shadow:inset -1px 0 0 var(--edge);overflow:hidden}
-  #nav .railtop{display:flex;align-items:center;gap:.7rem;padding:.2rem .4rem 1.3rem;flex:none}
-  #nav .railtop img{height:4.4rem;width:auto}
-  #nav .railtop b{display:block;font-family:var(--display);font-size:1rem;font-weight:600;
-    letter-spacing:-.026em;line-height:1.05;color:var(--ink);white-space:nowrap}
-  #nav .railtop i{display:block;font-style:normal;font-size:.54rem;font-weight:800;
-    letter-spacing:.18em;text-transform:uppercase;color:var(--ink-4);margin-top:3px}
+  #nav .railtop{display:flex;align-items:center;gap:10px;padding:2px 9px 18px;flex:none}
+  #nav .railtop img{height:54px;width:auto}
+  #nav .railtop b{display:block;font-family:var(--display);font-size:.789rem;font-weight:600;
+    letter-spacing:-.03em;line-height:1.1;color:var(--ink);white-space:nowrap}
+  #nav .railtop i{display:block;font-style:normal;font-size:.635rem;font-weight:700;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--ink-4);margin-top:3px}
   .navscroll{flex-direction:column;flex:1;gap:1px;overflow-y:auto;overflow-x:hidden}
-  #nav h6{display:block;margin:.85rem .5rem .25rem;font-size:.54rem;font-weight:800;
-    letter-spacing:.17em;text-transform:uppercase;color:var(--ink-4)}
+  #nav h6{display:block;margin:.85rem .5rem .25rem;font-size:.635rem;font-weight:700;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--ink-4)}
   #nav h6:first-child{margin-top:0}
-  .tabbtn{flex-direction:row;justify-content:flex-start;gap:.65rem;
-    padding:.5rem .55rem;min-height:2.2rem;min-width:0;border-radius:var(--r3);
-    font-size:.76rem;font-weight:700;letter-spacing:-.012em;text-align:left;width:100%}
-  .tabbtn svg{width:1.05rem;height:1.05rem;flex:none;opacity:.8}
+  /* 44px, not 2.2rem: the app holds a real touch target here whatever the
+     type is scaled to, and 2.2rem at the small end of the ladder is 35. */
+  .tabbtn{flex-direction:row;justify-content:flex-start;gap:11px;
+    padding:9px 10px;min-height:44px;min-width:0;border-radius:var(--r3);
+    font-size:.711rem;font-weight:700;letter-spacing:-.015em;text-align:left;width:100%}
+  .tabbtn svg{width:18px;height:18px;flex:none;opacity:.8}
   .tabbtn[aria-current="true"]{background:var(--t3);color:var(--ink)}
   .tabbtn[aria-current="true"] svg{opacity:1}
   #nav .railfoot{display:block;flex:none;padding:.9rem .4rem 0;margin-top:auto}
@@ -237,11 +327,15 @@ a:hover{text-decoration-color:currentColor}
    as large on a desktop to keep the line count sane. */
 .pg{max-width:none}
 .pg-head{padding:clamp(30px,5vw,60px) 0 clamp(20px,3vw,34px)}
-.eyebrow{margin:0 0 12px;font-size:.64rem;font-weight:800;letter-spacing:.2em;
+.eyebrow{margin:0 0 12px;font-size:.64rem;font-weight:700;letter-spacing:0.16em;
   text-transform:uppercase;color:var(--ink-4)}
 .pg-head h1{margin:0;font-family:var(--display);font-weight:600;
-  font-size:clamp(2rem,5.4vw,3.3rem);letter-spacing:-.032em;line-height:1.03;color:var(--ink)}
-.lede{margin:18px 0 0;font-size:clamp(1.02rem,1.6vw,1.22rem);line-height:1.52;
+  font-size:clamp(2rem,5.4vw,3.3rem);letter-spacing:-.048em;line-height:1.03;color:var(--ink)}
+/* The one place the two files disagree on purpose. .lede means a small muted
+   note in the app and a page's opening paragraph here, so the size stays; the
+   leading comes over, because 1.52 against the app's 1.58 is what made the
+   same sentence look set on a different grid. */
+.lede{margin:18px 0 0;font-size:clamp(1.02rem,1.6vw,1.22rem);line-height:1.58;
   color:var(--ink-3);font-weight:500}
 
 /* A block of prose is a block of prose. It gets a heading and white
@@ -253,12 +347,17 @@ a:hover{text-decoration-color:currentColor}
 .card > :first-child{margin-top:0}
 .card > :last-child{margin-bottom:0}
 .card h2{margin:0 0 12px;font-family:var(--display);font-size:1.5rem;font-weight:600;
-  letter-spacing:-.024em;line-height:1.16;color:var(--ink)}
-.card h3{margin:22px 0 7px;font-size:.96rem;font-weight:800;letter-spacing:-.005em;color:var(--ink)}
+  letter-spacing:-.04em;line-height:1.16;color:var(--ink)}
+.card h3{margin:22px 0 7px;font-size:.96rem;font-weight:700;letter-spacing:-.005em;color:var(--ink)}
 .card h3:first-child{margin-top:0}
-.card h4{margin:16px 0 5px;font-size:.72rem;font-weight:800;letter-spacing:.13em;
+.card h4{margin:16px 0 5px;font-size:.72rem;font-weight:700;letter-spacing:0.14em;
   text-transform:uppercase;color:var(--ink-4)}
-.card p{margin:0 0 13px}
+/* The app sets a card's paragraph at .94rem on 1.6 with a 9px gap under it,
+   and this page was leaving it at the inherited 1rem on 1.58 with 13. Cards
+   are the thing both sites are mostly made of, so this is the single texture
+   a reader would notice moving between them: the same words, set a size
+   apart, in blocks a little further apart. */
+.card p{margin:0 0 9px;font-size:.94rem;line-height:1.6}
 .card p:last-child{margin-bottom:0}
 
 .card.quiet{background:var(--t1);border-radius:var(--r);padding:24px 26px;margin-bottom:var(--g2)}
@@ -286,14 +385,14 @@ a:hover{text-decoration-color:currentColor}
 ul.list{list-style:square}
 
 .kv{margin:0;display:grid;grid-template-columns:minmax(7rem,auto) 1fr;gap:9px 22px}
-.kv dt{font-size:.72rem;font-weight:800;letter-spacing:.11em;text-transform:uppercase;
+.kv dt{font-size:.72rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;
   color:var(--ink);padding-top:.4em}
 .kv dd{margin:0}
 @media(max-width:600px){.kv{grid-template-columns:1fr;gap:2px}.kv dd{margin:0 0 13px}}
 
 .tbl{width:100%;border-collapse:collapse;font-size:.94rem;margin:0 0 13px}
 .tbl:last-child{margin-bottom:0}
-.tbl th{text-align:left;padding:0 14px 8px 0;font-size:.6rem;font-weight:800;letter-spacing:.15em;
+.tbl th{text-align:left;padding:0 14px 8px 0;font-size:.6rem;font-weight:700;letter-spacing:.15em;
   text-transform:uppercase;color:var(--ink-4);border-bottom:2px solid var(--ink)}
 .tbl td{padding:11px 14px 11px 0;border-bottom:1px solid var(--edge);vertical-align:top}
 .tbl td:first-child{font-weight:700;color:var(--ink)}
@@ -301,14 +400,14 @@ ul.list{list-style:square}
 .tbl-wrap .tbl{margin:0}
 
 .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 19px;border-radius:999px;
-  background:var(--ink);color:#fff;font-weight:800;font-size:.82rem;text-decoration:none;
+  background:var(--ink);color:#fff;font-weight:700;font-size:.86rem;text-decoration:none;
   margin:5px 8px 5px 0;transition:background .2s var(--ease),transform .2s var(--ease)}
 .btn:hover{background:#000;color:#fff;text-decoration:none;transform:translateY(-1px)}
 .btn.ghost{background:var(--t1);color:var(--ink)}
 .btn.ghost:hover{background:var(--t3)}
 .note{background:var(--t1);border-radius:var(--r2);padding:13px 16px;margin:0 0 var(--g2);
   font-size:.92rem;color:var(--ink-3)}
-.tag{display:block;margin:34px 0 14px;font-size:.62rem;font-weight:800;letter-spacing:.2em;
+.tag{display:block;margin:34px 0 14px;font-size:.62rem;font-weight:700;letter-spacing:0.16em;
   text-transform:uppercase;color:var(--ink-4)}
 
 /* ===================== PEOPLE =====================
@@ -324,13 +423,13 @@ ul.list{list-style:square}
    with margin-top:auto, which lines the addresses up the same way and
    survives in more browsers. */
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 var(--g2)}
-.chip{padding:8px 15px;border-radius:999px;background:var(--t1);font-size:.78rem;font-weight:800;
+.chip{padding:8px 15px;border-radius:999px;background:var(--t1);font-size:.78rem;font-weight:700;
   color:var(--ink-3);transition:background .2s var(--ease),color .2s var(--ease)}
 .chip:hover{background:var(--t3);color:var(--ink)}
 .chip[aria-pressed="true"]{background:var(--ink);color:#fff}
 
 .band{display:flex;align-items:center;gap:11px;margin:34px 0 22px;color:var(--ct);
-  font-size:.66rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
+  font-size:.66rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase}
 .band::before{content:"";width:22px;height:4px;border-radius:4px;background:var(--c);flex:0 0 22px}
 .band::after{content:"";flex:1;height:1px;background:var(--edge)}
 .cgroup:first-of-type .band{margin-top:18px}
@@ -356,14 +455,14 @@ ul.list{list-style:square}
 .person:hover img{transform:translateY(-3px)}
 .person .nm{display:block;margin:20px 0 10px;min-width:0}
 .person b{display:block;font-family:var(--display);font-size:1.06rem;font-weight:600;
-  line-height:1.08;letter-spacing:-.026em;color:var(--ink);text-wrap:balance}
-.person .role{display:block;margin-top:5px;font-size:.74rem;font-weight:800;
+  line-height:1.08;letter-spacing:-.03em;color:var(--ink);text-wrap:balance}
+.person .role{display:block;margin-top:5px;font-size:.74rem;font-weight:700;
   letter-spacing:-.005em;color:var(--ct);line-height:1.22;text-wrap:balance}
 /* The address, stacked: the role at full weight, the domain quiet under
    it. Two lines because on a card this wide one line breaks in the
    middle of a word — "president@mcr.jesu / s.cam.ac.uk" — which reads
    as damage rather than as an address. */
-.person .mail{display:block;margin-top:auto;font-size:.8rem;font-weight:800;
+.person .mail{display:block;margin-top:auto;font-size:.8rem;font-weight:700;
   color:var(--ink);text-decoration:none;line-height:1.24;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .person .mail span{display:block;font-size:.68rem;font-weight:600;color:var(--ink-4);
@@ -386,13 +485,13 @@ ul.list{list-style:square}
 .srch svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:17px;height:17px;
   fill:none;stroke:var(--ink-4);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .srch .clr{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:27px;height:27px;
-  border-radius:50%;background:var(--t3);color:var(--ink-3);font-size:.9rem;font-weight:800;
+  border-radius:50%;background:var(--t3);color:var(--ink-3);font-size:.9rem;font-weight:700;
   display:grid;place-items:center}
 .srch .clr:hover{background:var(--ink);color:#fff}
 .hits{margin:0 0 var(--g2);font-size:.82rem;font-weight:700;color:var(--ink-4)}
 .nohit{background:var(--t1);border-radius:var(--r);padding:30px 26px;color:var(--ink-3)}
 .nohit b{display:block;font-family:var(--display);font-size:1.16rem;font-weight:600;
-  color:var(--ink);margin-bottom:5px;letter-spacing:-.02em}
+  color:var(--ink);margin-bottom:5px;letter-spacing:-.03em}
 
 /* ===================== PICTURES ===================== */
 .shots{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(9rem,100%),1fr));margin:0 0 var(--g2)}
@@ -413,11 +512,11 @@ ul.list{list-style:square}
 .foot-in{display:grid;gap:24px;align-items:start}
 .foot p{margin:0 0 8px;font-size:.9rem;color:var(--ink-3);max-width:40rem}
 .foot p:last-child{margin-bottom:0}
-.foot .sig{font-size:.62rem;font-weight:800;letter-spacing:.17em;text-transform:uppercase;
+.foot .sig{font-size:.62rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;
   color:var(--ink);margin-bottom:10px}
 .skip{position:absolute;left:-9999px}
 .skip:focus{left:var(--gut);top:12px;z-index:300;background:var(--ink);color:#fff;
-  padding:10px 16px;border-radius:var(--r3);font-weight:800;text-decoration:none}
+  padding:10px 16px;border-radius:var(--r3);font-weight:700;text-decoration:none}
 
 /* ===================== REVEAL ===================== */
 .rise-on [data-rise]{opacity:0;transform:translateY(16px);
@@ -448,7 +547,7 @@ ul.list{list-style:square}
   background:rgba(6,48,28,.14)}
 .gymcard .ic svg{width:1.4rem;height:1.4rem;fill:none;stroke:currentColor;stroke-width:2;
   stroke-linecap:round;stroke-linejoin:round}
-.gymcard b{display:block;font-size:1.02rem;font-weight:800;color:#06301C;letter-spacing:-.012em}
+.gymcard b{display:block;font-size:1.02rem;font-weight:700;color:#06301C;letter-spacing:-.012em}
 .gymcard small{display:block;margin-top:4px;font-size:.82rem;line-height:1.45;color:rgba(6,48,28,.82)}
 .gymcard .arw{flex:none;font-size:1.1rem;opacity:.6}
 
@@ -456,39 +555,39 @@ ul.list{list-style:square}
 .club{display:block;background:var(--t1);border-radius:var(--r2);padding:.85rem 1rem;
   text-decoration:none;color:inherit;transition:background .2s var(--ease)}
 .club:hover{background:var(--t3);text-decoration:none}
-.club b{display:block;font-size:.92rem;font-weight:800;color:var(--ink);letter-spacing:-.01em}
+.club b{display:block;font-size:.92rem;font-weight:700;color:var(--ink);letter-spacing:-.01em}
 .club span{display:block;margin-top:2px;font-size:.78rem;color:var(--ink-3)}
-.club i{display:block;margin-top:5px;font-style:normal;font-size:.66rem;font-weight:800;
-  letter-spacing:.11em;text-transform:uppercase;color:var(--ink-4)}
+.club i{display:block;margin-top:5px;font-style:normal;font-size:.66rem;font-weight:700;
+  letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-4)}
 .club:hover i{color:var(--ink-2)}
 
 .jall{display:inline-flex;align-items:center;gap:.6rem;margin-top:.8rem;padding:.6rem 1rem;
-  border-radius:999px;background:var(--ink);color:#fff;font-size:.8rem;font-weight:800}
+  border-radius:999px;background:var(--ink);color:#fff;font-size:.8rem;font-weight:700}
 .jall:hover{background:#000}
 .jall .pm{display:inline-grid;place-items:center;width:1.1rem;height:1.1rem;border-radius:50%;
   background:rgba(255,255,255,.22);font-size:.85rem;line-height:1}
 .jhead{display:flex;align-items:baseline;gap:.6rem;margin:1.6rem 0 .7rem;
-  font-size:.64rem;font-weight:800;letter-spacing:.17em;text-transform:uppercase;color:var(--ink-4)}
+  font-size:.64rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-4)}
 .jhead b{color:var(--ink)}
 .jhead span{margin-left:auto;font-weight:700;color:var(--ink-4)}
 .jgrid{display:grid;gap:9px;grid-template-columns:repeat(auto-fill,minmax(min(12.5rem,100%),1fr));margin:0 0 var(--g2)}
 .jc{display:block;background:var(--t1);border-radius:var(--r2);padding:.75rem .9rem;
   text-decoration:none;color:inherit;transition:background .2s var(--ease)}
 .jc:hover{background:var(--t3);text-decoration:none}
-.jc b{display:block;font-size:.88rem;font-weight:800;color:var(--ink);letter-spacing:-.01em;line-height:1.25}
+.jc b{display:block;font-size:.88rem;font-weight:700;color:var(--ink);letter-spacing:-.01em;line-height:1.25}
 .jc span{display:block;margin-top:2px;font-size:.76rem;color:var(--ink-3);line-height:1.35}
-.jc i{display:block;margin-top:5px;font-style:normal;font-size:.62rem;font-weight:800;
-  letter-spacing:.11em;text-transform:uppercase;color:var(--ink-4)}
+.jc i{display:block;margin-top:5px;font-style:normal;font-size:.62rem;font-weight:700;
+  letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-4)}
 
 .linkgrid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(min(17rem,100%),1fr));margin:0 0 var(--g2)}
 .linkcard{display:flex;align-items:flex-start;gap:.8rem;background:var(--t1);border-radius:var(--r);
   padding:1rem 1.1rem;text-decoration:none;color:inherit;transition:background .2s var(--ease)}
 .linkcard:hover{background:var(--t3);text-decoration:none}
 .linkcard .t{min-width:0}
-.linkcard b{display:block;font-size:.94rem;font-weight:800;color:var(--ink);letter-spacing:-.012em}
+.linkcard b{display:block;font-size:.94rem;font-weight:700;color:var(--ink);letter-spacing:-.012em}
 .linkcard span{display:block;margin-top:3px;font-size:.8rem;color:var(--ink-3);line-height:1.45}
-.linkcard em{display:block;margin-top:6px;font-style:normal;font-size:.64rem;font-weight:800;
-  letter-spacing:.11em;text-transform:uppercase;color:var(--ink-4)}
+.linkcard em{display:block;margin-top:6px;font-style:normal;font-size:.64rem;font-weight:700;
+  letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-4)}
 .linkcard .arw{margin-left:auto;flex:none;font-size:1rem;color:var(--ink-4)}
 
 /* ===================== THE FRESHERS TIMETABLE =====================
@@ -549,7 +648,7 @@ ul.list{list-style:square}
    can be read. Everywhere smaller it is the cockerel alone. */
 .opening .badge{width:clamp(6rem,9vw,8.4rem);height:auto;margin:0 0 1.2rem}
 .opening h1{margin:0;font-family:var(--display);font-weight:600;text-wrap:balance;
-  font-size:clamp(1.9rem,3.6vw,2.9rem);letter-spacing:-.032em;line-height:1.05;color:var(--ink)}
+  font-size:clamp(1.9rem,3.6vw,2.9rem);letter-spacing:-.045em;line-height:1.05;color:var(--ink)}
 .opening .lede{margin:1rem 0 1.4rem;max-width:30rem}
 .opening figure{margin:0}
 /* height:auto matters. The width/height attributes on the tag are there
@@ -578,8 +677,8 @@ ul.list{list-style:square}
 .menu{background:var(--t1);border-radius:var(--r-big);padding:clamp(.75rem,1.3vw,1.1rem);margin:0 0 var(--g3)}
 .menu-top{display:flex;align-items:baseline;gap:.5rem;flex-wrap:wrap;margin:0 0 .55rem}
 .menu-top h2{margin:0;font-family:var(--display);font-size:clamp(1.2rem,2.1vw,1.55rem);
-  font-weight:600;letter-spacing:-.026em;line-height:1.1;color:var(--ink)}
-.menu-top .when{font-size:.8rem;font-weight:800;letter-spacing:.06em;color:var(--ink);
+  font-weight:600;letter-spacing:-.04em;line-height:1.1;color:var(--ink)}
+.menu-top .when{font-size:.8rem;font-weight:700;letter-spacing:0.14em;color:var(--ink);
   text-transform:uppercase}
 .menu-top .sp{flex:1}
 .menu-top a{font-size:.8rem;font-weight:700}
@@ -588,16 +687,16 @@ ul.list{list-style:square}
   scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .days::-webkit-scrollbar{display:none}
 .day{flex:0 0 auto;padding:.34rem .62rem;border-radius:var(--r2);background:var(--t2);
-  font-size:.73rem;font-weight:800;color:var(--ink-3);white-space:nowrap;
+  font-size:.73rem;font-weight:700;color:var(--ink-3);white-space:nowrap;
   transition:background .18s var(--ease),color .18s var(--ease)}
 .day:hover{background:var(--t3);color:var(--ink)}
 .day[aria-pressed="true"]{background:var(--ink);color:#fff}
-.day small{display:block;font-size:.62rem;font-weight:700;opacity:.62;letter-spacing:.06em;
+.day small{display:block;font-size:.62rem;font-weight:700;opacity:.62;letter-spacing:0.14em;
   text-transform:uppercase}
 
 .sittings{display:grid;gap:.55rem;grid-template-columns:repeat(auto-fit,minmax(min(14.5rem,100%),1fr))}
 .sitting{background:var(--t2);border-radius:var(--r);padding:.7rem .8rem}
-.sitting > h3{margin:0 0 .45rem;font-size:.65rem;font-weight:800;letter-spacing:.18em;
+.sitting > h3{margin:0 0 .45rem;font-size:.65rem;font-weight:700;letter-spacing:0.16em;
   text-transform:uppercase;color:var(--ink)}
 /* A COLOUR THAT MEANS SOMETHING.
    Taken from the members' app unchanged, including the reasoning. The
@@ -609,7 +708,7 @@ ul.list{list-style:square}
 .course{margin:0 0 .42rem;border-radius:var(--r3);overflow:hidden}
 .course:last-child{margin-bottom:0}
 .course h4{margin:0 0 .18rem;padding:.14rem .45rem;border-radius:var(--r3);
-  font-size:.6rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;
+  font-size:.6rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;
   background:var(--ct,rgba(0,0,0,.05));color:var(--ci,var(--ink-3))}
 .course.ct-veg  {--ct:rgba(79,200,148,.20); --ci:#0F5A40}
 .course.ct-soup {--ct:rgba(226,169,60,.22); --ci:#7A4E06}
@@ -623,7 +722,7 @@ ul.list{list-style:square}
 
 .dish{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 .32rem;padding:.04rem .45rem;line-height:1.27}
 .dish .nm{font-size:.8rem;font-weight:600;color:var(--ink-2)}
-.dish .pr{font-size:.74rem;font-weight:800;color:var(--ink-4);white-space:nowrap}
+.dish .pr{font-size:.74rem;font-weight:700;color:var(--ink-4);white-space:nowrap}
 
 /* FOUR MARKS THAT MEAN FOUR DIFFERENT THINGS.
    Given one colour between them the eye cannot pick out the one it is
@@ -632,7 +731,7 @@ ul.list{list-style:square}
    a meaning it has not got. */
 .marks{display:inline-flex;gap:3px;flex:0 0 auto}
 .mk{display:inline-grid;place-items:center;min-width:17px;height:15px;padding:0 4px;
-  border-radius:999px;font-size:.56rem;font-weight:800;letter-spacing:.03em;
+  border-radius:999px;font-size:.56rem;font-weight:700;letter-spacing:.03em;
   background:rgba(0,0,0,.08);color:var(--ink-3)}
 .mk.v,.mk.ve{background:rgba(79,200,148,.32);color:#0F5A40}
 .mk.h{background:rgba(99,173,238,.32);color:#17456E}
@@ -642,10 +741,10 @@ ul.list{list-style:square}
 /* The same key under the card, so the colours are told rather than guessed. */
 .mkey{display:flex;flex-wrap:wrap;gap:3px 10px;margin:.5rem 0 0;padding:0 2px}
 .mkey span{display:inline-flex;align-items:center;gap:6px;font-size:.6rem;
-  letter-spacing:.09em;text-transform:uppercase;font-weight:800;color:var(--ink-4)}
+  letter-spacing:0.14em;text-transform:uppercase;font-weight:700;color:var(--ink-4)}
 .mkey i{width:10px;height:10px;border-radius:3px;background:var(--k)}
 .mlegend{margin:.3rem 0 0;font-size:.64rem;line-height:1.45;color:var(--ink-4);font-weight:600}
-.mlegend b{font-weight:800;color:var(--ink-3)}
+.mlegend b{font-weight:700;color:var(--ink-3)}
 
 .menu-note{margin:.45rem 0 0;font-size:.68rem;font-weight:600;color:var(--ink-4)}
 .menu-skel .sk{background:var(--t2);border-radius:var(--r);height:142px;position:relative;overflow:hidden}
@@ -674,7 +773,7 @@ ul.list{list-style:square}
    out near-black on a darkened picture while the line under it — a span,
    which that rule does not match — stayed white. It has to be said here. */
 .tile b{display:block;color:#fff;font-family:var(--display);font-size:1.28rem;font-weight:600;
-  letter-spacing:-.022em;line-height:1.14}
+  letter-spacing:-.035em;line-height:1.14}
 .tile span{display:block;margin-top:4px;font-size:.84rem;font-weight:600;color:rgba(255,255,255,.82);
   line-height:1.4}
 .tile.plain{background:var(--t1);color:var(--ink);aspect-ratio:auto;min-height:11rem}
@@ -690,7 +789,7 @@ ul.list{list-style:square}
   padding:clamp(24px,3.4vw,38px);margin:0 0 var(--g3)}
 @media(max-width:720px){.gateway{grid-template-columns:1fr}}
 .gateway h2{margin:0 0 8px;font-family:var(--display);font-size:clamp(1.4rem,2.6vw,1.95rem);
-  font-weight:600;letter-spacing:-.026em;line-height:1.12;color:#fff}
+  font-weight:600;letter-spacing:-.042em;line-height:1.12;color:#fff}
 .gateway p{margin:0;color:rgba(255,255,255,.88);max-width:34rem;font-size:.98rem}
 /* The band is red, so the door on it is the inverse: white, with the
    red arrow. The colour holds at every width. The SHAPE does not — on a
@@ -728,7 +827,7 @@ ul.list{list-style:square}
 .rest:hover{background:var(--t3);text-decoration:none}
 .rest > svg{width:1.15rem;height:1.15rem;flex:none;fill:none;stroke:currentColor;stroke-width:1.9;
   stroke-linecap:round;stroke-linejoin:round;color:var(--ink-4)}
-.rest b{display:block;font-size:.94rem;font-weight:800;color:var(--ink);letter-spacing:-.012em}
+.rest b{display:block;font-size:.94rem;font-weight:700;color:var(--ink);letter-spacing:-.012em}
 .rest span span{display:block;margin-top:2px;font-size:.8rem;color:var(--ink-3);line-height:1.4}
 .rest .arw{margin-left:auto;flex:none;color:var(--ink-4);font-size:1.2rem}
 #moreTiles{display:grid;gap:.5rem;grid-template-columns:repeat(auto-fill,minmax(min(19rem,100%),1fr));margin:0 0 var(--g3)}
@@ -745,7 +844,7 @@ ul.list{list-style:square}
   box-shadow:0 -10px 34px -12px rgba(20,19,15,.4)}
 .sheet.on .sheet-in{transform:none}
 .sheet-top{display:flex;align-items:center;gap:1rem;padding:.2rem .4rem 1rem}
-.sheet-top b{flex:1;font-size:.7rem;font-weight:800;letter-spacing:.17em;
+.sheet-top b{flex:1;font-size:.7rem;font-weight:700;letter-spacing:0.16em;
   text-transform:uppercase;color:var(--ink-4)}
 .sheet nav{display:grid;gap:.4rem}
 .sheet nav a{display:flex;align-items:center;gap:.9rem;padding:.85rem .8rem;border-radius:var(--r2);
@@ -754,7 +853,7 @@ ul.list{list-style:square}
 .sheet nav a[aria-current] b{color:var(--red-ink)}
 .sheet nav svg{width:1.2rem;height:1.2rem;flex:none;fill:none;stroke:currentColor;stroke-width:1.9;
   stroke-linecap:round;stroke-linejoin:round;color:var(--ink-4)}
-.sheet nav b{display:block;font-size:.98rem;font-weight:800;color:var(--ink)}
+.sheet nav b{display:block;font-size:.98rem;font-weight:700;color:var(--ink)}
 .sheet nav span span{display:block;margin-top:2px;font-size:.8rem;color:var(--ink-3);line-height:1.4}
 
 @media(max-width:999px){
@@ -821,16 +920,16 @@ ul.list{list-style:square}
 .adminbar{position:fixed;left:0;right:0;top:0;z-index:200;display:flex;align-items:center;gap:.7rem;
   padding:.55rem clamp(.8rem,2.5vw,1.4rem);background:var(--ink);color:#fff;
   font-size:.78rem;font-weight:700;box-shadow:0 2px 14px -4px rgba(20,19,15,.5)}
-.adminbar b{font-weight:800;letter-spacing:.04em}
+.adminbar b{font-weight:700;letter-spacing:.04em}
 .adminbar .who{color:rgba(255,255,255,.62);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .adminbar .sp{flex:1}
 .adminbar button{padding:.45rem .9rem;border-radius:999px;background:rgba(255,255,255,.16);
-  color:#fff;font-size:.74rem;font-weight:800;white-space:nowrap}
+  color:#fff;font-size:.74rem;font-weight:700;white-space:nowrap}
 .adminbar button:hover{background:rgba(255,255,255,.28)}
 .adminbar button.go{background:var(--red)}
 .adminbar button.go:hover{background:#fff;color:var(--red-deep)}
 .adminbar .count{background:rgba(255,255,255,.16);padding:.2rem .6rem;border-radius:999px;
-  font-size:.7rem;font-weight:800}
+  font-size:.7rem;font-weight:700}
 body.adminon{padding-top:3rem}
 @media(max-width:700px){
   .adminbar{flex-wrap:wrap;gap:.45rem}
@@ -851,7 +950,7 @@ body.editing a[data-eh]{position:relative}
    you replace a photograph, you do not edit it. */
 .ehandle{position:absolute;z-index:150;transform:translate(-50%,-50%);
   padding:.3rem .7rem;border-radius:999px;background:var(--ink);color:#fff;
-  font-size:.66rem;font-weight:800;white-space:nowrap;box-shadow:0 4px 14px -4px rgba(0,0,0,.5);
+  font-size:.66rem;font-weight:700;white-space:nowrap;box-shadow:0 4px 14px -4px rgba(0,0,0,.5);
   transition:background .16s var(--ease),transform .16s var(--ease)}
 .ehandle:hover{background:var(--red);transform:translate(-50%,-50%) scale(1.06)}
 
@@ -869,10 +968,10 @@ body.reframing img.reframe:active{cursor:grabbing}
   display:flex;align-items:center;gap:.4rem;padding:.35rem .4rem .35rem .75rem;
   border-radius:999px;background:var(--ink);color:#fff;white-space:nowrap;
   box-shadow:0 8px 24px -6px rgba(0,0,0,.6)}
-.reframehud .rfnum{font-size:.68rem;font-weight:800;letter-spacing:.02em;
+.reframehud .rfnum{font-size:.68rem;font-weight:700;letter-spacing:.02em;
   font-variant-numeric:tabular-nums;color:rgba(255,255,255,.72);margin-right:.2rem}
 .rfb{padding:.3rem .65rem;border-radius:999px;background:rgba(255,255,255,.16);
-  color:#fff;font-size:.66rem;font-weight:800}
+  color:#fff;font-size:.66rem;font-weight:700}
 .rfb:hover{background:rgba(255,255,255,.3)}
 .rfb.go{background:var(--red)}
 .rfb.go:hover{background:#fff;color:var(--red-deep)}
@@ -891,8 +990,8 @@ body.reframing img.reframe:active{cursor:grabbing}
 .adminnote b{color:var(--ink)}
 .stat{display:grid;gap:.6rem;grid-template-columns:repeat(auto-fit,minmax(min(11rem,100%),1fr));margin:0 0 var(--g2)}
 .stat div{background:var(--t1);border-radius:var(--r2);padding:.9rem 1rem}
-.stat b{display:block;font-family:var(--display);font-size:1.7rem;font-weight:600;color:var(--ink);line-height:1}
-.stat span{display:block;margin-top:.25rem;font-size:.72rem;font-weight:800;letter-spacing:.11em;
+.stat b{display:block;font-family:var(--display);font-size:1.7rem;font-weight:600;color:var(--ink);line-height:1;letter-spacing:-.045em}
+.stat span{display:block;margin-top:.25rem;font-size:.72rem;font-weight:700;letter-spacing:0.14em;
   text-transform:uppercase;color:var(--ink-4)}
 
 /* The one line of feedback the admin layer has. Lost in an earlier
@@ -906,6 +1005,49 @@ body.reframing img.reframe:active{cursor:grabbing}
   transition:opacity .28s var(--ease),transform .28s var(--ease)}
 #toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 @media(min-width:1000px){#toast{bottom:1.4rem}}
+/* ============================================================
+   THE SMALL CAPS LABELS, IN THE FACE THE MCRNET SETS THEM IN
+   ============================================================
+   Twenty-one rules in this file describe the same object: a short label in
+   capitals, letter-spaced, sitting above or beside something bigger. The
+   eyebrow over a heading, the column heads in a table, the term on a tag, the
+   band on a committee photograph, the year in the footer. The app has the same
+   object and sets every instance of it in JetBrains Mono.
+
+   This page was setting them in Manrope with the letters pushed apart, which
+   is a different thing that looks like an attempt at the same thing -- and it
+   was the single biggest reason the two sites read as cousins rather than as
+   one place. A monospaced face at this size does not look like code; it looks
+   like a caption on an exhibit label, which is what these are.
+
+   It is one grouped rule at the end rather than twenty-one edits, so that what
+   they have in common is stated once and stays visible. Each keeps its own
+   size and letter-spacing, which are tuned to where it sits. Only the weight
+   is normalised, to 700: the file asked for 800 nearly everywhere, JetBrains
+   Mono is loaded to 700, and a browser asked for a weight it has not got
+   synthesises one, which is the smeared look of faked bold.
+   ============================================================ */
+.mark i,
+#nav .railtop i,
+#nav h6,
+.eyebrow,
+.card h4,
+.kv dt,
+.tbl th,
+.tag,
+.band,
+.foot .sig,
+.club i,
+.jhead,
+.jc i,
+.linkcard em,
+.menu-top .when,
+.day small,
+.sitting > h3,
+.course h4,
+.mkey span,
+.sheet-top b,
+.stat span{font-family:var(--mono);font-weight:700}
 </style>
 <body>
 <a class="skip" href="#app">Skip to content</a>
@@ -3433,7 +3575,7 @@ function googleButton(){
         + '</code> as somewhere this client ID is allowed to be used, so it refuses to draw anything and does not say so out loud.'
         + '<br><br>In the Google Cloud console open <b>APIs and services, Credentials</b>, click the OAuth client that begins <code>'
         + esc(String(GOOGLE_CLIENT_ID).split('-')[0]) + '</code>, and add this under <b>Authorised JavaScript origins</b>:'
-        + '<br><br><code id="wantOrigin" style="font-weight:800;color:var(--ink);word-break:break-all">' + esc(o) + '</code>'
+        + '<br><br><code id="wantOrigin" style="font-weight:700;color:var(--ink);word-break:break-all">' + esc(o) + '</code>'
         + '<br><br>No path, no trailing slash, exactly that. Changes can take a few minutes to take effect.'
         + '<br><br><button class="chip" type="button" id="gcopy">Copy the address</button> '
         + '<a class="chip" href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener">Open Credentials</a> '
