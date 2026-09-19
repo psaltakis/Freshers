@@ -95,28 +95,48 @@
       tells you nothing, no icon standing in for a thought.
    =================================================================== */
 :root{
-  /* Sampled off the MCR's own badge: the cockerel's red, the roundel's
-     sand, the bird's black. */
-  --red:#D6202A; --red-deep:#A8151B; --red-ink:#8A1017; --red-wash:#FBEDEE;
-  --sand:#E8B858; --sand-wash:#FDF6E7;
+  /* THE MCR'S RED, NOT A BRIGHT ONE.
+     This was #D6202A, sampled off the badge and a good deal louder than the
+     badge actually is: a pillar box red that shouted over a page made of
+     paper, and did not match the members' app, where the same colour is the
+     ground and is set a good deal further back. It is now the app's own
+     --crimson, so the two sites are the same red seen on two grounds rather
+     than two reds. Everything derived from it comes down with it. */
+  --red:#A82B34; --red-deep:#8E2029; --red-ink:#711C22; --red-wash:#F8EFEF;
+  --sand:#E2A93C; --sand-wash:#FCF6E9;
 
   /* The A3 poster's band colours, kept so the printed sheet on the
      noticeboard and this page are visibly the same committee. The
      poster sets its type in these on crimson; on paper they are too
      pale to read, so each has a darker twin for the lettering while the
      bright one draws the ring round the photograph. */
-  --lead:#E2A93C;   --lead-t:#8A6410;
-  --study:#4FC894;  --study-t:#186B49;
-  --social:#F58A62; --social-t:#A0431A;
-  --welfare:#63ADEE;--welfare-t:#1B5888;
-  --other:#B98FEC;  --other-t:#5A388D;
+  /* The poster's band colours, a step softer. They were mixed at full
+     strength for a printed sheet on a noticeboard seen from across a room; on
+     a screen at arm's length the same five read as a paint chart. Each ring
+     keeps its hue and gives up about a fifth of its saturation, and each
+     lettering twin is unchanged, because those are already dark enough to
+     read and are the only part of this that has to. */
+  --lead:#D4A856;   --lead-t:#8A6410;
+  --study:#63BF98;  --study-t:#186B49;
+  --social:#E89A7C; --social-t:#A0431A;
+  --welfare:#7CB3E3;--welfare-t:#1B5888;
+  --other:#C2A4E6;  --other-t:#5A388D;
 
-  --ink:#14130F; --ink-2:#38362E; --ink-3:#666254; --ink-4:#928D7D;
+  /* NOT BLACK. The darkest ink here was #14130F, which is black with a
+     rumour of olive in it, and on white it reads as black. The app sets its
+     own ink at #2A0F0C -- a warm, almost claret brown that belongs to the
+     same family as the red -- and these are that family on paper. Warm ink on
+     warm white is what the eye reads as printed rather than rendered, and it
+     is most of the difference between a page that looks designed and a page
+     that looks defaulted. */
+  --ink:#2A1C19; --ink-2:#4E3D39; --ink-3:#77655F; --ink-4:#A0908A;
   --paper:#FFFFFF;
-  --t1:#F5F3EE;              /* a tile */
+  /* The three surfaces, warmed to the same degree as the ink so a tile reads
+     as paper rather than as grey. */
+  --t1:#F7F4F1;              /* a tile */
   --t2:#FFFFFF;              /* a tile that is doing something */
-  --t3:#EAE6DC;              /* a tile pressed into the page */
-  --edge:rgba(20,19,15,.08);
+  --t3:#EDE7E2;              /* a tile pressed into the page */
+  --edge:rgba(42,28,25,.09);
 
   --display:'Fraunces',Georgia,'Times New Roman',serif;
   --ui:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;
@@ -131,7 +151,7 @@
      read as a different house style even when the colours agree. */
   --r:14px; --r2:10px; --r3:7px; --r-big:20px;
   --g:8px; --g2:16px; --g3:28px;
-  --gut:clamp(1rem,3vw,2.6rem); --bar:4.4rem; --rail:11rem; --page:1500px;
+  --gut:clamp(1rem,3vw,2.6rem); --bar:5rem; --rail:11rem; --page:1500px;
   --sat:env(safe-area-inset-top,0px); --sab:env(safe-area-inset-bottom,0px);
 }
 /* THE TEXT GROWS WITH THE SCREEN.
@@ -164,7 +184,7 @@ html{font-size:116%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
    step off the gap ladder, the pads and the section rhythm. */
 @media(max-width:999px){
   :root{--g2:.62rem; --g3:1.15rem; --gut:clamp(.7rem,3.6vw,1rem);
-        --r-big:14px; --r:14px; --r2:10px; --r3:7px; --bar:3.9rem}
+        --r-big:14px; --r:14px; --r2:10px; --r3:7px; --bar:4.4rem}
 }
 /* And one step further on a phone, which is what the app does. It has to come
    after the block above or that one wins on the same screens and this reads as
@@ -186,10 +206,23 @@ body.locked{overflow:hidden}
 button{cursor:pointer;background:none;border:0;padding:0;font:inherit;color:inherit}
 img{max-width:100%;display:block}
 strong,b{font-weight:700;color:var(--ink)}
-a{color:var(--ink);text-decoration:underline;text-decoration-thickness:1px;
-  text-underline-offset:2px;text-decoration-color:rgba(20,19,15,.34)}
-a:hover{text-decoration-color:currentColor}
-:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:4px}
+/* A LINK IS THE MCR'S RED AND A HAIRLINE, NOT INK AND A RULE.
+   Every link was set in the darkest ink with a one pixel underline at a third
+   opacity -- which on a welfare page carrying nine of them in four sentences
+   turned a paragraph into a paragraph with lines drawn through it. Two
+   changes, and between them they are most of the difference between this
+   reading as a document and reading as a form.
+
+   The colour does the work. A link is the one red thing in a body of text, so
+   it is findable without a rule under it at all, and the rule that remains is
+   a hairline at a quarter opacity sitting three pixels clear of the baseline,
+   where it does not collide with a descender. On hover it comes up to full
+   strength, which is when somebody has actually asked. */
+a{color:var(--red-ink);text-decoration:underline;text-decoration-thickness:1px;
+  text-underline-offset:3px;text-decoration-color:rgba(168,43,52,.28);
+  transition:text-decoration-color .15s var(--ease),color .15s var(--ease)}
+a:hover{color:var(--red);text-decoration-color:currentColor}
+:focus-visible{outline:2px solid var(--red);outline-offset:3px;border-radius:4px}
 
 /* ===================== THE BAR =====================
    A phone gets a slim top bar with the badge and the way in. A desktop
@@ -211,12 +244,28 @@ a:hover{text-decoration-color:currentColor}
   .tabbtn,.rest,.day,.tile,.btn,.chip,.sheet nav a,.linkcard{
     transition:transform .14s var(--ease),background .2s var(--ease),color .2s var(--ease)}
 }
-.mark,.railtop{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--ink);flex:none}
+/* THE LETTERING SITS ON THE FOOT OF THE BADGE, NOT IN THE MIDDLE OF IT.
+   The badge is a tall shield and the words beside it are two short lines, so
+   centring them hung the pair in the middle of the shield with air above and
+   below and nothing lining up with anything. Aligned to the foot, the baseline
+   of "Cambridge" and the bottom of the roundel are one line, which is what a
+   printer would do and is the only alignment on this row that the eye can
+   actually check. The 2px nudge is optical: the badge's lowest ink is a little
+   above its box. */
+.mark,.railtop{display:flex;align-items:flex-end;gap:11px;text-decoration:none;color:var(--ink);flex:none}
 .mark:hover,.railtop:hover{text-decoration:none}
-.mark img{height:3.4rem;width:auto}
+.mark span{padding-bottom:2px}
+/* A shade smaller, in a bar a shade taller: the badge was filling almost the
+   whole height of the bar, which left it looking wedged in rather than set
+   in. */
+.mark img{height:3rem;width:auto}
 .mark b{font-family:var(--display);font-size:1.08rem;font-weight:600;letter-spacing:-.03em;line-height:1.05}
 .mark i{display:block;font-style:normal;font-size:.56rem;font-weight:700;letter-spacing:0.16em;
   text-transform:uppercase;color:var(--ink-4);margin-top:3px}
+/* On the same line as CAMBRIDGE, which is where the app puts it too: a chip
+   floating in the gap between the wordmark and the button reads as a third
+   thing in the bar rather than as a note on the second. */
+.mark i .beta{margin-left:7px;padding:2px 5px;font-size:.52rem;vertical-align:1px}
 .bar .sp{flex:1}
 .ctrls{display:flex;align-items:center;gap:10px;flex:none}
 
@@ -274,7 +323,14 @@ a:hover{text-decoration-color:currentColor}
 .tabbtn svg{width:1.15rem;height:1.15rem;fill:none;stroke:currentColor;stroke-width:1.9;
   stroke-linecap:round;stroke-linejoin:round}
 .tabbtn:hover{color:var(--ink)}
-.tabbtn[aria-current="true"]{background:var(--ink);color:#fff}
+/* WHY THIS IS [aria-current] AND NOT [aria-current="true"].
+   markCurrent writes aria-current="page", which is the correct value for a
+   navigation link and the one the specification asks for. This selector was
+   written against "true" and therefore matched nothing at all: the whole time,
+   no tab and no category has ever been highlighted. Matching the attribute
+   rather than a particular value is also the right way round -- whichever
+   valid token is written, the current place is the current place. */
+.tabbtn[aria-current]{background:var(--red);color:#fff}
 
 @media(min-width:1000px){
   :root{--navh:0px}
@@ -288,8 +344,11 @@ a:hover{text-decoration-color:currentColor}
   #nav{left:0;top:0;bottom:0;transform:none;width:var(--rail);max-width:none;
     flex-direction:column;border-radius:0;padding:18px 12px calc(18px + var(--sab));
     background:var(--t1);box-shadow:inset -1px 0 0 var(--edge);overflow:hidden}
-  #nav .railtop{display:flex;align-items:center;gap:10px;padding:2px 9px 18px;flex:none}
-  #nav .railtop img{height:54px;width:auto}
+  /* The rail lines up the same way the bar does: the lettering on the foot
+     of the badge rather than in the middle of it. */
+  #nav .railtop{display:flex;align-items:flex-end;gap:10px;padding:2px 9px 18px;flex:none}
+  #nav .railtop img{height:50px;width:auto}
+  #nav .railtop span{padding-bottom:2px}
   #nav .railtop b{display:block;font-family:var(--display);font-size:.789rem;font-weight:600;
     letter-spacing:-.03em;line-height:1.1;color:var(--ink);white-space:nowrap}
   #nav .railtop i{display:block;font-style:normal;font-size:.635rem;font-weight:700;
@@ -304,8 +363,8 @@ a:hover{text-decoration-color:currentColor}
     padding:9px 10px;min-height:44px;min-width:0;border-radius:var(--r3);
     font-size:.711rem;font-weight:700;letter-spacing:-.015em;text-align:left;width:100%}
   .tabbtn svg{width:18px;height:18px;flex:none;opacity:.8}
-  .tabbtn[aria-current="true"]{background:var(--t3);color:var(--ink)}
-  .tabbtn[aria-current="true"] svg{opacity:1}
+  .tabbtn[aria-current]{background:var(--red-wash);color:var(--red-ink)}
+  .tabbtn[aria-current] svg{opacity:1}
   #nav .railfoot{display:block;flex:none;padding:.9rem .4rem 0;margin-top:auto}
   #nav .railfoot .enter{width:100%;padding:.75rem .8rem;font-size:.8rem}
   #nav .railfoot .enter span{display:inline}
@@ -327,8 +386,26 @@ a:hover{text-decoration-color:currentColor}
    as large on a desktop to keep the line count sane. */
 .pg{max-width:none}
 .pg-head{padding:clamp(30px,5vw,60px) 0 clamp(20px,3vw,34px)}
+/* THE EYEBROW IS THE MCR'S RED, NOT A GREY.
+   It was --ink-4, which is what you reach for when a label is meant to get out
+   of the way. This one is not: it is the only thing above the heading and it
+   is where the badge's colour belongs on a page otherwise made of paper. */
 .eyebrow{margin:0 0 12px;font-size:.64rem;font-weight:700;letter-spacing:0.16em;
-  text-transform:uppercase;color:var(--ink-4)}
+  text-transform:uppercase;color:var(--red)}
+/* ONE WORD OF EVERY HEADING IS SET ITALIC, IN A COLOUR OFF THE BADGE.
+   The app does this everywhere -- "The <i>MCRNet</i>", "Ask the <i>MCR</i>",
+   "The <i>board</i>" -- and it is the single most recognisable thing about the
+   way it sets a heading: Fraunces has a genuine italic rather than a slant,
+   and one word in it turns a line of type into a title. The colour is the
+   roundel's sand on a dark heading and the cockerel's red where the heading is
+   already reversed out, so both come off the badge rather than being chosen. */
+h1 i,h2 i,.tile b i,.gateway h2 i{font-style:italic}
+.pg-head h1 i,.opening h1 i,.card h2 i,.menu-top h2 i{color:var(--red)}
+.gateway h2 i,.tile b i{color:var(--sand)}
+/* The app's chip, brought over whole, for the same reason it exists there. */
+.beta{font-family:var(--mono);font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;
+  font-weight:700;color:#4A2E00;background:var(--sand);border-radius:6px;padding:3px 7px;
+  align-self:center;flex:0 0 auto}
 .pg-head h1{margin:0;font-family:var(--display);font-weight:600;
   font-size:clamp(2rem,5.4vw,3.3rem);letter-spacing:-.048em;line-height:1.03;color:var(--ink)}
 /* The one place the two files disagree on purpose. .lede means a small muted
@@ -372,6 +449,12 @@ a:hover{text-decoration-color:currentColor}
 .card.alert .tbl th{color:var(--sand);border-bottom-color:var(--sand)}
 .card.alert .tbl td{border-bottom-color:rgba(255,255,255,.16)}
 .card.alert .tbl td:first-child{color:#fff}
+.card.alert .kv dt{color:var(--sand)}
+.card.alert .note{color:var(--ink-2)}
+.card.alert .note a{color:var(--red-ink);text-decoration-color:rgba(168,43,52,.28)}
+.card.alert .note strong,.card.alert .note b{color:var(--ink)}
+.card.alert .btn{background:var(--sand);color:#4A2E00}
+.card.alert .btn:hover{background:#fff;color:var(--ink)}
 
 .grid{display:grid;gap:var(--g2);grid-template-columns:repeat(auto-fit,minmax(min(16rem,100%),1fr));margin:0 0 var(--g3)}
 .grid .card{margin:0;background:var(--t1);border-radius:var(--r);padding:22px 24px}
@@ -384,6 +467,24 @@ a:hover{text-decoration-color:currentColor}
 .list li::marker{color:var(--ink-4)}
 ul.list{list-style:square}
 
+/* A QUESTION IS NOT A LABEL.
+   .kv below is a two column list for short labels against values -- "Email",
+   "Appointments", "College Nurse" -- and every one of its labels is set small,
+   uppercase, letter-spaced and monospaced, in a column with a seven rem
+   minimum. The punting FAQ was built with it, and its labels are whole
+   questions of up to seventy-six characters. The result was a sentence set as
+   though it were the word "EMAIL", wrapping four times inside a narrow column
+   with the answer stranded beside it: unreadable, and the thing that looked
+   broken rather than merely wrong.
+
+   A question and its answer are one block, one under the other. The question
+   takes the display face at a readable size in sentence case, which is what it
+   is, and the answer sits under it in body text. */
+.faq{margin:0}
+.faq dt{margin:0;font-family:var(--display);font-size:1.02rem;font-weight:600;
+  letter-spacing:-.028em;line-height:1.3;color:var(--ink)}
+.faq dd{margin:.3rem 0 1.1rem;color:var(--ink-2)}
+.faq dd:last-child{margin-bottom:0}
 .kv{margin:0;display:grid;grid-template-columns:minmax(7rem,auto) 1fr;gap:9px 22px}
 .kv dt{font-size:.72rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;
   color:var(--ink);padding-top:.4em}
@@ -407,6 +508,20 @@ ul.list{list-style:square}
 .btn.ghost:hover{background:var(--t3)}
 .note{background:var(--t1);border-radius:var(--r2);padding:13px 16px;margin:0 0 var(--g2);
   font-size:.92rem;color:var(--ink-3)}
+/* A DOOR THE SIZE OF A PARAGRAPH.
+   The home page has the full red band, which is right once: it is the offer
+   the whole site is making. A page that merely needs to hand one job over to
+   the app wants something proportionate -- the same red, the same arrow, at
+   the size of the thing it interrupts. Red here is still doing the one job
+   rule 1 allows it: it is a way through to the members' app. */
+.doorway{display:flex;flex-wrap:wrap;align-items:center;gap:14px;
+  background:var(--red-wash);border-left:3px solid var(--red);
+  border-radius:var(--r2);padding:15px 18px;margin:0 0 var(--g2)}
+.doorway .t{flex:1 1 15rem;min-width:0}
+.doorway b{display:block;font-family:var(--display);font-size:1rem;font-weight:600;
+  letter-spacing:-.03em;color:var(--red-ink);margin-bottom:3px}
+.doorway p{margin:0;font-size:.9rem;color:var(--ink-2)}
+.doorway .enter{flex:0 0 auto}
 .tag{display:block;margin:34px 0 14px;font-size:.62rem;font-weight:700;letter-spacing:0.16em;
   text-transform:uppercase;color:var(--ink-4)}
 
@@ -532,6 +647,7 @@ ul.list{list-style:square}
 }
 .card,.grid,.grid>*,.pg,.person,.srch{min-width:0}
 .tbl td,.tbl th,.kv dd,.card p,.list li{overflow-wrap:anywhere}
+a[href^="tel:"]{white-space:nowrap;overflow-wrap:normal}
 
 /* ===================== SPORT =====================
    The gym induction goes first and is the only green thing on the site,
@@ -694,9 +810,11 @@ ul.list{list-style:square}
 .day small{display:block;font-size:.62rem;font-weight:700;opacity:.62;letter-spacing:0.14em;
   text-transform:uppercase}
 
-.sittings{display:grid;gap:.55rem;grid-template-columns:repeat(auto-fit,minmax(min(14.5rem,100%),1fr))}
-.sitting{background:var(--t2);border-radius:var(--r);padding:.7rem .8rem}
-.sitting > h3{margin:0 0 .45rem;font-size:.65rem;font-weight:700;letter-spacing:0.16em;
+/* Tighter throughout. A menu is a list somebody scans for one word, and it
+   was set with the air of a page somebody reads. */
+.sittings{display:grid;gap:.45rem;grid-template-columns:repeat(auto-fit,minmax(min(14rem,100%),1fr))}
+.sitting{background:var(--t2);border-radius:var(--r);padding:.55rem .6rem}
+.sitting > h3{margin:0 0 .35rem;font-size:.65rem;font-weight:700;letter-spacing:0.16em;
   text-transform:uppercase;color:var(--ink)}
 /* A COLOUR THAT MEANS SOMETHING.
    Taken from the members' app unchanged, including the reasoning. The
@@ -705,22 +823,34 @@ ul.list{list-style:square}
    card can be read at a glance. The college writes these headings by
    hand and changes the wording, so anything unrecognised gets the
    neutral tint rather than a colour it has not earned. */
-.course{margin:0 0 .42rem;border-radius:var(--r3);overflow:hidden}
+/* THE COLOUR BELONGS TO THE COURSE, NOT TO ITS TITLE.
+   The tint was on the h4 alone, so each course was a coloured strip with a
+   list of dishes hanging underneath it on white -- which reads as a heading
+   that happens to be highlighted rather than as a group. Moved onto the
+   course itself, the colour is a block with its own name at the top, and the
+   eye can find "the green one" without reading a word. The title keeps a
+   slightly stronger wash of the same colour so it still separates. */
+.course{margin:0 0 .3rem;border-radius:var(--r3);overflow:hidden;
+  background:var(--ct,rgba(0,0,0,.04));padding-bottom:.18rem}
 .course:last-child{margin-bottom:0}
-.course h4{margin:0 0 .18rem;padding:.14rem .45rem;border-radius:var(--r3);
+.course h4{margin:0 0 .1rem;padding:.16rem .5rem;
   font-size:.6rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;
-  background:var(--ct,rgba(0,0,0,.05));color:var(--ci,var(--ink-3))}
-.course.ct-veg  {--ct:rgba(79,200,148,.20); --ci:#0F5A40}
-.course.ct-soup {--ct:rgba(226,169,60,.22); --ci:#7A4E06}
-.course.ct-main {--ct:rgba(180,20,27,.14);  --ci:#8A1119}
-.course.ct-carb {--ct:rgba(99,173,238,.20); --ci:#17456E}
-.course.ct-side {--ct:rgba(79,200,148,.12); --ci:#2A6B4E}
-.course.ct-salad{--ct:rgba(150,205,110,.24);--ci:#3D6318}
-.course.ct-sweet{--ct:rgba(185,143,236,.20);--ci:#4A2A70}
-.course.ct-deli {--ct:rgba(245,138,98,.20); --ci:#7A3316}
-.course.ct-other{--ct:rgba(0,0,0,.05);      --ci:var(--ink-3)}
+  background:var(--ch,rgba(0,0,0,.08));color:var(--ci,var(--ink-3))}
+/* Two strengths of each: the block, and the title sitting on it. The block is
+   deliberately faint -- it is behind reading matter and a tint you notice is a
+   tint that is too strong -- and the pastel end of these is where the rest of
+   the palette went as well. */
+.course.ct-veg  {--ct:rgba(79,200,148,.11); --ch:rgba(79,200,148,.24); --ci:#0F5A40}
+.course.ct-soup {--ct:rgba(226,169,60,.12); --ch:rgba(226,169,60,.26); --ci:#7A4E06}
+.course.ct-main {--ct:rgba(168,43,52,.08);  --ch:rgba(168,43,52,.17);  --ci:#8A2028}
+.course.ct-carb {--ct:rgba(99,173,238,.11); --ch:rgba(99,173,238,.24); --ci:#17456E}
+.course.ct-side {--ct:rgba(79,200,148,.07); --ch:rgba(79,200,148,.15); --ci:#2A6B4E}
+.course.ct-salad{--ct:rgba(150,205,110,.13);--ch:rgba(150,205,110,.28);--ci:#3D6318}
+.course.ct-sweet{--ct:rgba(185,143,236,.11);--ch:rgba(185,143,236,.24);--ci:#4A2A70}
+.course.ct-deli {--ct:rgba(245,138,98,.11); --ch:rgba(245,138,98,.24); --ci:#7A3316}
+.course.ct-other{--ct:rgba(42,28,25,.04);   --ch:rgba(42,28,25,.08);   --ci:var(--ink-3)}
 
-.dish{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 .32rem;padding:.04rem .45rem;line-height:1.27}
+.dish{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 .32rem;padding:.02rem .5rem;line-height:1.25}
 .dish .nm{font-size:.8rem;font-weight:600;color:var(--ink-2)}
 .dish .pr{font-size:.74rem;font-weight:700;color:var(--ink-4);white-space:nowrap}
 
@@ -736,7 +866,7 @@ ul.list{list-style:square}
 .mk.v,.mk.ve{background:rgba(79,200,148,.32);color:#0F5A40}
 .mk.h{background:rgba(99,173,238,.32);color:#17456E}
 .mk.gf{background:rgba(226,169,60,.40);color:#653F04}
-.alg{flex:1 1 100%;font-size:.6rem;color:var(--ink-4);line-height:1.3;min-width:0}
+.alg{flex:1 1 100%;font-size:.63rem;color:var(--ink-3);line-height:1.3;min-width:0}
 
 /* The same key under the card, so the colours are told rather than guessed. */
 .mkey{display:flex;flex-wrap:wrap;gap:3px 10px;margin:.5rem 0 0;padding:0 2px}
@@ -802,7 +932,11 @@ ul.list{list-style:square}
 .gateway .enter{background:#fff;color:var(--red-deep)}
 .gateway .enter:hover{background:var(--sand);color:var(--ink);transform:translateY(-1px)}
 @media(min-width:1000px){
-  .gateway .enter{padding:15px 26px;font-size:.92rem}
+  /* Half what it was. It is the only button on a red band a third of a screen
+     tall, so it was being sized as though it had to compete with the band --
+     and a button that large on a band that colour reads as an advertisement.
+     The band is the emphasis; the button only has to be pressable. */
+  .gateway .enter{padding:8px 15px;font-size:.78rem}
   .gateway .enter span{display:inline}
 }
 
@@ -846,6 +980,9 @@ ul.list{list-style:square}
 .sheet-top{display:flex;align-items:center;gap:1rem;padding:.2rem .4rem 1rem}
 .sheet-top b{flex:1;font-size:.7rem;font-weight:700;letter-spacing:0.16em;
   text-transform:uppercase;color:var(--ink-4)}
+.shut{flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:var(--t1);
+  color:var(--ink-3);font-size:1.05rem;line-height:1;display:grid;place-items:center}
+.shut:hover{background:var(--ink);color:#fff}
 .sheet nav{display:grid;gap:.4rem}
 .sheet nav a{display:flex;align-items:center;gap:.9rem;padding:.85rem .8rem;border-radius:var(--r2);
   background:var(--t1);text-decoration:none;color:inherit}
@@ -1056,7 +1193,7 @@ body.reframing img.reframe:active{cursor:grabbing}
   <div class="bar-in">
     <a class="mark" href="#home">
       <img src="mcr-assets/mcr-logo.png" alt="Jesus College MCR" width="34" height="62">
-      <span><b>Jesus College MCR</b><i>Cambridge</i></span>
+      <span><b>Jesus College MCR</b><i>Cambridge <span class="beta" title="In development. Please tell the committee about anything that looks wrong.">Beta</span></i></span>
     </a>
     <span class="sp"></span>
     <div class="ctrls">
@@ -1101,7 +1238,7 @@ body.reframing img.reframe:active{cursor:grabbing}
 <section class="pg" id="home" hidden>
   <div class="opening">
     <div>
-      <h1 data-rise data-e="home/h1/1">The postgraduate community at Jesus</h1>
+      <h1 data-rise data-e="home/h1/1">The postgraduate community at <i>Jesus</i></h1>
       <p class="lede" data-rise data-e="home/p/1">Everything a Jesus postgraduate needs in one place, what the Caff is serving today, who to talk to, and how the MCR works.</p>
       <p data-rise data-e="home/p/2">
         <a class="btn" href="#freshers" data-eh="home/a/1">New here? Start here</a>
@@ -1151,7 +1288,7 @@ body.reframing img.reframe:active{cursor:grabbing}
 <section class="pg" id="freshers" hidden>
   <div class="pg-head">
     <p class="eyebrow" data-rise data-e="freshers/p/1">Michaelmas 2026</p>
-    <h1 data-rise data-e="freshers/h1/1">Freshers 2026</h1>
+    <h1 data-rise data-e="freshers/h1/1">Freshers <i>2026</i></h1>
     <p class="lede" data-rise data-e="freshers/p/2">If this is your first term as a postgraduate student at Jesus, welcome to the College. The MCR is the postgraduate community here, and the <a href="#committee" data-eh="freshers/a/1">Committee</a> is here to help make your time at Cambridge enjoyable, intellectually stimulating, and fun.</p>
   </div>
 
@@ -1168,31 +1305,36 @@ body.reframing img.reframe:active{cursor:grabbing}
 
   <div class="card" data-rise>
     <h2 data-e="freshers/h2/2">Before you arrive</h2>
-    <p data-e="freshers/p/5">Starting a new degree, and, for most, moving to a new city, is an exciting time, but it can also be stressful. Working with the Tutorial Department and Admissions Office within College, we put together a programme of events for Freshers’ Fortnight to help you settle in to Jesus. We will be reaching out with information soon, so do check your email regularly.</p>
+    <p data-e="freshers/p/5">We run Freshers’ Fortnight with the Tutorial Department and the Admissions Office, and the details come by email. Check it.</p>
     <p data-e="freshers/p/6">The College has a great deal of useful information in the <a href="https://jnet.jesus.cam.ac.uk/jnet/students/postgraduate-handbook" target="_blank" rel="noopener" data-eh="freshers/a/4">Postgraduate Handbook</a> and the <a href="https://jnet.jesus.cam.ac.uk/jnet/admissions/postgraduate-offer-holder-information" target="_blank" rel="noopener" data-eh="freshers/a/5">Offer Holder Information</a> pages. You will need to log into JNet using <em>[your CRSid]@jesus.cam.ac.uk</em> and your JNet password, once you have received it.</p>
     <div class="note" data-rise>Not arriving at the start of Michaelmas? Don’t worry. There are events all year, you will be welcomed and filled in on everything that has happened, and there are plenty of people willing to help you find your feet.</div>
   </div>
 
   <figure class="hero" data-rise><img src="mcr-assets/col-accom.jpg" alt="A postgraduate room at Jesus College" loading="lazy" data-e="freshers/img/1"><figcaption data-e="freshers/figcaption/1">Postgraduate accommodation. Photograph: Jesus College.</figcaption></figure>
 
-  <div class="card" data-rise>
-    <h2 data-e="freshers/h2/3">Arriving at Cambridge</h2>
+  <p class="tag" data-rise data-e="freshers/tag/1">Arriving at Cambridge</p>
+  <div class="grid" data-rise>
+    <div class="card" data-rise>
     <h3 data-e="freshers/h3/1">Admin and accommodation</h3>
-    <p data-e="freshers/p/7">Accommodation, registration and all the admin side of arriving is handled by the Tutorial Department within the College. You will find their contact details on the <a href="https://www.jesus.cam.ac.uk/college/people/staff-and-departments" target="_blank" rel="noopener" data-eh="freshers/a/6">People page of the College website</a>. look for ‘Staff and Departments’, then ‘Tutorial’. If you have any questions about your arrival, they are in the best position to help.</p>
+    <p data-e="freshers/p/7">Accommodation, registration and all the admin side of arriving is handled by the Tutorial Department within the College. You will find their contact details on the <a href="https://www.jesus.cam.ac.uk/college/people/staff-and-departments" target="_blank" rel="noopener" data-eh="freshers/a/6">People page of the College website</a>, under ‘Staff and Departments’, then ‘Tutorial’. If you have any questions about your arrival, they are in the best position to help.</p>
     <p data-e="freshers/p/8"><a href="https://www.jesus.cam.ac.uk/college/postgraduate/accommodation" target="_blank" rel="noopener" data-eh="freshers/a/7">Postgraduate accommodation</a> is in various houses, almost all of which are near the College or in the grounds itself. All houses have furniture, cooking and laundry facilities, network access and so on. It is all sorted out by Admissions or Tutorial before you start, so you will know where you are going before you arrive.</p>
-
+    </div>
+    <div class="card" data-rise>
     <h3 data-e="freshers/h3/2">Your University Card</h3>
     <p data-e="freshers/p/9">In College, and in the University, you will need a University Card. It is your student ID, your library card for the University and many Departmental Libraries, your access card to various places in College, and the card with which you pay for food in Hall or in the bar. You will want it with you all the time. Cards should be available at the Porters’ Lodge on arrival, if not, they will know where you can collect it.</p>
     <p data-e="freshers/p/10">Married students can also get a special University Card for their spouse, which allows access around the University. Speak to the <a href="mailto:graduate-tutor@jesus.cam.ac.uk" data-eh="freshers/a/8">Postgraduate Tutor</a> and they can help arrange this. Students with registered partners will also be able to get an access card for their partner.</p>
-
+    </div>
+    <div class="card" data-rise>
     <h3 data-e="freshers/h3/3">Paying for food and drink</h3>
+    <div class="shots wide" data-rise style="margin-bottom:14px"><figure><img src="mcr-assets/col-caff.jpg" alt="Students eating in Hall" loading="lazy" data-e="freshers/img/2"><figcaption data-e="freshers/figcaption/2">Lunch in Hall, paid for on your University Card. Photograph: Jesus College.</figcaption></figure></div>
     <p data-e="freshers/p/11">Within College, food and drink are paid for via <a href="https://www.upay.co.uk/" target="_blank" rel="noopener" data-eh="freshers/a/9">UPay</a>, a debit system linked to your University Card. You have to load money onto your account before you can use it. When you buy food in <a href="https://www.jesus.cam.ac.uk/college/life-jesus/food-and-drink/cafeteria" target="_blank" rel="noopener" data-eh="freshers/a/10">Caff</a>, drinks in <a href="https://www.jesus.cam.ac.uk/college/life-jesus/food-and-drink/cafe" target="_blank" rel="noopener" data-eh="freshers/a/11">the Roost</a>, or a ticket for <a href="https://www.jesus.cam.ac.uk/college/life-jesus/food-and-drink/formal-hall" target="_blank" rel="noopener" data-eh="freshers/a/12">Formal Hall</a> online, the money is debited from your card account. The easiest way to top up is the UPay website or app.</p>
     <a class="btn ghost" href="https://www.upay.co.uk/" target="_blank" rel="noopener" data-eh="freshers/a/13">Top up on UPay</a>
+    </div>
   </div>
 
   <div class="card quiet" data-rise>
     <h2 data-e="freshers/h2/4">Where to go if you have questions</h2>
-    <p data-e="freshers/p/12">Have a look at the <a href="#contacts" data-eh="freshers/a/14">Useful Contacts</a> page. Or email any of the <a href="#committee" data-eh="freshers/a/15">MCR committee</a>. they are more than happy to help.</p>
+    <p data-e="freshers/p/12">Have a look at the <a href="#contacts" data-eh="freshers/a/14">Useful Contacts</a> page. Or email any of the <a href="#committee" data-eh="freshers/a/15">MCR committee</a> — they are more than happy to help.</p>
   </div>
 </section>
 
@@ -1200,7 +1342,7 @@ body.reframing img.reframe:active{cursor:grabbing}
 <section class="pg" id="room" hidden>
   <div class="pg-head">
     <p class="eyebrow" data-rise data-e="room/p/1">West Court</p>
-    <h1 data-rise data-e="room/h1/1">The Middle Combination Room</h1>
+    <h1 data-rise data-e="room/h1/1">The Middle <i>Combination</i> Room</h1>
     <p class="lede" data-rise data-e="room/p/2">Above the Roost bar, one floor up the far set of stairs. Sofas, a widescreen TV with Freeview, a DVD player, an Xbox Kinect, a sound system and, perhaps most importantly, a coffee machine.</p>
   </div>
 
@@ -1213,32 +1355,41 @@ body.reframing img.reframe:active{cursor:grabbing}
 
   <div class="card" data-rise>
     <h2 data-e="room/h2/2">Holding an event there</h2>
-    <p data-e="room/p/6">If you plan to have a bigger event in the MCR. pre-dinner drinks before Formal Hall to celebrate your birthday, say, yake sure it does not clash with an event on the MCR calendar, or with any other usage. Post your event on the <a href="https://www.facebook.com/groups/JesusCollegeCambridgeMCR" target="_blank" rel="noopener" data-eh="room/a/1">MCR Facebook group</a> and kindly ask if anyone has objections, or <a href="mailto:committee@mcr.jesus.cam.ac.uk" data-eh="room/a/2">email the committee</a> if you do not have Facebook. Please give some detail about the time of your event and what you intend to use the room for.</p>
-    <div class="note" data-rise>For a large event you may need a party permit, see <a href="https://jnet.jesus.cam.ac.uk/jnet/students/dean-college/permit-procedure" target="_blank" rel="noopener" data-eh="room/a/3">JNet for the permit procedure</a>.</div>
+    <p data-e="room/p/6">If you are planning something bigger &#8212; pre-dinner drinks before Formal Hall for a birthday, say &#8212; put it through the app rather than hoping the room is free.</p>
+    <p data-e="room/p/13">An approved booking does not empty the room, so it is still worth posting it on the <a href="https://www.facebook.com/groups/JesusCollegeCambridgeMCR" target="_blank" rel="noopener" data-eh="room/a/1">MCR Facebook group</a>: the people already sitting there are the ones worth telling.</p>
+    <div class="doorway" data-rise>
+      <div class="t">
+        <b data-e="room/b/1">Bookings happen in the app</b>
+        <p data-e="room/p/12">The MCRNet shows when the room is already spoken for, takes your request, and sends back a permission slip once the committee has said yes &#8212; which is the piece of paper the Porters ask for.</p>
+      </div>
+      <a class="enter" href="#" data-enter aria-label="Enter the intranet" data-eh="room/a/6">
+        <svg viewBox="0 0 24 24"><path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M15 8.5 18.5 12 15 15.5"/><path d="M18.5 12H10"/></svg>
+        <span>Open the app</span>
+      </a>
+    </div>
+    <div class="note" data-rise>Over five people is a party as far as the Dean is concerned, and so is alcohol, amplified music, or anything running past eleven. The <a href="https://jnet.jesus.cam.ac.uk/jnet/students/dean-college/event-permit-application-form" target="_blank" rel="noopener" data-eh="room/a/3">permit</a> is a separate form and is due two weeks ahead, so do that first and send the booking after. Your booking slip is not a permit.</div>
   </div>
-
-  <figure class="hero" data-rise><img src="mcr-assets/col-caff.jpg" alt="Students eating in Hall" loading="lazy" data-e="room/img/1"><figcaption data-e="room/figcaption/1">Photograph: Jesus College.</figcaption></figure>
 
   <div class="card" data-rise>
     <h2 data-e="room/h2/3">House rules</h2>
-    <p data-e="room/p/7">To make the MCR an enjoyable space for everyone, there are a few housekeeping rules we would appreciate you following.</p>
+    <p data-e="room/p/7">Eight of them, in three groups, and none is a surprise.</p>
+    <h3 data-e="room/h3/1">Sharing it</h3>
     <ul class="list">
-      <li data-e="room/li/1">Always feel free to just drop in, to socialise, do some work, watch TV, share a meal, or see who is around.</li>
-      <li data-e="room/li/2">Please be respectful of others using the room. It is fine to talk or watch TV while others are working, but consider the volume.</li>
-      <li data-e="room/li/3">Please notify others in the MCR if you intend to use the room for an event.</li>
-      <li data-e="room/li/4">Please do not use the MCR as personal storage. Take all your belongings when you leave.</li>
-      <li data-e="room/li/5">Please do not leave food in the fridge for extended periods. Leaving your lunch there is fine, overnight is not. Label it with your name and the date.</li>
-      <li data-e="room/li/6">Please help yourself to tea and coffee (with milk and sugar), or food in the fridge unless it is labelled.</li>
-      <li data-e="room/li/7">Please do not take alcohol or food belonging to someone else. Ask a member of the <a href="#committee" data-eh="room/a/4">committee</a> if you are not sure.</li>
-      <li data-e="room/li/8">Please clear up after using the room: return anything you borrowed, and throw out or recycle any rubbish.</li>
-      <li data-e="room/li/9">Please wash up any plates, dishes or glasses you used, dry them and put them back in the cupboards. Glasses go back to the bar.</li>
-      <li data-e="room/li/10">Please take care of the shared property, it is there for all of us. Tell the <a href="#committee" data-eh="room/a/5">Committee</a> or the relevant College department if you break something, or if anything seems broken or missing, so it can be fixed.</li>
-      <li data-e="room/li/11">Please feel free to borrow board games and books, but not for more than a week, and please do not borrow electronic devices.</li>
-      <li data-e="room/li/12">Please feel free to borrow the inflatables. Rinse them after use, hose taps are available on Lower Park Street.</li>
-      <li data-e="room/li/13">Please help yourself to the sexual health supplies.</li>
-      <li data-e="room/li/14">Please help yourself to the art supplies.</li>
-      <li data-e="room/li/15">Please do not use the MCR as a supervision space. College provides other rooms for that. The café and study centre are suitable alternatives.</li>
-      <li data-e="room/li/16">Please familiarise yourself with the fire procedures.</li>
+      <li data-e="room/li/2">Talking and the television are both fine while somebody works in the corner. It is the volume that matters, not the activity.</li>
+      <li data-e="room/li/4">It is not personal storage. Take your things with you when you go.</li>
+      <li data-e="room/li/15">It is not a supervision room either &#8212; College provides those, and the café and study centre are the usual alternatives.</li>
+      <li data-e="room/li/16">Read the fire procedures once, on a day when nothing is on fire.</li>
+    </ul>
+    <h3 data-e="room/h3/2">Help yourself</h3>
+    <ul class="list">
+      <li data-e="room/li/6">The tea, the coffee with milk and sugar, the art supplies and the sexual health supplies are all there for you, as is anything in the fridge that is not labelled with somebody’s name. If you are not sure whose a bottle is, ask a member of the <a href="#committee" data-eh="room/a/4">committee</a> rather than guessing.</li>
+      <li data-e="room/li/11">Borrow the board games, the books and the inflatables for up to a week. Rinse the inflatables afterwards — there are hose taps on Lower Park Street — and leave the electronics where they are.</li>
+    </ul>
+    <h3 data-e="room/h3/3">Leaving it as you found it</h3>
+    <ul class="list">
+      <li data-e="room/li/8">Clear up: put back what you borrowed, bin or recycle the rest, wash and dry the plates and glasses and return them to the cupboards. Glasses go back to the bar.</li>
+      <li data-e="room/li/5">Lunch in the fridge is fine, overnight is not. Label it with your name and the date.</li>
+      <li data-e="room/li/10">Tell the <a href="#committee" data-eh="room/a/5">committee</a> when something breaks, or when something already looks broken or missing. Nobody is in trouble; it just cannot be fixed until somebody says.</li>
     </ul>
     <div class="note" data-rise>Most importantly, <strong>do</strong> think of the MCR as the grads’ living room, and enjoy it.</div>
   </div>
@@ -1248,18 +1399,11 @@ body.reframing img.reframe:active{cursor:grabbing}
 <section class="pg" id="sport" hidden>
   <div class="pg-head">
     <p class="eyebrow" data-rise data-e="sport/p/1">Get involved</p>
-    <h1 data-rise data-e="sport/h1/1">Sport and societies</h1>
-    <p class="lede" data-rise data-e="sport/p/2">Everything the MCR runs, plus sixty one College clubs that take postgraduates and that almost nobody finds out about.</p>
+    <h1 data-rise data-e="sport/h1/1">Sport and <i>societies</i></h1>
+    <p class="lede" data-rise data-e="sport/p/2">Everything the MCR runs, plus sixty-one College clubs that take postgraduates and that almost nobody finds out about.</p>
   </div>
 
   <figure class="hero" data-rise><img src="mcr-assets/col-sport.jpg" alt="A lineout on the College pitch, with Jesus behind" loading="lazy" data-e="sport/img/1"><figcaption data-e="sport/figcaption/1">Photograph: Jesus College.</figcaption></figure>
-
-  <a class="gymcard" href="https://jnet.jesus.cam.ac.uk/node/715" target="_blank" rel="noopener" data-rise data-eh="sport/a/1">
-    <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12h2M20 12h2M6 8v8M18 8v8M9 6v12M15 6v12M9 12h6"/></svg></span>
-    <span class="t"><b>Do your gym induction first</b>
-      <small>Not a class and not a booking. It is a page of short videos with a form at the bottom. Fill it in and your University card starts opening the gym doors. Both gyms are free, and both are shut to you until you have.</small></span>
-    <span class="arw">&#8599;</span>
-  </a>
 
   <p class="tag" data-rise data-e="sport/p/3">What the MCR runs</p>
   <div class="clubs" data-rise>
@@ -1273,6 +1417,13 @@ body.reframing img.reframe:active{cursor:grabbing}
     <a class="club" href="mailto:squash@mcr.jesus.cam.ac.uk" data-eh="sport/a/9"><b>MCR Squash</b><span>Tom Pritchard</span><i>write to them</i></a>
     <a class="club" href="mailto:bike-repair@mcr.jesus.cam.ac.uk" data-eh="sport/a/10"><b>Bike Repair Society</b><span>Mason Frudd</span><i>write to them</i></a>
   </div>
+
+  <a class="gymcard" href="https://jnet.jesus.cam.ac.uk/node/715" target="_blank" rel="noopener" data-rise data-eh="sport/a/1">
+    <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12h2M20 12h2M6 8v8M18 8v8M9 6v12M15 6v12M9 12h6"/></svg></span>
+    <span class="t"><b>Do your gym induction first</b>
+      <small>Not a class and not a booking. It is a page of short videos with a form at the bottom. Fill it in and your University card starts opening the gym doors. Both gyms are free, and both are shut to you until you have.</small></span>
+    <span class="arw">&#8599;</span>
+  </a>
 
   <p class="tag" data-rise data-e="sport/p/4">JCSU sports and societies</p>
   <div class="card quiet" data-rise>
@@ -1306,7 +1457,7 @@ body.reframing img.reframe:active{cursor:grabbing}
 <section class="pg" id="committee" hidden>
   <div class="pg-head">
     <p class="eyebrow" data-rise data-e="committee/p/1">2026 to 27</p>
-    <h1 data-rise data-e="committee/h1/1">Meet your committee</h1>
+    <h1 data-rise data-e="committee/h1/1">Meet your <i>committee</i></h1>
     <p class="lede" data-rise data-e="committee/p/2">Say hello when you see us around College, or write to a role’s own address, it always reaches whoever holds the post.</p>
   </div>
 
@@ -1399,67 +1550,72 @@ body.reframing img.reframe:active{cursor:grabbing}
 <section class="pg" id="funding" hidden>
   <div class="pg-head">
     <p class="eyebrow" data-rise data-e="funding/p/1">Conference fund</p>
-    <h1 data-rise data-e="funding/h1/1">Student-led conferences</h1>
+    <h1 data-rise data-e="funding/h1/1">Student-led <i>conferences</i></h1>
     <p class="lede" data-rise data-e="funding/p/2">The Jesus College MCR offers financial support to students who wish to run a conference or symposium. Awards are usually between £100 and £300.</p>
   </div>
 
+  <figure class="hero" data-rise><img src="mcr-assets/col-funding.jpg" alt="Students working together" loading="lazy" data-e="funding/img/1"><figcaption data-e="funding/figcaption/1">Photograph: Jesus College.</figcaption></figure>
+
   <div class="card alert" data-rise>
     <h2 data-e="funding/h2/1">How to apply</h2>
-    <p data-e="funding/p/3">Members of the MCR who would like to apply for funding should email an application to <a href="mailto:academic@mcr.jesus.cam.ac.uk" data-eh="funding/a/1">academic@mcr.jesus.cam.ac.uk</a>.</p>
+    <dl class="kv">
+      <dt data-e="funding/dt/1">Award</dt>
+      <dd data-e="funding/dd/1">£100 to £300. More only in exceptional cases, usually where a great many members benefit.</dd>
+      <dt data-e="funding/dt/2">Who</dt>
+      <dd data-e="funding/dd/2">A current MCR member, studying for or recently finished a Cambridge postgraduate degree.</dd>
+      <dt data-e="funding/dt/3">When</dt>
+      <dd data-e="funding/dd/3">At least two months before the event. The committee meets fortnightly in term and usually decides at the next meeting.</dd>
+      <dt data-e="funding/dt/4">Where to send it</dt>
+      <dd data-e="funding/dd/4"><a href="mailto:academic@mcr.jesus.cam.ac.uk" data-eh="funding/a/1">academic@mcr.jesus.cam.ac.uk</a></dd>
+    </dl>
     <a class="btn" href="mailto:academic@mcr.jesus.cam.ac.uk" data-eh="funding/a/2">Email the Academic Officer</a>
   </div>
 
-  <div class="grid" data-rise>
-    <div class="card" data-rise>
-      <h3 data-e="funding/h3/1">Who can apply</h3>
-      <p data-e="funding/p/4">Successful applicants must meet <strong>both</strong> criteria:</p>
-      <ol class="list">
-        <li data-e="funding/li/1">be a current member of the Jesus College MCR</li>
-        <li data-e="funding/li/2">be studying for, or have recently completed, a postgraduate degree at the University of Cambridge at the time of the proposed event.</li>
-      </ol>
-    </div>
-    <div class="card" data-rise>
-      <h3 data-e="funding/h3/2">What to include</h3>
-      <p data-e="funding/p/5">Applications should say how the money is to be used. To aid the decision, provide:</p>
-      <ul class="list">
-        <li data-e="funding/li/3">the theme of the conference</li>
-        <li data-e="funding/li/4">the date and location</li>
-        <li data-e="funding/li/5">speakers, if known</li>
-        <li data-e="funding/li/6">a breakdown of estimated costs.</li>
-      </ul>
-    </div>
-  </div>
-
   <div class="card" data-rise>
-    <h2 data-e="funding/h2/2">What the fund covers</h2>
-    <p data-e="funding/p/6">Applicants may request funding for the following expenses related to the event they propose to organise:</p>
+    <h2 data-e="funding/h2/2">Your <i>application</i></h2>
+    <h3 data-e="funding/h3/1">Who can apply</h3>
+    <p data-e="funding/p/4">Both of these, not either:</p>
+    <ol class="list">
+      <li data-e="funding/li/1">a current member of the Jesus College MCR;</li>
+      <li data-e="funding/li/2">studying for, or recently finished, a postgraduate degree at Cambridge at the time of the event.</li>
+    </ol>
+    <h3 data-e="funding/h3/2">What to send</h3>
+    <p data-e="funding/p/5">An email saying what the money is for, with:</p>
     <ul class="list">
-      <li data-e="funding/li/7">transport for speakers (not including air travel)</li>
-      <li data-e="funding/li/8">refreshments provided to attendees</li>
-      <li data-e="funding/li/9">the hiring of function rooms</li>
-      <li data-e="funding/li/10">costs associated with promoting the event</li>
-      <li data-e="funding/li/11">other reasonable associated costs.</li>
+      <li data-e="funding/li/3">the theme of the conference;</li>
+      <li data-e="funding/li/4">the date and the location;</li>
+      <li data-e="funding/li/5">speakers, if you know them yet;</li>
+      <li data-e="funding/li/6">a breakdown of estimated costs, item by item.</li>
     </ul>
-    <p data-e="funding/p/7">Estimates for each item should be listed. Where possible, the event should be held at Jesus College and be open to members of the Jesus postgraduate community.</p>
+    <h3 data-e="funding/h3/3">What the money can go on</h3>
+    <ul class="list">
+      <li data-e="funding/li/7">transport for speakers;</li>
+      <li data-e="funding/li/8">refreshments for those attending;</li>
+      <li data-e="funding/li/9">hiring function rooms;</li>
+      <li data-e="funding/li/10">promoting the event;</li>
+      <li data-e="funding/li/11">other reasonable costs that come with it.</li>
+    </ul>
+    <div class="note" data-rise>Air travel is not covered. Where it can be, the event should be held at Jesus and open to the Jesus postgraduate community.</div>
   </div>
 
   <div class="card" data-rise>
     <h2 data-e="funding/h2/3">How applications are decided</h2>
-    <p data-e="funding/p/8">Awards are granted per student-led academic event, and successful applications will be awarded funding <strong>between £100 and £300</strong> in most cases. Under exceptional circumstances a larger sum may be granted, this may be the case for events that benefit a large number of MCR members.</p>
-    <p data-e="funding/p/9">Applications are considered case by case by the MCR Committee, which meets fortnightly during term. In most circumstances an application is considered at the meeting following its submission. The Committee may choose to seek the advice of the graduate tutors before granting an award. To allow sufficient processing time, applications should generally be submitted well in advance of the event. <strong>in most cases at least two months prior</strong>.</p>
-    <p data-e="funding/p/10">The Committee will endeavour to support, at least in part, all applications that meet the criteria. However, total funding is limited and we regret that it may not be possible to accept all applications. Applications for events or groups that have not previously received MCR funding will be prioritised.</p>
+    <p data-e="funding/p/9">Each application is taken on its own terms by the committee, usually at the meeting following its arrival, and the graduate tutors are sometimes asked for a view first.</p>
+    <p data-e="funding/p/10">The fund is finite, so an event or a group that has not had MCR money before is prioritised over one that has.</p>
   </div>
 
   <div class="card" data-rise>
     <h2 data-e="funding/h2/4">Payment</h2>
-    <p data-e="funding/p/11">All funding requested should be fully documented, with receipts kept. However, the Committee understands that student-led conferences may not be feasible if funding is not provided upfront. Funding can therefore be requested upfront, but receipts will be required to document all spending claimed. Successful applicants will hear from the MCR Treasurer to arrange the transfer of funds.</p>
+    <p data-e="funding/p/11">You can ask for the money upfront, because a conference that has to be paid for first often cannot happen at all. Keep every receipt either way. The Treasurer will be in touch to arrange the transfer.</p>
   </div>
 
   <div class="card quiet" data-rise>
     <h2 data-e="funding/h2/5">Previous conferences</h2>
-    <p data-e="funding/p/12">Reports on the initiatives supported by the fund:</p>
-    <a class="btn ghost" href="mcr-assets/Student-led-Conferences-Report.pdf" target="_blank" rel="noopener" data-eh="funding/a/3">2021 to 22 report (PDF)</a>
-    <a class="btn ghost" href="mcr-assets/2023-24-Student-Conferences-1.docx" target="_blank" rel="noopener" data-eh="funding/a/4">2023 to 24 report (DOCX)</a>
+    <p data-e="funding/p/12">If you are weighing up whether your event is the sort of thing the fund pays for, these are the answer.</p>
+    <div class="linkgrid">
+      <a class="linkcard" href="mcr-assets/Student-led-Conferences-Report.pdf" target="_blank" rel="noopener" data-eh="funding/a/3"><span class="t"><b>2021 to 22</b><span>What the fund paid for that year, and what the events turned out to be.</span><em>PDF</em></span><span class="arw">&#8599;</span></a>
+      <a class="linkcard" href="mcr-assets/2023-24-Student-Conferences-1.docx" target="_blank" rel="noopener" data-eh="funding/a/4"><span class="t"><b>2023 to 24</b><span>The same, two years on, with the costs written out.</span><em>DOCX</em></span><span class="arw">&#8599;</span></a>
+    </div>
   </div>
 </section>
 
@@ -1467,8 +1623,8 @@ body.reframing img.reframe:active{cursor:grabbing}
 <section class="pg" id="sustainability" hidden>
   <div class="pg-head">
     <p class="eyebrow" data-rise data-e="sustainability/p/1">Green affairs</p>
-    <h1 data-rise data-e="sustainability/h1/1">Sustainability</h1>
-    <p class="lede" data-rise data-e="sustainability/p/2">There are lots of ways MCR members can reduce their impact on the planet while studying and living in Cambridge.</p>
+    <h1 data-rise data-e="sustainability/h1/1"><i>Sustainability</i></h1>
+    <p class="lede" data-rise data-e="sustainability/p/2">Plenty of small things are worth doing while you are here, and the College has committed to three large ones with dates attached.</p>
   </div>
 
   <figure class="hero" data-rise><img src="mcr-assets/col-garden.jpg" alt="The College gardens" loading="lazy" data-e="sustainability/img/1"><figcaption data-e="sustainability/figcaption/1">Photograph: Jesus College.</figcaption></figure>
@@ -1485,7 +1641,7 @@ body.reframing img.reframe:active{cursor:grabbing}
     <dl class="kv">
       <dt data-e="sustainability/dt/1">2021</dt><dd data-e="sustainability/dd/1"><a href="mcr-assets/Sustainability-20Strategy-202020-2030.pdf" target="_blank" rel="noopener" data-eh="sustainability/a/4">Sustainability Strategy 2020 to 30</a> and <a href="mcr-assets/Responsible-20Investment-20Policy.pdf" target="_blank" rel="noopener" data-eh="sustainability/a/5">Responsible Investment Policy</a></dd>
       <dt data-e="sustainability/dt/2">2022</dt><dd data-e="sustainability/dd/2"><a href="mcr-assets/july_2022_sustainability_strategy_progress_report.pdf" target="_blank" rel="noopener" data-eh="sustainability/a/6">First Sustainability Strategy Progress Report</a> and <a href="https://www.jesus.cam.ac.uk/articles/jesus-college-discusses-decarbonisation-report-and-challenges-reaching-net-zero" target="_blank" rel="noopener" data-eh="sustainability/a/7">Decarbonisation Report</a></dd>
-      <dt data-e="sustainability/dt/3">2023</dt><dd data-e="sustainability/dd/3"><a href="mcr-assets/sustainable_travel_strategy.pdf" target="_blank" rel="noopener" data-eh="sustainability/a/8">Sustainable Transport Strategy 2020 to 30</a> and the <a href="mcr-assets/a-z_of_sustainability.pdf" target="_blank" rel="noopener" data-eh="sustainability/a/9">A to Z of sustainability</a></dd>
+      <dt data-e="sustainability/dt/3">2023</dt><dd data-e="sustainability/dd/3"><a href="mcr-assets/sustainable_travel_strategy.pdf" target="_blank" rel="noopener" data-eh="sustainability/a/8">Sustainable Transport Strategy 2020 to 30</a></dd>
       <dt data-e="sustainability/dt/4">2024</dt><dd data-e="sustainability/dd/4"><a href="mcr-assets/2024_second_sustainability_strategy_progress_report.pdf" target="_blank" rel="noopener" data-eh="sustainability/a/10">Second Sustainability Strategy Progress Report</a></dd>
     </dl>
   </div>
@@ -1493,68 +1649,85 @@ body.reframing img.reframe:active{cursor:grabbing}
   <div class="card" data-rise>
     <h2 data-e="sustainability/h2/3">Investment policy</h2>
     <p data-e="sustainability/p/5">In June 2021 the College released a <a href="mcr-assets/Responsible-20Investment-20Policy.pdf" target="_blank" rel="noopener" data-eh="sustainability/a/11">Responsible Investment Policy</a>. Its key commitments are to:</p>
-    <ul class="list">
-      <li data-e="sustainability/li/1">eliminate any meaningful fossil fuel exposure in financial investments by the end of 2022</li>
-      <li data-e="sustainability/li/2">target net zero carbon in financial investments by 2038</li>
-      <li data-e="sustainability/li/3">target net zero carbon in property investments by 2050.</li>
-    </ul>
+    <div class="stat">
+      <div><b>2022</b><span>Fossil fuel exposure out</span></div>
+      <div><b>2038</b><span>Net zero, investments</span></div>
+      <div><b>2050</b><span>Net zero, property</span></div>
+    </div>
   </div>
 </section>
 
 <section class="pg" id="welfare" hidden>
   <div class="pg-head">
     <p class="eyebrow" data-rise data-e="welfare/p/1">Support</p>
-    <h1 data-rise data-e="welfare/h1/1">Welfare</h1>
-    <p class="lede" data-rise data-e="welfare/p/2">There is a wide range of help and support services available to all students at the University. The links below cover people and services you can contact for a variety of welfare issues.</p>
+    <h1 data-rise data-e="welfare/h1/1"><i>Welfare</i></h1>
+    <p class="lede" data-rise data-e="welfare/p/2">Somebody is on duty every hour of the year, and the Lodge will find them. Everything below is the longer answer: who to ask, what they look after, and the numbers worth having in your phone before you need them.</p>
   </div>
 
-  <figure class="hero" data-rise><img src="mcr-assets/col-library.jpg" alt="The Quincentenary Library reading room" loading="lazy" data-e="welfare/img/1"><figcaption data-e="welfare/figcaption/1">Photograph: Jesus College.</figcaption></figure>
+  <div class="card alert" data-rise>
+    <h2 data-e="welfare/h2/2">If it cannot wait</h2>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th data-e="welfare/th/1">Who</th><th data-e="welfare/th/2">Contact</th></tr></thead>
+      <tbody>
+        <tr><td data-e="welfare/td/1">Emergency services &#8212; crime, fire, or anything medical and serious</td><td data-e="welfare/td/2"><a href="tel:999" data-eh="welfare/a/21">999</a></td></tr>
+        <tr><td data-e="welfare/td/3">Porters’ Lodge, every hour of the year</td><td data-e="welfare/td/4"><a href="tel:01223339339" data-eh="welfare/a/22">01223 339339</a></td></tr>
+        <tr><td data-e="welfare/td/5">Welfare Tutor on duty, any hour</td><td data-e="welfare/td/6">Ask the Lodge — <a href="tel:01223339339" data-eh="welfare/a/23">01223 339339</a></td></tr>
+      </tbody>
+    </table></div>
+    <p data-e="welfare/p/8">Ring the Lodge as well as 999, so the College knows. There is a Welfare Tutor on duty every hour of the year and the Porters know who it is. Accident and Emergency at Addenbrooke’s is for loss of consciousness, severe chest pain, serious accidents and broken bones, heavy bleeding, and anything else life-threatening.</p>
+  </div>
+
+  <figure class="hero" data-rise><img src="mcr-assets/col-welfare.jpg" alt="Two students talking over coffee" loading="lazy" data-e="welfare/img/1"><figcaption data-e="welfare/figcaption/1">Photograph: Jesus College.</figcaption></figure>
 
   <div class="card" data-rise>
     <h2 data-e="welfare/h2/1">Who to contact</h2>
-    <p data-e="welfare/p/3">If you have any comments on these resources, or feel that we have missed something, please contact the <a href="#committee" data-eh="welfare/a/1">Welfare Officers</a>. (See “Anonymous contact” below if you want to do this anonymously.)</p>
-    <p data-e="welfare/p/4">The members of the MCR Welfare team (welfare officers, international officer and LGBT liaison) can be contacted by email, pigeonhole, or in person. You can find out who they are on the <a href="#committee" data-eh="welfare/a/2">Committee</a> page.</p>
+    <p data-e="welfare/p/4">The MCR welfare team — the two Welfare Officers, the International Officer and the LGBT+ Liaison — can be reached by email, by pigeonhole, or in person. Their names and addresses are on the <a href="#committee" data-eh="welfare/a/2">Committee</a> page, and you can write to them without giving your name (see below).</p>
     <p data-e="welfare/p/5">There is useful information on the College’s <a href="https://jnet.jesus.cam.ac.uk/jnet/students/health-and-welfare" target="_blank" rel="noopener" data-eh="welfare/a/3">welfare pages</a>. You can also find welfare advice from the <a href="https://www.gradunion.cam.ac.uk" target="_blank" rel="noopener" data-eh="welfare/a/4">Graduate Union</a> and the <a href="https://www.cambridgesu.co.uk/support/" target="_blank" rel="noopener" data-eh="welfare/a/5">Cambridge University Students’ Union</a>, as well as the <a href="https://www.cambridgesu.co.uk/support/advice/" target="_blank" rel="noopener" data-eh="welfare/a/6">Student Advice Service</a>.</p>
     <p data-e="welfare/p/6">You can also find more specific information from the MCR about <a href="#counselling" data-eh="welfare/a/7">counselling and advice</a> and <a href="#sexual-health" data-eh="welfare/a/8">sexual health</a>, as well as information for those with <a href="#families" data-eh="welfare/a/9">families and/or partners in Cambridge</a>.</p>
   </div>
 
-  <div class="card alert" data-rise>
-    <h2 data-e="welfare/h2/2">Accidents and Emergencies</h2>
-    <p data-e="welfare/p/7">Sometimes things happen during the course of the year that we never expect, so it helps to know who to contact when we get into these situations.</p>
-    <p data-e="welfare/p/8">If you find there is a serious emergency (i.e. crime, medical or fire) you can call the emergency services by dialling <strong>999</strong>. It is always a good idea to call the Porters’ Lodge as well, on <strong>01223 339339</strong>, to inform them of the emergency so the College is made aware.</p>
-  </div>
-
   <div class="card" data-rise>
     <h2 data-e="welfare/h2/3">Everyday incidents and support</h2>
-    <p data-e="welfare/p/9">For most incidents the people to call are the Porters. They can be reached either by calling <strong>01223 339339</strong> or dropping by the Porters’ Lodge. They will be able to help out with many situations, or at least tell you who you should call if they can’t help.</p>
-    <p data-e="welfare/p/10">To access mental health support, a good first port of call is the College’s <a href="https://jnet.jesus.cam.ac.uk/jnet/students/health-and-welfare" target="_blank" rel="noopener" data-eh="welfare/a/10">welfare pages</a>, which list the various channels through which you can get help. There is a Welfare Tutor on duty 24/7/365, the Porters are able to advise on who is currently on duty if you call in to the Lodge or telephone <strong>01223 339339</strong>.</p>
+    <p data-e="welfare/p/9">For most incidents the people to call are the Porters. They can be reached on <strong><a href="tel:01223339339" data-eh="welfare/a/25">01223 339339</a></strong> or at the Porters’ Lodge itself. They will be able to help out with many situations, or at least tell you who you should call if they can’t help.</p>
+    <p data-e="welfare/p/10">To access mental health support, a good first port of call is the College’s <a href="https://jnet.jesus.cam.ac.uk/jnet/students/health-and-welfare" target="_blank" rel="noopener" data-eh="welfare/a/10">welfare pages</a>, which list the various channels through which you can get help. There is a Welfare Tutor on duty 24/7/365, the Porters know who is currently on duty, in the Lodge or on <strong><a href="tel:01223339339" data-eh="welfare/a/26">01223 339339</a></strong>.</p>
     <p data-e="welfare/p/11">If you are having problems with the building you are living in (i.e. maintenance problems) you can report these online at <a href="https://jnet.jesus.cam.ac.uk/jnet/college-information/submit-maintenance-request" target="_blank" rel="noopener" data-eh="welfare/a/11">JNet</a> or to the housekeepers. If you have any other questions or concerns, feel free to contact any member of the <a href="#committee" data-eh="welfare/a/12">MCR Committee</a>, and we will do our best to help.</p>
   </div>
 
   <div class="card" data-rise>
-    <h2 data-e="welfare/h2/4">Anonymous contact</h2>
-    <p data-e="welfare/p/12">We realise that sometimes you might want support without the Welfare Officers knowing who you are. There’s a service called Hushmail which allows you to create an anonymous email address which forwards to your own email address.</p>
-    <ul class="list">
-      <li data-e="welfare/li/1">Go to <a href="http://www.hushmail.com/signup" target="_blank" rel="noopener" data-eh="welfare/a/13">hushmail.com/signup</a>.</li>
-      <li data-e="welfare/li/2">Choose an email address and password.</li>
-      <li data-e="welfare/li/3">Using Hushmail, send an email to the relevant officer. (You can find all their email addresses on the <a href="#committee" data-eh="welfare/a/14">Committee</a> page, right-click on the position of the person you want to contact and you’ll be able to copy the email address.)</li>
-      <li data-e="welfare/li/4">The Welfare Officer will email you back at your anonymous Hushmail address.</li>
-    </ul>
+    <h2 data-e="welfare/h2/4">Saying it without saying who you are</h2>
+    <p data-e="welfare/p/12">You do not have to put your name to a welfare message. In the app, a welfare thread goes to one officer and the President and to nobody else, and there is a box to tick that keeps your name off it. They can still write back; they just will not know who you are.</p>
+    <div class="doorway" data-rise>
+      <div class="t">
+        <b data-e="welfare/b/1">Anonymous welfare messages</b>
+        <p data-e="welfare/p/24">Ask something, or say something, without your name attached. Nothing on this public page can do that — the app can.</p>
+      </div>
+      <a class="enter" href="#" data-enter aria-label="Enter the intranet" data-eh="welfare/a/13">
+        <svg viewBox="0 0 24 24"><path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M15 8.5 18.5 12 15 15.5"/><path d="M18.5 12H10"/></svg>
+        <span>Open the app</span>
+      </a>
+    </div>
+    <p data-e="welfare/p/25">If you would rather not use the app at all, every officer’s address is on the <a href="#committee" data-eh="welfare/a/14">Committee</a> page, and the <a href="https://www.cambridgesu.co.uk/support/advice/" target="_blank" rel="noopener" data-eh="welfare/a/24">SU Student Advice Service</a> sits entirely outside the College.</p>
   </div>
 
   <div class="card" data-rise>
     <h2 data-e="welfare/h2/5">Security</h2>
     <p data-e="welfare/p/13">Cambridge may appear quiet and safe, but even so, security measures are important. There is no need to panic, but we want you to be alert to potential risks, especially at night. Avoid the public parks after dark. Also, if you see anything suspicious around College, please contact the Porters.</p>
-    <p data-e="welfare/p/14">The main pedestrian entrance to the College (the large wooden doors at the end of the ‘Chimney’) is locked at midnight during term. Access to College can be found by the vehicle exit gate on Jesus Lane (next to the housekeeping office), the vehicle entry gate on Victoria Avenue, and via the gate at the end of Lower Park Street, all by swiping your University card in front of the reader. All gates are opened at 5.30am. Those of you who will live in Lower Park Street will be able to get a key to the back gates from the Porters, upon payment of a deposit of £10.</p>
-    <p data-e="welfare/p/15">Keep the following suggestions in mind:</p>
+    <h3 data-e="welfare/h3/3">Getting back in after midnight</h3>
+    <dl class="kv">
+      <dt data-e="welfare/dt/5">Main gate</dt>
+      <dd data-e="welfare/dd/5">The wooden doors at the end of the Chimney. Locked at midnight in term.</dd>
+      <dt data-e="welfare/dt/6">After midnight</dt>
+      <dd data-e="welfare/dd/6">Jesus Lane vehicle exit, Victoria Avenue vehicle entry, or the gate at the end of Lower Park Street — University card at the reader.</dd>
+      <dt data-e="welfare/dt/7">All gates open</dt>
+      <dd data-e="welfare/dd/7">5.30am.</dd>
+      <dt data-e="welfare/dt/8">Lower Park Street</dt>
+      <dd data-e="welfare/dd/8">If you live there, the Porters hold a back-gate key against a £10 deposit.</dd>
+    </dl>
+    <p data-e="welfare/p/15">Three things worth remembering, none of them Cambridge-specific except the last:</p>
     <ul class="list">
-      <li data-e="welfare/li/5">Avoid walking back alone, especially after heavy drinking. Try to leave in groups.</li>
-      <li data-e="welfare/li/6">Be alert and walk confidently.</li>
-      <li data-e="welfare/li/7">Stick to well-lit, busy areas.</li>
-      <li data-e="welfare/li/8">Walk in the centre of the pavement away from bushes and shop doors.</li>
-      <li data-e="welfare/li/9">Try to avoid subways (e.g. on Newmarket Road and Elizabeth Way).</li>
-      <li data-e="welfare/li/10">Walk towards oncoming traffic. This way you will be fully aware if a car stops near you.</li>
-      <li data-e="welfare/li/11">If you think you’re being followed, cross the road. If you are still worried, go to a busy area like a petrol station, pub or restaurant and ask for help.</li>
+      <li data-e="welfare/li/5">Walk back in a group rather than alone, particularly after a night of drinking.</li>
+      <li data-e="welfare/li/6">Keep out of the public parks after dark and stick to the lit, busy routes.</li>
+      <li data-e="welfare/li/7">Tell the Porters about anything that seems off in College. That is what they are for, and it is never a bother.</li>
     </ul>
   </div>
 
@@ -1565,26 +1738,25 @@ body.reframing img.reframe:active{cursor:grabbing}
     </div>
     <div class="card" data-rise>
       <h3 data-e="welfare/h3/2">Alcohol</h3>
-      <p data-e="welfare/p/17">There can be a lot of alcohol about in the first few weeks, much of which is provided by a wide variety of clubs and societies. The consumption of alcoholic beverages seems to represent a common social lubricant of Cambridge life. But don’t be intimidated or put off, as it is always optional, the choice of not drinking, whether for religious, personal, health or cultural reasons, is one that is universally respected, and becoming more common. Non-alcoholic drinks are available at all MCR events and it is perfectly accepted to turn up to an event with alcohol and just enjoy others’ company!</p>
+      <p data-e="welfare/p/17">There is a lot of drink about in the first few weeks and none of it is compulsory. Nobody at Jesus is expected to drink, for any reason or for none, and there are non-alcoholic drinks at every MCR event.</p>
     </div>
   </div>
 
   <div class="card" data-rise>
     <h2 data-e="welfare/h2/6">Doctors’ Surgery and College Nurse</h2>
-    <p data-e="welfare/p/18">Accident and Emergency (A&amp;E) at Addenbrooke’s Hospital deals with emergencies such as loss of consciousness, severe chest pain, serious accidents including broken bones, serious blood loss, and other life-threatening circumstances.</p>
     <dl class="kv">
       <dt data-e="welfare/dt/1">College Nurse</dt>
       <dd data-e="welfare/dd/1">Mrs Jacky Poskitt</dd>
       <dt data-e="welfare/dt/2">Email</dt>
       <dd data-e="welfare/dd/2"><a href="mailto:college-nurse@jesus.cam.ac.uk" data-eh="welfare/a/15">college-nurse@jesus.cam.ac.uk</a></dd>
       <dt data-e="welfare/dt/3">Telephone</dt>
-      <dd data-e="welfare/dd/3">Surgery: 01223 339450, mobile: 0750 088 3448</dd>
+      <dd data-e="welfare/dd/3">Surgery <a href="tel:01223339450" data-eh="welfare/a/27">01223 339450</a>, mobile <a href="tel:07500883448" data-eh="welfare/a/28">0750 088 3448</a></dd>
       <dt data-e="welfare/dt/4">Web page</dt>
       <dd data-e="welfare/dd/4"><a href="https://jnet.jesus.cam.ac.uk/jnet/students/health-and-welfare/college-nurse-and-physio" target="_blank" rel="noopener" data-eh="welfare/a/16">College Nurse and Physio on JNet</a></dd>
     </dl>
-    <p data-e="welfare/p/19">You must register with the College Nurse so that she can help you during your studies at Cambridge. When you first arrive at College you are asked to complete a form, which is kept confidentially in the College Nurse’s office. In the UK you must register with a National Health Service General Practitioner (GP), )here are <a href="https://www.nhs.uk/service-search/find-a-gp/results/CB5%208BL" target="_blank" rel="noopener" data-eh="welfare/a/17">lots nearby</a>. You should let the College Nurse know which one you’ve registered with, for her records.</p>
+    <p data-e="welfare/p/19">You must register with the College Nurse so that she can help you during your studies at Cambridge. When you first arrive at College you are asked to complete a form, which is kept confidentially in the College Nurse’s office. In the UK you must register with a National Health Service General Practitioner (GP) — there are <a href="https://www.nhs.uk/service-search/find-a-gp/results/CB5%208BL" target="_blank" rel="noopener" data-eh="welfare/a/17">lots nearby</a>. You should let the College Nurse know which one you’ve registered with, for her records.</p>
     <p data-e="welfare/p/20">If you have any concerns about your own health or that of a colleague or housemate, please contact the College Nurse on one of the telephone numbers shown above or attend one of her surgeries. The College Nurse is located on the ground floor of Staircase 1, Library Court. Please inform the porters if you are unwell. The Porters’ Lodge is open 24/7 and all Porters are trained First Aiders.</p>
-    <p data-e="welfare/p/21">If any of your personal health details should change, it is important that the College Nurse is kept informed. Any student (or partner of a Jesus student living in College) should notify the College Nurse if they or their partner become pregnant. In these circumstances, if a parent or another family member comes to help and stays in the College house, the Graduate Tutor needs to give permission and the Tutorial Office and Porters’ Lodge need to record their presence for security and safety reasons.</p>
+    <p data-e="welfare/p/21">If any of your personal health details should change, it is important that the College Nurse is kept informed. Any student (or partner of a Jesus student living in College) should notify the College Nurse if they or their partner become pregnant. If a parent or another relative comes to stay in a College house to help, the Graduate Tutor has to give permission and the Tutorial Office and the Lodge record that they are there.</p>
   </div>
 
   <div class="card" data-rise>
@@ -1596,27 +1768,37 @@ body.reframing img.reframe:active{cursor:grabbing}
     <h2 data-e="welfare/h2/8">Harassment</h2>
     <p data-e="welfare/p/23">Jesus College has an ethos of tolerance, friendliness and consideration for others. You should never have to put up with anyone else’s bullying or harassing behaviour. Should you feel that you are being harassed don’t hesitate to speak to a member of the <a href="#committee" data-eh="welfare/a/19">Committee</a>, in particular the Welfare officers, International officer, any member of the JCSU welfare committee, or any of the Welfare Tutors (contact the Porter’s Lodge to find out who is on duty). All can offer confidential advice. Your problems will be taken seriously and procedures are in place should you wish to make an official complaint. We can also direct you to further support or counselling services if needed. The College has an official policy on <a href="https://jnet.jesus.cam.ac.uk/jnet/college-information/policies-and-guidelines/students/handling-cases-harassment-or-sexual" target="_blank" rel="noopener" data-eh="welfare/a/20">harassment</a>.</p>
   </div>
+
+  <p class="tag" data-rise data-e="welfare/tag/1">The rest of the support pages</p>
+  <div class="jgrid" data-rise>
+    <a class="jc" href="#counselling" data-eh="welfare/x/1"><b>Counselling and advice</b><span>Tutors, the counselling service, Linkline and the Samaritans.</span><i>Support</i></a>
+    <a class="jc" href="#sexual-health" data-eh="welfare/x/2"><b>Sexual health</b><span>Free supplies, Clinic 1A, and help after an assault.</span><i>Support</i></a>
+    <a class="jc" href="#families" data-eh="welfare/x/3"><b>Families and partners</b><span>Partners, childcare, and the Newcomers’ Group.</span><i>Support</i></a>
+  </div>
 </section>
 <section class="pg" id="counselling" hidden>
   <div class="pg-head">
     <p class="eyebrow" data-rise data-e="counselling/p/1">Support</p>
-    <h1 data-rise data-e="counselling/h1/1">Counselling and Advice</h1>
-    <p class="lede" data-rise data-e="counselling/p/2">The College and the University offer a wide range of counselling services for any situation.</p>
+    <h1 data-rise data-e="counselling/h1/1">Counselling and <i>Advice</i></h1>
+    <p class="lede" data-rise data-e="counselling/p/2">Somebody will listen at any hour, and you do not need a diagnosis, a reason or an appointment to start. The numbers are below; everything after them is the longer version.</p>
   </div>
 
-  <div class="card" data-rise>
-    <h2 data-e="counselling/h2/1">JNet: Health and Welfare</h2>
-    <p data-e="counselling/p/3">JNet has a section on <a href="https://jnet.jesus.cam.ac.uk/jnet/students/health-and-welfare" target="_blank" rel="noopener" data-eh="counselling/a/1">Health and Welfare</a>, including <a href="https://jnet.jesus.cam.ac.uk/jnet/students/health-and-welfare/welfare-support-pathways" target="_blank" rel="noopener" data-eh="counselling/a/2">this page</a> which has an extensive list of wide-ranging support for things like bereavement, anxiety, BME specific support, depression, eating disorders, and more. <a href="https://jnet.jesus.cam.ac.uk/jnet/students/health-and-welfare/reporting-harassment-and-assault" target="_blank" rel="noopener" data-eh="counselling/a/3">Reporting harassment and assault</a> is also a page on JNet which you might find useful. It has:</p>
-    <ul class="list">
-      <li data-e="counselling/li/1">A link to the University’s <a href="https://reportandsupport.cam.ac.uk/" target="_blank" rel="noopener" data-eh="counselling/a/4">Report+Support</a>.</li>
-      <li data-e="counselling/li/2">A document detailing the <a href="https://jnet.jesus.cam.ac.uk/jnet/college-information/policies-and-guidelines/students/student-complaints-procedure" target="_blank" rel="noopener" data-eh="counselling/a/5">student complaints procedure</a>, should you need to escalate matters.</li>
-      <li data-e="counselling/li/3">A document for <a href="https://jnet.jesus.cam.ac.uk/jnet/college-information/policies-and-guidelines/students/handling-cases-misconduct" target="_blank" rel="noopener" data-eh="counselling/a/6">handling reports of physical misconduct, sexual misconduct or abusive behaviour</a> raised by students about other students.</li>
-    </ul>
+  <div class="card alert" data-rise>
+    <h2 data-e="counselling/h2/1">Somebody to talk to, tonight</h2>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th data-e="counselling/th/1">Who</th><th data-e="counselling/th/2">Contact</th></tr></thead>
+      <tbody>
+        <tr><td data-e="counselling/td/1">Welfare Tutor on duty, any hour of the year</td><td data-e="counselling/td/2">Porters’ Lodge, <a href="tel:01223339339" data-eh="counselling/a/21">01223 339339</a></td></tr>
+        <tr><td data-e="counselling/td/3">Linkline — students, listening, not advising. 7pm to 7am in full term</td><td data-e="counselling/td/4"><a href="tel:01223744444" data-eh="counselling/a/22">01223 744444</a></td></tr>
+        <tr><td data-e="counselling/td/5">Samaritans, day or night, crisis or not</td><td data-e="counselling/td/6"><a href="tel:116123" data-eh="counselling/a/23">116 123</a></td></tr>
+      </tbody>
+    </table></div>
+    <p data-e="counselling/p/17">None of these three needs a reason, a referral or an appointment, and none of them will tell the College anything you have not asked them to.</p>
   </div>
 
   <div class="card" data-rise>
     <h2 data-e="counselling/h2/2">Welfare Tutors</h2>
-    <p data-e="counselling/p/4">The <a href="https://jnet.jesus.cam.ac.uk/jnet/students/health-and-welfare/welfare-tutors" target="_blank" rel="noopener" data-eh="counselling/a/7">Welfare Tutors</a> are available to listen and to offer help with any problems that are not purely academic or administrative. Undergraduates and postgraduates are welcome to contact any of them. Every day in term time there is a Welfare Tutor on duty who can be contacted whatever the hour in case of an emergency or urgent problem via the Porters’ Lodge (<strong>339339</strong>). Out of term please contact either the Porters’ Lodge or the Tutorial Department (N Staircase. <strong>339468</strong>).</p>
+    <p data-e="counselling/p/4">The <a href="https://jnet.jesus.cam.ac.uk/jnet/students/health-and-welfare/welfare-tutors" target="_blank" rel="noopener" data-eh="counselling/a/7">Welfare Tutors</a> are available to listen and to offer help with any problems that are not purely academic or administrative. Undergraduates and postgraduates are welcome to contact any of them. Every day in term time there is a Welfare Tutor on duty who can be contacted whatever the hour in case of an emergency or urgent problem through the Porters’ Lodge on <strong><a href="tel:01223339339" data-eh="counselling/a/25">01223 339339</a></strong>. Out of term, ring the Lodge or the Tutorial Department on N Staircase, <strong><a href="tel:01223339468" data-eh="counselling/a/26">01223 339468</a></strong>.</p>
   </div>
 
   <div class="card" data-rise>
@@ -1626,7 +1808,7 @@ body.reframing img.reframe:active{cursor:grabbing}
 
   <div class="card" data-rise>
     <h2 data-e="counselling/h2/4">Mental Health Nurse</h2>
-    <p data-e="counselling/p/6">Our new College mental health nurse, Rachel Michel, will be offering welfare support, assessments and advice on a range of mental health and wellbeing concerns, from academic stress to emotional difficulties. Looking after your mental health and wellbeing is really important and this service is not limited to people with diagnosed conditions, it’s available to all students who would like support to cope with any aspect of life. If more specialist support is advised, Rachel can sign-post you in the right direction.</p>
+    <p data-e="counselling/p/6">You do not need a diagnosis to book. Rachel Michel is the College mental health nurse, and she sees students about anything from academic stress to something that is simply not going well. If you would be better served elsewhere she will say so and point you there.</p>
     <dl class="kv">
       <dt data-e="counselling/dt/1">Email</dt>
       <dd data-e="counselling/dd/1"><a href="mailto:r.michel@jesus.cam.ac.uk" data-eh="counselling/a/9">r.michel@jesus.cam.ac.uk</a></dd>
@@ -1638,8 +1820,10 @@ body.reframing img.reframe:active{cursor:grabbing}
     <p data-e="counselling/p/7">Additional information on surgery times and contact details for the College nurse, mental health nurse and physiotherapist can be found <a href="https://jnet.jesus.cam.ac.uk/jnet/students/health-and-welfare/college-nurses-and-physio" target="_blank" rel="noopener" data-eh="counselling/a/10">here</a>.</p>
   </div>
 
+  <figure class="hero" data-rise><img src="mcr-assets/col-library.jpg" alt="The Quincentenary Library reading room" loading="lazy" data-e="counselling/img/1"><figcaption data-e="counselling/figcaption/1">The Quincentenary Library. The Personal Welfare shelf is at classmark PYW. Photograph: Jesus College.</figcaption></figure>
+
   <div class="card" data-rise>
-    <h2 data-e="counselling/h2/5">Library Resources</h2>
+    <h2 data-e="counselling/h2/5">The library’s own shelf</h2>
     <p data-e="counselling/p/8">The library has a Personal Welfare section in the building at classmark <strong>PYW</strong>. These books cover topics ranging from study help to personal welfare and may be browsed and borrowed as normal. We welcome suggestions to improve and expand this section.</p>
     <p data-e="counselling/p/9">You may also be interested in the following:</p>
     <ul class="list">
@@ -1653,58 +1837,96 @@ body.reframing img.reframe:active{cursor:grabbing}
 
   <div class="card" data-rise>
     <h2 data-e="counselling/h2/6">University Counselling Service</h2>
-    <p data-e="counselling/p/11">The <a href="http://www.counselling.cam.ac.uk/" target="_blank" rel="noopener" data-eh="counselling/a/15">University Counselling Service</a> provides free, confidential and professional counselling to all students. You can make an appointment online by filling in a pre-counselling form, or you can download a form, feel free to give as much or as little information as you are comfortable with. Any information you give will remain confidential within the Counselling Service and once you have submitted a form, the Counselling Service will contact you to arrange for you to see a suitable counsellor at a time that you can manage.</p>
+    <p data-e="counselling/p/11">The <a href="http://www.counselling.cam.ac.uk/" target="_blank" rel="noopener" data-eh="counselling/a/15">University Counselling Service</a> is free, confidential and open to every student. Book online; the form takes as much or as little as you want to give it, and they write back to arrange a time.</p>
     <p data-e="counselling/p/12">The Student Union provides a <a href="https://www.cambridgesu.co.uk/support/advice/" target="_blank" rel="noopener" data-eh="counselling/a/16">Student Advice Service</a> for confidential advice ranging from making friends through academic support to student finance.</p>
   </div>
 
   <div class="grid" data-rise>
     <div class="card" data-rise>
       <h3 data-e="counselling/h3/1">Linkline</h3>
-      <p data-e="counselling/p/13"><a href="http://www.linkline.org.uk" target="_blank" rel="noopener" data-eh="counselling/a/17">Linkline</a> is a telephone listening and information service (<strong>01223 744444</strong>) run by students for students in Cambridge. The telephone lines are open from 7pm until 7am each night during full term, and there will always be both a male and female volunteer available. Linkline is not a counselling service and so the volunteers won’t tell you what to do, but they will provide a confidential listening ear.</p>
+      <p data-e="counselling/p/13"><a href="http://www.linkline.org.uk" target="_blank" rel="noopener" data-eh="counselling/a/17">Linkline</a> is a listening service on <strong><a href="tel:01223744444" data-eh="counselling/a/27">01223 744444</a></strong>, run by students for students in Cambridge. The telephone lines are open from 7pm until 7am each night during full term, and there will always be both a male and female volunteer available. Linkline is not a counselling service and so the volunteers won’t tell you what to do, but they will provide a confidential listening ear.</p>
     </div>
     <div class="card" data-rise>
       <h3 data-e="counselling/h3/2">Samaritans</h3>
-      <p data-e="counselling/p/14">The <a href="http://www.samaritans.org.uk/" target="_blank" rel="noopener" data-eh="counselling/a/18">Samaritans</a> offer a confidential, round-the-clock listening ear, off the record, whatever is getting to you, you don’t have to be in crisis to get in touch. Call <strong>08457 909090</strong>.</p>
+      <p data-e="counselling/p/14">The <a href="http://www.samaritans.org.uk/" target="_blank" rel="noopener" data-eh="counselling/a/18">Samaritans</a> offer a confidential, round-the-clock listening ear, off the record, whatever is getting to you, you don’t have to be in crisis to get in touch. Call <strong><a href="tel:116123" data-eh="counselling/a/28">116 123</a></strong>, free, from any phone.</p>
     </div>
   </div>
 
   <div class="card" data-rise>
-    <h2 data-e="counselling/h2/7">Support within Cambridge (and beyond)</h2>
-    <p data-e="counselling/p/15">Please do take a look at the <a href="https://www.studentcomplaints.admin.cam.ac.uk/harassment-sexual-misconduct/i-want-know-more-about-universitys-policies/support-services-students" target="_blank" rel="noopener" data-eh="counselling/a/19">list of various kinds of support</a> accessible to all students. The list includes support for a range of difficulties including mental health struggles, and race, disability and/or gender based hate crimes.</p>
+    <h2 data-e="counselling/h2/7">Where to read more</h2>
+    <p data-e="counselling/p/15">Seven destinations, each one somebody else’s page rather than ours. The first three are the ones to start from if what happened involves another person.</p>
+    <div class="linkgrid">
+      <a class="linkcard" href="https://reportandsupport.cam.ac.uk/" target="_blank" rel="noopener" data-eh="counselling/a/19"><span class="t"><b>Report+Support</b><span>Report harassment or assault to the University, named or anonymously, and see your options first.</span><em>University</em></span><span class="arw">&#8599;</span></a>
+      <a class="linkcard" href="https://jnet.jesus.cam.ac.uk/jnet/students/health-and-welfare/reporting-harassment-and-assault" target="_blank" rel="noopener" data-eh="counselling/a/3"><span class="t"><b>Reporting harassment and assault</b><span>What the College itself does once you tell it, and who hears about it.</span><em>JNet</em></span><span class="arw">&#8599;</span></a>
+      <a class="linkcard" href="https://jnet.jesus.cam.ac.uk/jnet/college-information/policies-and-guidelines/students/handling-cases-misconduct" target="_blank" rel="noopener" data-eh="counselling/a/6"><span class="t"><b>Handling reports of misconduct</b><span>How a report about another student is handled, step by step.</span><em>JNet</em></span><span class="arw">&#8599;</span></a>
+      <a class="linkcard" href="https://jnet.jesus.cam.ac.uk/jnet/students/health-and-welfare/welfare-support-pathways" target="_blank" rel="noopener" data-eh="counselling/a/2"><span class="t"><b>Welfare support pathways</b><span>Bereavement, anxiety, depression, eating disorders, BME-specific support, and more.</span><em>JNet</em></span><span class="arw">&#8599;</span></a>
+      <a class="linkcard" href="https://www.studentcomplaints.admin.cam.ac.uk/harassment-sexual-misconduct/i-want-know-more-about-universitys-policies/support-services-students" target="_blank" rel="noopener" data-eh="counselling/a/24"><span class="t"><b>Support services for students</b><span>The University’s full list, including support after a race, disability or gender-based hate crime.</span><em>University</em></span><span class="arw">&#8599;</span></a>
+      <a class="linkcard" href="https://jnet.jesus.cam.ac.uk/jnet/college-information/policies-and-guidelines/students/student-complaints-procedure" target="_blank" rel="noopener" data-eh="counselling/a/5"><span class="t"><b>Student complaints procedure</b><span>If you have raised something and need to take it further.</span><em>JNet</em></span><span class="arw">&#8599;</span></a>
+      <a class="linkcard" href="http://www.counselling-directory.org.uk/" target="_blank" rel="noopener" data-eh="counselling/a/20"><span class="t"><b>Counselling Directory</b><span>Private counsellors around Cambridge, searchable by what you want to talk about.</span><em>External</em></span><span class="arw">&#8599;</span></a>
+    </div>
   </div>
 
-  <div class="card" data-rise>
-    <h2 data-e="counselling/h2/8">Professional Counsellors</h2>
-    <p data-e="counselling/p/16">There are many professional counsellors around Cambridge. <a href="http://www.counselling-directory.org.uk/" target="_blank" rel="noopener" data-eh="counselling/a/20">Counselling Directory</a> provides an easy way to find them.</p>
+  <p class="tag" data-rise data-e="counselling/tag/1">The rest of the support pages</p>
+  <div class="jgrid" data-rise>
+    <a class="jc" href="#welfare" data-eh="counselling/x/1"><b>Welfare</b><span>The officers, the Lodge, the nurse, and the gates after midnight.</span><i>Support</i></a>
+    <a class="jc" href="#sexual-health" data-eh="counselling/x/2"><b>Sexual health</b><span>Free supplies, Clinic 1A, and help after an assault.</span><i>Support</i></a>
+    <a class="jc" href="#families" data-eh="counselling/x/3"><b>Families and partners</b><span>Partners, childcare, and the Newcomers’ Group.</span><i>Support</i></a>
   </div>
 </section>
 <section class="pg" id="sexual-health" hidden>
   <div class="pg-head">
     <p class="eyebrow" data-rise data-e="sexual-health/p/1">Support</p>
-    <h1 data-rise data-e="sexual-health/h1/1">Sexual Health</h1>
-    <p class="lede" data-rise data-e="sexual-health/p/2">Jesus MCR is part of the CUSU Sexual Health Supply Scheme, giving members access to a range of free sexual health supplies, plus judgement-free information and support.</p>
+    <h1 data-rise data-e="sexual-health/h1/1">Sexual <i>Health</i></h1>
+    <p class="lede" data-rise data-e="sexual-health/p/2">Supplies are free and asking for them is nobody else’s business. Testing is confidential and filed by number rather than by name. And if something has happened, help does not depend on reporting it.</p>
+  </div>
+
+  <div class="card alert" data-rise>
+    <h2 data-e="sexual-health/h2/2">After an assault</h2>
+    <p data-e="sexual-health/p/8">Help does not depend on reporting anything, and none of it has to be decided tonight. These are the people to reach first, in whatever order suits you.</p>
+    <dl class="kv">
+      <dt data-e="sexual-health/dt/3">Women</dt>
+      <dd data-e="sexual-health/dd/3"><a href="http://cambridgerapecrisis.org.uk" target="_blank" rel="noopener" data-eh="sexual-health/a/5">Cambridge Rape Crisis Centre</a></dd>
+      <dt data-e="sexual-health/dt/4">Men</dt>
+      <dd data-e="sexual-health/dd/4"><a href="https://mkcharity.org" target="_blank" rel="noopener" data-eh="sexual-health/a/6">ManKind Counselling</a></dd>
+      <dt data-e="sexual-health/dt/5">In College, any hour</dt>
+      <dd data-e="sexual-health/dd/5">The Welfare Tutor on duty, through the Lodge — <a href="tel:01223339339" data-eh="sexual-health/a/7">01223 339339</a></dd>
+      <dt data-e="sexual-health/dt/6">Police</dt>
+      <dd data-e="sexual-health/dd/6"><a href="tel:999" data-eh="sexual-health/a/8">999</a> if it is happening now, otherwise <a href="tel:101" data-eh="sexual-health/a/9">101</a>. Cambridgeshire Police call out a specially trained officer.</dd>
+      <dt data-e="sexual-health/dt/7">Tests and treatment</dt>
+      <dd data-e="sexual-health/dd/7">Clinic 1A, <a href="tel:01223217774" data-eh="sexual-health/a/10">01223 217774</a></dd>
+      <dt data-e="sexual-health/dt/8">To read first</dt>
+      <dd data-e="sexual-health/dd/8"><a href="http://www.nhs.uk/Livewell/Sexualhealth/Pages/Sexualassault.aspx" target="_blank" rel="noopener" data-eh="sexual-health/a/4">Help after rape and sexual assault</a>, from the NHS</dd>
+    </dl>
+    <p data-e="sexual-health/p/9">One thing worth knowing that is easy to miss: the police medical examination does not test for pregnancy or for sexually transmitted infections. Those tests are done at a sexual health clinic, and Clinic 1A will do both.</p>
   </div>
 
   <div class="card" data-rise>
     <h2 data-e="sexual-health/h2/1">Free supplies</h2>
-    <p data-e="sexual-health/p/3">Jesus MCR is part of the <a href="https://www.cambridgesu.co.uk/support/sexualhealthscheme/" target="_blank" rel="noopener" data-eh="sexual-health/a/1">CUSU Sexual Health Supply Scheme</a>. This means the members of the MCR can access a range of sexual health supplies for free. You can obtain these supplies by visiting CUSU during office hours (at the New Museums Site) or by contacting one of the <a href="#committee" data-eh="sexual-health/a/2">MCR Welfare Officers</a>. Requests are filled confidentially and quickly (with 36 hours’ notice).</p>
-    <p data-e="sexual-health/p/4">The following items are available for free:</p>
+    <dl class="kv">
+      <dt data-e="sexual-health/dt/9">Cost</dt>
+      <dd data-e="sexual-health/dd/9">Nothing, to any MCR member.</dd>
+      <dt data-e="sexual-health/dt/10">Where</dt>
+      <dd data-e="sexual-health/dd/10">CUSU at the New Museums Site in office hours, or any <a href="#committee" data-eh="sexual-health/a/2">MCR Welfare Officer</a>.</dd>
+      <dt data-e="sexual-health/dt/11">Notice</dt>
+      <dd data-e="sexual-health/dd/11">36 hours. Requests are filled confidentially.</dd>
+    </dl>
+    <p data-e="sexual-health/p/4">Through the <a href="https://www.cambridgesu.co.uk/support/sexualhealthscheme/" target="_blank" rel="noopener" data-eh="sexual-health/a/1">CUSU Sexual Health Supply Scheme</a>, free:</p>
     <ul class="list">
       <li data-e="sexual-health/li/1">Condoms (standard, non-latex, trim, and large)</li>
       <li data-e="sexual-health/li/2">Lubricant sachets</li>
       <li data-e="sexual-health/li/3">Dental dams (standard and non-latex)</li>
       <li data-e="sexual-health/li/4">Pregnancy tests</li>
     </ul>
-    <p data-e="sexual-health/p/5">While unable to offer specific advice or suggestions, the welfare officers are able to provide judgement free, unbiased information about preventative contraception, emergency contraception, pregnancy support, and crisis support.</p>
+    <p data-e="sexual-health/p/5">The Welfare Officers cannot tell you what to do, but they can give you unbiased, judgement-free information on contraception, emergency contraception, pregnancy support and crisis support — and they will not repeat the conversation to anyone.</p>
   </div>
 
   <div class="grid" data-rise>
     <div class="card" data-rise>
       <h3 data-e="sexual-health/h3/1">STD Testing</h3>
-      <p data-e="sexual-health/p/6">Clinic 1A is the local GUM (Genito-Urinary Medicine) clinic at Addenbrooke’s hospital. Everything at Clinic 1A is totally confidential and filed by number, not name. Results (or even the fact that you have gone there) will not be passed onto your GP or anyone else without your consent.</p>
+      <p data-e="sexual-health/p/6">Everything at Clinic 1A is filed by number rather than by name. Neither your results nor the fact that you went reaches your GP, your College or anybody else without you saying so. It is the local GUM clinic, at Addenbrooke’s.</p>
       <dl class="kv">
         <dt data-e="sexual-health/dt/1">Appointments</dt>
-        <dd data-e="sexual-health/dd/1">01223 217774</dd>
+        <dd data-e="sexual-health/dd/1"><a href="tel:01223217774" data-eh="sexual-health/a/11">01223 217774</a></dd>
         <dt data-e="sexual-health/dt/2">Website</dt>
         <dd data-e="sexual-health/dd/2"><a href="http://www.cuh.org.uk/addenbrookes/patients/outpatients/clinics/clinic_1a.html" target="_blank" rel="noopener" data-eh="sexual-health/a/3">Clinic 1A</a></dd>
       </dl>
@@ -1715,53 +1937,56 @@ body.reframing img.reframe:active{cursor:grabbing}
     </div>
   </div>
 
-  <div class="card alert" data-rise>
-    <h2 data-e="sexual-health/h2/2">Rape, Sexual Assault, and Crises</h2>
-    <p data-e="sexual-health/p/8">If you are the victim of rape, sexual assault, or other crisis, it is important you seek help right away. The NHS has <a href="http://www.nhs.uk/Livewell/Sexualhealth/Pages/Sexualassault.aspx" target="_blank" rel="noopener" data-eh="sexual-health/a/4">important information for help after rape and sexual assault</a>.</p>
-    <p data-e="sexual-health/p/9">The Cambridgeshire Police force have specially trained police officers to deal with crimes of sexual violence. When someone contacts the police to report a sexual assault, the duty police officer will call out a specially trained officer who will then carry out the investigation. At the police station, the person reporting the attack will be interviewed (and a statement will be produced) and a medical examination performed.</p>
-    <p data-e="sexual-health/p/10">The woman or man involved has the right to have a friend with them while giving a statement. The police may ask personal questions, but no one should feel that they have to answer these if they are unable to do so. A detailed examination is performed to obtain evidence, and if a woman reports the crime a female police officer will be present. The medical examination does not include pregnancy testing or testing for any sexually transmitted disease. These tests can be carried out at any Sexual Health Clinic.</p>
-  </div>
 
-  <div class="card" data-rise>
-    <h2 data-e="sexual-health/h2/3">Sexual Assault Referral Centre</h2>
-    <dl class="kv">
-      <dt data-e="sexual-health/dt/3">Women</dt>
-      <dd data-e="sexual-health/dd/3"><a href="http://cambridgerapecrisis.org.uk" target="_blank" rel="noopener" data-eh="sexual-health/a/5">Cambridge Rape Crisis Centre</a></dd>
-      <dt data-e="sexual-health/dt/4">Men</dt>
-      <dd data-e="sexual-health/dd/4"><a href="https://mkcharity.org" target="_blank" rel="noopener" data-eh="sexual-health/a/6">ManKind Counseling</a></dd>
-    </dl>
+  <p class="tag" data-rise data-e="sexual-health/tag/1">The rest of the support pages</p>
+  <div class="jgrid" data-rise>
+    <a class="jc" href="#welfare" data-eh="sexual-health/x/1"><b>Welfare</b><span>The officers, the Lodge, the nurse, and the gates after midnight.</span><i>Support</i></a>
+    <a class="jc" href="#counselling" data-eh="sexual-health/x/2"><b>Counselling and advice</b><span>Tutors, the counselling service, Linkline and the Samaritans.</span><i>Support</i></a>
+    <a class="jc" href="#families" data-eh="sexual-health/x/3"><b>Families and partners</b><span>Partners, childcare, and the Newcomers’ Group.</span><i>Support</i></a>
   </div>
 </section>
 <section class="pg" id="families" hidden>
   <div class="pg-head">
     <p class="eyebrow" data-rise data-e="families/p/1">Support</p>
-    <h1 data-rise data-e="families/h1/1">Families and Partners</h1>
-    <p class="lede" data-rise data-e="families/p/2">Jesus College is a place for more than just postgraduate students. A fair number of students are here on a visiting basis or have brought families or partners with them.</p>
+    <h1 data-rise data-e="families/h1/1">Families and <i>Partners</i></h1>
+    <p class="lede" data-rise data-e="families/p/2">A good number of postgraduates arrive with a partner, or with children, or both. Three things are worth doing early; everything after them is detail.</p>
+  </div>
+
+  <div class="linkgrid" data-rise>
+    <a class="linkcard" href="https://forms.office.com/e/T3duXEPtHf" target="_blank" rel="noopener" data-eh="families/a/3"><span class="t"><b>Register a partner</b><span>Gym access, and Formal Hall as your guest.</span><em>Form</em></span><span class="arw">&#8599;</span></a>
+    <a class="linkcard" href="mailto:childcare@admin.cam.ac.uk" data-eh="families/a/5"><span class="t"><b>Join the Student Parent list</b><span>Coffee mornings, children’s activities across the city, second-hand kit.</span><em>Email to join</em></span><span class="arw">&#8599;</span></a>
+    <a class="linkcard" href="https://www.childcare.admin.cam.ac.uk" target="_blank" rel="noopener" data-eh="families/a/4"><span class="t"><b>Childcare Office bursaries</b><span>Help with unforeseen pre-school and after-school costs.</span><em>University</em></span><span class="arw">&#8599;</span></a>
   </div>
 
   <div class="card" data-rise>
     <h2 data-e="families/h2/1">Arriving with family</h2>
     <p data-e="families/p/3">If you have arrived with your family, you are welcome to inform the <a href="#committee" data-eh="families/a/1">Welfare Officers</a> who can assist you to get in touch with crèches, schools, baby-sitters and childminders.</p>
     <p data-e="families/p/4">The <a href="mailto:graduate-tutor@jesus.cam.ac.uk" data-eh="families/a/2">Senior Postgraduate Administrator</a> is the College’s childcare contact. They keep a contact list of student families with children, so please let them know if you wish to be added. Some events for Fellows and their families are organised by the College throughout the year, and postgraduate families are invited to many of them.</p>
-    <p data-e="families/p/5">MCR members can register partners to allow them to use the gym and attend Formal Halls as guests.</p>
-    <a class="btn" href="https://forms.office.com/e/T3duXEPtHf" target="_blank" rel="noopener" data-eh="families/a/3">Register a partner</a>
+    <p data-e="families/p/5">A registered partner can use the gym and come to Formal Hall as your guest. The form is above.</p>
   </div>
 
   <div class="card" data-rise>
     <h2 data-e="families/h2/2">Childcare</h2>
-    <p data-e="families/p/6">The <a href="https://www.childcare.admin.cam.ac.uk" target="_blank" rel="noopener" data-eh="families/a/4">Childcare Office</a> at the University operates a central fund for bursaries for assistance with unforeseen childcare costs for pre-school children and after-school care. They also have lots of useful information on childcare for children of University staff and students. A good source for finding children’s activities throughout the city is the Student Parent e-mail list run by the University’s Childcare Office (e-mail <a href="mailto:childcare@admin.cam.ac.uk" data-eh="families/a/5">childcare@admin.cam.ac.uk</a> to join).</p>
+    <p data-e="families/p/6">The University’s Childcare Office runs a central fund for unforeseen pre-school and after-school costs, holds a good deal of practical information for student and staff parents, and runs the Student Parent email list, which is the best single source for children’s activities around the city.</p>
   </div>
 
   <div class="card" data-rise>
     <h2 data-e="families/h2/3">Families</h2>
-    <p data-e="families/p/7">The <a href="https://www.nvs.admin.cam.ac.uk" target="_blank" rel="noopener" data-eh="families/a/6">Newcomers’ Group</a> is run by volunteers, who organise Coffee Mornings during term time at the University Centre (Grad Pad), for the families of those attached to the University. Children are welcome and toys are provided. They have a friendly neighbourhood scheme to welcome new families to Cambridge and introduce them to others at the Coffee Mornings. There is also a ‘moving sales’ section on their webpage, where you can advertise items for sale and look for items you need to buy.</p>
+    <p data-e="families/p/7">The <a href="https://www.nvs.admin.cam.ac.uk" target="_blank" rel="noopener" data-eh="families/a/6">Newcomers’ Group</a> is run by volunteers, who organise Coffee Mornings during term time at the University Centre (Grad Pad), for the families of those attached to the University. Children are welcome and toys are provided. They also run a neighbourhood scheme that introduces new families to people already here, and a small-ads page for the pushchairs and high chairs everybody buys and sells twice.</p>
     <p data-e="families/p/8">Of course, all members of your family are very welcome to attend <a href="#room" data-eh="families/a/7">MCR events</a>. Some events are particularly child friendly. There will also be other events throughout the year, so look to the MCR bulletin for information on upcoming events.</p>
+  </div>
+
+  <p class="tag" data-rise data-e="families/tag/1">The rest of the support pages</p>
+  <div class="jgrid" data-rise>
+    <a class="jc" href="#welfare" data-eh="families/x/1"><b>Welfare</b><span>The officers, the Lodge, the nurse, and the gates after midnight.</span><i>Support</i></a>
+    <a class="jc" href="#counselling" data-eh="families/x/2"><b>Counselling and advice</b><span>Tutors, the counselling service, Linkline and the Samaritans.</span><i>Support</i></a>
+    <a class="jc" href="#sexual-health" data-eh="families/x/3"><b>Sexual health</b><span>Free supplies, Clinic 1A, and help after an assault.</span><i>Support</i></a>
   </div>
 </section>
 <section class="pg" id="punting" hidden>
   <div class="pg-head">
     <p class="eyebrow" data-rise data-e="punting/p/1">Sport &amp; Societies</p>
-    <h1 data-rise data-e="punting/h1/1">Punting</h1>
+    <h1 data-rise data-e="punting/h1/1"><i>Punting</i></h1>
     <p class="lede" data-rise data-e="punting/p/2">The MCR facilitates punting in two ways: our own punt, the Rooster, exclusively bookable by MCR members, and membership of the Scudamore’s Student Punt Scheme for discounted hire rates.</p>
   </div>
 
@@ -1853,8 +2078,8 @@ body.reframing img.reframe:active{cursor:grabbing}
   </div>
 
   <div class="card" data-rise>
-    <h2 data-e="punting/h2/7">FAQs</h2>
-    <dl class="kv">
+    <h2 data-e="punting/h2/7">Questions we are <i>asked</i></h2>
+    <dl class="faq">
       <dt data-e="punting/dt/1">I’ve never punted before, can I still give it a go?</dt>
       <dd data-e="punting/dd/1">Yes. Most amateurs on the river are likely new to it too! Please do be as patient with other people on the river, listen to any tips given (particularly by professional tour guides), and be considerate about letting other boats pass.</dd>
       <dt data-e="punting/dt/2">How many people can go on the punt at once?</dt>
@@ -1888,11 +2113,12 @@ body.reframing img.reframe:active{cursor:grabbing}
 <section class="pg" id="info" hidden>
   <div class="pg-head">
     <p class="eyebrow" data-rise data-e="info/p/1">Reference</p>
-    <h1 data-rise data-e="info/h1/1">Information</h1>
-    <p class="lede" data-rise data-e="info/p/2">Forms, how College works and healthcare, written by the MCR committee rather than by the College. Where this describes a College service, the College’s own pages are the current position. Sport and societies have <a href="#sport" data-eh="info/a/1">a page of their own</a>.</p>
+    <h1 data-rise data-e="info/h1/1">Forms and <i>links</i></h1>
+    <p class="lede" data-rise data-e="info/p/2">The College pages, forms and accounts postgraduates reach for most, gathered in one place with the address of each. Where this describes a College service, the College’s own pages are the current position. First aid and health now has <a href="#health" data-eh="info/a/1">a page of its own</a>, as do <a href="#sport" data-eh="info/a/47">sport and societies</a>.</p>
   </div>
 
-    <p class="tag" data-rise data-e="info/p/3">Forms and links</p>
+  <figure class="hero" data-rise><img src="mcr-assets/col-formal.jpg" alt="Formal Hall at Jesus College" loading="lazy" data-e="info/img/1"><figcaption data-e="info/figcaption/1">Formal Hall. Four of the links below are about getting to it. Photograph: Jesus College.</figcaption></figure>
+
   <p class="bandnote" data-rise data-e="info/p/4">The College pages and forms postgraduates reach for most, with the address of each one. They are kept live in the members’ app, so if one has moved the app is the place that will know first.</p>
   <p class="jhead" data-rise data-e="info/p/5"><b>The three everybody needs</b><span>3</span></p>
   <div class="linkgrid" data-rise>
@@ -1907,7 +2133,7 @@ body.reframing img.reframe:active{cursor:grabbing}
     <a class="linkcard" href="https://www.jesus.cam.ac.uk/college/life-jesus/food-and-drink/cafeteria-lunch-menu" target="_blank" rel="noopener" data-eh="info/a/7"><span class="t"><b>What is on in the Caff</b><span>The lunch and dinner menus, published by the college each week.</span><em>Catering</em></span><span class="arw">&#8599;</span></a>
     <a class="linkcard" href="https://jnet.jesus.cam.ac.uk/jnet/catering-and-events/formal-hall-menu" target="_blank" rel="noopener" data-eh="info/a/8"><span class="t"><b>The formal hall menu</b><span>On JNet, behind Raven, so it cannot be read here. What is on at each hall this term.</span><em>JNet</em></span><span class="arw">&#8599;</span></a>
     <a class="linkcard" href="https://www.jesus.cam.ac.uk/college/life-jesus/food-and-drink/formal-hall" target="_blank" rel="noopener" data-eh="info/a/9"><span class="t"><b>Formal Hall</b><span>How formals work, what to wear, and how to book a guest in.</span><em>Catering</em></span><span class="arw">&#8599;</span></a>
-    <a class="linkcard" href="https://jnet.jesus.cam.ac.uk/" target="_blank" rel="noopener" data-eh="info/a/10"><span class="t"><b>JNet</b><span>Jesus College’s intranet: tutorial hours, minutes, room bookings, everything behind Raven.</span><em>College</em></span><span class="arw">&#8599;</span></a>
+    <a class="linkcard" href="https://jnet.jesus.cam.ac.uk/" target="_blank" rel="noopener" data-eh="info/a/10"><span class="t"><b>JNet</b><span>Jesus College’s intranet: tutorial hours, minutes, College room and court bookings, everything behind Raven.</span><em>College</em></span><span class="arw">&#8599;</span></a>
   </div>
   <p class="jhead" data-rise data-e="info/p/7"><b>Your course and your money</b><span>4</span></p>
   <div class="linkgrid" data-rise>
@@ -1927,53 +2153,61 @@ body.reframing img.reframe:active{cursor:grabbing}
   </div>
   <p class="jhead" data-rise data-e="info/p/9"><b>A gown</b><span>2</span></p>
   <div class="linkgrid" data-rise>
-    <a class="linkcard" href="https://www.cambridgesu.co.uk/shop/" target="_blank" rel="noopener" data-eh="info/a/21"><span class="t"><b>Buy a gown from Cambridge SU</b><span>A BA or an MA gown for \u00a358, which is the cheapest new gown in Cambridge.</span><em>Cambridge SU</em></span><span class="arw">&#8599;</span></a>
-    <a class="linkcard" href="https://www.ryderamies.co.uk/academic/shop/m-a-gown/" target="_blank" rel="noopener" data-eh="info/a/22"><span class="t"><b>Buy a gown from Ryder and Amies</b><span>On King’s Parade. From \u00a370 for imported polyester, up to about \u00a3205. Only the British made ones can be converted to a PhD gown later.</span><em>Ryder and Amies</em></span><span class="arw">&#8599;</span></a>
+    <a class="linkcard" href="https://www.cambridgesu.co.uk/shop/" target="_blank" rel="noopener" data-eh="info/a/21"><span class="t"><b>Buy a gown from Cambridge SU</b><span>A BA or an MA gown for £58, which is the cheapest new gown in Cambridge.</span><em>Cambridge SU</em></span><span class="arw">&#8599;</span></a>
+    <a class="linkcard" href="https://www.ryderamies.co.uk/academic/shop/m-a-gown/" target="_blank" rel="noopener" data-eh="info/a/22"><span class="t"><b>Buy a gown from Ryder and Amies</b><span>On King’s Parade. From £70 for imported polyester, up to about £205. Only the British made ones can be converted to a PhD gown later.</span><em>Ryder and Amies</em></span><span class="arw">&#8599;</span></a>
   </div>
 
-<figure class="hero" data-rise><img src="mcr-assets/col-formal.jpg" alt="Formal Hall at Jesus College" loading="lazy" data-e="info/img/1"><figcaption data-e="info/figcaption/1">Photograph: Jesus College.</figcaption></figure>
 
-  <div class="card" data-rise>
-    <h2 data-e="info/h2/1">How college works</h2>
-    <p data-e="info/p/10">A second shelf in the same part of the app holds short guides explaining how particular college and university processes work, each with a brief explanation and, where relevant, a contact and a link. Like the forms shelf, this is maintained live by the committee and is not reproduced here.</p>
+  <div class="gateway" data-rise>
+    <div>
+      <h2 data-e="info/h2/1">How <i>College</i> works is kept in the app</h2>
+      <p data-e="info/p/10">A second shelf holds short guides to particular College and University processes, each with a contact and a link, kept current by the committee rather than written once and left. Bookings live there too: the punt, formal swaps, event sign-ups, the notice board, and asking to hold something in the MCR. The common room itself stays open to every member and is never booked out.</p>
+    </div>
+    <a class="enter" href="#" hidden data-enter aria-label="Enter the intranet" data-eh="info/a/48">
+      <svg viewBox="0 0 24 24"><path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M15 8.5 18.5 12 15 15.5"/><path d="M18.5 12H10"/></svg>
+      <span>Open the app</span>
+    </a>
   </div>
 
+</section>
+<section class="pg" id="health" hidden>
   <div class="pg-head">
-    <p class="eyebrow" data-rise data-e="info/p/11">Health</p>
-    <h2 data-rise data-e="info/h2/2">First aid and health</h2>
-    <p class="lede" data-rise data-e="info/p/12">Where to go for something health related, from an emergency to registering with a GP, in the order you should consider them. Opening hours and direct numbers are the part of this that goes out of date without anyone noticing, so they are linked to the college and the NHS rather than copied out here, what follows is the part that does not change from year to year.</p>
+    <p class="eyebrow" data-rise data-e="health/p/11">Support</p>
+    <h1 data-rise data-e="health/h1/1">First aid and <i>health</i></h1>
+    <p class="lede" data-rise data-e="health/p/12">Where to go for anything health related, from an emergency to registering with a GP, in the order worth considering them. Opening hours and direct numbers go stale without anyone noticing, so those are linked rather than copied out; what is written here is the part that does not change from year to year.</p>
   </div>
+
 
   <div class="card alert" data-rise>
-    <h2 data-e="info/h2/3">If this is an emergency, ring 999</h2>
-    <p data-e="info/p/13">Chest pain, trouble breathing, bleeding that will not stop, somebody who will not wake up, a serious blow to the head, weakness on one side of the face or body, or thoughts of ending your own life.</p>
-    <p data-e="info/p/14">Ring the Porters as well, on the number below. A Porter will reach you before an ambulance can find the right staircase, they will meet it at the gate and bring it in, and they are trained in first aid. Give the operator the college address and the staircase and room, and stay on the line.</p>
+    <h2 data-e="health/h2/3">If this is an emergency, ring 999</h2>
+    <p data-e="health/p/13">Chest pain, trouble breathing, bleeding that will not stop, somebody who will not wake up, a serious blow to the head, weakness on one side of the face or body, or thoughts of ending your own life.</p>
+    <p data-e="health/p/14">Ring the Porters as well, on the number below. A Porter will reach you before an ambulance can find the right staircase, they will meet it at the gate and bring it in, and they are trained in first aid. Give the operator the college address and the staircase and room, and stay on the line.</p>
     <div class="tbl-wrap" data-rise>
       <table class="tbl">
-        <thead><tr><th data-e="info/th/1">Number</th><th data-e="info/th/2">For</th></tr></thead>
+        <thead><tr><th data-e="health/th/1">Number</th><th data-e="health/th/2">For</th></tr></thead>
         <tbody>
-          <tr><td data-e="info/td/1"><a class="btn" href="tel:999" data-eh="info/a/23">999</a></td><td data-e="info/td/2">Ambulance, police, fire</td></tr>
-          <tr><td data-e="info/td/3"><a class="btn" href="tel:+441223339339" data-eh="info/a/24">01223 339339</a></td><td data-e="info/td/4">Porters’ Lodge, any hour</td></tr>
-          <tr><td data-e="info/td/5"><a class="btn" href="tel:111" data-eh="info/a/25">111</a></td><td data-e="info/td/6">NHS advice, any hour</td></tr>
+          <tr><td data-e="health/td/1"><a class="btn" href="tel:999" data-eh="health/a/23">999</a></td><td data-e="health/td/2">Ambulance, police, fire</td></tr>
+          <tr><td data-e="health/td/3"><a class="btn" href="tel:+441223339339" data-eh="health/a/24">01223 339339</a></td><td data-e="health/td/4">Porters’ Lodge, any hour</td></tr>
+          <tr><td data-e="health/td/5"><a class="btn" href="tel:111" data-eh="health/a/25">111</a></td><td data-e="health/td/6">NHS advice, any hour</td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
   <div class="card" data-rise>
-    <h3 data-e="info/h3/1">Where to go, at a glance</h3>
+    <h3 data-e="health/h3/1">Where to go, at a glance</h3>
     <div class="tbl-wrap" data-rise>
       <table class="tbl">
-        <thead><tr><th data-e="info/th/3">Door</th><th data-e="info/th/4">Use it for</th><th data-e="info/th/5">Consider it</th></tr></thead>
+        <thead><tr><th data-e="health/th/3">Door</th><th data-e="health/th/4">Use it for</th><th data-e="health/th/5">Consider it</th></tr></thead>
         <tbody>
-          <tr><td data-e="info/td/7">999 or A and E</td><td data-e="info/td/8">Life threatening, or an injury that cannot wait</td><td data-e="info/td/9">Now</td></tr>
-          <tr><td data-e="info/td/10">NHS 111</td><td data-e="info/td/11">You are not sure how serious it is</td><td data-e="info/td/12">Now</td></tr>
-          <tr><td data-e="info/td/13">The Health and Wellbeing Centre</td><td data-e="info/td/14">In college, Library Court</td><td data-e="info/td/15">This week</td></tr>
-          <tr><td data-e="info/td/16">A pharmacy</td><td data-e="info/td/17">A cough, a rash, hay fever, emergency contraception</td><td data-e="info/td/18">Today</td></tr>
-          <tr><td data-e="info/td/19">Your GP</td><td data-e="info/td/20">Anything ongoing, prescriptions, referrals, vaccinations</td><td data-e="info/td/21">First fortnight</td></tr>
-          <tr><td data-e="info/td/22">A dentist</td><td data-e="info/td/23">Toothache, check-ups, anything that has cracked</td><td data-e="info/td/24">Register early</td></tr>
-          <tr><td data-e="info/td/25">Welfare and counselling</td><td data-e="info/td/26">How you are doing, rather than a symptom</td><td data-e="info/td/27">Any time</td></tr>
-          <tr><td data-e="info/td/28">A long-term condition or a disability</td><td data-e="info/td/29">Anything that needs arranging in advance</td><td data-e="info/td/30">Early</td></tr>
+          <tr><td data-e="health/td/7"><a href="#h-ae">999 or A and E</a></td><td data-e="health/td/8">Life threatening, or an injury that cannot wait</td><td data-e="health/td/9">Now</td></tr>
+          <tr><td data-e="health/td/10"><a href="#h-111">NHS 111</a></td><td data-e="health/td/11">You are not sure how serious it is</td><td data-e="health/td/12">Now</td></tr>
+          <tr><td data-e="health/td/13"><a href="#h-hwc">The Health and Wellbeing Centre</a></td><td data-e="health/td/14">In college, Library Court</td><td data-e="health/td/15">This week</td></tr>
+          <tr><td data-e="health/td/16"><a href="#h-pharm">A pharmacy</a></td><td data-e="health/td/17">A cough, a rash, hay fever, emergency contraception</td><td data-e="health/td/18">Today</td></tr>
+          <tr><td data-e="health/td/19"><a href="#h-gp">Your GP</a></td><td data-e="health/td/20">Anything ongoing, prescriptions, referrals, vaccinations</td><td data-e="health/td/21">First fortnight</td></tr>
+          <tr><td data-e="health/td/22"><a href="#h-dent">A dentist</a></td><td data-e="health/td/23">Toothache, check-ups, anything that has cracked</td><td data-e="health/td/24">Register early</td></tr>
+          <tr><td data-e="health/td/25"><a href="#h-welfare">Welfare and counselling</a></td><td data-e="health/td/26">How you are doing, rather than a symptom</td><td data-e="health/td/27">Any time</td></tr>
+          <tr><td data-e="health/td/28"><a href="#h-ltc">A long-term condition or a disability</a></td><td data-e="health/td/29">Anything that needs arranging in advance</td><td data-e="health/td/30">Early</td></tr>
         </tbody>
       </table>
     </div>
@@ -1981,109 +2215,106 @@ body.reframing img.reframe:active{cursor:grabbing}
 
   <div class="grid">
     <div class="card" data-rise>
-      <h3 data-e="info/h3/2">999 or A and E</h3>
-      <p data-e="info/p/15">Addenbrooke’s Emergency Department, Hills Road, Cambridge CB2 0QQ, is open at every hour of every day. You do not need to be registered with a GP and you do not pay at the door. Bring identification and your visa share code if you have one, nobody is turned away without them.</p>
-      <p data-e="info/p/16">Patients are seen by how ill they are, not in the order they arrived, so the wait can run to hours. If somebody can be moved safely and it is not life threatening, making your own way there is usually quicker than waiting for an ambulance. Anything that is not an emergency at all will be seen sooner somewhere else: 111, a pharmacy, an urgent treatment centre, or your own GP.</p>
-      <p data-e="info/p/17">It is two and a half miles south of Jesus, on the Biomedical Campus. The Universal and the Citi 1 and 2 buses run there, a taxi takes about fifteen minutes in normal traffic. Parking is paid and slow, so do not drive if there is any alternative.</p>
-      <p data-e="info/p/18">Somebody going in alone should tell a friend, and it is worth taking a phone charger: the wait is long and being reachable matters more than it sounds.</p>
-      <a class="btn" href="https://www.cuh.nhs.uk/" target="_blank" rel="noopener" data-eh="info/a/26">Addenbrooke’s (CUH)</a>
+      <h3 id="h-ae" data-e="health/h3/2">999 or A and E</h3>
+      <p data-e="health/p/15">Addenbrooke’s Emergency Department, Hills Road, Cambridge CB2 0QQ, is open at every hour of every day. You do not need to be registered with a GP and you do not pay at the door. Bring identification and your visa share code if you have one, nobody is turned away without them.</p>
+      <p data-e="health/p/16">Patients are seen by how ill they are, not in the order they arrived, so the wait can run to hours. If somebody can be moved safely and it is not life threatening, making your own way there is usually quicker than waiting for an ambulance. Anything that is not an emergency at all will be seen sooner somewhere else: 111, a pharmacy, an urgent treatment centre, or your own GP.</p>
+      <p data-e="health/p/17">It is two and a half miles south of Jesus, on the Biomedical Campus. The Universal and the Citi 1 and 2 buses run there, a taxi takes about fifteen minutes in normal traffic.</p>
+      <a class="btn" href="https://www.cuh.nhs.uk/" target="_blank" rel="noopener" data-eh="health/a/26">Addenbrooke’s (CUH)</a>
     </div>
 
     <div class="card" data-rise>
-      <h3 data-e="info/h3/3">NHS 111</h3>
-      <p data-e="info/p/19">Free, answered at every hour of the year, and the right first call whenever you cannot tell how bad something is. They will tell you what to do, and they can do more than advise: book you a slot at an urgent treatment centre, arrange an out of hours GP appointment, send a prescription to a pharmacy that is open, or have a nurse or doctor ring you back.</p>
-      <p data-e="info/p/20">111 online answers the same questions for anything that is not urgent, which is easier than a call if speaking is difficult or English is not your first language. Interpreters are available on the phone line if you ask.</p>
-      <p data-e="info/p/21">If you are deaf or hard of hearing, 18001 111 reaches the same service through Relay UK.</p>
-      <a class="btn" href="tel:111" data-eh="info/a/27">Ring 111</a>
-      <a class="btn" href="https://111.nhs.uk/" target="_blank" rel="noopener" data-eh="info/a/28">111 online (NHS)</a>
+      <h3 id="h-111" data-e="health/h3/3">NHS 111</h3>
+      <p data-e="health/p/19">Free, answered at every hour of the year, and the right first call whenever you cannot tell how bad something is. They will tell you what to do, and they can do more than advise: book you a slot at an urgent treatment centre, arrange an out of hours GP appointment, send a prescription to a pharmacy that is open, or have a nurse or doctor ring you back.</p>
+      <p data-e="health/p/20">111 online answers the same questions for anything not urgent, interpreters are available on the phone line if you ask, and 18001 111 reaches the service through Relay UK.</p>
+      <a class="btn" href="tel:111" data-eh="health/a/27">Ring 111</a>
+      <a class="btn" href="https://111.nhs.uk/" target="_blank" rel="noopener" data-eh="health/a/28">111 online (NHS)</a>
     </div>
 
     <div class="card" data-rise>
-      <h3 data-e="info/h3/4">The Health and Wellbeing Centre</h3>
-      <p data-e="info/p/22">In college, Library Court. Staffed by a Community Health Practitioner and a Mental Health Nurse, and the college physiotherapist is arranged through the Practitioner. Register there when you arrive, as well as with a GP rather than instead of one. It is the sensible first stop for an ordinary problem, and they know which door in college opens next when it turns out not to be ordinary.</p>
-      <p data-e="info/p/23">It is not a GP surgery and cannot be your registered practice, so a prescription, a referral or a sick note still comes from your GP. What it is good for is being seen quickly by somebody who knows the college, without crossing town for it.</p>
-      <p data-e="info/p/24">What you say there is confidential and is not passed to your department or your supervisor without your agreement, except in the rare circumstances where anybody in the NHS would have to act. If you want something taken up with your department, say so and they will help you do it.</p>
+      <h3 id="h-hwc" data-e="health/h3/4">The Health and Wellbeing Centre</h3>
+      <p data-e="health/p/22">In college, Library Court. Staffed by a Community Health Practitioner and a Mental Health Nurse, and the college physiotherapist is arranged through the Practitioner. Register there when you arrive, as well as with a GP rather than instead of one. It is the sensible first stop for an ordinary problem, and they know which door in college opens next when it turns out not to be ordinary.</p>
+      <p data-e="health/p/23">It is not a GP surgery and cannot be your registered practice, so a prescription, a referral or a sick note still comes from your GP.</p>
+      <p data-e="health/p/24">What you say there is confidential and is not passed to your department or your supervisor without your agreement, except in the rare circumstances where anybody in the NHS would have to act. If you want something taken up with your department, say so and they will help you do it.</p>
       <div class="note">Opening hours change from year to year, so they are not printed here where they would quietly go stale. The college’s own welfare pages carry them, and the Porters’ Lodge will tell you if you would rather ask a person.</div>
     </div>
 
     <div class="card" data-rise>
-      <h3 data-e="info/h3/5">A pharmacy</h3>
-      <p data-e="info/p/25">No appointment, and the most under-used door on this page. A pharmacist can treat a good deal outright, will say plainly when something needs a doctor, and can often see you in the minutes it would take to fail to get a GP appointment.</p>
-      <p data-e="info/p/26">They also handle emergency contraception, which works better the sooner it is taken, and they have a private room if you ask for one rather than saying it at the counter.</p>
-      <p data-e="info/p/27">NHS prescriptions in England carry a fixed charge per item, whatever the medicine costs. If you are on a low income, the NHS Low Income Scheme can cover it, and a prepayment certificate is cheaper than paying per item once you need more than a few in a year. Contraception is free.</p>
-      <p data-e="info/p/28">111 will name the nearest pharmacy that is open, which matters on a Sunday.</p>
-      <a class="btn" href="https://www.nhs.uk/nhs-services/help-with-health-costs/" target="_blank" rel="noopener" data-eh="info/a/29">Help with health costs (NHS)</a>
-      <a class="btn" href="https://www.icash.nhs.uk/" target="_blank" rel="noopener" data-eh="info/a/30">Sexual health, iCaSH (NHS Cambridgeshire)</a>
+      <h3 id="h-pharm" data-e="health/h3/5">A pharmacy</h3>
+      <p data-e="health/p/25">No appointment, and the door people forget. A pharmacist can treat a good deal outright, will say plainly when something needs a doctor, and will usually see you the same day.</p>
+      <p data-e="health/p/26">They also handle emergency contraception, which works better the sooner it is taken, and they have a private room if you ask for one rather than saying it at the counter.</p>
+      <p data-e="health/p/27">NHS prescriptions in England carry a fixed charge per item, whatever the medicine costs. If you are on a low income, the NHS Low Income Scheme can cover it, and a prepayment certificate is cheaper than paying per item once you need more than a few in a year. Contraception is free.</p>
+      <p data-e="health/p/28">111 will name the nearest pharmacy that is open, which matters on a Sunday.</p>
+      <a class="btn" href="https://www.nhs.uk/nhs-services/help-with-health-costs/" target="_blank" rel="noopener" data-eh="health/a/29">Help with health costs (NHS)</a>
+      <a class="btn" href="https://www.icash.nhs.uk/" target="_blank" rel="noopener" data-eh="health/a/30">Sexual health, iCaSH (NHS Cambridgeshire)</a>
     </div>
 
     <div class="card" data-rise>
-      <h3 data-e="info/h3/6">Your GP</h3>
-      <p data-e="info/p/29">Do this when you arrive, not on the morning you wake up ill. Being registered at home does not cover you in Cambridge and you cannot be registered in two places. It is free, and you need neither proof of address nor an NHS number, nor to be a British citizen.</p>
-      <p data-e="info/p/30">Put your address into NHS Find a GP, which lists the practices whose catchment covers it, then register through that practice. It takes a few working days. If you are here only for a short period, ask to be seen as a temporary resident instead and leave your registration at home in place.</p>
-      <p data-e="info/p/31">Once you are registered, the NHS App is worth ten minutes: it holds your NHS number, orders repeat prescriptions, shows test results and gives you your vaccination record.</p>
-      <p data-e="info/p/32">Two things to ask about in your first term. The meningitis MenACWY vaccination is recommended for students and is free if you have not had it. So is the flu jab for anybody in an at-risk group, from around October.</p>
-      <a class="btn" href="https://www.nhs.uk/service-search/find-a-gp" target="_blank" rel="noopener" data-eh="info/a/31">Find a GP (NHS)</a>
-      <a class="btn" href="https://www.nhs.uk/nhs-app/" target="_blank" rel="noopener" data-eh="info/a/32">The NHS App</a>
-      <a class="btn" href="https://www.lensfieldpractice.org/" target="_blank" rel="noopener" data-eh="info/a/33">Lensfield Practice</a>
-      <a class="btn" href="https://www.newnhamwalksurgery.nhs.uk/" target="_blank" rel="noopener" data-eh="info/a/34">Newnham Walk Surgery</a>
+      <h3 id="h-gp" data-e="health/h3/6">Your GP</h3>
+      <p data-e="health/p/29">Do this when you arrive, not on the morning you wake up ill. Being registered at home does not cover you in Cambridge and you cannot be registered in two places. It is free, and you need neither proof of address nor an NHS number, nor to be a British citizen.</p>
+      <p data-e="health/p/30">Put your address into NHS Find a GP, which lists the practices whose catchment covers it, then register through that practice. It takes a few working days. If you are here only for a short period, ask to be seen as a temporary resident instead and leave your registration at home in place.</p>
+      <p data-e="health/p/31">Once you are registered, the NHS App is worth ten minutes: it holds your NHS number, orders repeat prescriptions, shows test results and gives you your vaccination record.</p>
+      <p data-e="health/p/32">Two things to ask about in your first term. The meningitis MenACWY vaccination is recommended for students and is free if you have not had it. So is the flu jab for anybody in an at-risk group, from around October.</p>
+      <a class="btn" href="https://www.nhs.uk/service-search/find-a-gp" target="_blank" rel="noopener" data-eh="health/a/31">Find a GP (NHS)</a>
+      <a class="btn" href="https://www.nhs.uk/nhs-app/" target="_blank" rel="noopener" data-eh="health/a/32">The NHS App</a>
+      <a class="btn" href="https://www.lensfieldpractice.org/" target="_blank" rel="noopener" data-eh="health/a/33">Lensfield Practice</a>
+      <a class="btn" href="https://www.newnhamwalksurgery.nhs.uk/" target="_blank" rel="noopener" data-eh="health/a/34">Newnham Walk Surgery</a>
     </div>
 
     <div class="card" data-rise>
-      <h3 data-e="info/h3/7">A dentist</h3>
-      <p data-e="info/p/33">Separate from your GP, and the one people forget until it is three in the morning. NHS dentists taking new patients are genuinely scarce in Cambridge, so look while you have no toothache rather than when you do. You can register with any practice regardless of where you live, and there is no catchment.</p>
-      <p data-e="info/p/34">NHS dental treatment is charged in bands rather than free: one price for an examination, a higher one for fillings, higher again for crowns and dentures. The Low Income Scheme covers this too.</p>
-      <p data-e="info/p/35">For sudden pain out of hours, ring 111 and ask for the emergency dental service rather than going to A and E, which cannot treat teeth.</p>
-      <a class="btn" href="https://www.nhs.uk/service-search/find-a-dentist" target="_blank" rel="noopener" data-eh="info/a/35">Find a dentist (NHS)</a>
-      <a class="btn" href="https://www.nhs.uk/nhs-services/dentists/" target="_blank" rel="noopener" data-eh="info/a/36">What NHS dentistry costs</a>
+      <h3 id="h-dent" data-e="health/h3/7">A dentist</h3>
+      <p data-e="health/p/33">Separate from your GP, and the one people forget until it is three in the morning. NHS dentists taking new patients are genuinely scarce in Cambridge, so look while you have no toothache rather than when you do. You can register with any practice regardless of where you live, and there is no catchment.</p>
+      <p data-e="health/p/34">NHS dental treatment is charged in bands rather than free: one price for an examination, a higher one for fillings, higher again for crowns and dentures. The Low Income Scheme covers this too.</p>
+      <p data-e="health/p/35">For sudden pain out of hours, ring 111 and ask for the emergency dental service rather than going to A and E, which cannot treat teeth.</p>
+      <a class="btn" href="https://www.nhs.uk/service-search/find-a-dentist" target="_blank" rel="noopener" data-eh="health/a/35">Find a dentist (NHS)</a>
+      <a class="btn" href="https://www.nhs.uk/nhs-services/dentists/" target="_blank" rel="noopener" data-eh="health/a/36">What NHS dentistry costs</a>
     </div>
   </div>
 
   <div class="card" data-rise>
-    <h3 data-e="info/h3/8">Welfare and counselling</h3>
-    <p data-e="info/p/36">Several routes, and none of them is more legitimate than the others. You do not have to be in crisis to use any of them, and using one does not close the others.</p>
+    <h3 id="h-welfare" data-e="health/h3/8">Welfare and counselling</h3>
+    <p data-e="health/p/36">Several routes, and none of them is more legitimate than the others. You do not have to be in crisis to use any of them, and using one does not close the others.</p>
     <dl class="kv">
-      <dt data-e="info/dt/1">The MCR welfare officers</dt>
-      <dd data-e="info/dd/1">Graduate students, not clinicians, and the useful thing they do is know how college works and who to point you at. See the <a href="#welfare" data-eh="info/a/37">Welfare</a> page for how to reach them, messages can be sent without giving your name.</dd>
-      <dt data-e="info/dt/2">College</dt>
-      <dd data-e="info/dd/2">Keeps a Welfare Tutor on duty at every hour of the year: ring the Porters’ Lodge and ask who is on. This is also the route for anything academic that has become a health problem, and for asking about an intermission or an extension on medical grounds.</dd>
-      <dt data-e="info/dt/3">The University Counselling Service</dt>
-      <dd data-e="info/dd/3">Free to matriculated students, you refer yourself, and it runs groups and workshops as well as one to one appointments. There is usually a wait, which is a reason to put your name in early rather than a reason not to.</dd>
-      <dt data-e="info/dt/4">The NHS</dt>
-      <dd data-e="info/dd/4">Runs talking therapies you can refer yourself to without going through a GP, and your GP is the door to anything beyond that.</dd>
-      <dt data-e="info/dt/5">Tonight</dt>
-      <dd data-e="info/dd/5">Samaritans answer at any hour, and Cambridge Nightline is answered by trained students through the night in term.</dd>
+      <dt data-e="health/dt/1">The MCR welfare officers</dt>
+      <dd data-e="health/dd/1">Graduate students, not clinicians, and the useful thing they do is know how college works and who to point you at. See the <a href="#welfare" data-eh="health/a/37">Welfare</a> page for how to reach them, messages can be sent without giving your name.</dd>
+      <dt data-e="health/dt/2">College</dt>
+      <dd data-e="health/dd/2">Keeps a Welfare Tutor on duty at every hour of the year: ring the Porters’ Lodge and ask who is on. This is also the route for anything academic that has become a health problem, and for asking about an intermission or an extension on medical grounds.</dd>
+      <dt data-e="health/dt/3">The University Counselling Service</dt>
+      <dd data-e="health/dd/3">Free to matriculated students, you refer yourself, and it runs groups and workshops as well as one to one appointments. There is usually a wait, which is a reason to put your name in early rather than a reason not to.</dd>
+      <dt data-e="health/dt/4">The NHS</dt>
+      <dd data-e="health/dd/4">Runs talking therapies you can refer yourself to without going through a GP, and your GP is the door to anything beyond that.</dd>
+      <dt data-e="health/dt/5">Tonight</dt>
+      <dd data-e="health/dd/5">Samaritans answer at any hour, and Cambridge Nightline is answered by trained students through the night in term.</dd>
     </dl>
-    <a class="btn" href="tel:116123" data-eh="info/a/38">Samaritans, 116 123</a>
-    <a class="btn" href="tel:+441223339339" data-eh="info/a/39">Ring the Porters’ Lodge</a>
-    <a class="btn" href="https://www.counselling.cam.ac.uk/" target="_blank" rel="noopener" data-eh="info/a/40">Counselling Service (the University)</a>
-    <a class="btn" href="https://cambridge.nightline.ac.uk/" target="_blank" rel="noopener" data-eh="info/a/41">Cambridge Nightline</a>
-    <a class="btn" href="https://www.nhs.uk/service-search/mental-health/find-an-nhs-talking-therapies-service" target="_blank" rel="noopener" data-eh="info/a/42">NHS talking therapies</a>
-    <a class="btn" href="https://www.samaritans.org/" target="_blank" rel="noopener" data-eh="info/a/43">Samaritans</a>
+    <a class="btn" href="tel:116123" data-eh="health/a/38">Samaritans, 116 123</a>
+    <a class="btn" href="tel:+441223339339" data-eh="health/a/39">Ring the Porters’ Lodge</a>
+    <a class="btn" href="https://www.counselling.cam.ac.uk/" target="_blank" rel="noopener" data-eh="health/a/40">Counselling Service (the University)</a>
+    <a class="btn" href="https://cambridge.nightline.ac.uk/" target="_blank" rel="noopener" data-eh="health/a/41">Cambridge Nightline</a>
+    <a class="btn" href="https://www.nhs.uk/service-search/mental-health/find-an-nhs-talking-therapies-service" target="_blank" rel="noopener" data-eh="health/a/42">NHS talking therapies</a>
+    <a class="btn" href="https://www.samaritans.org/" target="_blank" rel="noopener" data-eh="health/a/43">Samaritans</a>
   </div>
 
   <div class="card" data-rise>
-    <h3 data-e="info/h3/9">A long-term condition or a disability</h3>
-    <p data-e="info/p/37">If you have a condition that will need managing while you are here, two things are worth doing before term rather than during it. Register with a GP early and ask them to request your records, so a repeat prescription does not lapse in the gap. And tell the University’s Accessibility and Disability Resource Centre, which arranges adjustments for teaching, examinations and fieldwork.</p>
-    <p data-e="info/p/38">College can help with accommodation and with anything about your room, and the Tutorial office is the place to raise it. None of this goes to your examiners as anything other than an adjustment.</p>
-    <a class="btn" href="https://www.disability.admin.cam.ac.uk/" target="_blank" rel="noopener" data-eh="info/a/44">Disability Resource Centre (the University)</a>
+    <h3 id="h-ltc" data-e="health/h3/9">A long-term condition or a disability</h3>
+    <p data-e="health/p/37">If you have a condition that will need managing while you are here, two things are worth doing before term rather than during it. Register with a GP early and ask them to request your records, so a repeat prescription does not lapse in the gap. And tell the University’s Accessibility and Disability Resource Centre, which arranges adjustments for teaching, examinations and fieldwork.</p>
+    <p data-e="health/p/38">College can help with accommodation and with anything about your room, and the Tutorial office is the place to raise it. None of this goes to your examiners as anything other than an adjustment.</p>
+    <a class="btn" href="https://www.disability.admin.cam.ac.uk/" target="_blank" rel="noopener" data-eh="health/a/44">Disability Resource Centre (the University)</a>
   </div>
 
   <div class="card quiet" data-rise>
-    <h3 data-e="info/h3/10">If you came here on a visa: the health surcharge covers you</h3>
-    <p data-e="info/p/39">The Immigration Health Surcharge paid with your visa application gives you the NHS on the same terms as somebody who has lived here all their life. It is not insurance, there is nothing further to buy, and being asked for payment at a GP surgery or a hospital is a mistake worth querying rather than paying.</p>
-    <p data-e="info/p/40">If you are in the country for six months or more, register with a GP as everybody else does, and do it early. Prescription charges, dental bands and eye tests are the same for you as for anybody else: those are charges within the NHS, not charges for being a visitor.</p>
-    <p data-e="info/p/41">Bring what repeat medication you can and a letter from your doctor at home naming it, since brand names differ and the first UK prescription is easier to arrange with the old one in front of somebody. Check before you travel that anything you take is legal to bring in.</p>
+    <h3 data-e="health/h3/10">If you came here on a visa: the health surcharge covers you</h3>
+    <p data-e="health/p/39">It is not insurance and there is nothing further to buy. Being asked for payment at a GP surgery or a hospital is a mistake worth querying rather than paying.</p>
+    <p data-e="health/p/40">If you are in the country for six months or more, register with a GP as everybody else does, and do it early. Prescription charges, dental bands and eye tests are the same for you as for anybody else: those are charges within the NHS, not charges for being a visitor.</p>
+    <p data-e="health/p/41">Bring what repeat medication you can and a letter from your doctor at home naming it, since brand names differ and the first UK prescription is easier to arrange with the old one in front of somebody. Check before you travel that anything you take is legal to bring in.</p>
     <div class="note">What the surcharge covers follows the immigration rules rather than the academic term, so the two links below are the ones to trust, and the International Student Office is the place to ask when a form does not fit your circumstances.</div>
-    <a class="btn" href="https://www.gov.uk/healthcare-immigration-application" target="_blank" rel="noopener" data-eh="info/a/45">The health surcharge (GOV.UK)</a>
-    <a class="btn" href="https://www.internationalstudents.cam.ac.uk/" target="_blank" rel="noopener" data-eh="info/a/46">International students (the University)</a>
+    <a class="btn" href="https://www.gov.uk/healthcare-immigration-application" target="_blank" rel="noopener" data-eh="health/a/45">The health surcharge (GOV.UK)</a>
+    <a class="btn" href="https://www.internationalstudents.cam.ac.uk/" target="_blank" rel="noopener" data-eh="health/a/46">International students (the University)</a>
   </div>
-
 </section>
 <section class="pg" id="contacts" hidden>
   <div class="pg-head">
     <p class="eyebrow" data-rise data-e="contacts/p/1">Directory</p>
-    <h1 data-rise data-e="contacts/h1/1">Useful Contacts</h1>
-    <p class="lede" data-rise data-e="contacts/p/2">In an emergency, either dial 999, or call the Porters’ Lodge (01223 339339). It’s opened and staffed 24 hours a day, 365 days a year. This page explains the key contacts in College: Tutorial, College Contacts, Porters, and East House.</p>
+    <h1 data-rise data-e="contacts/h1/1">Useful <i>Contacts</i></h1>
+    <p class="lede" data-rise data-e="contacts/p/2">In an emergency dial 999, or the Porters’ Lodge on 01223 339339, which is staffed every hour of the year. Everything else here is a directory: who to write to, and what each of them looks after. Search it, or start from the table below. For anything medical, <a href="#health" data-eh="contacts/a/41">First aid and health</a> is the page.</p>
   </div>
 
   <div class="card" id="cSearchCard" data-rise>
@@ -2105,14 +2336,39 @@ body.reframing img.reframe:active{cursor:grabbing}
       <tbody>
         <tr><td data-e="contacts/td/1">Emergency services</td><td data-e="contacts/td/2"><a href="tel:999" data-eh="contacts/a/1">999</a></td></tr>
         <tr><td data-e="contacts/td/3">Porters’ Lodge (24 hours a day, 365 days a year)</td><td data-e="contacts/td/4"><a href="tel:01223339339" data-eh="contacts/a/2">01223 339339</a></td></tr>
+        <tr><td data-e="contacts/td/101">NHS 111, when you cannot tell how serious it is</td><td data-e="contacts/td/102"><a href="tel:111" data-eh="contacts/a/42">111</a></td></tr>
+        <tr><td data-e="contacts/td/103">Samaritans, day or night</td><td data-e="contacts/td/104"><a href="tel:116123" data-eh="contacts/a/43">116 123</a></td></tr>
       </tbody>
     </table></div>
     <div class="note" data-rise>A list of all College staff with pictures can be accessed on <a href="https://jnet.jesus.cam.ac.uk/jnet/college-information/people/staff-departments" target="_blank" rel="noopener" data-eh="contacts/a/3">JNet</a> (you will need to be logged in).</div>
   </div>
 
   <div class="card" data-rise>
+    <h2 data-e="contacts/h2/11">Who to ask <i>about what</i></h2>
+    <p data-e="contacts/p/13">The College and the University run on committees, and it is often not obvious who to write to. Twelve common cases, and the address for each.</p>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th data-e="contacts/th/19">Topic</th><th data-e="contacts/th/20">Contact</th></tr></thead>
+      <tbody>
+        <tr><td data-e="contacts/td/77">Accommodation</td><td data-e="contacts/td/78">the <a href="mailto:student-rooms@jesus.cam.ac.uk" data-eh="contacts/a/27">Student Rooms</a> team</td></tr>
+        <tr><td data-e="contacts/td/79">University Card, general admin</td><td data-e="contacts/td/80">the Senior Postgraduate Administrator: <a href="mailto:graduate-tutor@jesus.cam.ac.uk" data-eh="contacts/a/28">graduate-tutor@jesus.cam.ac.uk</a></td></tr>
+        <tr><td data-e="contacts/td/81">Food and drink within College</td><td data-e="contacts/td/82">the Catering Office. Email the Manciple: <a href="mailto:manciple@jesus.cam.ac.uk" data-eh="contacts/a/29">manciple@jesus.cam.ac.uk</a> (Manciple is a Cambridge word for the person who runs the catering)</td></tr>
+        <tr><td data-e="contacts/td/83">Freshers events organised by the MCR</td><td data-e="contacts/td/84">the MCR Social Officers: <a href="mailto:social@mcr.jesus.cam.ac.uk" data-eh="contacts/a/30">social@mcr.jesus.cam.ac.uk</a></td></tr>
+        <tr><td data-e="contacts/td/85">Freshers events organised by the College</td><td data-e="contacts/td/86">probably the Senior Postgraduate Administrator: <a href="mailto:graduate-tutor@jesus.cam.ac.uk" data-eh="contacts/a/31">graduate-tutor@jesus.cam.ac.uk</a>, unless organised by a different department</td></tr>
+        <tr><td data-e="contacts/td/87">Your course</td><td data-e="contacts/td/88">email your Departmental Administrator, or see the list of <a href="https://www.cam.ac.uk/colleges-and-departments/department-a-z" target="_blank" rel="noopener" data-eh="contacts/a/32">Departments</a> on the University’s website, then look for the ‘About Us’ or ‘People’ section within the Departmental website</td></tr>
+        <tr><td data-e="contacts/td/89">Welfare issues</td><td data-e="contacts/td/90">see our <a href="#welfare" data-eh="contacts/a/33">Welfare</a> pages for comprehensive information on where to go for help (including within the University and the College)</td></tr>
+        <tr><td data-e="contacts/td/91">Sports</td><td data-e="contacts/td/92">the MCR Sports Officer: <a href="mailto:sports@mcr.jesus.cam.ac.uk" data-eh="contacts/a/34">sports@mcr.jesus.cam.ac.uk</a>. also see the <a href="https://jnet.jesus.cam.ac.uk/jnet/college-information/sport" target="_blank" rel="noopener" data-eh="contacts/a/35">Sports page on JNet</a> for court booking and gym info, or the <a href="http://www.sport.cam.ac.uk/university-sport/" target="_blank" rel="noopener" data-eh="contacts/a/36">University sports pages</a></td></tr>
+        <tr><td data-e="contacts/td/93">IT issues in College</td><td data-e="contacts/td/94">the College IT Officers: <a href="mailto:it-support@jesus.cam.ac.uk" data-eh="contacts/a/37">it-support@jesus.cam.ac.uk</a></td></tr>
+        <tr><td data-e="contacts/td/95">The Library</td><td data-e="contacts/td/96">the Librarian: <a href="mailto:quincentenary-library@jesus.cam.ac.uk" data-eh="contacts/a/38">quincentenary-library@jesus.cam.ac.uk</a></td></tr>
+        <tr><td data-e="contacts/td/97">General help</td><td data-e="contacts/td/98">the Porters: <a href="mailto:porter@jesus.cam.ac.uk" data-eh="contacts/a/39">porter@jesus.cam.ac.uk</a> (Porters in Cambridge are gatekeepers and generally tend to know everything and everyone, they are not there to carry your bags!)</td></tr>
+        <tr><td data-e="contacts/td/99">The Postgraduate Conference</td><td data-e="contacts/td/100">the MCR Academic Officer: <a href="mailto:academic@mcr.jesus.cam.ac.uk" data-eh="contacts/a/40">academic@mcr.jesus.cam.ac.uk</a></td></tr>
+      </tbody>
+    </table></div>
+    <div class="note" data-rise>Cambridge names things oddly because it has had eight hundred years to. There is a glossary from the <a href="https://www.cam.ac.uk/about-the-university/how-the-university-and-colleges-work/glossary-of-cambridge-terminology" target="_blank" rel="noopener" data-eh="contacts/a/24">University</a> and another from <a href="https://www.applytocambridge.com/cambridge/cambridge-glossary" target="_blank" rel="noopener" data-eh="contacts/a/25">ApplyToCambridge</a>, and JNet’s <a href="https://jnet.jesus.cam.ac.uk/departments" target="_blank" rel="noopener" data-eh="contacts/a/26">Departments page</a> puts faces to the names.</div>
+  </div>
+
+  <div class="card" data-rise>
     <h2 data-e="contacts/h2/2">Tutorial</h2>
-    <p data-e="contacts/p/5">In every College, a number of Fellows and Staff are ‘Tutors’. Every student at the University is assigned a Tutor. The Tutor is the primary contact in the college, and everything concerning your studies needs to go through them. For postgraduate students, the Tutor is the Graduate Tutor. Because he is responsible for over 400 students, the Graduate Tutor is supported by a small team. You can turn to any Tutor for advice on any matter whatsoever and on any problems, great or small. They will provide a confidential and sympathetic ear and can direct you towards appropriate professional or expert advice if necessary. Most of them have daily drop-in sessions.</p>
+    <p data-e="contacts/p/5">Every student is assigned a Tutor, and for postgraduates that is the Graduate Tutor, supported by a small team because the post covers more than four hundred people. You can go to any Tutor about anything at all, however large or small; they will listen in confidence and point you at expert help when it is needed. Most hold a drop-in.</p>
     <p data-e="contacts/p/6">The Tutors who are part of the College administration form the Tutorial Department, located on First Floor, N Staircase, Second Court. They organise everything related to students, including:</p>
     <ul class="list">
       <li data-e="contacts/li/1">Applications for extensions</li>
@@ -2141,7 +2397,7 @@ body.reframing img.reframe:active{cursor:grabbing}
 
   <div class="card" data-rise>
     <h2 data-e="contacts/h2/3">College Contacts</h2>
-    <p data-e="contacts/p/8">Upon your arrival in College, you will be assigned a College Contact who is a Fellow of Jesus College. Your contact will be from your faculty or a related subject area. The role of your contact is to provide an informal and friendly point of contact within the College Fellowship should you need some simple advice. This role exists as a backup to your main ports of call through either your supervisor or the College Welfare Tutors, or you may wish to discuss academic or professional matters of the sort not normally covered by your faculty supervisor or the College Welfare Tutors. The second role of your contact is to support the social engagement of new postgraduate students in the College, including invitations to undergraduate events or postgraduate-only events.</p>
+    <p data-e="contacts/p/8">When you arrive you are assigned a College Contact: a Fellow from your faculty or something near it, told to you on arrival. They are there for the informal question — the academic or professional one your supervisor does not cover and the Welfare Tutors would not — and for making sure new postgraduates get asked to things.</p>
   </div>
 
   <div class="card" data-rise>
@@ -2156,7 +2412,7 @@ body.reframing img.reframe:active{cursor:grabbing}
     </table></div>
     <p data-e="contacts/p/10">At the Porters’ Lodge, you can:</p>
     <ul class="list">
-      <li data-e="contacts/li/10">Check out a spare key if locked out (note: unless prior arrangements have been made, only the resident of the room may collect a spare key or access card from the Porters’ Lodge, for when a spare key or access card has been signed out the resident is allowed 72 hours to return it. When away from College on vacation or research, all keys to rooms in College must be returned to the Porters’ Lodge, as well as when you finally vacate your room. Lost keys and keys not returned incur a charge of £30. Lost access cards incur a charge of £10 for a replacement.)</li>
+      <li data-e="contacts/li/10">Check out a spare key if you are locked out</li>
       <li data-e="contacts/li/11">Get replacement light bulbs</li>
       <li data-e="contacts/li/12">Send and receive mail. Royal Mail (standard postage rates apply, cleared in time to catch postal collection). University Messenger Service (UMS, for mail to Faculties, Departments and Fellows of other Colleges, two deliveries/collections daily Monday to Friday). Inter-Collegiate Mail Service (ICMS, student to student, one collection daily Monday to Friday)</li>
       <li data-e="contacts/li/13">Collect parcels (check your pigeonhole in the MCR for the parcel slip)</li>
@@ -2164,6 +2420,7 @@ body.reframing img.reframe:active{cursor:grabbing}
       <li data-e="contacts/li/15">Reserve tennis or squash courts</li>
       <li data-e="contacts/li/16">Notify them of any emergency situation</li>
     </ul>
+    <div class="note" data-rise>Only the resident may collect a spare key or access card, and it has to be back within 72 hours. All keys go back to the Lodge when you leave for a vacation or for good. A key not returned costs £30, a replacement access card £10.</div>
     <div class="note" data-rise>
       Postal address:<br>
       (Your name) PG<br>
@@ -2181,18 +2438,20 @@ body.reframing img.reframe:active{cursor:grabbing}
 
   <div class="card" data-rise>
     <h2 data-e="contacts/h2/6">College Council</h2>
-    <p data-e="contacts/p/12">The College Council is the decision-making board of College, where any important changes to most aspects of the College (from building work to provision for students) are agreed upon. It meets on <a href="https://jnet.jesus.cam.ac.uk/jnet/college-information/college-calendar" target="_blank" rel="noopener" data-eh="contacts/a/18">specific dates</a> throughout the year and feeds off recommendations made by lots of different committees, many of which are attended by postgraduate representatives from the MCR Committee. Council approves everything that happens in and to College, and minutes are available in the library and on JNet. There are four Junior representatives on Council: the JCSU President, one elected undergraduate rep, the MCR President, and one elected postgraduate representative. These representatives also act as Trustees of the College.</p>
+    <p data-e="contacts/p/12">Council approves everything that happens in and to the College, from building work to student provision, on <a href="https://jnet.jesus.cam.ac.uk/jnet/college-information/college-calendar" target="_blank" rel="noopener" data-eh="contacts/a/18">set dates</a> through the year, and its minutes are in the library and on JNet. Four junior members sit on it — the JCSU President, the MCR President, and one elected representative from each — and all four are Trustees of the College.</p>
   </div>
 
+  <p class="tag" data-rise data-e="contacts/tag/1">Who is who in College</p>
+
   <div class="card" data-rise>
-    <h2 data-e="contacts/h2/7">Who is Who. College Officers</h2>
+    <h3 data-e="contacts/h2/7">The College Officers</h3>
     <div class="tbl-wrap"><table class="tbl">
       <thead><tr><th data-e="contacts/th/7">Role</th><th data-e="contacts/th/8">Name</th><th data-e="contacts/th/9">Notes</th></tr></thead>
       <tbody>
         <tr><td data-e="contacts/td/17">The Master</td><td data-e="contacts/td/18">Sonita Alleyne</td><td data-e="contacts/td/19">Head of College. Extremely approachable, don’t be afraid to talk to her.</td></tr>
         <tr><td data-e="contacts/td/20">The President</td><td data-e="contacts/td/21">Prof Ian Wilson</td><td data-e="contacts/td/22">Head of the Fellowship (the senior members of College, such as Fellows, visiting Scholars, and College Post-doctoral Associates or Research Associates).</td></tr>
         <tr><td data-e="contacts/td/23">The Dean of College</td><td data-e="contacts/td/24">Prof Clare Chambers</td><td data-e="contacts/td/25">Responsible for student discipline and reviewing event permit applications.</td></tr>
-        <tr><td data-e="contacts/td/26">The Senior Tutor</td><td data-e="contacts/td/27">Dr Paul Dominiak</td><td data-e="contacts/td/28">Responsible for all junior members of College (undergraduates and postgraduates), )lso in charge of parking permits.</td></tr>
+        <tr><td data-e="contacts/td/26">The Senior Tutor</td><td data-e="contacts/td/27">Dr Paul Dominiak</td><td data-e="contacts/td/28">Responsible for all junior members of College (undergraduates and postgraduates), Also in charge of parking permits.</td></tr>
         <tr><td data-e="contacts/td/29">The Graduate Tutor</td><td data-e="contacts/td/30">Dr Michael Edwards</td><td data-e="contacts/td/31">Tutor for all postgraduate students.</td></tr>
         <tr><td data-e="contacts/td/32">The Deputy Graduate Tutor</td><td data-e="contacts/td/33">Dr Fiona Green</td><td data-e="contacts/td/34">Assists the Graduate Tutor.</td></tr>
         <tr><td data-e="contacts/td/35">The Senior Postgraduate Administrator</td><td data-e="contacts/td/36">Rebecca Williams</td><td data-e="contacts/td/37">Often your first point of contact with the Postgraduate Tutors, and receives emails sent to them.</td></tr>
@@ -2202,11 +2461,11 @@ body.reframing img.reframe:active{cursor:grabbing}
   </div>
 
   <div class="card" data-rise>
-    <h2 data-e="contacts/h2/8">Health &amp; Pastoral Support</h2>
+    <h3 data-e="contacts/h2/8">Health and pastoral support</h3>
     <div class="tbl-wrap"><table class="tbl">
       <thead><tr><th data-e="contacts/th/10">Role</th><th data-e="contacts/th/11">Name</th><th data-e="contacts/th/12">Notes</th></tr></thead>
       <tbody>
-        <tr><td data-e="contacts/td/41">Student Wellbeing Lead</td><td data-e="contacts/td/42">Mary Simuyandi</td><td data-e="contacts/td/43"></td></tr>
+        <tr><td data-e="contacts/td/41">Student Wellbeing Lead</td><td data-e="contacts/td/42">Mary Simuyandi</td><td data-e="contacts/td/43">Coordinates welfare across College, and is the person to raise a pattern with rather than a single incident.</td></tr>
         <tr><td data-e="contacts/td/44">The Community Health Practitioner (formerly the College Nurse)</td><td data-e="contacts/td/45">Naomi Walker</td><td data-e="contacts/td/46">Assists/advises/administers medical treatment, manages the twice-weekly physiotherapy clinics, can refer you to other medical professionals when necessary.</td></tr>
         <tr><td data-e="contacts/td/47">The College Mental Health Nurse</td><td data-e="contacts/td/48"><a href="https://jnet.jesus.cam.ac.uk/jnet/students/health-and-welfare" target="_blank" rel="noopener" data-eh="contacts/a/19">Rachel Michel</a></td><td data-e="contacts/td/49">Can offer confidential support, assessments, and advice on a range of mental health and wellbeing concerns, from academic stress to emotional difficulties.</td></tr>
         <tr><td data-e="contacts/td/50">The Dean of the Chapel</td><td data-e="contacts/td/51">Rev Dr James Crockford</td><td data-e="contacts/td/52">Responsible for the Chapel and pastoral support, regardless of religious background.</td></tr>
@@ -2216,50 +2475,27 @@ body.reframing img.reframe:active{cursor:grabbing}
   </div>
 
   <div class="card" data-rise>
-    <h2 data-e="contacts/h2/9">Administration &amp; Finance</h2>
+    <h3 data-e="contacts/h2/9">Administration and finance</h3>
     <div class="tbl-wrap"><table class="tbl">
       <thead><tr><th data-e="contacts/th/13">Role</th><th data-e="contacts/th/14">Name</th><th data-e="contacts/th/15">Notes</th></tr></thead>
       <tbody>
         <tr><td data-e="contacts/td/53">The (Senior) Bursar</td><td data-e="contacts/td/54">Dr Richard Anthony</td><td data-e="contacts/td/55">Oversees the College Finances.</td></tr>
         <tr><td data-e="contacts/td/56">The Domestic Bursar</td><td data-e="contacts/td/57">Stuart Websdale</td><td data-e="contacts/td/58"><a href="tel:01223760516" data-eh="contacts/a/21">01223 760516</a> / <a href="mailto:domestic-bursar@jesus.cam.ac.uk" data-eh="contacts/a/22">domestic-bursar@jesus.cam.ac.uk</a></td></tr>
-        <tr><td data-e="contacts/td/59">The Tutorial Administrator</td><td data-e="contacts/td/60"></td><td data-e="contacts/td/61">Oversees housing and various other administration.</td></tr>
-        <tr><td data-e="contacts/td/62">The Financial Tutor</td><td data-e="contacts/td/63"></td><td data-e="contacts/td/64">Responsible for all matters relating to financial hardship: applications to Access Funds, the Supplementary Maintenance Committee, the General Scholarship Fund and other special College funds, as well as making special arrangements for paying your College bills.</td></tr>
+        <tr><td data-e="contacts/td/59">The Tutorial Administrator</td><td data-e="contacts/td/60">via the Tutorial Department, <a href="mailto:graduate-tutor@jesus.cam.ac.uk" data-eh="contacts/a/45">graduate-tutor@jesus.cam.ac.uk</a></td><td data-e="contacts/td/61">Oversees housing and various other administration.</td></tr>
+        <tr><td data-e="contacts/td/62">The Financial Tutor</td><td data-e="contacts/td/63">via the Tutorial Department, <a href="mailto:graduate-tutor@jesus.cam.ac.uk" data-eh="contacts/a/46">graduate-tutor@jesus.cam.ac.uk</a></td><td data-e="contacts/td/64">Responsible for all matters relating to financial hardship: applications to Access Funds, the Supplementary Maintenance Committee, the General Scholarship Fund and other special College funds, as well as making special arrangements for paying your College bills.</td></tr>
       </tbody>
     </table></div>
   </div>
 
   <div class="card" data-rise>
-    <h2 data-e="contacts/h2/10">Important College Staff</h2>
+    <h3 data-e="contacts/h2/10">The staff you will actually deal with</h3>
     <div class="tbl-wrap"><table class="tbl">
       <thead><tr><th data-e="contacts/th/16">Role</th><th data-e="contacts/th/17">Name</th><th data-e="contacts/th/18">Notes</th></tr></thead>
       <tbody>
         <tr><td data-e="contacts/td/65">Head Porter and Duty Porters</td><td data-e="contacts/td/66">Simon Durrant (Head Porter)</td><td data-e="contacts/td/67">Responsible for College security.</td></tr>
         <tr><td data-e="contacts/td/68">Housekeeping</td><td data-e="contacts/td/69">Sonia Horton (Head)</td><td data-e="contacts/td/70">Responsible for the cleanliness of accommodation.</td></tr>
         <tr><td data-e="contacts/td/71">Maintenance team</td><td data-e="contacts/td/72">Haidee Carpenter (Coordinator)</td><td data-e="contacts/td/73">Responsible for the upkeep of College buildings.</td></tr>
-        <tr><td data-e="contacts/td/74">Housing Management</td><td data-e="contacts/td/75">Isabel Harrison (Head)</td><td data-e="contacts/td/76"></td></tr>
-      </tbody>
-    </table></div>
-    <div class="note" data-rise>More information about all these people can be found on <a href="https://www.jesus.cam.ac.uk/college/people" target="_blank" rel="noopener" data-eh="contacts/a/23">JNet</a>.</div>
-  </div>
-
-  <div class="card" data-rise>
-    <h2 data-e="contacts/h2/11">Thematic List of Contacts and Resources</h2>
-    <p data-e="contacts/p/13">The College and University are both run by a number of committees and administrators, and it’s often hard to work out who to contact. The list below should give you some pointers. There are also useful glossaries of Cambridge words published by the <a href="https://www.cam.ac.uk/about-the-university/how-the-university-and-colleges-work/glossary-of-cambridge-terminology" target="_blank" rel="noopener" data-eh="contacts/a/24">University</a> and <a href="https://www.applytocambridge.com/cambridge/cambridge-glossary" target="_blank" rel="noopener" data-eh="contacts/a/25">ApplyToCambridge.com</a>. the University is 800 years old, and sometimes unusual names are given to things simply because that’s how they’ve always been known! Another place to find who’s who is the <a href="https://jnet.jesus.cam.ac.uk/departments" target="_blank" rel="noopener" data-eh="contacts/a/26">Departments page on JNet</a>, which has pictures of lots of the people you may deal with (click the ‘Staff’ link for the relevant section).</p>
-    <div class="tbl-wrap"><table class="tbl">
-      <thead><tr><th data-e="contacts/th/19">Topic</th><th data-e="contacts/th/20">Contact</th></tr></thead>
-      <tbody>
-        <tr><td data-e="contacts/td/77">Accommodation</td><td data-e="contacts/td/78">the <a href="mailto:student-rooms@jesus.cam.ac.uk" data-eh="contacts/a/27">Student Rooms</a> team</td></tr>
-        <tr><td data-e="contacts/td/79">University Card, general admin</td><td data-e="contacts/td/80">the Senior Postgraduate Administrator: <a href="mailto:graduate-tutor@jesus.cam.ac.uk" data-eh="contacts/a/28">graduate-tutor@jesus.cam.ac.uk</a></td></tr>
-        <tr><td data-e="contacts/td/81">Food and drink within College</td><td data-e="contacts/td/82">the Catering Office. Email the Manciple: <a href="mailto:manciple@jesus.cam.ac.uk" data-eh="contacts/a/29">manciple@jesus.cam.ac.uk</a> (Manciple is a Cambridge word for the person who runs the catering)</td></tr>
-        <tr><td data-e="contacts/td/83">Freshers events organised by the MCR</td><td data-e="contacts/td/84">the MCR Social Officers: <a href="mailto:social@mcr.jesus.cam.ac.uk" data-eh="contacts/a/30">social@mcr.jesus.cam.ac.uk</a></td></tr>
-        <tr><td data-e="contacts/td/85">Freshers events organised by the College</td><td data-e="contacts/td/86">probably the Senior Postgraduate Administrator: <a href="mailto:graduate-tutor@jesus.cam.ac.uk" data-eh="contacts/a/31">graduate-tutor@jesus.cam.ac.uk</a>, unless organised by a different department</td></tr>
-        <tr><td data-e="contacts/td/87">Your course</td><td data-e="contacts/td/88">email your Departmental Administrator, or see the list of <a href="https://www.cam.ac.uk/colleges-and-departments/department-a-z" target="_blank" rel="noopener" data-eh="contacts/a/32">Departments</a> on the University’s website, then look for the ‘About Us’ or ‘People’ section within the Departmental website</td></tr>
-        <tr><td data-e="contacts/td/89">Welfare issues</td><td data-e="contacts/td/90">see our <a href="#welfare" data-eh="contacts/a/33">Welfare</a> pages for comprehensive information on where to go for help (including within the University and the College)</td></tr>
-        <tr><td data-e="contacts/td/91">Sports</td><td data-e="contacts/td/92">the MCR Sports Officer: <a href="mailto:sports@mcr.jesus.cam.ac.uk" data-eh="contacts/a/34">sports@mcr.jesus.cam.ac.uk</a>. also see the <a href="https://jnet.jesus.cam.ac.uk/jnet/college-information/sport" target="_blank" rel="noopener" data-eh="contacts/a/35">Sports page on JNet</a> for court booking and gym info, or the <a href="http://www.sport.cam.ac.uk/university-sport/" target="_blank" rel="noopener" data-eh="contacts/a/36">University sports pages</a></td></tr>
-        <tr><td data-e="contacts/td/93">IT issues in College</td><td data-e="contacts/td/94">the College IT Officers: <a href="mailto:it-support@jesus.cam.ac.uk" data-eh="contacts/a/37">it-support@jesus.cam.ac.uk</a></td></tr>
-        <tr><td data-e="contacts/td/95">The Library</td><td data-e="contacts/td/96">the Librarian: <a href="mailto:quincentenary-library@jesus.cam.ac.uk" data-eh="contacts/a/38">quincentenary-library@jesus.cam.ac.uk</a></td></tr>
-        <tr><td data-e="contacts/td/97">General help</td><td data-e="contacts/td/98">the Porters: <a href="mailto:porter@jesus.cam.ac.uk" data-eh="contacts/a/39">porter@jesus.cam.ac.uk</a> (Porters in Cambridge are gatekeepers and generally tend to know everything and everyone, they are not there to carry your bags!)</td></tr>
-        <tr><td data-e="contacts/td/99">The Postgraduate Conference</td><td data-e="contacts/td/100">the MCR Academic Officer: <a href="mailto:academic@mcr.jesus.cam.ac.uk" data-eh="contacts/a/40">academic@mcr.jesus.cam.ac.uk</a></td></tr>
+        <tr><td data-e="contacts/td/74">Housing Management</td><td data-e="contacts/td/75">Isabel Harrison (Head)</td><td data-e="contacts/td/76">Room allocation, moves, and the leases on the College houses.</td></tr>
       </tbody>
     </table></div>
   </div>
@@ -2363,9 +2599,28 @@ var ICON = {
   room:'<path d="M4 12.5V9a2 2 0 0 1 4 0v2h8V9a2 2 0 0 1 4 0v3.5"/><path d="M3 12.5h18V17H3Z"/><path d="M6 17v2M18 17v2"/>',
   sport:'<circle cx="12" cy="12" r="8"/><path d="M12 4c2.6 2.2 2.6 13.8 0 16M4.6 9.5c4 1.6 10.8 1.6 14.8 0M4.6 14.5c4-1.6 10.8-1.6 14.8 0"/>',
   punting:'<path d="M3 16.5h18l-2.2 3.2a2 2 0 0 1-1.7.8H6.9a2 2 0 0 1-1.7-.8Z"/><path d="M6 16.5V11l11-7v12.5"/>',
+  /* Life at Jesus is the MCR room, sport, the punt, the conference fund and
+     the garden -- five things with nothing in common but the place. So the
+     icon is the place: the gatehouse everybody walks through to get to any of
+     them. A punt stood for one of the five and made the whole group look like
+     it was about boats.
+
+     IT IS FLAT ON TOP, WITH BATTLEMENTS, AND THAT IS THE WHOLE POINT.
+     The first version had a pitched roof over an arched door, which is a
+     church -- and this is Jesus College, not Jesus the church, a confusion the
+     College spends quite a lot of its time correcting. A square crenellated
+     tower over an arch is a college gate and cannot be read as anything else;
+     it is also what the Chimney actually looks like. */
+  gatehouse:'<path d="M5 8V5.4h2.8V8h2.8V5.4h2.8V8h2.8V5.4H19V8"/>'
+    + '<path d="M5 8v12.6M19 8v12.6"/><path d="M3 20.6h18"/>'
+    + '<path d="M9.7 20.6v-4.3a2.3 2.3 0 0 1 4.6 0v4.3"/>'
+    + '<path d="M9.6 11.6h1.3M13.1 11.6h1.3"/>',
   funding:'<rect x="3" y="6" width="18" height="12" rx="2.5"/><circle cx="12" cy="12" r="2.6"/>',
   sustainability:'<path d="M20 5c0 8-4.6 12-9 12a5.4 5.4 0 0 1-5.4-5.4C5.6 7.6 11.6 4.6 20 5Z"/><path d="M5 20c2-4.4 5-7.2 9-9"/>',
   info:'<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5"/><path d="M12 7.7h.01"/>',
+  /* A first-aid cross in a rounded box: the one symbol on the bar that a
+     reader does not have to be told the meaning of. */
+  health:'<rect x="3.4" y="5.6" width="17.2" height="13.4" rx="3"/><path d="M12 9.4v6M9 12.4h6"/>',
   contacts:'<path d="M7 3.5h10a1.5 1.5 0 0 1 1.5 1.5v14a1.5 1.5 0 0 1-1.5 1.5H7Z"/><path d="M5 7.5h2M5 12h2M5 16.5h2"/><circle cx="12.5" cy="10" r="1.9"/><path d="M9.6 15.4a3 3 0 0 1 5.8 0"/>'
 };
 function svg(k){ return '<svg viewBox="0 0 24 24" aria-hidden="true">'+(ICON[k]||'')+'</svg>' }
@@ -2378,12 +2633,13 @@ var PAGES = [
   {id:'counselling',    label:'Counselling and advice', tab:'Counselling', group:'Support', blurb:'Who to see, and how to reach them.'},
   {id:'sexual-health',  label:'Sexual health',         group:'Support',    blurb:'Free supplies, testing, and where to go.'},
   {id:'families',       label:'Families and partners', tab:'Families', group:'Support', blurb:'Bringing a partner or children to Cambridge.'},
+  {id:'health',         label:'First aid and health', tab:'Health', group:'Support', blurb:'From an emergency to registering with a GP, in the order to consider them.'},
   {id:'room',           label:'The MCR room', tab:'MCR room', group:'Life at Jesus', blurb:'Above the Roost, open to every member, all hours.'},
   {id:'sport',          label:'Sport and societies', tab:'Sport', group:'Life at Jesus', blurb:'Nine MCR clubs, and how to start another.', pic:'col-sport.jpg', alt:'A lineout on the College pitch'},
   {id:'punting',        label:'Punting',               group:'Life at Jesus', blurb:'The Rooster: booking, finding her, bringing her back.', pic:'punt6.jpeg', alt:'The Rooster, the MCR punt'},
   {id:'funding',        label:'Conference fund', tab:'Funding', group:'Life at Jesus', blurb:'£100–£300 towards a student-led conference.', pic:'col-funding.jpg', alt:'Students working together'},
   {id:'sustainability', label:'Sustainability', tab:'Green', group:'Life at Jesus', blurb:'The A–Z guide and the College’s own policies.', pic:'col-garden.jpg', alt:'The College gardens'},
-  {id:'info',           label:'Information', tab:'Info', group:'Reference', blurb:'Health, first aid, forms and how College works.', pic:'col-formal.jpg', alt:'Formal Hall at Jesus College'},
+  {id:'info',           label:'Forms and links', tab:'Forms', group:'Reference', blurb:'Twenty-one College pages and forms, with the address of each.', pic:'col-formal.jpg', alt:'Formal Hall at Jesus College'},
   {id:'contacts',       label:'Useful contacts', tab:'Contacts', group:'Reference', pic:'col-library.jpg', alt:'The Quincentenary Library', blurb:'Tutors, porters and doctors. The whole directory, searchable.'}
 ];
 /* #admin is a page like any other as far as routing is concerned, and
@@ -2420,7 +2676,7 @@ function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').repl
     if (!g){ g = {name:p.group, pages:[]}; GROUPS.push(g) }
     g.pages.push(p);
   });
-  var GICON = {'Start here':'freshers','Support':'welfare','Life at Jesus':'punting','Reference':'info'};
+  var GICON = {'Start here':'freshers','Support':'welfare','Life at Jesus':'gatehouse','Reference':'info'};
   document.getElementById('navcats').innerHTML =
     '<button class="tabbtn" type="button" data-id="home">' + svg('home') + '<span>Home</span></button>'
     + GROUPS.map(function(g, i){
@@ -2484,9 +2740,16 @@ function markCurrent(id){
   });
   var p = PAGES.filter(function(x){ return x.id === id })[0];
   if (!p) return;
+  /* HOME IS NOT A CATEGORY, EVEN THOUGH IT IS IN ONE.
+     Home sits in the "Start here" group so that it appears in the rail with
+     its neighbours, and the phone bar gives it a button of its own as well.
+     Marking both meant two tabs lit at once on the home page -- the only page
+     where that could happen, and the first page anybody sees. The button wins:
+     it is the more specific of the two and it is the one that was pressed. */
+  var onHome = id === 'home';
   [].forEach.call(document.querySelectorAll('[data-cat]'), function(b){
     var g = GROUPS[+b.getAttribute('data-cat')];
-    if (g && p && g.name === p.group) b.setAttribute('aria-current','page');
+    if (!onHome && g && p && g.name === p.group) b.setAttribute('aria-current','page');
     else b.removeAttribute('aria-current');
   });
 }
@@ -2506,7 +2769,10 @@ function show(id, push){
   window.scrollTo(0,0);
   closeSheet();
   if (typeof ADMIN === 'object' && ADMIN.editing) setTimeout(function(){ setEditing(true) }, 60);
-  var cur = document.querySelector('#navscroll .tabbtn[aria-current="true"]');
+  /* Same attribute mismatch as the stylesheet had: markCurrent writes
+     aria-current="page" and this asked for "true", so the tab bar has never
+     once scrolled the current category into view on a narrow screen. */
+  var cur = document.querySelector('#navscroll .tabbtn[aria-current]');
   if (cur && cur.scrollIntoView) cur.scrollIntoView({block:'nearest', inline:'center'});
   var sec = document.getElementById(id);
   if (sec){
@@ -2821,7 +3087,7 @@ function drawJcsu(){
   var all = document.getElementById('jAll');
   all.hidden = !!q;
   all.setAttribute('aria-expanded', jOpen ? 'true' : 'false');
-  all.innerHTML = '<span class="pm">' + (jOpen ? '\u2212' : '+') + '</span>'
+  all.innerHTML = '<span class="pm">' + (jOpen ? '−' : '+') + '</span>'
     + (jOpen ? 'Close the list' : 'Show all ' + JCSU.length + ' of them');
 
   var out = document.getElementById('jOut');
@@ -2831,7 +3097,7 @@ function drawJcsu(){
   });
   if (!hit.length){
     out.innerHTML = '<div class="nohit"><b>Nothing matched that.</b>'
-      + 'Try part of a name, or a captain\u2019s surname.</div>';
+      + 'Try part of a name, or a captain’s surname.</div>';
     return;
   }
   function group(kind, label){
@@ -2865,6 +3131,19 @@ function wireSearch(){
   var sec = document.getElementById('contacts');
   var cards = [].slice.call(sec.querySelectorAll('.card'));
   var rows  = [].slice.call(sec.querySelectorAll('.tbl tbody tr'));
+  /* A CARD IS NOT ONLY ITS TABLE.
+     The Porters card and the Tutorial card each hold a table AND a list of
+     what those people actually do, so judging them on their rows alone hid
+     the card that answered the question: "parcel", "bicycle", "light bulb",
+     "keys", "extension" and "visa" all reported nothing matched while the
+     answer was on screen a moment earlier. So each card also carries the text
+     that is NOT in any of its tables, measured once, here, rather than on
+     every keystroke. */
+  var prose = cards.map(function(c){
+    var clone = c.cloneNode(true);
+    [].forEach.call(clone.querySelectorAll('.tbl-wrap,.tbl'), function(t){ t.parentNode.removeChild(t) });
+    return clone.textContent.toLowerCase();
+  });
   var count = document.getElementById('cCount'), none = document.getElementById('cNone'),
       clr = document.getElementById('cClear');
   function run(){
@@ -2876,10 +3155,14 @@ function wireSearch(){
     }
     var hits = 0;
     rows.forEach(function(r){ var h = r.textContent.toLowerCase().indexOf(q)>=0; r.hidden=!h; if(h) hits++ });
-    cards.forEach(function(c){
+    cards.forEach(function(c, i){
       if (c.id==='cSearchCard') return;
-      if (c.querySelector('.tbl')) c.hidden = !c.querySelector('.tbl tbody tr:not([hidden])');
-      else { var h = c.textContent.toLowerCase().indexOf(q)>=0; c.hidden=!h; if(h) hits++ }
+      var rowHit = !!c.querySelector('.tbl tbody tr:not([hidden])'),
+          txtHit = prose[i].indexOf(q) >= 0;
+      c.hidden = !(rowHit || txtHit);
+      /* Counted only when the card itself matched and none of its rows did,
+         so a card and its own matching rows are not both tallied. */
+      if (txtHit && !rowHit) hits++;
     });
     count.hidden = !hits; none.hidden = hits>0;
     if (hits) count.textContent = hits + (hits===1?' match':' matches') + ' for “' + q + '”';
@@ -3690,6 +3973,19 @@ if (APP_URL){
   ['enterTop','enterRail','enterBand','footEnter'].forEach(function(id){
     var el = document.getElementById(id);
     if (el){ el.href = APP_URL; el.hidden = false; el.target = '_blank'; el.rel = 'noopener' }
+  });
+  /* Doors inside a page carry data-enter rather than an id of their own, so a
+     new one can be dropped into any section without coming back here to add
+     it to a list -- which is how a door ends up pointing at "#". */
+  [].forEach.call(document.querySelectorAll('[data-enter]'), function(el){
+    el.href = APP_URL; el.hidden = false; el.target = '_blank'; el.rel = 'noopener';
+  });
+}else{
+  /* No address configured: a door to nowhere is worse than no door, so the
+     panel says where to go instead of offering a link that does nothing. */
+  [].forEach.call(document.querySelectorAll('.doorway'), function(el){
+    var a = el.querySelector('[data-enter]');
+    if (a) a.remove();
   });
 }
 wireSearch();
