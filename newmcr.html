@@ -251,14 +251,44 @@ a{color:var(--gold-2);text-underline-offset:3px}
    with a fixed basis ignores its own width and the letterboxing comes back. */
 .crest{display:block;width:auto;height:3rem;flex:0 0 auto;object-fit:contain;
   filter:drop-shadow(0 2px 5px rgba(30,2,4,.5))}
-/* The plate the comment above promises, on the two crests that actually sit on
-   the crimson. A rounded card rather than a disc, now that the box has the
-   shield's own shape and a circle would letterbox it again. It is scoped to
-   these two on purpose: the gate card and the way in put their crest on a disc
-   of their own, and a plate under that disc would be a card inside a coin. */
-#crestTop,#crestRail{padding:3px 5px;border-radius:9px;filter:none;
-  background:linear-gradient(180deg,rgba(255,253,250,.94),rgba(240,226,212,.88));
-  box-shadow:0 2px 8px -3px rgba(20,1,3,.6),inset 0 0 0 1px rgba(113,28,34,.14)}
+/* THE OUTLINE FOLLOWS THE CREST, NOT A BOX ROUND IT.
+   The crest needs something pale behind it or the red shield disappears into
+   the red page -- but a rectangle behind a shield is a rectangle, and it read
+   as the arms stuck on a label rather than as the arms. What it wanted was the
+   thing a printer would do: a fine white keyline traced round the drawing
+   itself, cockerel, shield and roundel, following every edge.
+
+   There is no CSS property for that, and there does not need to be. A
+   drop-shadow filter is cast from the shape's own alpha channel rather than
+   from its box, and filters chain: each one takes the previous one's result as
+   its input. Four of them, one pixel up, down, left and right, dilate the
+   alpha by its whole three-by-three neighbourhood -- which is a continuous
+   ring on every edge including the diagonal ones, because by the time the
+   fourth runs it is working on a shape the first three have already widened.
+   The fifth is an ordinary shadow, cast from that silhouette rather than from
+   a rectangle, which is what stops the whole thing floating.
+
+   FOUR, NOT EIGHT. The first version of this added the four diagonals as well,
+   on the assumption they were needed to close the corners. They are not -- the
+   orthogonal four already do -- and each extra pass is another rasterisation
+   and another compounding of whatever alpha the artwork has in its background.
+   Which brings us to the thing that actually went wrong.
+
+   THE ARTWORK HAD TO BE REPAIRED BEFORE ANY OF THIS WORKED.
+   The crest is a palette PNG, and not one of its hundred and ten tRNS entries
+   was fully transparent: the background sat at alpha 1 of 255, invisible on
+   its own. A chained drop-shadow composites the source over its own shadow, so
+   a uniform alpha does not stay put -- it goes 1, 2, 4, 8, 16, 31, 57, 99, 161
+   across eight passes. Eight offsets turned an imperceptible background into a
+   near-solid pale rectangle with square corners: the exact plate this change
+   was made to remove, drawn worse. The twelve palette entries under alpha 8
+   are now true zero, so the chain traces the silhouette and nothing else, and
+   four passes keep it that way even if some future export is imperfect. */
+#crestTop,#crestRail{padding:0;border-radius:0;background:none;box-shadow:none;
+  filter:
+    drop-shadow(1px 0 0 #FFFDFA)  drop-shadow(-1px 0 0 #FFFDFA)
+    drop-shadow(0 1px 0 #FFFDFA)  drop-shadow(0 -1px 0 #FFFDFA)
+    drop-shadow(0 2px 5px rgba(20,1,3,.55))}
 .crest.big{width:auto;height:96px;flex-basis:auto}
 
 /* ---------- masthead ---------- */
@@ -1667,12 +1697,11 @@ button.busy{cursor:progress}
    decides to draw. The slot is the full width of the card, the height of a
    comfortable target, and it has no ground of its own.
 
-   It used to be painted with the card's own dark tile. When Google honoured
-   the dark theme that was invisible; when it did not, and drew the white
-   personalised button it draws for somebody with a live session, the tile
-   showed round it as a dark halo with square shoulders. Transparent is right
-   in both cases: a black pill or a white one, centred on the crimson, and
-   nothing behind either. */
+   It used to be painted with the card's own dark tile, which showed round a
+   white button as a dark halo with square shoulders. It was then transparent,
+   which showed Google's own white container against the crimson instead. It is
+   now a white tray, deliberately, so that container has nothing to show
+   against -- see the rule at #gateGsi, which is the current answer. */
 /* THE BUTTON IS GOOGLE'S OWN, VISIBLE AND UNMODIFIED. READ THIS FIRST.
 
    It was briefly drawn our way: our own pill, with Google's real button laid
@@ -1697,8 +1726,10 @@ button.busy{cursor:progress}
    those is a second opinion about a box whose contents Google lays out, and
    between them they are every rendering mismatch this button has ever had.
    The other app sets three properties -- a minimum height and a centring
-   flex -- and its button has never misdrawn. So this is those three
-   properties and nothing else. Do not add a fourth. */
+   flex -- and its button has never misdrawn. So this is those three, plus one
+   deliberate fourth: a max-width on Google's own child, which is a backstop
+   for a card narrower than any this app draws and is justified where it is
+   written. Nothing else. */
 /* THE SPACING OF THIS CARD.
    One button is the whole point of the screen, so it gets room on both sides
    of it and nothing else competes: the note under it is small and quiet, and
@@ -1721,8 +1752,14 @@ button.busy{cursor:progress}
    Everything inside it turns over with the ground: the line under the button
    is claret on white instead of cream on claret, and the waiting bar is a pale
    grey rather than the dark well it used to be. */
+/* #FFFFFF, and it has to be exactly that. The tray was a warm off white on a
+   gradient, which is the right colour for this card and the wrong one for this
+   job: Google's container is pure white, so anything within a shade of it drew
+   a faint rectangle exactly where the seam was supposed to stop existing. The
+   whole point of the tray is that the two whites are one white. Do not warm it
+   up, do not gradient it, do not tint it to match the card. */
 #gateGsi{display:grid;gap:11px;justify-items:center;margin:22px 0 0;
-  background:linear-gradient(180deg,#FFFDFA,#F7EEE7);
+  background:#FFFFFF;
   border-radius:16px;padding:16px 14px 14px;
   box-shadow:0 10px 26px -16px rgba(20,1,3,.85),inset 0 0 0 1px rgba(113,28,34,.10)}
 /* The tray takes padding of its own, which comes off the width the button has
@@ -1747,9 +1784,10 @@ button.busy{cursor:progress}
   color:var(--cream-4);font-weight:700}
 /* The ring belongs on the slot: the thing being focused is Google's frame. */
 #gsiBtn:focus-within{outline:2px solid var(--crimson);outline-offset:3px;border-radius:999px}
-/* On the tray now, so it is a pale grey rather than a dark well. */
+/* On the white tray, so a pale neutral rather than a dark well -- and neutral
+   rather than claret tinted, for the same reason the tray is not tinted. */
 .gsiskel{display:block;width:272px;max-width:100%;height:44px;border-radius:999px;
-  background:rgba(113,28,34,.09);animation:glow 1.5s ease-in-out infinite}
+  background:#EEEBE7;animation:glow 1.5s ease-in-out infinite}
 /* AN ADDRESSED ENVELOPE.
    .kv had two colour rules and no layout whatever, so the label and the value
    were simply two inline elements touching: "To" ran into the address and
@@ -3139,7 +3177,7 @@ function loadGsi(again){
    than inside Apps Script itself (GitHub Pages, the MCR site, a custom domain).
    Leave it empty when the page is served by the script and it will use the
    google.script.run bridge instead. */
-const API_URL = "https://script.google.com/macros/s/AKfycbwg_oBfFBnz9guD8f7waQ_8hxHhLrRj-3nyFDhEVt79yXpGHu_ki8yRZ9_1j0i1W5LD/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyXPfIXIZujmR5ctLtSVluPcbgmxVmWG-K3JSYm2hkbK3nnlFyKuPYGbER1HQZ83IrJ/exec";
 
 /* Where somebody goes to be written into the MCR Book. The server decides
    membership; this is only the signpost shown when the answer is no. */
@@ -3241,7 +3279,7 @@ const GATE = '<div class="roost" aria-hidden="true"><svg viewBox="0 0 64 64">' +
    confined to the anti-aliasing on the outline: measured over the crimson it
    is a mean of two parts in 255 at the sizes it is actually drawn, with ten
    pixels of the twelve thousand changing anywhere but on an edge. */
-const CREST = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFIAAACWCAMAAAB6iy8LAAABSlBMVEUAAABVAAADAQEBAAADAgAvBgmuGiQBAAAGAwICAADWIS3nIzGKFBxPCxDNGyd/AABlDBMCAQAuAAaZGCH/AACSAwlxERemVFqTJi1SPkhscnSxpqetEh2cmaFvJy6YhonMCxmqAAD///9tACQlBAeZADMYFAkwJxIjGw2XdzpYRiKuiUPFm0yhfj5ISCQ6LRbVqFPquVtIOBuZZjMYEgnGjThjTSb5xWG5k0hvVyoqKiozMwCjgT48MReHajT/0mjesFd8YTAUFAbywF5QQB8VEgnoGinIEB2TVlqtiYyVPEKylZemeXyqJS6VNDq2tbXb8/HKysq2x8XV6OaSR0y52daYlpeSaGvr+/qyCBKYc3WoMzukREuofYDK4N6sZmvL19bDurqnO0O/wL+RXGB0PEDDpKabqql3HSShXmPkDh7s7u5FLhdMMxnTXAoiAAAAbnRSTlMBA1Cvb/3+/S/P/v7+/v4C/o0L/gH//v////////////8DAQfZBf7+/v3+/v7+B9r+/v4FvAn+/v7+BgX9/v7//v4U/v8p/v////////////////////////////////////////////////8LCqviSIcAAApZSURBVHgBrNeFcuU6DAZgrUGy9Vs+SdPNZYb3f8MLJ8WQ50z8De62/ceCEO37Qs476itElkS9OJ9jjoriqY+UjSsUgAr1cEvCWPSKpDBAsWDfp2ypWCjKSB08+QmvNKZnuszlAYBOFUCNia5zsQJA/foVOmdHHXiGAuBvvjURRz2MMxSo333/g/wndyj8ednJH7///ie569JMmYb448+//CyLHtei/K/+CpM7T1fJogImi3B1OnI3QWHSp/Tkvc9SAai8CnTVb5kBYJI3dNHvzvC/KN2OeSNfAAzyLtOxFLwfXXtGcYjykTt+nsTCPJmMic5l+cwfzTJOuKsl+vNQWUv711nBu3La8iRrYTeR8VG1kQ4FWcv7N9YVC61LaF15KxGIrjmd4wE5qdiqkpqtfNdKXLCkRt1Hq5mEsVULUPIf7RXaZn55yowdNR6NaJR9OXx4Pu3hiKoq9Exrcsinl2FjV2TMM+axfcjVyt+CVCg2mAFMhro9ppwaQxZR7KhWAZsBc5tDtkWzYSh1kwmY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";
+const CREST = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFIAAACWCAMAAAB6iy8LAAABSlBMVEUAAABVAAADAQEBAAADAgAvBgmuGiQBAAAGAwICAADWIS3nIzGKFBxPCxDNGyd/AABlDBMCAQAuAAaZGCH/AACSAwlxERemVFqTJi1SPkhscnSxpqetEh2cmaFvJy6YhonMCxmqAAD///9tACQlBAeZADMYFAkwJxIjGw2XdzpYRiKuiUPFm0yhfj5ISCQ6LRbVqFPquVtIOBuZZjMYEgnGjThjTSb5xWG5k0hvVyoqKiozMwCjgT48MReHajT/0mjesFd8YTAUFAbywF5QQB8VEgnoGinIEB2TVlqtiYyVPEKylZemeXyqJS6VNDq2tbXb8/HKysq2x8XV6OaSR0y52daYlpeSaGvr+/qyCBKYc3WoMzukREuofYDK4N6sZmvL19bDurqnO0O/wL+RXGB0PEDDpKabqql3HSShXmPkDh7s7u5FLhdMMxnTXAoiAAAAbnRSTlMAAFCvb/3+/S/P/v7+/v4A/o0L/gD//v////////////8AAADZAP7+/v3+/v7+ANr+/v4AvAn+/v7+AAD9/v7//v4U/v8p/v////////////////////////////////////////////////8LCkEiBPMAAApZSURBVHgBrNeFcuU6DAZgrUGy9Vs+SdPNZYb3f8MLJ8WQ50z8De62/ceCEO37Qs476itElkS9OJ9jjoriqY+UjSsUgAr1cEvCWPSKpDBAsWDfp2ypWCjKSB08+QmvNKZnuszlAYBOFUCNia5zsQJA/foVOmdHHXiGAuBvvjURRz2MMxSo333/g/wndyj8ednJH7///ie569JMmYb448+//CyLHtei/K/+CpM7T1fJogImi3B1OnI3QWHSp/Tkvc9SAai8CnTVb5kBYJI3dNHvzvC/KN2OeSNfAAzyLtOxFLwfXXtGcYjykTt+nsTCPJmMic5l+cwfzTJOuKsl+vNQWUv711nBu3La8iRrYTeR8VG1kQ4FWcv7N9YVC61LaF15KxGIrjmd4wE5qdiqkpqtfNdKXLCkRt1Hq5mEsVULUPIf7RXaZn55yowdNR6NaJR9OXx4Pu3hiKoq9Exrcsinl2FjV2TMM+axfcjVyt+CVCg2mAFMhro9ppwaQxZR7KhWAZsBc5tDtkWzYSh1kwmY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";
 
 /* ---------- time, all of it Cambridge wall clock ---------- */
 const fmtLondon = new Intl.DateTimeFormat("en-GB", {timeZone:TZ, year:"numeric", month:"2-digit",
@@ -8635,11 +8673,29 @@ document.addEventListener("click", async e => {
     }
     if (d.noticeoff){ await api("deleteNotice", { id: d.noticeoff }); await refresh(false); return; }
     if (d.roomyes || d.roomno){
+      /* THE LINE THE COMMITTEE WRITES IS THE WHOLE OF A REFUSAL.
+         The server has always accepted a reply here, put it on the thread and
+         now puts it in the member's email -- and this, the only caller, never
+         sent one. So a decline arrived as "Not this time." and nothing else,
+         with the committee told the reason was on the thread. It is asked for
+         now: required on a no, because a refusal with no reason is the thing
+         people complain about, and offered on a yes, where it is usually
+         "leave the chairs as you found them" and is allowed to be empty. */
+      const yes = !!d.roomyes;
+      const reply = prompt(yes
+        ? "Anything to add? It goes in their email. Leave it empty if not."
+        : "Why not? This is what they will be told, so a line is better than nothing.", "");
+      /* Cancel means cancel. Empty is a deliberate choice on a yes and not a
+         useful one on a no. */
+      if (reply === null) return;
+      if (!yes && !reply.trim()) return toast("Give them a reason, even a short one.");
       spin(t, "One moment");
-      const r = await api("roomDecide", { id: d.roomyes || d.roomno, status: d.roomyes ? "yes" : "no" });
+      const r = await api("roomDecide", { id: d.roomyes || d.roomno,
+        status: yes ? "yes" : "no", reply: reply });
       S.allRooms = r.allRooms;
       await refresh(false);
-      return toast(d.roomyes ? "Approved. Their booking note is on the MCR room page." : "Declined. The reason is on their thread.");
+      return toast(yes ? "Approved. The slip is on its way to them."
+                       : "Declined. They have been told why.");
     }
     if (d.edit) return openEventEditor(d.edit);
     if (d.editser) return openSeriesEditor(d.editser);
