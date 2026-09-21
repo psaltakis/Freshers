@@ -341,6 +341,59 @@ a{color:var(--gold-2)}
   font-weight:800;font-size:.8rem;padding:12px 20px;border-radius:999px;transition:transform .3s var(--ease);z-index:90;max-width:88vw;text-align:center}
 #toast.show{transform:translateX(-50%)}
 .spin{width:14px;height:14px;border-radius:50%;border:2.5px solid rgba(0,0,0,.25);border-top-color:currentColor;display:inline-block;animation:spin .7s linear infinite;vertical-align:-2px}
+
+/* ---------- AN ADDRESS THAT IS NOT AT THE COLLEGE ----------
+   Not an error, so it is not painted like one: no red, no shaking. It is a
+   question, and it is asked in gold. */
+.why{margin:0 0 12px;border-radius:var(--r2);background:rgba(235,183,83,.1);
+  box-shadow:inset 0 0 0 1.5px rgba(235,183,83,.34);padding:14px 15px;animation:rise .3s var(--ease) both}
+.why h4{font-family:var(--display);font-size:.98rem;font-weight:600;letter-spacing:-.025em;margin:0 0 5px;color:var(--gold-2)}
+.why p{font-size:.75rem;color:var(--cream-2);margin:0 0 10px;line-height:1.55}
+.why textarea{width:100%;min-height:92px;resize:vertical;background:rgba(0,0,0,.3);border:1px solid transparent;
+  border-radius:11px;color:var(--cream);font:inherit;font-size:.855rem;line-height:1.6;padding:11px 12px;outline:0;
+  transition:border-color .15s,background .15s}
+.why textarea:focus{border-color:var(--gold);background:rgba(0,0,0,.42)}
+.why .count{display:block;margin-top:7px;font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;
+  color:var(--cream-4);font-weight:700}
+.why .count.ok{color:#B7F0D6}
+.quoted{border-left:2.5px solid rgba(180,20,27,.35);padding:2px 0 2px 12px;margin:10px 0 0;font-size:.79rem;
+  line-height:1.55;color:var(--ink-soft)}
+.flag{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:.58rem;letter-spacing:.13em;
+  text-transform:uppercase;font-weight:700;color:var(--gold-2);background:rgba(235,183,83,.16);border-radius:6px;padding:3px 8px}
+.stamp.hand{background:rgba(255,255,255,.13);color:var(--cream-2)}
+
+/* ---------- THE DESK: what is open, and where it has stuck ---------- */
+.op{display:grid;grid-template-columns:1fr auto;gap:3px 12px;align-items:center;padding:13px 0;
+  box-shadow:0 1px 0 rgba(255,255,255,.07)}
+.op:last-of-type{box-shadow:none}
+.op .nm{font-weight:800;font-size:.87rem;letter-spacing:-.01em;min-width:0;overflow-wrap:anywhere}
+.op .nm em{font-style:normal;font-family:var(--mono);font-size:.58rem;color:var(--cream-4);margin-left:8px;
+  letter-spacing:.13em;text-transform:uppercase}
+.op .sub{grid-column:1/2;font-size:.735rem;color:var(--cream-3);font-weight:600}
+.op .sub b{color:var(--gold-2);font-weight:700}
+.op.cold .sub b{color:#FFC9C9}
+.op .acts{grid-column:1/-1;margin-top:10px}
+.op .pips{display:flex;gap:3px;align-items:center}
+.op .pips i{width:14px;height:4px;border-radius:3px;background:var(--t2)}
+.op .pips i.did{background:var(--gold);opacity:.5}
+.op .pips i.now{background:var(--gold)}
+
+.roster{display:grid;gap:6px;margin:11px 0 2px}
+.roster .r{display:flex;gap:10px;align-items:center;font-size:.79rem;background:rgba(0,0,0,.2);border-radius:10px;padding:8px 11px}
+.roster .r span{color:var(--cream-4);font-size:.68rem;margin-left:auto;font-family:var(--mono);letter-spacing:.06em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.deskbox{background:rgba(0,0,0,.18);border-radius:var(--r2);padding:14px 15px;margin-top:11px}
+.deskbox>.k{display:block;margin-bottom:9px}
+.note{white-space:pre-wrap;font-size:.72rem;color:var(--cream-3);line-height:1.65;font-family:var(--mono);margin:0}
+.row2{display:grid;gap:0 11px}
+@media(min-width:560px){.row2{grid-template-columns:1fr 1fr}}
+.live{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:.58rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--cream-4);font-weight:700}
+.tick{display:flex;gap:10px;align-items:center;cursor:pointer;font-size:.8rem;color:var(--cream-2)}
+.tick input{accent-color:var(--gold);width:17px;height:17px;flex:0 0 17px;margin:0}
+.grp{align-items:center}
+.live i{width:6px;height:6px;border-radius:50%;background:#4FC894;animation:pulse 2.4s var(--ease) infinite}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
 </style>
 </head>
 <body>
@@ -406,11 +459,36 @@ a{color:var(--gold-2)}
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script>
 /* Put the deployed Web App /exec URL here once it is deployed. */
-const API_URL = "https://script.google.com/macros/s/AKfycbwBkjXE7XIK4h2PuzNAs58mCk5VRiGm5CqEFOeEoOWXrtVq5WViylr4r6SOb-UNJnv9/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwZgBNLIwfjluyO26PkFrdEYjAyY8lEJJxM0ZAu8MN8aoLg9xixoAtNnthIYETeFy6l/exec";
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 const TOKEN_KEY = "vm_token";
+/* OPENING ON WHAT WAS THERE LAST.
+   A round trip to Apps Script is the best part of a second, and for that second
+   the old page showed a book animation and nothing else, every single time. The
+   last view is kept here and drawn at once, then corrected by the server as
+   soon as it answers. It is tied to the token it was taken under, so a
+   different account never sees somebody else's page for a moment, and it is
+   thrown away after a day, by which time it would be a lie rather than a
+   guess. */
+const SNAP_KEY = "vm_snap";
+function snapSave(st){
+  try{
+    if (!st) return;
+    const c = Object.assign({}, st);
+    delete c.desk;   /* the desk holds other people's letters; it is always fetched fresh */
+    localStorage.setItem(SNAP_KEY, JSON.stringify({ t: Date.now(), k: getToken(), s: c }));
+  }catch(e){}
+}
+function snapLoad(){
+  try{
+    const j = JSON.parse(localStorage.getItem(SNAP_KEY) || "null");
+    if (!j || j.k !== getToken() || Date.now() - j.t > 86400000) return null;
+    return j.s;
+  }catch(e){ return null; }
+}
+function snapDrop(){ try{ localStorage.removeItem(SNAP_KEY); }catch(e){} }
 const getToken = () => { try{ return localStorage.getItem(TOKEN_KEY) || ""; }catch(e){ return ""; } };
 const setToken = t => { try{ t ? localStorage.setItem(TOKEN_KEY, t) : localStorage.removeItem(TOKEN_KEY); }catch(e){} };
 const bridge = () => (window.google && google.script && google.script.run) ? google.script.run : null;
@@ -449,12 +527,26 @@ const firstName = n => { const w = String(n || "").trim().split(/\s+/).filter(x 
 const initials = n => String(n || "").split(/\s+/).filter(Boolean).map(w => w[0]).join("").slice(0, 2).toUpperCase() || "V";
 
 /* ---------- state ---------- */
-let S = null, proof = null, tick = null, pending = null;
+let S = null, proof = null, tick = null, pending = null, poll = null, outsideNow = null, draft = null;
+/* The server measures a letter with its whitespace collapsed, so the counter on
+   screen does too. A counter that disagrees with the rule it is counting
+   towards is worse than no counter. */
+const len = s => String(s == null ? "" : s).replace(/\s+/g, " ").trim().length;
+const atJesus = e => String(e || "").trim().toLowerCase().slice(-(S.voucherDomain.length + 1)) === "@" + S.voucherDomain;
+const inCam = e => /^[^@\s]+@([a-z0-9.\-]+\.)?cam\.ac\.uk$/.test(String(e || "").trim().toLowerCase());
 function bootSay(t){ const e = $("bootLine"); if (e) e.textContent = t; }
 function bootDone(){ const b = $("boot"); if (b){ b.classList.add("gone"); setTimeout(() => { b.hidden = true; }, 420); } }
 const atDesk = () => location.hash === "#desk";
 
+function dressUp(){
+  $("gate").hidden = true; $("app").hidden = false; $("bOut").hidden = false;
+  const av = $("avatar"); av.hidden = false; av.textContent = initials(S.name || S.email);
+}
 async function load(){
+  /* Draw the last view first, if there is one, so the page is up before the
+     request has finished. Everything on it is replaced a moment later. */
+  const snap = snapLoad();
+  if (snap && !S){ S = snap; dressUp(); render(); bootDone(); }
   try{
     bootSay("Looking up your application");
     S = await api("state");
@@ -468,9 +560,13 @@ async function load(){
        lost the token for an application that was perfectly fine. */
     const m = String(e && e.message ? e.message : e);
     if (/sign in|session/i.test(m)){
-      setToken(""); $("app").hidden = true; $("bOut").hidden = true; $("avatar").hidden = true; openGate();
+      setToken(""); snapDrop(); S = null;
+      $("app").hidden = true; $("bOut").hidden = true; $("avatar").hidden = true; openGate();
       return;
     }
+    /* A snapshot on screen is better than an error page: they can read where
+       they got to even while the server is unreachable. */
+    if (S && snap){ toast("Showing what was here last: " + m); bootDone(); return; }
     bootSay("Something went wrong");
     bootDone();
     $("app").hidden = false;
@@ -517,18 +613,19 @@ async function onCredential(res){
   }catch(e){ checkSay("no", e.message || String(e)); }
 }
 $("bOut").onclick = async () => { try{ await api("signOut"); }catch(e){}
-  setToken(""); S = null; location.hash = ""; location.reload(); };
+  setToken(""); snapDrop(); S = null; location.hash = ""; location.reload(); };
 $("bBack").onclick = () => { location.hash = ""; };
 
 /* ---------- render ---------- */
 function render(){
-  clearInterval(tick);
+  clearInterval(tick); clearInterval(poll);
   const desk = S.president && atDesk();
   $("bBack").hidden = !desk;
   if (desk){ $("app").innerHTML = deskPage(); wireDesk(); return; }
   if (!S.president && atDesk()) location.hash = "";
   $("app").innerHTML = applicantPage();
   wire();
+  snapSave(S);
   if (/Code$/.test((S.application || {}).step || "")) tick = setInterval(paintLeft, 30000);
 }
 
@@ -550,10 +647,14 @@ function stationOf(step){
 }
 function rail(a){
   const at = stationOf(a.step);
+  /* A step the President cleared by hand says so, rather than pretending a code
+     was typed for it. */
+  const done = w => w.by === "desk" ? "confirmed by the President" : "confirmed";
   const sub = i => {
-    if (i === 0) return a.voucher.done ? "confirmed" : a.voucher.email ? "waiting on " + firstName(a.voucher.name || a.voucher.email) : "a Fellow, or an MCR member";
-    if (i === 1) return a.supervisor.done ? "confirmed" : a.supervisor.email ? "waiting on " + firstName(a.supervisor.name || a.supervisor.email) : "whoever you work with here";
-    if (i === 2) return a.hasProof && a.intro ? "in" : a.hasProof ? "the letter still" : "one document, a few lines";
+    if (i === 0) return a.voucher.done ? done(a.voucher) : a.voucher.email ? "waiting on " + firstName(a.voucher.name || a.voucher.email) : "a Fellow, or an MCR member";
+    if (i === 1) return a.supervisor.done ? done(a.supervisor) : a.supervisor.email ? "waiting on " + firstName(a.supervisor.name || a.supervisor.email) : "whoever you work with here";
+    if (i === 2) return a.intro && (a.hasProof || !a.paperNeeded) ? "in"
+      : a.hasProof ? "the letter still" : a.paperNeeded ? "one document, a few lines" : "a few lines, and that is all";
     if (i === 3) return at > 3 ? "sent " + a.submittedAt : "one last look";
     return a.step === "approved" ? "approved " + a.decidedAt : a.step === "rejected" ? "answered " + a.decidedAt
       : at === 4 ? "at the next meeting" : "the vote, then the answer";
@@ -614,26 +715,51 @@ function stepCard(a){
   if (a.step === "submitted") return waitingCard(a);
   return doneCard(a.step === "approved", a);
 }
+/* THE COLLEGE ADDRESS IS ASKED FOR, NOT INSISTED ON.
+   It used to be a lock: anything but @jesus.cam.ac.uk was refused outright, and
+   that refusal fell on exactly the wrong people. Fellows answer from
+   departments, units and institutes; a visiting student should not lose their
+   voucher because the one person at Jesus who knows them does not open their
+   college mail. So the form asks for the college address, takes another
+   University one when there is a reason, and puts the reason in front of the
+   President. The asking itself is never waived: the code goes to the voucher
+   wherever they are, so nobody is named behind their back. */
 function nameCard(kind, a){
   const v = kind === "voucher", who = v ? a.voucher : a.supervisor;
+  const d = draft || {};
+  const val = (k, fb) => esc(d[k] !== undefined ? d[k] : (fb || ""));
   return '<div class="card"><h3>' + (v ? 'Who will <i>vouch</i> for you?' : 'Who <i>supervises</i> you here?') + '</h3>' +
     '<p class="lede">' + (v
       ? 'A Fellow of Jesus College, or a current member of the MCR. They are saying they know you and are content to ' +
-        'put their name to this, so ask them first. Their address must end <b>@' + esc(S.voucherDomain) + '</b>. A ' +
-        'cam.ac.uk address will not do, because the point is that they are at the college.'
+        'put their name to this, so ask them first. Their <b>@' + esc(S.voucherDomain) + '</b> address is what this ' +
+        'form looks for. If they only ever answer somewhere else in the University, that is allowed, and you will be ' +
+        'asked to say why in a line or two.'
       : 'Whoever you work with in Cambridge: your host, your group leader, your director of studies. Any University ' +
         'address ending cam.ac.uk.') + '</p>' +
     '<label class="f" style="margin-top:14px"><span class="l">Their name</span>' +
-    '<input id="nmName" value="' + esc(who.name || "") + '" placeholder="' + (v ? "Dr Alice Fellow" : "Professor Bea Host") + '" autocomplete="off"></label>' +
+    '<input id="nmName" value="' + val("name", who.name) + '" placeholder="' + (v ? "Dr Alice Fellow" : "Professor Bea Host") + '" autocomplete="off"></label>' +
     '<label class="f"><span class="l">Their email</span>' +
-    '<input id="nmEmail" value="' + esc(who.email || "") + '" inputmode="email" autocapitalize="off" spellcheck="false" placeholder="' +
+    '<input id="nmEmail" value="' + val("email", who.email) + '" inputmode="email" autocapitalize="off" spellcheck="false" placeholder="' +
       (v ? "afellow@" + esc(S.voucherDomain) : "bhost@cam.ac.uk") + '"></label>' +
     '<label class="f"><span class="l">' + (v ? "How you know them" : "Their department") + '</span>' +
-    '<input id="nmExtra" value="' + esc((v ? who.role : who.dept) || "") + '" placeholder="' +
+    '<input id="nmExtra" value="' + val("extra", v ? who.role : who.dept) + '" placeholder="' +
       (v ? "Fellow in Chemistry, my host at Jesus" : "Department of Engineering") + '"></label>' +
+    (v ? '<div id="whyWrap"></div>' : '') +
     '<div class="acts"><button class="btn" id="bName">Email them a code</button>' +
     (who.email ? '<button class="btn ghost sm" id="bKeep">Keep ' + esc(firstName(who.name || who.email)) + '</button>' : '') +
     '</div><p class="msg" id="nmMsg"></p></div>';
+}
+/* Shown the moment the address stops being a college one, and taken away again
+   the moment it is. Gold, not red: this is a question, not a mistake. */
+function whyPanel(email, val){
+  const min = S.reasonMin || 120, n = len(val);
+  return '<div class="why"><h4>Not a college address</h4>' +
+    '<p><span class="mono">' + esc(email) + '</span> is a University address, but not a Jesus one. That is allowed. ' +
+    'Say who they are at Jesus and why this is the address they answer at, and the President reads it with your ' +
+    'application. The code still goes to them, so they are asked either way.</p>' +
+    '<textarea id="nmWhy" placeholder="She is a Fellow of Jesus but runs her group at the LMB and answers only there. She supervised my masters and offered to vouch for me.">' +
+    esc(val || "") + '</textarea>' +
+    '<span class="count' + (n >= min ? " ok" : "") + '" id="whyCount">' + n + ' / ' + min + ' characters at least</span></div>';
 }
 /* NOTHING IS SENT UNTIL THE ADDRESS HAS BEEN CHECKED THREE TIMES.
    A code sent to a mistyped address is worse than useless: it goes to a
@@ -649,8 +775,11 @@ function confirmCard(){
     '<p>An email with a six digit code goes to that address, and to nobody else. If one letter is wrong it ' +
     'reaches a stranger, ' + esc(firstName(p.name)) + ' never hears from us, and you wait for a code that ' +
     'will never come.</p>' +
-    (v ? '<p style="margin-top:8px">It must also be ' + esc(firstName(p.name)) + '&rsquo;s <b>@' + esc(S.voucherDomain) +
-      '</b> address, not a personal or departmental one.</p>' : '') +
+    (v && p.reason
+      ? '<p style="margin-top:8px">That is not a college address, so this goes to the President with your ' +
+        'application, in your words:</p><div class="quoted">' + esc(p.reason) + '</div>'
+      : v ? '<p style="margin-top:8px">It should be ' + esc(firstName(p.name)) + '&rsquo;s <b>@' + esc(S.voucherDomain) +
+        '</b> address, the one they answer at the college.</p>' : '') +
     '<label class="f" style="margin-top:15px"><span class="l">Type the address again</span>' +
     '<input id="cfEmail" inputmode="email" autocapitalize="off" spellcheck="false" autocomplete="off" placeholder="' + esc(p.email) + '"></label>' +
     '<label class="tickbox"><input type="checkbox" id="cfTick">' +
@@ -672,7 +801,7 @@ function askBeforeSending(p, go){
     'stranger, ' + first + ' never hears from us, and nothing more can be sent to them until tomorrow.</div>' +
     '<label class="tickbox"><input type="checkbox" id="md1">' +
     '<span>I have read that address back letter by letter and it is ' + first + '&rsquo;s' +
-    (v ? ' <b>@' + esc(S.voucherDomain) + '</b>' : '') + ' address.</span></label>' +
+    (v && !p.reason ? ' <b>@' + esc(S.voucherDomain) + '</b>' : '') + ' address.</span></label>' +
     '<label class="tickbox"><input type="checkbox" id="md2">' +
     '<span>I have asked ' + first + ', and they are willing to ' +
     (v ? 'vouch for me' : 'confirm they supervise me') + '.</span></label>' +
@@ -720,12 +849,16 @@ function codeCard(kind, a){
     '<p class="msg" id="cMsg" style="text-align:center"></p></div>';
 }
 function papersCard(a){
-  const n = (a.intro || "").length, min = S.introMin || 280;
-  return '<div class="card"><h3>One paper, and a <i>letter</i></h3>' +
-    '<p class="lede">A document showing you are here: a letter from your department, your CamCard, a visiting ' +
-    'student card, an offer or acceptance email. A photograph is fine. Only the President and the committee see it.</p>' +
-    '<label class="filepick" style="margin-top:14px"><input type="file" id="pFile" accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg">' +
-    '<span class="fn" id="pName">' + esc(a.proofName || "Attach the document") + '</span><span class="hint">PDF, PNG or JPG</span></label>' +
+  const min = a.introMin || S.introMin || 280, n = len(a.intro);
+  const need = a.paperNeeded !== false;
+  return '<div class="card"><h3>' + (need ? 'One paper, and a <i>letter</i>' : 'Your <i>letter</i>') + '</h3>' +
+    '<p class="lede">' + (need
+      ? 'A document showing you are here: a letter from your department, your CamCard, a visiting ' +
+        'student card, an offer or acceptance email. A photograph is fine. Only the President and the committee see it.'
+      : 'The President has your papers already, so there is nothing to upload. All that is left is the letter, ' +
+        'and it can be short.') + '</p>' +
+    (need ? '<label class="filepick" style="margin-top:14px"><input type="file" id="pFile" accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg">' +
+      '<span class="fn" id="pName">' + esc(a.proofName || "Attach the document") + '</span><span class="hint">PDF, PNG or JPG</span></label>' : '') +
     '<label class="f" style="margin-top:15px"><span class="l">Your name, as it should be written</span>' +
     '<input id="pWho" value="' + esc(a.name || S.name || "") + '"></label></div>' +
     '<div class="letter"><div class="to">To the committee,</div>' +
@@ -741,9 +874,13 @@ function reviewCard(a){
     'and the President writes to you afterwards.</p>' +
     '<div class="kv" style="margin-top:12px">' +
     '<b>Name</b><span>' + esc(a.name || S.email) + '</span>' +
-    '<b>Voucher</b><span>' + esc(a.voucher.name) + ' &middot; <span class="mono">' + esc(a.voucher.email) + '</span></span>' +
-    '<b>Supervisor</b><span>' + esc(a.supervisor.name) + ' &middot; <span class="mono">' + esc(a.supervisor.email) + '</span></span>' +
-    '<b>Paper</b><span>' + esc(a.proofName || "attached") + '</span></div></div>' +
+    '<b>Voucher</b><span>' + esc(a.voucher.name) + ' &middot; <span class="mono">' + esc(a.voucher.email) + '</span>' +
+      (a.voucher.outside ? '<br><span class="flag" style="margin-top:6px">not a college address</span>' +
+        '<br><span class="lede">' + esc(a.voucher.reason) + '</span>' : '') +
+      (a.voucher.by === "desk" ? '<br><span class="lede">Confirmed by the President.</span>' : '') + '</span>' +
+    '<b>Supervisor</b><span>' + esc(a.supervisor.name) + ' &middot; <span class="mono">' + esc(a.supervisor.email) + '</span>' +
+      (a.supervisor.by === "desk" ? '<br><span class="lede">Confirmed by the President.</span>' : '') + '</span>' +
+    (a.hasProof ? '<b>Paper</b><span>' + esc(a.proofName || "attached") + '</span>' : '') + '</div></div>' +
     '<div class="letter"><div class="to">To the committee,</div><div class="body">' + esc(a.intro) + '</div>' +
     '<div class="foot"><span></span><span class="sig">' + esc(a.name || "") + '</span></div></div>' +
     '<div class="acts"><button class="btn" id="bSubmit">Send it to the President</button>' +
@@ -772,53 +909,180 @@ function doneCard(yes, a){
     (yes ? '<div class="acts"><a class="btn sm" href="https://jcollegemcr.co.uk" target="_blank" rel="noopener">Open The Chimney</a></div>' : '');
 }
 function deskDoor(){
-  const n = ((S.desk || {}).apps || []).filter(x => x.status === "submitted").length;
+  const d = S.desk || {};
+  const n = (d.apps || []).filter(x => x.status === "submitted").length;
+  const o = (d.open || []).length;
+  const what = n ? n + " waiting on the meeting" : o ? o + " part finished" : "nothing waiting";
   return '<button class="btn ghost" id="deskDoor" style="width:100%;justify-content:space-between;margin-top:4px">' +
-    '<span>The President&rsquo;s desk</span><span class="mono">' + (n ? n + " waiting" : "nothing waiting") + '</span></button>';
+    '<span>The President&rsquo;s desk</span><span class="mono">' + esc(what) + '</span></button>';
 }
 
 /* ---------- the desk ---------- */
 const proofs = {};
+function ago(ms){
+  const d = Date.now() - Number(ms || 0);
+  if (!ms || d < 0) return "";
+  const m = Math.round(d / 60000);
+  if (m < 1) return "just now";
+  if (m < 60) return m + (m === 1 ? " minute ago" : " minutes ago");
+  const h = Math.round(m / 60);
+  if (h < 24) return h + (h === 1 ? " hour ago" : " hours ago");
+  const dd = Math.round(h / 24);
+  return dd + (dd === 1 ? " day ago" : " days ago");
+}
 function deskPage(){
   const d = S.desk || {};
   const pend = (d.apps || []).filter(a => a.status === "submitted");
   const done = (d.apps || []).filter(a => a.status !== "submitted");
-  const stuck = d.stuck || {};
-  const stuckText = Object.keys(stuck).length
-    ? Object.keys(stuck).map(k => stuck[k] + " " + ({voucher:"naming a voucher",voucherCode:"waiting on a voucher's code",
-        supervisor:"naming a supervisor",supervisorCode:"waiting on a supervisor's code",papers:"writing the letter",review:"about to send"}[k] || k)).join(", ")
-    : "";
+  const open = d.open || [];
   return '<h2>The <i>desk</i></h2>' +
-    '<p class="lede" style="margin-bottom:14px">Applications are put to the committee at a meeting. Record the vote here and the applicant is written to.' +
-    (d.drafts ? ' <b>' + d.drafts + '</b> part finished' + (stuckText ? ': ' + esc(stuckText) : '') + '.' : '') + '</p>' +
+    '<p class="lede" style="margin-bottom:14px">Applications are put to the committee at a meeting. Record the vote ' +
+    'here and the applicant is written to. Nothing else on this page writes to anybody.</p>' +
     (pend.length ? pend.map(deskCard).join("") : '<div class="card"><p>Nothing waiting on the meeting.</p></div>') +
+    openPanel(open) +
     (done.length ? '<div class="grp">Answered</div><div class="card">' + done.slice(0, 12).map(a =>
       '<div class="who"><span class="t"><b>' + esc(a.name || a.email) + '</b><span>' + esc(a.decidedAt) +
-      (a.reply ? ' &middot; \u201c' + esc(a.reply) + '\u201d' : '') + '</span></span>' +
+      (a.reply ? ' &middot; “' + esc(a.reply) + '”' : '') + '</span></span>' +
       '<span class="stamp ' + (a.status === "approved" ? "ok" : "no") + '">' + esc(a.status) + '</span></div>').join("") + '</div>' : '') +
+    newPanel() + committeePanel(d) +
     '<div class="grp">The desk itself</div><div class="card">' +
     '<p class="lede">Every application, part finished ones included, is in the spreadsheet.</p>' +
     '<div class="acts"><a class="btn sm" href="' + esc(d.sheetUrl || "#") + '" target="_blank" rel="noopener">Open the spreadsheet</a></div>' +
+    '<label class="f" style="margin-top:14px"><span class="l">Where this page lives, for the links in emails</span>' +
+    '<input id="pageIn" value="' + esc(d.pageUrl || "") + '" placeholder="https://…/visiting.html"></label>' +
+    '<div class="acts"><button class="btn ghost sm" id="bPage">Save that</button></div>' +
     '<label class="f" style="margin-top:14px"><span class="l">Hand the desk on</span><input id="pres" placeholder="' + esc(d.president || "") + '"></label>' +
     '<div class="acts"><button class="btn danger sm" id="bPres">Hand it on</button></div></div>';
 }
+
+/* THE LIVE PANEL.
+   The queue is almost always waiting on somebody who has not opened their
+   email, and until now there was no way to see that from here. Every part
+   finished application, what it is stuck on, and how long it has been stuck.
+   Anything untouched for a week is marked, because that is the one worth a
+   line from the President. */
+function openPanel(open){
+  if (!open.length) return '<div class="grp">Open applications</div><div class="card"><p>None part finished.</p></div>';
+  return '<div class="grp">Open applications <span class="live" style="margin-left:auto"><i></i>live</span></div>' +
+    '<div class="card">' + open.map(openRow).join("") + '</div>';
+}
+function openRow(o){
+  const cold = o.idleDays >= 7;
+  const pips = Array.from({ length: o.steps }, (_, i) =>
+    '<i class="' + (i < o.stepNo ? "did" : i === o.stepNo ? "now" : "") + '"></i>').join("");
+  const vDone = o.voucher.done, sDone = o.supervisor.done;
+  return '<div class="op' + (cold ? " cold" : "") + '">' +
+    '<div class="nm">' + esc(o.name) + '<em>' + esc(o.email) + '</em></div>' +
+    '<div class="pips">' + pips + '</div>' +
+    '<div class="sub">waiting on <b>' + esc(o.waitingOn) + '</b> &middot; moved ' + esc(o.moved) +
+      (cold ? ' &middot; ' + o.idleDays + ' days untouched' : '') +
+      (o.assisted ? ' &middot; started at the desk' : '') + '</div>' +
+    (o.voucher.outside ? '<div class="sub" style="margin-top:6px"><span class="flag">voucher not at the college</span> ' +
+      esc(o.voucher.reason) + '</div>' : '') +
+    (o.note ? '<div class="sub" style="margin-top:6px"><p class="note">' + esc(o.note) + '</p></div>' : '') +
+    '<div class="acts">' +
+    '<button class="btn ghost sm" data-vouch="' + esc(o.id) + '|voucher">' +
+      (vDone ? "Voucher ✓ " + esc(firstName(o.voucher.name)) : "Confirm the voucher by hand") + '</button>' +
+    '<button class="btn ghost sm" data-vouch="' + esc(o.id) + '|supervisor">' +
+      (sDone ? "Supervisor ✓ " + esc(firstName(o.supervisor.name)) : "Confirm the supervisor by hand") + '</button>' +
+    '<button class="btn ghost sm" data-waive="' + esc(o.id) + '|' + (o.paperNeeded ? "off" : "on") + '">' +
+      (o.paperNeeded ? "Do not ask for a paper" : "Ask for a paper after all") + '</button>' +
+    '<button class="btn ghost sm" data-invite="' + esc(o.id) + '">' + (o.invited ? "Nudge again" : "Send them a link") + '</button>' +
+    '<button class="btn danger sm" data-aside="' + esc(o.id) + '">Put aside</button></div>' +
+    vouchBox(o, "voucher") + vouchBox(o, "supervisor") + '</div>';
+}
+/* Clearing a step by hand. The how is not optional and the form says why: a
+   confirmation with no account of itself is worth nothing a year later. */
+function vouchBox(o, kind){
+  const w = kind === "voucher" ? o.voucher : o.supervisor;
+  const id = o.id + "-" + kind;
+  return '<div class="deskbox" id="vb-' + esc(id) + '" hidden style="grid-column:1/-1">' +
+    '<span class="k">' + (kind === "voucher" ? "The voucher" : "The supervisor") + ', confirmed by hand</span>' +
+    (w.done && w.by === "desk"
+      ? '<p class="lede" style="margin-bottom:10px">Already confirmed here. Saving again overwrites it.</p>' : '') +
+    '<div class="row2">' +
+    '<label class="f"><span class="l">Their name</span><input id="vn-' + esc(id) + '" value="' + esc(w.name || "") + '"></label>' +
+    '<label class="f"><span class="l">Their cam.ac.uk address</span><input id="ve-' + esc(id) + '" value="' + esc(w.email || "") +
+      '" inputmode="email" autocapitalize="off" spellcheck="false"></label></div>' +
+    '<label class="f"><span class="l">How this was confirmed</span>' +
+    '<input id="vh-' + esc(id) + '" placeholder="Wrote to the committee on 14 October"></label>' +
+    '<div class="acts"><button class="btn sm" data-vsave="' + esc(id) + '">Confirm it</button>' +
+    (w.done && w.by === "desk" ? '<button class="btn danger sm" data-vundo="' + esc(id) + '">Undo it</button>' : '') +
+    '<button class="btn ghost sm" data-vshut="' + esc(id) + '">Never mind</button></div>' +
+    '<p class="msg" id="vm-' + esc(id) + '"></p></div>';
+}
+
+function newPanel(){
+  return '<div class="grp">Enter one by hand</div><div class="card">' +
+    '<p class="lede">For somebody who applied another way: by email, at a meeting, across a table in the Caff. ' +
+    'Fill in whatever you have already checked and they are asked for nothing but the letter.</p>' +
+    '<div class="row2" style="margin-top:12px">' +
+    '<label class="f"><span class="l">Their name</span><input id="nwName" placeholder="Hanne Jansen"></label>' +
+    '<label class="f"><span class="l">Their cam.ac.uk address</span><input id="nwEmail" inputmode="email" autocapitalize="off" spellcheck="false" placeholder="hj12@cam.ac.uk"></label></div>' +
+    '<div class="deskbox"><span class="k">The voucher, if you have already checked</span>' +
+    '<div class="row2"><label class="f"><span class="l">Name</span><input id="nwVName"></label>' +
+    '<label class="f"><span class="l">Address</span><input id="nwVEmail" inputmode="email" autocapitalize="off" spellcheck="false"></label></div>' +
+    '<label class="f" style="margin:0"><span class="l">How you checked</span>' +
+    '<input id="nwVHow" placeholder="Alice wrote to the committee on 14 September"></label></div>' +
+    '<div class="deskbox"><span class="k">The supervisor, the same</span>' +
+    '<div class="row2"><label class="f"><span class="l">Name</span><input id="nwSName"></label>' +
+    '<label class="f"><span class="l">Address</span><input id="nwSEmail" inputmode="email" autocapitalize="off" spellcheck="false"></label></div>' +
+    '<label class="f" style="margin:0"><span class="l">How you checked</span>' +
+    '<input id="nwSHow" placeholder="confirmed at the October meeting"></label></div>' +
+    '<label class="tick" style="margin-top:12px"><input type="checkbox" id="nwInvite" checked>' +
+    '<span>Email them a link to finish it</span></label>' +
+    '<div class="acts"><button class="btn" id="bNew">Start it</button></div>' +
+    '<p class="msg" id="nwMsg"></p></div>';
+}
+
+function committeePanel(d){
+  const list = d.committee || [];
+  return '<div class="grp">The committee</div><div class="card">' +
+    '<p class="lede">Who an application is sent round to before a meeting, in one email, so that a reply to all ' +
+    'reaches all of them. Nothing goes to this list until you have read it through and confirmed it: a roster ' +
+    'nobody has looked at is a guess, and a guess should not be posted to.</p>' +
+    '<div class="roster">' + (list.length
+      ? list.map(m => '<div class="r"><b>' + esc(m.name || m.email) + '</b><span>' + esc(m.email) + '</span></div>').join("")
+      : '<div class="r">Nobody on it yet.</div>') + '</div>' +
+    '<label class="f" style="margin-top:13px"><span class="l">Replace it &mdash; one a line, name then address</span>' +
+    '<textarea id="rosterIn" style="min-height:120px">' +
+    esc(list.map(m => (m.name ? m.name + " <" + m.email + ">" : m.email)).join("\n")) + '</textarea></label>' +
+    '<div class="acts"><button class="btn sm" id="bRoster">Save the roster</button>' +
+    (d.committeeOk
+      ? '<span class="stamp ok">confirmed</span><button class="btn ghost sm" id="bUnconfirm">Unconfirm it</button>'
+      : '<button class="btn sm" id="bConfirm">I have read it &mdash; confirm</button>') + '</div>' +
+    '<p class="lede" style="margin-top:14px">Their replies come back to you as ordinary email. Nothing is counted ' +
+    'here and nothing is written down about who said what: the vote is taken at the meeting, and the two buttons ' +
+    'on an application are what record it.</p></div>';
+}
+
 function deskCard(a){
   const p = proofs[a.id];
   const box = p
     ? (/^image\//.test(p.mime) ? '<img alt="paper" src="data:' + esc(p.mime) + ';base64,' + p.data + '">'
         : '<iframe title="paper" src="data:' + esc(p.mime || "application/pdf") + ';base64,' + p.data + '"></iframe>')
     : '<button class="btn ghost sm" data-proof="' + esc(a.id) + '"' + (a.hasProof ? '' : ' disabled') + '>' + (a.hasProof ? "Show the paper" : "No paper") + '</button>';
+  const hand = w => w.by === "desk" ? '<br><span class="stamp hand">confirmed by hand</span>' : '';
   return '<div class="card"><div class="desk2"><div>' +
     '<span class="stamp wait">Waiting on the meeting</span>' +
+    (a.assisted ? ' <span class="stamp hand">entered at the desk</span>' : '') +
     '<h3 style="margin-top:12px">' + esc(a.name || a.email) + '</h3>' +
     '<div class="kv"><b>Address</b><span class="mono">' + esc(a.email) + '</span>' +
-    '<b>Voucher</b><span>' + esc(a.voucher.name) + '<br><span class="mono" style="font-size:.66rem">' + esc(a.voucher.email) + '</span>' + (a.voucher.role ? '<br>' + esc(a.voucher.role) : '') + '</span>' +
-    '<b>Supervisor</b><span>' + esc(a.supervisor.name) + '<br><span class="mono" style="font-size:.66rem">' + esc(a.supervisor.email) + '</span>' + (a.supervisor.dept ? '<br>' + esc(a.supervisor.dept) : '') + '</span>' +
-    '<b>Sent</b><span>' + esc(a.submittedAt) + '</span></div>' +
+    '<b>Voucher</b><span>' + esc(a.voucher.name) + '<br><span class="mono" style="font-size:.66rem">' + esc(a.voucher.email) + '</span>' +
+      (a.voucher.role ? '<br>' + esc(a.voucher.role) : '') + hand(a.voucher) +
+      (a.voucher.outside ? '<br><span class="flag" style="margin-top:6px">not a college address</span>' +
+        '<br><span class="lede">' + esc(a.voucher.reason) + '</span>' : '') + '</span>' +
+    '<b>Supervisor</b><span>' + esc(a.supervisor.name) + '<br><span class="mono" style="font-size:.66rem">' + esc(a.supervisor.email) + '</span>' +
+      (a.supervisor.dept ? '<br>' + esc(a.supervisor.dept) : '') + hand(a.supervisor) + '</span>' +
+    '<b>Sent</b><span>' + esc(a.submittedAt) + '</span>' +
+    (a.circulatedAt ? '<b>Committee</b><span>sent round ' + esc(ago(a.circulatedAt)) + '</span>' : '') + '</div>' +
+    (a.note ? '<p class="note" style="margin-top:10px">' + esc(a.note) + '</p>' : '') +
     '<div class="letter" style="margin-top:14px;padding:16px 16px 12px;box-shadow:none"><div class="to">To the committee,</div>' +
     '<div class="body" style="font-size:.86rem">' + esc(a.intro) + '</div><div class="foot"><span></span><span class="sig">' + esc(a.name || "") + '</span></div></div>' +
     '<div class="acts"><button class="btn sm" data-yes="' + esc(a.id) + '">The committee said yes</button>' +
     '<button class="btn ghost sm" data-no="' + esc(a.id) + '">Said no</button>' +
+    '<button class="btn ghost sm" data-circulate="' + esc(a.id) + '">' +
+      (a.circulatedAt ? "Send it round again" : "Send it to the committee") + '</button>' +
     (a.proofUrl ? '<a class="btn ghost sm" href="' + esc(a.proofUrl) + '" target="_blank" rel="noopener">Open in Drive</a>' : '') + '</div>' +
     '<label class="f" id="why-' + esc(a.id) + '" hidden style="margin-top:12px"><span class="l">A line for them, either way</span>' +
     '<input id="whyIn-' + esc(a.id) + '" placeholder="Carried at the meeting on 14 October."></label>' +
@@ -867,16 +1131,47 @@ function wire(){
     try{ const r = await api("begin"); S.application = r.application; render(); }
     catch(e){ unspin(el); fail(e); } });
   on("deskDoor", () => { location.hash = "desk"; });
+  /* THE PANEL APPEARS AND DISAPPEARS WITH THE ADDRESS, and only when the answer
+     to "is this a college address" actually changes. Redrawing it on every
+     keystroke would pull the textarea out from under the cursor. */
+  const nmE = $("nmEmail");
+  if (nmE){
+    const look = () => {
+      const a = S.application;
+      if (!a || a.step !== "voucher") return;
+      const e = (nmE.value || "").trim().toLowerCase();
+      const outside = !!e && inCam(e) && !atJesus(e);
+      if (outside === outsideNow) return;
+      outsideNow = outside;
+      const wrap = $("whyWrap"); if (!wrap) return;
+      if (!outside){ wrap.innerHTML = ""; return; }
+      wrap.innerHTML = whyPanel(e, (draft && draft.reason) || a.voucher.reason || "");
+      const w = $("nmWhy");
+      w.oninput = () => { const min = S.reasonMin || 120, n = len(w.value), c = $("whyCount");
+        c.textContent = n + " / " + min + " characters at least";
+        c.className = "count" + (n >= min ? " ok" : ""); };
+    };
+    nmE.oninput = look;
+    outsideNow = null;
+    look();
+  }
   on("bName", () => {
     const a = S.application, kind = a.step === "voucher" ? "voucher" : "supervisor";
     const name = ($("nmName").value || "").trim(), email = ($("nmEmail").value || "").trim().toLowerCase();
+    const reason = ($("nmWhy") || {}).value || "";
     if (!name) return say("nmMsg", "Please give their name.", true);
     if (!email) return say("nmMsg", "Please give their email.", true);
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return say("nmMsg", "That does not look like an email address.", true);
-    if (kind === "voucher" && email.slice(-(S.voucherDomain.length + 1)) !== "@" + S.voucherDomain)
-      return say("nmMsg", "A voucher's address has to end @" + S.voucherDomain + ".", true);
+    if (!inCam(email)) return say("nmMsg", (kind === "voucher" ? "A voucher" : "A supervisor") +
+      " needs a University of Cambridge address, ending cam.ac.uk.", true);
+    if (kind === "voucher" && !atJesus(email) && len(reason) < (S.reasonMin || 120)){
+      const w = $("nmWhy"); if (w) w.focus();
+      return say("nmMsg", "A line or two about why there is no Jesus address, and this can go.", true);
+    }
     /* Held, not sent. The next screen is the check. */
-    pending = { kind: kind, name: name, email: email, extra: $("nmExtra").value };
+    draft = { name: name, email: email, extra: $("nmExtra").value, reason: reason };
+    pending = { kind: kind, name: name, email: email, extra: $("nmExtra").value,
+      reason: kind === "voucher" && !atJesus(email) ? reason : "" };
     render();
   });
   /* the second and third checks */
@@ -892,9 +1187,10 @@ function wire(){
     cf.oninput = look; tk.onchange = look;
     setTimeout(() => cf.focus(), 120);
   }
-  on("cfBack", () => { const p = pending; pending = null; render();
-    const n = $("nmName"), e = $("nmEmail"), x = $("nmExtra");
-    if (n) n.value = p.name; if (e) e.value = p.email; if (x) x.value = p.extra || ""; });
+  /* Change it: everything typed comes back, the reason included. */
+  on("cfBack", () => { const p = pending;
+    draft = { name: p.name, email: p.email, extra: p.extra || "", reason: p.reason || "" };
+    pending = null; render(); });
   on("cfSend", el => {
     const p = pending;
     /* Three checks are behind us: read back, typed again, ticked. The sheet is
@@ -904,12 +1200,12 @@ function wire(){
       spin(el, "Sending");
       try{
         const r = await api(p.kind === "voucher" ? "setVoucher" : "setSupervisor",
-          { name: p.name, email: p.email, role: p.extra, dept: p.extra });
-        pending = null; S.application = r.application; render(); toast("Code sent to " + p.email);
+          { name: p.name, email: p.email, role: p.extra, dept: p.extra, reason: p.reason || "" });
+        pending = null; draft = null; S.application = r.application; render(); toast("Code sent to " + p.email);
       }catch(e){ unspin(el); say("cfMsg", e.message || String(e), true); }
     });
   });
-  on("bKeep", () => { pending = null; const a = S.application; a.step = a.step === "voucher" ? "voucherCode" : "supervisorCode"; render(); });
+  on("bKeep", () => { pending = null; draft = null; const a = S.application; a.step = a.step === "voucher" ? "voucherCode" : "supervisorCode"; render(); });
   on("bVerify", async el => {
     const a = S.application, kind = a.step === "voucherCode" ? "voucher" : "supervisor";
     const code = codeValue();
@@ -931,7 +1227,7 @@ function wire(){
       catch(e){ unspin(el); say("cMsg", e.message || String(e), true); }
     });
   });
-  on("bChange", () => { pending = null; const a = S.application; a.step = a.step === "voucherCode" ? "voucher" : "supervisor"; render(); });
+  on("bChange", () => { pending = null; draft = null; const a = S.application; a.step = a.step === "voucherCode" ? "voucher" : "supervisor"; render(); });
 
   const f = $("pFile");
   if (f) f.onchange = () => {
@@ -945,12 +1241,13 @@ function wire(){
     rd.readAsDataURL(file);
   };
   const ta = $("pIntro"), who = $("pWho");
-  if (ta) ta.oninput = () => { const n = ta.value.length, min = S.introMin || 280, c = $("pCount");
+  if (ta) ta.oninput = () => { const n = len(ta.value),
+    min = (S.application && S.application.introMin) || S.introMin || 280, c = $("pCount");
     if (c){ c.textContent = n + " / " + min + " characters at least"; c.className = "count" + (n >= min ? " ok" : ""); } };
   if (who) who.oninput = () => { const s = $("pSig"); if (s) s.textContent = who.value; };
   on("bPapers", async el => {
     const a = S.application;
-    if (!proof && !a.hasProof) return say("pMsg", "Please attach one document.", true);
+    if (a.paperNeeded !== false && !proof && !a.hasProof) return say("pMsg", "Please attach one document.", true);
     spin(el, "Saving");
     try{ const r = await api("savePapers", { intro: $("pIntro").value, name: $("pWho").value, proof: proof });
       S.application = r.application; proof = null; render();
@@ -965,11 +1262,15 @@ function wire(){
 }
 function wireDesk(){
   const all = (sel, fn) => document.querySelectorAll(sel).forEach(el => el.onclick = () => fn(el));
+  const one = (id, fn) => { const el = $(id); if (el) el.onclick = () => fn(el); };
+  const after = (d, note) => { S.desk = d; render(); if (note) toast(note); };
   const take = async (el, label, payload, note) => {
     spin(el, label);
-    try{ S.desk = (await api("decide", payload)).desk; render(); toast(note); }
+    try{ after((await api("decide", payload)).desk, note); }
     catch(e){ unspin(el); fail(e); }
   };
+  const pair = key => { const c = key.lastIndexOf("-"); return { id: key.slice(0, c), kind: key.slice(c + 1) }; };
+
   all("[data-proof]", async el => { spin(el, "Fetching");
     try{ proofs[el.dataset.proof] = await api("proofGet", { id: el.dataset.proof }); render(); }
     catch(e){ unspin(el); fail(e); } });
@@ -982,6 +1283,113 @@ function wireDesk(){
     if (!why) return toast("Give them a line to go on.");
     take(el, "Recording", { id: el.dataset.no, want: "no", reply: why }, "Answered.");
   });
+
+  /* SENDING IT ROUND. It emails the committee and nobody else, and it says so
+     before it goes: the one thing worth being sure of here is that the
+     applicant is not about to receive anything. */
+  all("[data-circulate]", async el => {
+    if (!confirm("Send this application round to the whole committee?\n\nOne email, addressed to all of them, so " +
+      "a reply to all is a conversation. Nothing goes to the applicant, and the answer is still yours to record " +
+      "after the meeting.")) return;
+    spin(el, "Sending");
+    try{ const r = await api("circulate", { id: el.dataset.circulate });
+      after(r.desk, "Sent round to all " + r.sent + " of them."); }
+    catch(e){ unspin(el); fail(e); }
+  });
+
+  /* the live panel */
+  all("[data-vouch]", el => {
+    const [id, kind] = el.dataset.vouch.split("|");
+    const box = $("vb-" + id + "-" + kind);
+    if (!box) return;
+    if (box.hidden){ box.hidden = false; box.setAttribute("data-open", "1"); $("vh-" + id + "-" + kind).focus(); }
+    else { box.hidden = true; box.removeAttribute("data-open"); }
+  });
+  all("[data-vshut]", el => { const b = $("vb-" + el.dataset.vshut); b.hidden = true; b.removeAttribute("data-open"); });
+  all("[data-vsave]", async el => {
+    const key = el.dataset.vsave, w = pair(key);
+    const name = ($("vn-" + key).value || "").trim(), email = ($("ve-" + key).value || "").trim().toLowerCase(),
+          how = ($("vh-" + key).value || "").trim();
+    if (!name) return say("vm-" + key, "Their name, please.", true);
+    if (!inCam(email)) return say("vm-" + key, "A University address, ending cam.ac.uk.", true);
+    if (!how){ $("vh-" + key).focus();
+      return say("vm-" + key, "Say how this was confirmed — a line is enough.", true); }
+    spin(el, "Confirming");
+    try{ after((await api("deskVouch", { id: w.id, kind: w.kind, name: name, email: email, how: how })).desk,
+      "Confirmed, and written down."); }
+    catch(e){ unspin(el); say("vm-" + key, e.message || String(e), true); }
+  });
+  all("[data-vundo]", async el => {
+    const w = pair(el.dataset.vundo);
+    if (!confirm("Undo that confirmation? They go back to asking for a code.")) return;
+    spin(el, "Undoing");
+    try{ after((await api("deskUnvouch", { id: w.id, kind: w.kind })).desk, "Undone. The note stays."); }
+    catch(e){ unspin(el); fail(e); }
+  });
+  all("[data-waive]", async el => {
+    const [id, on] = el.dataset.waive.split("|");
+    spin(el, "Saving");
+    try{ after((await api("deskWaive", { id: id, paper: on === "on" })).desk,
+      on === "on" ? "A paper is asked for again." : "No paper will be asked for."); }
+    catch(e){ unspin(el); fail(e); }
+  });
+  all("[data-invite]", async el => {
+    spin(el, "Sending");
+    try{ after((await api("deskInvite", { id: el.dataset.invite })).desk, "A line is on its way to them."); }
+    catch(e){ unspin(el); fail(e); }
+  });
+  all("[data-aside]", async el => {
+    const why = prompt("Put this one aside? It leaves the open list, and nothing is emailed to anybody.\n\n" +
+      "A line for the record:");
+    if (why === null) return;
+    spin(el, "Putting aside");
+    try{ after((await api("deskCancel", { id: el.dataset.aside, why: why })).desk, "Put aside."); }
+    catch(e){ unspin(el); fail(e); }
+  });
+
+  /* entering one by hand */
+  one("bNew", async el => {
+    const name = ($("nwName").value || "").trim(), email = ($("nwEmail").value || "").trim().toLowerCase();
+    if (!name) return say("nwMsg", "Their name, please.", true);
+    if (!inCam(email)) return say("nwMsg", "A cam.ac.uk address, please.", true);
+    const v  = { name: ($("nwVName").value || "").trim(), email: ($("nwVEmail").value || "").trim().toLowerCase(),
+                 how: ($("nwVHow").value || "").trim(), kind: "voucher" };
+    const sv = { name: ($("nwSName").value || "").trim(), email: ($("nwSEmail").value || "").trim().toLowerCase(),
+                 how: ($("nwSHow").value || "").trim(), kind: "supervisor" };
+    if (v.email && !v.how) return say("nwMsg", "Say how you checked the voucher.", true);
+    if (sv.email && !sv.how) return say("nwMsg", "Say how you checked the supervisor.", true);
+    spin(el, "Starting");
+    try{ after((await api("deskNew", { email: email, name: name,
+      voucher: v.email ? v : null, supervisor: sv.email ? sv : null,
+      invite: $("nwInvite").checked })).desk, "Started, and it is in the open list."); }
+    catch(e){ unspin(el); say("nwMsg", e.message || String(e), true); }
+  });
+
+  /* the roster */
+  one("bRoster", async el => {
+    const list = ($("rosterIn").value || "").split("\n").map(l => l.trim()).filter(Boolean).map(l => {
+      const m = l.match(/^(.*?)[<\s]*([^<>\s,;]+@[^<>\s,;]+)>?$/);
+      return m ? { name: (m[1] || "").replace(/[<,;]+$/, "").trim(), email: m[2].toLowerCase() } : null;
+    }).filter(Boolean);
+    if (!list.length) return toast("Nothing there that looks like an address.");
+    spin(el, "Saving");
+    try{ after((await api("committeeSet", { list: list })).desk,
+      list.length + " on the roster. Read it through, then confirm it."); }
+    catch(e){ unspin(el); fail(e); }
+  });
+  one("bConfirm", async el => {
+    if (!confirm("Confirm the roster? Applications will be sent to exactly these addresses and no others.")) return;
+    spin(el, "Confirming");
+    try{ after((await api("committeeSet", { confirm: true })).desk, "Confirmed."); }
+    catch(e){ unspin(el); fail(e); }
+  });
+  one("bUnconfirm", async el => { spin(el, "Saving");
+    try{ after((await api("committeeSet", { confirm: false })).desk, "Nothing goes round until it is confirmed again."); }
+    catch(e){ unspin(el); fail(e); } });
+  one("bPage", async el => { spin(el, "Saving");
+    try{ after((await api("deskPage", { url: ($("pageIn").value || "").trim() })).desk, "Saved."); }
+    catch(e){ unspin(el); fail(e); } });
+
   const p = $("bPres");
   if (p) p.onclick = async () => {
     const next = ($("pres").value || "").trim();
@@ -991,6 +1399,24 @@ function wireDesk(){
     try{ await api("presidentSet", { email: next }); location.hash = ""; await load(); toast("Done."); }
     catch(e){ unspin(p); fail(e); }
   };
+  deskTick();
+}
+
+/* THE PANEL IS LIVE, BUT NEVER UNDER YOUR HANDS.
+   It looks again every half minute, and holds off entirely while anything is
+   being typed into, while one of the by-hand forms is open, or while the sheet
+   is up. A page that redraws itself mid-sentence is worse than one that does
+   not redraw at all. */
+function deskTick(){
+  clearInterval(poll);
+  poll = setInterval(async () => {
+    if (!S || !S.president || !atDesk()) return;
+    const ae = document.activeElement;
+    if (ae && /^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName)) return;
+    if (document.querySelector(".deskbox[data-open]")) return;
+    if ($("modal").classList.contains("on")) return;
+    try{ S.desk = (await api("deskPoll")).desk; render(); }catch(e){}
+  }, 30000);
 }
 
 if (getToken()) load(); else openGate();
