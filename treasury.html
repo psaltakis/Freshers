@@ -1661,18 +1661,18 @@ textarea{min-height:82px}
 </style>
 
 
-<style id="treasury-pastel-navigation-and-categories">
-/* Treasury refinement: exact MCRNet navigation geometry, a deliberately warmer
-   pastel-yellow navigation surface, and distinct pastel funding categories.
-   This layer is visual only: IDs, data attributes, forms and scripts are untouched. */
+<style id="treasury-earthy-navigation-and-categories">
+/* Treasury refinement: exact MCRNet navigation geometry with a distinctive antique-gold
+   treasury surface and natural, mineral/earth funding-category colours. Functional hooks
+   remain unchanged; the only script-level edits are the presentation-only palette values. */
 
 :root{
-  --treasury-nav:#F3E4B3;
-  --treasury-nav-hover:#EAD79D;
-  --treasury-nav-edge:#DCC783;
-  --treasury-nav-ink:#594624;
-  --treasury-nav-muted:#77623A;
-  --treasury-nav-active:#822832;
+  --treasury-nav:#D8BC72;
+  --treasury-nav-hover:#CBAA5B;
+  --treasury-nav-edge:#B89448;
+  --treasury-nav-ink:#3F321D;
+  --treasury-nav-muted:#6B5530;
+  --treasury-nav-active:#6F4332;
 }
 
 /* Treasury is the product name. Jesus College MCR becomes the quiet context. */
@@ -1690,12 +1690,12 @@ textarea{min-height:82px}
   max-width:none;
   bottom:calc(10px + var(--sab));
   border-radius:16px;
-  box-shadow:0 7px 22px rgba(98,72,24,.16);
+  box-shadow:0 7px 22px rgba(75,55,23,.18);
 }
 .navwrap .nav,.nav{
   width:100%;max-width:none;box-sizing:border-box;
   display:flex;gap:2px;padding:4px;border-radius:16px;
-  background:var(--treasury-nav);border:1px solid rgba(126,94,35,.10);
+  background:var(--treasury-nav);border:1px solid rgba(91,66,27,.14);
   box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;
   overflow-x:auto;overflow-y:hidden;scrollbar-width:none;
   -webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;
@@ -1711,14 +1711,14 @@ textarea{min-height:82px}
   transition:background .18s ease,color .18s ease,box-shadow .18s ease;
 }
 .nav button svg{width:20px;height:20px;flex:0 0 20px;stroke-width:1.9}
-.nav button:hover{background:var(--treasury-nav-hover);color:#493818}
+.nav button:hover{background:var(--treasury-nav-hover);color:#302617}
 .nav button[aria-current="true"]{
   background:var(--treasury-nav-active);color:#FFF8ED;
-  box-shadow:0 2px 7px rgba(104,32,42,.14);
+  box-shadow:0 2px 7px rgba(67,43,26,.16);
 }
 .nav button[aria-current="true"]::before{display:none}
-.nav .badge{background:#A82B34;color:#FFF8ED;border-radius:999px;font-size:.53rem;padding:1px 4px;min-width:13px}
-.nav button[aria-current="true"] .badge{background:#F7DDA6;color:#643C14}
+.nav .badge{background:#71513B;color:#FFF8ED;border-radius:999px;font-size:.53rem;padding:1px 4px;min-width:13px}
+.nav button[aria-current="true"] .badge{background:#E7D5A4;color:#4B351D}
 
 @media(min-width:1000px){
   :root{--public-nav-unit:19.2px;--rail:calc(11 * var(--public-nav-unit))}
@@ -1733,12 +1733,12 @@ textarea{min-height:82px}
   .nav .railtop{
     display:flex;align-items:center;gap:10px;
     padding:2px 9px 18px;margin-bottom:12px;
-    border-bottom:1px solid rgba(108,82,34,.18);
+    border-bottom:1px solid rgba(79,59,26,.22);
   }
   .nav .railtop .crest{width:auto;height:54px;flex-basis:auto;object-fit:contain}
   .nav .railtop span{min-width:0}
   .nav .railtop b{
-    display:block;color:#4F3C1D;font-family:"Roca";
+    display:block;color:#352918;font-family:"Roca";
     font-size:calc(.789 * var(--public-nav-unit));letter-spacing:-.03em;line-height:1.1;
   }
   .nav .railtop i{
@@ -1758,36 +1758,52 @@ textarea{min-height:82px}
   .nav button[aria-current="true"]{position:relative}
   .nav button[aria-current="true"]::before{
     content:"";display:block;position:absolute;left:-12px;top:9px;bottom:9px;
-    width:3px;border-radius:3px;background:#822832;
+    width:3px;border-radius:3px;background:#6F4332;
   }
   html:has(#app:not([hidden])) .topbar .crest,
   html:has(#app:not([hidden])) .topbar .brand{display:none}
+
+  /* On desktop the top bar and rail deliberately share one Treasury metal tone. */
+  html:has(#app:not([hidden])) .topbar{
+    background:var(--treasury-nav)!important;color:var(--treasury-nav-ink);
+    border-bottom:1px solid var(--treasury-nav-edge);box-shadow:0 3px 12px rgba(75,55,23,.10);
+    backdrop-filter:none;-webkit-backdrop-filter:none;
+  }
+  html:has(#app:not([hidden])) .topbar .chip-user{
+    background:rgba(255,253,247,.34);border:1px solid rgba(75,55,23,.12);
+  }
+  html:has(#app:not([hidden])) .topbar .chip-user .nm{color:#332817}
+  html:has(#app:not([hidden])) .topbar .chip-user .rl{color:#70562E}
+  html:has(#app:not([hidden])) .topbar .iconbtn{
+    color:#493719;background:rgba(255,253,247,.24);border:1px solid rgba(75,55,23,.17);
+  }
+  html:has(#app:not([hidden])) .topbar .iconbtn:hover{background:rgba(255,253,247,.48);color:#2E2416}
 }
 @media(min-width:1280px){:root{--public-nav-unit:21.12px}}
 @media(min-width:1600px){:root{--public-nav-unit:22.72px}}
 @media(min-width:1920px){:root{--public-nav-unit:24px}}
 
 /* ---------------- funding categories ----------------
-   The render already provides --c/--cd/--cl per category. Use the light companion
-   as the card surface, so each category has a recognisable pastel identity. */
+   The render provides --c/--cd/--cl per category. The palette now uses natural pigments
+   rather than pastels: terracotta, eucalyptus, mineral blue, muted plum, moss, ochre and slate. */
 .cat{
-  background:color-mix(in srgb,var(--cl) 62%,#FFFDFA 38%);
-  border:1px solid color-mix(in srgb,var(--c) 16%,#FFFFFF 84%);
+  background:color-mix(in srgb,var(--cl) 72%,#F8F2E8 28%);
+  border:1px solid color-mix(in srgb,var(--c) 24%,#EFE6D8 76%);
   box-shadow:0 3px 15px rgba(56,37,25,.04);
 }
 .cat .stripe{height:4px;background:color-mix(in srgb,var(--c) 72%,#FFFFFF 28%)}
 .cat h3{color:color-mix(in srgb,var(--cd) 86%,#292624 14%)}
 .cat .pc{
-  background:rgba(255,253,250,.74);color:var(--cd);
+  background:rgba(250,246,237,.74);color:var(--cd);
   border:1px solid color-mix(in srgb,var(--c) 24%,#FFFFFF 76%);
   box-shadow:none;
 }
 .cat .pc.over{background:#292624;color:#FFFDF8;border-color:#292624}
-.cat .meter{background:rgba(255,253,250,.62)}
+.cat .meter{background:rgba(248,243,234,.68)}
 .cat .rows .rw{border-bottom-color:rgba(71,58,44,.10)}
 .cat .rows .k{color:color-mix(in srgb,var(--cd) 70%,#635B56 30%)}
 .cat.clickable:hover{
-  background:color-mix(in srgb,var(--cl) 74%,#FFFDFA 26%);
+  background:color-mix(in srgb,var(--cl) 82%,#F8F2E8 18%);
   box-shadow:0 6px 18px rgba(56,37,25,.07);
 }
 
@@ -2887,15 +2903,15 @@ function countUp(sel){
 
 <script>
 const PALETTE={
-  "Welcome Events":{c:"#C8262C",d:"#7C1015",l:"#F2B9B6"},
-  "Welfare":{c:"#1F7A6B",d:"#0E4940",l:"#A9D8CE"},
-  "Academic":{c:"#3D5A98",d:"#22355F",l:"#B8C6E4"},
-  "Entertainment":{c:"#7A3E86",d:"#492150",l:"#D8BFDF"},
-  "Sports and Societies":{c:"#4F7A2A",d:"#2E4917",l:"#C2D9AA"},
-  "General":{c:"#B87A18",d:"#754A07",l:"#EDD09E"},
-  "Contingency":{c:"#5C6674",d:"#343B45",l:"#C8CED5"}
+  "Welcome Events":{c:"#A7654F",d:"#694236",l:"#D2AA99"},
+  "Welfare":{c:"#5F7B70",d:"#3E514A",l:"#B2C1B8"},
+  "Academic":{c:"#667A84",d:"#42535B",l:"#B7C3C8"},
+  "Entertainment":{c:"#7B625E",d:"#51413E",l:"#C8B6B0"},
+  "Sports and Societies":{c:"#72805D",d:"#4A543D",l:"#BEC6AE"},
+  "General":{c:"#A17B45",d:"#684F2E",l:"#D2BD99"},
+  "Contingency":{c:"#706E68",d:"#484641",l:"#C3C0B9"}
 };
-const CAT=c=>PALETTE[c]||{c:"#8A5F5C",d:"#4A2523",l:"#DCC9C6"};
+const CAT=c=>PALETTE[c]||{c:"#806B5D",d:"#4F433B",l:"#C8BBB0"};
 const STATUS={submitted:"Awaiting decision",college:"With the college",
   allocated:"Approved, receipt needed",
   approved:"With the Treasurer",paid:"Paid",rejected:"Rejected",cancelled:"Cancelled",
