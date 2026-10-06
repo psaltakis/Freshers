@@ -1720,6 +1720,484 @@ a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,
   a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,.jc,.linkcard,.enter,.tabbtn{cursor:pointer!important}
 }
 
+
+
+/* ==== 2026 refinement: softer editorial boxes, search, and desktop alignment ==== */
+:root{
+  --soft-card:#F7F2EA;
+  --soft-card-2:#F2EBE1;
+  --soft-red:#F6EBE7;
+  --soft-gold:#F8F0DF;
+  --soft-ink:#302825;
+}
+
+/* Content boxes: no top rules. Surfaces now read as objects rather than outlined panels. */
+.card.chapter{
+  position:relative;overflow:hidden;border:0!important;border-radius:18px!important;
+  background:linear-gradient(135deg,#FAF7F2 0%,#F5EFE7 100%)!important;
+  padding:1.15rem 1.2rem!important;margin:0 0 .8rem!important;
+  box-shadow:0 8px 28px rgba(54,38,31,.035)!important;
+}
+.card.chapter::after{
+  content:"";position:absolute;left:0;top:1rem;bottom:1rem;width:4px;border-radius:0 5px 5px 0;
+  background:linear-gradient(180deg,var(--red),#D8A448);opacity:.72;
+}
+.card.chapter .chapter-title{padding-left:.35rem}
+.card.quiet,.grid .card{
+  border:0!important;border-radius:16px!important;background:var(--soft-card)!important;
+  box-shadow:0 7px 24px rgba(58,40,31,.03)!important;
+}
+.card.alert,.grid .card.alert{
+  position:relative;overflow:hidden;border:0!important;border-radius:17px!important;
+  background:var(--soft-red)!important;color:var(--ink-2)!important;
+  box-shadow:inset 4px 0 0 rgba(168,43,52,.28),0 8px 24px rgba(80,35,30,.025)!important;
+}
+.card.alert h2,.card.alert h3,.card.alert h4{color:var(--red-ink)!important}
+.card.alert strong,.card.alert b{color:var(--ink)!important}
+.card.alert a{color:var(--red-ink)!important;text-decoration-color:rgba(168,43,52,.28)!important}
+.card.alert .tbl th{color:var(--ink-3)!important;border-bottom-color:rgba(42,28,25,.16)!important}
+.card.alert .tbl td{border-bottom-color:rgba(42,28,25,.09)!important}
+.card.alert .tbl td:first-child{color:var(--ink)!important}
+
+/* Previously rule-led link boxes become softer 'paper slips' with their own arrow affordance. */
+.linkgrid{gap:.58rem!important}
+.linkcard,.jc,.club,.rest{
+  border:0!important;border-radius:13px!important;background:#F8F4ED!important;
+  padding:.78rem .9rem!important;box-shadow:none!important;
+}
+.linkcard,.jc{position:relative}
+.linkcard:hover,.linkcard:focus-visible,.jc:hover,.jc:focus-visible,.club:hover,.club:focus-visible,.rest:hover,.rest:focus-visible{
+  background:#F0E8DC!important;transform:translateY(-1px)!important;
+}
+.linkcard .arw{display:grid;place-items:center;width:1.8rem;height:1.8rem;border-radius:50%;background:#EEE3D4;color:var(--red-ink)!important}
+.jc{padding-right:2.7rem!important}
+.jc::after{right:.75rem!important;top:50%!important;transform:translateY(-50%);display:grid;place-items:center;width:1.7rem;height:1.7rem;border-radius:50%;background:#EEE3D4}
+.jc:hover::after,.jc:focus-visible::after{transform:translate(2px,-52%)!important}
+.note{border:0!important;border-radius:12px!important;background:#F2ECE3!important;box-shadow:inset 3px 0 0 #D9C7A5}
+.doorway{border:0!important;border-radius:14px!important;background:#F8EFEA!important;box-shadow:inset 4px 0 0 rgba(168,43,52,.25)}
+.join-grid{border:0!important;border-radius:16px!important;background:#F5F0E8!important;box-shadow:0 8px 26px rgba(48,34,28,.03)!important}
+.join-card.visiting{border-left:6px solid var(--paper)!important}
+#committee .person{border:0!important;background:#F8F4ED!important;border-radius:14px!important;box-shadow:none!important}
+#committee .person:hover,#committee .person:focus-within{background:#F0E8DC!important;box-shadow:none!important}
+
+/* Desktop brand and reading alignment. Keep the white rail, improve the geometry. */
+@media(min-width:1000px){
+  #nav{padding:20px 13px calc(18px + var(--sab))!important;background:#F8F6F0!important}
+  #nav .railtop{
+    display:grid!important;grid-template-columns:48px minmax(0,1fr);align-items:center!important;
+    column-gap:11px!important;padding:2px 7px 18px!important;margin:0 0 10px!important;
+    border-bottom:0!important;min-height:70px;
+  }
+  #nav .railtop img{height:52px!important;width:auto!important;justify-self:center;align-self:center}
+  #nav .railtop span{padding:0!important;align-self:center;display:block;min-width:0}
+  #nav .railtop b{font-size:.88rem!important;line-height:1.03!important;letter-spacing:-.035em!important;white-space:normal!important}
+  #nav .railtop i{font-size:.6rem!important;line-height:1.15!important;margin-top:5px!important;color:#83766E!important}
+  #nav .navscroll{padding-top:4px}
+  #nav .tabbtn{padding-left:9px!important;padding-right:9px!important;gap:11px!important}
+  #nav .tabbtn svg{width:18px!important;height:18px!important}
+  .pg-head{grid-template-columns:minmax(0,1.02fr) minmax(18rem,.82fr)!important;column-gap:clamp(2.4rem,5vw,5.5rem)!important;align-items:end!important}
+  .pg-head .lede{border-left:0!important;padding:0!important;max-width:35rem}
+  .opening{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)!important;gap:clamp(2.4rem,5vw,5.2rem)!important}
+}
+
+/* Search entry points */
+.site-search-trigger,.rail-search{font-family:"Roca",system-ui,sans-serif}
+.site-search-trigger svg,.rail-search svg{fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.site-search-trigger{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:42px;padding:.45rem .7rem;border-radius:9px;color:var(--ink-2);background:#F4F0E9;transition:background .2s var(--ease),transform .2s var(--ease)}
+.site-search-trigger svg{width:18px;height:18px}.site-search-trigger span{font-size:.78rem;font-weight:600}
+.site-search-trigger:hover{background:#ECE4D8;transform:translateY(-1px)}
+.rail-search{display:none}
+@media(max-width:999px){.site-search-trigger span{display:none}.site-search-trigger{width:2.55rem;height:2.55rem;padding:0;border-radius:50%;background:#F4F0E9}}
+@media(min-width:1000px){
+  .rail-search{display:flex;align-items:center;gap:9px;width:100%;min-height:39px;margin:0 0 10px;padding:7px 9px;border-radius:9px;background:#EEE9E1;color:#645A54;text-align:left;transition:background .18s var(--ease),color .18s var(--ease),transform .18s var(--ease)}
+  .rail-search:hover{background:#E7DED2;color:var(--ink);transform:translateY(-1px)}
+  .rail-search svg{width:17px;height:17px;flex:none}.rail-search span{font-size:.68rem;font-weight:600;flex:1;min-width:0}.rail-search kbd{font:600 .56rem/1 "Roca",system-ui,sans-serif;background:#FAF8F4;border:1px solid #DCD3C8;border-radius:5px;padding:4px 6px;color:#8C7E75}
+  .top-search{display:none}
+}
+
+/* Dedicated search page */
+.search-page{max-width:72rem!important;margin:0 auto}
+.search-head{padding-bottom:1rem!important}
+.site-search-shell{position:sticky;top:.55rem;z-index:35;padding:.55rem 0 1rem;background:linear-gradient(180deg,var(--paper) 75%,rgba(252,251,248,0));backdrop-filter:blur(2px)}
+.site-search-box{position:relative;display:flex;align-items:center;min-height:62px;background:#fff;border-radius:18px;box-shadow:0 12px 38px rgba(57,38,30,.08),0 0 0 1px rgba(65,45,37,.055);overflow:hidden}
+.site-search-box>svg{width:21px;height:21px;margin-left:20px;flex:none;fill:none;stroke:var(--red-ink);stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.site-search-box input{width:100%;min-width:0;border:0;outline:0;background:transparent;padding:17px 54px 17px 13px;font:600 clamp(1rem,1.5vw,1.16rem)/1.3 "Roca",system-ui,sans-serif;color:var(--ink)}
+.site-search-box input::placeholder{color:#9C8D84;font-weight:400}
+.site-search-clear{position:absolute;right:12px;width:35px;height:35px;border-radius:50%;display:grid;place-items:center;background:#F3EEE7;color:#776A62;font-size:1.25rem;line-height:1}.site-search-clear:hover{background:#E9E0D5;color:var(--ink)}
+.search-help{display:flex;justify-content:space-between;gap:1rem;align-items:center;padding:.55rem .25rem 0;color:#877970;font-size:.72rem}.search-key-hint{white-space:nowrap}.search-key-hint kbd{display:inline-block;border-radius:5px;background:#F2ECE4;padding:3px 6px;color:#6C5F57;font:600 .62rem/1 "Roca",system-ui,sans-serif}
+.search-results{display:grid;gap:.62rem;padding:.3rem 0 3rem}
+.search-empty{padding:1.3rem 1.4rem;background:#F6F1E9;border-radius:16px;color:var(--ink-2)}.search-empty b{display:block;font-size:1.05rem;margin-bottom:.25rem}
+.search-result{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:1rem;padding:1rem 1.05rem;background:#F8F4ED;border-radius:16px;color:inherit;text-decoration:none;transition:background .18s var(--ease),transform .18s var(--ease),box-shadow .18s var(--ease)}
+.search-result:hover,.search-result:focus-visible{background:#F0E7DA;text-decoration:none;transform:translateY(-2px);box-shadow:0 10px 25px rgba(55,36,28,.055)}
+.search-result-main{min-width:0}.search-breadcrumb{display:flex;align-items:center;gap:.42rem;margin-bottom:.28rem;color:#8A7469;font-size:.66rem;font-weight:600}.search-breadcrumb .dot{width:4px;height:4px;border-radius:50%;background:#D5A34B}.search-result h2{margin:0 0 .25rem;font-size:1rem;line-height:1.2;letter-spacing:-.02em}.search-result p{margin:0;color:#665B55;font-size:.82rem;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.search-result-arrow{display:grid;place-items:center;width:2rem;height:2rem;border-radius:50%;background:#EDE3D6;color:var(--red-ink);font-size:1.1rem;transition:transform .18s var(--ease)}.search-result:hover .search-result-arrow{transform:translateX(3px)}
+.search-result mark{background:#F1D9A4;color:inherit;border-radius:3px;padding:0 .08em}
+.search-page-intro{font-size:.8rem;color:#7B6F68;margin:.25rem 0 .1rem}
+.site-search-hit{animation:searchPulse 3s var(--ease)}
+@keyframes searchPulse{0%,100%{box-shadow:inherit}12%,45%{box-shadow:0 0 0 4px rgba(226,169,60,.28),0 14px 36px rgba(67,43,32,.08);background-color:#FFF7E7}65%{box-shadow:0 0 0 2px rgba(168,43,52,.15)}}
+@media(max-width:620px){.search-key-hint{display:none}.site-search-box{min-height:56px;border-radius:15px}.site-search-box>svg{margin-left:16px}.site-search-box input{font-size:1rem;padding-top:15px;padding-bottom:15px}.search-result{padding:.85rem .9rem;border-radius:14px}.search-result-arrow{width:1.8rem;height:1.8rem}.search-head .lede{font-size:.92rem}}
+@media(prefers-reduced-motion:reduce){.site-search-hit{animation:none!important;outline:3px solid rgba(226,169,60,.35);outline-offset:4px}}
+
+
+/* ==== Professional surface + performance refinement ==== */
+:root{
+  --surface-paper:#FBFAF7;
+  --surface-warm:#F7F3ED;
+  --surface-warm-2:#F2ECE4;
+  --surface-edge:#E8E0D7;
+  --surface-edge-strong:#DED3C7;
+}
+
+/* Remove decorative side rules. Hierarchy comes from spacing, type and material contrast. */
+.card.chapter,
+.card.quiet,.grid .card,
+.card.alert,.grid .card.alert,
+.note,.doorway,.join-grid,
+.linkcard,.jc,.club,.rest,
+#committee .person{
+  box-shadow:none!important;
+}
+.card.chapter::after{display:none!important}
+.card.chapter{
+  overflow:visible!important;
+  border:1px solid var(--surface-edge)!important;
+  border-radius:15px!important;
+  background:var(--surface-paper)!important;
+  padding:1.18rem 1.22rem!important;
+  margin-bottom:.82rem!important;
+}
+.card.chapter .chapter-title{padding-left:0!important}
+.card.chapter:hover{border-color:var(--surface-edge-strong)!important;background:#FCFBF8!important}
+.card.quiet,.grid .card{
+  border:1px solid #ECE5DC!important;
+  border-radius:14px!important;
+  background:var(--surface-warm)!important;
+}
+.card.alert,.grid .card.alert{
+  border:1px solid #E8D7D1!important;
+  border-radius:14px!important;
+  background:#F8F0EC!important;
+  color:#4A3D38!important;
+}
+.card.alert h2,.card.alert h3,.card.alert h4{color:#74232B!important}
+.card.alert p,.card.alert li,.card.alert dd{color:#554640!important}
+.card.alert a{color:#74232B!important}
+.note{
+  border:1px solid #E7DED3!important;
+  border-radius:12px!important;
+  background:#F5F1EB!important;
+  color:#5E534D!important;
+}
+.doorway{
+  border:1px solid #E8D8D1!important;
+  border-radius:14px!important;
+  background:#FAF3EF!important;
+}
+.linkcard,.jc,.club,.rest{
+  border:1px solid transparent!important;
+  border-radius:12px!important;
+  background:#F8F5F0!important;
+  box-shadow:0 1px 1px rgba(46,33,27,.025)!important;
+  transition:background .16s var(--ease),border-color .16s var(--ease),transform .16s var(--ease),box-shadow .16s var(--ease)!important;
+}
+.linkcard:hover,.linkcard:focus-visible,.jc:hover,.jc:focus-visible,.club:hover,.club:focus-visible,.rest:hover,.rest:focus-visible{
+  background:#FCFAF6!important;
+  border-color:#DED4C8!important;
+  transform:translateY(-1px)!important;
+  box-shadow:0 7px 18px rgba(54,39,31,.045)!important;
+}
+.linkcard .arw,.jc::after{
+  background:#EFE7DD!important;
+  color:#76242C!important;
+}
+.join-grid{
+  border:1px solid #E4DCD1!important;
+  border-radius:14px!important;
+  background:#F8F5F0!important;
+}
+.join-card.visiting{border-left:1px solid #E4DCD1!important}
+#committee .person{
+  border:1px solid transparent!important;
+  background:#F8F5F0!important;
+  border-radius:13px!important;
+}
+#committee .person:hover,#committee .person:focus-within{
+  border-color:#E1D7CB!important;background:#FCFAF6!important;
+}
+
+/* Brand-red panels: explicit high-contrast type instead of relying on inherited colors. */
+.gateway{
+  background:linear-gradient(118deg,#7B222B 0%,#8F2933 58%,#A43740 100%)!important;
+  color:#FFF9F0!important;
+  border:0!important;
+  box-shadow:0 10px 28px rgba(89,27,34,.10)!important;
+}
+.gateway h1,.gateway h2,.gateway h3,.gateway h4,.gateway strong,.gateway b{color:#FFF9F0!important}
+.gateway p,.gateway li,.gateway small{color:rgba(255,249,240,.88)!important}
+.gateway a:not(.enter){color:#FFE3A6!important;text-decoration-color:rgba(255,227,166,.45)!important}
+.gateway .enter{background:#FFF9F0!important;color:#6F1D25!important;box-shadow:none!important}
+.gateway .enter:hover,.gateway .enter:focus-visible{background:#F3D58F!important;color:#552027!important}
+
+/* Search: more breathing room, cleaner sticky treatment, less GPU-heavy blur. */
+.search-head{padding-bottom:1.2rem!important}
+.site-search-shell{
+  top:0!important;padding:.65rem 0 1.15rem!important;
+  background:linear-gradient(180deg,#FFFEFC 82%,rgba(255,254,252,0))!important;
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+}
+.site-search-box{
+  min-height:64px!important;border-radius:15px!important;
+  border:1px solid #E5DDD3!important;
+  box-shadow:0 5px 18px rgba(57,38,30,.045)!important;
+}
+.site-search-box:focus-within{border-color:#C9A8A1!important;box-shadow:0 0 0 3px rgba(168,43,52,.07),0 6px 20px rgba(57,38,30,.04)!important}
+.site-search-box input{padding:18px 58px 18px 14px!important;letter-spacing:-.012em}
+.search-help{padding:.72rem .25rem 0!important;line-height:1.45}
+.search-page-intro{margin:.42rem 0 .15rem!important;line-height:1.55}
+.search-results{gap:.72rem!important;padding:.9rem 0 3.2rem!important}
+.search-result{
+  gap:1.15rem!important;padding:1.08rem 1.15rem!important;
+  border:1px solid #ECE4DA!important;border-radius:13px!important;
+  background:#FAF8F4!important;box-shadow:none!important;
+}
+.search-result:hover,.search-result:focus-visible{
+  background:#FFFDFC!important;border-color:#DED3C6!important;
+  transform:translateY(-1px)!important;box-shadow:0 7px 20px rgba(55,36,28,.04)!important;
+}
+.search-breadcrumb{margin-bottom:.38rem!important;gap:.5rem!important;color:#84766D!important}
+.search-result h2{margin-bottom:.32rem!important}
+.search-result p{line-height:1.55!important;color:#625750!important}
+.search-result mark{background:#F4E1B8!important;border-radius:2px!important;padding:0 .06em!important}
+.search-empty{border:1px solid #EAE1D6!important;background:#F8F5F0!important;border-radius:13px!important}
+@media(max-width:620px){
+  .site-search-shell{padding-bottom:.9rem!important}
+  .search-results{gap:.58rem!important;padding-top:.62rem!important}
+  .search-result{padding:.92rem .95rem!important}
+}
+
+/* Keep the native cursor until the custom mark has actually rendered. */
+@media(hover:hover) and (pointer:fine){
+  html:not(.cock-live) body{cursor:default!important}
+  html:not(.cock-live) a,html:not(.cock-live) button,html:not(.cock-live) [role="button"],html:not(.cock-live) summary,
+  html:not(.cock-live) label[for],html:not(.cock-live) select,html:not(.cock-live) .day,html:not(.cock-live) .tile,
+  html:not(.cock-live) .chip,html:not(.cock-live) .rest,html:not(.cock-live) .club,html:not(.cock-live) .jc,
+  html:not(.cock-live) .linkcard,html:not(.cock-live) .enter,html:not(.cock-live) .tabbtn,
+  html:not(.cock-live) .section-jump,html:not(.cock-live) .site-search-trigger,html:not(.cock-live) .rail-search,
+  html:not(.cock-live) .search-result{cursor:pointer!important}
+}
+
+
+/* ==== 2026 final polish: button contrast, JCSU directory, selection visibility ==== */
+/* Red actions always carry white type. Exceptions are light and ghost actions. */
+.btn:not(.ghost),
+.bar .enter,
+#nav .enter,
+.doorway .enter,
+.join-link,
+.adminbar button.go,
+.rfb.go,
+#committee .chip[aria-pressed="true"]{
+  color:#FFFFFF!important;
+}
+.btn:not(.ghost) svg,.bar .enter svg,#nav .enter svg,.doorway .enter svg,.join-link svg{stroke:#FFFFFF!important;color:#FFFFFF!important}
+.btn:not(.ghost):hover,.btn:not(.ghost):focus-visible,
+.bar .enter:hover,.bar .enter:focus-visible,
+#nav .enter:hover,#nav .enter:focus-visible,
+.doorway .enter:hover,.doorway .enter:focus-visible,
+.join-link:hover,.join-link:focus-visible{color:#FFFFFF!important}
+.gateway .enter,.gateway .enter:hover,.gateway .enter:focus-visible{color:#6F1D25!important}
+
+/* Search selections stay obvious instead of disappearing into the field. */
+.site-search-box input,.srch input{caret-color:#7B222B}
+.site-search-box input::selection,.srch input::selection{background:#7B222B;color:#FFFFFF}
+.site-search-box input::-moz-selection,.srch input::-moz-selection{background:#7B222B;color:#FFFFFF}
+
+/* JCSU directory: quieter framing, clearer results, less generic-card styling. */
+.jcsu-directory{
+  background:#FAF8F4!important;
+  border:0!important;
+  border-radius:16px!important;
+  padding:1rem 1.05rem!important;
+}
+.jcsu-intro{max-width:58rem;color:#5F554F!important;margin-bottom:.85rem!important}
+.jcsu-directory .srch{margin-bottom:.65rem}
+.jcsu-directory .srch input{
+  background:#FFFFFF!important;
+  border:1px solid #E5DDD3!important;
+  border-radius:12px!important;
+  min-height:50px;
+  padding-top:11px!important;
+  padding-bottom:11px!important;
+  box-shadow:none!important;
+  transition:border-color .16s var(--ease),box-shadow .16s var(--ease),background .16s var(--ease)!important;
+}
+.jcsu-directory .srch input:focus{
+  background:#FFFFFF!important;
+  border-color:#C9A8A1!important;
+  box-shadow:0 0 0 3px rgba(168,43,52,.07)!important;
+}
+.jcsu-directory .srch .clr{background:#F1ECE5!important}
+.jall{
+  margin-top:.2rem!important;
+  padding:.58rem .8rem!important;
+  min-height:42px;
+  border-radius:10px!important;
+  background:#EEE7DD!important;
+  color:#4E433E!important;
+  font-size:.76rem!important;
+  font-weight:600!important;
+  transition:background .16s var(--ease),transform .16s var(--ease)!important;
+}
+.jall:hover,.jall:focus-visible{background:#E4D9CC!important;transform:translateY(-1px)}
+.jall .pm{background:#FFFFFF!important;color:#7B222B!important}
+#jOut{margin-top:.9rem}
+.j-results-summary{
+  display:flex;align-items:baseline;justify-content:space-between;gap:1rem;
+  margin:.15rem 0 .55rem;padding:0 .1rem;color:#81736A;
+}
+.j-results-summary b{font-size:.82rem;color:#3D3430;font-weight:650}
+.j-results-summary span{font-size:.7rem}
+.j-result-group{margin:0 0 1rem}
+.j-result-group:last-child{margin-bottom:0}
+.jhead{
+  display:flex!important;align-items:center!important;gap:.65rem!important;
+  margin:.85rem 0 .48rem!important;padding:0 .1rem!important;
+  letter-spacing:0!important;text-transform:none!important;font-family:"Roca",system-ui,sans-serif!important;
+}
+.jhead b{font-size:.83rem!important;font-weight:700!important;letter-spacing:-.01em!important;color:#3C332F!important}
+.jhead span{margin-left:auto!important;font-size:.68rem!important;font-weight:500!important;color:#8A7D75!important}
+.jgrid{grid-template-columns:repeat(auto-fill,minmax(min(15.5rem,100%),1fr))!important;gap:.5rem!important}
+.jc{
+  display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-content:start!important;
+  gap:.16rem .75rem!important;min-height:0!important;padding:.78rem .82rem!important;
+  background:#FFFFFF!important;border:1px solid #ECE5DC!important;border-radius:12px!important;
+  box-shadow:none!important;color:inherit!important;text-decoration:none!important;
+}
+.jc::after{display:none!important}
+.jc:hover,.jc:focus-visible{
+  background:#FFFDFC!important;border-color:#DCCFC2!important;transform:translateY(-1px)!important;
+  box-shadow:0 6px 16px rgba(54,39,31,.035)!important;
+}
+.jc .jc-kind{
+  grid-column:1/2;display:block;margin:0 0 .12rem!important;
+  font-size:.61rem!important;font-weight:650!important;color:#8B7D74!important;
+}
+.jc b{grid-column:1/2;font-size:.91rem!important;line-height:1.2!important;letter-spacing:-.015em!important;color:#302825!important}
+.jc .jc-person{grid-column:1/2;display:block!important;margin:.08rem 0 0!important;font-size:.73rem!important;line-height:1.35!important;color:#71645D!important}
+.jc .jc-action{
+  grid-column:2/3;grid-row:1/4;align-self:center;display:inline-flex!important;align-items:center;gap:.28rem;
+  white-space:nowrap;margin:0!important;padding:.38rem .5rem;border-radius:8px;background:#F3EEE7;
+  color:#74232B!important;font-size:.66rem!important;font-weight:650!important;
+}
+.jc:hover .jc-action,.jc:focus-visible .jc-action{background:#EDE4D9}
+.j-empty{
+  display:flex;flex-direction:column;gap:.2rem;padding:1rem 1.05rem;border-radius:12px;background:#F6F1EA;color:#655A54;
+}
+.j-empty b{font-size:.92rem;color:#352D29}.j-empty span{font-size:.78rem;line-height:1.45}
+@media(max-width:560px){
+  .j-results-summary{align-items:flex-start;flex-direction:column;gap:.08rem}
+  .jc{grid-template-columns:minmax(0,1fr)!important}
+  .jc .jc-action{grid-column:1/2;grid-row:auto;justify-self:start;margin-top:.32rem!important}
+}
+
+
+
+/* ==== 2026 crimson action contrast hardening ==== */
+/* Keep every genuinely crimson action readable in every interaction state. */
+.btn:not(.ghost),
+.bar .enter,
+#nav .enter,
+.doorway .enter,
+.adminbar button.go,
+.rfb.go,
+#committee .chip[aria-pressed="true"]{
+  background:#822832!important;
+  border-color:#822832!important;
+  color:#FFFFFF!important;
+  -webkit-text-fill-color:#FFFFFF;
+  text-shadow:none!important;
+}
+
+.btn:not(.ghost):visited,
+.bar .enter:visited,
+#nav .enter:visited,
+.doorway .enter:visited{
+  color:#FFFFFF!important;
+  -webkit-text-fill-color:#FFFFFF;
+}
+
+.btn:not(.ghost):hover,.btn:not(.ghost):focus-visible,.btn:not(.ghost):active,
+.bar .enter:hover,.bar .enter:focus-visible,.bar .enter:active,
+#nav .enter:hover,#nav .enter:focus-visible,#nav .enter:active,
+.doorway .enter:hover,.doorway .enter:focus-visible,.doorway .enter:active,
+.adminbar button.go:hover,.adminbar button.go:focus-visible,.adminbar button.go:active,
+.rfb.go:hover,.rfb.go:focus-visible,.rfb.go:active,
+#committee .chip[aria-pressed="true"]:hover,#committee .chip[aria-pressed="true"]:focus-visible{
+  background:#711C22!important;
+  border-color:#711C22!important;
+  color:#FFFFFF!important;
+  -webkit-text-fill-color:#FFFFFF;
+}
+
+/* Nested typography used elsewhere in the site must not recolour button labels. */
+.btn:not(.ghost) :is(span,b,strong,small,i,em),
+.bar .enter :is(span,b,strong,small,i,em),
+#nav .enter :is(span,b,strong,small,i,em),
+.doorway .enter :is(span,b,strong,small,i,em),
+.adminbar button.go :is(span,b,strong,small,i,em),
+.rfb.go :is(span,b,strong,small,i,em),
+#committee .chip[aria-pressed="true"] :is(span,b,strong,small,i,em){
+  color:#FFFFFF!important;
+  -webkit-text-fill-color:#FFFFFF;
+}
+
+.btn:not(.ghost) svg,.btn:not(.ghost) svg *,
+.bar .enter svg,.bar .enter svg *,
+#nav .enter svg,#nav .enter svg *,
+.doorway .enter svg,.doorway .enter svg *,
+.adminbar button.go svg,.adminbar button.go svg *,
+.rfb.go svg,.rfb.go svg *,
+#committee .chip[aria-pressed="true"] svg,#committee .chip[aria-pressed="true"] svg *{
+  color:#FFFFFF!important;
+  stroke:#FFFFFF!important;
+}
+
+/* The gateway action is intentionally a light button inside a crimson panel. */
+.gateway .enter,
+.gateway .enter:hover,
+.gateway .enter:focus-visible,
+.gateway .enter:active{
+  background:#FFF9F0!important;
+  border-color:#FFF9F0!important;
+  color:#6F1D25!important;
+  -webkit-text-fill-color:#6F1D25;
+}
+.gateway .enter :is(span,b,strong,small,i,em){
+  color:#6F1D25!important;
+  -webkit-text-fill-color:#6F1D25;
+}
+.gateway .enter svg,.gateway .enter svg *{
+  color:#6F1D25!important;
+  stroke:#6F1D25!important;
+}
+
+/* Join cards use a text-link treatment, not a crimson button. Keep them legible. */
+.join-link,.visiting .join-link,
+.join-link:hover,.join-link:focus-visible,.join-link:active,
+.visiting .join-link:hover,.visiting .join-link:focus-visible,.visiting .join-link:active{
+  background:transparent!important;
+  border-color:#C9ACA2!important;
+  color:#711C22!important;
+  -webkit-text-fill-color:#711C22;
+}
+.join-link :is(span,b,strong,small,i,em),.visiting .join-link :is(span,b,strong,small,i,em){
+  color:#711C22!important;
+  -webkit-text-fill-color:#711C22;
+}
+.join-link svg,.join-link svg *,.visiting .join-link svg,.visiting .join-link svg *{
+  color:#711C22!important;
+  stroke:#711C22!important;
+}
+
 </style>
 <body>
 <a class="skip" href="#app">Skip to content</a>
@@ -1732,6 +2210,9 @@ a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,
     </a>
     <span class="sp"></span>
     <div class="ctrls">
+      <button class="site-search-trigger top-search" id="searchTop" type="button" aria-label="Search the whole website">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.2"/><path d="m15.2 15.2 5 5"/></svg><span>Search</span>
+      </button>
       <a class="enter" id="enterTop" href="#" aria-label="Enter the intranet">
         <svg viewBox="0 0 24 24"><path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M15 8.5 18.5 12 15 15.5"/><path d="M18.5 12H10"/></svg>
         <span>Enter the intranet</span>
@@ -1745,6 +2226,10 @@ a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,
     <img src="mcr-assets/mcr-logo.png" alt="Jesus College MCR" width="34" height="62">
     <span><b>Jesus&nbsp;MCR</b><i>Cambridge</i></span>
   </a>
+  <button class="rail-search" id="searchRail" type="button" aria-label="Search the whole website">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.2"/><path d="m15.2 15.2 5 5"/></svg>
+    <span>Search the site</span><kbd>/</kbd>
+  </button>
   <div class="navscroll" id="navscroll"></div>
   <div class="navcats" id="navcats"></div>
   <div class="railfoot">
@@ -1765,6 +2250,24 @@ a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,
 <div id="toast" role="status" aria-live="polite"></div>
 
 <div class="wrap" id="app">
+
+<section class="pg search-page" id="search" hidden>
+  <div class="pg-head search-head">
+    <p class="eyebrow">Find anything</p>
+    <h1>Search the <i>MCR site</i></h1>
+    <p class="lede">Search across every public page, contact, guide and link. Small spelling mistakes are fine.</p>
+  </div>
+  <div class="site-search-shell">
+    <div class="site-search-box">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.2"/><path d="m15.2 15.2 5 5"/></svg>
+      <label class="visually-hidden" for="siteSearchInput">Search the website</label>
+      <input id="siteSearchInput" type="search" autocomplete="off" spellcheck="false" placeholder="Try ‘graduate tutor’, ‘punt booking’, ‘welfair’…">
+      <button id="siteSearchClear" class="site-search-clear" type="button" aria-label="Clear search" hidden>&times;</button>
+    </div>
+    <div class="search-help"><span id="siteSearchStatus" role="status" aria-live="polite">Start typing to search the whole site.</span><span class="search-key-hint"><kbd>/</kbd> opens search</span></div>
+  </div>
+  <div class="search-results" id="siteSearchResults"></div>
+</section>
 
 <section class="pg" id="home" hidden>
   <div class="opening">
@@ -1890,7 +2393,7 @@ a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,
 
   <div class="card quiet" data-rise>
     <h2 data-e="freshers/h2/4">Where to go if you have questions</h2>
-    <p data-e="freshers/p/12">Have a look at the <a href="#contacts" data-eh="freshers/a/14">Useful Contacts</a> page. Or email any of the <a href="#committee" data-eh="freshers/a/15">MCR committee</a> — they are more than happy to help.</p>
+    <p data-e="freshers/p/12">Have a look at the <a href="#contacts" data-eh="freshers/a/14">Useful Contacts</a> page. Or email any of the <a href="#committee" data-eh="freshers/a/15">MCR committee</a> , they are more than happy to help.</p>
   </div>
 </section>
 
@@ -1914,12 +2417,12 @@ a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,
   <div class="card chapter" data-rise>
     <div class="chapter-title"><h2 data-e="room/h2/2">Holding an event there</h2></div>
     <div class="chapter-body">
-    <p data-e="room/p/6">If you are planning something bigger &#8212; pre-dinner drinks before Formal Hall for a birthday, say &#8212; put it through the app rather than hoping the room is free.</p>
+    <p data-e="room/p/6">If you are planning something bigger , pre-dinner drinks before Formal Hall for a birthday, say , put it through the app rather than hoping the room is free.</p>
     <p data-e="room/p/13">An approved booking does not empty the room, so it is still worth posting it on the <a href="https://www.facebook.com/groups/JesusCollegeCambridgeMCR" target="_blank" rel="noopener" data-eh="room/a/1">MCR Facebook group</a>: the people already sitting there are the ones worth telling.</p>
     <div class="doorway" data-rise>
       <div class="t">
         <b data-e="room/b/1">Bookings happen in the app</b>
-        <p data-e="room/p/12">The MCRNet shows when the room is already spoken for, takes your request, and sends back a permission slip once the committee has said yes &#8212; which is the piece of paper the Porters ask for.</p>
+        <p data-e="room/p/12">The MCRNet shows when the room is already spoken for, takes your request, and sends back a permission slip once the committee has said yes , which is the piece of paper the Porters ask for.</p>
       </div>
       <a class="enter" href="#" data-enter aria-label="Enter the intranet" data-eh="room/a/6">
         <svg viewBox="0 0 24 24"><path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M15 8.5 18.5 12 15 15.5"/><path d="M18.5 12H10"/></svg>
@@ -1939,19 +2442,19 @@ a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,
     <ul class="list">
       <li data-e="room/li/2">Talking and the television are both fine while somebody works in the corner. It is the volume that matters, not the activity.</li>
       <li data-e="room/li/4">It is not personal storage. Take your things with you when you go.</li>
-      <li data-e="room/li/15">It is not a supervision room either &#8212; College provides those, and the café and study centre are the usual alternatives.</li>
+      <li data-e="room/li/15">It is not a supervision room either , College provides those, and the café and study centre are the usual alternatives.</li>
       <li data-e="room/li/16">Read the fire procedures once, on a day when nothing is on fire.</li>
     </ul>
     <h3 data-e="room/h3/2">Help yourself</h3>
     <ul class="list">
       <li data-e="room/li/6">The tea, the coffee with milk and sugar, the art supplies and the sexual health supplies are all there for you, as is anything in the fridge that is not labelled with somebody’s name. If you are not sure whose a bottle is, ask a member of the <a href="#committee" data-eh="room/a/4">committee</a> rather than guessing.</li>
-      <li data-e="room/li/11">Borrow the board games, the books and the inflatables for up to a week. Rinse the inflatables afterwards — there are hose taps on Lower Park Street — and leave the electronics where they are.</li>
+      <li data-e="room/li/11">Borrow the board games, the books and the inflatables for up to a week. Rinse the inflatables afterwards , there are hose taps on Lower Park Street , and leave the electronics where they are.</li>
     </ul>
     <h3 data-e="room/h3/3">Leaving it as you found it</h3>
     <ul class="list">
       <li data-e="room/li/8">Clear up: put back what you borrowed, bin or recycle the rest, wash and dry the plates and glasses and return them to the cupboards. Glasses go back to the bar.</li>
       <li data-e="room/li/5">Lunch in the fridge is fine, overnight is not. Label it with your name and the date.</li>
-      <li data-e="room/li/10">Tell the <a href="#committee" data-eh="room/a/5">committee</a> when something breaks, or when something already looks broken or missing. Nobody is in trouble; it just cannot be fixed until somebody says.</li>
+      <li data-e="room/li/10">Tell the <a href="#committee" data-eh="room/a/5">committee</a> when something breaks, or when something already looks broken or missing. Nobody is in trouble, it just cannot be fixed until somebody says.</li>
     </ul>
     <div class="note" data-rise>Most importantly, <strong>do</strong> think of the MCR as the grads’ living room, and enjoy it.</div>
   
@@ -1989,8 +2492,8 @@ a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,
   </a>
 
   <p class="tag" data-rise data-e="sport/p/4">JCSU sports and societies</p>
-  <div class="card quiet" data-rise>
-    <p data-e="sport/p/5">These belong to the <b>JCSU</b>, the undergraduate union, not to the MCR. Nearly all of them take postgraduates. Pick one to write to whoever runs it.</p>
+  <div class="card quiet jcsu-directory" data-rise>
+    <p class="jcsu-intro" data-e="sport/p/5">These belong to the <b>JCSU</b>, the undergraduate union, not to the MCR. Nearly all of them take postgraduates. Pick one to write to whoever runs it.</p>
     <div class="srch">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
       <label for="jQ" class="skip">Find a sport or a society</label>
@@ -2154,23 +2657,23 @@ a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,
     <h3 data-e="funding/h3/1">Who can apply</h3>
     <p data-e="funding/p/4">Both of these, not either:</p>
     <ol class="list">
-      <li data-e="funding/li/1">a current member of the Jesus College MCR;</li>
+      <li data-e="funding/li/1">a current member of the Jesus College MCR,</li>
       <li data-e="funding/li/2">studying for, or recently finished, a postgraduate degree at Cambridge at the time of the event.</li>
     </ol>
     <h3 data-e="funding/h3/2">What to send</h3>
     <p data-e="funding/p/5">An email saying what the money is for, with:</p>
     <ul class="list">
-      <li data-e="funding/li/3">the theme of the conference;</li>
-      <li data-e="funding/li/4">the date and the location;</li>
-      <li data-e="funding/li/5">speakers, if you know them yet;</li>
+      <li data-e="funding/li/3">the theme of the conference,</li>
+      <li data-e="funding/li/4">the date and the location,</li>
+      <li data-e="funding/li/5">speakers, if you know them yet,</li>
       <li data-e="funding/li/6">a breakdown of estimated costs, item by item.</li>
     </ul>
     <h3 data-e="funding/h3/3">What the money can go on</h3>
     <ul class="list">
-      <li data-e="funding/li/7">transport for speakers;</li>
-      <li data-e="funding/li/8">refreshments for those attending;</li>
-      <li data-e="funding/li/9">hiring function rooms;</li>
-      <li data-e="funding/li/10">promoting the event;</li>
+      <li data-e="funding/li/7">transport for speakers,</li>
+      <li data-e="funding/li/8">refreshments for those attending,</li>
+      <li data-e="funding/li/9">hiring function rooms,</li>
+      <li data-e="funding/li/10">promoting the event,</li>
       <li data-e="funding/li/11">other reasonable costs that come with it.</li>
     </ul>
     <div class="note" data-rise>Air travel is not covered. Where it can be, the event should be held at Jesus and open to the Jesus postgraduate community.</div>
@@ -2264,9 +2767,9 @@ a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,
     <div class="tbl-wrap"><table class="tbl">
       <thead><tr><th data-e="welfare/th/1">Who</th><th data-e="welfare/th/2">Contact</th></tr></thead>
       <tbody>
-        <tr><td data-e="welfare/td/1">Emergency services &#8212; crime, fire, or anything medical and serious</td><td data-e="welfare/td/2"><a href="tel:999" data-eh="welfare/a/21">999</a></td></tr>
+        <tr><td data-e="welfare/td/1">Emergency services , crime, fire, or anything medical and serious</td><td data-e="welfare/td/2"><a href="tel:999" data-eh="welfare/a/21">999</a></td></tr>
         <tr><td data-e="welfare/td/3">Porters’ Lodge, every hour of the year</td><td data-e="welfare/td/4"><a href="tel:01223339339" data-eh="welfare/a/22">01223 339339</a></td></tr>
-        <tr><td data-e="welfare/td/5">Welfare Tutor on duty, any hour</td><td data-e="welfare/td/6">Ask the Lodge — <a href="tel:01223339339" data-eh="welfare/a/23">01223 339339</a></td></tr>
+        <tr><td data-e="welfare/td/5">Welfare Tutor on duty, any hour</td><td data-e="welfare/td/6">Ask the Lodge , <a href="tel:01223339339" data-eh="welfare/a/23">01223 339339</a></td></tr>
       </tbody>
     </table></div>
     <p data-e="welfare/p/8">Ring the Lodge as well as 999, so the College knows. There is a Welfare Tutor on duty every hour of the year and the Porters know who it is. Accident and Emergency at Addenbrooke’s is for loss of consciousness, severe chest pain, serious accidents and broken bones, heavy bleeding, and anything else life-threatening.</p>
@@ -2278,7 +2781,7 @@ a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,
   <div class="card chapter" data-rise>
     <div class="chapter-title"><h2 data-e="welfare/h2/1">Who to contact</h2></div>
     <div class="chapter-body">
-    <p data-e="welfare/p/4">The MCR welfare team — the two Welfare Officers, the International Officer and the LGBT+ Liaison — can be reached by email, by pigeonhole, or in person. Their names and addresses are on the <a href="#committee" data-eh="welfare/a/2">Committee</a> page, and you can write to them without giving your name (see below).</p>
+    <p data-e="welfare/p/4">The MCR welfare team , the two Welfare Officers, the International Officer and the LGBT+ Liaison , can be reached by email, by pigeonhole, or in person. Their names and addresses are on the <a href="#committee" data-eh="welfare/a/2">Committee</a> page, and you can write to them without giving your name (see below).</p>
     <p data-e="welfare/p/5">There is useful information on the College’s <a href="https://jnet.jesus.cam.ac.uk/jnet/students/health-and-welfare" target="_blank" rel="noopener" data-eh="welfare/a/3">welfare pages</a>. You can also find welfare advice from the <a href="https://www.gradunion.cam.ac.uk" target="_blank" rel="noopener" data-eh="welfare/a/4">Graduate Union</a> and the <a href="https://www.cambridgesu.co.uk/support/" target="_blank" rel="noopener" data-eh="welfare/a/5">Cambridge University Students’ Union</a>, as well as the <a href="https://www.cambridgesu.co.uk/support/advice/" target="_blank" rel="noopener" data-eh="welfare/a/6">Student Advice Service</a>.</p>
     <p data-e="welfare/p/6">You can also find more specific information from the MCR about <a href="#counselling" data-eh="welfare/a/7">counselling and advice</a> and <a href="#sexual-health" data-eh="welfare/a/8">sexual health</a>, as well as information for those with <a href="#families" data-eh="welfare/a/9">families and/or partners in Cambridge</a>.</p>
   
@@ -2298,11 +2801,11 @@ a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,
   <div class="card chapter" data-rise>
     <div class="chapter-title"><h2 data-e="welfare/h2/4">Send an anonymous welfare message</h2></div>
     <div class="chapter-body">
-    <p data-e="welfare/p/12">You do not have to put your name to a welfare message. In the app, a welfare thread goes to one officer and the President and to nobody else, and there is a box to tick that keeps your name off it. They can still write back; they just will not know who you are.</p>
+    <p data-e="welfare/p/12">You do not have to put your name to a welfare message. In the app, a welfare thread goes to one officer and the President and to nobody else, and there is a box to tick that keeps your name off it. They can still write back, they just will not know who you are.</p>
     <div class="doorway" data-rise>
       <div class="t">
         <b data-e="welfare/b/1">Anonymous welfare messages</b>
-        <p data-e="welfare/p/24">Ask something, or say something, without your name attached. Nothing on this public page can do that — the app can.</p>
+        <p data-e="welfare/p/24">Ask something, or say something, without your name attached. Nothing on this public page can do that , the app can.</p>
       </div>
       <a class="enter" href="#" data-enter aria-label="Enter the intranet" data-eh="welfare/a/13">
         <svg viewBox="0 0 24 24"><path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M15 8.5 18.5 12 15 15.5"/><path d="M18.5 12H10"/></svg>
@@ -2323,7 +2826,7 @@ a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,
       <dt data-e="welfare/dt/5">Main gate</dt>
       <dd data-e="welfare/dd/5">The wooden doors at the end of the Chimney. Locked at midnight in term.</dd>
       <dt data-e="welfare/dt/6">After midnight</dt>
-      <dd data-e="welfare/dd/6">Jesus Lane vehicle exit, Victoria Avenue vehicle entry, or the gate at the end of Lower Park Street — University card at the reader.</dd>
+      <dd data-e="welfare/dd/6">Jesus Lane vehicle exit, Victoria Avenue vehicle entry, or the gate at the end of Lower Park Street , University card at the reader.</dd>
       <dt data-e="welfare/dt/7">All gates open</dt>
       <dd data-e="welfare/dd/7">5.30am.</dd>
       <dt data-e="welfare/dt/8">Lower Park Street</dt>
@@ -2363,7 +2866,7 @@ a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,
       <dt data-e="welfare/dt/4">Web page</dt>
       <dd data-e="welfare/dd/4"><a href="https://jnet.jesus.cam.ac.uk/jnet/students/health-and-welfare/college-nurse-and-physio" target="_blank" rel="noopener" data-eh="welfare/a/16">College Nurse and Physio on JNet</a></dd>
     </dl>
-    <p data-e="welfare/p/19">You must register with the College Nurse so that she can help you during your studies at Cambridge. When you first arrive at College you are asked to complete a form, which is kept confidentially in the College Nurse’s office. In the UK you must register with a National Health Service General Practitioner (GP) — there are <a href="https://www.nhs.uk/service-search/find-a-gp/results/CB5%208BL" target="_blank" rel="noopener" data-eh="welfare/a/17">lots nearby</a>. You should let the College Nurse know which one you’ve registered with, for her records.</p>
+    <p data-e="welfare/p/19">You must register with the College Nurse so that she can help you during your studies at Cambridge. When you first arrive at College you are asked to complete a form, which is kept confidentially in the College Nurse’s office. In the UK you must register with a National Health Service General Practitioner (GP) , there are <a href="https://www.nhs.uk/service-search/find-a-gp/results/CB5%208BL" target="_blank" rel="noopener" data-eh="welfare/a/17">lots nearby</a>. You should let the College Nurse know which one you’ve registered with, for her records.</p>
     <p data-e="welfare/p/20">If you have any concerns about your own health or that of a colleague or housemate, please contact the College Nurse on one of the telephone numbers shown above or attend one of her surgeries. The College Nurse is located on the ground floor of Staircase 1, Library Court. Please inform the porters if you are unwell. The Porters’ Lodge is open 24/7 and all Porters are trained First Aiders.</p>
     <p data-e="welfare/p/21">If any of your personal health details should change, it is important that the College Nurse is kept informed. Any student (or partner of a Jesus student living in College) should notify the College Nurse if they or their partner become pregnant. If a parent or another relative comes to stay in a College house to help, the Graduate Tutor has to give permission and the Tutorial Office and the Lodge record that they are there.</p>
   
@@ -2397,7 +2900,7 @@ a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,
   <div class="pg-head">
     <p class="eyebrow" data-rise data-e="counselling/p/1">Support</p>
     <h1 data-rise data-e="counselling/h1/1">Counselling and <i>Advice</i></h1>
-    <p class="lede" data-rise data-e="counselling/p/2">Somebody will listen at any hour, and you do not need a diagnosis, a reason or an appointment to start. The numbers are below; everything after them is the longer version.</p>
+    <p class="lede" data-rise data-e="counselling/p/2">Somebody will listen at any hour, and you do not need a diagnosis, a reason or an appointment to start. The numbers are below, everything after them is the longer version.</p>
   </div>
 
   <div class="card alert" data-rise>
@@ -2406,7 +2909,7 @@ a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,
       <thead><tr><th data-e="counselling/th/1">Who</th><th data-e="counselling/th/2">Contact</th></tr></thead>
       <tbody>
         <tr><td data-e="counselling/td/1">Welfare Tutor on duty, any hour of the year</td><td data-e="counselling/td/2">Porters’ Lodge, <a href="tel:01223339339" data-eh="counselling/a/21">01223 339339</a></td></tr>
-        <tr><td data-e="counselling/td/3">Linkline — students, listening, not advising. 7pm to 7am in full term</td><td data-e="counselling/td/4"><a href="tel:01223744444" data-eh="counselling/a/22">01223 744444</a></td></tr>
+        <tr><td data-e="counselling/td/3">Linkline , students, listening, not advising. 7pm to 7am in full term</td><td data-e="counselling/td/4"><a href="tel:01223744444" data-eh="counselling/a/22">01223 744444</a></td></tr>
         <tr><td data-e="counselling/td/5">Samaritans, day or night, crisis or not</td><td data-e="counselling/td/6"><a href="tel:116123" data-eh="counselling/a/23">116 123</a></td></tr>
       </tbody>
     </table></div>
@@ -2467,7 +2970,7 @@ a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,
   <div class="card chapter" data-rise>
     <div class="chapter-title"><h2 data-e="counselling/h2/6">University Counselling Service</h2></div>
     <div class="chapter-body">
-    <p data-e="counselling/p/11">The <a href="http://www.counselling.cam.ac.uk/" target="_blank" rel="noopener" data-eh="counselling/a/15">University Counselling Service</a> is free, confidential and open to every student. Book online; the form takes as much or as little as you want to give it, and they write back to arrange a time.</p>
+    <p data-e="counselling/p/11">The <a href="http://www.counselling.cam.ac.uk/" target="_blank" rel="noopener" data-eh="counselling/a/15">University Counselling Service</a> is free, confidential and open to every student. Book online, the form takes as much or as little as you want to give it, and they write back to arrange a time.</p>
     <p data-e="counselling/p/12">The Student Union provides a <a href="https://www.cambridgesu.co.uk/support/advice/" target="_blank" rel="noopener" data-eh="counselling/a/16">Student Advice Service</a> for confidential advice ranging from making friends through academic support to student finance.</p>
   
     </div>
@@ -2524,7 +3027,7 @@ a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,
       <dt data-e="sexual-health/dt/4">Men</dt>
       <dd data-e="sexual-health/dd/4"><a href="https://mkcharity.org" target="_blank" rel="noopener" data-eh="sexual-health/a/6">ManKind Counselling</a></dd>
       <dt data-e="sexual-health/dt/5">In College, any hour</dt>
-      <dd data-e="sexual-health/dd/5">The Welfare Tutor on duty, through the Lodge — <a href="tel:01223339339" data-eh="sexual-health/a/7">01223 339339</a></dd>
+      <dd data-e="sexual-health/dd/5">The Welfare Tutor on duty, through the Lodge , <a href="tel:01223339339" data-eh="sexual-health/a/7">01223 339339</a></dd>
       <dt data-e="sexual-health/dt/6">Police</dt>
       <dd data-e="sexual-health/dd/6"><a href="tel:999" data-eh="sexual-health/a/8">999</a> if it is happening now, otherwise <a href="tel:101" data-eh="sexual-health/a/9">101</a>. Cambridgeshire Police call out a specially trained officer.</dd>
       <dt data-e="sexual-health/dt/7">Tests and treatment</dt>
@@ -2553,7 +3056,7 @@ a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,
       <li data-e="sexual-health/li/3">Dental dams (standard and non-latex)</li>
       <li data-e="sexual-health/li/4">Pregnancy tests</li>
     </ul>
-    <p data-e="sexual-health/p/5">The Welfare Officers cannot tell you what to do, but they can give you unbiased, judgement-free information on contraception, emergency contraception, pregnancy support and crisis support — and they will not repeat the conversation to anyone.</p>
+    <p data-e="sexual-health/p/5">The Welfare Officers cannot tell you what to do, but they can give you unbiased, judgement-free information on contraception, emergency contraception, pregnancy support and crisis support , and they will not repeat the conversation to anyone.</p>
   
     </div>
   </div>
@@ -2586,7 +3089,7 @@ a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,
   <div class="pg-head">
     <p class="eyebrow" data-rise data-e="families/p/1">Support</p>
     <h1 data-rise data-e="families/h1/1">Families and <i>Partners</i></h1>
-    <p class="lede" data-rise data-e="families/p/2">A good number of postgraduates arrive with a partner, or with children, or both. Three things are worth doing early; everything after them is detail.</p>
+    <p class="lede" data-rise data-e="families/p/2">A good number of postgraduates arrive with a partner, or with children, or both. Three things are worth doing early, everything after them is detail.</p>
   </div>
 
   <div class="linkgrid" data-rise>
@@ -2845,7 +3348,7 @@ a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,
   <div class="pg-head">
     <p class="eyebrow" data-rise data-e="health/p/11">Support</p>
     <h1 data-rise data-e="health/h1/1">First aid and <i>health</i></h1>
-    <p class="lede" data-rise data-e="health/p/12">Where to go for anything health related, from an emergency to registering with a GP, in the order worth considering them. Opening hours and direct numbers go stale without anyone noticing, so those are linked rather than copied out; what is written here is the part that does not change from year to year.</p>
+    <p class="lede" data-rise data-e="health/p/12">Where to go for anything health related, from an emergency to registering with a GP, in the order worth considering them. Opening hours and direct numbers go stale without anyone noticing, so those are linked rather than copied out, what is written here is the part that does not change from year to year.</p>
   </div>
 
   <div class="card alert" data-rise>
@@ -3042,7 +3545,7 @@ a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,
   <div class="card chapter" data-rise>
     <div class="chapter-title"><h2 data-e="contacts/h2/2">Tutorial</h2></div>
     <div class="chapter-body">
-    <p data-e="contacts/p/5">Every student is assigned a Tutor, and for postgraduates that is the Graduate Tutor, supported by a small team because the post covers more than four hundred people. You can go to any Tutor about anything at all, however large or small; they will listen in confidence and point you at expert help when it is needed. Most hold a drop-in.</p>
+    <p data-e="contacts/p/5">Every student is assigned a Tutor, and for postgraduates that is the Graduate Tutor, supported by a small team because the post covers more than four hundred people. You can go to any Tutor about anything at all, however large or small, they will listen in confidence and point you at expert help when it is needed. Most hold a drop-in.</p>
     <p data-e="contacts/p/6">The Tutors who are part of the College administration form the Tutorial Department, located on First Floor, N Staircase, Second Court. They organise everything related to students, including:</p>
     <ul class="list">
       <li data-e="contacts/li/1">Applications for extensions</li>
@@ -3074,7 +3577,7 @@ a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,
   <div class="card chapter" data-rise>
     <div class="chapter-title"><h2 data-e="contacts/h2/3">College Contacts</h2></div>
     <div class="chapter-body">
-    <p data-e="contacts/p/8">When you arrive you are assigned a College Contact: a Fellow from your faculty or something near it, told to you on arrival. They are there for the informal question — the academic or professional one your supervisor does not cover and the Welfare Tutors would not — and for making sure new postgraduates get asked to things.</p>
+    <p data-e="contacts/p/8">When you arrive you are assigned a College Contact: a Fellow from your faculty or something near it, told to you on arrival. They are there for the informal question , the academic or professional one your supervisor does not cover and the Welfare Tutors would not , and for making sure new postgraduates get asked to things.</p>
   
     </div>
   </div>
@@ -3124,7 +3627,7 @@ a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,
   <div class="card chapter" data-rise>
     <div class="chapter-title"><h2 data-e="contacts/h2/6">College Council</h2></div>
     <div class="chapter-body">
-    <p data-e="contacts/p/12">Council approves everything that happens in and to the College, from building work to student provision, on <a href="https://jnet.jesus.cam.ac.uk/jnet/college-information/college-calendar" target="_blank" rel="noopener" data-eh="contacts/a/18">set dates</a> through the year, and its minutes are in the library and on JNet. Four junior members sit on it — the JCSU President, the MCR President, and one elected representative from each — and all four are Trustees of the College.</p>
+    <p data-e="contacts/p/12">Council approves everything that happens in and to the College, from building work to student provision, on <a href="https://jnet.jesus.cam.ac.uk/jnet/college-information/college-calendar" target="_blank" rel="noopener" data-eh="contacts/a/18">set dates</a> through the year, and its minutes are in the library and on JNet. Four junior members sit on it , the JCSU President, the MCR President, and one elected representative from each , and all four are Trustees of the College.</p>
   
     </div>
   </div>
@@ -3296,13 +3799,13 @@ var PAGES = [
   {id:'room',           label:'The MCR room', tab:'MCR room', group:'Life at Jesus', blurb:'Above the Roost, open to every member, all hours.'},
   {id:'sport',          label:'Sport and societies', tab:'Sport', group:'Life at Jesus', blurb:'Nine MCR clubs, and how to start another.', pic:'col-sport.jpg', alt:'A lineout on the College pitch'},
   {id:'punting',        label:'Punting',               group:'Life at Jesus', blurb:'The Rooster: booking, finding her, bringing her back.', pic:'punt6.jpeg', alt:'The Rooster, the MCR punt'},
-  {id:'funding',        label:'Conference fund', tab:'Funding', group:'Life at Jesus', blurb:'£100–£300 towards a student-led conference.', pic:'col-funding.jpg', alt:'Students working together'},
-  {id:'sustainability', label:'Sustainability', tab:'Green', group:'Life at Jesus', blurb:'The A–Z guide and the College’s own policies.', pic:'col-garden.jpg', alt:'The College gardens'},
+  {id:'funding',        label:'Conference fund', tab:'Funding', group:'Life at Jesus', blurb:'£100-£300 towards a student-led conference.', pic:'col-funding.jpg', alt:'Students working together'},
+  {id:'sustainability', label:'Sustainability', tab:'Green', group:'Life at Jesus', blurb:'The A to Z guide and the College’s own policies.', pic:'col-garden.jpg', alt:'The College gardens'},
   {id:'info',           label:'Forms and links', tab:'Forms', group:'Reference', blurb:'Twenty-one College pages and forms, with the address of each.', pic:'col-formal.jpg', alt:'Formal Hall at Jesus College'},
   {id:'contacts',       label:'Useful contacts', tab:'Contacts', group:'Reference', pic:'col-library.jpg', alt:'The Quincentenary Library', blurb:'Tutors, porters and doctors. The whole directory, searchable.'}
 ];
 
-var IDS = PAGES.map(function(p){return p.id}).concat(['admin']);
+var IDS = PAGES.map(function(p){return p.id}).concat(['admin','search']);
 
 var GROUPS = [];
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;')}
@@ -3395,8 +3898,9 @@ function show(id, push){
   markCurrent(id);
   var p = PAGES.filter(function(x){ return x.id===id })[0];
   
-  document.title = !p ? 'Edit this site · Jesus College MCR'
-                 : (id === 'home' ? 'Jesus College MCR' : p.label + ' · Jesus College MCR');
+  document.title = id === 'search' ? 'Search · Jesus College MCR'
+                 : (!p ? 'Edit this site · Jesus College MCR'
+                 : (id === 'home' ? 'Jesus College MCR' : p.label + ' · Jesus College MCR'));
   if (id === 'admin' && typeof adminInit === 'function') adminInit();
   if (push){ try{ if (location.hash !== '#'+id) history.pushState(null,'','#'+id) }catch(e){} }
   window.scrollTo(0,0);
@@ -3413,7 +3917,30 @@ function show(id, push){
     arm(sec);
   }
 }
-function fromHash(){ show((location.hash||'#home').slice(1).split('?')[0], false) }
+function fromHash(){
+  var raw=(location.hash||'#home').slice(1), bits=raw.split('?'), id=bits[0]||'home';
+  show(id, false);
+  var params=new URLSearchParams(bits.slice(1).join('?'));
+  if(id==='search' && typeof runSiteSearch==='function'){
+    var q=params.get('q')||'';
+    var input=document.getElementById('siteSearchInput');
+    if(input && input.value!==q) input.value=q;
+    runSiteSearch(q, false);
+  }
+  var j=params.get('j');
+  if(id==='sport' && j){
+    var jq=document.getElementById('jQ'); if(jq){jq.value=j; if(typeof drawJcsu==='function')drawJcsu()}
+  }
+  var spot=params.get('spot');
+  if(spot){
+    setTimeout(function(){
+      var el=document.getElementById(spot); if(!el) return;
+      el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
+      el.classList.remove('site-search-hit'); void el.offsetWidth; el.classList.add('site-search-hit');
+      setTimeout(function(){el.classList.remove('site-search-hit')},3200);
+    },90);
+  }
+}
 window.addEventListener('hashchange', fromHash);
 document.addEventListener('click', function(e){
   var t = e.target.closest ? e.target : null; if (!t) return;
@@ -3778,47 +4305,87 @@ function wireCommittee(){
 }
 
 var jOpen = false;
-function drawJcsu(){
-  var box = document.getElementById('jQ'); if (!box) return;
-  var q = box.value.trim().toLowerCase();
-  document.getElementById('jClear').hidden = !q;
-  var all = document.getElementById('jAll');
-  all.hidden = !!q;
-  all.setAttribute('aria-expanded', jOpen ? 'true' : 'false');
-  all.innerHTML = '<span class="pm">' + (jOpen ? '−' : '+') + '</span>'
-    + (jOpen ? 'Close the list' : 'Show all ' + JCSU.length + ' of them');
-
-  var out = document.getElementById('jOut');
-  if (!q && !jOpen){ out.innerHTML = ''; return }
-  var hit = JCSU.filter(function(x){
-    return !q || (x.n + ' ' + x.w).toLowerCase().indexOf(q) >= 0;
+function jNorm(s){
+  return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9+]+/g,' ').replace(/\s+/g,' ').trim();
+}
+function jDistance(a,b){
+  a=jNorm(a);b=jNorm(b);
+  if(a===b)return 0;
+  if(!a)return b.length;if(!b)return a.length;
+  var prev=new Array(b.length+1),cur=new Array(b.length+1),i,j;
+  for(j=0;j<=b.length;j++)prev[j]=j;
+  for(i=1;i<=a.length;i++){
+    cur[0]=i;
+    for(j=1;j<=b.length;j++)cur[j]=Math.min(cur[j-1]+1,prev[j]+1,prev[j-1]+(a.charAt(i-1)===b.charAt(j-1)?0:1));
+    var tmp=prev;prev=cur;cur=tmp;
+  }
+  return prev[b.length];
+}
+function jScoreItem(x,q){
+  var query=jNorm(q),name=jNorm(x.n),who=jNorm(x.w),all=(name+' '+who).trim();
+  if(!query)return 1;
+  if(name===query)return 200;
+  if(name.indexOf(query)===0)return 165;
+  if(name.indexOf(query)>=0)return 145;
+  if(all.indexOf(query)>=0)return 120;
+  var qs=query.split(' ').filter(Boolean),words=all.split(' ').filter(Boolean),score=0;
+  qs.forEach(function(qw){
+    var best=0;
+    words.forEach(function(w){
+      if(w===qw)best=Math.max(best,36);
+      else if(w.indexOf(qw)===0||qw.indexOf(w)===0)best=Math.max(best,29);
+      else {
+        var d=jDistance(qw,w),lim=Math.max(1,Math.floor(Math.max(qw.length,w.length)*.28));
+        if(d<=lim)best=Math.max(best,24-d*4);
+      }
+    });
+    score+=best;
   });
-  if (!hit.length){
-    out.innerHTML = '<div class="nohit"><b>Nothing matched that.</b>'
-      + 'Try part of a name, or a captain’s surname.</div>';
+  if(qs.length>1&&score>0)score+=10;
+  return score;
+}
+function drawJcsu(){
+  var box=document.getElementById('jQ');if(!box)return;
+  var raw=box.value,q=jNorm(raw);
+  document.getElementById('jClear').hidden=!q;
+  var all=document.getElementById('jAll');
+  all.hidden=!!q;
+  all.setAttribute('aria-expanded',jOpen?'true':'false');
+  all.innerHTML='<span class="pm">'+(jOpen?'−':'+')+'</span>'+(jOpen?'Hide the full directory':'Browse all '+JCSU.length+' clubs and societies');
+
+  var out=document.getElementById('jOut');
+  if(!q&&!jOpen){out.innerHTML='';return}
+  var hit=JCSU.map(function(x){return {x:x,s:jScoreItem(x,q)}})
+    .filter(function(r){return !q||r.s>0})
+    .sort(function(a,b){return b.s-a.s||a.x.n.localeCompare(b.x.n)})
+    .map(function(r){return r.x});
+  if(!hit.length){
+    out.innerHTML='<div class="j-empty"><b>No close match yet.</b><span>Try a shorter word, a related activity, or an approximate spelling.</span></div>';
     return;
   }
-  function group(kind, label){
-    var list = hit.filter(function(x){ return x.k === kind });
-    if (!list.length) return '';
-    return '<p class="jhead"><b>' + label + '</b><span>' + list.length + '</span></p>'
-      + '<div class="jgrid">' + list.map(function(x){
-          return '<a class="jc" href="mailto:' + x.e.join(',') + '?subject='
-            + encodeURIComponent('Jesus ' + x.n) + '"><b>' + esc(x.n) + '</b>'
-            + '<span>' + esc(x.w) + '</span><i>write to them</i></a>';
-        }).join('') + '</div>';
+  function group(kind,label){
+    var list=hit.filter(function(x){return x.k===kind});
+    if(!list.length)return '';
+    return '<section class="j-result-group"><div class="jhead"><b>'+label+'</b><span>'+list.length+(list.length===1?' match':' matches')+'</span></div>'
+      +'<div class="jgrid">'+list.map(function(x){
+        return '<a class="jc" href="mailto:'+x.e.join(',')+'?subject='+encodeURIComponent('Jesus '+x.n)+'">'
+          +'<span class="jc-kind">'+(x.k==='sport'?'Sport':'Society')+'</span>'
+          +'<b>'+esc(x.n)+'</b>'
+          +'<span class="jc-person">'+esc(x.w)+'</span>'
+          +'<span class="jc-action">Email contact <span aria-hidden="true">↗</span></span></a>';
+      }).join('')+'</div></section>';
   }
-  out.innerHTML = group('sport','Sport') + group('society','Societies');
+  out.innerHTML='<div class="j-results-summary"><b>'+hit.length+(hit.length===1?' result':' results')+'</b><span>'+(q?'Best matches first':'The full JCSU directory')+'</span></div>'
+    +group('sport','Sports')+group('society','Societies');
 }
 function wireJcsu(){
-  var box = document.getElementById('jQ'); if (!box) return;
-  box.addEventListener('input', drawJcsu);
-  document.getElementById('jClear').addEventListener('click', function(){
-    box.value = ''; box.focus(); drawJcsu();
-  });
-  document.getElementById('jAll').addEventListener('click', function(){
-    jOpen = !jOpen; drawJcsu();
-    if (jOpen && io) arm(document.getElementById('jOut'));
+  var box=document.getElementById('jQ');if(!box)return;
+  var timer=0;
+  box.addEventListener('input',function(){clearTimeout(timer);timer=setTimeout(drawJcsu,55)});
+  document.getElementById('jClear').addEventListener('click',function(){box.value='';box.focus();drawJcsu()});
+  document.getElementById('jAll').addEventListener('click',function(){
+    jOpen=!jOpen;drawJcsu();
+    if(jOpen&&io)arm(document.getElementById('jOut'));
   });
   drawJcsu();
 }
@@ -4596,91 +5163,273 @@ arm();
 loadMenu();
 
 
-/* ---- Gentle interaction enhancement + purpose-built cockerel-head pointer ---- */
-(function(){
-  var fine = window.matchMedia && window.matchMedia('(hover:hover) and (pointer:fine)').matches;
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* ---- Whole-site intelligent fuzzy search ---- */
+var SITE_SEARCH_INDEX=[];
+var SITE_SEARCH_READY=false;
+var SEARCH_PAGE_NAMES={};
+PAGES.forEach(function(p){SEARCH_PAGE_NAMES[p.id]=p.label});
 
-  var aliveSelector = '.grid .card,.card.quiet,.linkcard,.rest,.club,.jc,.menu,.doorway,.gateway,.tile,.person,.btn,.enter,.day,.chip,.section-jump,.sitting,.gymcard';
-  [].forEach.call(document.querySelectorAll(aliveSelector), function(el){ el.classList.add('alive-surface'); });
+var SEARCH_STOPWORDS={a:1,an:1,and:1,are:1,at:1,be:1,can:1,do:1,for:1,from:1,how:1,i:1,in:1,is:1,it:1,me:1,my:1,of:1,on:1,or:1,the:1,to:1,where:1,with:1,you:1};
+var SEARCH_ALIASES={
+  caff:['cafeteria','cafe','menu','food'], cafeteria:['caff','cafe','menu'],
+  porter:['porters','lodge'], porters:['porter','lodge'], lodge:['porters','porter'],
+  welfare:['wellbeing','support'], wellbeing:['welfare','support'],
+  society:['societies','club'], societies:['society','club'], club:['society','societies'],
+  gym:['fitness','sport'], fitness:['gym','sport'],
+  punt:['punting'], punting:['punt'],
+  fresher:['freshers','newcomer'], freshers:['fresher','newcomer'],
+  accommodation:['housing','room'], housing:['accommodation'],
+  formal:['hall','dinner'], hall:['formal']
+};
 
-  if (fine && !reduce){
-    document.addEventListener('pointermove', function(e){
-      var el = e.target.closest ? e.target.closest('.alive-surface') : null;
-      if (!el) return;
-      var r = el.getBoundingClientRect();
-      if (!r.width || !r.height) return;
-      el.style.setProperty('--alive-x', ((e.clientX-r.left)/r.width*100).toFixed(1)+'%');
-      el.style.setProperty('--alive-y', ((e.clientY-r.top)/r.height*100).toFixed(1)+'%');
-    }, {passive:true});
+function searchNorm(s){
+  s=String(s||'');
+  if(s.normalize)s=s.normalize('NFKD').replace(/[\u0300-\u036f]/g,'');
+  return s.toLowerCase().replace(/[’']/g,'').replace(/[^a-z0-9@+£&]+/g,' ').replace(/\s+/g,' ').trim();
+}
+function searchWords(s){return searchNorm(s).split(' ').filter(Boolean)}
+function stemSearchWord(w){
+  w=searchNorm(w);
+  if(w.length>5&&/ies$/.test(w))return w.slice(0,-3)+'y';
+  if(w.length>5&&/ing$/.test(w))return w.slice(0,-3);
+  if(w.length>4&&/ed$/.test(w))return w.slice(0,-2);
+  if(w.length>4&&/s$/.test(w)&&!/ss$/.test(w))return w.slice(0,-1);
+  return w;
+}
+function meaningfulSearchWords(s){
+  var all=searchWords(s), filtered=all.filter(function(w){return !SEARCH_STOPWORDS[w]});
+  return filtered.length?filtered:all;
+}
+function expandedSearchWords(s){
+  var base=meaningfulSearchWords(s), out=[], seen={};
+  base.forEach(function(w){
+    var variants=[w,stemSearchWord(w)].concat(SEARCH_ALIASES[w]||[]);
+    variants.forEach(function(v){v=searchNorm(v);if(v&&!seen[v]){seen[v]=1;out.push(v)}});
+  });
+  return {base:base,all:out};
+}
+function editDistance(a,b,max){
+  a=String(a);b=String(b); if(a===b)return 0; if(Math.abs(a.length-b.length)>(max==null?99:max))return (max||2)+1;
+  var prev=new Array(b.length+1),cur=new Array(b.length+1),prevprev=null;
+  for(var j=0;j<=b.length;j++)prev[j]=j;
+  for(var i=1;i<=a.length;i++){
+    cur[0]=i;var rowMin=cur[0];
+    for(j=1;j<=b.length;j++){
+      var cost=a.charAt(i-1)===b.charAt(j-1)?0:1;
+      cur[j]=Math.min(cur[j-1]+1,prev[j]+1,prev[j-1]+cost);
+      if(prevprev&&i>1&&j>1&&a.charAt(i-1)===b.charAt(j-2)&&a.charAt(i-2)===b.charAt(j-1))cur[j]=Math.min(cur[j],prevprev[j-2]+1);
+      if(cur[j]<rowMin)rowMin=cur[j];
+    }
+    if(max!=null&&rowMin>max)return max+1;
+    prevprev=prev;prev=cur;cur=new Array(b.length+1);
   }
+  return prev[b.length];
+}
+function tokenCloseness(q,w){
+  q=stemSearchWord(q);w=stemSearchWord(w);
+  if(q===w)return 38;
+  if(w.indexOf(q)===0||q.indexOf(w)===0)return Math.min(q.length,w.length)>=3?29:12;
+  if(q.length>=4&&w.indexOf(q)>=0)return 23;
+  var lim=q.length>=8?2:(q.length>=4?1:0); if(!lim)return 0;
+  var d=editDistance(q,w,lim); return d<=lim?(22-d*6):0;
+}
+function nearestHeading(el,page){
+  var hs=page.querySelectorAll('h1,h2,h3'); var found='';
+  for(var i=0;i<hs.length;i++){
+    if(hs[i]===el||(hs[i].compareDocumentPosition(el)&Node.DOCUMENT_POSITION_FOLLOWING))found=(hs[i].textContent||'').trim();
+    else break;
+  }
+  return found;
+}
+function buildSiteSearchIndex(force){
+  if(SITE_SEARCH_READY&&!force)return;
+  SITE_SEARCH_INDEX=[];var serial=0,seen={};
+  PAGES.forEach(function(p){
+    if(p.id==='search')return;
+    var page=document.getElementById(p.id);if(!page)return;
+    var nodes=page.querySelectorAll('h1,h2,h3,h4,p,li,dt,dd,td,.person,.club,.jc,.linkcard,.gymcard,.doorway,.join-card,.rest');
+    [].forEach.call(nodes,function(el){
+      if(el.closest('[hidden]:not(.pg)'))return;
+      if(el.matches('p,li,dt,dd,td,h1,h2,h3,h4')&&el.closest('.person,.club,.jc,.linkcard,.gymcard,.doorway,.join-card,.rest'))return;
+      var raw=(el.innerText||el.textContent||'').replace(/\s+/g,' ').trim();
+      if(raw.length<3)return;
+      var norm=searchNorm(raw),key=p.id+'|'+norm.slice(0,180);if(seen[key])return;seen[key]=1;
+      if(!el.id)el.id='search-spot-'+p.id+'-'+(++serial);
+      var heading=nearestHeading(el,page)||p.label;
+      var allText=[raw,heading,p.label,p.group||''].join(' ');
+      SITE_SEARCH_INDEX.push({page:p.id,pageLabel:p.label,group:p.group||'',spot:el.id,heading:heading,text:raw,norm:norm,words:searchWords(raw),headingNorm:searchNorm(heading),pageNorm:searchNorm(p.label+' '+(p.group||'')),allNorm:searchNorm(allText)});
+    });
+  });
+  if(typeof JCSU!=='undefined'&&Array.isArray(JCSU)){
+    JCSU.forEach(function(x){
+      var raw=x.n+', '+x.w+' '+(x.e||[]).join(' ');
+      SITE_SEARCH_INDEX.push({page:'sport',pageLabel:'Sport and societies',group:'Life at Jesus',spot:'jOut',heading:x.n,text:raw,norm:searchNorm(raw),words:searchWords(raw),headingNorm:searchNorm(x.n),pageNorm:searchNorm('Sport and societies Life at Jesus'),allNorm:searchNorm(raw+' '+x.n+' Sport and societies Life at Jesus'),special:'jcsu',specialQuery:x.n});
+    });
+  }
+  SITE_SEARCH_READY=true;
+}
+function bestTokenMatch(tok,words){
+  var best=0,pos=-1;
+  for(var i=0;i<words.length;i++){
+    var s=tokenCloseness(tok,words[i]);
+    if(s>best){best=s;pos=i;if(best>=38)break}
+  }
+  return {score:best,pos:pos};
+}
+function scoreSearchEntry(entry,q){
+  var nq=searchNorm(q);if(!nq)return -1;
+  var ex=expandedSearchWords(q),qt=ex.base;if(!qt.length)return -1;
+  var score=0,matched=0,positions=[];
+  if(entry.norm.indexOf(nq)>=0)score+=155-Math.min(40,entry.norm.indexOf(nq)/4);
+  else if(entry.allNorm.indexOf(nq)>=0)score+=80;
+  if(entry.headingNorm===nq)score+=95;else if(entry.headingNorm.indexOf(nq)>=0)score+=58;
+  if(entry.pageNorm.indexOf(nq)>=0)score+=40;
+  for(var i=0;i<qt.length;i++){
+    var tok=qt[i],m=bestTokenMatch(tok,entry.words),hs=bestTokenMatch(tok,searchWords(entry.heading)),ps=bestTokenMatch(tok,searchWords(entry.pageLabel+' '+entry.group));
+    var best=m.score,bestPos=m.pos;
+    if(hs.score+9>best){best=hs.score+9;bestPos=m.pos}
+    if(ps.score+5>best){best=ps.score+5;bestPos=m.pos}
+    if(best<=0&&SEARCH_ALIASES[tok]){
+      SEARCH_ALIASES[tok].some(function(alias){var a=bestTokenMatch(alias,entry.words);if(a.score>best){best=a.score-4;bestPos=a.pos}return best>=30});
+    }
+    if(best>0){matched++;score+=best;if(bestPos>=0)positions.push(bestPos)}else score-=18;
+  }
+  if(matched<Math.max(1,Math.ceil(qt.length*.66)))return -1;
+  if(matched===qt.length)score+=24;
+  if(positions.length>1){
+    var min=Math.min.apply(Math,positions),max=Math.max.apply(Math,positions),span=max-min;
+    if(span<=qt.length+1)score+=30;else if(span<=qt.length+5)score+=15;else score-=Math.min(12,span/5);
+  }
+  score-=Math.min(15,entry.text.length/190);
+  return score;
+}
+function fuzzyWordMatch(word,queries){
+  var n=searchNorm(word);if(!n)return false;
+  for(var i=0;i<queries.length;i++)if(tokenCloseness(queries[i],n)>=16)return true;
+  return false;
+}
+function snippetWindow(text,q){
+  var qs=meaningfulSearchWords(q),matches=[],re=/[A-Za-zÀ-ž0-9@+£&.'’-]+/g,m;
+  while((m=re.exec(text))){if(fuzzyWordMatch(m[0],qs)){matches.push(m.index);if(matches.length>=3)break}}
+  var anchor=matches.length?matches[0]:0,start=Math.max(0,anchor-95),end=Math.min(text.length,start+300);
+  if(start>0){var next=text.indexOf(' ',start);if(next>0&&next<start+25)start=next+1}
+  if(end<text.length){var prev=text.lastIndexOf(' ',end);if(prev>start+180)end=prev}
+  return (start>0?'…':'')+text.slice(start,end)+(end<text.length?'…':'');
+}
+function highlightedSnippet(text,q){
+  var qs=meaningfulSearchWords(q),safe=esc(snippetWindow(text,q));
+  if(!qs.length)return safe;
+  return safe.replace(/([A-Za-zÀ-ž0-9@+£&.'’-]+)/g,function(w){return fuzzyWordMatch(w,qs)?'<mark>'+w+'</mark>':w});
+}
+function searchHref(r,q){return '#'+encodeURIComponent(r.page)+'?spot='+encodeURIComponent(r.spot)+'&q='+encodeURIComponent(searchNorm(q).replace(/ /g,' '))+(r.special==='jcsu'?'&j='+encodeURIComponent(r.specialQuery||''):'')}
+function runSiteSearch(query,updateHash){
+  var input=document.getElementById('siteSearchInput'),out=document.getElementById('siteSearchResults'),status=document.getElementById('siteSearchStatus'),clear=document.getElementById('siteSearchClear');
+  if(!out||!status)return;
+  var raw=String(query==null?(input?input.value:''):query),q=raw.replace(/\s+/g,' ').trim();
+  if(clear)clear.hidden=!q;
+  if(updateHash!==false&&location.hash.indexOf('#search')===0){try{history.replaceState(null,'',q?'#search?q='+encodeURIComponent(q):'#search')}catch(e){}}
+  if(!q){status.textContent='Start typing to search the whole site.';out.innerHTML='<div class="search-empty"><b>What are you looking for?</b>Try a person, room, College service, form, society, or a phrase you only partly remember.</div>';return}
+  buildSiteSearchIndex(false);
+  var ranked=SITE_SEARCH_INDEX.map(function(e){return {e:e,s:scoreSearchEntry(e,q)}}).filter(function(x){return x.s>0}).sort(function(a,b){return b.s-a.s});
+  var kept=[],pageCounts={},seen={};
+  for(var i=0;i<ranked.length&&kept.length<30;i++){
+    var r=ranked[i].e,dup=r.page+'|'+searchNorm(r.heading)+'|'+searchNorm(r.text).slice(0,100);
+    if(seen[dup])continue;seen[dup]=1;
+    pageCounts[r.page]=pageCounts[r.page]||0;if(pageCounts[r.page]>=6)continue;pageCounts[r.page]++;kept.push(r);
+  }
+  status.textContent=kept.length?(kept.length+' '+(kept.length===1?'match':'matches')+' for “'+q+'”'):'No close matches for “'+q+'”';
+  if(!kept.length){out.innerHTML='<div class="search-empty"><b>No close match yet.</b>Try a shorter phrase, a related term, or keep the spelling approximate. Small mistakes are allowed.</div>';return}
+  out.innerHTML=kept.map(function(r){
+    var title=(r.heading&&searchNorm(r.heading)!==searchNorm(r.pageLabel))?r.heading:r.pageLabel;
+    return '<a class="search-result" href="'+searchHref(r,q)+'" data-search-result>'
+      +'<span class="search-result-main"><span class="search-breadcrumb">'+esc(r.pageLabel)+(r.group?'<span class="dot"></span>'+esc(r.group):'')+'</span>'
+      +'<h2>'+esc(title)+'</h2><p>'+highlightedSnippet(r.text,q)+'</p></span><span class="search-result-arrow" aria-hidden="true">›</span></a>';
+  }).join('');
+}
+function openSiteSearch(){
+  show('search',true);
+  setTimeout(function(){var i=document.getElementById('siteSearchInput');if(i){i.focus();i.select()}},30);
+}
+(function wireSiteSearch(){
+  var top=document.getElementById('searchTop'),rail=document.getElementById('searchRail'),input=document.getElementById('siteSearchInput'),clear=document.getElementById('siteSearchClear');
+  if(top)top.addEventListener('click',openSiteSearch);if(rail)rail.addEventListener('click',openSiteSearch);
+  var timer=0;
+  if(input)input.addEventListener('input',function(){clearTimeout(timer);var v=input.value;timer=setTimeout(function(){runSiteSearch(v,true)},110)});
+  if(clear)clear.addEventListener('click',function(){if(input){input.value='';input.focus()}runSiteSearch('',true)});
+  document.addEventListener('keydown',function(e){
+    var t=e.target,editable=t&&((t.tagName==='INPUT')||(t.tagName==='TEXTAREA')||t.isContentEditable);
+    if(e.key==='/'&&!editable&&!e.metaKey&&!e.ctrlKey&&!e.altKey){e.preventDefault();openSiteSearch()}
+  });
+  document.addEventListener('input',function(e){
+    if(e.target!==input&&e.target.closest&&e.target.closest('.pg'))SITE_SEARCH_READY=false;
+  });
+  var warm=function(){buildSiteSearchIndex(false)};
+  if('requestIdleCallback' in window)requestIdleCallback(warm,{timeout:1200});else setTimeout(warm,350);
+  if(location.hash.indexOf('#search')===0){var raw=location.hash.slice(1).split('?');var ps=new URLSearchParams(raw.slice(1).join('?'));var q=ps.get('q')||'';if(input)input.value=q;runSiteSearch(q,false)}
+})();
 
-  if (!fine || reduce) return;
-  document.documentElement.classList.add('cock-live');
-  var cursor = document.createElement('span');
-  cursor.className = 'cock-live-cursor is-hidden';
-  cursor.setAttribute('aria-hidden','true');
-  cursor.innerHTML = `<svg viewBox="0 0 34 34" aria-hidden="true" focusable="false">
-  <path class="cock-beak" d="M1.6 1.7 12.7 6.4 8.7 11.2Z"/>
-  <path class="cock-comb" d="M14.0 7.2c.3-3.6 1.7-5.7 3.7-5.9 1.2-.1 2.1.5 2.5 1.6.7-1.6 2-2.4 3.3-1.8 1.3.6 1.6 2.2.8 3.7 1.6-.8 3.2-.3 3.8.9.5 1.1.1 2.4-1.2 3.4Z"/>
-  <path class="cock-head" d="M10.5 8.2c4.4-3.3 10.6-3.1 14.5.6 3.6 3.4 4.3 8.8 1.7 13-1.9 3.1-5.0 5.0-8.2 6.6-1.7.9-3.0 2.3-3.5 4.0-3.5-2.6-5.7-6.1-6.0-9.9-.2-2.7.5-5.3 2.2-7.5L8.7 11.2c.2-1.1.8-2.1 1.8-3Z"/>
-</svg>`;
+/* ---- Optimised interaction layer + minimal cockerel cursor ---- */
+(function(){
+  var fine=window.matchMedia&&window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var aliveSelector='.grid .card,.card.quiet,.linkcard,.rest,.club,.jc,.menu,.doorway,.gateway,.tile,.person,.btn,.enter,.day,.chip,.section-jump,.sitting,.gymcard';
+  [].forEach.call(document.querySelectorAll(aliveSelector),function(el){el.classList.add('alive-surface')});
+  if(!fine||reduce)return;
+
+  var cursor=document.createElement('span');
+  cursor.className='cock-live-cursor is-hidden';cursor.setAttribute('aria-hidden','true');
+  cursor.innerHTML='<svg viewBox="0 0 34 34" aria-hidden="true" focusable="false"><path class="cock-beak" d="M1.6 1.7 12.7 6.4 8.7 11.2Z"/><path class="cock-comb" d="M14.0 7.2c.3-3.6 1.7-5.7 3.7-5.9 1.2-.1 2.1.5 2.5 1.6.7-1.6 2-2.4 3.3-1.8 1.3.6 1.6 2.2.8 3.7 1.6-.8 3.2-.3 3.8.9.5 1.1.1 2.4-1.2 3.4Z"/><path class="cock-head" d="M10.5 8.2c4.4-3.3 10.6-3.1 14.5.6 3.6 3.4 4.3 8.8 1.7 13-1.9 3.1-5.0 5.0-8.2 6.6-1.7.9-3.0 2.3-3.5 4.0-3.5-2.6-5.7-6.1-6.0-9.9-.2-2.7.5-5.3 2.2-7.5L8.7 11.2c.2-1.1.8-2.1 1.8-3Z"/></svg>';
   document.body.appendChild(cursor);
 
-  var x=-80,y=-80,lastX=x,lastY=y,tilt=0,hot=false,down=false,raf=0;
-  var hotSelector='a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,.jc,.linkcard,.enter,.tabbtn,.section-jump';
-
-  function textTarget(t){
-    if (!t || !t.closest) return false;
-    return !!t.closest('textarea,[contenteditable="true"],input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"])');
-  }
-  function parseRGB(s){
-    var m=(s||'').match(/rgba?\((\d+)[, ]+(\d+)[, ]+(\d+)(?:[, /]+([\d.]+))?\)/i);
-    return m ? [Number(m[1]),Number(m[2]),Number(m[3]),m[4]==null?1:Number(m[4])] : null;
-  }
+  var x=-60,y=-60,lastX=x,lastY=y,tilt=0,hot=false,down=false,raf=0,activated=false;
+  var surface=null,surfaceRect=null,sx=50,sy=50;
+  var hotSelector='a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,.jc,.linkcard,.enter,.tabbtn,.section-jump,.site-search-trigger,.rail-search,.search-result';
+  function textTarget(t){return !!(t&&t.closest&&t.closest('textarea,[contenteditable="true"],input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"])'))}
+  function parseRGB(s){var m=(s||'').match(/rgba?\((\d+)[, ]+(\d+)[, ]+(\d+)(?:[, /]+([\d.]+))?\)/i);return m?[+m[1],+m[2],+m[3],m[4]==null?1:+m[4]]:null}
   function isDarkSurface(t){
     var n=t,steps=0;
-    while(n && n!==document.documentElement && steps<7){
-      var cs=getComputedStyle(n), rgb=parseRGB(cs.backgroundColor);
-      if(rgb && rgb[3]>.18){
-        var lum=(.2126*rgb[0]+.7152*rgb[1]+.0722*rgb[2])/255;
-        return lum < .53;
-      }
-      n=n.parentElement; steps++;
+    while(n&&n!==document.documentElement&&steps<6){
+      var rgb=parseRGB(getComputedStyle(n).backgroundColor);
+      if(rgb&&rgb[3]>.2)return ((.2126*rgb[0]+.7152*rgb[1]+.0722*rgb[2])/255)<.5;
+      n=n.parentElement;steps++;
     }
     return false;
   }
   function paint(){
     raf=0;
-    var scale=down ? .93 : (hot ? 1.045 : 1);
-    /* Beak tip at 1.6,1.7 in the 34×34 viewBox = the true click hotspot. */
+    var scale=down?.94:(hot?1.035:1);
     cursor.style.transform='translate3d('+(x-1.6)+'px,'+(y-1.7)+'px,0) rotate('+tilt.toFixed(2)+'deg) scale('+scale+')';
+    if(surface){surface.style.setProperty('--alive-x',sx.toFixed(1)+'%');surface.style.setProperty('--alive-y',sy.toFixed(1)+'%')}
   }
-  function queue(){ if(!raf) raf=requestAnimationFrame(paint); }
-
+  function queue(){if(!raf)raf=requestAnimationFrame(paint)}
+  function activate(){
+    if(activated)return;activated=true;cursor.classList.remove('is-hidden');
+    requestAnimationFrame(function(){document.documentElement.classList.add('cock-live')});
+  }
+  document.addEventListener('pointerover',function(e){
+    if(e.pointerType&&e.pointerType!=='mouse')return;
+    var t=e.target;
+    hot=!!(t.closest&&t.closest(hotSelector));cursor.classList.toggle('is-hot',hot);
+    cursor.classList.toggle('is-inverse',isDarkSurface(t));
+    cursor.classList.toggle('is-hidden',textTarget(t)||document.body.classList.contains('reframing'));
+    var next=t.closest?t.closest('.alive-surface'):null;
+    if(next!==surface){surface=next;surfaceRect=surface?surface.getBoundingClientRect():null}
+  },{passive:true});
   document.addEventListener('pointermove',function(e){
-    if (e.pointerType && e.pointerType!=='mouse') return;
-    var dx=e.clientX-lastX,dy=e.clientY-lastY;
-    lastX=e.clientX;lastY=e.clientY;x=e.clientX;y=e.clientY;
-    tilt=Math.max(-1.8,Math.min(1.8,dy*.045-dx*.018));
-    hot=!!(e.target.closest && e.target.closest(hotSelector));
-    var hide=textTarget(e.target)||document.body.classList.contains('reframing');
-    cursor.classList.toggle('is-hot',hot);
-    cursor.classList.toggle('is-inverse',isDarkSurface(e.target));
-    cursor.classList.toggle('is-hidden',hide);
+    if(e.pointerType&&e.pointerType!=='mouse')return;
+    activate();
+    var dx=e.clientX-lastX,dy=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;x=e.clientX;y=e.clientY;
+    tilt=Math.max(-1.4,Math.min(1.4,dy*.03-dx*.012));
+    if(surface&&surfaceRect&&surfaceRect.width&&surfaceRect.height){sx=(e.clientX-surfaceRect.left)/surfaceRect.width*100;sy=(e.clientY-surfaceRect.top)/surfaceRect.height*100}
     queue();
   },{passive:true});
-  document.addEventListener('pointerdown',function(e){
-    if(e.pointerType&&e.pointerType!=='mouse')return;
-    down=true;cursor.classList.add('is-down');queue();
-  },{passive:true});
-  document.addEventListener('pointerup',function(e){
-    if(e.pointerType&&e.pointerType!=='mouse')return;
-    down=false;cursor.classList.remove('is-down');queue();
-  },{passive:true});
-  document.addEventListener('pointercancel',function(){down=false;cursor.classList.remove('is-down');cursor.classList.add('is-hidden');queue()},{passive:true});
+  document.addEventListener('pointerdown',function(e){if(e.pointerType&&e.pointerType!=='mouse')return;down=true;queue()},{passive:true});
+  document.addEventListener('pointerup',function(e){if(e.pointerType&&e.pointerType!=='mouse')return;down=false;queue()},{passive:true});
+  document.addEventListener('pointercancel',function(){down=false;cursor.classList.add('is-hidden');queue()},{passive:true});
+  addEventListener('scroll',function(){surfaceRect=surface?surface.getBoundingClientRect():null},{passive:true});
+  addEventListener('resize',function(){surfaceRect=surface?surface.getBoundingClientRect():null},{passive:true});
   document.documentElement.addEventListener('mouseleave',function(){cursor.classList.add('is-hidden')});
-  document.documentElement.addEventListener('mouseenter',function(){cursor.classList.remove('is-hidden')});
+  document.documentElement.addEventListener('mouseenter',function(){if(activated)cursor.classList.remove('is-hidden')});
 })();
 </script>
 </body>
