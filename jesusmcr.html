@@ -2198,6 +2198,99 @@ a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,
   stroke:#711C22!important;
 }
 
+
+
+/* ==== Family support cards + zero-lag cockerel cursor ==== */
+/* The custom pointer is now a CSS cursor, so it is available on the very first frame. */
+:root{
+  --cock-head-cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='34' height='34' viewBox='0 0 34 34'%3E%3Cpath d='M1.6 1.7 12.7 6.4 8.7 11.2Z' fill='%23E2A93C' stroke='%23FFF9F0' stroke-width='.8' stroke-linejoin='round'/%3E%3Cpath d='M14 7.2c.3-3.6 1.7-5.7 3.7-5.9 1.2-.1 2.1.5 2.5 1.6.7-1.6 2-2.4 3.3-1.8 1.3.6 1.6 2.2.8 3.7 1.6-.8 3.2-.3 3.8.9.5 1.1.1 2.4-1.2 3.4Z' fill='%23A82B34' stroke='%23FFF9F0' stroke-width='.7' stroke-linejoin='round'/%3E%3Cpath d='M10.5 8.2c4.4-3.3 10.6-3.1 14.5.6 3.6 3.4 4.3 8.8 1.7 13-1.9 3.1-5 5-8.2 6.6-1.7.9-3 2.3-3.5 4-3.5-2.6-5.7-6.1-6-9.9-.2-2.7.5-5.3 2.2-7.5L8.7 11.2c.2-1.1.8-2.1 1.8-3Z' fill='%232A1C19' stroke='%23FFF9F0' stroke-width='.8' stroke-linejoin='round'/%3E%3C/svg%3E") 2 2, auto;
+  --cock-head-pointer:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 34 34'%3E%3Cpath d='M1.6 1.7 12.7 6.4 8.7 11.2Z' fill='%23E2A93C' stroke='%23FFFFFF' stroke-width='.85' stroke-linejoin='round'/%3E%3Cpath d='M14 7.2c.3-3.6 1.7-5.7 3.7-5.9 1.2-.1 2.1.5 2.5 1.6.7-1.6 2-2.4 3.3-1.8 1.3.6 1.6 2.2.8 3.7 1.6-.8 3.2-.3 3.8.9.5 1.1.1 2.4-1.2 3.4Z' fill='%23A82B34' stroke='%23FFFFFF' stroke-width='.75' stroke-linejoin='round'/%3E%3Cpath d='M10.5 8.2c4.4-3.3 10.6-3.1 14.5.6 3.6 3.4 4.3 8.8 1.7 13-1.9 3.1-5 5-8.2 6.6-1.7.9-3 2.3-3.5 4-3.5-2.6-5.7-6.1-6-9.9-.2-2.7.5-5.3 2.2-7.5L8.7 11.2c.2-1.1.8-2.1 1.8-3Z' fill='%232A1C19' stroke='%23FFFFFF' stroke-width='.85' stroke-linejoin='round'/%3E%3C/svg%3E") 2 2, pointer;
+}
+@media(hover:hover) and (pointer:fine){
+  html,body{cursor:var(--cock-head-cursor)!important}
+  a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,.jc,.linkcard,.enter,.tabbtn,.section-jump,.site-search-trigger,.rail-search,.search-result{cursor:var(--cock-head-pointer)!important}
+  input[type="button"],input[type="submit"],input[type="reset"],input[type="checkbox"],input[type="radio"]{cursor:var(--cock-head-pointer)!important}
+  input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]),textarea,[contenteditable="true"]{cursor:text!important}
+  body.reframing,body.reframing img.reframe{cursor:grab!important}
+  body.reframing img.reframe:active{cursor:grabbing!important}
+}
+.cock-live-cursor{display:none!important}
+/* Remove the pointer-following radial paint. Hover motion remains, without per-frame work. */
+.alive-surface::after{display:none!important}
+
+/* Families: the final support links are a dedicated, balanced card group. */
+#families .tag[data-e="families/tag/1"]{
+  margin:1.75rem 0 .72rem!important;
+}
+#families .tag[data-e="families/tag/1"] + .jgrid{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:.72rem!important;
+  margin:0 0 var(--g3)!important;
+  padding:0!important;
+  align-items:stretch!important;
+}
+#families .tag[data-e="families/tag/1"] + .jgrid .jc{
+  display:flex!important;
+  flex-direction:column!important;
+  min-width:0!important;
+  min-height:9.15rem!important;
+  padding:1rem 2.35rem 1rem 1.05rem!important;
+  margin:0!important;
+  border:1px solid #E6DED4!important;
+  border-radius:13px!important;
+  background:#FAF8F4!important;
+  box-shadow:none!important;
+  overflow:hidden!important;
+}
+#families .tag[data-e="families/tag/1"] + .jgrid .jc:hover,
+#families .tag[data-e="families/tag/1"] + .jgrid .jc:focus-visible{
+  border-color:#D6C9BC!important;
+  background:#FFFDFC!important;
+  transform:translateY(-1px)!important;
+  box-shadow:0 7px 18px rgba(54,39,31,.04)!important;
+}
+#families .tag[data-e="families/tag/1"] + .jgrid .jc::after{
+  right:1rem!important;
+  top:.95rem!important;
+  width:1.65rem!important;
+  height:1.65rem!important;
+  display:grid!important;
+  place-items:center!important;
+  border-radius:50%!important;
+  background:#F1E9DF!important;
+  color:#822832!important;
+  font-size:.88rem!important;
+}
+#families .tag[data-e="families/tag/1"] + .jgrid .jc b{
+  margin:0!important;
+  padding:0!important;
+  font-size:1.02rem!important;
+  line-height:1.22!important;
+}
+#families .tag[data-e="families/tag/1"] + .jgrid .jc span{
+  display:block!important;
+  margin:.48rem 0 0!important;
+  padding:0!important;
+  font-size:.79rem!important;
+  line-height:1.48!important;
+  color:#665A53!important;
+}
+#families .tag[data-e="families/tag/1"] + .jgrid .jc i{
+  display:block!important;
+  margin:auto 0 0!important;
+  padding:.9rem 0 0!important;
+  font-size:.62rem!important;
+  line-height:1.2!important;
+  letter-spacing:.035em!important;
+  text-transform:none!important;
+  color:#8A756B!important;
+}
+@media(max-width:760px){
+  #families .tag[data-e="families/tag/1"] + .jgrid{grid-template-columns:1fr!important;gap:.58rem!important}
+  #families .tag[data-e="families/tag/1"] + .jgrid .jc{min-height:0!important;padding:.9rem 2.7rem .9rem .95rem!important}
+  #families .tag[data-e="families/tag/1"] + .jgrid .jc i{margin-top:.7rem!important;padding-top:0!important}
+}
 </style>
 <body>
 <a class="skip" href="#app">Skip to content</a>
@@ -3330,17 +3423,6 @@ a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,
   <div class="linkgrid" data-rise>
     <a class="linkcard" href="https://www.cambridgesu.co.uk/shop/" target="_blank" rel="noopener" data-eh="info/a/21"><span class="t"><b>Buy a gown from Cambridge SU</b><span>A BA or an MA gown for £58, which is the cheapest new gown in Cambridge.</span><em>Cambridge SU</em></span><span class="arw">&#8599;</span></a>
     <a class="linkcard" href="https://www.ryderamies.co.uk/academic/shop/m-a-gown/" target="_blank" rel="noopener" data-eh="info/a/22"><span class="t"><b>Buy a gown from Ryder and Amies</b><span>On King’s Parade. From £70 for imported polyester, up to about £205. Only the British made ones can be converted to a PhD gown later.</span><em>Ryder and Amies</em></span><span class="arw">&#8599;</span></a>
-  </div>
-
-  <div class="gateway" data-rise>
-    <div>
-      <h2 data-e="info/h2/1">How <i>College</i> works is kept in the app</h2>
-      <p data-e="info/p/10">A second shelf holds short guides to particular College and University processes, each with a contact and a link, kept current by the committee rather than written once and left. Bookings live there too: the punt, formal swaps, event sign-ups, the notice board, and asking to hold something in the MCR. The common room itself stays open to every member and is never booked out.</p>
-    </div>
-    <a class="enter" href="#" hidden data-enter aria-label="Enter the intranet" data-eh="info/a/48">
-      <svg viewBox="0 0 24 24"><path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M15 8.5 18.5 12 15 15.5"/><path d="M18.5 12H10"/></svg>
-      <span>Open the app</span>
-    </a>
   </div>
 
 </section>
@@ -5368,68 +5450,10 @@ function openSiteSearch(){
   if(location.hash.indexOf('#search')===0){var raw=location.hash.slice(1).split('?');var ps=new URLSearchParams(raw.slice(1).join('?'));var q=ps.get('q')||'';if(input)input.value=q;runSiteSearch(q,false)}
 })();
 
-/* ---- Optimised interaction layer + minimal cockerel cursor ---- */
+/* ---- Lightweight interaction setup ---- */
 (function(){
-  var fine=window.matchMedia&&window.matchMedia('(hover:hover) and (pointer:fine)').matches;
-  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var aliveSelector='.grid .card,.card.quiet,.linkcard,.rest,.club,.jc,.menu,.doorway,.gateway,.tile,.person,.btn,.enter,.day,.chip,.section-jump,.sitting,.gymcard';
   [].forEach.call(document.querySelectorAll(aliveSelector),function(el){el.classList.add('alive-surface')});
-  if(!fine||reduce)return;
-
-  var cursor=document.createElement('span');
-  cursor.className='cock-live-cursor is-hidden';cursor.setAttribute('aria-hidden','true');
-  cursor.innerHTML='<svg viewBox="0 0 34 34" aria-hidden="true" focusable="false"><path class="cock-beak" d="M1.6 1.7 12.7 6.4 8.7 11.2Z"/><path class="cock-comb" d="M14.0 7.2c.3-3.6 1.7-5.7 3.7-5.9 1.2-.1 2.1.5 2.5 1.6.7-1.6 2-2.4 3.3-1.8 1.3.6 1.6 2.2.8 3.7 1.6-.8 3.2-.3 3.8.9.5 1.1.1 2.4-1.2 3.4Z"/><path class="cock-head" d="M10.5 8.2c4.4-3.3 10.6-3.1 14.5.6 3.6 3.4 4.3 8.8 1.7 13-1.9 3.1-5.0 5.0-8.2 6.6-1.7.9-3.0 2.3-3.5 4.0-3.5-2.6-5.7-6.1-6.0-9.9-.2-2.7.5-5.3 2.2-7.5L8.7 11.2c.2-1.1.8-2.1 1.8-3Z"/></svg>';
-  document.body.appendChild(cursor);
-
-  var x=-60,y=-60,lastX=x,lastY=y,tilt=0,hot=false,down=false,raf=0,activated=false;
-  var surface=null,surfaceRect=null,sx=50,sy=50;
-  var hotSelector='a,button,[role="button"],summary,label[for],select,.day,.tile,.chip,.rest,.club,.jc,.linkcard,.enter,.tabbtn,.section-jump,.site-search-trigger,.rail-search,.search-result';
-  function textTarget(t){return !!(t&&t.closest&&t.closest('textarea,[contenteditable="true"],input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"])'))}
-  function parseRGB(s){var m=(s||'').match(/rgba?\((\d+)[, ]+(\d+)[, ]+(\d+)(?:[, /]+([\d.]+))?\)/i);return m?[+m[1],+m[2],+m[3],m[4]==null?1:+m[4]]:null}
-  function isDarkSurface(t){
-    var n=t,steps=0;
-    while(n&&n!==document.documentElement&&steps<6){
-      var rgb=parseRGB(getComputedStyle(n).backgroundColor);
-      if(rgb&&rgb[3]>.2)return ((.2126*rgb[0]+.7152*rgb[1]+.0722*rgb[2])/255)<.5;
-      n=n.parentElement;steps++;
-    }
-    return false;
-  }
-  function paint(){
-    raf=0;
-    var scale=down?.94:(hot?1.035:1);
-    cursor.style.transform='translate3d('+(x-1.6)+'px,'+(y-1.7)+'px,0) rotate('+tilt.toFixed(2)+'deg) scale('+scale+')';
-    if(surface){surface.style.setProperty('--alive-x',sx.toFixed(1)+'%');surface.style.setProperty('--alive-y',sy.toFixed(1)+'%')}
-  }
-  function queue(){if(!raf)raf=requestAnimationFrame(paint)}
-  function activate(){
-    if(activated)return;activated=true;cursor.classList.remove('is-hidden');
-    requestAnimationFrame(function(){document.documentElement.classList.add('cock-live')});
-  }
-  document.addEventListener('pointerover',function(e){
-    if(e.pointerType&&e.pointerType!=='mouse')return;
-    var t=e.target;
-    hot=!!(t.closest&&t.closest(hotSelector));cursor.classList.toggle('is-hot',hot);
-    cursor.classList.toggle('is-inverse',isDarkSurface(t));
-    cursor.classList.toggle('is-hidden',textTarget(t)||document.body.classList.contains('reframing'));
-    var next=t.closest?t.closest('.alive-surface'):null;
-    if(next!==surface){surface=next;surfaceRect=surface?surface.getBoundingClientRect():null}
-  },{passive:true});
-  document.addEventListener('pointermove',function(e){
-    if(e.pointerType&&e.pointerType!=='mouse')return;
-    activate();
-    var dx=e.clientX-lastX,dy=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;x=e.clientX;y=e.clientY;
-    tilt=Math.max(-1.4,Math.min(1.4,dy*.03-dx*.012));
-    if(surface&&surfaceRect&&surfaceRect.width&&surfaceRect.height){sx=(e.clientX-surfaceRect.left)/surfaceRect.width*100;sy=(e.clientY-surfaceRect.top)/surfaceRect.height*100}
-    queue();
-  },{passive:true});
-  document.addEventListener('pointerdown',function(e){if(e.pointerType&&e.pointerType!=='mouse')return;down=true;queue()},{passive:true});
-  document.addEventListener('pointerup',function(e){if(e.pointerType&&e.pointerType!=='mouse')return;down=false;queue()},{passive:true});
-  document.addEventListener('pointercancel',function(){down=false;cursor.classList.add('is-hidden');queue()},{passive:true});
-  addEventListener('scroll',function(){surfaceRect=surface?surface.getBoundingClientRect():null},{passive:true});
-  addEventListener('resize',function(){surfaceRect=surface?surface.getBoundingClientRect():null},{passive:true});
-  document.documentElement.addEventListener('mouseleave',function(){cursor.classList.add('is-hidden')});
-  document.documentElement.addEventListener('mouseenter',function(){if(activated)cursor.classList.remove('is-hidden')});
 })();
 </script>
 </body>
