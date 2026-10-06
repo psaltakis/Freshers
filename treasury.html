@@ -1660,6 +1660,156 @@ textarea{min-height:82px}
 }
 </style>
 
+
+<style id="treasury-pastel-navigation-and-categories">
+/* Treasury refinement: exact MCRNet navigation geometry, a deliberately warmer
+   pastel-yellow navigation surface, and distinct pastel funding categories.
+   This layer is visual only: IDs, data attributes, forms and scripts are untouched. */
+
+:root{
+  --treasury-nav:#F3E4B3;
+  --treasury-nav-hover:#EAD79D;
+  --treasury-nav-edge:#DCC783;
+  --treasury-nav-ink:#594624;
+  --treasury-nav-muted:#77623A;
+  --treasury-nav-active:#822832;
+}
+
+/* Treasury is the product name. Jesus College MCR becomes the quiet context. */
+.topbar .brand h1,.brand h1{font-size:1.18rem;letter-spacing:-.045em;color:#FFF8EE}
+.topbar .brand h1>span:first-child{font-size:1.08em}
+.topbar .brand .eyebrow,.brand .eyebrow{font-size:.61rem;color:#F3DDCA;letter-spacing:.035em}
+
+/* Exact MCRNet crest sizing. */
+.topbar .crest{height:37px;width:auto;flex:0 0 auto;margin-right:8px}
+@media(max-width:360px){.topbar .crest{height:33px}}
+
+/* ---------------- navigation: same dimensions as MCRNet ---------------- */
+.navwrap{
+  width:min(480px,calc(100vw - 16px));
+  max-width:none;
+  bottom:calc(10px + var(--sab));
+  border-radius:16px;
+  box-shadow:0 7px 22px rgba(98,72,24,.16);
+}
+.navwrap .nav,.nav{
+  width:100%;max-width:none;box-sizing:border-box;
+  display:flex;gap:2px;padding:4px;border-radius:16px;
+  background:var(--treasury-nav);border:1px solid rgba(126,94,35,.10);
+  box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;
+  overflow-x:auto;overflow-y:hidden;scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;
+}
+.nav::-webkit-scrollbar{display:none}
+.nav .railtop{display:none}
+.nav button{
+  flex:0 0 auto;min-width:74px;min-height:58px;
+  padding:8px 10px;border-radius:11px;gap:3px;
+  color:var(--treasury-nav-ink);background:transparent;
+  font-family:"Roca Navigation","Roca";font-size:.62rem;line-height:1.2;
+  letter-spacing:0;text-align:center;white-space:nowrap;
+  transition:background .18s ease,color .18s ease,box-shadow .18s ease;
+}
+.nav button svg{width:20px;height:20px;flex:0 0 20px;stroke-width:1.9}
+.nav button:hover{background:var(--treasury-nav-hover);color:#493818}
+.nav button[aria-current="true"]{
+  background:var(--treasury-nav-active);color:#FFF8ED;
+  box-shadow:0 2px 7px rgba(104,32,42,.14);
+}
+.nav button[aria-current="true"]::before{display:none}
+.nav .badge{background:#A82B34;color:#FFF8ED;border-radius:999px;font-size:.53rem;padding:1px 4px;min-width:13px}
+.nav button[aria-current="true"] .badge{background:#F7DDA6;color:#643C14}
+
+@media(min-width:1000px){
+  :root{--public-nav-unit:19.2px;--rail:calc(11 * var(--public-nav-unit))}
+  .navwrap{left:0;top:0;bottom:0;transform:none;width:var(--rail);max-width:none;border-radius:0;box-shadow:none}
+  .navwrap .nav,.nav{
+    height:100%;width:100%;max-width:none;overflow-y:auto;overflow-x:hidden;
+    flex-direction:column;align-items:stretch;
+    padding:18px 12px calc(18px + var(--sab));gap:2px;border-radius:0;
+    border:0;border-right:1px solid var(--treasury-nav-edge);
+    background:var(--treasury-nav);
+  }
+  .nav .railtop{
+    display:flex;align-items:center;gap:10px;
+    padding:2px 9px 18px;margin-bottom:12px;
+    border-bottom:1px solid rgba(108,82,34,.18);
+  }
+  .nav .railtop .crest{width:auto;height:54px;flex-basis:auto;object-fit:contain}
+  .nav .railtop span{min-width:0}
+  .nav .railtop b{
+    display:block;color:#4F3C1D;font-family:"Roca";
+    font-size:calc(.789 * var(--public-nav-unit));letter-spacing:-.03em;line-height:1.1;
+  }
+  .nav .railtop i{
+    display:block;margin-top:3px;color:var(--treasury-nav-muted);font-family:"Roca";
+    font-size:calc(.635 * var(--public-nav-unit));font-style:normal;
+    letter-spacing:.035em;line-height:1.35;text-transform:none;white-space:normal;
+  }
+  .nav button{
+    flex:0 0 auto;min-width:0;min-height:44px;
+    flex-direction:row;justify-content:flex-start;
+    padding:9px 10px;gap:11px;border-radius:7px;
+    font-family:"Roca";font-size:calc(.711 * var(--public-nav-unit));
+    letter-spacing:-.015em;text-align:left;
+  }
+  .nav button svg{width:18px;height:18px;flex:0 0 18px}
+  .nav .badge{position:static;margin-left:auto;font-size:.635rem;min-width:15px;padding:1px 4px}
+  .nav button[aria-current="true"]{position:relative}
+  .nav button[aria-current="true"]::before{
+    content:"";display:block;position:absolute;left:-12px;top:9px;bottom:9px;
+    width:3px;border-radius:3px;background:#822832;
+  }
+  html:has(#app:not([hidden])) .topbar .crest,
+  html:has(#app:not([hidden])) .topbar .brand{display:none}
+}
+@media(min-width:1280px){:root{--public-nav-unit:21.12px}}
+@media(min-width:1600px){:root{--public-nav-unit:22.72px}}
+@media(min-width:1920px){:root{--public-nav-unit:24px}}
+
+/* ---------------- funding categories ----------------
+   The render already provides --c/--cd/--cl per category. Use the light companion
+   as the card surface, so each category has a recognisable pastel identity. */
+.cat{
+  background:color-mix(in srgb,var(--cl) 62%,#FFFDFA 38%);
+  border:1px solid color-mix(in srgb,var(--c) 16%,#FFFFFF 84%);
+  box-shadow:0 3px 15px rgba(56,37,25,.04);
+}
+.cat .stripe{height:4px;background:color-mix(in srgb,var(--c) 72%,#FFFFFF 28%)}
+.cat h3{color:color-mix(in srgb,var(--cd) 86%,#292624 14%)}
+.cat .pc{
+  background:rgba(255,253,250,.74);color:var(--cd);
+  border:1px solid color-mix(in srgb,var(--c) 24%,#FFFFFF 76%);
+  box-shadow:none;
+}
+.cat .pc.over{background:#292624;color:#FFFDF8;border-color:#292624}
+.cat .meter{background:rgba(255,253,250,.62)}
+.cat .rows .rw{border-bottom-color:rgba(71,58,44,.10)}
+.cat .rows .k{color:color-mix(in srgb,var(--cd) 70%,#635B56 30%)}
+.cat.clickable:hover{
+  background:color-mix(in srgb,var(--cl) 74%,#FFFDFA 26%);
+  box-shadow:0 6px 18px rgba(56,37,25,.07);
+}
+
+/* Carry the category identity into the ledger and scheduled-payment cards too. */
+.lg{border:1px solid color-mix(in srgb,var(--c) 12%,#E3DDD4 88%)}
+.lg .lh{
+  background:color-mix(in srgb,var(--c) 12%,#FFFDFA 88%);
+  color:#292624;
+}
+.lg .lh h3{color:color-mix(in srgb,var(--c) 76%,#292624 24%)}
+.lg .lh .f,.lg .lh .f b{color:#514A44}
+.upc{
+  background:color-mix(in srgb,var(--c) 8%,#FFFDFA 92%);
+  border-left:4px solid color-mix(in srgb,var(--c) 68%,#FFFFFF 32%);
+}
+
+/* Login crest follows the corresponding MCRNet gate sizes too. */
+@media(min-width:760px){.gatetop img{width:72px;height:72px;flex-basis:72px;padding:8px}}
+@media(max-width:759px){.gatetop img{width:58px;height:58px;flex-basis:58px;padding:7px}}
+@media(max-width:360px){.gatetop img{width:52px;height:52px;flex-basis:52px;padding:6px}}
+</style>
+
 <!-- The first thing anybody sees. Everything above this point is stylesheet, so
      the moment this tag is parsed the browser has a complete screen to draw. -->
 <div id="boot">
@@ -1697,7 +1847,7 @@ textarea{min-height:82px}
 <header class="topbar">
   <div class="in">
     <img class="crest" alt="Jesus College MCR crest">
-    <div class="brand"><h1>Jesus <i>MCR</i> <span class="beta">Beta</span></h1><span class="eyebrow">Treasury &middot; 2026 to 2027</span></div>
+    <div class="brand"><h1><span>Treasury</span> <span class="beta">Beta</span></h1><span class="eyebrow">Jesus College MCR &middot; 2026/27</span></div>
     <span class="sp"></span>
     <div class="chip-user" id="chipUser" hidden>
       <div><div class="nm" id="whoName">&mdash;</div><div class="rl" id="whoRole">&mdash;</div></div>
@@ -1736,7 +1886,7 @@ textarea{min-height:82px}
     <nav class="nav" id="nav">
       <!-- Shown only when the bar becomes a rail down the left of a wide
            screen: the crest and the name move in here, and leave the top bar. -->
-      <div class="railtop"><img class="crest" alt="Jesus College MCR"><span><b>Jesus MCR</b><i>Treasury</i></span></div>
+      <div class="railtop"><img class="crest" alt="Jesus College MCR"><span><b>Treasury</b><i>Jesus College MCR &middot; 2026/27</i></span></div>
       <button data-view="overview" data-budget aria-current="true">
         <svg viewBox="0 0 24 24"><path d="M4 19V9m5 10V5m5 14v-7m5 7V8"/></svg>Budget</button>
       <button data-view="mine">
