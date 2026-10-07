@@ -1824,6 +1824,192 @@ textarea{min-height:82px}
 @media(min-width:760px){.gatetop img{width:72px;height:72px;flex-basis:72px;padding:8px}}
 @media(max-width:759px){.gatetop img{width:58px;height:58px;flex-basis:58px;padding:7px}}
 @media(max-width:360px){.gatetop img{width:52px;height:52px;flex-basis:52px;padding:6px}}
+
+</style>
+<style id="treasury-mcr-yellow-final">
+/* Final Treasury chrome refinement. The colour is intentionally the brighter MCR
+   gold family rather than antique brass. Geometry mirrors MCRNet exactly, while
+   selected navigation stays Jesus crimson. */
+:root{
+  --treasury-yellow:#F3C85C;
+  --treasury-yellow-hover:#E8B94A;
+  --treasury-yellow-edge:#D7A63C;
+  --treasury-yellow-ink:#3B2B12;
+  --treasury-yellow-muted:#6A5024;
+  --treasury-crimson:#822832;
+  --treasury-crimson-hover:#9A303B;
+}
+
+/* The header is visibly the same Treasury yellow on every viewport. */
+.topbar,
+html:has(#app:not([hidden])) .topbar{
+  background:var(--treasury-yellow)!important;
+  color:var(--treasury-yellow-ink)!important;
+  border:0!important;
+  border-bottom:1px solid var(--treasury-yellow-edge)!important;
+  box-shadow:0 3px 12px rgba(74,50,14,.10)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+
+/* Exact MCRNet header rhythm: 7px vertical padding, 8px gap, 44px controls. */
+.topbar .in{
+  max-width:1180px;
+  margin:0 auto;
+  padding:7px var(--gut);
+  gap:8px;
+  min-height:58px;
+}
+.topbar .crest{
+  height:37px;
+  width:auto;
+  flex:0 0 auto;
+  margin-right:8px;
+}
+.topbar .brand h1,.brand h1{color:var(--treasury-yellow-ink)!important}
+.topbar .brand .eyebrow,.brand .eyebrow{color:var(--treasury-yellow-muted)!important}
+.topbar .beta{background:var(--treasury-crimson)!important;color:#FFFDF8!important}
+.topbar .chip-user{
+  background:rgba(255,253,247,.38)!important;
+  border:1px solid rgba(73,49,13,.13)!important;
+}
+.topbar .chip-user .nm{color:#33240F!important}
+.topbar .chip-user .rl{color:#70511F!important}
+.topbar .iconbtn{
+  min-height:44px;
+  background:rgba(255,253,247,.30)!important;
+  color:#493513!important;
+  border:1px solid rgba(73,49,13,.16)!important;
+}
+.topbar .iconbtn:hover{background:rgba(255,253,247,.58)!important;color:#2E210D!important}
+.topbar .iconbtn:active{background:var(--treasury-crimson)!important;color:#FFFDF8!important;border-color:var(--treasury-crimson)!important}
+
+/* MCRNet's crisp white crest keyline: four 1px drop-shadows plus a soft depth shadow. */
+.topbar .crest,.nav .railtop .crest{
+  padding:0!important;
+  border-radius:0!important;
+  background:none!important;
+  box-shadow:none!important;
+  filter:
+    drop-shadow(1px 0 0 #FFFDFA)
+    drop-shadow(-1px 0 0 #FFFDFA)
+    drop-shadow(0 1px 0 #FFFDFA)
+    drop-shadow(0 -1px 0 #FFFDFA)
+    drop-shadow(0 2px 5px rgba(54,37,14,.22))!important;
+}
+
+/* Navigation keeps exact MCRNet dimensions but uses the same visible yellow. */
+.navwrap{bottom:calc(10px + var(--sab));width:min(480px,calc(100vw - 16px));border-radius:16px}
+.navwrap .nav,.nav{
+  width:100%;
+  padding:4px;
+  gap:2px;
+  border-radius:16px;
+  background:var(--treasury-yellow)!important;
+  border:1px solid var(--treasury-yellow-edge)!important;
+  box-shadow:0 6px 20px rgba(74,50,14,.14)!important;
+}
+.nav button{
+  min-width:74px;
+  min-height:58px;
+  padding:8px 10px;
+  gap:3px;
+  border-radius:11px;
+  font-size:.62rem;
+  line-height:1.2;
+  color:var(--treasury-yellow-ink)!important;
+}
+.nav button svg{width:20px;height:20px;flex:0 0 20px;stroke-width:1.9}
+.nav button:hover{background:var(--treasury-yellow-hover)!important;color:#2E210D!important}
+.nav button[aria-current="true"]{
+  background:var(--treasury-crimson)!important;
+  color:#FFFDF8!important;
+  box-shadow:0 2px 7px rgba(75,24,32,.18)!important;
+}
+.nav button[aria-current="true"] .badge{background:#FFF2D0!important;color:var(--treasury-crimson)!important}
+.nav .badge{background:#704A27!important;color:#FFF8ED!important}
+
+@media(max-width:360px){
+  .topbar .in{gap:4px;padding-left:10px;padding-right:10px}
+  .topbar .crest{height:33px}
+}
+
+@media(min-width:1000px){
+  :root{--public-nav-unit:19.2px;--rail:calc(11 * var(--public-nav-unit))}
+  .topbar .in{max-width:none;margin:0;padding:7px var(--gut);gap:8px;min-height:58px}
+  .navwrap{left:0;top:0;bottom:0;transform:none;width:var(--rail);max-width:none;border-radius:0;box-shadow:none}
+  .navwrap .nav,.nav{
+    height:100%;max-width:none;
+    flex-direction:column;align-items:stretch;
+    padding:18px 12px calc(18px + var(--sab));
+    gap:2px;border-radius:0;border:0;border-right:1px solid var(--treasury-yellow-edge)!important;
+    box-shadow:none!important;
+  }
+  .nav .railtop{display:flex;align-items:center;gap:10px;padding:2px 9px 18px;margin-bottom:12px;border-bottom:1px solid rgba(72,48,12,.18)}
+  .nav .railtop .crest{width:auto;height:54px;flex-basis:auto;object-fit:contain}
+  .nav .railtop b{color:#33240F;font-size:calc(.789 * var(--public-nav-unit));letter-spacing:-.03em;line-height:1.1}
+  .nav .railtop i{color:var(--treasury-yellow-muted);font-size:calc(.635 * var(--public-nav-unit));line-height:1.35}
+  .nav button{
+    min-width:0;min-height:44px;
+    flex-direction:row;justify-content:flex-start;
+    padding:9px 10px;gap:11px;border-radius:7px;
+    font-size:calc(.78 * var(--public-nav-unit));
+    letter-spacing:-.015em;text-align:left;
+  }
+  .nav button svg{width:18px;height:18px;flex:0 0 18px}
+  .nav button[aria-current="true"]::before{
+    content:"";display:block;position:absolute;left:-12px;top:9px;bottom:9px;width:3px;border-radius:3px;background:var(--treasury-crimson);
+  }
+}
+@media(min-width:1280px){:root{--public-nav-unit:21.12px}}
+@media(min-width:1600px){:root{--public-nav-unit:22.72px}}
+@media(min-width:1920px){:root{--public-nav-unit:24px}}
+
+/* The opening Budget surface uses the same yellow, so header, rail and first financial
+   overview read as one Treasury identity rather than three unrelated pieces. */
+#v-overview > [data-admin]:first-child{
+  background:var(--treasury-yellow);
+  color:var(--treasury-yellow-ink);
+  border:1px solid var(--treasury-yellow-edge);
+  border-radius:18px;
+  padding:18px;
+  margin-top:18px;
+  box-shadow:0 5px 18px rgba(74,50,14,.08);
+}
+#v-overview > [data-admin]:first-child > .shead:first-child{margin-top:0}
+#v-overview > [data-admin]:first-child .shead h2{color:#33240F}
+#v-overview > [data-admin]:first-child .shead .note{color:#725622}
+#v-overview > [data-admin]:first-child .panel.dark{
+  background:rgba(255,253,247,.35)!important;
+  color:#292624!important;
+  border:1px solid rgba(73,49,13,.10)!important;
+  box-shadow:none!important;
+}
+#v-overview > [data-admin]:first-child .cash .c{
+  background:rgba(255,253,247,.58)!important;
+  color:#292624!important;
+  border:1px solid rgba(73,49,13,.09)!important;
+}
+#v-overview > [data-admin]:first-child .cash .c.big{
+  background:var(--treasury-crimson)!important;
+  color:#FFFDF8!important;
+  border-color:var(--treasury-crimson)!important;
+}
+#v-overview > [data-admin]:first-child .cash .c.big .k,
+#v-overview > [data-admin]:first-child .cash .c.big .s{color:#F6E6E2!important;opacity:1}
+#v-overview > [data-admin]:first-child .cash .c .k,
+#v-overview > [data-admin]:first-child .cash .c .s{color:#6B5530}
+#v-overview > [data-admin]:first-child .fig{
+  background:rgba(255,253,247,.72)!important;
+  border:1px solid rgba(73,49,13,.08)!important;
+  box-shadow:none!important;
+}
+#v-overview > [data-admin]:first-child .legend{color:#5E4720!important}
+#v-overview > [data-admin]:first-child .masterbar{border-color:rgba(73,49,13,.18);background:rgba(73,49,13,.14)}
+
+@media(max-width:599px){
+  #v-overview > [data-admin]:first-child{padding:14px;border-radius:14px;margin-top:14px}
+}
 </style>
 
 <!-- The first thing anybody sees. Everything above this point is stylesheet, so
