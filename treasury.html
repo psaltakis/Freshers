@@ -2099,6 +2099,154 @@ html:has(#app:not([hidden])) .topbar,
 #v-overview > [data-admin]:first-child .cash .c.big.over .s{color:#68202A!important}
 </style>
 
+<style id="treasury-charcoal-red-final">
+/* Treasury final colour direction: warm graphite rather than true black.
+   The chrome is quiet and architectural; Jesus crimson carries interaction
+   and the primary financial emphasis. */
+:root{
+  --treasury-charcoal:#332F2E;
+  --treasury-charcoal-2:#3B3635;
+  --treasury-charcoal-3:#2B2827;
+  --treasury-charcoal-edge:#504947;
+  --treasury-ivory:#FFF8ED;
+  --treasury-ivory-muted:#DCCFC7;
+  --treasury-crimson:#822832;
+  --treasury-crimson-hover:#9A303B;
+  --treasury-crimson-deep:#68202A;
+  --treasury-stone:#EEE9E2;
+  --treasury-stone-2:#E5DED5;
+}
+
+/* Header and navigation become a soft off-black, not a flat black slab. */
+.topbar,
+html:has(#app:not([hidden])) .topbar{
+  background:linear-gradient(180deg,#393433 0%,var(--treasury-charcoal) 100%)!important;
+  color:var(--treasury-ivory)!important;
+  border:0!important;
+  border-bottom:1px solid var(--treasury-charcoal-edge)!important;
+  box-shadow:0 3px 14px rgba(28,22,21,.14)!important;
+}
+.navwrap .nav,.nav{
+  background:linear-gradient(180deg,#393433 0%,var(--treasury-charcoal-3) 100%)!important;
+  border-color:var(--treasury-charcoal-edge)!important;
+  box-shadow:0 8px 24px rgba(28,22,21,.18)!important;
+}
+@media(min-width:1000px){
+  .navwrap .nav,.nav{border-right-color:var(--treasury-charcoal-edge)!important}
+}
+
+/* Warm ivory typography keeps the graphite shell collegiate rather than tech-black. */
+.topbar .brand h1,.brand h1,.nav button,.nav .railtop b{
+  color:var(--treasury-ivory)!important;
+}
+.topbar .brand .eyebrow,.brand .eyebrow,.nav .railtop i{
+  color:var(--treasury-ivory-muted)!important;
+}
+.topbar .chip-user{
+  background:rgba(255,248,237,.075)!important;
+  border-color:rgba(255,248,237,.12)!important;
+}
+.topbar .chip-user .nm{color:var(--treasury-ivory)!important}
+.topbar .chip-user .rl{color:#D8BFC0!important}
+.topbar .iconbtn{
+  background:rgba(255,248,237,.07)!important;
+  color:var(--treasury-ivory)!important;
+  border-color:rgba(255,248,237,.14)!important;
+}
+.topbar .iconbtn:hover{background:rgba(255,248,237,.13)!important;color:#fff!important}
+
+/* Crimson is the interaction language again. */
+.nav button:hover{
+  background:rgba(130,40,50,.28)!important;
+  color:#fff!important;
+}
+.nav button[aria-current="true"],
+.topbar .iconbtn:active{
+  background:var(--treasury-crimson)!important;
+  color:#FFFDF8!important;
+  border-color:var(--treasury-crimson)!important;
+}
+.nav button[aria-current="true"]::before{background:#F1D6D2!important}
+.nav .badge{background:#E8DDD3!important;color:#5B242A!important}
+.nav button[aria-current="true"] .badge{background:#FFF4E9!important;color:var(--treasury-crimson)!important}
+.topbar .beta{background:var(--treasury-crimson)!important;color:#FFFDF8!important}
+
+/* Keep the MCRNet white crest keyline, now especially crisp on graphite. */
+.topbar .crest,.nav .railtop .crest{
+  filter:
+    drop-shadow(1px 0 0 #FFFDFA)
+    drop-shadow(-1px 0 0 #FFFDFA)
+    drop-shadow(0 1px 0 #FFFDFA)
+    drop-shadow(0 -1px 0 #FFFDFA)
+    drop-shadow(0 2px 5px rgba(0,0,0,.24))!important;
+}
+
+/* The budget opening area returns to quiet warm stone instead of carrying nav colour. */
+#v-overview > [data-admin]:first-child{
+  background:var(--treasury-stone)!important;
+  color:#292624!important;
+  border:1px solid #DED6CC!important;
+  box-shadow:0 5px 18px rgba(56,37,25,.045)!important;
+}
+#v-overview > [data-admin]:first-child .shead h2{color:#292624!important}
+#v-overview > [data-admin]:first-child .shead .note{color:#635B56!important}
+#v-overview > [data-admin]:first-child .panel.dark{
+  background:#F6F2EC!important;
+  color:#292624!important;
+  border:1px solid #E1D9CF!important;
+}
+#v-overview > [data-admin]:first-child .cash .c{
+  background:#FFFDFA!important;
+  color:#292624!important;
+  border:1px solid #E3DDD4!important;
+}
+#v-overview > [data-admin]:first-child .cash .c .k,
+#v-overview > [data-admin]:first-child .cash .c .s{color:#6B625C!important}
+#v-overview > [data-admin]:first-child .fig{
+  background:#FFFDFA!important;
+  border:1px solid #E3DDD4!important;
+  box-shadow:none!important;
+}
+#v-overview > [data-admin]:first-child .legend{color:#635B56!important}
+#v-overview > [data-admin]:first-child .masterbar{
+  background:#DED7CF!important;
+  border-color:#D3CBC1!important;
+}
+
+/* Restore the bank balance as the unmistakable crimson Treasury focal card. */
+#v-overview > [data-admin]:first-child .cash .c.big{
+  background:linear-gradient(145deg,#8A2A35 0%,var(--treasury-crimson) 58%,#70232D 100%)!important;
+  color:#FFF8ED!important;
+  border-color:var(--treasury-crimson)!important;
+  box-shadow:0 5px 16px rgba(91,28,36,.12)!important;
+}
+#v-overview > [data-admin]:first-child .cash .c.big .k,
+#v-overview > [data-admin]:first-child .cash .c.big .s{
+  color:#F3DEDA!important;
+  opacity:1!important;
+}
+#v-overview > [data-admin]:first-child .cash .c.big .v{color:#FFF8ED!important}
+#v-overview > [data-admin]:first-child .cash .c.big.over{
+  background:linear-gradient(145deg,#70232D,var(--treasury-crimson-deep))!important;
+  box-shadow:inset 0 0 0 2px #E4B6B0,0 5px 16px rgba(91,28,36,.16)!important;
+}
+#v-overview > [data-admin]:first-child .cash .c.big.over .v,
+#v-overview > [data-admin]:first-child .cash .c.big.over .k,
+#v-overview > [data-admin]:first-child .cash .c.big.over .s{color:#FFF8ED!important}
+
+/* Small finance accents also return to crimson, without making every card red. */
+#v-overview > [data-admin]:first-child .fig.alloc{border-top-color:var(--treasury-crimson)!important}
+#v-overview > [data-admin]:first-child .masterbar i.a{background:var(--treasury-crimson)!important}
+#v-overview > [data-admin]:first-child .sw.a{background:var(--treasury-crimson)!important}
+
+/* Mobile keeps exactly the same MCRNet geometry; only the material changes. */
+@media(max-width:999px){
+  .navwrap .nav,.nav{
+    background:linear-gradient(180deg,#3A3534 0%,#302C2B 100%)!important;
+  }
+}
+</style>
+
 <!-- The first thing anybody sees. Everything above this point is stylesheet, so
      the moment this tag is parsed the browser has a complete screen to draw. -->
 <div id="boot">
