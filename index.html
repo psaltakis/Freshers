@@ -314,7 +314,7 @@ ul.list{list-style:square}
 .person .mail span{display:block;font-size:.68rem;font-weight:600;color:var(--ink-4);
   letter-spacing:-.015em}
 .person .mail:hover{text-decoration:underline;text-underline-offset:3px}
-.person.vacant img{filter:grayscale(1);opacity:.45}
+.person.vacant img.vacant-placeholder{filter:grayscale(1);opacity:.45}
 .person.vacant b{color:var(--ink-3)}
 @media(max-width:560px){
   .people{grid-template-columns:repeat(2,1fr);gap:24px 14px}
@@ -888,7 +888,7 @@ body.reframing img.reframe:active{cursor:grabbing}
 #committee .person .mail{grid-column:2;font-size:.65rem;font-weight:600;line-height:1.4;overflow:visible;white-space:normal;overflow-wrap:anywhere;color:var(--red-ink)}
 #committee .person .mail span{font-size:.59rem;letter-spacing:0;color:var(--ink-3);font-weight:500}
 #committee .person.vacant{background:#F9F8F5;border-style:dashed}
-#committee .person.vacant img{opacity:.3}
+#committee .person.vacant img.vacant-placeholder{opacity:.3}
 #committee .bandnote{font-size:.86rem;margin-bottom:.7rem}
 #committee .card.quiet{margin-top:1rem}
 .reset-filter{min-height:44px;display:inline-flex;align-items:center;padding:.4rem .75rem;background:#fff;border:1px solid var(--edge);border-radius:6px;color:var(--red-ink);font-size:.8rem;font-weight:600;margin-top:.7rem}
@@ -6289,6 +6289,19 @@ function openSiteSearch(){
     });
     Object.keys(fieldMap).forEach(function(k){fieldMap[k].el=elFor(k);});
   }
+  function syncCommitteeVacancies() {
+    document.querySelectorAll('#committee .person').forEach(function(person){
+      var name=person.querySelector('.nm b'), image=person.querySelector('img');
+      if(!name)return;
+      var vacant=/^vacant$/i.test(name.textContent.trim());
+      person.classList.toggle('vacant',vacant);
+      if(image){
+        var placeholder=/(?:^|\/)blank-1\.jpg(?:[?#]|$)/i.test(image.getAttribute('src')||'');
+        image.classList.toggle('vacant-placeholder',vacant&&placeholder);
+      }
+    });
+    if(typeof filterPeople==='function')filterPeople();
+  }
   function paintLayout() {
     Object.keys(groups).forEach(function(gid){
       var g=groups[gid],rs=records.filter(function(r){return r.groupId===gid;}),ids=rs.map(function(r){return r.id;});
@@ -6327,7 +6340,7 @@ function openSiteSearch(){
   }
   function render() {
     if(rendering)return;rendering=true;
-    try {syncCustom();renderFields();paintLayout();applySite();if(typeof SITE_SEARCH_READY!=='undefined')SITE_SEARCH_READY=false;if(typeof refreshSectionNavigation==='function')refreshSectionNavigation();} finally {rendering=false;}
+    try {syncCustom();renderFields();paintLayout();syncCommitteeVacancies();applySite();if(typeof SITE_SEARCH_READY!=='undefined')SITE_SEARCH_READY=false;if(typeof refreshSectionNavigation==='function')refreshSectionNavigation();} finally {rendering=false;}
   }
   function changed() { render(); if(typeof M.onChange==='function')M.onChange(M); }
   M.init=function(){
